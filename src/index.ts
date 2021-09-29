@@ -1,1 +1,1 @@
-console.log("This is the start of this project")
+console.log('This is the start of this project');
