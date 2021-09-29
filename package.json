@@ -2,6 +2,7 @@
   "name": "kipper_lang",
   "version": "0.0.1",
   "description": "The Kipper Programming language",
+  "license": "GPL-3.0",
   "keywords": [
     "language",
     "compiler"
@@ -23,9 +24,9 @@
     "tslint": "tslint **/*.ts",
     "tslint:fix": "npm run tslint -- --fix",
     "pretest": "npm run rebuild",
-    "test": "mocha --recursive --allow-console-logs \"./dist/__tests__/**/test_*.js\"",
+    "test": "mocha -r ts-node/register --recursive --allow-console-logs \"./dist/__tests__/**/*.js\"",
     "posttest": "npm run lint",
-    "test:dev": "mocha --recursive --allow-console-logs \"./dist/__tests__/**/test_*.js\" && npm run posttest",
+    "test:dev": "mocha -r ts-node/register --recursive --allow-console-logs \"./dist/__tests__/**/*.js\" && npm run posttest",
     "premigrate": "npm run build",
     "migrate": "node ./dist/migrate",
     "rebuild": "npm run build",
@@ -38,22 +39,23 @@
   },
   "files": [
     "README.md",
+    "LICENSE",
     "dist",
     "src",
     "!*/__tests__"
   ],
   "dependencies": {
-    "serve-static": "^1.14.1",
-    "strong-error-handler": "^4.0.0",
+    "ts-node": "^10.2.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.2",
     "@types/node": "^10.17.48",
-    "mocha": "^8.4.0",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
     "chai": "^4.3.4",
-    "tslint": "^5.20.0",
+    "mocha": "^8.4.0",
     "prettier": "^2.4.1",
+    "tslint": "^5.20.0",
     "typescript": "~4.1.2"
   }
 }
