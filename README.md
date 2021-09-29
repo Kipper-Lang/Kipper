@@ -2,10 +2,10 @@
 The Kipper Programming Language
 
 ## Project Overview
-- [Deno](https://deno.land) and [Deno Compile](https://deno.land/manual/tools/compiler) to Executable is used to build and deploy the application
-- [Semantic versioning](https://semver.org/) is used for the versioning of new releases
-- CHANGELOG.md uses the format from [KeepAChangelog](https://keepachangelog.com/en/1.0.0/)
-- [Antrl4](https://antlr.org) is used for generating the lexer and parser for the language
+- NodeJS is used for the deployment and usage of the project.
+- [Semantic versioning](https://semver.org/) is used for the versioning of new releases.
+- CHANGELOG.md uses the format from [KeepAChangelog](https://keepachangelog.com/en/1.0.0/).
+- [Antrl4](https://antlr.org) is used for generating the lexer and parser for the language.
 
 ## Website Project and online Compiler Project
 
