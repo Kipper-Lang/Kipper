@@ -1,3 +1,1 @@
-/* Entry file for the project */
-
-console.log("Welcome to Deno!");
+console.log("This is the start of this project")

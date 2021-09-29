@@ -1,17 +1,9 @@
 {
+  "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "inlineSourceMap": true,
-    "isolatedModules": true,
-    "jsx": "react",
-    "lib": [
-      "deno.window"
-    ],
-    "module": "esnext",
-    "strict": true,
-    "target": "esnext",
-    "useDefineForClassFields": true
-  }
+    "removeComments": true,
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"]
 }

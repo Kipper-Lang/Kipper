@@ -1,0 +1,5 @@
+{
+  "exit": true,
+  "recursive": true,
+  "require": "dist/__tests__"
+}
