@@ -77,5 +77,5 @@ npm run lint:fix
 ## Tests
 
 ```sh
-npm __tests__
+npm test
 ```
