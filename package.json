@@ -30,7 +30,8 @@
     "migrate": "node ./dist/migrate",
     "rebuild": "npm run build",
     "prestart": "npm run rebuild",
-    "start": "node ."
+    "start": "node .",
+    "antlr4ts": "antlr4ts -visitor grammar/Kipper.g4"
   },
   "repository": {
     "type": "git",
@@ -45,7 +46,9 @@
   "dependencies": {
     "serve-static": "^1.14.1",
     "strong-error-handler": "^4.0.0",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "antlr4ts": "^0.5.0-alpha.4",
+    "antlr4ts-cli": "^0.5.0-alpha.4"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
