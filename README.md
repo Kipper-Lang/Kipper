@@ -1,7 +1,9 @@
 # Kipper
+
 The Kipper Programming Language
 
 ## Project Overview
+
 - NodeJS is used for the deployment and usage of the project.
 - [Semantic versioning](https://semver.org/) is used for the versioning of new releases.
 - CHANGELOG.md uses the format from [KeepAChangelog](https://keepachangelog.com/en/1.0.0/).
@@ -17,7 +19,7 @@ and the compiler built in for simple usage online without having to install the 
 The grammar files can be found in `./grammar/`. The files are in the Antlr4-Format and will be used with the Antlr4 compiled
 TypeScript Parser and Lexer.
 
-## Development 
+## Development
 
 ### Setup
 
