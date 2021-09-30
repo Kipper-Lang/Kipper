@@ -6,7 +6,26 @@
     "language",
     "compiler"
   ],
-  "scripts": {},
+  "scripts": {
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "lint": "npm run tslint && npm run prettier:check",
+    "lint:fix": "npm run tslint:fix && npm run prettier:fix",
+    "prettier:check": "prettier -l ./src/",
+    "prettier:fix": "prettier --write ./src/",
+    "tslint": "tslint src/**/*.ts",
+
+    "tslint:fix": "npm run tslint -- --fix",
+    "pretest": "npm run rebuild",
+    "test": "mocha --recursive dist/tests/**/*.js",
+    "posttest": "npm run lint",
+    "test:dev": "mocha --recursive dist/tests/**/*.js && npm run posttest",
+    "rebuild": "npm run build",
+    "prestart": "npm run rebuild",
+    "start": "node .",
+    "antlr4ts": "antlr4ts -visitor grammar/Kipper.g4"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Luna-Klatzer/Kipper"
@@ -14,14 +33,11 @@
   "dependencies": {
     "antlr4ts": "^0.5.0-alpha.4",
     "antlr4ts-cli": "^0.5.0-alpha.4",
-    "serve-static": "^1.14.1",
-    "strong-error-handler": "^4.0.0",
     "ts-node": "^3.3.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@types/expect": "^24.3.0",
-    "@types/jest": "^27.0.2",
     "@types/mocha": "^9.0.0",
     "@types/node": "^10.17.48",
     "chai": "^4.3.4",
@@ -30,5 +46,9 @@
     "ts-mocha": "^8.0.0",
     "tslint": "^5.20.0",
     "typescript": "~4.1.2"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": false
   }
 }
