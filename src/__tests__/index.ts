@@ -1,10 +1,10 @@
-import {expect} from 'chai';
-import 'mocha';
+import { expect } from "chai";
+import { describe, it } from "mocha";
+import { kipperRunCLI } from "../index";
 
-describe('This', () => {
-  describe('should', () => {
-    it('always pass', () => {
-      expect(true).to.equal(true);
-    });
+describe("Simple", () => {
+  it("Example", () => {
+    const r = kipperRunCLI();
+    expect(r).to.equal(r);
   });
 });
