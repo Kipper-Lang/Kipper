@@ -6,57 +6,29 @@
     "language",
     "compiler"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "engines": {
-    "node": ">=12.0"
-  },
-  "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
-    "build:watch": "tsc --watch",
-    "lint": "npm run tslint && npm run prettier:check",
-    "lint:fix": "npm run tslint:fix && npm run prettier:fix",
-    "prettier:cli": "prettier \"**/*.ts\" \"**/*.js\"",
-    "prettier:check": "npm run prettier:cli -- -l",
-    "prettier:fix": "npm run prettier:cli -- --write",
-    "tslint": "tslint **/*.ts",
-    "tslint:fix": "npm run tslint -- --fix",
-    "pretest": "npm run rebuild",
-    "test": "mocha --recursive --allow-console-logs \"./dist/__tests__/**/test_*.js\"",
-    "posttest": "npm run lint",
-    "test:dev": "mocha --recursive --allow-console-logs \"./dist/__tests__/**/test_*.js\" && npm run posttest",
-    "premigrate": "npm run build",
-    "migrate": "node ./dist/migrate",
-    "rebuild": "npm run build",
-    "prestart": "npm run rebuild",
-    "start": "node .",
-    "antlr4ts": "antlr4ts -visitor grammar/Kipper.g4"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
-  "files": [
-    "README.md",
-    "dist",
-    "src",
-    "!*/__tests__"
-  ],
   "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
     "serve-static": "^1.14.1",
     "strong-error-handler": "^4.0.0",
-    "tslib": "^2.0.0",
-    "antlr4ts": "^0.5.0-alpha.4",
-    "antlr4ts-cli": "^0.5.0-alpha.4"
+    "ts-node": "^3.3.0",
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
+    "@types/expect": "^24.3.0",
     "@types/jest": "^27.0.2",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^10.17.48",
-    "mocha": "^8.4.0",
     "chai": "^4.3.4",
-    "tslint": "^5.20.0",
+    "mocha": "^9.1.2",
     "prettier": "^2.4.1",
+    "ts-mocha": "^8.0.0",
+    "tslint": "^5.20.0",
     "typescript": "~4.1.2"
   }
 }
