@@ -7,7 +7,7 @@
     "compiler"
   ],
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "prebuild": "npm run tslint",
     "build": "tsc",
     "build:watch": "tsc --watch",
     "rebuild": "npm run build",
