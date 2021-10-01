@@ -17,7 +17,7 @@
     "tslint": "eslint src/**/*.ts",
     "tslint:fix": "npm run lint -- --fix",
     "test": "ts-mocha -p tsconfig.json --recursive src/tests/**/*.ts",
-    "posttest": "npm run lint",
+    "posttest": "npm run lint:fix",
     "prestart": "npm run rebuild",
     "start": "node .",
     "antlr4ts": "antlr4ts -visitor grammar/Kipper.g4"
