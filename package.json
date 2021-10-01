@@ -15,7 +15,6 @@
     "prettier:check": "prettier -l ./src/",
     "prettier:fix": "prettier --write ./src/",
     "tslint": "tslint src/**/*.ts",
-
     "tslint:fix": "npm run tslint -- --fix",
     "pretest": "npm run rebuild",
     "test": "mocha --recursive dist/tests/**/*.js",
