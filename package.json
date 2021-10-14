@@ -1,12 +1,72 @@
 {
-  "name": "kipper_lang",
+  "name": "kipper",
+  "description": "The Kipper programming language (CLI implementation)",
   "version": "0.0.1",
-  "description": "The Kipper Programming language",
+  "author": "Luna-Klatzer @Luna-Klatzer",
+  "bin": {
+    "kipper": "./bin/run"
+  },
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.3",
+    "tslib": "^1.14.1",
+    "ts-node": "^8.10.2"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.26.0",
+    "@oclif/test": "^1.2.8",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.17.60",
+    "chai": "^4.3.4",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.1.0",
+    "globby": "^10.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.10",
+    "prettier": "^2.4.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/Luna-Klatzer/Kipper",
+  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luna-Klatzer/Kipper"
+  },
   "keywords": [
+    "oclif",
     "language",
     "compiler"
   ],
+  "license": "GPL-3.0",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "kipper",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
   "scripts": {
+    "postpack": "rimraf oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md",
     "prebuild": "npm run tslint",
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -16,35 +76,9 @@
     "prettier": "prettier --write ./src/",
     "tslint": "eslint src/**/*.ts",
     "tslint:fix": "npm run lint -- --fix",
-    "test": "ts-mocha -p tsconfig.json --recursive src/__tests__/**/*.ts",
-    "posttest": "npm run lint:fix",
-    "prestart": "npm run rebuild",
-    "start": "node .",
-    "antlr4ts": "antlr4ts -visitor grammar/Kipper.g4"
+    "antlr4ts": "antlr4ts -visitor -o ./src/parser/antlr_gen ./src/grammar/Kipper.g4"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper"
-  },
-  "dependencies": {
-    "antlr4ts": "^0.5.0-alpha.4",
-    "antlr4ts-cli": "^0.5.0-alpha.4",
-    "ts-node": "^3.3.0",
-    "tslib": "^2.0.0"
-  },
-  "devDependencies": {
-    "@types/expect": "^24.3.0",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^10.17.48",
-    "chai": "^4.3.4",
-    "mocha": "^9.1.2",
-    "prettier": "^2.4.1",
-    "ts-mocha": "^8.0.0",
-    "eslint": "^7.32.0",
-    "@typescript-eslint/parser": "^4.32.0",
-    "@typescript-eslint/eslint-plugin": "^4.32.0",
-    "typescript": "~4.1.2"
-  },
+  "types": "lib/index.d.ts",
   "prettier": {
     "tabWidth": 2,
     "singleQuote": false

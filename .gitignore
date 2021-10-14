@@ -5,6 +5,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# oclif .gitignore ttttt
+*-debug.log
+*-error.log
+/.nyc_output
+/lib
+/tmp
+/yarn.lock
+node_modules
+
 # Runtime data
 pids
 *.pid
@@ -62,3 +71,5 @@ typings/
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
+
+*.idea

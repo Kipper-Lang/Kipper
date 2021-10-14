@@ -99,3 +99,9 @@ npm run lint:fix
 ```sh
 npm test
 ```
+
+### Generate Antlr4 Files
+
+```bash
+antlr4 -o ./src/parser/antlr4_gen/ -Dlanguage=TypeScript ./grammar/Kipper.g4
+```
