@@ -16,7 +16,7 @@
     "prettier": "prettier --write ./src/",
     "tslint": "eslint src/**/*.ts",
     "tslint:fix": "npm run lint -- --fix",
-    "test": "ts-mocha -p tsconfig.json --recursive src/tests/**/*.ts",
+    "test": "ts-mocha -p tsconfig.json --recursive src/__tests__/**/*.ts",
     "posttest": "npm run lint:fix",
     "prestart": "npm run rebuild",
     "start": "node .",
