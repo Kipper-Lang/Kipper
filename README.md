@@ -1,4 +1,4 @@
-![](./src/img/Kipper-Logo-with-head.png)
+![](./img/Kipper-Logo-with-head.png)
 
 ## Goals
 
