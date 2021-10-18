@@ -50,7 +50,9 @@
   "keywords": [
     "oclif",
     "language",
-    "compiler"
+    "compiler",
+    "cli",
+    "C"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",

@@ -2,7 +2,7 @@
 
 # Kipper
 
-The Kipper programming language (CLI implementation)
+The Kipper programming language (CLI implementation) - Currently in development. No usable/stable versions available
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/kipper.svg)](https://npmjs.org/package/kipper)
@@ -10,6 +10,7 @@ The Kipper programming language (CLI implementation)
 [![License](https://img.shields.io/npm/l/kipper.svg)](https://github.com/Luna-Klatzer/Kipper/blob/master/package.json)
 
 <!-- toc -->
+* [Kipper](#kipper)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -22,7 +23,7 @@ $ npm install -g kipper
 $ kipper COMMAND
 running command...
 $ kipper (-v|--version|version)
-kipper/0.0.1 win32-x64 node-v14.15.3
+kipper/0.0.1 linux-x64 node-v16.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -33,11 +34,27 @@ USAGE
 # Commands
 
 <!-- commands -->
+* [`kipper hello`](#kipper-hello)
 * [`kipper help [COMMAND]`](#kipper-help-command)
+
+## `kipper hello`
+
+Returns a simple hello from Kipper!
+
+```
+USAGE
+  $ kipper hello
+
+EXAMPLE
+  $ kipper hello
+  Hello from Kipper v0.0.1!
+```
+
+_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.1/src/commands/hello.ts)_
 
 ## `kipper help [COMMAND]`
 
-Display help for kipper
+display help for kipper
 
 ```
 USAGE
