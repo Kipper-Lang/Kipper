@@ -23,7 +23,7 @@ export class KipperCompiler {
   /**
    * Fetches the content of a file and returns the entire content as a string
    * @param {string} fileLocation The relative or absolute path to the file
-   * @param {string} encoding The enconding that should be used to read the file
+   * @param {string} encoding The encoding that should be used to read the file
    * @returns {ParserFile} A new instance that contains the string content
    */
   getFileString(fileLocation: string, encoding: string): ParserFile {
