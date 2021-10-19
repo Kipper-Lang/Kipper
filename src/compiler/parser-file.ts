@@ -34,21 +34,21 @@ export class ParserFile {
   /**
    * Returns the absolute Path of the file
    */
-  get absolutePath() {
+  get absolutePath(): string {
     return this._absolutePath;
   }
 
   /**
    * Returns the input path that was given as the initializer
    */
-  get inputPath() {
+  get inputPath(): string {
     return this._inputPath;
   }
 
   /**
    * Returns the string content of the file
    */
-  get stringContent() {
+  get stringContent(): string {
     return this._stringContent;
   }
 }
