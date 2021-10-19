@@ -4,8 +4,22 @@ import { CharStreams, CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperLexer, KipperParser } from "./parser";
 import { CompilationUnitContext } from "./parser/KipperParser";
 import { ParserFile } from "./parser-file";
+import { KipperErrorListener } from "./error-handler";
 
 export class KipperCompiler {
+  private readonly _errorListener: KipperErrorListener<any>;
+
+  constructor() {
+    this._errorListener = new KipperErrorListener(); // using a general error listener for the entire compiler instance
+  }
+
+  /**
+   * Returns the error listener that was initialised at the construction of this class
+   */
+  get errorListener(): KipperErrorListener<any> {
+    return this._errorListener;
+  }
+
   /**
    * Fetches the content of a file and returns the entire content as a string
    * @param {string} fileLocation The relative or absolute path to the file
@@ -29,6 +43,9 @@ export class KipperCompiler {
     const lexer = new KipperLexer(inputStream);
     const tokenStream = new CommonTokenStream(lexer);
     const parser = new KipperParser(tokenStream);
+
+    parser.removeErrorListeners(); // removing all error listeners
+    parser.addErrorListener(this._errorListener); // adding our own error listener
 
     // Parse the input, where `compilationUnit` is whatever entry point you defined
     return parser.compilationUnit();
@@ -62,7 +79,5 @@ export class KipperCompiler {
   async syntaxAnalyse(fileLocation: string, encoding: string): Promise<void> {
     const inFile = this.getFileString(fileLocation, encoding);
     const compilationUnit = this.parse(inFile);
-
-
   }
 }

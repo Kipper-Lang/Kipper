@@ -1,8 +1,15 @@
-import {CommonToken, InputMismatchException, LexerNoViableAltException, NoViableAltException} from "antlr4ts";
-import {RecognitionException} from "antlr4ts/RecognitionException";
-import {FailedPredicateException} from "antlr4ts/FailedPredicateException";
+import {
+  CommonToken,
+  InputMismatchException,
+  LexerNoViableAltException,
+  NoViableAltException,
+} from "antlr4ts";
+import { RecognitionException } from "antlr4ts/RecognitionException";
+import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
+import { Recognizer } from "antlr4ts/Recognizer";
+import { KipperParser } from "./compiler/parser";
 
-class KipperError extends Error {
+export class KipperError extends Error {
   constructor(msg: string) {
     super(msg);
 
@@ -14,42 +21,50 @@ class KipperError extends Error {
 /**
  * SyntaxError that is used to indicate a syntax error detected by the antlr4 lexer
  */
-class KipperSyntaxError extends KipperError {
-  private readonly _offendingSymbol: CommonToken;
+export class KipperSyntaxError<Token> extends KipperError {
+  private readonly _recognizer: Recognizer<Token, any>;
+  private readonly _offendingSymbol: Token | undefined;
   private readonly _line: number;
   private readonly _column: number;
   private readonly _msg: string;
-  private readonly _error: RecognitionException |
-    NoViableAltException |
-    LexerNoViableAltException |
-    InputMismatchException |
-    FailedPredicateException;
+  private readonly _error:
+    | RecognitionException
+    | NoViableAltException
+    | LexerNoViableAltException
+    | InputMismatchException
+    | FailedPredicateException
+    | undefined;
 
   /**
    * KipperSyntaxError Constructor
-   * @param offendingSymbol The token that caused the error
-   * @param line The line of the element that caused the error
-   * @param column The column of the element that caused the error
-   * @param msg The msg that was generated as the error message in the Parser
-   * @param error The error instance that raised the syntax error in the Lexer
+   * @param {Recognizer<KipperParser, any>} recognizer The Antlr4 Parser - should normally always be KipperParser
+   * @param {CommonToken} offendingSymbol The token that caused the error
+   * @param {number} line The line of the element that caused the error
+   * @param {number} column The column of the element that caused the error
+   * @param {string} msg The msg that was generated as the error message in the Parser
+   * @param {RecognitionException} error The error instance that raised the syntax error in the Lexer
    */
   constructor(
-    offendingSymbol: CommonToken,
+    recognizer: Recognizer<Token, any>,
+    offendingSymbol: Token | undefined,
     line: number,
     column: number,
     msg: string,
-    error: RecognitionException |
-      NoViableAltException |
-      LexerNoViableAltException |
-      InputMismatchException |
-      FailedPredicateException
+    error:
+      | RecognitionException
+      | NoViableAltException
+      | LexerNoViableAltException
+      | InputMismatchException
+      | FailedPredicateException
+      | undefined
   ) {
     super(msg);
 
+    this._recognizer = recognizer;
     this._offendingSymbol = offendingSymbol;
-    this._line = line
+    this._line = line;
     this._column = column;
-    this._msg = msg
+    this._msg = msg;
     this._error = error;
 
     // Set the prototype explicitly.
@@ -57,9 +72,16 @@ class KipperSyntaxError extends KipperError {
   }
 
   /**
+   * Returns the Antlr4 Parser - should normally always be {@link KipperParser}
+   */
+  get recognizer(): Recognizer<Token, any> {
+    return this._recognizer;
+  }
+
+  /**
    * Returns the token that caused the error
    */
-  get offendingSymbol(): CommonToken {
+  get offendingSymbol(): Token | undefined {
     return this._offendingSymbol;
   }
 
@@ -87,8 +109,18 @@ class KipperSyntaxError extends KipperError {
   /**
    * Returns the error instance that raised the syntax error in the Lexer
    */
-  get error(): RecognitionException | NoViableAltException | LexerNoViableAltException |
-    InputMismatchException | FailedPredicateException {
+  get error():
+    | RecognitionException
+    | NoViableAltException
+    | LexerNoViableAltException
+    | InputMismatchException
+    | FailedPredicateException
+    | undefined {
     return this._error;
   }
+
+  /**
+   * Reports the syntax error and writes onto the console
+   */
+  async reportError(): Promise<void> {}
 }
