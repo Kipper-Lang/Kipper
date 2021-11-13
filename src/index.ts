@@ -1,9 +1,7 @@
-/*
- * Main Entry file for the project
- */
+const version = '0.0.1'
+const author = 'Luna Klatzer'
+const license = 'GPL-3.0'
 
-function run() {
-  console.log("This is the start of this project - Kipper v0.0.1");
-}
-
-export { run as kipperRunCLI };
+export {run} from '@oclif/command'
+export {version}
+export * from './compiler/index'

@@ -1,20 +1,74 @@
-![](./src/img/Kipper-Logo-with-head.png)
+![](./img/Kipper-Logo-with-head.png)
 
-## Goals
+# Kipper
 
-- Provide simple and straight-forward documentation on the programming language.
-- Provide an interactive code-editor and online compiler for using Kipper online.
-- Have a simple, organised and well-designed Homepage, providing info on the project and Kipper itself.
+The Kipper programming language (CLI implementation) - Currently in development. No usable/stable versions available
 
-## Timeline
-- 17th October: Grammar file and project setup for [Kipper](https://github.com/Luna-Klatzer/Kipper) finished.
-- 30th October: Design finalised and base page content is finished. Figma Design is done ([prototype](https://www.figma.com/proto/wpt1dHa6Y1NITO2sq0xdRX/Web-Layout?node-id=0%3A1)).
-- 13th December: Rough Design finished (HTML done) - CSS might be not fully implemented.
-- 16th January: Finished CSS and HTMl - Static part release candidate.
-- End of Winter Semester: Finalised design and release of [static part](https://github.com/WMC-AHIF-2021/Kipper-Web).
-- Summer Semester: Online Compiler (Playground) of Kipper
+*Note that this is a development preview! Stable releases might take until January-March 2022*
 
-## Team-Members
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/kipper.svg)](https://npmjs.org/package/kipper)
+[![Downloads/week](https://img.shields.io/npm/dw/kipper.svg)](https://npmjs.org/package/kipper)
+[![License](https://img.shields.io/npm/l/kipper.svg)](https://github.com/Luna-Klatzer/Kipper/blob/master/package.json)
+[![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 
-- Luna Klatzer (Team-Lead): Main Developer for the programming language and interactive editor (Mainly JS/TS)
-- Maximilian Seebacher: Main Developer for the Website and design (Mainly CSS, HTML)
+<!-- toc -->
+* [Kipper](#kipper)
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+
+# Usage
+
+<!-- usage -->
+```sh-session
+$ npm install -g kipper
+$ kipper COMMAND
+running command...
+$ kipper (-v|--version|version)
+kipper/0.0.1 linux-x64 node-v16.10.0
+$ kipper --help [COMMAND]
+USAGE
+  $ kipper COMMAND
+...
+```
+<!-- usagestop -->
+
+# Commands
+
+<!-- commands -->
+* [`kipper hello`](#kipper-hello)
+* [`kipper help [COMMAND]`](#kipper-help-command)
+
+## `kipper hello`
+
+Returns a simple hello from Kipper!
+
+```
+USAGE
+  $ kipper hello
+
+EXAMPLE
+  $ kipper hello
+  Hello from Kipper v0.0.1!
+```
+
+_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.1/src/commands/hello.ts)_
+
+## `kipper help [COMMAND]`
+
+display help for kipper
+
+```
+USAGE
+  $ kipper help [COMMAND]
+
+ARGUMENTS
+  COMMAND  command to show help for
+
+OPTIONS
+  --all  see all commands in CLI
+```
+
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
+<!-- commandsstop -->

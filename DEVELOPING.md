@@ -99,3 +99,9 @@ npm run lint:fix
 ```sh
 npm test
 ```
+
+### Generate Antlr4 Files
+
+```bash
+npm run antlr4ts
+```
