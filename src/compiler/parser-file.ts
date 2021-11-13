@@ -14,14 +14,14 @@ export class ParserFile {
 
   private _stringContent: string;
 
-  private readonly _encoding: string;
+  private readonly _encoding: BufferEncoding;
 
   /**
    * Parser File Constructor
    * @param {string} fileLocation The relative or absolute path to the file
    * @param {string} encoding The encoding that should be used to read the file
    */
-  constructor(fileLocation: string, encoding: string) {
+  constructor(fileLocation: string, encoding: BufferEncoding) {
     this._absolutePath = path.resolve(fileLocation)
     this._inputPath = fileLocation
     this._stringContent = ''
@@ -37,7 +37,7 @@ export class ParserFile {
     let content: string
     try {
       content = (await fs.readFile(
-        this._absolutePath, {encoding: this._encoding}
+        this._absolutePath, this._encoding
       )).toString()
     } catch (error) {
       // TODO! Add some sensible error handling here for the CLI
@@ -72,7 +72,7 @@ export class ParserFile {
   /**
    * Returns the encoding for this specific file
    */
-  get encoding(): string {
-    return this._stringContent
+  get encoding(): BufferEncoding {
+    return this._encoding
   }
 }

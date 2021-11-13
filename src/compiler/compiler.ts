@@ -27,7 +27,7 @@ export class KipperCompiler {
    * @param {string} encoding The encoding that should be used to read the file
    * @returns {ParserFile} A new instance that contains the string content
    */
-  async getParseFile(fileLocation: string, encoding: string): Promise<ParserFile> {
+  async getParseFile(fileLocation: string, encoding: BufferEncoding): Promise<ParserFile> {
     const file = new ParserFile(fileLocation, encoding)
     await file.readContent()
     return file
@@ -60,7 +60,7 @@ export class KipperCompiler {
    * @param {string} encoding The encoding that should be used to read the file
    * @returns {string} The compiled C code
    */
-  async compile(fileLocation: string, encoding: string): Promise<string> {
+  async compile(fileLocation: string, encoding: BufferEncoding): Promise<string> {
     const inFile: ParserFile = await this.getParseFile(fileLocation, encoding)
     const compilationUnit: CompilationUnitContext = await this.parse(inFile)
 
@@ -79,7 +79,7 @@ export class KipperCompiler {
    * @param {string} encoding The encoding that should be used to read the file
    * @throws {KipperSyntaxError} If a syntax-error is encountered
    */
-  async syntaxAnalyse(fileLocation: string, encoding: string): Promise<void> {
+  async syntaxAnalyse(fileLocation: string, encoding: BufferEncoding): Promise<void> {
     const inFile: ParserFile = await this.getParseFile(fileLocation, encoding)
     const compilationUnit: CompilationUnitContext = await this.parse(inFile)
   }

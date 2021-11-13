@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `/test/module` for module specific tests using `mocha`
 - `KipperErrorListener<Token>` for listening to `KipperParser` and `KipperLexer` errors
 - `ParserFile` for implementing the stream that may be used for `KipperCompiler.parser()`
-
+-
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 

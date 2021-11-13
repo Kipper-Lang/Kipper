@@ -33,6 +33,6 @@ Full log available at \`local/path/kipper-analyse_HH-MM-SS_dd-mm-yy.log\`
   async run() {
     const {args, flags} = this.parse(Analyse)
     const compiler = new KipperCompiler()
-    await compiler.syntaxAnalyse(args.file, flags.encoding as string)
+    await compiler.syntaxAnalyse(args.file, flags.encoding as BufferEncoding)
   }
 }
