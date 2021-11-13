@@ -6,7 +6,10 @@
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
-    "target": "es2017"
+    "target": "es2020",
+    "lib": [
+      "ES7"
+    ]
   },
   "include": [
     "src/**/*"

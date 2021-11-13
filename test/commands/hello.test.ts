@@ -1,10 +1,10 @@
-import {expect, test} from '@oclif/test'
+import {expect, test} from "@oclif/test";
 
-describe('hello', () => {
+describe("hello", () => {
   test
-  .stdout()
-  .command([])
-  .it('runs hello', ctx => {
-    expect(ctx.stdout).to.contain('Hello from Kipper v0.0.1')
-  })
-})
+    .stdout()
+    .command(["hello"])
+    .it("runs hello", ctx => {
+      expect(ctx.stdout).to.contain("Hello from Kipper v0.0.1");
+    });
+});
