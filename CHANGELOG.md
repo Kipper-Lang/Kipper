@@ -24,11 +24,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-## [0.0.1] - 2021-10-09
-
-### Added
-- Initial release, which contains the base content (no functioning content)
-
-[unreleased]: https://github.com/WMC-AHIF-2021/Kipper-Web/compare/dev...HEAD
-[0.0.1]: https://github.com/WMC-AHIF-2021/Kipper-Web/compare/dev...HEAD
-
+[unreleased]: https://github.com/WMC-AHIF-2021/Kipper-Web/compare/0.0.2...HEAD
+[0.0.2]: https://github.com/WMC-AHIF-2021/Kipper-Web/tags/0.0.2

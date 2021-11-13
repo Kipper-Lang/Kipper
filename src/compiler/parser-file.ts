@@ -8,20 +8,20 @@ import * as path from 'path'
  * @since 0.0.1
  */
 export class ParserFile {
-  private readonly _absolutePath: string;
+  private readonly _absolutePath: string
 
-  private readonly _inputPath: string;
+  private readonly _inputPath: string
 
-  private _stringContent: string;
+  private _stringContent: string
 
-  private readonly _encoding: string;
+  private readonly _encoding: BufferEncoding
 
   /**
    * Parser File Constructor
    * @param {string} fileLocation The relative or absolute path to the file
    * @param {string} encoding The encoding that should be used to read the file
    */
-  constructor(fileLocation: string, encoding: string) {
+  constructor(fileLocation: string, encoding: BufferEncoding) {
     this._absolutePath = path.resolve(fileLocation)
     this._inputPath = fileLocation
     this._stringContent = ''
@@ -31,17 +31,17 @@ export class ParserFile {
   /**
    * Reads the content from the file asynchronously and updated the local
    * '_stringContent' private field.
-   * @return Promise<string> Returns the string that was read from the file
+   * @returns {Promise<string>} Returns the string that was read from the file
    */
   async readContent(): Promise<string> {
     let content: string
     try {
       content = (await fs.readFile(
-        this._absolutePath, {encoding: this._encoding}
+        this._absolutePath, this._encoding as BufferEncoding
       )).toString()
-    } catch (err) {
+    } catch (error) {
       // TODO! Add some sensible error handling here for the CLI
-      throw err
+      throw error
     }
 
     this._stringContent = content.replace(/(\r(\n)?)/gi, '\n')
@@ -72,7 +72,7 @@ export class ParserFile {
   /**
    * Returns the encoding for this specific file
    */
-  get encoding(): string {
-    return this._stringContent
+  get encoding(): BufferEncoding {
+    return this._encoding
   }
 }
