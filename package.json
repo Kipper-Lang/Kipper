@@ -31,7 +31,8 @@
     "rimraf": "^3.0.2",
     "typescript": "^3.9.10",
     "prettier": "^2.4.1",
-    "@sinonjs/fake-timers": "~6.0.0"
+    "@sinonjs/fake-timers": "~6.0.0",
+    "@types/sinonjs__fake-timers": "~6.0.0"
   },
   "engines": {
     "node": ">=12.0.0"
