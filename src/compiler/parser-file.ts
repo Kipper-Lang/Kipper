@@ -31,7 +31,7 @@ export class ParserFile {
   /**
    * Reads the content from the file asynchronously and updated the local
    * '_stringContent' private field.
-   * @return Promise<string> Returns the string that was read from the file
+   * @returns {Promise<string>} Returns the string that was read from the file
    */
   async readContent(): Promise<string> {
     let content: string
@@ -39,9 +39,9 @@ export class ParserFile {
       content = (await fs.readFile(
         this._absolutePath, {encoding: this._encoding}
       )).toString()
-    } catch (err) {
+    } catch (error) {
       // TODO! Add some sensible error handling here for the CLI
-      throw err
+      throw error
     }
 
     this._stringContent = content.replace(/(\r(\n)?)/gi, '\n')

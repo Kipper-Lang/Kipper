@@ -4,6 +4,9 @@
     "oclif-typescript"
   ],
   "rules": {
-    "max-params": 0
+    "max-params": 0,
+    "no-unused-vars": "off",
+    "no-warning-comments": "off",
+    "@typescript-eslint/no-unused-vars": ["warning"]
   }
 }
