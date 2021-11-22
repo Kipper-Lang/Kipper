@@ -80,6 +80,5 @@
   "prettier": {
     "tabWidth": 2,
     "singleQuote": false
-  },
-  "type": "module"
+  }
 }
