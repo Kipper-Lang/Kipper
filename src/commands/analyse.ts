@@ -13,7 +13,7 @@ Validating syntax... - file.kip
 
 Full log available at \`local/path/kipper-analyse_HH-MM-SS_dd-mm-yy.log\`
 `,
-  ];
+  ]
 
   static args = [
     {
@@ -21,14 +21,14 @@ Full log available at \`local/path/kipper-analyse_HH-MM-SS_dd-mm-yy.log\`
       required: true,
       description: "The file that should be analysed and checked",
     },
-  ];
+  ]
 
   static flags = {
     encoding: flags.string({
       default: "utf-8",
       description: "The encoding that should be used to read the file",
     }),
-  };
+  }
 
   async run() {
     const { args, flags } = this.parse(Analyse);

@@ -9,7 +9,7 @@ export default class Hello extends Command {
     `$ kipper hello
 Hello from Kipper v0.0.2!
 `,
-  ];
+  ]
 
   async run() {
     this.log(`Hello from Kipper v${version}!`);

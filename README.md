@@ -53,8 +53,6 @@ EXAMPLE
   Hello from Kipper v0.0.2!
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.2/src/commands/hello.ts)_
-
 ## `kipper help [COMMAND]`
 
 display help for kipper
