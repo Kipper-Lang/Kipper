@@ -8,11 +8,11 @@ import * as path from "path";
  * @since 0.0.1
  */
 export class ParserFile {
-  private readonly _absolutePath: string
+  private readonly _absolutePath: string;
 
-  private readonly _inputPath: string
+  private readonly _inputPath: string;
 
-  private _stringContent: string
+  private _stringContent: string;
 
   private readonly _encoding: BufferEncoding;
 

@@ -7,7 +7,7 @@ import { ParserFile } from "./parser-file";
 import { CompilationUnitContext } from "./parser/KipperParser";
 
 export class KipperCompiler {
-  private readonly _errorListener: KipperErrorListener<any>
+  private readonly _errorListener: KipperErrorListener<any>;
 
   constructor() {
     // using a general error listener for the entire compiler instance

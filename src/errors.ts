@@ -17,15 +17,15 @@ export class KipperError extends Error {
  * SyntaxError that is used to indicate a syntax error detected by the antlr4 lexer
  */
 export class KipperSyntaxError<Token> extends KipperError {
-  private readonly _recognizer: Recognizer<Token, any>
+  private readonly _recognizer: Recognizer<Token, any>;
 
-  private readonly _offendingSymbol: Token | undefined
+  private readonly _offendingSymbol: Token | undefined;
 
-  private readonly _line: number
+  private readonly _line: number;
 
-  private readonly _column: number
+  private readonly _column: number;
 
-  private readonly _msg: string
+  private readonly _msg: string;
 
   private readonly _error:
     | RecognitionException
@@ -33,7 +33,7 @@ export class KipperSyntaxError<Token> extends KipperError {
     | LexerNoViableAltException
     | InputMismatchException
     | FailedPredicateException
-    | undefined
+    | undefined;
 
   /**
    * KipperSyntaxError Constructor
