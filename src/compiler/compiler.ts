@@ -1,24 +1,24 @@
 // Main Compiler file for interacting with the entire Kipper Compiler
 
-import {CharStreams, CodePointCharStream, CommonTokenStream} from 'antlr4ts'
-import {KipperErrorListener} from './error-handler'
-import {KipperLexer, KipperParser} from './parser'
-import {ParserFile} from './parser-file'
-import {CompilationUnitContext} from './parser/KipperParser'
+import { CharStreams, CodePointCharStream, CommonTokenStream } from "antlr4ts";
+import { KipperErrorListener } from "./error-handler";
+import { KipperLexer, KipperParser } from "./parser";
+import { ParserFile } from "./parser-file";
+import { CompilationUnitContext } from "./parser/KipperParser";
 
 export class KipperCompiler {
   private readonly _errorListener: KipperErrorListener<any>
 
   constructor() {
     // using a general error listener for the entire compiler instance
-    this._errorListener = new KipperErrorListener()
+    this._errorListener = new KipperErrorListener();
   }
 
   /**
    * Returns the error listener that was initialised at the construction of this class
    */
   get errorListener(): KipperErrorListener<any> {
-    return this._errorListener
+    return this._errorListener;
   }
 
   /**
@@ -28,9 +28,9 @@ export class KipperCompiler {
    * @returns {ParserFile} A new instance that contains the string content
    */
   async getParseFile(fileLocation: string, encoding: BufferEncoding): Promise<ParserFile> {
-    const file = new ParserFile(fileLocation, encoding)
-    await file.readContent()
-    return file
+    const file = new ParserFile(fileLocation, encoding);
+    await file.readContent();
+    return file;
   }
 
   /**
@@ -40,18 +40,16 @@ export class KipperCompiler {
    */
   async parse(inFile: ParserFile): Promise<CompilationUnitContext> {
     // Create the lexer and parser
-    const inputStream: CodePointCharStream = CharStreams.fromString(
-      inFile.stringContent,
-    )
-    const lexer = new KipperLexer(inputStream)
-    const tokenStream = new CommonTokenStream(lexer)
-    const parser = new KipperParser(tokenStream)
+    const inputStream: CodePointCharStream = CharStreams.fromString(inFile.stringContent);
+    const lexer = new KipperLexer(inputStream);
+    const tokenStream = new CommonTokenStream(lexer);
+    const parser = new KipperParser(tokenStream);
 
-    parser.removeErrorListeners() // removing all error listeners
-    parser.addErrorListener(this._errorListener) // adding our own error listener
+    parser.removeErrorListeners(); // removing all error listeners
+    parser.addErrorListener(this._errorListener); // adding our own error listener
 
     // Parse the input, where `compilationUnit` is whatever entry point you defined
-    return parser.compilationUnit()
+    return parser.compilationUnit();
   }
 
   /**
@@ -61,8 +59,8 @@ export class KipperCompiler {
    * @returns {string} The compiled C code
    */
   async compile(fileLocation: string, encoding: BufferEncoding): Promise<string> {
-    const inFile: ParserFile = await this.getParseFile(fileLocation, encoding)
-    const compilationUnit: CompilationUnitContext = await this.parse(inFile)
+    const inFile: ParserFile = await this.getParseFile(fileLocation, encoding);
+    const compilationUnit: CompilationUnitContext = await this.parse(inFile);
 
     // TODO! Implement parsing function - add to this function
     //  Add Visitor class and implementation for generating logic stream (lexing and parsing)
@@ -70,7 +68,7 @@ export class KipperCompiler {
     //  Validate the existence of all items (linker)
     //  Generate Code (code generator)
 
-    return ''
+    return "";
   }
 
   /**
@@ -81,7 +79,7 @@ export class KipperCompiler {
    * @throws {KipperSyntaxError} If a syntax-error is encountered
    */
   async syntaxAnalyse(fileLocation: string, encoding: BufferEncoding): Promise<void> {
-    const inFile: ParserFile = await this.getParseFile(fileLocation, encoding)
-    const compilationUnit: CompilationUnitContext = await this.parse(inFile)
+    const inFile: ParserFile = await this.getParseFile(fileLocation, encoding);
+    const compilationUnit: CompilationUnitContext = await this.parse(inFile);
   }
 }

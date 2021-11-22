@@ -1,15 +1,15 @@
-import {CommonToken, InputMismatchException, LexerNoViableAltException, NoViableAltException} from 'antlr4ts'
-import {FailedPredicateException} from 'antlr4ts/FailedPredicateException'
-import {RecognitionException} from 'antlr4ts/RecognitionException'
-import {Recognizer} from 'antlr4ts/Recognizer'
-import {KipperParser} from './compiler/parser'
+import { CommonToken, InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
+import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
+import { RecognitionException } from "antlr4ts/RecognitionException";
+import { Recognizer } from "antlr4ts/Recognizer";
+import { KipperParser } from "./compiler/parser";
 
 export class KipperError extends Error {
   constructor(msg: string) {
-    super(msg)
+    super(msg);
 
     // Set the prototype explicitly.
-    Object.setPrototypeOf(this, KipperError.prototype)
+    Object.setPrototypeOf(this, KipperError.prototype);
   }
 }
 
@@ -56,54 +56,54 @@ export class KipperSyntaxError<Token> extends KipperError {
       | LexerNoViableAltException
       | InputMismatchException
       | FailedPredicateException
-      | undefined,
+      | undefined
   ) {
-    super(msg)
+    super(msg);
 
-    this._recognizer = recognizer
-    this._offendingSymbol = offendingSymbol
-    this._line = line
-    this._column = column
-    this._msg = msg
-    this._error = error
+    this._recognizer = recognizer;
+    this._offendingSymbol = offendingSymbol;
+    this._line = line;
+    this._column = column;
+    this._msg = msg;
+    this._error = error;
 
     // Set the prototype explicitly.
-    Object.setPrototypeOf(this, KipperSyntaxError.prototype)
+    Object.setPrototypeOf(this, KipperSyntaxError.prototype);
   }
 
   /**
    * Returns the Antlr4 Parser - should normally always be {@link KipperParser}
    */
   get recognizer(): Recognizer<Token, any> {
-    return this._recognizer
+    return this._recognizer;
   }
 
   /**
    * Returns the token that caused the error
    */
   get offendingSymbol(): Token | undefined {
-    return this._offendingSymbol
+    return this._offendingSymbol;
   }
 
   /**
    * Returns the line of the element that caused the error
    */
   get line(): number {
-    return this._line
+    return this._line;
   }
 
   /**
    * Returns the column of the element that caused the error
    */
   get column(): number {
-    return this._column
+    return this._column;
   }
 
   /**
    * Returns the msg that was generated as the error message in the Parser
    */
   get msg(): string {
-    return this._msg
+    return this._msg;
   }
 
   /**
@@ -116,12 +116,11 @@ export class KipperSyntaxError<Token> extends KipperError {
     | InputMismatchException
     | FailedPredicateException
     | undefined {
-    return this._error
+    return this._error;
   }
 
   /**
    * Reports the syntax error and writes onto the console
    */
-  async reportError(): Promise<void> {
-  }
+  async reportError(): Promise<void> {}
 }

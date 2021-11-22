@@ -1,7 +1,7 @@
-import {ANTLRErrorListener} from 'antlr4ts/ANTLRErrorListener'
-import {RecognitionException} from 'antlr4ts/RecognitionException'
-import {Recognizer} from 'antlr4ts/Recognizer'
-import {KipperSyntaxError} from '../errors'
+import { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
+import { RecognitionException } from "antlr4ts/RecognitionException";
+import { Recognizer } from "antlr4ts/Recognizer";
+import { KipperSyntaxError } from "../errors";
 
 export class KipperErrorListener<Token> implements ANTLRErrorListener<Token> {
   syntaxError(
@@ -10,15 +10,8 @@ export class KipperErrorListener<Token> implements ANTLRErrorListener<Token> {
     line: number,
     charPositionInLine: number,
     msg: string,
-    e: RecognitionException | undefined,
+    e: RecognitionException | undefined
   ) {
-    throw new KipperSyntaxError<Token>(
-      recognizer,
-      offendingSymbol,
-      line,
-      charPositionInLine,
-      msg,
-      e,
-    )
+    throw new KipperSyntaxError<Token>(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
   }
 }

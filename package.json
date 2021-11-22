@@ -82,8 +82,8 @@
     "lint": "npm run tslint && npm run prettier",
     "lint:fix": "npm run tslint:fix && npm run prettier",
     "prettier": "prettier --write ./src/",
-    "tslint": "eslint src/**/*.ts || true",
-    "tslint:fix": "eslint src/**/*.ts --fix || true && npm run prettier",
+    "tslint": "eslint src/**/*.ts --ext .ts --config .eslintrc",
+    "tslint:fix": "eslint src/**/*.ts --fix --ext .ts --config .eslintrc && npm run prettier",
     "antlr4ts": "antlr4ts -visitor -o src/compiler/parser/ Kipper.g4"
   },
   "types": "lib/index.d.ts",
