@@ -7,7 +7,7 @@ const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
 describe("lib-compile", () => {
   it("lib-single-file", async () => {
     const compiler = new KipperCompiler();
-    const fileToParse = await compiler.getParseFile(fileLocation, "utf-8");
+    const fileToParse = await compiler.getParseFile(fileLocation, "utf-8" as BufferEncoding);
     let compilationUnit: CompilationUnitContext = await compiler.parse(fileToParse);
     assert(
       compilationUnit != undefined,

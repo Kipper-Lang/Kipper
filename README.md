@@ -26,7 +26,7 @@ $ npm install -g kipper
 $ kipper COMMAND
 running command...
 $ kipper (-v|--version|version)
-kipper/0.0.1 linux-x64 node-v16.10.0
+kipper/0.0.2 linux-x64 node-v16.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -50,10 +50,10 @@ USAGE
 
 EXAMPLE
   $ kipper hello
-  Hello from Kipper v0.0.1!
+  Hello from Kipper v0.0.2!
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.1/src/commands/hello.ts)_
+_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.2/src/commands/hello.ts)_
 
 ## `kipper help [COMMAND]`
 
