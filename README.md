@@ -37,12 +37,38 @@ USAGE
 # Commands
 
 <!-- commands -->
+* [`kipper analyse FILE`](#kipper-analyse-file)
 * [`kipper hello`](#kipper-hello)
 * [`kipper help [COMMAND]`](#kipper-help-command)
 
+## `kipper analyse FILE`
+
+Analyses a file and validates its syntax
+
+```
+USAGE
+  $ kipper analyse FILE
+
+ARGUMENTS
+  FILE  The file that should be analysed and checked
+
+OPTIONS
+  --encoding=encoding  [default: utf-8] The encoding that should be used to read the file
+
+EXAMPLE
+  $ kipper analyse
+  Validating syntax... - file.kip
+
+  0 Warnings, 0 Errors found!
+
+  Full log available at `local/path/kipper-analyse_HH-MM-SS_dd-mm-yy.log`
+```
+
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.2/src/commands/analyse.ts)_
+
 ## `kipper hello`
 
-Returns a simple hello from Kipper!
+Returns a simple hello from Kipper
 
 ```
 USAGE
@@ -50,8 +76,10 @@ USAGE
 
 EXAMPLE
   $ kipper hello
-  Hello from Kipper v0.0.2!
+  Hello from Kipper!
 ```
+
+_See code: [src/commands/hello.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.0.2/src/commands/hello.ts)_
 
 ## `kipper help [COMMAND]`
 
