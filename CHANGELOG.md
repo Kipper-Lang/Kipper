@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Class `CLIKipperCompiler` for Graphical CLI output
+- CLI Output Handler function `handleCLICall`
+- CLI Logging implementation using `tslog`
 
 ### Changed
 

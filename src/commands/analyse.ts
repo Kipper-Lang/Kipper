@@ -1,6 +1,7 @@
 // Syntax-analyse command for analysing the syntax of a file
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler } from "../compiler";
+import { CLIKipperCompiler } from "../compiler";
+import {handleCLICall} from "../errors";
 
 export default class Analyse extends Command {
   static description = "Analyses a file and validates its syntax";
@@ -28,11 +29,22 @@ Full log available at \`local/path/kipper-analyse_HH-MM-SS_dd-mm-yy.log\`
       default: "utf-8",
       description: "The encoding that should be used to read the file",
     }),
+    verbose: flags.boolean({
+      description: "If the compiler should log verbose (Logs everything)",
+    }),
+    debug: flags.boolean({
+      description: "Whether the compiler should log debug messages. If --verbose is set this ",
+    }),
   };
 
   async run() {
     const { args, flags } = this.parse(Analyse);
-    const compiler = new KipperCompiler();
-    await compiler.syntaxAnalyse(args.file, flags.encoding as BufferEncoding);
+    const compiler = new CLIKipperCompiler();
+
+    await handleCLICall(
+      compiler.logger, this, async () => {
+        await compiler.syntaxAnalyse(args.file, flags.encoding as BufferEncoding);
+      }
+    );
   }
 }

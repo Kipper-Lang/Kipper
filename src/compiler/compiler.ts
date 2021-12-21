@@ -5,8 +5,14 @@ import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
 import { ParserFile } from "./parser-file";
 import { CompilationUnitContext } from "./parser/KipperParser";
+import { Logger } from "tslog";
 
 export class KipperCompiler {
+  /**
+   * The private '_errorListener' that actually contains the instance,
+   * which is used inside the getter 'errorListener'
+   * @private
+   */
   private readonly _errorListener: KipperErrorListener<any>;
 
   constructor() {
@@ -81,5 +87,84 @@ export class KipperCompiler {
   async syntaxAnalyse(fileLocation: string, encoding: BufferEncoding): Promise<void> {
     const inFile: ParserFile = await this.getParseFile(fileLocation, encoding);
     const compilationUnit: CompilationUnitContext = await this.parse(inFile);
+  }
+}
+
+export class CLIKipperCompiler extends KipperCompiler {
+  /**
+   * The private '_verbose' boolean that actually contains the value,
+   * which is used inside the getter 'verbose'
+   * @private
+   */
+  private readonly _verbose: boolean;
+
+  /**
+   * The private '_debug' boolean that actually contains the value,
+   * which is used inside the getter 'debug'
+   * @private
+   */
+  private readonly _debug: boolean;
+
+  /**
+   * The private '_logger' instance, which contains the 'tslog' {@link Logger}
+   * @private
+   */
+  private readonly _logger: Logger;
+
+  /**
+   * Initialises the CLI Kipper Compiler
+   * @param verbose If set to true, the compiler will log everything
+   * @param debug If set to true, the compiler will log also debug messages (not as verbose)
+   */
+  constructor(verbose = false, debug = false) {
+    super();
+    this._verbose = verbose;
+    this._debug = debug;
+    this._logger = new Logger(
+      {
+        name: "Kipper-Logger",
+        minLevel: verbose ? "silly" : (debug ? "debug" : "info"),
+        displayDateTime: false,
+        displayFunctionName: false,
+        displayRequestId: false,
+        displayLoggerName: false,
+        displayFilePath: "hidden"
+      }
+    );
+  }
+
+  /**
+   * Returns whether the compiler should log content verbose. (Everything is logged)
+   */
+  get verbose(): boolean {
+    return this._verbose;
+  }
+
+  /**
+   * Returns whether the compiler was set to log debug messages.
+   */
+  get debug(): boolean {
+    return this._debug;
+  }
+
+  /**
+   * Returns the logger for the current CLI run
+   */
+  get logger(): Logger {
+    return this._logger;
+  }
+
+  /**
+   * Logs the start of processing
+   * @returns {void} Nothing
+   * @private
+   */
+  private async logInit(): Promise<void> {
+    this._logger.info(`Starting log output`);
+  }
+
+  async syntaxAnalyse(fileLocation: string, encoding: BufferEncoding): Promise<void> {
+    await this.logInit();
+    await super.syntaxAnalyse(fileLocation, encoding);
   }
 }

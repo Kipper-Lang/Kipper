@@ -4,6 +4,7 @@ import { Recognizer } from "antlr4ts/Recognizer";
 import { KipperSyntaxError } from "../errors";
 
 export class KipperErrorListener<Token> implements ANTLRErrorListener<Token> {
+  // eslint-disable-next-line max-params
   syntaxError(
     recognizer: Recognizer<Token, any>,
     offendingSymbol: Token | undefined,
@@ -12,6 +13,14 @@ export class KipperErrorListener<Token> implements ANTLRErrorListener<Token> {
     msg: string,
     e: RecognitionException | undefined
   ) {
-    throw new KipperSyntaxError<Token>(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+    throw new KipperSyntaxError<Token>(
+      msg,
+      {
+        recognizer,
+        offendingSymbol,
+        line,
+        column: charPositionInLine,
+        error: e
+      });
   }
 }
