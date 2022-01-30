@@ -1,7 +1,6 @@
 import { assert } from "chai";
 import { KipperCompiler } from "../../lib";
 import { KipperLogger, LogLevel } from "../../lib/logger";
-import { emit } from "cluster";
 
 describe("KipperCompiler", () => {
   it("constructor", () => {
