@@ -1,3 +1,10 @@
+/**
+ * Errors for the {@link KipperCompiler} that are used throughout this library. All errors inherit from the base
+ * {@link KipperError}
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.0.2
+ */
 import { CommonToken, InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
@@ -122,5 +129,6 @@ export class KipperSyntaxError<Token> extends KipperError {
   /**
    * Reports the syntax error and writes onto the console
    */
-  async reportError(): Promise<void> {}
+  async reportError(): Promise<void> {
+  }
 }

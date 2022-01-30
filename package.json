@@ -13,7 +13,8 @@
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.3",
     "tslib": "^1.14.1",
-    "ts-node": "^8.10.2"
+    "ts-node": "^8.10.2",
+    "tslog": "^3.3.1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
@@ -34,11 +35,13 @@
     "pseudomap": "1.0.2",
     "ts-node": "8.10.2",
     "typescript": "^3.9.10",
+    "tsify": "^5.0.4",
+    "browserify": "^17.0.0",
     "@types/sinon": "^7.5.2",
     "@sinonjs/fake-timers": "^6.0.1"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "files": [
     "/bin",
@@ -61,6 +64,7 @@
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "kipper",
@@ -73,6 +77,7 @@
     "posttest": "npm run lint:fix",
     "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
+    "build": "tsc",
     "version": "oclif-dev readme && git add README.md",
     "lint": "npm run tslint && npm run prettier",
     "lint:fix": "npm run tslint:fix && npm run prettier",
@@ -80,9 +85,9 @@
     "tslint": "eslint src/**/*.ts --ext .ts --config .eslintrc",
     "tslint:fix": "eslint src/**/*.ts --fix --ext .ts --config .eslintrc && npm run prettier",
     "antlr4ts": "antlr4ts -visitor -o src/compiler/parser/ Kipper.g4",
-    "start": "./bin/run"
+    "prestart": "npm run build",
+    "start": "node ./bin/run"
   },
-  "types": "lib/index.d.ts",
   "prettier": {
     "tabWidth": 2,
     "singleQuote": false

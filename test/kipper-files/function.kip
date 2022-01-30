@@ -1,9 +1,1 @@
-const variable: int = 4;
-
-def x(param: int) -> int {
-    call print(param);
-
-    return param * param;
-}
-
-call x(variable);
+uasdhrn;sef j sa;ihdf14 jf32

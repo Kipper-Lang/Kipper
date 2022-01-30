@@ -1,14 +1,14 @@
 /**
- * 'analyse' command for analysing the syntax of a file
+ * 'run' command for running a compiled kipper-file (.js file) or compiling and running a file in one
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.2
+ * @since 0.0.3
  */
 import { Command, flags } from "@oclif/command";
 import { KipperCompiler } from "../compiler";
 
-export default class Analyse extends Command {
-  static description = "Analyses a file and validates its syntax";
+export default class Run extends Command {
+  static description = "Runs a compiled file or compiles and afterwards runs the passed file";
 
   // TODO! Add examples when the command moves out of development
   static examples = [];
@@ -17,7 +17,7 @@ export default class Analyse extends Command {
     {
       name: "file",
       required: true,
-      description: "The file that should be analysed and checked"
+      description: "The file that should be either run (.js) or compiled and afterwards run"
     }
   ];
 
@@ -29,8 +29,8 @@ export default class Analyse extends Command {
   };
 
   async run() {
-    const { args, flags } = this.parse(Analyse);
+    const { args, flags } = this.parse(Run);
     const compiler = new KipperCompiler();
-    await compiler.syntaxAnalyseFile(args.file, true, flags.encoding as BufferEncoding);
+    await compiler.compileFile(args.file, true, flags.encoding as BufferEncoding);
   }
 }
