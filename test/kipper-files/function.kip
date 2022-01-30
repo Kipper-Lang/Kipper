@@ -1,1 +1,12 @@
-uasdhrn;sef j sa;ihdf14 jf32
+const variable: int = 4;
+
+// Get sum of all items stored inside 'param'
+def getSumOf(param: list<int>) -> int {
+  sum: int = 0;
+  for (int i = 0; i < param.len; i++) {
+	sum += param[i];
+  }
+  return sum;
+}
+
+call getSumOf([1, 2, 3, 4] as list<int>);
