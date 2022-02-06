@@ -51,6 +51,9 @@ import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
 import { IterationStatementContext } from "./KipperParser";
+import { ForConditionContext } from "./KipperParser";
+import { ForDeclarationContext } from "./KipperParser";
+import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
@@ -408,6 +411,27 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitIterationStatement?: (ctx: IterationStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.forCondition`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForCondition?: (ctx: ForConditionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.forDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForDeclaration?: (ctx: ForDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.forExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForExpression?: (ctx: ForExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.jumpStatement`.

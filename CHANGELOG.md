@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for `multiItemTypeSpecifier`, which use the `identifier<T>` syntax (for lists specifically).
 - Support for `typeof(V)` (`typeofTypeSpecifier`) syntax for `typeSpecifier` expressions.
 - Support for Kipper-Conversion `identifier as typeSpecifier` syntax.
+- Support for for-loops using the `for(INIT_EXPRESSION; CONDITION, LOOP_EXPRESSION) STATEMENT` syntax.
 
 ### Changed
 - Made `KipperParseFile` inherit from `KipperParseStream` and made it be a specific interface for files alone, while

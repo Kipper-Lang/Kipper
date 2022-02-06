@@ -199,8 +199,21 @@ selectionStatement
     ;
 
 iterationStatement
-    :   While WS* '(' WS* expression WS* ')' WS* statement
+    :   For WS* '(' forCondition ')' WS* statement
+    |   While WS* '(' WS* expression WS* ')' WS* statement
     |   Do WS* statement WS* While WS* '(' WS* expression WS* ')' endOfItem
+    ;
+
+forCondition
+	  :   (forDeclaration | expression?) endOfItem forExpression? endOfItem forExpression?
+	  ;
+
+forDeclaration
+    :   storageTypeSpecifier WS* initDeclarator
+    ;
+
+forExpression
+    :   assignmentExpression WS* (',' WS* assignmentExpression WS* )*
     ;
 
 jumpStatement

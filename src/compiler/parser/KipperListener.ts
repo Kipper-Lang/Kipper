@@ -51,6 +51,9 @@ import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
 import { IterationStatementContext } from "./KipperParser";
+import { ForConditionContext } from "./KipperParser";
+import { ForDeclarationContext } from "./KipperParser";
+import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
@@ -603,6 +606,39 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIterationStatement?: (ctx: IterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.forCondition`.
+	 * @param ctx the parse tree
+	 */
+	enterForCondition?: (ctx: ForConditionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.forCondition`.
+	 * @param ctx the parse tree
+	 */
+	exitForCondition?: (ctx: ForConditionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.forDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterForDeclaration?: (ctx: ForDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.forDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitForDeclaration?: (ctx: ForDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.forExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterForExpression?: (ctx: ForExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.forExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitForExpression?: (ctx: ForExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.jumpStatement`.
