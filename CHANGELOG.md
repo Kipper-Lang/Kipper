@@ -11,8 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic `run` command for running a compiled file or compiling and running a file. (This is still in development).
 - Basic `compile` command for compiling a file into it's js-counterpart with its typescript types added.
 - New Parse Stream class `KipperParseStream`, which implements a basic Utf-16 stream.
-- Added support for `[]` initializers for lists in Kipper.g4.
-- Added support for `multiItemTypeSpecifier`, which use the `identifier<T>` syntax (for lists specifically).
+- Support for `[]` initializers for lists in Kipper.g4.
+- Support for `multiItemTypeSpecifier`, which use the `identifier<T>` syntax (for lists specifically).
+- Support for `typeof(V)` (`typeofTypeSpecifier`) syntax for `typeSpecifier` expressions.
+- Support for Kipper-Conversion `identifier as typeSpecifier` syntax.
 
 ### Changed
 - Made `KipperParseFile` inherit from `KipperParseStream` and made it be a specific interface for files alone, while

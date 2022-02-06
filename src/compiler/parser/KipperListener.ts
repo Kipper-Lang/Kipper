@@ -8,6 +8,7 @@ import { ExternalDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
 import { MultiItemTypeSpecifierContext } from "./KipperParser";
+import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -127,6 +128,19 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `typeofTypeSpecifier`
+	 * labeled alternative in `KipperParser.typeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by the `typeofTypeSpecifier`
+	 * labeled alternative in `KipperParser.typeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.primaryExpression`.

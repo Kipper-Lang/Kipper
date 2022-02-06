@@ -17,7 +17,7 @@ postfixExpression
         | ('++' | '--')
         )*
         |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')'
+        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' // function call
     ;
 
 argumentExpressionList
@@ -39,6 +39,7 @@ unaryOperator
 castOrConvertExpression
     :   unaryExpression
     |   DigitSequence // for
+    |   unaryExpression WS* 'as' WS* typeSpecifier // conversion function
     ;
 
 multiplicativeExpression
@@ -104,12 +105,13 @@ declarationSpecifier
     ;
 
 initDeclarator
-    :   declarator WS* typeSpecifier WS* ('=' WS* initializer WS*)?
+    :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
     ;
 
 typeSpecifier
-    :   ':' WS* Identifier #singleItemTypeSpecifier // for single items, like 'num'
-    |   ':' WS* Identifier '<' Identifier '>' #multiItemTypeSpecifier // for lists
+    :   Identifier #singleItemTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' #multiItemTypeSpecifier // for lists
+    |   'typeof' WS* '(' Identifier ')' #typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
@@ -236,6 +238,9 @@ endOfItem
 // const / var
 Const : 'const';
 Var : 'var';
+
+// conversion
+As : 'as';
 
 // switch
 Switch : 'switch';
