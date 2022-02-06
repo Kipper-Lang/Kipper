@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Made `KipperParseFile` inherit from `KipperParseStream` and made it be a specific interface for files alone, while
   `KipperParseStream` handles raw string data.
+- Fixed syntax bug in Kipper.g4 that caused typed arguments to not be able to passed to functions.
 
 ### Removed
 

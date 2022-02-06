@@ -137,7 +137,7 @@ parameterList
     ;
 
 parameterDeclaration
-    :   declarator WS* declarationSpecifiers
+    :   declarator WS* ':' WS* declarationSpecifiers
     ;
 
 initializer
