@@ -13,7 +13,7 @@ primaryExpression
 
 postfixExpression
     :   primaryExpression WS*
-        ('[' WS* expression WS* ']'
+        ('[' WS* expression WS* ']' // array specifier
         | ('++' | '--')
         )*
         |
@@ -104,15 +104,12 @@ declarationSpecifier
     ;
 
 initDeclarator
-    :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
-    ;
-
-arraySpecifier
-    :   '[' WS* assignmentExpression? WS* ']'
+    :   declarator WS* typeSpecifier WS* ('=' WS* initializer WS*)?
     ;
 
 typeSpecifier
-    :   Identifier arraySpecifier*
+    :   ':' WS* Identifier #singleItemTypeSpecifier // for single items, like 'num'
+    |   ':' WS* Identifier '<' Identifier '>' #multiItemTypeSpecifier // for lists
     ;
 
 declarator
@@ -138,12 +135,12 @@ parameterList
     ;
 
 parameterDeclaration
-    :   declarator WS* ':' WS* declarationSpecifiers
+    :   declarator WS* declarationSpecifiers
     ;
 
 initializer
     :   assignmentExpression
-    |   '{' WS* initializerList? WS* ','? WS* '}' // array
+    |   '[' WS* initializerList? WS* ','? WS* ']' // for lists
     ;
 
 initializerList
