@@ -3,54 +3,32 @@
   "description": "The Kipper programming language (CLI implementation)",
   "version": "0.0.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
-  "bin": {
-    "kipper": "./bin/run"
-  },
   "dependencies": {
     "antlr4ts": "^0.5.0-alpha.4",
     "antlr4ts-cli": "^0.5.0-alpha.4",
-    "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.3",
     "tslib": "^1.14.1",
     "ts-node": "^8.10.2",
     "tslog": "^3.3.1"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.26.0",
-    "@oclif/test": "^1.2.8",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.17.60",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
-    "eslint-config-oclif": "^3.1.0",
-    "eslint-config-oclif-typescript": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "json-parse-even-better-errors": "2.3.1",
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
-    "os-tmpdir": "1.0.2",
     "prettier": "2.4.1",
-    "pseudomap": "1.0.2",
-    "ts-node": "8.10.2",
-    "typescript": "^3.9.10",
+    "typescript": "^4.6.2",
     "tsify": "^5.0.4",
     "browserify": "^17.0.0",
-    "watchify": "^4.0.0",
-    "@types/sinon": "^7.5.2",
-    "@sinonjs/fake-timers": "^6.0.1",
-    "fs-extra-debug": "^1.0.4"
+    "watchify": "^4.0.0"
   },
   "engines": {
     "node": ">=14.0.0"
   },
-  "files": [
-    "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
-  ],
   "homepage": "https://github.com/Luna-Klatzer/Kipper",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
@@ -58,40 +36,21 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
-    "oclif",
     "language",
-    "compiler",
-    "cli",
-    "C"
+    "compiler"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "oclif": {
-    "commands": "./lib/commands",
-    "bin": "kipper",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
-  },
   "scripts": {
-    "postpack": "rimraf oclif.manifest.json",
     "posttest": "npm run lint:fix",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
     "build": "tsc",
-    "version": "oclif-dev readme && git add README.md",
     "lint": "npm run tslint && npm run prettier",
     "lint:fix": "npm run tslint:fix && npm run prettier",
     "prettier": "prettier --write ./src/",
     "tslint": "eslint src/**/*.ts --ext .ts --config .eslintrc",
     "tslint:fix": "eslint src/**/*.ts --fix --ext .ts --config .eslintrc && npm run prettier",
-    "antlr4ts": "antlr4ts -visitor -o src/compiler/parser/ Kipper.g4",
-    "prestart": "npm run build",
-    "start": "node ./bin/run"
-  },
-  "prettier": {
-    "tabWidth": 2,
-    "singleQuote": false
+    "antlr4ts": "antlr4ts -visitor -o src/compiler/parser/ Kipper.g4"
   }
 }
