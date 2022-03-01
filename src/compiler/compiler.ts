@@ -5,7 +5,7 @@
  * @since 0.0.1
  */
 
-import { CharStreams, CodePointCharStream, CommonTokenStream } from "antlr4ts";
+import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
 import { CompilationUnitContext } from "./parser/KipperParser";
@@ -44,18 +44,11 @@ export class KipperCompileResult {
 export class KipperCompiler {
   private readonly _errorListener: KipperErrorListener<any>;
   private readonly _logger: KipperLogger;
-  private readonly _avoidLogging: boolean;
 
-  constructor(logger: KipperLogger = new KipperLogger(), avoidLogging: boolean = false) {
+  constructor(logger: KipperLogger = new KipperLogger(() => {})) {
     // using a general error listener for the entire compiler instance
     this._errorListener = new KipperErrorListener<any>();
     this._logger = logger;
-    this._avoidLogging = avoidLogging;
-
-    if (avoidLogging) {
-      // Adds a null-handler to the logger, which will avoid not log anything
-      this._logger = new KipperLogger(() => {});
-    }
   }
 
   /**
@@ -70,13 +63,6 @@ export class KipperCompiler {
    */
   get logger(): KipperLogger {
     return this._logger;
-  }
-
-  /**
-   * Returns whether logging should be avoided - if set to true, then the logger will avoid any logging
-   */
-  get avoidLogging(): boolean {
-    return this._avoidLogging;
   }
 
   /**
