@@ -16,7 +16,6 @@ Install the following extensions:
 - [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-
 ### Install dependencies
 
 Whenever dependencies in `package.json` are changed, run the following command:
@@ -82,7 +81,7 @@ npm run rebuild
 
 ### Fix code style and formatting issues
 
-(Using `lint` will also call `prettier` afterwards. For a pure `typescript-eslint` use `tslint`)
+(Using `lint` will also call `prettier` afterwards. For a pure `typescript-eslint` execution use `tslint`)
 
 ```sh
 npm run lint
