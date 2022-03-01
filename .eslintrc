@@ -1,8 +1,4 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ],
   "rules": {
     "max-params": 1,
     "no-unused-vars": 1,
