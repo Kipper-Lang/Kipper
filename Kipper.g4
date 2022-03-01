@@ -4,6 +4,29 @@
 
 grammar Kipper;
 
+// Entry Point for an entire file
+compilationUnit
+    :   translationUnit? EOF
+    ;
+
+translationUnit
+    :   (externalItem | endOfItem | WS+)+
+    ;
+
+externalItem
+    :   functionDefinition # externalFunctionDefinition
+    |   declaration # externalDeclaration
+    |   blockItem # externalBlockItem
+    ;
+
+functionDefinition
+    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* compoundStatement
+    ;
+
+endOfItem
+    :   Whitespace* ';' Whitespace*
+    ;
+
 primaryExpression
     :   Identifier
     |   Constant
@@ -221,29 +244,6 @@ jumpStatement
     |   'return' WS* expression?
     )
     endOfItem
-    ;
-
-// Entry Point for an entire file
-compilationUnit
-    :   translationUnit? EOF
-    ;
-
-translationUnit
-    :   (externalItem | endOfItem | WS+)+
-    ;
-
-externalItem
-    :   functionDefinition # externalFunctionDefinition
-    |   declaration # externalDeclaration
-    |   blockItem # externalBlockItem
-    ;
-
-functionDefinition
-    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* compoundStatement
-    ;
-
-endOfItem
-    :   Whitespace* ';' Whitespace*
     ;
 
 // Lexer Rules (tokens / token rules)
