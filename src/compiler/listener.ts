@@ -4,7 +4,6 @@ import { ParserRuleContext } from "antlr4ts";
 import {
   AdditiveExpressionContext,
   ArgumentExpressionListContext,
-  ArraySpecifierContext,
   AssignmentExpressionContext,
   AssignmentOperatorContext,
   BlockItemContext,
@@ -45,7 +44,8 @@ import {
   RelationalExpressionContext,
   SelectionStatementContext,
   StatementContext,
-  StorageTypeSpecifierContext, TranslationUnitContext,
+  StorageTypeSpecifierContext,
+  TranslationUnitContext,
   TypeSpecifierContext,
   UnaryExpressionContext,
   UnaryOperatorContext
@@ -377,18 +377,6 @@ export class KipperFileListener implements KipperListener {
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitInitDeclarator = (ctx: InitDeclaratorContext) => { };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.arraySpecifier`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterArraySpecifier = (ctx: ArraySpecifierContext) => { };
-
-  /**
-   * exit a parse tree produced by `KipperParser.arraySpecifier`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitArraySpecifier = (ctx: ArraySpecifierContext) => { };
 
   /**
    * Enter a parse tree produced by `KipperParser.typeSpecifier`.

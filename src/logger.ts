@@ -7,9 +7,6 @@
  * @since 0.0.3
  */
 
-import { ISettingsParam, Logger } from "tslog";
-import { ILogObject } from "tslog/dist/types/interfaces";
-
 // The LogLevels for the Logger
 export enum LogLevel {
   DEBUG,
@@ -20,14 +17,14 @@ export enum LogLevel {
   TRACE
 }
 
-/**
- * Default @link{}
- */
-export const defaultKipperLoggerConfig: ISettingsParam = {
-  dateTimePattern: "hour:minute:second",
-  displayFilePath: "hidden",
-  displayFunctionName: false
-};
+export const LogLevelNames: Map<LogLevel, string> = new Map<LogLevel, string>([
+  [LogLevel.DEBUG, "DEBUG"],
+  [LogLevel.INFO, "INFO"],
+  [LogLevel.WARN, "WARN"],
+  [LogLevel.ERROR, "ERROR"],
+  [LogLevel.FATAL, "FATAL"],
+  [LogLevel.TRACE, "TRACE"]
+])
 
 /**
  * The KipperLogger class, which implements the specific logging logic for this
@@ -35,15 +32,12 @@ export const defaultKipperLoggerConfig: ISettingsParam = {
  * @since 0.0.3
  */
 export class KipperLogger {
-  private readonly _emitHandler: ((level: LogLevel, msg: string) => void) | undefined;
-  private readonly _tsLogger: Logger;
+  private readonly _emitHandler: ((level: LogLevel, msg: string) => void);
 
   constructor(
-    emitHandler?: (level: LogLevel, msg: string) => void,
-    logger?: Logger
+    emitHandler: (level: LogLevel, msg: string) => void,
   ) {
     this._emitHandler = emitHandler;
-    this._tsLogger = logger ?? new Logger(defaultKipperLoggerConfig);
   }
 
   /**
@@ -57,7 +51,7 @@ export class KipperLogger {
    * Logs a message with the severity 'debug'
    * @param {string} msg The message to log
    */
-  debug(msg: string): ILogObject | void {
+  debug(msg: string): void {
     return this.log(LogLevel.DEBUG, msg);
   }
 
@@ -65,7 +59,7 @@ export class KipperLogger {
    * Logs a message with the severity 'info'
    * @param {string} msg The message to log
    */
-  info(msg: string): ILogObject | void {
+  info(msg: string): void {
     return this.log(LogLevel.INFO, msg);
   }
 
@@ -73,7 +67,7 @@ export class KipperLogger {
    * Logs a message with the severity 'warn'
    * @param {string} msg The message to log
    */
-  warn(msg: string): ILogObject | void {
+  warn(msg: string): void {
     return this.log(LogLevel.WARN, msg);
   }
 
@@ -81,7 +75,7 @@ export class KipperLogger {
    * Logs a message with the severity 'error'
    * @param {string} msg The message to log
    */
-  error(msg: string): ILogObject | void {
+  error(msg: string): void {
     return this.log(LogLevel.ERROR, msg);
   }
 
@@ -89,7 +83,7 @@ export class KipperLogger {
    * Logs a message with the severity 'fatal'
    * @param {string} msg The message to log
    */
-  fatal(msg: string): ILogObject | void {
+  fatal(msg: string): void {
     return this.log(LogLevel.FATAL, msg);
   }
 
@@ -97,37 +91,17 @@ export class KipperLogger {
    * Logs a message with traceback / stack information
    * @param {string} msg The message to log
    */
-  trace(msg: string): ILogObject | void {
+  trace(msg: string): void {
     return this.log(LogLevel.TRACE, msg);
   }
 
   /**
-   * Logs a general message, and invokes the proper emit handler for it. If
-   * 'emitHandler' is not defined, then the default 'tslog' logger for node will
-   * be used!
+   * Logs a general message, and invokes the proper emit handler for it
    *
-   * @param {logLevel} level The level of the logging message
+   * @param {LogLevel} level The level of the logging message
    * @param {string} msg The content of the logging message
    */
-  log(level: LogLevel, msg: string): ILogObject | void {
-    if (this._emitHandler) {
-      this._emitHandler(level, msg);
-      return;
-    } else {
-      switch (level) {
-        case LogLevel.DEBUG:
-          return this._tsLogger.debug(msg);
-        case LogLevel.INFO:
-          return this._tsLogger.info(msg);
-        case LogLevel.WARN:
-          return this._tsLogger.warn(msg);
-        case LogLevel.ERROR:
-          return this._tsLogger.error(msg);
-        case LogLevel.FATAL:
-          return this._tsLogger.fatal(msg);
-        case LogLevel.TRACE:
-          return this._tsLogger.trace(msg);
-      }
-    }
+  log(level: LogLevel, msg: string): void {
+    return this._emitHandler(level, msg);
   }
 }
