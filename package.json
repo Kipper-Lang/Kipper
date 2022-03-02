@@ -37,6 +37,11 @@
     "language",
     "compiler"
   ],
+  "files": [
+    "kipper-standalone.js",
+    "Kipper.g4",
+    "CHANGELOG.md"
+  ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

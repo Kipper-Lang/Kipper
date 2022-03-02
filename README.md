@@ -10,6 +10,7 @@ The Kipper programming language - Currently in development. No usable/stable ver
 [![Downloads/week](https://img.shields.io/npm/dw/kipper.svg)](https://npmjs.org/package/kipper)
 [![License](https://img.shields.io/npm/l/kipper.svg)](https://github.com/Luna-Klatzer/Kipper/blob/master/package.json)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
+[![](https://data.jsdelivr.com/v1/package/npm/kipper/badge)](https://www.jsdelivr.com/package/npm/kipper)
 
 # Docs
 
@@ -31,11 +32,12 @@ dependencies of Kipper into a web-friendly file that you can include in your HTM
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency - Get it from the GitHub release page for Kipper -->
-<script src="KIPPER_DOWNLOAD_LINK"></script>
+<script src="https://cdn.jsdelivr.net/npm/kipper@latest/kipper-standalone.min.js"></script>
 <!-- Kipper will automatically compile all kipper script tags and replace them with javascript tags before runtime -->
 <script type="text/kipper"></script>
 ```
 
 ## With NodeJS
 
-In work...
+Go to our separate repository [here](https://github.com/Luna-Klatzer/Kipper-CLI), which is designed for NodeJS and implements a basic CLI to interact
+with the compiler.
