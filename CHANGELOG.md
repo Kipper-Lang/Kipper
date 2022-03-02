@@ -5,9 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.3] - 2022-03-02
 
 ### Added
+- Build Option for the browser-compatible script `kipper-standalone.js`
 - Basic `run` command for running a compiled file or compiling and running a file. (This is still in development).
 - Basic `compile` command for compiling a file into it's js-counterpart with its typescript types added.
 - New Parse Stream class `KipperParseStream`, which implements a basic Utf-16 stream.
@@ -41,5 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/WMC-AHIF-2021/Kipper-Web/compare/0.0.2...HEAD
-[0.0.2]: https://github.com/WMC-AHIF-2021/Kipper-Web/tags/0.0.2
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.3...HEAD
+[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/0.0.2
