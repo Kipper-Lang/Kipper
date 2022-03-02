@@ -1,30 +1,27 @@
 import { assert } from "chai";
-import { KipperCompiler } from "../../lib";
-import { KipperLogger, LogLevel } from "../../lib/logger";
+import { KipperCompiler } from "../../src";
+import { KipperLogger, LogLevel } from "../../src/logger";
 
 describe("KipperCompiler", () => {
   it("constructor", () => {
     let instance = new KipperCompiler();
     assert(instance, "Has to be undefined");
-    assert(!instance.avoidLogging, "'avoidLogging' has to be 'false'");
     assert(instance.logger !== undefined, "Set init value has to be equal to the property");
   })
 
   it("constructor with default logger", () => {
-    let logger = new KipperLogger();
+    let logger = new KipperLogger(() => {});
     let instance = new KipperCompiler(logger);
-    assert(instance, "Has to be undefined");
-    assert(!instance.avoidLogging, "'avoidLogging' has to be 'false'");
+    assert(instance, "Has to be not undefined");
     assert(instance.logger === logger, "Set init value has to not be overwritten by 'avoidLogging'");
   })
 
   it("constructor with logging overwrite", () => {
-    let logger = new KipperLogger();
-    let instance = new KipperCompiler(logger, true);
+    let logger = new KipperLogger(() => {});
+    let instance = new KipperCompiler(logger);
 
-    assert(instance, "Has to be undefined");
-    assert(instance.avoidLogging, "'avoidLogging' has to be 'true'");
-    assert(instance.logger !== logger, "Set init value has to be overwritten by 'avoidLogging'");
+    assert(instance, "Has to be not undefined");
+    assert(instance.logger === logger, "Logger was written");
   })
 
   it("constructor with logging emitHandler", () => {
@@ -33,10 +30,9 @@ describe("KipperCompiler", () => {
       emitHandlerWasCalled = true;
     });
     let logger = new KipperLogger(emitHandler);
-    let instance = new KipperCompiler(logger, false);
+    let instance = new KipperCompiler(logger);
 
-    assert(instance, "Has to be undefined");
-    assert(!instance.avoidLogging, "'avoidLogging' has to be 'false'");
+    assert(instance, "Has to be not undefined");
     assert(instance.logger === logger, "Set init value has to not be overwritten by 'avoidLogging'");
     assert(logger.emitHandler === emitHandler, "Set 'emitHandler' has to match");
     assert(instance.logger.emitHandler === emitHandler, "Set 'emitHandler' has to match");

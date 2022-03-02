@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import { KipperFileContext } from "../../src/compiler/file-ctx";
+import { KipperFileContext } from '../../src';
 
 describe("KipperFileContext", () => {
   it("constructor", () => {
