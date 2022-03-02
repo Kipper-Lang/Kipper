@@ -4,6 +4,29 @@
 
 grammar Kipper;
 
+// Entry Point for an entire file
+compilationUnit
+    :   translationUnit? EOF
+    ;
+
+translationUnit
+    :   (externalItem | endOfItem | WS+)+
+    ;
+
+externalItem
+    :   functionDefinition # externalFunctionDefinition
+    |   declaration # externalDeclaration
+    |   blockItem # externalBlockItem
+    ;
+
+functionDefinition
+    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* compoundStatement
+    ;
+
+endOfItem
+    :   Whitespace* ';' Whitespace*
+    ;
+
 primaryExpression
     :   Identifier
     |   Constant
@@ -13,11 +36,11 @@ primaryExpression
 
 postfixExpression
     :   primaryExpression WS*
-        ('[' WS* expression WS* ']'
+        ('[' WS* expression WS* ']' // array specifier
         | ('++' | '--')
         )*
         |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')'
+        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' // function call
     ;
 
 argumentExpressionList
@@ -39,6 +62,7 @@ unaryOperator
 castOrConvertExpression
     :   unaryExpression
     |   DigitSequence // for
+    |   unaryExpression WS* 'as' WS* typeSpecifier // conversion function
     ;
 
 multiplicativeExpression
@@ -107,12 +131,10 @@ initDeclarator
     :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
     ;
 
-arraySpecifier
-    :   '[' WS* assignmentExpression? WS* ']'
-    ;
-
 typeSpecifier
-    :   Identifier arraySpecifier*
+    :   Identifier #singleItemTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' #multiItemTypeSpecifier // for lists
+    |   'typeof' WS* '(' Identifier ')' #typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
@@ -143,7 +165,7 @@ parameterDeclaration
 
 initializer
     :   assignmentExpression
-    |   '{' WS* initializerList? WS* ','? WS* '}' // array
+    |   '[' WS* initializerList? WS* ','? WS* ']' // for lists
     ;
 
 initializerList
@@ -200,8 +222,21 @@ selectionStatement
     ;
 
 iterationStatement
-    :   While WS* '(' WS* expression WS* ')' WS* statement
+    :   For WS* '(' forCondition ')' WS* statement
+    |   While WS* '(' WS* expression WS* ')' WS* statement
     |   Do WS* statement WS* While WS* '(' WS* expression WS* ')' endOfItem
+    ;
+
+forCondition
+	  :   (forDeclaration | expression?) endOfItem forExpression? endOfItem forExpression?
+	  ;
+
+forDeclaration
+    :   storageTypeSpecifier WS* initDeclarator
+    ;
+
+forExpression
+    :   assignmentExpression WS* (',' WS* assignmentExpression WS* )*
     ;
 
 jumpStatement
@@ -211,34 +246,14 @@ jumpStatement
     endOfItem
     ;
 
-// Entry Point for an entire file
-compilationUnit
-    :   translationUnit? EOF
-    ;
-
-translationUnit
-    :   (externalItem | endOfItem | WS+)+
-    ;
-
-externalItem
-    :   functionDefinition # externalFunctionDefinition
-    |   declaration # externalDeclaration
-    |   blockItem # externalBlockItem
-    ;
-
-functionDefinition
-    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* compoundStatement
-    ;
-
-endOfItem
-    :   Whitespace* ';' Whitespace*
-    ;
-
 // Lexer Rules (tokens / token rules)
 
 // const / var
 Const : 'const';
 Var : 'var';
+
+// conversion
+As : 'as';
 
 // switch
 Switch : 'switch';

@@ -1,2 +1,2 @@
-export { run } from "@oclif/command";
-export * from "./compiler/index";
+/* Index */
+export * from "./compiler/";

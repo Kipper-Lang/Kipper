@@ -1,18 +1,20 @@
-import { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
+/**
+ * Errors for the {@link KipperCompiler} that are used throughout this library. All errors inherit from the base
+ * {@link KipperError}
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.0.2
+ */
+import { CommonToken, InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
-import { Logger } from "tslog";
-import Command from "@oclif/command";
+import { KipperParser } from "./compiler/parser";
 
 /**
  * The base error for the Kipper module
  */
 export class KipperError extends Error {
-  /**
-   * Initialises the base {@link KipperError}
-   * @param msg The error message that should be logged
-   */
   constructor(msg: string) {
     super(msg);
 
@@ -20,12 +22,6 @@ export class KipperError extends Error {
     Object.setPrototypeOf(this, KipperError.prototype);
   }
 }
-
-/**
- * A CLI Abort Error which should always be caught by the oclif CLI wrapper.
- * This is only used in the {@link CLIKipperCompiler}.
- */
-export class KipperCLIAbortError extends KipperError {}
 
 /**
  * SyntaxError that is used to indicate a syntax error detected by the antlr4 lexer
@@ -51,33 +47,35 @@ export class KipperSyntaxError<Token> extends KipperError {
 
   /**
    * KipperSyntaxError Constructor
-   * @param msg The error message that should be logged
-   * @param context {unknown} The error context config
+   * @param {Recognizer<KipperParser, any>} recognizer The Antlr4 Parser - should normally always be KipperParser
+   * @param {CommonToken} offendingSymbol The token that caused the error
+   * @param {number} line The line of the element that caused the error
+   * @param {number} column The column of the element that caused the error
+   * @param {string} msg The msg that was generated as the error message in the Parser
+   * @param {RecognitionException} error The error instance that raised the syntax error in the Lexer
    */
   constructor(
+    recognizer: Recognizer<Token, any>,
+    offendingSymbol: Token | undefined,
+    line: number,
+    column: number,
     msg: string,
-    context: {
-      recognizer: Recognizer<Token, any>,
-      offendingSymbol: Token | undefined,
-      line: number,
-      column: number,
-      error:
-        | RecognitionException
-        | NoViableAltException
-        | LexerNoViableAltException
-        | InputMismatchException
-        | FailedPredicateException
-        | undefined
-    }
+    error:
+      | RecognitionException
+      | NoViableAltException
+      | LexerNoViableAltException
+      | InputMismatchException
+      | FailedPredicateException
+      | undefined
   ) {
     super(msg);
 
+    this._recognizer = recognizer;
+    this._offendingSymbol = offendingSymbol;
+    this._line = line;
+    this._column = column;
     this._msg = msg;
-    this._recognizer = context.recognizer;
-    this._offendingSymbol = context.offendingSymbol;
-    this._line = context.line;
-    this._column = context.column;
-    this._error = context.error;
+    this._error = error;
 
     // Set the prototype explicitly.
     Object.setPrototypeOf(this, KipperSyntaxError.prototype);
@@ -130,19 +128,11 @@ export class KipperSyntaxError<Token> extends KipperError {
     | undefined {
     return this._error;
   }
-}
 
-/**
- * Handles the call of a function from {@link CLIKipperCompiler}
- * @param logger The logger instance to use to log info. Should be acquired from {@link CLIKipperCompiler.logger}
- * @param command The command where the {@link func} should be called
- * @param func The function to call
- * @returns {void} Nothing
- */
-export async function handleCLICall(logger: Logger, command: Command, func: () => Promise<void>): Promise<void> {
-  try {
-    await func();
-  } catch (error) {
-    logger.prettyError(error);
+  /**
+   * Reports the syntax error and writes onto the console
+   */
+  async reportError(): Promise<void> {
+
   }
 }
