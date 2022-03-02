@@ -1,9 +1,7 @@
 {
-  "extends": [
-    "eslint:recommended"
-  ],
+  "extends": ["eslint:recommended"],
   "parserOptions": {
-    "ecmaVersion": 7,
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
   "rules": {
