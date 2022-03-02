@@ -1,15 +1,13 @@
 {
-  "parserOptions": {
-    "sourceType": "module"
-  },
   "compilerOptions": {
+    "sourceMap": true,
     "declaration": true,
     "importHelpers": true,
     "module": "commonjs",
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
-    "target": "ESNext",
+    "target": "es2017",
     "lib": ["ES7"] // ES7 -> ES2016
   },
   "include": [
