@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
+  generated in the walking step.
+- Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
+- General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
+
+### Changed
+- Changed return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
+
+### Removed
+
 ## [0.0.5] - 2022-03-02
 
 ### Changed

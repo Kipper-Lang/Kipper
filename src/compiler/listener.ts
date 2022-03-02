@@ -1,3 +1,9 @@
+/**
+ * Antlr4 listener for walking through a parser tree and processing its content
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.0.3
+ */
 import { KipperListener } from "./parser";
 import { KipperFileContext } from "./file-ctx";
 import { ParserRuleContext } from "antlr4ts";
@@ -49,27 +55,49 @@ import {
   TypeSpecifierContext,
   UnaryExpressionContext,
   UnaryOperatorContext
-} from "./parser/KipperParser";
+} from "./parser";
 
 /**
- * The listener for a {@link KipperFileContext}, which may generate a logic stream by going through a generated parse
- * tree.
+ * The listener for a {@link KipperFileContext}, which walks through the generated
+ * parser tree and produces the TypeScript code output in {@link itemBuffer}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 export class KipperFileListener implements KipperListener {
+  /**
+   * The private '_fileCtx' that actually contains the instance,
+   * which is used inside the getter 'fileCtx'
+   * @private
+   */
   private readonly _fileCtx: KipperFileContext;
 
-  constructor(fileCtx: KipperFileContext) {
+  /**
+   * The private '_itemBuffer' that actually contains the instance,
+   * which is used inside the getter 'itemBuffer'
+   * @private
+   */
+  private readonly _itemBuffer: Array<string>;
+
+  constructor(fileCtx: KipperFileContext, itemBuffer: Array<string>) {
     this._fileCtx = fileCtx;
+    this._itemBuffer = itemBuffer;
   }
 
   /**
    * The {@link KipperFileContext} instance responsible for managing this {@link KipperFileListener} instance
    */
-  get fileCtx() {
+  get fileCtx(): KipperFileContext {
     return this._fileCtx
+  }
+
+  /**
+   * A string array that contains the generated TypeScript code lines that were created by
+   * the listener.
+   * @since 0.0.6
+   */
+  get itemBuffer(): Array<string> {
+    return this._itemBuffer;
   }
 
   /**

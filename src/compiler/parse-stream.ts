@@ -19,11 +19,19 @@ export namespace KipperStreams {
 }
 
 export class KipperParseStream {
+  /**
+   * The private '_name' that actually contains the instance,
+   * which is used inside the getter 'name'
+   * @private
+   */
   protected readonly _name: string;
 
+  /**
+   * The private '_charStream' that actually contains the instance,
+   * which is used inside the getter 'charStream'
+   * @private
+   */
   protected readonly _charStream: CodePointCharStream;
-
-  protected readonly _stringContent: string;
 
   /**
    * Parser File Constructor
@@ -34,7 +42,6 @@ export class KipperParseStream {
    */
   constructor(name: string, stringContent: string, charStream?: CodePointCharStream) {
     this._name = name;
-    this._stringContent = stringContent;
     this._charStream = charStream ?? CharStreams.fromString(stringContent, this._name);
   }
 
@@ -49,7 +56,7 @@ export class KipperParseStream {
    * Returns the string content of the file
    */
   get stringContent(): string {
-    return this._stringContent;
+    return this._charStream.toString();
   }
 
   /**
