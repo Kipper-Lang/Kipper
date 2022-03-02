@@ -1,4 +1,7 @@
 {
+  "parserOptions": {
+    "sourceType": "module"
+  },
   "compilerOptions": {
     "declaration": true,
     "importHelpers": true,
@@ -6,7 +9,7 @@
     "outDir": "lib",
     "rootDir": "src",
     "strict": true,
-    "target": "ES2016",
+    "target": "ESNext",
     "lib": ["ES7"] // ES7 -> ES2016
   },
   "include": [
