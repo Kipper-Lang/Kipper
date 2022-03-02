@@ -10,7 +10,7 @@ import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
 import { CompilationUnitContext } from "./parser/KipperParser";
 import { KipperLogger } from "../logger";
-import { KipperParseFile, KipperParseStream, KipperStreams } from "./parse-stream";
+import { KipperParseStream, KipperStreams } from "./parse-stream";
 import { KipperFileContext } from "./file-ctx";
 
 /**
@@ -18,16 +18,16 @@ import { KipperFileContext } from "./file-ctx";
  * @since 0.0.3
  */
 export class KipperCompileResult {
-  private readonly _stream: KipperParseStream | KipperParseFile;
+  private readonly _stream: KipperParseStream;
 
-  constructor(stream: KipperParseStream | KipperParseFile) {
+  constructor(stream: KipperParseStream) {
     this._stream = stream;
   }
 
   /**
    * The stream that was used for the compilation
    */
-  get stream(): KipperParseStream | KipperParseFile {
+  get stream(): KipperParseStream {
     return this._stream;
   }
 }
@@ -36,9 +36,7 @@ export class KipperCompileResult {
  * The main Compiler class that contains the functions for parsing and compiling a file.
  *
  * This class will per default use a {@link KipperLogger} and log events while processing. To define custom behaviour
- * initialise {@link KipperLogger} yourself and overwrite {@link KipperLogger.emitHandler}. If the argument
- * {@link avoidLogging} is set, then that will overwrite the {@link logger} and add a null handler to avoid logging
- * altogether!
+ * initialise {@link KipperLogger} yourself and overwrite {@link KipperLogger.emitHandler}.
  * @since 0.0.1
  */
 export class KipperCompiler {
@@ -68,11 +66,11 @@ export class KipperCompiler {
   /**
    * Parses a file and generates the antlr4 tree ({@link CompilationUnitContext}, using
    * {@link KipperParser.compilationUnit} (the highest item of the tree / entry point to the tree)
-   * @param {KipperParseStream | KipperParseFile} parseInput The {@link KipperParseStream} or {@link KipperParseFile}
-   * instance that contains the required string content
+   * @param {KipperParseStream} parseInput The {@link KipperParseStream} instance that contains the required string
+   * content
    * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}
    */
-  async parse(parseInput: KipperParseStream | KipperParseFile): Promise<CompilationUnitContext> {
+  async parse(parseInput: KipperParseStream): Promise<CompilationUnitContext> {
     this._logger.info(`Parsing '${parseInput.name}'`);
 
     // Creating the char stream, based on the input
@@ -108,37 +106,6 @@ export class KipperCompiler {
   }
 
   /**
-   * Handles the input for a file-based function of the {@link KipperCompiler}
-   * @param file The input, which may be either a {@link String} or {@link KipperParseFile}
-   * @param encoding The encoding to read the file with
-   */
-  private static async _handleFileStreamInput(file: string | KipperParseFile, encoding?: BufferEncoding): Promise<KipperParseFile> {
-    if (file instanceof KipperParseFile) {
-      return file;
-    } else {
-      return KipperStreams.fromFile(file, encoding);
-    }
-  }
-
-  /**
-   * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code
-   * @param {string | KipperParseFile} file The file to compile, which may be either a {@link String}
-   * path to the file, or a {@link KipperParseFile}.
-   * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
-   * raised. This option is needed if you want information about warnings.
-   * @param {string} encoding The encoding that should be used to read the file. Defaults to 'utf8'.
-   * @returns The created {@link KipperCompileResult} instance
-   */
-  async compileFile(file: string | KipperParseFile, preferLogging: boolean, encoding?: BufferEncoding): Promise<KipperCompileResult> {
-    let inFile: KipperParseFile = await KipperCompiler._handleFileStreamInput(file);
-
-    // TODO! Not done -> See 'compile'
-    await this.compile(inFile);
-
-    return new KipperCompileResult(inFile);
-  }
-
-  /**
    * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code
    * @param stream The input to compile, which may be either a {@link String} or {@link CodePointCharStream}.
    * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
@@ -146,45 +113,15 @@ export class KipperCompiler {
    * @param streamName The name that should be used to differentiate this specific stream
    * @returns The created {@link KipperCompileResult} instance
    */
-  async compileStream(stream: string | KipperParseStream, preferLogging: boolean = true, streamName?: string): Promise<KipperCompileResult> {
+  async compile(stream: string | KipperParseStream, preferLogging: boolean = true, streamName?: string): Promise<KipperCompileResult> {
     let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
-    // TODO! Not done -> See 'compile'
-    await this.compile(inStream);
-
-    return new KipperCompileResult(inStream);
-  }
-
-  /**
-   * Raw compile function, which will generate a {@link KipperFileContext} and run the lexer, parser and code generator
-   * for it.
-   *
-   * For a higher-level interface for running a compilation, see {@link compileFile} or {@link compileStream}.
-   *
-   * @param {KipperParseStream | KipperParseFile} stream The stream to compile
-   * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
-   * raised. This option is needed if you want information about warnings.
-   * @returns The created {@link KipperFileContext} class representing the stream / file
-   */
-  async compile(stream: KipperParseStream | KipperParseFile, preferLogging: boolean = true): Promise<KipperFileContext> {
-    this._logger.info(`Starting compilation for '${stream.name}'`);
-    const compilationUnit: CompilationUnitContext = await this.parse(stream);
+    this._logger.info(`Starting compilation for '${inStream.name}'`);
+    const compilationUnit: CompilationUnitContext = await this.parse(inStream);
 
     throw new Error("Not implemented");
-  }
 
-  /**
-   * Analyses the syntax of the given file. Any warnings or errors will be logged.
-   * @param {string | KipperParseFile} file The file to syntax analyse, which may be either a {@link String}
-   * path to the file, or a {@link KipperParseFile}.
-   * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
-   * raised. This option is needed if you want information about warnings.
-   * @param {string} encoding The encoding that should be used to read the file. Defaults to 'utf8'.
-   */
-  async syntaxAnalyseFile(file: string | KipperParseFile, preferLogging: boolean = true, encoding?: BufferEncoding): Promise<void> {
-    let inFile: KipperParseFile = await KipperCompiler._handleFileStreamInput(file);
-
-    return this.syntaxAnalyseStream(await inFile.readContent());
+    return new KipperCompileResult(inStream);
   }
 
   /**
@@ -194,7 +131,7 @@ export class KipperCompiler {
    * raised. This option is needed if you want information about warnings.
    * @param streamName The name that should be used to differentiate this specific stream
    */
-  async syntaxAnalyseStream(stream: string | KipperParseStream, preferLogging: boolean = true, streamName?: string) {
+  async syntaxAnalyse(stream: string | KipperParseStream, preferLogging: boolean = true, streamName?: string) {
     let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
     this._logger.info(`Starting syntax check for '${inStream.name}'`);

@@ -20,8 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `"CRITICAL"`).
 
 ### Changed
-- Made `KipperParseFile` inherit from `KipperParseStream` and made it be a specific interface for files alone, while
-  `KipperParseStream` handles raw string data.
 - Fixed syntax bug in Kipper.g4 that caused typed arguments to not be able to passed to functions.
 - Updated handling of the `KipperLogger`, which will now only use an `emitHandler`, which can be defined by the user.
   This means the user entirely decides how to handle the logging output of the compiler, and there is no default logging
@@ -30,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Oclif CLI, which will be released in another package separate to this one, as this will be made to suit the usage
   inside a browser.
+- `KipperParseFile`, which will be implemented in the NodeJS CLI implementation for Kipper
 
 ## [0.0.2] - 2021-11-23
 
