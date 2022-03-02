@@ -4,7 +4,6 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
  */
-
 export { KipperCompiler, KipperCompileResult } from "./compiler";
 export { KipperErrorListener } from "./error-handler";
 export { KipperStreams, KipperParseStream } from "./parse-stream";

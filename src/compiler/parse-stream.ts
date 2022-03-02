@@ -4,7 +4,6 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
-
 import { CharStreams, CodePointCharStream } from "antlr4ts";
 
 export namespace KipperStreams {

@@ -4,14 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
  */
-
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
 import { CompilationUnitContext } from "./parser/KipperParser";
 import { KipperLogger } from "../logger";
 import { KipperParseStream, KipperStreams } from "./parse-stream";
-import { KipperFileContext } from "./file-ctx";
 
 /**
  * The result of a {@link KipperCompiler} compilation
@@ -40,7 +38,18 @@ export class KipperCompileResult {
  * @since 0.0.1
  */
 export class KipperCompiler {
+  /**
+   * The private '_errorListener' that actually contains the instance,
+   * which is used inside the getter 'errorListener'
+   * @private
+   */
   private readonly _errorListener: KipperErrorListener<any>;
+
+  /**
+   * The private '_logger' that actually contains the instance,
+   * which is used inside the getter 'logger'
+   * @private
+   */
   private readonly _logger: KipperLogger;
 
   constructor(logger: KipperLogger = new KipperLogger(() => {})) {

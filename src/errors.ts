@@ -11,6 +11,9 @@ import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
 import { KipperParser } from "./compiler/parser";
 
+/**
+ * The base error for the Kipper module
+ */
 export class KipperError extends Error {
   constructor(msg: string) {
     super(msg);
@@ -130,5 +133,6 @@ export class KipperSyntaxError<Token> extends KipperError {
    * Reports the syntax error and writes onto the console
    */
   async reportError(): Promise<void> {
+
   }
 }
