@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2022-03-02
+
+### Changed
+- Fixed invalid publish of the module on npm
+
+## [0.0.4] - 2022-03-02
+
+**Broken version!**
+
 ## [0.0.3] - 2022-03-02
 
 ### Added
@@ -43,5 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
 [unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.3...HEAD
+[0.0.5]: https://github.com/Luna-Klatzer/Kipper/tag/0.0.5
+[0.0.4]: https://github.com/Luna-Klatzer/Kipper/
 [0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/0.0.2
