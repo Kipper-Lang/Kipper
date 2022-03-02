@@ -1,6 +1,6 @@
 {
   "name": "kipper",
-  "description": "The Kipper programming language (CLI implementation)",
+  "description": "The Kipper programming language Compiler",
   "version": "0.0.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
