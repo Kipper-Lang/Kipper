@@ -8,8 +8,8 @@ simple and straightforward coding similar to TypeScript and Python.
 *Note that this is a development version! Stable releases might take until April/May 2022*
 
 [![Version](https://img.shields.io/npm/v/@kipper/base)](https://npmjs.org/package/@kipper/base)
-[![License](https://img.shields.io/npm/l/kipper.svg)](https://github.com/Luna-Klatzer/Kipper/blob/master/package.json)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
+![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)
 
 # Docs
 
@@ -40,7 +40,7 @@ Simple example of including your code in your browser:
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency - Get it from the GitHub release page for Kipper -->
-<script src="https://cdn.jsdelivr.net/npm/kipper/base@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/base@latest/kipper-standalone.min.js"></script>
 <!-- Kipper will automatically compile all kipper script tags and replace them with javascript tags before runtime -->
 <script type="text/kipper">
   /* Simple Program */
