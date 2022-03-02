@@ -9,7 +9,7 @@ import { CommonToken, InputMismatchException, LexerNoViableAltException, NoViabl
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
-import { KipperParser } from "./compiler/parser";
+import { KipperParser } from './compiler';
 
 /**
  * The base error for the Kipper module

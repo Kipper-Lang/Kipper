@@ -9,4 +9,4 @@ export { KipperErrorListener } from "./error-handler";
 export { KipperStreams, KipperParseStream } from "./parse-stream";
 export { KipperFileListener } from "./listener";
 export { KipperFileContext } from "./file-ctx";
-export * as parser from "./parser";
+export * from "./parser";
