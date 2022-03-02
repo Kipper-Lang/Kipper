@@ -1,30 +1,32 @@
 import { assert } from "chai";
 import { KipperCompiler } from "../../src";
-import { KipperLogger, LogLevel } from "../../src/logger";
+import { KipperLogger, LogLevel } from "../../src";
 
 describe("KipperCompiler", () => {
-  it("constructor", () => {
+  it("Constructor", () => {
     let instance = new KipperCompiler();
     assert(instance, "Has to be undefined");
     assert(instance.logger !== undefined, "Set init value has to be equal to the property");
-  })
+  });
 
-  it("constructor with default logger", () => {
-    let logger = new KipperLogger(() => {});
+  it("Constructor with default logger", () => {
+    let logger = new KipperLogger(() => {
+    });
     let instance = new KipperCompiler(logger);
     assert(instance, "Has to be not undefined");
     assert(instance.logger === logger, "Set init value has to not be overwritten by 'avoidLogging'");
-  })
+  });
 
-  it("constructor with logging overwrite", () => {
-    let logger = new KipperLogger(() => {});
+  it("Constructor with logging overwrite", () => {
+    let logger = new KipperLogger(() => {
+    });
     let instance = new KipperCompiler(logger);
 
     assert(instance, "Has to be not undefined");
     assert(instance.logger === logger, "Logger was written");
-  })
+  });
 
-  it("constructor with logging emitHandler", () => {
+  it("Constructor with logging emitHandler", () => {
     let emitHandlerWasCalled: boolean = false;
     let emitHandler: (level: LogLevel, msg: string) => void = ((level: LogLevel, msg: string) => {
       emitHandlerWasCalled = true;
@@ -43,5 +45,5 @@ describe("KipperCompiler", () => {
     emitHandlerWasCalled = false;
     instance.logger.log(LogLevel.INFO, "This is a message");
     assert(emitHandlerWasCalled, "Emit Handler should have been called");
-  })
+  });
 });

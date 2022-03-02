@@ -1,7 +1,5 @@
 import { assert } from "chai";
-import { KipperCompiler } from "../../src/";
-import { CompilationUnitContext } from "../../src/compiler/parser/KipperParser";
-import { KipperStreams } from "../../src";
+import { KipperCompiler, KipperStreams } from "../../src/";
 import { promises as fs } from "fs";
 
 const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
@@ -12,7 +10,9 @@ describe("KipperCompiler.parse", () => {
     let compiler = new KipperCompiler();
     let stream = await KipperStreams.fromString(fileContent, "inline-stream");
 
-    let compilationUnit: CompilationUnitContext = await compiler.parse(stream);
-    assert(compilationUnit, "compilationUnit must be defined");
+    assert(stream.name === "inline-stream");
+    assert(stream.stringContent === fileContent);
+    assert(stream.charStream.sourceName === "inline-stream");
+    assert(stream.charStream.toString() === fileContent);
   });
 });
