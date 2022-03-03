@@ -1,6 +1,6 @@
 const num_list: list<num> = [1, 2, 3, 4];
 
-// Get sum of all items stored inside 'param'
+/* Get sum of all items stored inside 'param' */
 def getSumOf(param: list<num>) -> num {
   sum: num = 0;
   for (num i = 0; i < param.len; i++) {
@@ -11,9 +11,9 @@ def getSumOf(param: list<num>) -> num {
 
 call print(f"The sum of the following list: {num_list}");
 
-// Calculating the sum of the items in the list
+/* Calculating the sum of the items in the list */
 var result = call getSumOf(num_list);
 call print(f"Result: {result}");
 
-// Exiting the program
+/* Exiting the program */
 call exit(0);

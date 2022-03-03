@@ -6,30 +6,48 @@
  */
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperErrorListener } from "./error-handler";
-import { KipperLexer, KipperListener, KipperParser } from "./parser";
+import { KipperLexer, KipperParser } from "./parser";
 import { CompilationUnitContext } from "./parser";
 import { KipperLogger } from "../logger";
-import { KipperParseStream, KipperStreams } from "./parse-stream";
-import { ParseTreeWalker } from "antlr4ts/tree";
+import { KipperParseStream } from "./parse-stream";
 import { KipperFileContext } from "./file-ctx";
-import { start } from "repl";
 
 /**
  * The result of a {@link KipperCompiler} compilation
  * @since 0.0.3
  */
 export class KipperCompileResult {
-  private readonly _stream: KipperParseStream;
+  /**
+   * The private '_fileCtx' that actually contains the instance,
+   * which is used inside the getter 'fileCtx'
+   * @private
+   */
+  private readonly _fileCtx: KipperFileContext;
 
-  constructor(stream: KipperParseStream) {
-    this._stream = stream;
+  /**
+   * The private '_result' that actually contains the instance,
+   * which is used inside the getter 'result'
+   * @private
+   */
+  private readonly _result: Array<string>;
+
+  constructor(fileCtx: KipperFileContext, result: Array<string>) {
+    this._fileCtx = fileCtx;
+    this._result = result;
   }
 
   /**
-   * The stream that was used for the compilation
+   * The "virtual" file context for the compilation run, which stores the content of the file and meta-data.
    */
-  get stream(): KipperParseStream {
-    return this._stream;
+  get fileCtx(): KipperFileContext {
+    return this._fileCtx;
+  }
+
+  /**
+   * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
+   */
+  get result(): Array<string> {
+    return this._result;
   }
 }
 
@@ -80,11 +98,11 @@ export class KipperCompiler {
    * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
    * @param name The encoding to read the file with.
    */
-  private static _handleStreamInput(stream: string | KipperParseStream, name?: string): KipperParseStream {
+  private static _handleStreamInput(stream: string | KipperParseStream, name: string = "inline-stream"): KipperParseStream {
     if (stream instanceof KipperParseStream) {
       return stream;
     } else {
-      return KipperStreams.fromString(stream, name);
+      return new KipperParseStream(name, stream);
     }
   }
 
@@ -151,7 +169,6 @@ export class KipperCompiler {
 
     this._logger.info(`Starting syntax check for '${inStream.name}'`);
     const fileCtx: KipperFileContext = await this.parse(inStream);
-
-    throw new Error("Not implemented");
+    return;
   }
 }

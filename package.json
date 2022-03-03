@@ -10,6 +10,8 @@
     "typescript": "^4.5.5",
     "tslib": "^2.3.1",
     "ts-node": "^10.6.0",
+    "uuid": "^8.3.2",
+    "mkdirp": "^1.0.4",
     "chai": "^4.3.0",
     "eslint": "^7.32.0",
     "mocha": "^5.2.0",
@@ -51,6 +53,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "posttest": "npm run lint:fix",
+    "pretest": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
     "build": "tsc",
     "browserify": "browserify src/kipper-standalone.ts -p [ tsify --noImplicitAny] > kipper-standalone.js",

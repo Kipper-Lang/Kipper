@@ -12,11 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   generated in the walking step.
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
 - General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
+- `KipperFileContext.translate()`, which walks through the listener and returns the generated code of the listener.
+
 
 ### Changed
-- Changed return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
+- Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
+- Behaviour of `KipperCompileResult`, which will now store the `fileCtx: KipperFileContext` and `result: string[]`
+  of a compilation. 
+- Fixed bug in `KipperErrorListener`, which resulted in errors being not properly raised. The function is
+  now a template, where `<T>` represents the offending token. `<T>` will also be passed onto `KipperSyntaxError<T>`.
 
 ### Removed
+- Unneeded namespace `KipperStreams` and its functions.
 
 ## [0.0.5] - 2022-03-02
 

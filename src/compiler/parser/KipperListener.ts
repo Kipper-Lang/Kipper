@@ -61,7 +61,6 @@ import { ExternalItemContext } from "./KipperParser";
 import { FunctionDefinitionContext } from "./KipperParser";
 import { EndOfItemContext } from "./KipperParser";
 
-
 /**
  * This interface defines a complete listener for a parse tree produced by
  * `KipperParser`.

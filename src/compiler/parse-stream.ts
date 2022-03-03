@@ -6,32 +6,25 @@
  */
 import { CharStreams, CodePointCharStream } from "antlr4ts";
 
-export namespace KipperStreams {
-  /**
-   * Creates a new {@link KipperParseStream} instance based on the passed {@link stringContent}
-   * @param name The name that should be used to differentiate this specific stream
-   * @param stringContent The string content to fill the instance
-   * @returns The new {@link KipperParseStream} instance with the set values
-   */
-  export function fromString(stringContent: string, name: string = "Input Char Stream"): KipperParseStream {
-    return new KipperParseStream(name, stringContent);
-  }
-}
-
+/**
+ * The {@link KipperParseStream} class, which stores the content of a file/string in a "virtual" file in a UTF-16
+ * encoded {@link CodePointCharStream}.
+ * @since 0.0.3
+ */
 export class KipperParseStream {
   /**
    * The private '_name' that actually contains the instance,
    * which is used inside the getter 'name'
    * @private
    */
-  protected readonly _name: string;
+  private readonly _name: string;
 
   /**
    * The private '_charStream' that actually contains the instance,
    * which is used inside the getter 'charStream'
    * @private
    */
-  protected readonly _charStream: CodePointCharStream;
+  private readonly _charStream: CodePointCharStream;
 
   /**
    * Parser File Constructor
