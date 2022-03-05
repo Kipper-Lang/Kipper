@@ -29,17 +29,18 @@ endOfItem
 primaryExpression
     :   Identifier
     |   Constant
-    |   StringLiteral+
+    |   (StringLiteral WS*)+
+    |   (FStringLiteral WS*)+
     |   '(' expression ')'
     ;
 
 postfixExpression
-    :   primaryExpression WS*
-        ('[' WS* expression WS* ']' // array specifier
-        | ('++' | '--')
-        )*
+    :   primaryExpression (
+            '[' WS* expression WS* ']' // array specifier
+            | ('++' | '--')
+        )* #ReferenceExpression
         |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' // function call
+        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' #FunctionCallExpression
     ;
 
 argumentExpressionList
@@ -164,25 +165,7 @@ parameterDeclaration
 
 initializer
     :   assignmentExpression
-    |   '[' WS* initializerList? WS* ','? WS* ']' // for lists
-    ;
-
-initializerList
-    :   designation? WS* initializer WS* (',' WS* designation? WS* initializer WS*)*
-    ;
-
-// struct designator
-designation
-    :   designatorList WS* '='
-    ;
-
-designatorList
-    :   designator+
-    ;
-
-designator
-    :   '[' WS* constantExpression WS* ']'
-    |   '.' WS* Identifier
+    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' // for lists
     ;
 
 statement
@@ -552,16 +535,12 @@ HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit+
     ;
 
-StringLiteral
-    :   EncodingPrefix? '"' SCharSequence? '"'
+FStringLiteral
+    :   'f' '"' SCharSequence? '"'
     ;
 
-fragment
-EncodingPrefix
-    :   'u8'
-    |   'u'
-    |   'U'
-    |   'L'
+StringLiteral
+    :   '"' SCharSequence? '"'
     ;
 
 fragment

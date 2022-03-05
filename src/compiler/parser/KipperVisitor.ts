@@ -3,6 +3,8 @@
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
+import { ReferenceExpressionContext } from "./KipperParser";
+import { FunctionCallExpressionContext } from "./KipperParser";
 import { ExternalFunctionDefinitionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
@@ -43,10 +45,6 @@ import { ParameterTypeListContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InitializerContext } from "./KipperParser";
-import { InitializerListContext } from "./KipperParser";
-import { DesignationContext } from "./KipperParser";
-import { DesignatorListContext } from "./KipperParser";
-import { DesignatorContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { BlockItemListContext } from "./KipperParser";
@@ -69,6 +67,22 @@ import { JumpStatementContext } from "./KipperParser";
  * operations with no return type.
  */
 export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
+	/**
+	 * Visit a parse tree produced by the `ReferenceExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitReferenceExpression?: (ctx: ReferenceExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `FunctionCallExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => Result;
+
 	/**
 	 * Visit a parse tree produced by the `externalFunctionDefinition`
 	 * labeled alternative in `KipperParser.externalItem`.
@@ -353,34 +367,6 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitInitializer?: (ctx: InitializerContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.initializerList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitInitializerList?: (ctx: InitializerListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.designation`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDesignation?: (ctx: DesignationContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.designatorList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDesignatorList?: (ctx: DesignatorListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.designator`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDesignator?: (ctx: DesignatorContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.statement`.

@@ -3,6 +3,8 @@
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
+import { ReferenceExpressionContext } from "./KipperParser";
+import { FunctionCallExpressionContext } from "./KipperParser";
 import { ExternalFunctionDefinitionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
@@ -43,10 +45,6 @@ import { ParameterTypeListContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InitializerContext } from "./KipperParser";
-import { InitializerListContext } from "./KipperParser";
-import { DesignationContext } from "./KipperParser";
-import { DesignatorListContext } from "./KipperParser";
-import { DesignatorContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { BlockItemListContext } from "./KipperParser";
@@ -66,6 +64,32 @@ import { JumpStatementContext } from "./KipperParser";
  * `KipperParser`.
  */
 export interface KipperListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by the `ReferenceExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterReferenceExpression?: (ctx: ReferenceExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ReferenceExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitReferenceExpression?: (ctx: ReferenceExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `FunctionCallExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `FunctionCallExpression`
+	 * labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
+
 	/**
 	 * Enter a parse tree produced by the `externalFunctionDefinition`
 	 * labeled alternative in `KipperParser.externalItem`.
@@ -515,50 +539,6 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitInitializer?: (ctx: InitializerContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.initializerList`.
-	 * @param ctx the parse tree
-	 */
-	enterInitializerList?: (ctx: InitializerListContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.initializerList`.
-	 * @param ctx the parse tree
-	 */
-	exitInitializerList?: (ctx: InitializerListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.designation`.
-	 * @param ctx the parse tree
-	 */
-	enterDesignation?: (ctx: DesignationContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.designation`.
-	 * @param ctx the parse tree
-	 */
-	exitDesignation?: (ctx: DesignationContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.designatorList`.
-	 * @param ctx the parse tree
-	 */
-	enterDesignatorList?: (ctx: DesignatorListContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.designatorList`.
-	 * @param ctx the parse tree
-	 */
-	exitDesignatorList?: (ctx: DesignatorListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.designator`.
-	 * @param ctx the parse tree
-	 */
-	enterDesignator?: (ctx: DesignatorContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.designator`.
-	 * @param ctx the parse tree
-	 */
-	exitDesignator?: (ctx: DesignatorContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.statement`.
