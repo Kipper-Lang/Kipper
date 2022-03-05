@@ -13,8 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
 - General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
 - `KipperFileContext.translate()`, which walks through the listener and returns the generated code of the listener.
-- `LogLevel.UNKNOWN` as the default log level.
-`KipperLogger.levels` as a static variable to access the enum `LogLevel`.
+- `LogLevel.UNKNOWN` as the default log level. 
+- `KipperLogger.levels` as a static variable to access the enum `LogLevel`.
+- New abstract base class `KipperParseToken`, which will represent the major parse tokens inside a kipper program. 
+  This class will be used to represent the items in a kipper program, and generate the typescript counterpart.
+- Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.

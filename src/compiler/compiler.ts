@@ -7,7 +7,6 @@
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
-import { CompilationUnitContext } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileContext } from "./file-ctx";
@@ -18,15 +17,15 @@ import { KipperFileContext } from "./file-ctx";
  */
 export class KipperCompileResult {
   /**
-   * The private '_fileCtx' that actually contains the instance,
-   * which is used inside the getter 'fileCtx'
+   * The private '_fileCtx' that actually stores the variable data,
+   * which is returned inside the getter 'fileCtx'
    * @private
    */
   private readonly _fileCtx: KipperFileContext;
 
   /**
-   * The private '_result' that actually contains the instance,
-   * which is used inside the getter 'result'
+   * The private '_result' that actually stores the variable data,
+   * which is returned inside the getter 'result'
    * @private
    */
   private readonly _result: Array<string>;
@@ -60,15 +59,15 @@ export class KipperCompileResult {
  */
 export class KipperCompiler {
   /**
-   * The private '_errorListener' that actually contains the instance,
-   * which is used inside the getter 'errorListener'
+   * The private '_errorListener' that actually stores the variable data,
+   * which is returned inside the getter 'errorListener'
    * @private
    */
   private readonly _errorListener: KipperErrorListener<any>;
 
   /**
-   * The private '_logger' that actually contains the instance,
-   * which is used inside the getter 'logger'
+   * The private '_logger' that actually stores the variable data,
+   * which is returned inside the getter 'logger'
    * @private
    */
   private readonly _logger: KipperLogger;
@@ -131,7 +130,7 @@ export class KipperCompiler {
     return (() => {
       let result = parser.compilationUnit();
       this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'`);
-      return new KipperFileContext(parseStream, result);
+      return new KipperFileContext(parseStream, result, parser, lexer);
     })();
   }
 

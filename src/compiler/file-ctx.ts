@@ -5,10 +5,11 @@
  * @since 0.0.3
  */
 
-import { CompilationUnitContext } from "./parser";
+import { KipperParser, KipperLexer, CompilationUnitContext } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
 import { ParseTreeWalker } from "antlr4ts/tree";
+import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
 
 /**
  * The file context class used to represent a file in a compilation.
@@ -19,24 +20,42 @@ import { ParseTreeWalker } from "antlr4ts/tree";
  */
 export class KipperFileContext {
   /**
-   * The private '_stream' that actually contains the instance,
-   * which is used inside the getter 'stream'
+   * The private '_stream' that actually stores the variable data,
+   * which is returned inside the getter 'stream'
    * @private
    */
   private readonly _stream: KipperParseStream;
 
   /**
-   * The private '_startItem' that actually contains the instance,
-   * which is used inside the getter 'startItem'
+   * The private '_startItem' that actually stores the variable data,
+   * which is returned inside the getter 'startItem'
    * @private
    */
   private readonly _startItem: CompilationUnitContext;
 
+  /**
+   * The private '_parser' that actually stores the variable data,
+   * which is returned inside the getter 'parser'
+   * @private
+   */
+  private readonly _parser: KipperParser;
+
+  /**
+   * The private '_lexer' that actually stores the variable data,
+   * which is returned inside the getter 'lexer'
+   * @private
+   */
+  private readonly _lexer: KipperLexer;
+
   constructor(
     stream: KipperParseStream,
-    startItem: CompilationUnitContext) {
+    startItem: CompilationUnitContext,
+    parser: KipperParser,
+    lexer: KipperLexer) {
     this._stream = stream;
     this._startItem = startItem;
+    this._parser = parser;
+    this._lexer = lexer;
   }
 
   /**
@@ -54,6 +73,38 @@ export class KipperFileContext {
   }
 
   /**
+   * Returns the {@link KipperParser}, which parsed this "virtual" file and generated the {@link this.startItem} ctx
+   * context.
+   */
+  get parser(): KipperParser {
+    return this._parser;
+  }
+
+  /**
+   * Returns the {@link KipperLexer}, which lexed this "virtual" file and generated the tokens for it.
+   */
+  get lexer(): KipperLexer {
+    return this._lexer;
+  }
+
+  /**
+   * Returns the {@link ANTLRErrorListener} instances, which actively listen for errors on this "virtual" file.
+   *
+   * Considering this file is only generated after the lexing and parse step, no more errors will be handled by these
+   * listeners, though they may be used to manually raise errors, so they are properly handled and formatted.
+   */
+  get errorHandler(): ANTLRErrorListener<Token>[] {
+    return this.parser.getErrorListeners();
+  }
+
+  /**
+   * Returns the {@link TokenStream}, which contains all lexer tokens in a stream
+   */
+  get tokenStream(): TokenStream {
+    return this.parser.inputStream;
+  }
+
+  /**
    * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
    * @param listener {KipperFileListener} The listener to generate the TypeScript code. The function will return the
    * generated {@link KipperFileListener.itemBuffer}, which stores the translated code items.
@@ -61,12 +112,18 @@ export class KipperFileContext {
   async translate(
     listener: KipperFileListener = new KipperFileListener(this)
   ): Promise<Array<string>> {
-    // The walker used to go through the parse tree
+    // The walker used to go through the parse tree.
     const walker = new ParseTreeWalker();
 
-    // Walking through the parse tree using the listener
+    // Walking through the parse tree using the listener.
     walker.walk(listener, this.startItem);
 
-    return listener.itemBuffer;
+    // Walking through every parse item and appending the generated {@link KipperParseToken.tsCode} array to the
+    // existing item array.
+    let genCode: Array<string> = [];
+    for (let parseItem of listener.itemBuffer) {
+      genCode = genCode.concat(parseItem.tsCode);
+    }
+    return genCode;
   }
 }
