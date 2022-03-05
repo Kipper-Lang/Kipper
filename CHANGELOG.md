@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
 - General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
 - `KipperFileContext.translate()`, which walks through the listener and returns the generated code of the listener.
-
+- `LogLevel.UNKNOWN` as the default log level.
+`KipperLogger.levels` as a static variable to access the enum `LogLevel`.
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
@@ -21,9 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of a compilation. 
 - Fixed bug in `KipperErrorListener`, which resulted in errors being not properly raised. The function is
   now a template, where `<T>` represents the offending token. `<T>` will also be passed onto `KipperSyntaxError<T>`.
+- Changed type of `LogLevel`, which now returns string-representations of the log level.
 
 ### Removed
 - Unneeded namespace `KipperStreams` and its functions.
+- Unneeded variable `LogLevelNames`, as now the enum `LogLevel` per default returns the names of the level.
 
 ## [0.0.5] - 2022-03-02
 

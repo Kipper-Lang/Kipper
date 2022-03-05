@@ -9,22 +9,14 @@
 
 // The LogLevels for the Logger
 export enum LogLevel {
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR,
-  FATAL,
-  TRACE
+  UNKNOWN = "UNKNOWN",
+  DEBUG = "DEBUG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
+  FATAL = "FATAL",
+  TRACE = "TRACE"
 }
-
-export const LogLevelNames: Map<LogLevel, string> = new Map<LogLevel, string>([
-  [LogLevel.DEBUG, "DEBUG"],
-  [LogLevel.INFO, "INFO"],
-  [LogLevel.WARN, "WARN"],
-  [LogLevel.ERROR, "ERROR"],
-  [LogLevel.FATAL, "FATAL"],
-  [LogLevel.TRACE, "TRACE"]
-])
 
 /**
  * The KipperLogger class, which implements the specific logging logic for this
@@ -32,9 +24,23 @@ export const LogLevelNames: Map<LogLevel, string> = new Map<LogLevel, string>([
  * @since 0.0.3
  */
 export class KipperLogger {
+  /**
+   * Available log levels for the {@link KipperLogger}
+   * @static
+   * @public
+   */
+  public static levels: typeof LogLevel = LogLevel;
+
+  /**
+   * The private '_emitHandler' that actually stores the variable data,
+   * which is returned inside the getter 'emitHandler'
+   * @private
+   */
+  // eslint-disable-next-line no-unused-vars
   private readonly _emitHandler: ((level: LogLevel, msg: string) => void);
 
   constructor(
+    // eslint-disable-next-line no-unused-vars
     emitHandler: (level: LogLevel, msg: string) => void,
   ) {
     this._emitHandler = emitHandler;
@@ -43,6 +49,7 @@ export class KipperLogger {
   /**
    * The specific handler that should handle emitted log messages
    */
+  // eslint-disable-next-line no-unused-vars
   get emitHandler(): ((level: LogLevel, msg: string) => void) | undefined {
     return this._emitHandler;
   }
