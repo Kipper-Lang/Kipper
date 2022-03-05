@@ -20,22 +20,17 @@ import {
   DeclarationSpecifierContext,
   DeclarationSpecifiersContext,
   DeclaratorContext,
-  DesignationContext,
-  DesignatorContext,
-  DesignatorListContext,
   DirectDeclaratorContext,
   EndOfItemContext,
   EqualityExpressionContext,
   ExpressionContext,
   ExpressionStatementContext,
   ExternalBlockItemContext,
-  ExternalDeclarationContext,
   ExternalFunctionDefinitionContext,
   ExternalItemContext,
   FunctionDefinitionContext,
   InitDeclaratorContext,
   InitializerContext,
-  InitializerListContext,
   IterationStatementContext,
   JumpStatementContext,
   KipperListener,
@@ -62,6 +57,8 @@ import { KipperFileContext } from "./file-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
+import { ExpressionStatement, KipperParseToken, Expression } from "./parse-tokens";
+import { FunctionCallExpressionContext, ReferenceExpressionContext } from "./parser/KipperParser";
 
 /**
  * The listener for a {@link KipperFileContext}, which walks through the generated
@@ -72,26 +69,55 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
  */
 export class KipperFileListener implements KipperListener {
   /**
-   * The private '_fileCtx' that actually contains the instance,
-   * which is used inside the getter 'fileCtx'
+   * The private '_fileCtx' that actually stores the variable data,
+   * which is returned inside the getter 'fileCtx'.
    * @private
    */
   private readonly _fileCtx: KipperFileContext;
 
   /**
-   * The private '_itemBuffer' that actually contains the instance,
-   * which is used inside the getter 'itemBuffer'
+   * The private '_itemBuffer' that actually stores the variable data,
+   * which is returned inside the getter 'itemBuffer'.
    * @private
    */
-  private readonly _itemBuffer: Array<string>;
+  private readonly _itemBuffer: Array<KipperParseToken>;
+
+  /**
+   * If this is true, the current context is inside an external item and automatically indicates
+   * {@link _isFunctionDefinition} is false.
+   */
+  private _isExternalItem: boolean;
+
+  /**
+   * If this is true, the current context is inside a function definition and automatically indicates
+   * {@link _isExternalItem} is false.
+   */
+  private _isFunctionDefinition: boolean;
+
+  /**
+   * The correct kipper token that is being walked through right now. This is the instance where current metadata
+   * should be added to and read from, as this instance will represent and convert the context items that were walked
+   * through during this operation.
+   */
+  private _currentKipperToken: KipperParseToken | undefined;
+
+  /**
+   * The current expression that is being walked through. This is the instance where current metadata
+   * should be added to and read from, as this instance will represent and convert the context items that were walked
+   * through during this operation.
+   */
+  private _currentExpression: Expression | undefined;
 
   constructor(fileCtx: KipperFileContext) {
     this._fileCtx = fileCtx;
     this._itemBuffer = [];
+    this._isExternalItem = false;
+    this._isFunctionDefinition = false;
+    this._currentKipperToken = undefined;
   }
 
   /**
-   * The {@link KipperFileContext} instance responsible for managing this {@link KipperFileListener} instance
+   * The {@link KipperFileContext} instance responsible for managing this {@link KipperFileListener} instance.
    */
   get fileCtx(): KipperFileContext {
     return this._fileCtx;
@@ -102,20 +128,20 @@ export class KipperFileListener implements KipperListener {
    * the listener.
    * @since 0.0.6
    */
-  get itemBuffer(): Array<string> {
+  get itemBuffer(): Array<KipperParseToken> {
     return this._itemBuffer;
   }
 
   /**
    * ??? - Let's ignore this for now
-   * @param node The node that was visited
+   * @param node The node that was visited.
    */
   visitTerminal = (/*@NotNull*/ node: TerminalNode): void => {
   };
 
   /**
-   * Function that is called when an error node is visited
-   * @param node The node that was visited
+   * Function that is called when an error node is visited.
+   * @param node The node that was visited.
    */
   visitErrorNode = (/*@NotNull*/ node: ErrorNode): void => {
   };
@@ -128,8 +154,8 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * Function that is called every time an item is exited
-   * @param ctx The context of the rule
+   * Function that is called every time an item is exited.
+   * @param ctx The context of the rule.
    */
   exitEveryRule = (/*@NotNull*/ ctx: ParserRuleContext): void => {
   };
@@ -140,14 +166,16 @@ export class KipperFileListener implements KipperListener {
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   enterExternalFunctionDefinition = (ctx: ExternalFunctionDefinitionContext) => {
+    this._isFunctionDefinition = true;
   };
 
   /**
-   * exit a parse tree produced by the `externalFunctionDefinition`
+   * Exit a parse tree produced by the `externalFunctionDefinition`
    * labeled alternative in `KipperParser.externalItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitExternalFunctionDefinition = (ctx: ExternalFunctionDefinitionContext) => {
+    this._isFunctionDefinition = false;
   };
 
   /**
@@ -156,14 +184,16 @@ export class KipperFileListener implements KipperListener {
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   enterExternalBlockItem = (ctx: ExternalBlockItemContext) => {
+    this._isExternalItem = true;
   };
 
   /**
-   * exit a parse tree produced by the `externalBlockItem`
+   * Exit a parse tree produced by the `externalBlockItem`
    * labeled alternative in `KipperParser.externalItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitExternalBlockItem = (ctx: ExternalBlockItemContext) => {
+    this._isExternalItem = false;
   };
 
   /**
@@ -174,10 +204,42 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.primaryExpression`.
+   * Exit a parse tree produced by `KipperParser.primaryExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitPrimaryExpression = (ctx: PrimaryExpressionContext) => {
+  };
+
+  /**
+   * Enter a parse tree produced by the `ReferenceExpression`
+   * labeled alternative in `KipperParser.postfixExpression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  enterReferenceExpression = (ctx: ReferenceExpressionContext) => {
+  };
+
+  /**
+   * Exit a parse tree produced by the `ReferenceExpression`
+   * labeled alternative in `KipperParser.postfixExpression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  exitReferenceExpression = (ctx: ReferenceExpressionContext) => {
+  };
+
+  /**
+   * Enter a parse tree produced by the `FunctionCallExpression`
+   * labeled alternative in `KipperParser.postfixExpression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  enterFunctionCallExpression = (ctx: FunctionCallExpressionContext) => {
+  };
+
+  /**
+   * Exit a parse tree produced by the `FunctionCallExpression`
+   * labeled alternative in `KipperParser.postfixExpression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  exitFunctionCallExpression = (ctx: FunctionCallExpressionContext) => {
   };
 
   /**
@@ -188,7 +250,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.postfixExpression`.
+   * Exit a parse tree produced by `KipperParser.postfixExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitPostfixExpression = (ctx: PostfixExpressionContext) => {
@@ -202,7 +264,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.argumentExpressionList`.
+   * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitArgumentExpressionList = (ctx: ArgumentExpressionListContext) => {
@@ -216,7 +278,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.unaryExpression`.
+   * Exit a parse tree produced by `KipperParser.unaryExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitUnaryExpression = (ctx: UnaryExpressionContext) => {
@@ -230,7 +292,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.unaryOperator`.
+   * Exit a parse tree produced by `KipperParser.unaryOperator`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitUnaryOperator = (ctx: UnaryOperatorContext) => {
@@ -244,7 +306,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.castOrConvertExpression`.
+   * Exit a parse tree produced by `KipperParser.castOrConvertExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitCastOrConvertExpression = (ctx: CastOrConvertExpressionContext) => {
@@ -258,7 +320,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.multiplicativeExpression`.
+   * Exit a parse tree produced by `KipperParser.multiplicativeExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitMultiplicativeExpression = (ctx: MultiplicativeExpressionContext) => {
@@ -272,7 +334,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.additiveExpression`.
+   * Exit a parse tree produced by `KipperParser.additiveExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitAdditiveExpression = (ctx: AdditiveExpressionContext) => {
@@ -286,7 +348,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.relationalExpression`.
+   * Exit a parse tree produced by `KipperParser.relationalExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitRelationalExpression = (ctx: RelationalExpressionContext) => {
@@ -300,7 +362,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.equalityExpression`.
+   * Exit a parse tree produced by `KipperParser.equalityExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitEqualityExpression = (ctx: EqualityExpressionContext) => {
@@ -314,7 +376,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.logicalAndExpression`.
+   * Exit a parse tree produced by `KipperParser.logicalAndExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitLogicalAndExpression = (ctx: LogicalAndExpressionContext) => {
@@ -328,7 +390,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.logicalOrExpression`.
+   * Exit a parse tree produced by `KipperParser.logicalOrExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitLogicalOrExpression = (ctx: LogicalOrExpressionContext) => {
@@ -342,7 +404,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.conditionalExpression`.
+   * Exit a parse tree produced by `KipperParser.conditionalExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitConditionalExpression = (ctx: ConditionalExpressionContext) => {
@@ -353,10 +415,11 @@ export class KipperFileListener implements KipperListener {
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   enterAssignmentExpression = (ctx: AssignmentExpressionContext) => {
+
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.assignmentExpression`.
+   * Exit a parse tree produced by `KipperParser.assignmentExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitAssignmentExpression = (ctx: AssignmentExpressionContext) => {
@@ -370,24 +433,10 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.assignmentOperator`.
+   * Exit a parse tree produced by `KipperParser.assignmentOperator`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitAssignmentOperator = (ctx: AssignmentOperatorContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.expression`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterExpression = (ctx: ExpressionContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.expression`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitExpression = (ctx: ExpressionContext) => {
   };
 
   /**
@@ -398,10 +447,45 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.constantExpression`.
+   * Exit a parse tree produced by `KipperParser.constantExpression`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitConstantExpression = (ctx: ConstantExpressionContext) => {
+  };
+
+  /**
+   * Enter a parse tree produced by `KipperParser.expression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  enterExpression = (ctx: ExpressionContext) => {
+    this._currentExpression = new Expression(ctx, this.fileCtx);
+    this._currentKipperToken?.children.push(this._currentExpression);
+  };
+
+  /**
+   * Exit a parse tree produced by `KipperParser.expression`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  exitExpression = (ctx: ExpressionContext) => {
+    this._currentExpression = undefined;
+  };
+
+  /**
+   * Enter a parse tree produced by `KipperParser.expressionStatement`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  enterExpressionStatement = (ctx: ExpressionStatementContext) => {
+    this._currentKipperToken = new ExpressionStatement(ctx, this.fileCtx);
+  };
+
+  /**
+   * Exit a parse tree produced by `KipperParser.expressionStatement`.
+   * @param ctx The parse tree (instance of {@link ParserRuleContext})
+   */
+  exitExpressionStatement = (ctx: ExpressionStatementContext) => {
+    if (this._currentKipperToken instanceof ExpressionStatement)
+      this.itemBuffer.push(this._currentKipperToken);
+    this._currentKipperToken = undefined;
   };
 
   /**
@@ -412,7 +496,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.declaration`.
+   * Exit a parse tree produced by `KipperParser.declaration`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitDeclaration = (ctx: DeclarationContext) => {
@@ -426,7 +510,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
+   * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitStorageTypeSpecifier = (ctx: StorageTypeSpecifierContext) => {
@@ -440,7 +524,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.declarationSpecifiers`.
+   * Exit a parse tree produced by `KipperParser.declarationSpecifiers`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitDeclarationSpecifiers = (ctx: DeclarationSpecifiersContext) => {
@@ -454,7 +538,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.declarationSpecifier`.
+   * Exit a parse tree produced by `KipperParser.declarationSpecifier`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitDeclarationSpecifier = (ctx: DeclarationSpecifierContext) => {
@@ -468,7 +552,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.initDeclarator`.
+   * Exit a parse tree produced by `KipperParser.initDeclarator`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitInitDeclarator = (ctx: InitDeclaratorContext) => {
@@ -482,7 +566,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.typeSpecifier`.
+   * Exit a parse tree produced by `KipperParser.typeSpecifier`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitTypeSpecifier = (ctx: TypeSpecifierContext) => {
@@ -496,7 +580,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.declarator`.
+   * Exit a parse tree produced by `KipperParser.declarator`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitDeclarator = (ctx: DeclaratorContext) => {
@@ -510,7 +594,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.directDeclarator`.
+   * Exit a parse tree produced by `KipperParser.directDeclarator`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitDirectDeclarator = (ctx: DirectDeclaratorContext) => {
@@ -524,7 +608,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.nestedParenthesesBlock`.
+   * Exit a parse tree produced by `KipperParser.nestedParenthesesBlock`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitNestedParenthesesBlock = (ctx: NestedParenthesesBlockContext) => {
@@ -538,7 +622,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.parameterTypeList`.
+   * Exit a parse tree produced by `KipperParser.parameterTypeList`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitParameterTypeList = (ctx: ParameterTypeListContext) => {
@@ -552,7 +636,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.parameterList`.
+   * Exit a parse tree produced by `KipperParser.parameterList`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitParameterList = (ctx: ParameterListContext) => {
@@ -566,7 +650,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.parameterDeclaration`.
+   * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitParameterDeclaration = (ctx: ParameterDeclarationContext) => {
@@ -580,66 +664,10 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.initializer`.
+   * Exit a parse tree produced by `KipperParser.initializer`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitInitializer = (ctx: InitializerContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.initializerList`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterInitializerList = (ctx: InitializerListContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.initializerList`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitInitializerList = (ctx: InitializerListContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.designation`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterDesignation = (ctx: DesignationContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.designation`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitDesignation = (ctx: DesignationContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.designatorList`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterDesignatorList = (ctx: DesignatorListContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.designatorList`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitDesignatorList = (ctx: DesignatorListContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.designator`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterDesignator = (ctx: DesignatorContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.designator`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitDesignator = (ctx: DesignatorContext) => {
   };
 
   /**
@@ -650,7 +678,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.statement`.
+   * Exit a parse tree produced by `KipperParser.statement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitStatement = (ctx: StatementContext) => {
@@ -664,7 +692,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.labeledStatement`.
+   * Exit a parse tree produced by `KipperParser.labeledStatement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitLabeledStatement = (ctx: LabeledStatementContext) => {
@@ -678,7 +706,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.compoundStatement`.
+   * Exit a parse tree produced by `KipperParser.compoundStatement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitCompoundStatement = (ctx: CompoundStatementContext) => {
@@ -692,7 +720,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.blockItemList`.
+   * Exit a parse tree produced by `KipperParser.blockItemList`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitBlockItemList = (ctx: BlockItemListContext) => {
@@ -706,24 +734,10 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.blockItem`.
+   * Exit a parse tree produced by `KipperParser.blockItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitBlockItem = (ctx: BlockItemContext) => {
-  };
-
-  /**
-   * Enter a parse tree produced by `KipperParser.expressionStatement`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterExpressionStatement = (ctx: ExpressionStatementContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by `KipperParser.expressionStatement`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitExpressionStatement = (ctx: ExpressionStatementContext) => {
   };
 
   /**
@@ -734,7 +748,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.selectionStatement`.
+   * Exit a parse tree produced by `KipperParser.selectionStatement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitSelectionStatement = (ctx: SelectionStatementContext) => {
@@ -748,7 +762,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.iterationStatement`.
+   * Exit a parse tree produced by `KipperParser.iterationStatement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitIterationStatement = (ctx: IterationStatementContext) => {
@@ -762,7 +776,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.jumpStatement`.
+   * Exit a parse tree produced by `KipperParser.jumpStatement`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitJumpStatement = (ctx: JumpStatementContext) => {
@@ -776,7 +790,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.compilationUnit`.
+   * Exit a parse tree produced by `KipperParser.compilationUnit`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitCompilationUnit = (ctx: CompilationUnitContext) => {
@@ -790,7 +804,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.translationUnit`.
+   * Exit a parse tree produced by `KipperParser.translationUnit`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitTranslationUnit = (ctx: TranslationUnitContext) => {
@@ -804,7 +818,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.externalItem`.
+   * Exit a parse tree produced by `KipperParser.externalItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitExternalItem = (ctx: ExternalItemContext) => {
@@ -818,7 +832,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.functionDefinition`.
+   * Exit a parse tree produced by `KipperParser.functionDefinition`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitFunctionDefinition = (ctx: FunctionDefinitionContext) => {
@@ -832,7 +846,7 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * exit a parse tree produced by `KipperParser.endOfItem`.
+   * Exit a parse tree produced by `KipperParser.endOfItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitEndOfItem = (ctx: EndOfItemContext) => {

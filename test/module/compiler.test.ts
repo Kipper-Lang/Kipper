@@ -1,8 +1,10 @@
 import { assert } from "chai";
 import { KipperCompiler, KipperLogger, KipperParseStream, KipperSyntaxError, LogLevel } from "../../src";
 import { promises as fs } from "fs";
+import { KipperCompileResult } from "../../src";
 
-const validFile = `${__dirname}/../kipper-files/main.kip`;
+const mainFile = `${__dirname}/../kipper-files/main.kip`;
+const singleFunctionFile = `${__dirname}/../kipper-files/single-function-call.kip`;
 const invalidFile = `${__dirname}/../kipper-files/invalid.kip`;
 
 describe("KipperCompiler", () => {
@@ -46,11 +48,11 @@ describe("KipperCompiler", () => {
 
   describe("KipperCompiler.syntaxAnalyse()", () => {
     it("Syntax analyse valid code without error", async () => {
-      let fileContent = (await fs.readFile(validFile, "utf8" as BufferEncoding)).toString();
+      let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
       let stream = new KipperParseStream("inline-stream", fileContent);
 
-      await compiler.syntaxAnalyse(stream, false);
+      await compiler.syntaxAnalyse(stream);
     });
 
     it("Syntax analyse invalid code with expected error", async () => {
@@ -59,7 +61,7 @@ describe("KipperCompiler", () => {
       let stream = new KipperParseStream("inline-stream", fileContent);
 
       try {
-        await compiler.syntaxAnalyse(stream, false);
+        await compiler.syntaxAnalyse(stream);
         assert(false, "Expected an error");
       } catch (e) {
         assert(e instanceof KipperSyntaxError, "Expected a valid KipperSyntaxError instance");
@@ -69,7 +71,7 @@ describe("KipperCompiler", () => {
 
   describe("KipperCompiler.parse()", () => {
     it("Validate file ctx return", async () => {
-      let fileContent = (await fs.readFile(validFile, "utf8" as BufferEncoding)).toString();
+      let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
       let stream = new KipperParseStream("inline-stream", fileContent);
       let instance = await compiler.parse(stream);
@@ -80,6 +82,18 @@ describe("KipperCompiler", () => {
       assert(stream.stringContent === fileContent);
       assert(stream.charStream.sourceName === "inline-stream");
       assert(stream.charStream.toString() === fileContent);
+    });
+  });
+
+  describe("KipperCompiler.compile()", () => {
+    it("Simple file compilation", async () => {
+      let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
+      let compiler = new KipperCompiler();
+      let stream = new KipperParseStream("inline-stream", fileContent);
+      let instance: KipperCompileResult = await compiler.compile(stream);
+
+      assert(instance.fileCtx);
+      assert(instance.fileCtx.stream === stream);
     });
   });
 });

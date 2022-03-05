@@ -32,6 +32,7 @@ export abstract class KipperParseToken {
    * @private
    */
   private readonly _antlrContext: ParserRuleContext;
+
   /**
    * The private '_fileCtx' that actually stores the variable data,
    * which is returned inside the getter 'fileCtx'
@@ -39,9 +40,23 @@ export abstract class KipperParseToken {
    */
   private readonly _fileCtx: KipperFileContext;
 
-  protected constructor(antlrContext: ParserRuleContext, fileCtx: KipperFileContext) {
+  /**
+   * The private '_children' that actually stores the variable data,
+   * which is returned inside the getter 'children'
+   * @private
+   */
+  private readonly _children: Array<KipperParseToken>;
+
+  /**
+   * The parent of this token - If this is not undefined, it will be either a {@link CompoundStatement},
+   * {@link FunctionDefinition}, {@link SelectionStatement} or {@link IterationStatement}.
+   */
+  public parent: KipperParseToken | undefined = undefined;
+
+  constructor(antlrContext: ParserRuleContext, fileCtx: KipperFileContext) {
     this._antlrContext = antlrContext;
     this._fileCtx = fileCtx;
+    this._children = [];
   }
 
   /**
@@ -84,7 +99,109 @@ export abstract class KipperParseToken {
   }
 
   /**
+   * The children of this parse token
+   */
+  get children(): Array<KipperParseToken> {
+    return this._children;
+  }
+
+  /**
    * Generates the typescript for this item, and all children (if they exist)
    */
   abstract get tsCode(): Array<string>;
+}
+
+export class Expression extends KipperParseToken {
+  /**
+   * The private '_expressionCtx' that actually stores the variable data,
+   * which is returned inside the getter 'expressionCtx'
+   * @private
+   */
+  private _expressionCtx: ParserRuleContext | undefined;
+
+  constructor(antlrContext: ParserRuleContext, fileCtx: KipperFileContext) {
+    super(antlrContext, fileCtx);
+    this._expressionCtx = undefined;
+  }
+
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+
+  /**
+   * Gets the expression context, which contains the actual data for this expression.
+   * This is not the same as {@link antlrContext}, which contains the overall 'expression' rule context.
+   *
+   * Undefined if it was not set yet (not found yet by the listener)!
+   */
+  get expressionCtx(): ParserRuleContext | undefined {
+    return this._expressionCtx;
+  }
+
+  /**
+   * Sets the actual expression context, which contains the actual data for this expression.
+   * This is not the same as {@link antlrContext}, which contains the overall 'expression' rule context.
+   * @param ctx The antlr context that represents the proper expression context.
+   */
+  setExpressionCtx(ctx: ParserRuleContext): void {
+    this._expressionCtx = ctx;
+  }
+}
+
+export class FunctionDefinition extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class Declaration extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class CompoundStatement extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class SelectionStatement extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class ExpressionStatement extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class IterationStatement extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
+}
+
+export class JumpStatement extends KipperParseToken {
+  get tsCode(): Array<string> {
+    let genCode: Array<string> = [];
+
+    return genCode;
+  }
 }
