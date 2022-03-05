@@ -10,7 +10,6 @@ export {KipperVisitor} from './KipperVisitor';
 export {
   KipperParser,
   ExternalFunctionDefinitionContext,
-  ExternalDeclarationContext,
   ExternalBlockItemContext,
   SingleItemTypeSpecifierContext,
   MultiItemTypeSpecifierContext,

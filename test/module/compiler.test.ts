@@ -23,6 +23,7 @@ describe("KipperCompiler", () => {
 
     it("Constructor with logging emitHandler", () => {
       let emitHandlerWasCalled: boolean = false;
+      // eslint-disable-next-line no-unused-vars
       let emitHandler: (level: LogLevel, msg: string) => void = (() => {
         emitHandlerWasCalled = true;
       });

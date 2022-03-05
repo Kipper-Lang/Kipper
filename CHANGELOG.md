@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New abstract base class `KipperParseToken`, which will represent the major parse tokens inside a kipper program. 
   This class will be used to represent the items in a kipper program, and generate the typescript counterpart.
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
+- New dictionary `builtInFunctions`, which will map to the built-in function names, like `print()`, a 
+  handler that will generate the typescript code to replace the function call with. This is to avoid having to
+  add overhead or any dependencies for the function calls, and natively convert the statement to TypeScript.
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.

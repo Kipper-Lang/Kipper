@@ -9,4 +9,4 @@
 
 export const builtInFunctions: { [key: string]: (...args: any[]) => any } = {
 
-}
+};
