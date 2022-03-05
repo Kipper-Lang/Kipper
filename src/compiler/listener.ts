@@ -151,22 +151,6 @@ export class KipperFileListener implements KipperListener {
   };
 
   /**
-   * Enter a parse tree produced by the `externalDeclaration`
-   * labeled alternative in `KipperParser.externalItem`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  enterExternalDeclaration = (ctx: ExternalDeclarationContext) => {
-  };
-
-  /**
-   * exit a parse tree produced by the `externalDeclaration`
-   * labeled alternative in `KipperParser.externalItem`.
-   * @param ctx The parse tree (instance of {@link ParserRuleContext})
-   */
-  exitExternalDeclaration = (ctx: ExternalDeclarationContext) => {
-  };
-
-  /**
    * Enter a parse tree produced by the `externalBlockItem`
    * labeled alternative in `KipperParser.externalItem`.
    * @param ctx The parse tree (instance of {@link ParserRuleContext})

@@ -4,7 +4,6 @@
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { ExternalFunctionDefinitionContext } from "./KipperParser";
-import { ExternalDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
 import { MultiItemTypeSpecifierContext } from "./KipperParser";
@@ -77,14 +76,6 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitExternalFunctionDefinition?: (ctx: ExternalFunctionDefinitionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `externalDeclaration`
-	 * labeled alternative in `KipperParser.externalItem`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExternalDeclaration?: (ctx: ExternalDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `externalBlockItem`

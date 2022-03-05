@@ -15,7 +15,6 @@ translationUnit
 
 externalItem
     :   functionDefinition # externalFunctionDefinition
-    |   declaration # externalDeclaration
     |   blockItem # externalBlockItem
     ;
 
@@ -576,11 +575,6 @@ SChar
     |   EscapeSequence
     |   '\\\n'   // Added line
     |   '\\\r\n' // Added line
-    ;
-
-Directive
-    :   '#' ~[\r\n]*
-        -> skip
     ;
 
 WS
