@@ -5,10 +5,10 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
-import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { RecognitionException } from "antlr4ts/RecognitionException";
-import { Recognizer } from "antlr4ts/Recognizer";
+import {InputMismatchException, LexerNoViableAltException, NoViableAltException} from "antlr4ts";
+import {FailedPredicateException} from "antlr4ts/FailedPredicateException";
+import {RecognitionException} from "antlr4ts/RecognitionException";
+import {Recognizer} from "antlr4ts/Recognizer";
 
 /**
  * The base error for the Kipper module
@@ -65,7 +65,7 @@ export class KipperSyntaxError<Token> extends KipperError {
       | LexerNoViableAltException
       | InputMismatchException
       | FailedPredicateException
-      | undefined
+      | undefined,
   ) {
     super(msg);
 
@@ -131,7 +131,5 @@ export class KipperSyntaxError<Token> extends KipperError {
   /**
    * Reports the syntax error and writes onto the console
    */
-  async reportError(): Promise<void> {
-
-  }
+  async reportError(): Promise<void> {}
 }

@@ -7,9 +7,9 @@
     "antlr4ts": "^0.5.0-alpha.4"
   },
   "devDependencies": {
-    "typescript": "^4.5.5",
-    "tslib": "^2.3.1",
-    "ts-node": "^10.6.0",
+    "typescript": "~4.5.5",
+    "tslib": "~2.3.1",
+    "ts-node": "~10.6.0",
     "uuid": "^8.3.2",
     "mkdirp": "^1.0.4",
     "chai": "^4.3.0",
@@ -19,8 +19,8 @@
     "ansi-regex": "^5.0.1",
     "prettier": "2.4.1",
     "tsify": "^5.0.4",
-    "browserify": "^17.0.0",
-    "watchify": "^4.0.0",
+    "browserify": "~17.0.0",
+    "watchify": "~4.0.0",
     "antlr4ts-cli": "^0.5.0-alpha.4",
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.17.60",

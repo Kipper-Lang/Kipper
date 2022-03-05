@@ -5,11 +5,11 @@
  * @since 0.0.3
  */
 
-import { KipperParser, KipperLexer, CompilationUnitContext } from "./parser";
-import { KipperParseStream } from "./parse-stream";
-import { KipperFileListener } from "./listener";
-import { ParseTreeWalker } from "antlr4ts/tree";
-import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
+import {KipperParser, KipperLexer, CompilationUnitContext} from "./parser";
+import {KipperParseStream} from "./parse-stream";
+import {KipperFileListener} from "./listener";
+import {ParseTreeWalker} from "antlr4ts/tree";
+import {Token, ANTLRErrorListener, TokenStream} from "antlr4ts";
 
 /**
  * The file context class used to represent a file in a compilation.
@@ -54,11 +54,7 @@ export class KipperFileContext {
    */
   private _typescriptCode: Array<string> | undefined;
 
-  constructor(
-    stream: KipperParseStream,
-    startItem: CompilationUnitContext,
-    parser: KipperParser,
-    lexer: KipperLexer) {
+  constructor(stream: KipperParseStream, startItem: CompilationUnitContext, parser: KipperParser, lexer: KipperLexer) {
     this._stream = stream;
     this._startItem = startItem;
     this._parser = parser;
@@ -125,9 +121,7 @@ export class KipperFileContext {
    * generated {@link KipperFileListener.itemBuffer}, which stores the translated code items. Generates a new one per
    * default!
    */
-  translate(
-    listener: KipperFileListener = new KipperFileListener(this)
-  ): Array<string> {
+  translate(listener: KipperFileListener = new KipperFileListener(this)): Array<string> {
     // The walker used to go through the parse tree.
     const walker = new ParseTreeWalker();
 

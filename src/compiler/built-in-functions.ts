@@ -7,6 +7,4 @@
  * @since 0.0.6
  */
 
-export const builtInFunctions: { [key: string]: (...args: any[]) => any } = {
-
-};
+export const builtInFunctions: {[key: string]: (...args: any[]) => any} = {};

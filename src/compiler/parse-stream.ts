@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
-import { CharStreams, CodePointCharStream } from "antlr4ts";
+import {CharStreams, CodePointCharStream} from "antlr4ts";
 
 /**
  * The {@link KipperParseStream} class, which stores the content of a file/string in a "virtual" file in a UTF-16

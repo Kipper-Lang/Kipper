@@ -16,10 +16,10 @@
  * @since 0.0.6
  */
 
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { KipperParser } from "./parser";
-import { Interval } from "antlr4ts/misc/Interval";
-import { KipperFileContext } from "./file-ctx";
+import {ParserRuleContext} from "antlr4ts/ParserRuleContext";
+import {KipperParser} from "./parser";
+import {Interval} from "antlr4ts/misc/Interval";
+import {KipperFileContext} from "./file-ctx";
 
 /**
  * Kipper Parse token, which is the base class all tokens will extend from
@@ -67,8 +67,7 @@ export abstract class KipperParseToken {
     let start = this.antlrContext.start.startIndex;
 
     // If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
-    if (inputStream === undefined)
-      return this.antlrContext.text;
+    if (inputStream === undefined) return this.antlrContext.text;
 
     // If {@link this.antlrContext.stop} is defined, then use {@link this.antlrContext.stop.stopIndex}, otherwise use
     // the last index of the "virtual" file/buffer, which is {@link inputStream.size} - 2 (Accounting for the

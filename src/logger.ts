@@ -15,7 +15,7 @@ export enum LogLevel {
   WARN = "WARN",
   ERROR = "ERROR",
   FATAL = "FATAL",
-  TRACE = "TRACE"
+  TRACE = "TRACE",
 }
 
 /**
@@ -37,7 +37,7 @@ export class KipperLogger {
    * @private
    */
   // eslint-disable-next-line no-unused-vars
-  private readonly _emitHandler: ((level: LogLevel, msg: string) => void);
+  private readonly _emitHandler: (level: LogLevel, msg: string) => void;
 
   constructor(
     // eslint-disable-next-line no-unused-vars

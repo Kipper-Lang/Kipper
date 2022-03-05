@@ -4,12 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
  */
-import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
-import { KipperErrorListener } from "./error-handler";
-import { KipperLexer, KipperParser } from "./parser";
-import { KipperLogger } from "../logger";
-import { KipperParseStream } from "./parse-stream";
-import { KipperFileContext } from "./file-ctx";
+import {CodePointCharStream, CommonTokenStream} from "antlr4ts";
+import {KipperErrorListener} from "./error-handler";
+import {KipperLexer, KipperParser} from "./parser";
+import {KipperLogger} from "../logger";
+import {KipperParseStream} from "./parse-stream";
+import {KipperFileContext} from "./file-ctx";
 
 /**
  * The result of a {@link KipperCompiler} compilation
@@ -97,7 +97,10 @@ export class KipperCompiler {
    * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
    * @param name The encoding to read the file with.
    */
-  private static _handleStreamInput(stream: string | KipperParseStream, name: string = "inline-stream"): KipperParseStream {
+  private static _handleStreamInput(
+    stream: string | KipperParseStream,
+    name: string = "inline-stream",
+  ): KipperParseStream {
     if (stream instanceof KipperParseStream) {
       return stream;
     } else {
@@ -169,7 +172,7 @@ export class KipperCompiler {
    * {@link stream} is a {@link KipperParseStream}.
    * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async syntaxAnalyse(stream: string | KipperParseStream, streamName?: string): Promise<void>  {
+  async syntaxAnalyse(stream: string | KipperParseStream, streamName?: string): Promise<void> {
     let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, streamName);
 
     this.logger.info(`Starting syntax check for '${inStream.name}'`);
