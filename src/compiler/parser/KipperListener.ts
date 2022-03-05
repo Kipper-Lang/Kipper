@@ -9,6 +9,11 @@ import { ExternalBlockItemContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
 import { MultiItemTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
+import { CompilationUnitContext } from "./KipperParser";
+import { TranslationUnitContext } from "./KipperParser";
+import { ExternalItemContext } from "./KipperParser";
+import { FunctionDefinitionContext } from "./KipperParser";
+import { EndOfItemContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -44,22 +49,18 @@ import { DesignationContext } from "./KipperParser";
 import { DesignatorListContext } from "./KipperParser";
 import { DesignatorContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
-import { LabeledStatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { BlockItemListContext } from "./KipperParser";
 import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
+import { LabeledStatementContext } from "./KipperParser";
 import { IterationStatementContext } from "./KipperParser";
 import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
-import { CompilationUnitContext } from "./KipperParser";
-import { TranslationUnitContext } from "./KipperParser";
-import { ExternalItemContext } from "./KipperParser";
-import { FunctionDefinitionContext } from "./KipperParser";
-import { EndOfItemContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -143,6 +144,61 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
+	 * @param ctx the parse tree
+	 */
+	enterCompilationUnit?: (ctx: CompilationUnitContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.compilationUnit`.
+	 * @param ctx the parse tree
+	 */
+	exitCompilationUnit?: (ctx: CompilationUnitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.translationUnit`.
+	 * @param ctx the parse tree
+	 */
+	enterTranslationUnit?: (ctx: TranslationUnitContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.translationUnit`.
+	 * @param ctx the parse tree
+	 */
+	exitTranslationUnit?: (ctx: TranslationUnitContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.externalItem`.
+	 * @param ctx the parse tree
+	 */
+	enterExternalItem?: (ctx: ExternalItemContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.externalItem`.
+	 * @param ctx the parse tree
+	 */
+	exitExternalItem?: (ctx: ExternalItemContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx the parse tree
+	 */
+	enterFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx the parse tree
+	 */
+	exitFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.endOfItem`.
+	 * @param ctx the parse tree
+	 */
+	enterEndOfItem?: (ctx: EndOfItemContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.endOfItem`.
+	 * @param ctx the parse tree
+	 */
+	exitEndOfItem?: (ctx: EndOfItemContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.primaryExpression`.
@@ -530,17 +586,6 @@ export interface KipperListener extends ParseTreeListener {
 	exitStatement?: (ctx: StatementContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.labeledStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterLabeledStatement?: (ctx: LabeledStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.labeledStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitLabeledStatement?: (ctx: LabeledStatementContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.compoundStatement`.
 	 * @param ctx the parse tree
 	 */
@@ -596,6 +641,17 @@ export interface KipperListener extends ParseTreeListener {
 	exitSelectionStatement?: (ctx: SelectionStatementContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.labeledStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterLabeledStatement?: (ctx: LabeledStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.labeledStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitLabeledStatement?: (ctx: LabeledStatementContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.iterationStatement`.
 	 * @param ctx the parse tree
 	 */
@@ -649,60 +705,5 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitJumpStatement?: (ctx: JumpStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
-	 * @param ctx the parse tree
-	 */
-	enterCompilationUnit?: (ctx: CompilationUnitContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.compilationUnit`.
-	 * @param ctx the parse tree
-	 */
-	exitCompilationUnit?: (ctx: CompilationUnitContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.translationUnit`.
-	 * @param ctx the parse tree
-	 */
-	enterTranslationUnit?: (ctx: TranslationUnitContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.translationUnit`.
-	 * @param ctx the parse tree
-	 */
-	exitTranslationUnit?: (ctx: TranslationUnitContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.externalItem`.
-	 * @param ctx the parse tree
-	 */
-	enterExternalItem?: (ctx: ExternalItemContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.externalItem`.
-	 * @param ctx the parse tree
-	 */
-	exitExternalItem?: (ctx: ExternalItemContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx the parse tree
-	 */
-	enterFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx the parse tree
-	 */
-	exitFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.endOfItem`.
-	 * @param ctx the parse tree
-	 */
-	enterEndOfItem?: (ctx: EndOfItemContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.endOfItem`.
-	 * @param ctx the parse tree
-	 */
-	exitEndOfItem?: (ctx: EndOfItemContext) => void;
 }
 

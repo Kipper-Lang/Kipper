@@ -187,17 +187,11 @@ designator
     ;
 
 statement
-    :   labeledStatement
-    |   compoundStatement
+    :   compoundStatement
     |   expressionStatement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
-    ;
-
-labeledStatement
-    :   'case' WS* constantExpression WS* ':' WS* statement
-    |   'default' WS* ':' WS* statement
     ;
 
 compoundStatement
@@ -218,7 +212,12 @@ expressionStatement
 
 selectionStatement
     :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)?
-    |   'switch' WS* '(' WS* expression WS* ')' WS* statement
+    |   'switch' WS* '(' WS* expression WS* ')' WS* '{' (WS* labeledStatement)* '}'
+    ;
+
+labeledStatement
+    :   'case' WS* constantExpression WS* ':' WS* statement
+    |   'default' WS* ':' WS* statement
     ;
 
 iterationStatement
