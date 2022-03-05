@@ -111,6 +111,7 @@ export class KipperCompiler {
    * @param {KipperParseStream} parseStream The {@link KipperParseStream} instance that contains the required string
    * content
    * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}
+   * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
   async parse(parseStream: KipperParseStream): Promise<KipperFileContext> {
     this._logger.info(`Parsing '${parseStream.name}'`);
@@ -137,37 +138,46 @@ export class KipperCompiler {
   /**
    * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
    * @param stream The input to compile, which may be either a {@link String} or {@link KipperParseStream}.
-   * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
-   * raised. This option is needed if you want to customise the handling using the {@link logger.emitHandler}.
    * @param streamName The name that should be used to differentiate this specific stream. Only available if
    * {@link stream} is a {@link KipperParseStream}.
    * @returns The created {@link KipperCompileResult} instance.
+   * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async compile(stream: string | KipperParseStream, preferLogging: boolean = false, streamName?: string): Promise<KipperCompileResult> {
+  async compile(stream: string | KipperParseStream, streamName?: string): Promise<KipperCompileResult> {
     let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, streamName);
 
-    this._logger.info(`Starting compilation for '${inStream.name}'`);
+    this.logger.info(`Starting compilation for '${inStream.name}'`);
+
+    // The file context storing the metadata for the "virtual file"
     const fileCtx: KipperFileContext = await this.parse(inStream);
 
-    throw new Error("Not implemented");
+    // Translate and compile the code
+    this.logger.info(`Starting translation for '${inStream.name}'`);
+    const code = fileCtx.translate();
 
-    // return new KipperCompileResult(inStream);
+    this.logger.info(`Finished compilation - Returning compilation result`);
+
+    // Return the result for the compilation
+    return new KipperCompileResult(fileCtx, code);
   }
 
   /**
-   * Analyses the syntax of the given file. Errors will be raised as an exception, unless {@link preferLogging} is true.
+   * Analyses the syntax of the given file. Errors will be raised as an exception and warnings logged using the
+   * {@link this.logger}.
    * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
-   * @param {boolean} preferLogging If set to true, all warnings and errors will be logged rather than errors
-   * raised. This option is needed if you want to customise the handling using the {@link logger.emitHandler}.
    * @param streamName The name that should be used to differentiate this specific stream. Only available if
    * {@link stream} is a {@link KipperParseStream}.
-   * @throws {KipperSyntaxError} If {@link preferLogging} is false and an exception was encountered while running.
+   * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async syntaxAnalyse(stream: string | KipperParseStream, preferLogging: boolean = false, streamName?: string) {
+  async syntaxAnalyse(stream: string | KipperParseStream, streamName?: string): Promise<void>  {
     let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, streamName);
 
-    this._logger.info(`Starting syntax check for '${inStream.name}'`);
-    const fileCtx: KipperFileContext = await this.parse(inStream);
-    return;
+    this.logger.info(`Starting syntax check for '${inStream.name}'`);
+
+    // Parsing the content, if an error is found, it will be reported
+    await this.parse(inStream);
+
+    // If no exception was raised, then everything should be alright!
+    this.logger.info("Finished syntax check successfully!");
   }
 }

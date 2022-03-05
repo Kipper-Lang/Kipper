@@ -47,6 +47,13 @@ export class KipperFileContext {
    */
   private readonly _lexer: KipperLexer;
 
+  /**
+   * The private '_typescriptCode' that will store the cached code, once 'typescriptCode' has been called. This is to
+   * avoid running the function unnecessarily and generate code again, even though it already exists.
+   * @private
+   */
+  private _typescriptCode: Array<string> | undefined;
+
   constructor(
     stream: KipperParseStream,
     startItem: CompilationUnitContext,
@@ -105,13 +112,22 @@ export class KipperFileContext {
   }
 
   /**
+   * Returns the typescript code counterpart to this "virtual" file. This getter uses caching, so it will only be
+   * populated in case 'translate()' has been called before!
+   */
+  get typescriptCode(): Array<string> | undefined {
+    return this._typescriptCode;
+  }
+
+  /**
    * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
    * @param listener {KipperFileListener} The listener to generate the TypeScript code. The function will return the
-   * generated {@link KipperFileListener.itemBuffer}, which stores the translated code items.
+   * generated {@link KipperFileListener.itemBuffer}, which stores the translated code items. Generates a new one per
+   * default!
    */
-  async translate(
+  translate(
     listener: KipperFileListener = new KipperFileListener(this)
-  ): Promise<Array<string>> {
+  ): Array<string> {
     // The walker used to go through the parse tree.
     const walker = new ParseTreeWalker();
 
@@ -124,6 +140,10 @@ export class KipperFileContext {
     for (let parseItem of listener.itemBuffer) {
       genCode = genCode.concat(parseItem.tsCode);
     }
+
+    // Cache the result
+    this._typescriptCode = genCode;
+
     return genCode;
   }
 }
