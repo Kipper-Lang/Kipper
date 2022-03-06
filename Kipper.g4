@@ -66,7 +66,7 @@ castOrConvertExpression
     ;
 
 multiplicativeExpression
-    :   castOrConvertExpression WS* (('*'|'/'|'%') WS* castOrConvertExpression WS*)*
+    :   castOrConvertExpression WS* (('*'|'/'|'%'|'**') WS* castOrConvertExpression WS*)*
     ;
 
 additiveExpression
@@ -288,6 +288,7 @@ MinusMinus : '--';
 Star : '*';
 Div : '/';
 Mod : '%';
+PowerTo : '**';
 
 // Boolish Logical Operations
 AndAnd : '&&';
