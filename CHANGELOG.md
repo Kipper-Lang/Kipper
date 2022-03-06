@@ -29,9 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `IterationStatement`
   - `JumpStatement`
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
-- New dictionary `builtInFunctions`, which will map to the built-in function names, like `print()`, a 
-  handler that will generate the typescript code to replace the function call with. This is to avoid having to
-  add overhead or any dependencies for the function calls, and natively convert the statement to TypeScript.
+- Added file `built-ins.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
+  primarily includes global functions, which can be represented using the interface `GlobalFunction`. (In work!)
 - Added `**` (Power-to) as a  valid arithmetic expression.
 
 ### Changed
