@@ -42,7 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   now a template, where `<T>` represents the offending token. `<T>` will also be passed onto `KipperSyntaxError<T>`.
 - Changed type of `LogLevel`, which now returns string-representations of the log level.
 - Fixed `initializer` rule in Kipper.g4 and removed invalid designator rules.
-- 
+- Updated all expressions in `Kipper.g4` to contain proper labelled sub-rules, which clearly state if
+  the expression is used or if it's a pass on and an expression with higher importance is used (child of that
+  expression).
+
 ### Removed
 - Unneeded namespace `KipperStreams` and its functions.
 - Unneeded variable `LogLevelNames`, as now the enum `LogLevel` per default returns the names of the level.

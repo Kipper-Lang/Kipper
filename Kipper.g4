@@ -27,20 +27,20 @@ endOfItem
     ;
 
 primaryExpression
-    :   Identifier
-    |   Constant
-    |   (StringLiteral WS*)+
-    |   (FStringLiteral WS*)+
-    |   '(' expression ')'
+    :   Identifier # identifierPrimaryExpression
+    |   Constant # constantPrimaryExpression
+    |   (StringLiteral WS*)+ # stringPrimaryExpression
+    |   (FStringLiteral WS*)+ # fStringPrimaryExpression
+    |   '(' expression ')' # tangledPrimaryExpression
     ;
 
 postfixExpression
     :   primaryExpression (
-            '[' WS* expression WS* ']' // array specifier
-            | ('++' | '--')
-        )* #ReferenceExpression
+            ('[' WS* expression WS* ']')+ // array specifier
+            | ('++' | '--') // left-to-right increment/decrement
+        )? # referenceExpression
         |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' #FunctionCallExpression
+        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallExpression
     ;
 
 argumentExpressionList
@@ -48,54 +48,58 @@ argumentExpressionList
     ;
 
 unaryExpression
-    :
-    ('++' |  '--')* WS*
-    (postfixExpression
-    |   unaryOperator WS* castOrConvertExpression
-    )
+    :   postfixExpression # passOnUnaryExpression
+    |   ('++' |  '--') WS* postfixExpression # incrementOrDecrementUnaryExpression
+    |   ('++' |  '--')? unaryOperator WS* castOrConvertExpression # operatorModifiedUnaryExpression
     ;
 
 unaryOperator
-    :   '*' | '+' | '-' | '!'
+    :   '+' | '-' | '!'
     ;
 
 castOrConvertExpression
-    :   unaryExpression
-    |   DigitSequence // for
-    |   unaryExpression WS* 'as' WS* typeSpecifier // conversion function
+    :   unaryExpression # passOnCastOrConvertExpression
+    |   unaryExpression WS* 'as' WS* typeSpecifier # actualCastOrConvertExpression // conversion function
     ;
 
 multiplicativeExpression
-    :   castOrConvertExpression WS* (('*'|'/'|'%'|'**') WS* castOrConvertExpression WS*)*
+    :   castOrConvertExpression # passOnMultiplicativeExpression
+    |   castOrConvertExpression WS* (('*'|'/'|'%'|'**') WS* castOrConvertExpression WS*)* # actualMultiplicativeExpression
     ;
 
 additiveExpression
-    :   multiplicativeExpression WS* (('+'|'-') WS* multiplicativeExpression WS*)*
+    :   multiplicativeExpression # passOnAdditiveExpression
+    |   multiplicativeExpression WS* (('+'|'-') WS* multiplicativeExpression WS*)* # actualAdditiveExpression
     ;
 
 relationalExpression
-    :   additiveExpression WS* (('<'|'>'|'<='|'>=') WS* additiveExpression WS*)*
+    :   additiveExpression # passOnRelationalExpression
+    |   additiveExpression WS* (('<'|'>'|'<='|'>=') WS* additiveExpression WS*)* # actualRelationalExpression
     ;
 
 equalityExpression
-    :   relationalExpression WS* (('=='| '!=') WS* relationalExpression WS*)*
+    :   relationalExpression # passOnEqualityExpression
+    |   relationalExpression WS* (('=='| '!=') WS* relationalExpression WS*)* # actualEqualityExpression
     ;
 
 logicalAndExpression
-    :   equalityExpression WS* ('&&' WS* equalityExpression WS*)*
+    :   equalityExpression # passOnLogicalAndExpression
+    |   equalityExpression WS* ('&&' WS* equalityExpression WS*)* # actualLogicalAndExpression
     ;
 
 logicalOrExpression
-    :   logicalAndExpression WS* ( '||' WS* logicalAndExpression WS*)*
+    :   logicalAndExpression # passOnLogicalOrExpression
+    |   logicalAndExpression WS* ( '||' WS* logicalAndExpression WS*)* # actualLogicalOrExpression
     ;
 
 conditionalExpression
-    :   logicalOrExpression WS* ('?' WS* expression WS* ':' WS* conditionalExpression WS*)?
+    :   logicalOrExpression # passOnConditionalExpression
+    |   logicalOrExpression WS* '?' WS* expression WS* ':' WS* conditionalExpression WS* # actualConditionalExpression
     ;
 
 assignmentExpression
-    :   conditionalExpression
-    |   unaryExpression WS* assignmentOperator WS* assignmentExpression
+    :   conditionalExpression # passOnAssignmentExpression
+    |   unaryExpression WS* assignmentOperator WS* assignmentExpression # actualAssignmentExpression
     ;
 
 assignmentOperator
@@ -132,9 +136,9 @@ initDeclarator
     ;
 
 typeSpecifier
-    :   Identifier #singleItemTypeSpecifier // for single items, like 'num'
-    |   Identifier '<' WS* Identifier WS* '>' #multiItemTypeSpecifier // for lists
-    |   'typeof' WS* '(' Identifier ')' #typeofTypeSpecifier // typeof another variable
+    :   Identifier # singleItemTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' # multiItemTypeSpecifier // for lists
+    |   'typeof' WS* '(' Identifier ')' # typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
