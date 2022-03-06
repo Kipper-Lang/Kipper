@@ -11,6 +11,10 @@
     "lib": ["ES7"] // ES7 -> ES2016
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/compiler/parser/*.*"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

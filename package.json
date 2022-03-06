@@ -27,7 +27,8 @@
     "@types/chai": "^4.3.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "json-parse-even-better-errors": "2.3.1"
+    "json-parse-even-better-errors": "2.3.1",
+    "run-script-os": "^1.1.6"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -44,6 +45,7 @@
   ],
   "files": [
     "lib",
+    "src",
     "kipper-standalone.js",
     "Kipper.g4",
     "CHANGELOG.md"
@@ -55,7 +57,9 @@
     "posttest": "npm run lint:fix",
     "pretest": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
-    "build": "tsc",
+    "build": "run-script-os",
+    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp ./lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens ./lib/compiler/parser/",
+    "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
     "browserify": "browserify src/kipper-standalone.ts -p [ tsify --noImplicitAny] > kipper-standalone.js",
     "lint": "npm run tslint && npm run prettier",
     "lint:fix": "npm run tslint:fix && npm run prettier",
