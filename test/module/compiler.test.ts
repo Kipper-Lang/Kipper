@@ -77,7 +77,7 @@ describe("KipperCompiler", () => {
       let instance = await compiler.parse(stream);
 
       assert(instance.stream === stream, "Expected streams to equal");
-      assert(instance.startItem !== null, "Start item must exist");
+      assert(instance.parseTreeEntry !== null, "Start item must exist");
       assert(stream.name === "inline-stream");
       assert(stream.stringContent === fileContent);
       assert(stream.charStream.sourceName === "inline-stream");
@@ -92,8 +92,8 @@ describe("KipperCompiler", () => {
       let stream = new KipperParseStream("inline-stream", fileContent);
       let instance: KipperCompileResult = await compiler.compile(stream);
 
-      assert(instance.fileCtx);
-      assert(instance.fileCtx.stream === stream);
+      assert(instance.programCtx);
+      assert(instance.programCtx.stream === stream);
     });
   });
 });

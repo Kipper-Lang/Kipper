@@ -44,12 +44,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated all expressions in `Kipper.g4` to contain proper labelled sub-rules, which clearly state if
   the expression is used or if it's a pass on and an expression with higher importance is used (child of that
   expression).
+- Renamed `KipperFileContext` to `KipperProgramContext`, which will now handle the entire compilation and store its
+  meta-data.
 
 ### Removed
 - Unneeded namespace `KipperStreams` and its functions.
 - Unneeded variable `LogLevelNames`, as now the enum `LogLevel` per default returns the names of the level.
 - Removed `preferLogging` options in the entire module, as errors and warnings will always be logged no matter what. 
   This also means that errors will always be logged *and* thrown as a catchable error instance.
+- Argument `streamName` in `KipperCompiler.syntaxAnalyse()` and `KipperCompiler.compile()`. 
 
 ## [0.0.5] - 2022-03-02
 

@@ -8,5 +8,5 @@ export {KipperCompiler, KipperCompileResult} from "./compiler";
 export {KipperErrorListener} from "./error-handler";
 export {KipperParseStream} from "./parse-stream";
 export {KipperFileListener} from "./listener";
-export {KipperFileContext} from "./file-ctx";
+export {KipperProgramContext} from "./program-ctx";
 export * from "./parser";

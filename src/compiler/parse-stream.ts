@@ -14,14 +14,14 @@ import {CharStreams, CodePointCharStream} from "antlr4ts";
 export class KipperParseStream {
   /**
    * The private '_name' that actually stores the variable data,
-   * which is returned inside the getter 'name'
+   * which is returned inside the getter 'name'.
    * @private
    */
   private readonly _name: string;
 
   /**
    * The private '_charStream' that actually stores the variable data,
-   * which is returned inside the getter 'charStream'
+   * which is returned inside the getter 'charStream'.
    * @private
    */
   private readonly _charStream: CodePointCharStream;

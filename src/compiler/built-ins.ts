@@ -20,6 +20,13 @@ export type KipperType = "void" | "num" | "str" | "char" | "bool" | "list";
  */
 export interface GlobalFunctionArgument {
   /**
+   * The name of the argument inside the function
+   *
+   * This value does not affect the behaviour of the language, as named-arguments are not implemented in Kipper. This
+   * only serves the purpose of readability and allowing easier differentiation.
+   */
+  name: string;
+  /**
    * The type of the argument inside the function
    *
    * @example
@@ -34,7 +41,6 @@ export interface GlobalFunctionArgument {
 /**
  * Interface representation of a {@link GlobalFunction}, which is available inside a kipper program using the specified
  * metadata.
- *
  */
 export interface GlobalFunction {
   /**
@@ -71,4 +77,8 @@ export interface GlobalFunction {
    *  };
    */
   handler: string;
+  /**
+   * The expected return of the function. If the return type is "void", then the function will not return anything.
+   */
+  returnType: KipperType;
 }

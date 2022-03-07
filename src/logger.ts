@@ -33,7 +33,7 @@ export class KipperLogger {
 
   /**
    * The private '_emitHandler' that actually stores the variable data,
-   * which is returned inside the getter 'emitHandler'
+   * which is returned inside the getter 'emitHandler'.
    * @private
    */
   // eslint-disable-next-line no-unused-vars

@@ -19,7 +19,7 @@
 import {ParserRuleContext} from "antlr4ts/ParserRuleContext";
 import {KipperParser} from "./parser";
 import {Interval} from "antlr4ts/misc/Interval";
-import {KipperFileContext} from "./file-ctx";
+import {KipperProgramContext} from "./program-ctx";
 
 /**
  * Kipper Parse token, which is the base class all tokens will extend from
@@ -28,21 +28,21 @@ import {KipperFileContext} from "./file-ctx";
 export abstract class KipperParseToken {
   /**
    * The private '_antlrContext' that actually stores the variable data,
-   * which is returned inside the getter 'antlrContext'
+   * which is returned inside the getter 'antlrContext'.
    * @private
    */
   private readonly _antlrContext: ParserRuleContext;
 
   /**
    * The private '_fileCtx' that actually stores the variable data,
-   * which is returned inside the getter 'fileCtx'
+   * which is returned inside the getter 'fileCtx'.
    * @private
    */
-  private readonly _fileCtx: KipperFileContext;
+  private readonly _fileCtx: KipperProgramContext;
 
   /**
    * The private '_children' that actually stores the variable data,
-   * which is returned inside the getter 'children'
+   * which is returned inside the getter 'children'.
    * @private
    */
   private readonly _children: Array<KipperParseToken>;
@@ -53,16 +53,16 @@ export abstract class KipperParseToken {
    */
   public parent: KipperParseToken | undefined = undefined;
 
-  constructor(antlrContext: ParserRuleContext, fileCtx: KipperFileContext) {
+  constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
     this._antlrContext = antlrContext;
     this._fileCtx = fileCtx;
     this._children = [];
   }
 
   /**
-   * The kipper code that was used to generate this parse token
+   * The kipper source code that was used to generate this {@link KipperParseToken}.
    */
-  get kipperCode(): string {
+  get sourceCode(): string {
     let inputStream = this.antlrContext.start.inputStream;
     let start = this.antlrContext.start.startIndex;
 
@@ -93,7 +93,7 @@ export abstract class KipperParseToken {
   /**
    * The file context instance containing the metadata for the listener and this parse token.
    */
-  get fileCtx(): KipperFileContext {
+  get fileCtx(): KipperProgramContext {
     return this._fileCtx;
   }
 
@@ -113,12 +113,12 @@ export abstract class KipperParseToken {
 export class Expression extends KipperParseToken {
   /**
    * The private '_expressionCtx' that actually stores the variable data,
-   * which is returned inside the getter 'expressionCtx'
+   * which is returned inside the getter 'expressionCtx'.
    * @private
    */
   private _expressionCtx: ParserRuleContext | undefined;
 
-  constructor(antlrContext: ParserRuleContext, fileCtx: KipperFileContext) {
+  constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
     super(antlrContext, fileCtx);
     this._expressionCtx = undefined;
   }

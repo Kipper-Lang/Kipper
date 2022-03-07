@@ -9,7 +9,8 @@ import {KipperErrorListener} from "./error-handler";
 import {KipperLexer, KipperParser} from "./parser";
 import {KipperLogger} from "../logger";
 import {KipperParseStream} from "./parse-stream";
-import {KipperFileContext} from "./file-ctx";
+import {KipperProgramContext} from "./program-ctx";
+import {GlobalFunction} from "./built-ins";
 
 /**
  * The result of a {@link KipperCompiler} compilation
@@ -18,28 +19,28 @@ import {KipperFileContext} from "./file-ctx";
 export class KipperCompileResult {
   /**
    * The private '_fileCtx' that actually stores the variable data,
-   * which is returned inside the getter 'fileCtx'
+   * which is returned inside the getter 'fileCtx'.
    * @private
    */
-  private readonly _fileCtx: KipperFileContext;
+  private readonly _programCtx: KipperProgramContext;
 
   /**
    * The private '_result' that actually stores the variable data,
-   * which is returned inside the getter 'result'
+   * which is returned inside the getter 'result'.
    * @private
    */
   private readonly _result: Array<string>;
 
-  constructor(fileCtx: KipperFileContext, result: Array<string>) {
-    this._fileCtx = fileCtx;
+  constructor(fileCtx: KipperProgramContext, result: Array<string>) {
+    this._programCtx = fileCtx;
     this._result = result;
   }
 
   /**
-   * The "virtual" file context for the compilation run, which stores the content of the file and meta-data.
+   * The program context for the compilation run, which stores the content of the program and meta-data.
    */
-  get fileCtx(): KipperFileContext {
-    return this._fileCtx;
+  get programCtx(): KipperProgramContext {
+    return this._programCtx;
   }
 
   /**
@@ -60,14 +61,14 @@ export class KipperCompileResult {
 export class KipperCompiler {
   /**
    * The private '_errorListener' that actually stores the variable data,
-   * which is returned inside the getter 'errorListener'
+   * which is returned inside the getter 'errorListener'.
    * @private
    */
   private readonly _errorListener: KipperErrorListener<any>;
 
   /**
    * The private '_logger' that actually stores the variable data,
-   * which is returned inside the getter 'logger'
+   * which is returned inside the getter 'logger'.
    * @private
    */
   private readonly _logger: KipperLogger;
@@ -109,14 +110,14 @@ export class KipperCompiler {
   }
 
   /**
-   * Parses a file and generates the antlr4 tree ({@link CompilationUnitContext}, using
-   * {@link KipperParser.compilationUnit} (the highest item of the tree / entry point to the tree)
+   * Parses a file and generates the antlr4 tree ({@link CompilationUnitContext}), using
+   * {@link KipperParser.compilationUnit} (the highest item of the tree / entry point to the tree).
    * @param {KipperParseStream} parseStream The {@link KipperParseStream} instance that contains the required string
-   * content
-   * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}
+   * content.
+   * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}.
    * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async parse(parseStream: KipperParseStream): Promise<KipperFileContext> {
+  async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
     this._logger.info(`Parsing '${parseStream.name}'`);
 
     // Creating the char stream, based on the input
@@ -134,29 +135,40 @@ export class KipperCompiler {
     return (() => {
       let result = parser.compilationUnit();
       this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'`);
-      return new KipperFileContext(parseStream, result, parser, lexer);
+      return new KipperProgramContext(parseStream, result, parser, lexer);
     })();
   }
 
   /**
    * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
-   * @param stream The input to compile, which may be either a {@link String} or {@link KipperParseStream}.
-   * @param streamName The name that should be used to differentiate this specific stream. Only available if
-   * {@link stream} is a {@link KipperParseStream}.
+   * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
+   * {@link KipperParseStream}.
+   * @param globals {GlobalFunction[]} The
    * @returns The created {@link KipperCompileResult} instance.
    * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async compile(stream: string | KipperParseStream, streamName?: string): Promise<KipperCompileResult> {
-    let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, streamName);
+  async compile(stream: string | KipperParseStream, globals?: Array<GlobalFunction>): Promise<KipperCompileResult> {
+    let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
     this.logger.info(`Starting compilation for '${inStream.name}'`);
 
     // The file context storing the metadata for the "virtual file"
-    const fileCtx: KipperFileContext = await this.parse(inStream);
+    const fileCtx: KipperProgramContext = await this.parse(inStream);
+
+    // If there are globals to register, register them
+    if (globals !== undefined && globals.length > 0) {
+      this.logger.debug(`Registering the following globals for the Kipper program '${inStream.name}':`);
+      for (let item of globals) {
+        this.logger.debug(` - ${item.name} -> ${item.returnType}`);
+      }
+      fileCtx.registerGlobals(globals);
+    } else {
+      this.logger.debug("Registered no globals for the Kipper program '${inStream.name}'");
+    }
 
     // Translate and compile the code
-    this.logger.info(`Starting translation for '${inStream.name}'`);
-    const code = fileCtx.translate();
+    this.logger.info(`Starting compilation for '${inStream.name}'`);
+    const code = fileCtx.compileProgram();
 
     this.logger.info(`Finished compilation - Returning compilation result`);
 
@@ -168,12 +180,10 @@ export class KipperCompiler {
    * Analyses the syntax of the given file. Errors will be raised as an exception and warnings logged using the
    * {@link this.logger}.
    * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
-   * @param streamName The name that should be used to differentiate this specific stream. Only available if
-   * {@link stream} is a {@link KipperParseStream}.
    * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
    */
-  async syntaxAnalyse(stream: string | KipperParseStream, streamName?: string): Promise<void> {
-    let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, streamName);
+  async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
+    let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
     this.logger.info(`Starting syntax check for '${inStream.name}'`);
 

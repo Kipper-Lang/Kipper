@@ -82,7 +82,7 @@ import {
   UnaryExpressionContext,
   UnaryOperatorContext,
 } from "./parser";
-import {KipperFileContext} from "./file-ctx";
+import {KipperProgramContext} from "./program-ctx";
 import {ParserRuleContext} from "antlr4ts";
 import {TerminalNode} from "antlr4ts/tree/TerminalNode";
 import {ErrorNode} from "antlr4ts/tree/ErrorNode";
@@ -90,8 +90,8 @@ import {Expression, ExpressionStatement, KipperParseToken} from "./parse-tokens"
 import {FunctionCallExpressionContext, ReferenceExpressionContext} from "./parser/KipperParser";
 
 /**
- * The listener for a {@link KipperFileContext}, which walks through the generated
- * parser tree and produces the TypeScript code output in {@link itemBuffer}.
+ * The listener for a {@link KipperProgramContext}, which walks through the generated
+ * parser tree and produces the TypeScript code output in {@link processedParseTree}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
@@ -102,14 +102,14 @@ export class KipperFileListener implements KipperListener {
    * which is returned inside the getter 'fileCtx'.
    * @private
    */
-  private readonly _fileCtx: KipperFileContext;
+  private readonly _fileCtx: KipperProgramContext;
 
   /**
    * The private '_itemBuffer' that actually stores the variable data,
    * which is returned inside the getter 'itemBuffer'.
    * @private
    */
-  private readonly _itemBuffer: Array<KipperParseToken>;
+  private readonly _processedParseTree: Array<KipperParseToken>;
 
   /**
    * If this is true, the current context is inside an external item and automatically indicates
@@ -137,18 +137,18 @@ export class KipperFileListener implements KipperListener {
    */
   private _currentExpression: Expression | undefined;
 
-  constructor(fileCtx: KipperFileContext) {
+  constructor(fileCtx: KipperProgramContext) {
     this._fileCtx = fileCtx;
-    this._itemBuffer = [];
+    this._processedParseTree = [];
     this._isExternalItem = false;
     this._isFunctionDefinition = false;
     this._currentKipperToken = undefined;
   }
 
   /**
-   * The {@link KipperFileContext} instance responsible for managing this {@link KipperFileListener} instance.
+   * The {@link KipperProgramContext} instance responsible for managing this {@link KipperFileListener} instance.
    */
-  get fileCtx(): KipperFileContext {
+  get fileCtx(): KipperProgramContext {
     return this._fileCtx;
   }
 
@@ -157,8 +157,8 @@ export class KipperFileListener implements KipperListener {
    * the listener.
    * @since 0.0.6
    */
-  get itemBuffer(): Array<KipperParseToken> {
-    return this._itemBuffer;
+  get processedParseTree(): Array<KipperParseToken> {
+    return this._processedParseTree;
   }
 
   /**
@@ -989,7 +989,7 @@ export class KipperFileListener implements KipperListener {
    * @param ctx The parse tree (instance of {@link ParserRuleContext})
    */
   exitExpressionStatement(ctx: ExpressionStatementContext): void {
-    if (this._currentKipperToken instanceof ExpressionStatement) this.itemBuffer.push(this._currentKipperToken);
+    if (this._currentKipperToken instanceof ExpressionStatement) this.processedParseTree.push(this._currentKipperToken);
     this._currentKipperToken = undefined;
   }
 
