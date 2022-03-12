@@ -34,6 +34,8 @@ import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
 import { PassOnLogicalOrExpressionContext } from "./KipperParser";
 import { ActualLogicalOrExpressionContext } from "./KipperParser";
+import { DefaultInitializerContext } from "./KipperParser";
+import { ListInitializerContext } from "./KipperParser";
 import { PassOnEqualityExpressionContext } from "./KipperParser";
 import { ActualEqualityExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
@@ -43,6 +45,7 @@ import { FunctionDefinitionContext } from "./KipperParser";
 import { EndOfItemContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
+import { ArraySpecifierContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
 import { UnaryExpressionContext } from "./KipperParser";
 import { UnaryOperatorContext } from "./KipperParser";
@@ -494,6 +497,32 @@ export interface KipperListener extends ParseTreeListener {
 	exitActualLogicalOrExpression?: (ctx: ActualLogicalOrExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `defaultInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	enterDefaultInitializer?: (ctx: DefaultInitializerContext) => void;
+	/**
+	 * Exit a parse tree produced by the `defaultInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	exitDefaultInitializer?: (ctx: DefaultInitializerContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `listInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	enterListInitializer?: (ctx: ListInitializerContext) => void;
+	/**
+	 * Exit a parse tree produced by the `listInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	exitListInitializer?: (ctx: ListInitializerContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `passOnEqualityExpression`
 	 * labeled alternative in `KipperParser.equalityExpression`.
 	 * @param ctx the parse tree
@@ -595,6 +624,17 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitPostfixExpression?: (ctx: PostfixExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.arraySpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterArraySpecifier?: (ctx: ArraySpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.arraySpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitArraySpecifier?: (ctx: ArraySpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.argumentExpressionList`.

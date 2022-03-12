@@ -20,6 +20,7 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperParser } from "./parser";
 import { Interval } from "antlr4ts/misc/Interval";
 import { KipperProgramContext } from "./program-ctx";
+import { ExpressionTypeAlreadySetError, ParentAlreadyExistsError } from "../errors";
 
 /**
  * Basic Parse Token, which represents an Antlr4 Parse Token
@@ -32,8 +33,16 @@ export abstract class ParseToken {
 	 */
 	private readonly _antlrContext: ParserRuleContext;
 
+	/**
+	 * The private '_parent' that actually stores the variable data,
+	 * which is returned inside the getter 'parent'.
+	 * @private
+	 */
+	private _parent: CompilableParseToken | undefined;
+
 	constructor(antlrContext: ParserRuleContext) {
 		this._antlrContext = antlrContext;
+		this._parent = undefined;
 	}
 
 	/**
@@ -41,6 +50,25 @@ export abstract class ParseToken {
 	 */
 	get antlrContext(): ParserRuleContext {
 		return this._antlrContext;
+	}
+
+	/**
+	 * Returns the {@link CompilableParseToken parent} that has this item as a child. If {@link parent} is none, then
+	 * this item is a primary {@link CompilableParseToken}.
+	 */
+	get parent(): CompilableParseToken | undefined {
+		return this._parent;
+	}
+
+	/**
+	 * Sets the parent class of this item
+	 */
+	setParent(parent: CompilableParseToken) {
+		if (this._parent === undefined) {
+			this._parent = parent;
+		} else {
+			throw new ParentAlreadyExistsError();
+		}
 	}
 }
 
@@ -62,12 +90,6 @@ export abstract class CompilableParseToken extends ParseToken {
 	 * @private
 	 */
 	private readonly _children: Array<ParseToken | CompilableParseToken>;
-
-	/**
-	 * The parent of this token - If this is not undefined, it will be either a {@link CompoundStatement},
-	 * {@link FunctionDefinition}, {@link SelectionStatement} or {@link IterationStatement}.
-	 */
-	public parent: CompilableParseToken | undefined = undefined;
 
 	constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
 		super(antlrContext);
@@ -107,10 +129,22 @@ export abstract class CompilableParseToken extends ParseToken {
 	}
 
 	/**
-	 * The children of this parse token
+	 * The children of this parse token.
 	 */
 	get children(): Array<ParseToken | CompilableParseToken> {
 		return this._children;
+	}
+
+	/**
+	 * Adds new child to this class. Must be in proper order, so that it can be properly compiled.
+	 * This will also automatically set the parent of the class to this instance.
+	 * @example
+	 *  let newExpression = new Expression(ctx, this.fileCtx);
+	 *  oldExpression.addNewChild(newExpression);
+	 */
+	addNewChild(newChild: CompilableParseToken) {
+		newChild.setParent(this);
+		this._children.push(newChild);
 	}
 
 	/**
@@ -120,39 +154,8 @@ export abstract class CompilableParseToken extends ParseToken {
 }
 
 export class Expression extends CompilableParseToken {
-	/**
-	 * The private '_expressionCtx' that actually stores the variable data,
-	 * which is returned inside the getter 'expressionCtx'.
-	 * @private
-	 */
-	private _expressionCtx: ParserRuleContext | undefined;
-
-	constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
-		this._expressionCtx = undefined;
-	}
-
 	compileCtxAndChildren(): Array<string> {
 		return [];
-	}
-
-	/**
-	 * Gets the expression context, which contains the actual data for this expression.
-	 * This is not the same as {@link antlrContext}, which contains the overall 'expression' rule context.
-	 *
-	 * Undefined if it was not set yet (not found yet by the listener)!
-	 */
-	get expressionCtx(): ParserRuleContext | undefined {
-		return this._expressionCtx;
-	}
-
-	/**
-	 * Sets the actual expression context, which contains the actual data for this expression.
-	 * This is not the same as {@link antlrContext}, which contains the overall 'expression' rule context.
-	 * @param ctx The antlr context that represents the proper expression context.
-	 */
-	setExpressionCtx(ctx: ParserRuleContext): void {
-		this._expressionCtx = ctx;
 	}
 }
 

@@ -34,6 +34,8 @@ import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
 import { PassOnLogicalOrExpressionContext } from "./KipperParser";
 import { ActualLogicalOrExpressionContext } from "./KipperParser";
+import { DefaultInitializerContext } from "./KipperParser";
+import { ListInitializerContext } from "./KipperParser";
 import { PassOnEqualityExpressionContext } from "./KipperParser";
 import { ActualEqualityExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
@@ -43,6 +45,7 @@ import { FunctionDefinitionContext } from "./KipperParser";
 import { EndOfItemContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
+import { ArraySpecifierContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
 import { UnaryExpressionContext } from "./KipperParser";
 import { UnaryOperatorContext } from "./KipperParser";
@@ -342,6 +345,22 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitActualLogicalOrExpression?: (ctx: ActualLogicalOrExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `defaultInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDefaultInitializer?: (ctx: DefaultInitializerContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `listInitializer`
+	 * labeled alternative in `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitListInitializer?: (ctx: ListInitializerContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `passOnEqualityExpression`
 	 * labeled alternative in `KipperParser.equalityExpression`.
 	 * @param ctx the parse tree
@@ -405,6 +424,13 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPostfixExpression?: (ctx: PostfixExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.arraySpecifier`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitArraySpecifier?: (ctx: ArraySpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.argumentExpressionList`.

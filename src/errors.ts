@@ -47,7 +47,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 	/**
 	 * KipperSyntaxError Constructor
 	 * @param {Recognizer<KipperParser, any>} recognizer The Antlr4 Parser - should normally always be KipperParser
-	 * @param {CommonToken} offendingSymbol The token that caused the error
+	 * @param {Token | undefined} offendingSymbol The token that caused the error
 	 * @param {number} line The line of the element that caused the error
 	 * @param {number} column The column of the element that caused the error
 	 * @param {string} msg The msg that was generated as the error message in the Parser
@@ -132,4 +132,22 @@ export class KipperSyntaxError<Token> extends KipperError {
 	 * Reports the syntax error and writes onto the console
 	 */
 	async reportError(): Promise<void> {}
+}
+
+export class ExpressionTypeAlreadySetError extends KipperError {
+	constructor(msg: string = "The type of this expression was already set. Only children may be added now!") {
+		super(msg);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, ParentAlreadyExistsError.prototype);
+	}
+}
+
+export class ParentAlreadyExistsError extends KipperError {
+	constructor(msg: string = "Parent already exists on this parse token.") {
+		super(msg);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, ParentAlreadyExistsError.prototype);
+	}
 }

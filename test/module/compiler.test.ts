@@ -5,6 +5,7 @@ import { KipperCompileResult } from "../../src";
 
 const mainFile = `${__dirname}/../kipper-files/main.kip`;
 const singleFunctionFile = `${__dirname}/../kipper-files/single-function-call.kip`;
+const multiFunctionFile = `${__dirname}/../kipper-files/multi-function-call.kip`;
 const invalidFile = `${__dirname}/../kipper-files/invalid.kip`;
 
 describe("KipperCompiler", () => {
@@ -86,8 +87,18 @@ describe("KipperCompiler", () => {
   });
 
   describe("KipperCompiler.compile()", () => {
-    it("Simple file compilation", async () => {
+    it("Single Function call compilation", async () => {
       let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
+      let compiler = new KipperCompiler();
+      let stream = new KipperParseStream("inline-stream", fileContent);
+      let instance: KipperCompileResult = await compiler.compile(stream);
+
+      assert(instance.programCtx);
+      assert(instance.programCtx.stream === stream);
+    });
+
+    it("Multi Function call compilation", async () => {
+      let fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
       let stream = new KipperParseStream("inline-stream", fileContent);
       let instance: KipperCompileResult = await compiler.compile(stream);

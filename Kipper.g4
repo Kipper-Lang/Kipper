@@ -36,11 +36,15 @@ primaryExpression
 
 postfixExpression
     :   primaryExpression (
-            ('[' WS* expression WS* ']')+ // array specifier
+            arraySpecifier+ // array specifier
             | ('++' | '--') // left-to-right increment/decrement
         )? # referenceExpression
         |
         'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallExpression
+    ;
+
+arraySpecifier
+    :   '[' WS* expression WS* ']'
     ;
 
 argumentExpressionList
@@ -168,8 +172,8 @@ parameterDeclaration
     ;
 
 initializer
-    :   assignmentExpression
-    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' // for lists
+    :   assignmentExpression #defaultInitializer
+    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' #listInitializer // for lists
     ;
 
 statement

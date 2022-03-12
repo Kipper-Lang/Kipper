@@ -3,6 +3,7 @@
     "sourceMap": true,
     "declaration": true,
     "importHelpers": true,
+    "removeComments": true,
     "module": "commonjs",
     "outDir": "lib",
     "rootDir": "src",
