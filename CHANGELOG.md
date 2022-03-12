@@ -17,8 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   code again.
 - `LogLevel.UNKNOWN` as the default log level for `LogLevel`.
 - `KipperLogger.levels` as a static variable to access the enum `LogLevel`.
-- New abstract base class `KipperParseToken`, which will represent the major parse tokens inside a kipper program. 
-  This class will be used to represent the items in a kipper program, and generate the typescript counterpart.
+- New abstract base class `ParseToken` and `CompilableParseToken`, which will represent the major parse tokens 
+  inside a kipper program. `CompilableParseToken` will also have the additional functionality of wrapping an entire
+  statement or block, and converting it to TypeScript using `compileCtxAndChildren()`
+  This class will be used to represent the items  in a kipper program, and generate the typescript counterpart.
   Current child classes:
   - `Expression`
   - `FunctionDefinition`

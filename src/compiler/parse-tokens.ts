@@ -22,10 +22,9 @@ import { Interval } from "antlr4ts/misc/Interval";
 import { KipperProgramContext } from "./program-ctx";
 
 /**
- * Kipper Parse token, which is the base class all tokens will extend from
- * @since 0.0.6
+ * Basic Parse Token, which represents an Antlr4 Parse Token
  */
-export abstract class KipperParseToken {
+export abstract class ParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
 	 * which is returned inside the getter 'antlrContext'.
@@ -33,6 +32,23 @@ export abstract class KipperParseToken {
 	 */
 	private readonly _antlrContext: ParserRuleContext;
 
+	constructor(antlrContext: ParserRuleContext) {
+		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this parse token.
+	 */
+	get antlrContext(): ParserRuleContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ * Kipper Parse token, which is the base class all tokens will extend from
+ * @since 0.0.6
+ */
+export abstract class CompilableParseToken extends ParseToken {
 	/**
 	 * The private '_fileCtx' that actually stores the variable data,
 	 * which is returned inside the getter 'fileCtx'.
@@ -45,22 +61,22 @@ export abstract class KipperParseToken {
 	 * which is returned inside the getter 'children'.
 	 * @private
 	 */
-	private readonly _children: Array<KipperParseToken>;
+	private readonly _children: Array<ParseToken | CompilableParseToken>;
 
 	/**
 	 * The parent of this token - If this is not undefined, it will be either a {@link CompoundStatement},
 	 * {@link FunctionDefinition}, {@link SelectionStatement} or {@link IterationStatement}.
 	 */
-	public parent: KipperParseToken | undefined = undefined;
+	public parent: CompilableParseToken | undefined = undefined;
 
 	constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
-		this._antlrContext = antlrContext;
+		super(antlrContext);
 		this._fileCtx = fileCtx;
 		this._children = [];
 	}
 
 	/**
-	 * The kipper source code that was used to generate this {@link KipperParseToken}.
+	 * The kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	get sourceCode(): string {
 		let inputStream = this.antlrContext.start.inputStream;
@@ -74,13 +90,6 @@ export abstract class KipperParseToken {
 		// additional EOF at the end that we do not want, and the fact arrays start at 0)
 		let end = this.antlrContext.stop !== undefined ? this.antlrContext.stop.stopIndex : inputStream.size - 2;
 		return inputStream.getText(new Interval(start, end));
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this parse token
-	 */
-	get antlrContext(): ParserRuleContext {
-		return this._antlrContext;
 	}
 
 	/**
@@ -100,17 +109,17 @@ export abstract class KipperParseToken {
 	/**
 	 * The children of this parse token
 	 */
-	get children(): Array<KipperParseToken> {
+	get children(): Array<ParseToken | CompilableParseToken> {
 		return this._children;
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist)
+	 * Generates the typescript for this item, and all children (if they exist).
 	 */
-	abstract get tsCode(): Array<string>;
+	abstract compileCtxAndChildren(): Array<string>;
 }
 
-export class Expression extends KipperParseToken {
+export class Expression extends CompilableParseToken {
 	/**
 	 * The private '_expressionCtx' that actually stores the variable data,
 	 * which is returned inside the getter 'expressionCtx'.
@@ -123,10 +132,8 @@ export class Expression extends KipperParseToken {
 		this._expressionCtx = undefined;
 	}
 
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 
 	/**
@@ -149,58 +156,44 @@ export class Expression extends KipperParseToken {
 	}
 }
 
-export class FunctionDefinition extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class FunctionDefinition extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class Declaration extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class Declaration extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class CompoundStatement extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class CompoundStatement extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class SelectionStatement extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class SelectionStatement extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class ExpressionStatement extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class ExpressionStatement extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class IterationStatement extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class IterationStatement extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
-export class JumpStatement extends KipperParseToken {
-	get tsCode(): Array<string> {
-		let genCode: Array<string> = [];
-
-		return genCode;
+export class JumpStatement extends CompilableParseToken {
+	compileCtxAndChildren(): Array<string> {
+		return [];
 	}
 }

@@ -11,7 +11,7 @@ import { KipperFileListener } from "./listener";
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
 import { GlobalFunction } from "./built-ins";
-import { KipperParseToken } from "./parse-tokens";
+import { CompilableParseToken } from "./parse-tokens";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -61,7 +61,7 @@ export class KipperProgramContext {
 	 * which is returned inside the getter 'processedParseTree'.
 	 * @private
 	 */
-	private _processedParseTree: Array<KipperParseToken>;
+	private _processedParseTree: Array<CompilableParseToken>;
 
 	/**
 	 * The private '_typescriptCode' that will store the cached code, once 'typescriptCode' has been called. This is to
@@ -154,7 +154,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
-	get processedParseTree(): Array<KipperParseToken> {
+	get processedParseTree(): Array<CompilableParseToken> {
 		return this._processedParseTree;
 	}
 
@@ -185,7 +185,7 @@ export class KipperProgramContext {
 		// existing item array.
 		let genCode: Array<string> = [];
 		for (let parseItem of this._processedParseTree) {
-			genCode = genCode.concat(parseItem.tsCode);
+			genCode = genCode.concat(parseItem.compileCtxAndChildren());
 		}
 
 		// Cache the result
@@ -200,7 +200,7 @@ export class KipperProgramContext {
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
-	private getProcessedParseTree(listener: KipperFileListener): Array<KipperParseToken> {
+	private getProcessedParseTree(listener: KipperFileListener): Array<CompilableParseToken> {
 		// The walker used to go through the parse tree.
 		const walker = new ParseTreeWalker();
 

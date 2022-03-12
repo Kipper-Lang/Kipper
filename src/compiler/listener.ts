@@ -86,7 +86,7 @@ import { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
-import { Expression, ExpressionStatement, KipperParseToken } from "./parse-tokens";
+import { Expression, ExpressionStatement, CompilableParseToken } from "./parse-tokens";
 import { FunctionCallExpressionContext, ReferenceExpressionContext } from "./parser/KipperParser";
 
 /**
@@ -109,7 +109,7 @@ export class KipperFileListener implements KipperListener {
 	 * which is returned inside the getter 'itemBuffer'.
 	 * @private
 	 */
-	private readonly _processedParseTree: Array<KipperParseToken>;
+	private readonly _processedParseTree: Array<CompilableParseToken>;
 
 	/**
 	 * If this is true, the current context is inside an external item and automatically indicates
@@ -128,7 +128,7 @@ export class KipperFileListener implements KipperListener {
 	 * should be added to and read from, as this instance will represent and convert the context items that were walked
 	 * through during this operation.
 	 */
-	private _currentKipperToken: KipperParseToken | undefined;
+	private _currentKipperToken: CompilableParseToken | undefined;
 
 	/**
 	 * The current expression that is being walked through. This is the instance where current metadata
@@ -157,7 +157,7 @@ export class KipperFileListener implements KipperListener {
 	 * the listener.
 	 * @since 0.0.6
 	 */
-	get processedParseTree(): Array<KipperParseToken> {
+	get processedParseTree(): Array<CompilableParseToken> {
 		return this._processedParseTree;
 	}
 
