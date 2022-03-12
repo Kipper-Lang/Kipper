@@ -27,6 +27,7 @@ import { ConstantPrimaryExpressionContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
+import { ListConstantPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
@@ -36,14 +37,13 @@ import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
 import { PassOnLogicalOrExpressionContext } from "./KipperParser";
 import { ActualLogicalOrExpressionContext } from "./KipperParser";
-import { DefaultInitializerContext } from "./KipperParser";
-import { ListInitializerContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
 import { FunctionDefinitionContext } from "./KipperParser";
 import { EndOfItemContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
+import { ListConstantContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { ArraySpecifierContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -290,6 +290,14 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `listConstantPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitListConstantPrimaryExpression?: (ctx: ListConstantPrimaryExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -362,22 +370,6 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitActualLogicalOrExpression?: (ctx: ActualLogicalOrExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `defaultInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitDefaultInitializer?: (ctx: DefaultInitializerContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `listInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitListInitializer?: (ctx: ListInitializerContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `KipperParser.compilationUnit`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -418,6 +410,13 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPrimaryExpression?: (ctx: PrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.listConstant`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitListConstant?: (ctx: ListConstantContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.postfixExpression`.

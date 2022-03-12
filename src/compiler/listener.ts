@@ -60,8 +60,8 @@ import {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 	ArraySpecifierContext,
-	DefaultInitializerContext,
-	ListInitializerContext
+	ListConstantPrimaryExpressionContext,
+	ListConstantContext,
 } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
@@ -335,6 +335,36 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
+	/**
+	 * Enter a parse tree produced by the `listConstantPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	enterListConstantPrimaryExpression(ctx: ListConstantPrimaryExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `listConstantPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	exitListConstantPrimaryExpression(ctx: ListConstantPrimaryExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.listConstant`.
+	 * @param ctx The parse tree
+	 */
+	enterListConstant(ctx: ListConstantContext): void {}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.listConstant`.
+	 * @param ctx The parse tree
+	 */
+	exitListConstant(ctx: ListConstantContext): void {}
+
 	// /**
 	//  * Enter a parse tree produced by `KipperParser.primaryExpression`.
 	//  *
@@ -414,13 +444,13 @@ export class KipperFileListener implements KipperListener {
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.arraySpecifier`.
-	 * @param ctx the parse tree
+	 * @param ctx The parse tree
 	 */
 	enterArraySpecifier(ctx: ArraySpecifierContext): void {}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.arraySpecifier`.
-	 * @param ctx the parse tree
+	 * @param ctx The parse tree
 	 */
 	exitArraySpecifier(ctx: ArraySpecifierContext): void {}
 
@@ -1249,38 +1279,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	exitParameterDeclaration(ctx: ParameterDeclarationContext): void {}
-
-	/**
-	 * Enter a parse tree produced by the `defaultInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	enterDefaultInitializer(ctx: DefaultInitializerContext): void {
-	}
-
-	/**
-	 * Exit a parse tree produced by the `defaultInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	exitDefaultInitializer(ctx: DefaultInitializerContext): void {
-	}
-
-	/**
-	 * Enter a parse tree produced by the `listInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	enterListInitializer(ctx: ListInitializerContext): void {
-	}
-
-	/**
-	 * Exit a parse tree produced by the `listInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	exitListInitializer(ctx: ListInitializerContext): void {
-	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initializer`.

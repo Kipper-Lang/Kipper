@@ -32,6 +32,11 @@ primaryExpression
     |   (StringLiteral WS*)+ # stringPrimaryExpression
     |   (FStringLiteral WS*)+ # fStringPrimaryExpression
     |   '(' expression ')' # tangledPrimaryExpression
+    |   listConstant #listConstantPrimaryExpression
+    ;
+
+listConstant
+    :   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']'
     ;
 
 postfixExpression
@@ -176,8 +181,7 @@ parameterDeclaration
     ;
 
 initializer
-    :   assignmentExpression #defaultInitializer
-    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' #listInitializer // for lists
+    :   assignmentExpression
     ;
 
 statement

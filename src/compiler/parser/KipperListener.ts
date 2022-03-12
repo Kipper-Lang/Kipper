@@ -27,6 +27,7 @@ import { ConstantPrimaryExpressionContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
+import { ListConstantPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { SingleItemTypeSpecifierContext } from "./KipperParser";
@@ -36,14 +37,13 @@ import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
 import { PassOnLogicalOrExpressionContext } from "./KipperParser";
 import { ActualLogicalOrExpressionContext } from "./KipperParser";
-import { DefaultInitializerContext } from "./KipperParser";
-import { ListInitializerContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
 import { FunctionDefinitionContext } from "./KipperParser";
 import { EndOfItemContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
+import { ListConstantContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { ArraySpecifierContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -407,6 +407,19 @@ export interface KipperListener extends ParseTreeListener {
 	exitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `listConstantPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterListConstantPrimaryExpression?: (ctx: ListConstantPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `listConstantPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitListConstantPrimaryExpression?: (ctx: ListConstantPrimaryExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -524,32 +537,6 @@ export interface KipperListener extends ParseTreeListener {
 	exitActualLogicalOrExpression?: (ctx: ActualLogicalOrExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `defaultInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	enterDefaultInitializer?: (ctx: DefaultInitializerContext) => void;
-	/**
-	 * Exit a parse tree produced by the `defaultInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	exitDefaultInitializer?: (ctx: DefaultInitializerContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `listInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	enterListInitializer?: (ctx: ListInitializerContext) => void;
-	/**
-	 * Exit a parse tree produced by the `listInitializer`
-	 * labeled alternative in `KipperParser.initializer`.
-	 * @param ctx the parse tree
-	 */
-	exitListInitializer?: (ctx: ListInitializerContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
 	 * @param ctx the parse tree
 	 */
@@ -614,6 +601,17 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitPrimaryExpression?: (ctx: PrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.listConstant`.
+	 * @param ctx the parse tree
+	 */
+	enterListConstant?: (ctx: ListConstantContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.listConstant`.
+	 * @param ctx the parse tree
+	 */
+	exitListConstant?: (ctx: ListConstantContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.postfixExpression`.
