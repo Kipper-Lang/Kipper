@@ -5,7 +5,7 @@ import { KipperParseStream } from "../../src";
 const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
 
 describe("KipperStreams", () => {
-  describe("KipperStreams.fromString()", () => {
+  describe("fromString", () => {
     it("Simple file initialisation", async () => {
       let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
       let stream: KipperParseStream = new KipperParseStream("inline-stream", fileContent);

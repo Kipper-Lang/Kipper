@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { KipperLogger, LogLevel } from "../../src/";
 
 describe("KipperLogger", () => {
-  describe("KipperLogger.constructor()", () => {
+  describe("constructor", () => {
     it("Construction with empty emit handler", () => {
       const emitHandler = () => {};
       const logger = new KipperLogger(emitHandler);
@@ -31,7 +31,7 @@ describe("KipperLogger", () => {
     });
   });
 
-  describe("KipperLogger.log()", () => {
+  describe("log", () => {
     it("Simple call", () => {
       let levelReceived: LogLevel = LogLevel.UNKNOWN;
       const emitHandler = (level: LogLevel) => {

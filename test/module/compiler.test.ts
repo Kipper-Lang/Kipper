@@ -9,7 +9,7 @@ const multiFunctionFile = `${__dirname}/../kipper-files/multi-function-call.kip`
 const invalidFile = `${__dirname}/../kipper-files/invalid.kip`;
 
 describe("KipperCompiler", () => {
-  describe("KipperCompiler.constructor()", () => {
+  describe("constructor", () => {
     it("Empty Construction", () => {
       let instance = new KipperCompiler();
       assert(instance, "Has to be undefined");
@@ -47,7 +47,7 @@ describe("KipperCompiler", () => {
     });
   });
 
-  describe("KipperCompiler.syntaxAnalyse()", () => {
+  describe("syntaxAnalyse", () => {
     it("Syntax analyse valid code without error", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
@@ -70,7 +70,7 @@ describe("KipperCompiler", () => {
     });
   });
 
-  describe("KipperCompiler.parse()", () => {
+  describe("parse", () => {
     it("Validate file ctx return", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
@@ -86,7 +86,7 @@ describe("KipperCompiler", () => {
     });
   });
 
-  describe("KipperCompiler.compile()", () => {
+  describe("compile", () => {
     it("Single Function call compilation", async () => {
       let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
