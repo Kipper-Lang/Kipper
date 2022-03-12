@@ -90,6 +90,6 @@ export {
   FStringPrimaryExpressionContext,
   TangledPrimaryExpressionContext,
   ArraySpecifierContext,
-  DefaultInitializerContext,
-  ListInitializerContext
+  ListConstantPrimaryExpressionContext,
+  ListConstantContext
 } from './KipperParser';
