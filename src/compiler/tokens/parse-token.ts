@@ -1,26 +1,15 @@
 /**
- * Parse tokens for the kipper language. In comparison to the antlr4 generated parser tokens, these tokens will only
- * contain the major statements of Kipper, to simplify the compilation process and allow the listener to directly
- * translate items.
- *
- * These major statements are:
- * - Function definition
- * - Declaration
- * - Compound statement
- * - Selection statement
- * - Expression statement
- * - Iteration statement
- * - Jump statement (Only valid in functions or loops)
+ * Base Parse token classes for the kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
  */
 
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { KipperParser } from "./parser";
 import { Interval } from "antlr4ts/misc/Interval";
-import { KipperProgramContext } from "./program-ctx";
-import { ExpressionTypeAlreadySetError, ParentAlreadyExistsError } from "../errors";
+import { KipperParser } from "../parser";
+import { KipperProgramContext } from "../program-ctx";
+import { ParentAlreadyExistsError } from "../../errors";
 
 /**
  * Basic Parse Token, which represents an Antlr4 Parse Token
@@ -31,14 +20,14 @@ export abstract class ParseToken {
 	 * which is returned inside the getter 'antlrContext'.
 	 * @private
 	 */
-	private readonly _antlrContext: ParserRuleContext;
+	protected readonly _antlrContext: ParserRuleContext;
 
 	/**
 	 * The private '_parent' that actually stores the variable data,
 	 * which is returned inside the getter 'parent'.
 	 * @private
 	 */
-	private _parent: CompilableParseToken | undefined;
+	protected _parent: CompilableParseToken | undefined;
 
 	constructor(antlrContext: ParserRuleContext) {
 		this._antlrContext = antlrContext;
@@ -82,14 +71,14 @@ export abstract class CompilableParseToken extends ParseToken {
 	 * which is returned inside the getter 'fileCtx'.
 	 * @private
 	 */
-	private readonly _fileCtx: KipperProgramContext;
+	protected readonly _fileCtx: KipperProgramContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
 	 * which is returned inside the getter 'children'.
 	 * @private
 	 */
-	private readonly _children: Array<ParseToken | CompilableParseToken>;
+	protected readonly _children: Array<ParseToken | CompilableParseToken>;
 
 	constructor(antlrContext: ParserRuleContext, fileCtx: KipperProgramContext) {
 		super(antlrContext);
@@ -151,52 +140,4 @@ export abstract class CompilableParseToken extends ParseToken {
 	 * Generates the typescript for this item, and all children (if they exist).
 	 */
 	abstract compileCtxAndChildren(): Array<string>;
-}
-
-export class Expression extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class FunctionDefinition extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class Declaration extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class CompoundStatement extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class SelectionStatement extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class ExpressionStatement extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class IterationStatement extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-}
-
-export class JumpStatement extends CompilableParseToken {
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
 }

@@ -65,7 +65,8 @@ import {
 } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
-import { CompilableParseToken, Expression, ExpressionStatement } from "./parse-tokens";
+import { CompilableParseToken, Expression, ExpressionStatement } from "./tokens";
+import { antlrExpressionCtx, getExpressionInstance } from "./tokens/expressions";
 
 const passOnHandler: () => void = (() => {});
 
@@ -142,6 +143,18 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
+	 * Returns which token is being processed at the moment and where meta-data should be assigned to. If
+	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryToken}.
+	 * @private
+	 */
+	private get currentProcessedToken() {
+		if (this._currentExpression !== undefined) {
+			return this._currentExpression;
+		}
+		return this._currentPrimaryToken;
+	}
+
+	/**
 	 * Handles an incoming expression context. The handling algorithm is:
 	 * - If {@link _currentExpression} is undefined, then it will be created and set as a child of the
 	 * {@link _currentPrimaryToken}.
@@ -158,13 +171,7 @@ export class KipperFileListener implements KipperListener {
 			this._currentPrimaryToken?.addNewChild(this._currentExpression);
 		} else {
 			// Generating a new expression, which a child of the previous expression.
-			// This can happen in things like:
-			// 	4 + 4 * 3
-			// Result:
-			// 												 	  	 actualAdditiveExpression
-			//	 										  	 	/							|						   \
-			//  constantPrimaryExpression    constantPrimaryExpression  constantPrimaryExpression
-			let newExpression = new Expression(ctx, this.fileCtx);
+			let newExpression: Expression = getExpressionInstance(ctx, this.fileCtx);
 			this._currentExpression.addNewChild(newExpression);
 			this._currentExpression = newExpression;
 		}

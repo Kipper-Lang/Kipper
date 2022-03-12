@@ -37,7 +37,7 @@ primaryExpression
 postfixExpression
     :   primaryExpression (
             arraySpecifier+ // array specifier
-            | ('++' | '--') // left-to-right increment/decrement
+            | incrementOrDecrementOperator // left-to-right increment/decrement
         )? # referenceExpression
         |
         'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallExpression
@@ -53,8 +53,12 @@ argumentExpressionList
 
 unaryExpression
     :   postfixExpression # passOnUnaryExpression
-    |   ('++' |  '--') WS* postfixExpression # incrementOrDecrementUnaryExpression
-    |   ('++' |  '--')? unaryOperator WS* castOrConvertExpression # operatorModifiedUnaryExpression
+    |   incrementOrDecrementOperator WS* postfixExpression # incrementOrDecrementUnaryExpression
+    |   unaryOperator WS* postfixExpression # operatorModifiedUnaryExpression
+    ;
+
+incrementOrDecrementOperator
+    :   ('++' |  '--')
     ;
 
 unaryOperator

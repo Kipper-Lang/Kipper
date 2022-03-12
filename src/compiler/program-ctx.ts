@@ -11,7 +11,7 @@ import { KipperFileListener } from "./listener";
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
 import { GlobalFunction } from "./built-ins";
-import { CompilableParseToken } from "./parse-tokens";
+import { CompilableParseToken } from "./tokens";
 
 /**
  * The program context class used to represent a file in a compilation.

@@ -10,3 +10,4 @@ export { KipperParseStream } from "./parse-stream";
 export { KipperFileListener } from "./listener";
 export { KipperProgramContext } from "./program-ctx";
 export * from "./parser";
+export * from "./tokens";

@@ -31,11 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `IterationStatement`
   - `JumpStatement`
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
-- Added file `built-ins.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
+- File `built-ins.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `GlobalFunction`. (In work!)
-- Added `**` (Power-to) as a  valid arithmetic expression.
-- Added `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to configure
+- Implemented `**` (Power-to) as a valid arithmetic expression.
+- Implemented `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to configure
   the compilation behaviour.
+- Implemented new module `/compiler/tokens`, which contains the parse token implementations.
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
