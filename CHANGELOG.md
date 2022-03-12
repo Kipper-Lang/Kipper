@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added file `built-ins.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `GlobalFunction`. (In work!)
 - Added `**` (Power-to) as a  valid arithmetic expression.
+- Added `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to configure
+  the compilation behaviour.
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
