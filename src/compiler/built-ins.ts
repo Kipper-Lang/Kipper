@@ -1,7 +1,7 @@
 /**
  * Built-In Function implementation, which will convert a built-in function call to a proper TypeScript code snippet.
  * This means it will insert code rather than actually call it, to reduce overhead, and remove any dependencies when
- * running kipper itself.
+ * running Kipper itself.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
@@ -36,7 +36,7 @@ export interface GlobalFunctionArgument {
 }
 
 /**
- * Interface representation of a {@link GlobalFunction}, which is available inside a kipper program using the specified
+ * Interface representation of a {@link GlobalFunction}, which is available inside a Kipper program using the specified
  * metadata.
  */
 export interface GlobalFunction {
@@ -56,7 +56,7 @@ export interface GlobalFunction {
 	 */
 	args: Array<GlobalFunctionArgument>;
 	/**
-	 * The TypeScript code that will be inserted at the beginning of the kipper program. This should contain the
+	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
 	 * implementation for the function name, prefixed by `'_kipperGlobal_'`.
 	 *
 	 * @example

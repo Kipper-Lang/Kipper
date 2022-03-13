@@ -20,6 +20,8 @@ import { PassOnAdditiveExpressionContext } from "./KipperParser";
 import { ActualAdditiveExpressionContext } from "./KipperParser";
 import { PassOnRelationalExpressionContext } from "./KipperParser";
 import { ActualRelationalExpressionContext } from "./KipperParser";
+import { IfStatementContext } from "./KipperParser";
+import { SwitchStatementContext } from "./KipperParser";
 import { PassOnPostfixExpressionContext } from "./KipperParser";
 import { ArraySpecifierPostfixExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
@@ -84,7 +86,7 @@ import { BlockItemListContext } from "./KipperParser";
 import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
-import { LabeledStatementContext } from "./KipperParser";
+import { SwitchLabeledStatementContext } from "./KipperParser";
 import { IterationStatementContext } from "./KipperParser";
 import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
@@ -235,6 +237,22 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ifStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIfStatement?: (ctx: IfStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `switchStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSwitchStatement?: (ctx: SwitchStatementContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnPostfixExpression`
@@ -705,11 +723,11 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitSelectionStatement?: (ctx: SelectionStatementContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.labeledStatement`.
+	 * Visit a parse tree produced by `KipperParser.switchLabeledStatement`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLabeledStatement?: (ctx: LabeledStatementContext) => Result;
+	visitSwitchLabeledStatement?: (ctx: SwitchLabeledStatementContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.iterationStatement`.

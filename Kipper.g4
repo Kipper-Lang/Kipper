@@ -208,11 +208,11 @@ expressionStatement
     ;
 
 selectionStatement
-    :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)?
-    |   'switch' WS* '(' WS* expression WS* ')' WS* '{' (WS* labeledStatement)* '}'
+    :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)? #ifStatement
+    |   'switch' WS* '(' WS* expression WS* ')' WS* '{' (WS* switchLabeledStatement)* '}' #switchStatement
     ;
 
-labeledStatement
+switchLabeledStatement
     :   'case' WS* constantExpression WS* ':' WS* statement
     |   'default' WS* ':' WS* statement
     ;

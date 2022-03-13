@@ -1,5 +1,5 @@
 /**
- * A file context for a single kipper file, which may be used for parsing or compiling a kipper file
+ * A file context for a single Kipper file, which may be used for parsing or compiling a Kipper file
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
@@ -12,6 +12,8 @@ import { ParseTreeWalker } from "antlr4ts/tree";
 import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
 import { GlobalFunction } from "./built-ins";
 import { CompilableParseToken } from "./tokens";
+import { KipperLogger } from "../logger";
+import { RootFileParseToken } from "./tokens/parse-token";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -33,7 +35,7 @@ export class KipperProgramContext {
 	 * which is returned inside the getter 'parseTreeEntry'.
 	 * @private
 	 */
-	private readonly _parseTreeEntry: CompilationUnitContext;
+	private readonly _antlrParseTree: CompilationUnitContext;
 
 	/**
 	 * The private '_parser' that actually stores the variable data,
@@ -61,7 +63,7 @@ export class KipperProgramContext {
 	 * which is returned inside the getter 'processedParseTree'.
 	 * @private
 	 */
-	private _processedParseTree: Array<CompilableParseToken>;
+	private _processedParseTree: RootFileParseToken | undefined;
 
 	/**
 	 * The private '_typescriptCode' that will store the cached code, once 'typescriptCode' has been called. This is to
@@ -70,18 +72,26 @@ export class KipperProgramContext {
 	 */
 	private _compiledCode: Array<string> | undefined;
 
+	/**
+	 * The logger that should be used to log warnings and errors.
+	 * @public
+	 */
+	public logger: KipperLogger;
+
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
 		parser: KipperParser,
 		lexer: KipperLexer,
+		logger: KipperLogger,
 	) {
+		this.logger = logger;
 		this._stream = stream;
-		this._parseTreeEntry = parseTreeEntry;
+		this._antlrParseTree = parseTreeEntry;
 		this._parser = parser;
 		this._lexer = lexer;
 		this._globals = [];
-		this._processedParseTree = [];
+		this._processedParseTree = undefined;
 	}
 
 	/**
@@ -94,8 +104,8 @@ export class KipperProgramContext {
 	/**
 	 * Returns the start item of the parser tree (top item).
 	 */
-	get parseTreeEntry(): CompilationUnitContext {
-		return this._parseTreeEntry;
+	get antlrParseTree(): CompilationUnitContext {
+		return this._antlrParseTree;
 	}
 
 	/**
@@ -131,9 +141,9 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the globals registered for this kipper program. These global functions defined in the array will be
-	 * available inside the compiled kipper program and callable using their specified identifier. This is designed to
-	 * allow calling external typescript functions, which can not be natively implemented inside kipper.
+	 * Returns the globals registered for this Kipper program. These global functions defined in the array will be
+	 * available inside the compiled Kipper program and callable using their specified identifier. This is designed to
+	 * allow calling external typescript functions, which can not be natively implemented inside Kipper.
 	 */
 	get globals(): Array<GlobalFunction> {
 		return this._globals;
@@ -149,17 +159,17 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the processed parse tree, which is a converted antlr4 parse tree in a customised kipper form, which allows
+	 * Returns the processed parse tree, which is a converted antlr4 parse tree in a customised Kipper form, which allows
 	 * it to be used for semantic analysis and translation to typescript.
 	 *
-	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
+	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
-	get processedParseTree(): Array<CompilableParseToken> {
+	get processedParseTree(): RootFileParseToken | undefined {
 		return this._processedParseTree;
 	}
 
 	/**
-	 * Registers new globals that are available inside the kipper program.
+	 * Registers new globals that are available inside the Kipper program.
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
@@ -171,26 +181,32 @@ export class KipperProgramContext {
 	 * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
 	 *
 	 * Steps of compilation:
-	 * - Walking through the parsed antlr4 tree - ({@link parseTreeEntry})
+	 * - Walking through the parsed antlr4 tree - ({@link antlrParseTree})
 	 * - Generating a proper Kipper parse tree, which is eligible for semantic analysis and compilation -
-	 *   ({@link getProcessedParseTree})
-	 * - Running the semantic analysis - ({@link semanticallyAnalyseCode})
-	 * - Generating the final source code - ({@link translate})
+	 *   ({@link generateProcessedParseTree})
+	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
+	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
 	compileProgram(): Array<string> {
-		// Getting the proper processed parse tree contained of proper kipper tokens that are compilable
-		this._processedParseTree = this.getProcessedParseTree(new KipperFileListener(this));
+		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
+		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
 
-		// Walking through every parse item and appending the generated {@link KipperParseToken.tsCode} array to the
-		// existing item array.
-		let genCode: Array<string> = [];
-		for (let parseItem of this._processedParseTree) {
-			genCode = genCode.concat(parseItem.compileCtxAndChildren());
-		}
+		// Run the semantic analysis to validate the code
+		this.logger.debug(`Running semantic analysis for '${this.stream.name}'`);
+		this._processedParseTree.semanticAnalysis();
+
+		// Translating the context instances and children
+		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'`);
+		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
+
+		this.logger.info(
+			`Generated ${genCode.length} lines - Processed ${this._processedParseTree.children.length} root items.`,
+		);
 
 		// Cache the result
 		this._compiledCode = genCode;
 
+		// Finished compilation
 		return genCode;
 	}
 
@@ -200,28 +216,18 @@ export class KipperProgramContext {
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
-	private getProcessedParseTree(listener: KipperFileListener): Array<CompilableParseToken> {
+	private generateProcessedParseTree(listener: KipperFileListener): RootFileParseToken {
 		// The walker used to go through the parse tree.
 		const walker = new ParseTreeWalker();
 
-		// Walking through the parse tree using the listener.
-		walker.walk(listener, this.parseTreeEntry);
-		return listener.processedParseTree;
-	}
+		// Walking through the parse tree using the listener and generating the processed Kipper parse tree
+		this.logger.debug(`Generating processed Kipper parse tree for '${this.stream.name}'`);
+		walker.walk(listener, this.antlrParseTree);
 
-	/**
-	 * Translates the {@link _processedParseTree}
-	 * @private
-	 */
-	private translate() {
-		// TODO! Implement after {@link semanticallyAnalyseCode} was finished
-	}
-
-	/**
-	 * Analyse the semantics of the code and checks its logical content. If an error is raised, it will be directly
-	 * raised from here!
-	 */
-	private semanticallyAnalyseCode(): void {
-		// TODO! Implement after {@link getProcessedParseTree} was properly implemented using Kipper tokens
+		this.logger.debug(
+			`Finished generation of processed Kipper parse tree for '${this.stream.name}'` +
+				` - Parsed ${listener.kipperParseTree.children.length} root items.`,
+		);
+		return listener.kipperParseTree;
 	}
 }

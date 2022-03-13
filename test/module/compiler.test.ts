@@ -79,7 +79,7 @@ describe("KipperCompiler", () => {
       let instance = await compiler.parse(stream);
 
       assert(instance.stream === stream, "Expected streams to equal");
-      assert(instance.parseTreeEntry !== null, "Start item must exist");
+      assert(instance.antlrParseTree !== null, "Start item must exist");
       assert(stream.name === "inline-stream");
       assert(stream.stringContent === fileContent);
       assert(stream.charStream.sourceName === "inline-stream");

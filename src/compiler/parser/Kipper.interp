@@ -181,7 +181,7 @@ blockItemList
 blockItem
 expressionStatement
 selectionStatement
-labeledStatement
+switchLabeledStatement
 iterationStatement
 forCondition
 forDeclaration

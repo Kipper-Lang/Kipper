@@ -19,7 +19,7 @@ import { GlobalFunction } from "./built-ins";
  */
 export interface CompileConfig {
 	/**
-	 * List of global items, which should be made available inside kipper as a built-in. If this is set, then the
+	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
 	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
 	 */
 	globals?: Array<GlobalFunction>;
@@ -188,7 +188,7 @@ export class KipperCompiler {
 		return (() => {
 			let result = parser.compilationUnit();
 			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'`);
-			return new KipperProgramContext(parseStream, result, parser, lexer);
+			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger);
 		})();
 	}
 
@@ -222,7 +222,7 @@ export class KipperCompiler {
 			}
 			fileCtx.registerGlobals(globals);
 		} else {
-			this.logger.debug("Registered no globals for the Kipper program '${inStream.name}'");
+			this.logger.debug(`Registered no globals for the Kipper program '${inStream.name}'`);
 		}
 
 		// Translate and compile the code

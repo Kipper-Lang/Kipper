@@ -1,10 +1,10 @@
 /**
- * Expressions of the kipper language.
+ * Expressions of the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
  */
-import { CompilableParseToken, ParseToken } from "./parse-token";
+import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
 	AssignmentExpressionContext,
@@ -28,22 +28,21 @@ import {
 	IncrementOrDecrementPostfixExpressionContext,
 	NumberPrimaryExpressionContext,
 } from "../parser";
-import { KipperProgramContext } from "../program-ctx";
 import { KipperType } from "../types";
 
 /**
- * Every antlr4 expression type
+ * Every antlr4 expression ctx type
  */
-export type antlrExpressionCtx =
-	NumberPrimaryExpressionContext
+export type antlrExpressionCtxType =
+	| NumberPrimaryExpressionContext
 	| CharacterPrimaryExpressionContext
-	|	ListPrimaryExpressionContext
+	| ListPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
 	| TangledPrimaryExpressionContext
-	|	ArraySpecifierPostfixExpressionContext
-	|	IncrementOrDecrementPostfixExpressionContext
+	| ArraySpecifierPostfixExpressionContext
+	| IncrementOrDecrementPostfixExpressionContext
 	| FunctionCallPostfixExpressionContext
 	| IncrementOrDecrementUnaryExpressionContext
 	| OperatorModifiedUnaryExpressionContext
@@ -58,60 +57,60 @@ export type antlrExpressionCtx =
 	| AssignmentExpressionContext;
 
 /**
- * Fetches the handler for the specified {@link antlrExpressionCtx}.
+ * Fetches the handler for the specified {@link antlrExpressionCtxType}.
  * @param antlrContext The context instance that the handler class should be fetched for.
- * @param fileCtx The file context class that will be assigned to the instance.
+ * @param parent The file context class that will be assigned to the instance.
  */
-export function getExpressionInstance(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext): Expression {
+export function getExpressionInstance(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken): Expression {
 	if (antlrContext instanceof NumberPrimaryExpressionContext) {
-		return new NumberPrimaryExpression(antlrContext, fileCtx);
+		return new NumberPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof CharacterPrimaryExpressionContext) {
-		return new CharacterPrimaryExpression(antlrContext, fileCtx);
+		return new CharacterPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof ListPrimaryExpressionContext) {
-		return new ListPrimaryExpression(antlrContext, fileCtx);
+		return new ListPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof IdentifierPrimaryExpressionContext) {
-		return new IdentifierPrimaryExpression(antlrContext, fileCtx);
+		return new IdentifierPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof StringPrimaryExpressionContext) {
-		return new StringPrimaryExpression(antlrContext, fileCtx);
+		return new StringPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof FStringPrimaryExpressionContext) {
-		return new FStringPrimaryExpression(antlrContext, fileCtx);
+		return new FStringPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof TangledPrimaryExpressionContext) {
-		return new TangledPrimaryExpression(antlrContext, fileCtx);
+		return new TangledPrimaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof ArraySpecifierPostfixExpressionContext) {
-		return new ArraySpecifierExpression(antlrContext, fileCtx);
+		return new ArraySpecifierExpression(antlrContext, parent);
 	} else if (antlrContext instanceof IncrementOrDecrementPostfixExpressionContext) {
-		return new IncrementOrDecrementExpression(antlrContext, fileCtx);
+		return new IncrementOrDecrementExpression(antlrContext, parent);
 	} else if (antlrContext instanceof FunctionCallPostfixExpressionContext) {
-		return new FunctionCallPostfixExpression(antlrContext, fileCtx);
+		return new FunctionCallPostfixExpression(antlrContext, parent);
 	} else if (antlrContext instanceof IncrementOrDecrementUnaryExpressionContext) {
-		return new IncrementOrDecrementUnaryExpression(antlrContext, fileCtx);
+		return new IncrementOrDecrementUnaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof OperatorModifiedUnaryExpressionContext) {
-		return new OperatorModifiedUnaryExpression(antlrContext, fileCtx);
+		return new OperatorModifiedUnaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof CastOrConvertExpressionContext) {
-		return new CastOrConvertExpression(antlrContext, fileCtx);
+		return new CastOrConvertExpression(antlrContext, parent);
 	} else if (antlrContext instanceof MultiplicativeExpressionContext) {
-		return new MultiplicativeExpression(antlrContext, fileCtx);
+		return new MultiplicativeExpression(antlrContext, parent);
 	} else if (antlrContext instanceof AdditiveExpressionContext) {
-		return new AdditiveExpression(antlrContext, fileCtx);
+		return new AdditiveExpression(antlrContext, parent);
 	} else if (antlrContext instanceof RelationalExpressionContext) {
-		return new RelationalExpression(antlrContext, fileCtx);
+		return new RelationalExpression(antlrContext, parent);
 	} else if (antlrContext instanceof EqualityExpressionContext) {
-		return new EqualityExpression(antlrContext, fileCtx);
+		return new EqualityExpression(antlrContext, parent);
 	} else if (antlrContext instanceof LogicalAndExpressionContext) {
-		return new LogicalAndExpression(antlrContext, fileCtx);
+		return new LogicalAndExpression(antlrContext, parent);
 	} else if (antlrContext instanceof LogicalOrExpressionContext) {
-		return new LogicalOrExpression(antlrContext, fileCtx);
+		return new LogicalOrExpression(antlrContext, parent);
 	} else if (antlrContext instanceof ConditionalExpressionContext) {
-		return new ConditionalExpression(antlrContext, fileCtx);
+		return new ConditionalExpression(antlrContext, parent);
 	} else {
 		// Last remaining possible type {@link AssignmentExpression}
-		return new AssignmentExpression(antlrContext, fileCtx);
+		return new AssignmentExpression(antlrContext, parent);
 	}
 }
 
 /**
- * Expression class, which represents an expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Expression class, which represents an expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export abstract class Expression extends CompilableParseToken {
@@ -120,22 +119,22 @@ export abstract class Expression extends CompilableParseToken {
 	 * which is returned inside the getter 'antlrContext'.
 	 * @private
 	 */
-	protected override readonly _antlrContext: antlrExpressionCtx;
+	protected override readonly _antlrContext: antlrExpressionCtxType;
 
-	protected constructor(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	protected constructor(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	abstract compileCtxAndChildren(): Array<string>;
+	abstract translateCtxAndChildren(): Array<string>;
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): antlrExpressionCtxType {
 		return this._antlrContext;
 	}
 }
@@ -146,15 +145,15 @@ export abstract class ConstantExpression extends Expression {
 	 */
 	public readonly type: KipperType;
 
-	protected constructor(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext, type: KipperType) {
-		super(antlrContext, fileCtx);
+	protected constructor(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken, type: KipperType) {
+		super(antlrContext, parent);
 		this.type = type;
 	}
 }
 
 /**
- *  Integer constant expression class, which represents an integer constant in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Integer constant expression class, which represents an integer constant in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class NumberPrimaryExpression extends ConstantExpression {
@@ -167,8 +166,8 @@ export class NumberPrimaryExpression extends ConstantExpression {
 
 	public readonly value: number;
 
-	constructor(antlrContext: NumberPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx, "num" as KipperType);
+	constructor(antlrContext: NumberPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent, "num" as KipperType);
 		this._antlrContext = antlrContext;
 
 		// Setting the numeric value
@@ -176,9 +175,17 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	}
 
 	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -192,8 +199,8 @@ export class NumberPrimaryExpression extends ConstantExpression {
 }
 
 /**
- *  Character constant expression class, which represents an integer constant in the kipper language and is
- * compilable using {@link compileCtxAndChildren}.
+ *  Character constant expression class, which represents an integer constant in the Kipper language and is
+ * compilable using {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class CharacterPrimaryExpression extends ConstantExpression {
@@ -209,20 +216,28 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 */
 	public readonly value: string;
 
-	constructor(antlrContext: CharacterPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx, "char" as KipperType);
+	constructor(antlrContext: CharacterPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent, "char" as KipperType);
 		this._antlrContext = antlrContext;
 
 		// Setting the character value
-		this.value = this.sourceCode.slice(1, this.sourceCode.length-1);
+		this.value = this.sourceCode.slice(1, this.sourceCode.length - 1);
 
 		// TODO! Add check for length, which forbids empty characters and multi-characters!
 	}
 
 	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -236,8 +251,8 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 }
 
 /**
- *  List constant expression class, which represents a list constant in the kipper language and is
- * compilable using {@link compileCtxAndChildren}.
+ *  List constant expression class, which represents a list constant in the Kipper language and is
+ * compilable using {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class ListPrimaryExpression extends ConstantExpression {
@@ -248,15 +263,23 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 */
 	protected override readonly _antlrContext: ListPrimaryExpressionContext;
 
-	constructor(antlrContext: ListPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx, "list" as KipperType);
+	constructor(antlrContext: ListPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent, "list" as KipperType);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -270,8 +293,8 @@ export class ListPrimaryExpression extends ConstantExpression {
 }
 
 /**
- * String class, which represents a string expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * String class, which represents a string expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class StringPrimaryExpression extends ConstantExpression {
@@ -287,21 +310,27 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 */
 	public readonly stringContent: string;
 
-	constructor(antlrContext: StringPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx, "str" as KipperType);
+	constructor(antlrContext: StringPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent, "str" as KipperType);
 		this._antlrContext = antlrContext;
 
 		// Get string content for the f-string. Removing start and end character
-		this.stringContent = this.sourceCode.slice(1, this.sourceCode.length-1);
+		this.stringContent = this.sourceCode.slice(1, this.sourceCode.length - 1);
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
-		return [
-			`"${this.stringContent}"`
-		];
+	translateCtxAndChildren(): Array<string> {
+		return [`"${this.stringContent}"`];
 	}
 
 	/**
@@ -313,8 +342,8 @@ export class StringPrimaryExpression extends ConstantExpression {
 }
 
 /**
- * Expression class, which represents an expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Expression class, which represents an expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class IdentifierPrimaryExpression extends Expression {
@@ -330,8 +359,8 @@ export class IdentifierPrimaryExpression extends Expression {
 	 */
 	public readonly identifierValue: string;
 
-	constructor(antlrContext: IdentifierPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: IdentifierPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
 
 		// Fetching the identifier
@@ -339,9 +368,17 @@ export class IdentifierPrimaryExpression extends Expression {
 	}
 
 	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -355,8 +392,8 @@ export class IdentifierPrimaryExpression extends Expression {
 }
 
 /**
- * F-String class, which represents an f-string expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * F-String class, which represents an f-string expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  */
 export class FStringPrimaryExpression extends Expression {
@@ -369,15 +406,23 @@ export class FStringPrimaryExpression extends Expression {
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrContext: FStringPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: FStringPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -391,8 +436,8 @@ export class FStringPrimaryExpression extends Expression {
 }
 
 /**
- * Tangled expression class, which represents a tangled expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Tangled expression class, which represents a tangled expression in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
  *
  * This class may only have children of type {@link CompilableParseToken}, as this expression itself does not
  * compile anything and simply change the order of evaluation.
@@ -413,8 +458,8 @@ export class TangledPrimaryExpression extends Expression {
 	 */
 	protected override readonly _children: Array<CompilableParseToken>;
 
-	constructor(antlrContext: TangledPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: TangledPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
 		this._children = [];
 	}
@@ -428,13 +473,21 @@ export class TangledPrimaryExpression extends Expression {
 	}
 
 	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO! Add tests for this
 		let genCode: Array<string> = [];
 		for (let child of this._children) {
-			genCode = genCode.concat(child.compileCtxAndChildren());
+			genCode = genCode.concat(child.translateCtxAndChildren());
 		}
 		return genCode;
 	}
@@ -448,8 +501,8 @@ export class TangledPrimaryExpression extends Expression {
 }
 
 /**
- * Function call class, which represents a function call expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Function call class, which represents a function call expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * call print("Hello world!")
@@ -462,15 +515,23 @@ export class IncrementOrDecrementExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrContext: IncrementOrDecrementPostfixExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -484,8 +545,8 @@ export class IncrementOrDecrementExpression extends Expression {
 }
 
 /**
- * Function call class, which represents a function call expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Function call class, which represents a function call expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * call print("Hello world!")
@@ -498,15 +559,23 @@ export class ArraySpecifierExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrContext: ArraySpecifierPostfixExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -520,8 +589,8 @@ export class ArraySpecifierExpression extends Expression {
 }
 
 /**
- * Function call class, which represents a function call expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Function call class, which represents a function call expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * call print("Hello world!")
@@ -534,15 +603,23 @@ export class FunctionCallPostfixExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
 
-	constructor(antlrContext: FunctionCallPostfixExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -556,8 +633,8 @@ export class FunctionCallPostfixExpression extends Expression {
 }
 
 /**
- * Increment or decrement expression class, which represents an -- or ++ expression in the kipper language and is
- * compilable using {@link compileCtxAndChildren}.
+ * Increment or decrement expression class, which represents an -- or ++ expression in the Kipper language and is
+ * compilable using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * ++4 // 5
@@ -571,15 +648,23 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrContext: IncrementOrDecrementUnaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -593,8 +678,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 }
 
 /**
- * Operator modified unary expression class, which represents a signed (+/-) unary expression in the kipper language
- * and is compilable using {@link compileCtxAndChildren}.
+ * Operator modified unary expression class, which represents a signed (+/-) unary expression in the Kipper language
+ * and is compilable using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * -41 // -41
@@ -608,15 +693,23 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrContext: OperatorModifiedUnaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -630,8 +723,8 @@ export class OperatorModifiedUnaryExpression extends Expression {
 }
 
 /**
- * Convert expression class, which represents a conversion expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Convert expression class, which represents a conversion expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * "4" as num // 4
@@ -645,15 +738,23 @@ export class CastOrConvertExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: CastOrConvertExpressionContext;
 
-	constructor(antlrContext: CastOrConvertExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: CastOrConvertExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -667,8 +768,8 @@ export class CastOrConvertExpression extends Expression {
 }
 
 /**
- * Multiplicative expression class, which represents a multiplicative expression in the kipper language and is
- * compilable using {@link compileCtxAndChildren}.
+ * Multiplicative expression class, which represents a multiplicative expression in the Kipper language and is
+ * compilable using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * 16 * 6 // 96
@@ -684,15 +785,23 @@ export class MultiplicativeExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: MultiplicativeExpressionContext;
 
-	constructor(antlrContext: MultiplicativeExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: MultiplicativeExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -706,8 +815,8 @@ export class MultiplicativeExpression extends Expression {
 }
 
 /**
- * Additive expression class, which represents an additive expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * 4 + 4 // 8
@@ -721,15 +830,23 @@ export class AdditiveExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: AdditiveExpressionContext;
 
-	constructor(antlrContext: AdditiveExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: AdditiveExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -743,8 +860,8 @@ export class AdditiveExpression extends Expression {
 }
 
 /**
- * Relational expression class, which represents a relational expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Relational expression class, which represents a relational expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * 19 > 11 // true
@@ -766,15 +883,23 @@ export class RelationalExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: RelationalExpressionContext;
 
-	constructor(antlrContext: RelationalExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: RelationalExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -788,8 +913,8 @@ export class RelationalExpression extends Expression {
 }
 
 /**
- * Equality expression class, which represents an equality check expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Equality expression class, which represents an equality check expression in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * 4 == 4 // true
@@ -805,15 +930,23 @@ export class EqualityExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: EqualityExpressionContext;
 
-	constructor(antlrContext: EqualityExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: EqualityExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -827,8 +960,8 @@ export class EqualityExpression extends Expression {
 }
 
 /**
- * Logical-And expression class, which represents a logical-and expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Logical-And expression class, which represents a logical-and expression in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * false && false // false
@@ -844,15 +977,23 @@ export class LogicalAndExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: LogicalAndExpressionContext;
 
-	constructor(antlrContext: LogicalAndExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: LogicalAndExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -866,8 +1007,8 @@ export class LogicalAndExpression extends Expression {
 }
 
 /**
- * Logical-Or expression class, which represents a logical-or expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
+ * Logical-Or expression class, which represents a logical-or expression in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * false || false // false
@@ -883,15 +1024,23 @@ export class LogicalOrExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: LogicalOrExpressionContext;
 
-	constructor(antlrContext: LogicalOrExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: LogicalOrExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -905,8 +1054,8 @@ export class LogicalOrExpression extends Expression {
 }
 
 /**
- * Conditional expression class, which represents a conditional expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Conditional expression class, which represents a conditional expression in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
  * @since 0.0.6
  * @example
  * true ? 3 : 4; // 3
@@ -920,15 +1069,23 @@ export class ConditionalExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: ConditionalExpressionContext;
 
-	constructor(antlrContext: ConditionalExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: ConditionalExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -942,8 +1099,8 @@ export class ConditionalExpression extends Expression {
 }
 
 /**
- * Assignment expression class, which represents an assignment expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
+ * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}. This class only represents assigning a value, but not declaring it!
  * @since 0.0.6
  * @example
  * x = 4
@@ -956,15 +1113,23 @@ export class AssignmentExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: AssignmentExpressionContext;
 
-	constructor(antlrContext: AssignmentExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
+	constructor(antlrContext: AssignmentExpressionContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	semanticAnalysis(): void {
+		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	compileCtxAndChildren(): Array<string> {
+	translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}

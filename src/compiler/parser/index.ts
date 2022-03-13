@@ -45,7 +45,7 @@ export {
   ParameterDeclarationContext,
   InitializerContext,
   StatementContext,
-  LabeledStatementContext,
+  SwitchLabeledStatementContext,
   CompoundStatementContext,
   BlockItemListContext,
   BlockItemContext,

@@ -17,19 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   code again.
 - `LogLevel.UNKNOWN` as the default log level for `LogLevel`.
 - `KipperLogger.levels` as a static variable to access the enum `LogLevel`.
-- New abstract base class `ParseToken` and `CompilableParseToken`, which will represent the major parse tokens 
-  inside a kipper program. `CompilableParseToken` will also have the additional functionality of wrapping an entire
-  statement or block, and converting it to TypeScript using `compileCtxAndChildren()`
-  This class will be used to represent the items  in a kipper program, and generate the typescript counterpart.
-  Current child classes:
-  - `Expression`
-  - `FunctionDefinition`
-  - `Declaration`
-  - `CompoundStatement`
-  - `SelectionStatement`
-  - `ExpressionStatement`
-  - `IterationStatement`
-  - `JumpStatement`
+- New abstract base class `CompilableParseToken`, which will represent the major parse tokens inside a kipper 
+  program. The token class has the additional functionality of wrapping an entire antlr4 statement, expression or 
+  block, and being able to semantically analyse it using `semanticAnalysis()` and translate it to TypeScript using 
+  `translateCtxAndChildren()`.
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
 - File `built-ins.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `GlobalFunction`. (In work!)
@@ -40,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
-- Behaviour of `KipperCompileResult`, which will now store the `fileCtx: KipperFileContext` and `result: string[]`
+- Behaviour of `KipperCompileResult`, which will now store the `programCtx: KipperFileContext` and `result: string[]`
   of a compilation. 
 - Fixed bug in `KipperErrorListener`, which resulted in errors being not properly raised. The function is
   now a template, where `<T>` represents the offending token. `<T>` will also be passed onto `KipperSyntaxError<T>`.

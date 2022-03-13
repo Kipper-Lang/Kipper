@@ -6,6 +6,6 @@
  */
 
 /**
- * All built-in types inside kipper that are allowed to be used.
+ * All built-in types inside Kipper that are allowed to be used.
  */
 export type KipperType = "void" | "num" | "str" | "char" | "bool" | "list";

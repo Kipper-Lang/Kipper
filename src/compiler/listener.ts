@@ -15,9 +15,12 @@ import {
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
 	ArgumentExpressionListContext,
+	ArraySpecifierContext,
+	ArraySpecifierPostfixExpressionContext,
 	AssignmentOperatorContext,
 	BlockItemContext,
 	BlockItemListContext,
+	CharacterPrimaryExpressionContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -34,67 +37,72 @@ import {
 	FunctionCallPostfixExpressionContext,
 	FunctionDefinitionContext,
 	IdentifierPrimaryExpressionContext,
+	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
 	IterationStatementContext,
 	JumpStatementContext,
 	KipperListener,
-	LabeledStatementContext,
+	ListConstantContext,
+	ListPrimaryExpressionContext,
 	MultiItemTypeSpecifierContext,
 	NestedParenthesesBlockContext,
+	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
 	ParameterListContext,
 	ParameterTypeListContext,
-	SelectionStatementContext,
 	SingleItemTypeSpecifierContext,
-	StatementContext,
 	StorageTypeSpecifierContext,
 	StringPrimaryExpressionContext,
+	SwitchLabeledStatementContext,
 	TangledPrimaryExpressionContext,
 	TranslationUnitContext,
 	TypeofTypeSpecifierContext,
 	TypeSpecifierContext,
 	UnaryOperatorContext,
-	ArraySpecifierContext,
-	ListConstantContext,
-	NumberPrimaryExpressionContext,
-	CharacterPrimaryExpressionContext,
-	ListPrimaryExpressionContext,
 } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
-import { CompilableParseToken, Expression, ExpressionStatement } from "./tokens";
-import { getExpressionInstance } from "./tokens/expressions";
 import {
-	ArraySpecifierPostfixExpressionContext,
-	IncrementOrDecrementPostfixExpressionContext,
-} from "./parser/KipperParser";
+	antlrDefinitionCtxType,
+	antlrExpressionCtxType,
+	antlrStatementCtxType,
+	CompilableParseToken,
+	Definition,
+	Expression,
+	getDefinitionInstance,
+	getExpressionInstance,
+	getStatementInstance,
+	Statement,
+} from "./tokens";
+import { RootFileParseToken } from "./tokens/parse-token";
+import { IfStatementContext, SwitchStatementContext } from "./parser/KipperParser";
 
-const passOnHandler: () => void = (() => {});
+const passOnHandler: () => void = () => {};
 
 /**
  * The listener for a {@link KipperProgramContext}, which walks through the generated
- * parser tree and produces the TypeScript code output in {@link processedParseTree}.
+ * parser tree and produces the TypeScript code output in {@link kipperParseTree}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 export class KipperFileListener implements KipperListener {
 	/**
-	 * The private '_fileCtx' that actually stores the variable data,
-	 * which is returned inside the getter 'fileCtx'.
+	 * The private '_programCtx' that actually stores the variable data,
+	 * which is returned inside the getter 'programCtx'.
 	 * @private
 	 */
-	private readonly _fileCtx: KipperProgramContext;
+	private readonly _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_itemBuffer' that actually stores the variable data,
 	 * which is returned inside the getter 'itemBuffer'.
 	 * @private
 	 */
-	private readonly _processedParseTree: Array<CompilableParseToken>;
+	private readonly _kipperParseTree: RootFileParseToken;
 
 	/**
 	 * If this is true, the current context is inside an external item and automatically indicates
@@ -109,7 +117,7 @@ export class KipperFileListener implements KipperListener {
 	private _isFunctionDefinition: boolean;
 
 	/**
-	 * The correct kipper token that is being walked through right now. This is the instance where current metadata
+	 * The correct Kipper token that is being walked through right now. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and convert the context items that were walked
 	 * through during this operation.
 	 */
@@ -122,9 +130,9 @@ export class KipperFileListener implements KipperListener {
 	 */
 	private _currentExpression: Expression | undefined;
 
-	constructor(fileCtx: KipperProgramContext) {
-		this._fileCtx = fileCtx;
-		this._processedParseTree = [];
+	constructor(programCtx: KipperProgramContext) {
+		this._kipperParseTree = new RootFileParseToken(programCtx);
+		this._programCtx = programCtx;
 		this._isExternalItem = false;
 		this._isFunctionDefinition = false;
 		this._currentPrimaryToken = undefined;
@@ -133,17 +141,17 @@ export class KipperFileListener implements KipperListener {
 	/**
 	 * The {@link KipperProgramContext} instance responsible for managing this {@link KipperFileListener} instance.
 	 */
-	get fileCtx(): KipperProgramContext {
-		return this._fileCtx;
+	get programCtx(): KipperProgramContext {
+		return this._programCtx;
 	}
 
 	/**
-	 * A string array that contains the generated TypeScript code lines that were created by
-	 * the listener.
+	 * The root token instance that represents a simplified Kipper parse tree that may be used for semantic analysis and
+	 * compilation.
 	 * @since 0.0.6
 	 */
-	get processedParseTree(): Array<CompilableParseToken> {
-		return this._processedParseTree;
+	get kipperParseTree(): RootFileParseToken {
+		return this._kipperParseTree;
 	}
 
 	/**
@@ -151,11 +159,14 @@ export class KipperFileListener implements KipperListener {
 	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryToken}.
 	 * @private
 	 */
-	private get currentProcessedToken() {
+	private get getCurrentProcessedToken(): CompilableParseToken | RootFileParseToken {
 		if (this._currentExpression !== undefined) {
 			return this._currentExpression;
+		} else if (this._currentPrimaryToken !== undefined) {
+			return this._currentPrimaryToken;
+		} else {
+			return this._kipperParseTree;
 		}
-		return this._currentPrimaryToken;
 	}
 
 	/**
@@ -169,16 +180,15 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The context instance of the expression
 	 * @private
 	 */
-	private handleIncomingExpressionCtx(ctx: ParserRuleContext) {
-		if (this._currentExpression === undefined) {
-			this._currentExpression = getExpressionInstance(ctx, this.fileCtx);
-			this._currentPrimaryToken?.addNewChild(this._currentExpression);
-		} else {
-			// Generating a new expression, which a child of the previous expression.
-			let newExpression: Expression = getExpressionInstance(ctx, this.fileCtx);
-			this._currentExpression.addNewChild(newExpression);
-			this._currentExpression = newExpression;
+	private handleIncomingExpressionCtx(ctx: antlrExpressionCtxType) {
+		if (this.getCurrentProcessedToken instanceof RootFileParseToken) {
+			throw new Error(
+				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
+					" definition",
+			);
 		}
+
+		this._currentExpression = getExpressionInstance(ctx, this.getCurrentProcessedToken);
 	}
 
 	/**
@@ -192,6 +202,54 @@ export class KipperFileListener implements KipperListener {
 	private handleExitingExpressionCtx() {
 		if (this._currentExpression?.parent instanceof Expression) {
 			this._currentExpression = this._currentExpression.parent;
+		} else {
+			this._currentExpression = undefined;
+		}
+	}
+
+	/**
+	 * Handles an incoming statement context. The handling algorithm is:
+	 * - If {@link _currentPrimaryToken} is undefined, then it will be created and set as a child of
+	 * {@link _kipperParseTree}
+	 * - Otherwise, generate a new {@link Statement} instance, which will be added to the {@link _currentPrimaryToken} as
+	 * a child. Afterwards {@link _currentPrimaryToken} will be set to this new instance, as all new context instances
+	 * must be assigned to it. When the context is left, then the old {@link _currentPrimaryToken} will be restored as
+	 * {@link _currentPrimaryToken}, and all further context instances will be assigned to it.
+	 * @private
+	 */
+	private handleIncomingStatementCtx(ctx: antlrStatementCtxType) {
+		this._currentPrimaryToken = getStatementInstance(ctx, this.getCurrentProcessedToken);
+	}
+
+	/**
+	 * Handles an incoming statement context. The handling algorithm is:
+	 * - If {@link _currentPrimaryToken} is undefined, then it will be created and set as a child of
+	 * {@link _kipperParseTree}
+	 * - Otherwise, generate a new {@link Definition} instance, which will be added to the {@link _currentPrimaryToken} as
+	 * a child. Afterwards {@link _currentPrimaryToken} will be set to this new instance, as all new context instances
+	 * must be assigned to it. When the context is left, then the old {@link _currentPrimaryToken} will be restored as
+	 * {@link _currentPrimaryToken}, and all further context instances will be assigned to it.
+	 * @private
+	 */
+	private handleIncomingDefinitionCtx(ctx: antlrDefinitionCtxType) {
+		this._currentPrimaryToken = getDefinitionInstance(ctx, this.getCurrentProcessedToken);
+	}
+
+	/**
+	 * Handles an exiting statement or definition context. The handling algorithm is:
+	 * - If {@link _currentPrimaryToken.parent} is of type {@link _currentPrimaryToken} or {@link Statement}, then set
+	 * {@link _currentPrimaryToken} to that parent.
+	 * - Otherwise set {@link _currentPrimaryToken} to {@link undefined} again. If
+	 * {@link handleExitingStatementOrDefinitionCtx} is called again, the {@link _currentPrimaryToken} will be defined
+	 * again and the whole process starts again.
+	 * @private
+	 */
+	private handleExitingStatementOrDefinitionCtx() {
+		if (
+			this._currentPrimaryToken?.parent instanceof Definition ||
+			this._currentPrimaryToken?.parent instanceof Statement
+		) {
+			this._currentPrimaryToken = this._currentPrimaryToken.parent;
 		} else {
 			this._currentExpression = undefined;
 		}
@@ -631,7 +689,6 @@ export class KipperFileListener implements KipperListener {
 	//  */
 	// exitCastOrConvertExpression(ctx: CastOrConvertExpressionContext): void {}
 
-
 	/**
 	 * Enter a parse tree produced by the `passOnCastOrConvertExpression`
 	 * Labeled alternative in `KipperParser.castOrConvertExpression`.
@@ -944,7 +1001,6 @@ export class KipperFileListener implements KipperListener {
 	//  */
 	// exitLogicalOrExpression(ctx: LogicalOrExpressionContext): void {}
 
-
 	/**
 	 * Enter a parse tree produced by the `passOnLogicalOrExpression`
 	 * Labeled alternative in `KipperParser.logicalOrExpression`.
@@ -1049,7 +1105,6 @@ export class KipperFileListener implements KipperListener {
 	//  */
 	// exitAssignmentExpression(ctx: AssignmentExpressionContext): void {}
 
-
 	/**
 	 * Enter a parse tree produced by the `passOnAssignmentExpression`
 	 * Labeled alternative in `KipperParser.assignmentExpression`.
@@ -1102,7 +1157,7 @@ export class KipperFileListener implements KipperListener {
 	//  * Enter a parse tree produced by `KipperParser.constantExpression`.
 	//  *
 	//  * This is an expression that "re-directs" directly to an {@link ConditionalExpressionContext} and is used inside
-	//  * {@link LabeledStatementContext} (Switch).
+	//  * {@link SwitchLabeledStatementContext} (Switch).
 	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	//  */
 	// enterConstantExpression(ctx: ConstantExpressionContext): void {}
@@ -1111,7 +1166,7 @@ export class KipperFileListener implements KipperListener {
 	//  * Exit a parse tree produced by `KipperParser.constantExpression`.
 	//  *
 	//  * This is an expression that "re-directs" directly to an {@link ConditionalExpressionContext} and is used inside
-	//  * {@link LabeledStatementContext} (Switch statement).
+	//  * {@link SwitchLabeledStatementContext} (Switch statement).
 	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	//  */
 	// exitConstantExpression(ctx: ConstantExpressionContext): void {}
@@ -1128,14 +1183,36 @@ export class KipperFileListener implements KipperListener {
 	//  */
 	// exitExpression(ctx: ExpressionContext): void {}
 
-	// -- Statement and Declaration section --
+	// -- Statement section --
+
+	/**
+	 * We are ignoring statements, and only going to handle the rules 'expressionStatement', 'labeledStatement'
+	 * 'selectionStatement', 'iterationStatement', 'jumpStatement' and 'compoundStatement', which implement a more precise
+	 * 'assignmentExpression' rule.
+	 *
+	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
+	 * expression is called.
+	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.statement`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterStatement(ctx: StatementContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.statement`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitStatement(ctx: StatementContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.expressionStatement`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	enterExpressionStatement(ctx: ExpressionStatementContext): void {
-		this._currentPrimaryToken = new ExpressionStatement(ctx, this.fileCtx);
+		// TODO! Implement proper handling of parents for compound statements and function definitions
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1143,23 +1220,164 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	exitExpressionStatement(ctx: ExpressionStatementContext): void {
-		if (this._currentPrimaryToken instanceof ExpressionStatement) {
-			this.processedParseTree.push(this._currentPrimaryToken);
-		}
-		this._currentPrimaryToken = undefined;
+		this.handleExitingStatementOrDefinitionCtx();
 	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.compoundStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterCompoundStatement(ctx: CompoundStatementContext): void {
+		throw new Error("Compound statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.compoundStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitCompoundStatement(ctx: CompoundStatementContext): void {
+		throw new Error("Compound statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * We are ignoring selection statements, and only going to handle the rules 'ifStatement' and 'switchStatement',
+	 * which implement a more precise 'assignmentExpression' rule.
+	 *
+	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
+	 * expression is called.
+	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.selectionStatement`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterSelectionStatement(ctx: SelectionStatementContext): void {
+	// 	throw new Error("Selection statements are not supported yet in Kipper");
+	// }
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.selectionStatement`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitSelectionStatement(ctx: SelectionStatementContext): void {
+	// 	throw new Error("Selection statements are not supported yet in Kipper");
+	// }
+
+	/**
+	 * Enter a parse tree produced by the `ifStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterIfStatement(ctx: IfStatementContext): void {
+		throw new Error("If statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by the `ifStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitIfStatement(ctx: IfStatementContext): void {
+		throw new Error("If statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Enter a parse tree produced by the `switchStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterSwitchStatement(ctx: SwitchStatementContext): void {
+		throw new Error("Switch statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by the `switchStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitSwitchStatement(ctx: SwitchStatementContext): void {
+		throw new Error("Switch statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.labeledStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterSwitchLabeledStatement(ctx: SwitchLabeledStatementContext): void {
+		throw new Error("Switch statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.labeledStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitSwitchLabeledStatement(ctx: SwitchLabeledStatementContext): void {
+		throw new Error("Switch statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.iterationStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterIterationStatement(ctx: IterationStatementContext): void {
+		throw new Error("Iteration statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.iterationStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitIterationStatement(ctx: IterationStatementContext): void {
+		throw new Error("Iteration statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.jumpStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterJumpStatement(ctx: JumpStatementContext): void {
+		throw new Error("Jump statements are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.jumpStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitJumpStatement(ctx: JumpStatementContext): void {
+		throw new Error("Jump statements are not supported yet in Kipper");
+	}
+
+	// -- Declaration section --
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterDeclaration(ctx: DeclarationContext): void {}
+	enterDeclaration(ctx: DeclarationContext): void {
+		throw new Error("Declaration and definitions are not supported yet in Kipper");
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitDeclaration(ctx: DeclarationContext): void {}
+	exitDeclaration(ctx: DeclarationContext): void {
+		throw new Error("Declaration and definitions are not supported yet in Kipper");
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterFunctionDefinition(ctx: FunctionDefinitionContext): void {
+		throw new Error("Function definitions are not supported yet in Kipper");
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitFunctionDefinition(ctx: FunctionDefinitionContext): void {}
 
 	// -- Child Rules Section --
 
@@ -1350,42 +1568,6 @@ export class KipperFileListener implements KipperListener {
 	exitInitializer(ctx: InitializerContext): void {}
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.statement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterStatement(ctx: StatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.statement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitStatement(ctx: StatementContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.labeledStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterLabeledStatement(ctx: LabeledStatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.labeledStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitLabeledStatement(ctx: LabeledStatementContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.compoundStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterCompoundStatement(ctx: CompoundStatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.compoundStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitCompoundStatement(ctx: CompoundStatementContext): void {}
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.blockItemList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
@@ -1408,42 +1590,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	exitBlockItem(ctx: BlockItemContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterSelectionStatement(ctx: SelectionStatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitSelectionStatement(ctx: SelectionStatementContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.iterationStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterIterationStatement(ctx: IterationStatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.iterationStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitIterationStatement(ctx: IterationStatementContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.jumpStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterJumpStatement(ctx: JumpStatementContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.jumpStatement`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitJumpStatement(ctx: JumpStatementContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
@@ -1480,18 +1626,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	exitExternalItem(ctx: ExternalItemContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterFunctionDefinition(ctx: FunctionDefinitionContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitFunctionDefinition(ctx: FunctionDefinitionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.endOfItem`.

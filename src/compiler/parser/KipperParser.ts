@@ -138,7 +138,7 @@ export class KipperParser extends Parser {
 	public static readonly RULE_blockItem = 41;
 	public static readonly RULE_expressionStatement = 42;
 	public static readonly RULE_selectionStatement = 43;
-	public static readonly RULE_labeledStatement = 44;
+	public static readonly RULE_switchLabeledStatement = 44;
 	public static readonly RULE_iterationStatement = 45;
 	public static readonly RULE_forCondition = 46;
 	public static readonly RULE_forDeclaration = 47;
@@ -157,8 +157,8 @@ export class KipperParser extends Parser {
 		"initDeclarator", "typeSpecifier", "declarator", "directDeclarator", "nestedParenthesesBlock", 
 		"parameterTypeList", "parameterList", "parameterDeclaration", "initializer", 
 		"statement", "compoundStatement", "blockItemList", "blockItem", "expressionStatement", 
-		"selectionStatement", "labeledStatement", "iterationStatement", "forCondition", 
-		"forDeclaration", "forExpression", "jumpStatement",
+		"selectionStatement", "switchLabeledStatement", "iterationStatement", 
+		"forCondition", "forDeclaration", "forExpression", "jumpStatement",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
@@ -3559,6 +3559,7 @@ export class KipperParser extends Parser {
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case KipperParser.If:
+				_localctx = new IfStatementContext(_localctx);
 				this.enterOuterAlt(_localctx, 1);
 				{
 				this.state = 867;
@@ -3672,6 +3673,7 @@ export class KipperParser extends Parser {
 				}
 				break;
 			case KipperParser.Switch:
+				_localctx = new SwitchStatementContext(_localctx);
 				this.enterOuterAlt(_localctx, 2);
 				{
 				this.state = 912;
@@ -3761,7 +3763,7 @@ export class KipperParser extends Parser {
 						_la = this._input.LA(1);
 					}
 					this.state = 947;
-					this.labeledStatement();
+					this.switchLabeledStatement();
 					}
 					}
 					this.state = 952;
@@ -3791,9 +3793,9 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public labeledStatement(): LabeledStatementContext {
-		let _localctx: LabeledStatementContext = new LabeledStatementContext(this._ctx, this.state);
-		this.enterRule(_localctx, 88, KipperParser.RULE_labeledStatement);
+	public switchLabeledStatement(): SwitchLabeledStatementContext {
+		let _localctx: SwitchLabeledStatementContext = new SwitchLabeledStatementContext(this._ctx, this.state);
+		this.enterRule(_localctx, 88, KipperParser.RULE_switchLabeledStatement);
 		let _la: number;
 		try {
 			this.state = 995;
@@ -7906,7 +7908,17 @@ export class ExpressionStatementContext extends ParserRuleContext {
 
 
 export class SelectionStatementContext extends ParserRuleContext {
-	public If(): TerminalNode | undefined { return this.tryGetToken(KipperParser.If, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return KipperParser.RULE_selectionStatement; }
+	public copyFrom(ctx: SelectionStatementContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class IfStatementContext extends SelectionStatementContext {
+	public If(): TerminalNode { return this.getToken(KipperParser.If, 0); }
 	public LeftParen(): TerminalNode { return this.getToken(KipperParser.LeftParen, 0); }
 	public expression(): ExpressionContext {
 		return this.getRuleContext(0, ExpressionContext);
@@ -7931,39 +7943,78 @@ export class SelectionStatementContext extends ParserRuleContext {
 		}
 	}
 	public Else(): TerminalNode | undefined { return this.tryGetToken(KipperParser.Else, 0); }
-	public Switch(): TerminalNode | undefined { return this.tryGetToken(KipperParser.Switch, 0); }
-	public LeftBrace(): TerminalNode | undefined { return this.tryGetToken(KipperParser.LeftBrace, 0); }
-	public RightBrace(): TerminalNode | undefined { return this.tryGetToken(KipperParser.RightBrace, 0); }
-	public labeledStatement(): LabeledStatementContext[];
-	public labeledStatement(i: number): LabeledStatementContext;
-	public labeledStatement(i?: number): LabeledStatementContext | LabeledStatementContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(LabeledStatementContext);
-		} else {
-			return this.getRuleContext(i, LabeledStatementContext);
-		}
+	constructor(ctx: SelectionStatementContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
 	}
-	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
-		super(parent, invokingState);
-	}
-	// @Override
-	public get ruleIndex(): number { return KipperParser.RULE_selectionStatement; }
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterSelectionStatement) {
-			listener.enterSelectionStatement(this);
+		if (listener.enterIfStatement) {
+			listener.enterIfStatement(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitSelectionStatement) {
-			listener.exitSelectionStatement(this);
+		if (listener.exitIfStatement) {
+			listener.exitIfStatement(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitSelectionStatement) {
-			return visitor.visitSelectionStatement(this);
+		if (visitor.visitIfStatement) {
+			return visitor.visitIfStatement(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class SwitchStatementContext extends SelectionStatementContext {
+	public Switch(): TerminalNode { return this.getToken(KipperParser.Switch, 0); }
+	public LeftParen(): TerminalNode { return this.getToken(KipperParser.LeftParen, 0); }
+	public expression(): ExpressionContext {
+		return this.getRuleContext(0, ExpressionContext);
+	}
+	public RightParen(): TerminalNode { return this.getToken(KipperParser.RightParen, 0); }
+	public LeftBrace(): TerminalNode { return this.getToken(KipperParser.LeftBrace, 0); }
+	public RightBrace(): TerminalNode { return this.getToken(KipperParser.RightBrace, 0); }
+	public WS(): TerminalNode[];
+	public WS(i: number): TerminalNode;
+	public WS(i?: number): TerminalNode | TerminalNode[] {
+		if (i === undefined) {
+			return this.getTokens(KipperParser.WS);
+		} else {
+			return this.getToken(KipperParser.WS, i);
+		}
+	}
+	public switchLabeledStatement(): SwitchLabeledStatementContext[];
+	public switchLabeledStatement(i: number): SwitchLabeledStatementContext;
+	public switchLabeledStatement(i?: number): SwitchLabeledStatementContext | SwitchLabeledStatementContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(SwitchLabeledStatementContext);
+		} else {
+			return this.getRuleContext(i, SwitchLabeledStatementContext);
+		}
+	}
+	constructor(ctx: SelectionStatementContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperListener): void {
+		if (listener.enterSwitchStatement) {
+			listener.enterSwitchStatement(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperListener): void {
+		if (listener.exitSwitchStatement) {
+			listener.exitSwitchStatement(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperVisitor<Result>): Result {
+		if (visitor.visitSwitchStatement) {
+			return visitor.visitSwitchStatement(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -7971,7 +8022,7 @@ export class SelectionStatementContext extends ParserRuleContext {
 }
 
 
-export class LabeledStatementContext extends ParserRuleContext {
+export class SwitchLabeledStatementContext extends ParserRuleContext {
 	public Case(): TerminalNode | undefined { return this.tryGetToken(KipperParser.Case, 0); }
 	public constantExpression(): ConstantExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ConstantExpressionContext);
@@ -7993,23 +8044,23 @@ export class LabeledStatementContext extends ParserRuleContext {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return KipperParser.RULE_labeledStatement; }
+	public get ruleIndex(): number { return KipperParser.RULE_switchLabeledStatement; }
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterLabeledStatement) {
-			listener.enterLabeledStatement(this);
+		if (listener.enterSwitchLabeledStatement) {
+			listener.enterSwitchLabeledStatement(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitLabeledStatement) {
-			listener.exitLabeledStatement(this);
+		if (listener.exitSwitchLabeledStatement) {
+			listener.exitSwitchLabeledStatement(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitLabeledStatement) {
-			return visitor.visitLabeledStatement(this);
+		if (visitor.visitSwitchLabeledStatement) {
+			return visitor.visitSwitchLabeledStatement(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
