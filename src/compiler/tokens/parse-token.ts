@@ -94,7 +94,9 @@ export abstract class CompilableParseToken extends ParseToken {
 		let start = this.antlrContext.start.startIndex;
 
 		// If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
-		if (inputStream === undefined) return this.antlrContext.text;
+		if (inputStream === undefined) {
+			return this.antlrContext.text;
+		}
 
 		// If {@link this.antlrContext.stop} is defined, then use {@link this.antlrContext.stop.stopIndex}, otherwise use
 		// the last index of the "virtual" file/buffer, which is {@link inputStream.size} - 2 (Accounting for the
@@ -137,7 +139,7 @@ export abstract class CompilableParseToken extends ParseToken {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	abstract compileCtxAndChildren(): Array<string>;
 }

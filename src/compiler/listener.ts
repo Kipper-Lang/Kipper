@@ -20,7 +20,6 @@ import {
 	BlockItemListContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
-	ConstantPrimaryExpressionContext,
 	DeclarationContext,
 	DeclarationSpecifierContext,
 	DeclarationSpecifiersContext,
@@ -32,7 +31,7 @@ import {
 	ExternalFunctionDefinitionContext,
 	ExternalItemContext,
 	FStringPrimaryExpressionContext,
-	FunctionCallExpressionContext,
+	FunctionCallPostfixExpressionContext,
 	FunctionDefinitionContext,
 	IdentifierPrimaryExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
@@ -48,7 +47,6 @@ import {
 	ParameterDeclarationContext,
 	ParameterListContext,
 	ParameterTypeListContext,
-	ReferenceExpressionContext,
 	SelectionStatementContext,
 	SingleItemTypeSpecifierContext,
 	StatementContext,
@@ -60,13 +58,19 @@ import {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 	ArraySpecifierContext,
-	ListConstantPrimaryExpressionContext,
 	ListConstantContext,
+	NumberPrimaryExpressionContext,
+	CharacterPrimaryExpressionContext,
+	ListPrimaryExpressionContext,
 } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import { CompilableParseToken, Expression, ExpressionStatement } from "./tokens";
-import { antlrExpressionCtx, getExpressionInstance } from "./tokens/expressions";
+import { getExpressionInstance } from "./tokens/expressions";
+import {
+	ArraySpecifierPostfixExpressionContext,
+	IncrementOrDecrementPostfixExpressionContext,
+} from "./parser/KipperParser";
 
 const passOnHandler: () => void = (() => {});
 
@@ -167,7 +171,7 @@ export class KipperFileListener implements KipperListener {
 	 */
 	private handleIncomingExpressionCtx(ctx: ParserRuleContext) {
 		if (this._currentExpression === undefined) {
-			this._currentExpression = new Expression(ctx, this.fileCtx);
+			this._currentExpression = getExpressionInstance(ctx, this.fileCtx);
 			this._currentPrimaryToken?.addNewChild(this._currentExpression);
 		} else {
 			// Generating a new expression, which a child of the previous expression.
@@ -246,6 +250,29 @@ export class KipperFileListener implements KipperListener {
 	// -- Expression Section --
 
 	/**
+	 * We are ignoring primary expressions, and only going to handle the rules 'identifierPrimaryExpression'
+	 * 'constantPrimaryExpression', 'stringPrimaryExpression', 'fStringPrimaryExpression' and
+	 * 'tangledPrimaryExpression', which implement a more precise 'primaryExpression' rule.
+	 *
+	 * This is to simplify the walking process, without having to check if the expression is actually used every time
+	 * an expression is called.
+	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.primaryExpression`.
+	//  *
+	//  * This is the lowest expression / This has the highest importance of all!
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterPrimaryExpression(ctx: PrimaryExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.primaryExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitPrimaryExpression(ctx: PrimaryExpressionContext): void {}
+
+	/**
 	 * Enter a parse tree produced by the `identifierPrimaryExpression`
 	 * Labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
@@ -260,24 +287,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	exitIdentifierPrimaryExpression(ctx: IdentifierPrimaryExpressionContext): void {
-		this.handleExitingExpressionCtx();
-	}
-
-	/**
-	 * Enter a parse tree produced by the `constantPrimaryExpression`
-	 * Labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	enterConstantPrimaryExpression(ctx: ConstantPrimaryExpressionContext): void {
-		this.handleIncomingExpressionCtx(ctx);
-	}
-
-	/**
-	 * Exit a parse tree produced by the `constantPrimaryExpression`
-	 * Labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	exitConstantPrimaryExpression(ctx: ConstantPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
@@ -300,7 +309,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Enter a parse tree produced by the `fstringPrimaryExpression`
+	 * Enter a parse tree produced by the `fStringPrimaryExpression`
 	 * Labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
@@ -309,7 +318,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Exit a parse tree produced by the `fstringPrimaryExpression`
+	 * Exit a parse tree produced by the `fStringPrimaryExpression`
 	 * Labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
@@ -336,11 +345,47 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
+	 * Enter a parse tree produced by the `numberPrimaryExpression`
+	 * labeled alternative in `KipperParser.PrimaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	enterNumberPrimaryExpression(ctx: NumberPrimaryExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `numberPrimaryExpression`
+	 * labeled alternative in `KipperParser.PrimaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	exitNumberPrimaryExpression(ctx: NumberPrimaryExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by the `characterPrimaryExpression`
+	 * labeled alternative in `KipperParser.PrimaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	enterCharacterPrimaryExpression(ctx: CharacterPrimaryExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `characterPrimaryExpression`
+	 * labeled alternative in `KipperParser.PrimaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	exitCharacterPrimaryExpression(ctx: CharacterPrimaryExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
 	 * Enter a parse tree produced by the `listConstantPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx The parse tree
 	 */
-	enterListConstantPrimaryExpression(ctx: ListConstantPrimaryExpressionContext): void {
+	enterListPrimaryExpression(ctx: ListPrimaryExpressionContext): void {
 		this.handleIncomingExpressionCtx(ctx);
 	}
 
@@ -349,7 +394,7 @@ export class KipperFileListener implements KipperListener {
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx The parse tree
 	 */
-	exitListConstantPrimaryExpression(ctx: ListConstantPrimaryExpressionContext): void {
+	exitListPrimaryExpression(ctx: ListPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
@@ -365,62 +410,91 @@ export class KipperFileListener implements KipperListener {
 	 */
 	exitListConstant(ctx: ListConstantContext): void {}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.primaryExpression`.
-	//  *
-	//  * This is the lowest expression / This has the highest importance of all!
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterPrimaryExpression(ctx: PrimaryExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.primaryExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitPrimaryExpression(ctx: PrimaryExpressionContext): void {}
-
 	/**
-	 * We are ignoring primary expressions, and only going to handle the rules 'identifierPrimaryExpression'
-	 * 'constantPrimaryExpression', 'stringPrimaryExpression', 'fStringPrimaryExpression' and
-	 * 'tangledPrimaryExpression', which implement a more precise 'primaryExpression' rule.
+	 * We are ignoring postfix expressions, and only going to handle the rules 'referenceExpression' and
+	 * 'functionCallExpression', which implement a more precise 'postfixExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time
 	 * an expression is called.
 	 */
 
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.postfixExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterPostfixExpression(ctx: PostfixExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.postfixExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitPostfixExpression(ctx: PostfixExpressionContext): void {}
+
 	/**
-	 * Enter a parse tree produced by the `ReferenceExpression`
+	 * Enter a parse tree produced by the `passOnPostfixExpression`
 	 * Labeled alternative in `KipperParser.postfixExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterReferenceExpression(ctx: ReferenceExpressionContext): void {
+	enterPassOnPostfixExpression: () => void = passOnHandler; // pass on expressions are always ignored
+
+	/**
+	 * Exit a parse tree produced by the `passOnPostfixExpression`
+	 * Labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitPassOnPostfixExpression: () => void = passOnHandler; // pass on expressions are always ignored
+
+	/**
+	 * Enter a parse tree produced by the `arraySpecifierPostfixExpression`
+	 * Labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterArraySpecifierPostfixExpression(ctx: ArraySpecifierPostfixExpressionContext): void {
 		this.handleIncomingExpressionCtx(ctx);
 	}
 
 	/**
-	 * Exit a parse tree produced by the `ReferenceExpression`
+	 * Exit a parse tree produced by the `arraySpecifierPostfixExpression`
 	 * Labeled alternative in `KipperParser.postfixExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitReferenceExpression(ctx: ReferenceExpressionContext): void {
+	exitArraySpecifierPostfixExpression(ctx: ArraySpecifierPostfixExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
 	/**
-	 * Enter a parse tree produced by the `FunctionCallExpression`
+	 * Enter a parse tree produced by the `incrementOrDecrementPostfixExpression`
 	 * Labeled alternative in `KipperParser.postfixExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterFunctionCallExpression(ctx: FunctionCallExpressionContext): void {
+	enterIncrementOrDecrementPostfixExpression(ctx: IncrementOrDecrementPostfixExpressionContext): void {
 		this.handleIncomingExpressionCtx(ctx);
 	}
 
 	/**
-	 * Exit a parse tree produced by the `FunctionCallExpression`
+	 * Exit a parse tree produced by the `incrementOrDecrementPostfixExpression`
 	 * Labeled alternative in `KipperParser.postfixExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitFunctionCallExpression(ctx: FunctionCallExpressionContext): void {
+	exitIncrementOrDecrementPostfixExpression(ctx: IncrementOrDecrementPostfixExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by the `functionCallPostfixExpression`
+	 * Labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	enterFunctionCallPostfixExpression(ctx: FunctionCallPostfixExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `functionCallPostfixExpression`
+	 * Labeled alternative in `KipperParser.postfixExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	 */
+	exitFunctionCallPostfixExpression(ctx: FunctionCallPostfixExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
@@ -454,25 +528,26 @@ export class KipperFileListener implements KipperListener {
 	 */
 	exitArraySpecifier(ctx: ArraySpecifierContext): void {}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.postfixExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterPostfixExpression(ctx: PostfixExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.postfixExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitPostfixExpression(ctx: PostfixExpressionContext): void {}
-
 	/**
-	 * We are ignoring postfix expressions, and only going to handle the rules 'referenceExpression' and
-	 * 'functionCallExpression', which implement a more precise 'postfixExpression' rule.
+	 * We are ignoring unary expressions, and only going to handle the rules 'passOnUnaryExpression',
+	 * 'incrementOrDecrementUnaryExpression' and 'operatorModifiedUnaryExpression', which implement a more precise
+	 * 'unaryExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time
 	 * an expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.unaryExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterUnaryExpression(ctx: UnaryExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.unaryExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitUnaryExpression(ctx: UnaryExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnUnaryExpression`
@@ -536,26 +611,26 @@ export class KipperFileListener implements KipperListener {
 	 */
 	exitUnaryOperator(ctx: UnaryOperatorContext): void {}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.unaryExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterUnaryExpression(ctx: UnaryExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.unaryExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitUnaryExpression(ctx: UnaryExpressionContext): void {}
-
 	/**
-	 * We are ignoring unary expressions, and only going to handle the rules 'passOnUnaryExpression',
-	 * 'incrementOrDecrementUnaryExpression' and 'operatorModifiedUnaryExpression', which implement a more precise
-	 * 'unaryExpression' rule.
+	 * We are ignoring cast or convert expressions, and only going to handle the rules 'passOnCastOrConvertExpression',
+	 * and 'actualCastOrConvertExpression', which implement a more precise 'castOrConvertExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time
 	 * an expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.castOrConvertExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterCastOrConvertExpression(ctx: CastOrConvertExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.castOrConvertExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitCastOrConvertExpression(ctx: CastOrConvertExpressionContext): void {}
+
 
 	/**
 	 * Enter a parse tree produced by the `passOnCastOrConvertExpression`
@@ -589,25 +664,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.castOrConvertExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterCastOrConvertExpression(ctx: CastOrConvertExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.castOrConvertExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitCastOrConvertExpression(ctx: CastOrConvertExpressionContext): void {}
-
 	/**
-	 * We are ignoring cast or convert expressions, and only going to handle the rules 'passOnCastOrConvertExpression',
-	 * and 'actualCastOrConvertExpression', which implement a more precise 'castOrConvertExpression' rule.
+	 * We are ignoring multiplicative expressions, and only going to handle the rules 'passOnMultiplicativeExpression',
+	 * and 'actualMultiplicativeExpression', which implement a more precise 'multiplicativeExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time
 	 * an expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.multiplicativeExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterMultiplicativeExpression(ctx: MultiplicativeExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.multiplicativeExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitMultiplicativeExpression(ctx: MultiplicativeExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnMultiplicativeExpression`
@@ -641,25 +716,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.multiplicativeExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterMultiplicativeExpression(ctx: MultiplicativeExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.multiplicativeExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitMultiplicativeExpression(ctx: MultiplicativeExpressionContext): void {}
-
 	/**
-	 * We are ignoring multiplicative expressions, and only going to handle the rules 'passOnMultiplicativeExpression',
-	 * and 'actualMultiplicativeExpression', which implement a more precise 'multiplicativeExpression' rule.
+	 * We are ignoring additive expressions, and only going to handle the rules 'passOnAdditiveExpression',
+	 * and 'actualAdditiveExpression', which implement a more precise 'additiveExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time
 	 * an expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.additiveExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterAdditiveExpression(ctx: AdditiveExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.additiveExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitAdditiveExpression(ctx: AdditiveExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnAdditiveExpression`
@@ -693,25 +768,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
+	/**
+	 * We are ignoring relational expressions, and only going to handle the rules 'passOnRelationalExpression',
+	 * and 'actualRelationalExpression', which implement a more precise 'relationalExpression' rule.
+	 *
+	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
+	 * expression is called.
+	 */
+
 	// /**
-	//  * Enter a parse tree produced by `KipperParser.additiveExpression`.
+	//  * Enter a parse tree produced by `KipperParser.relationalExpression`.
 	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	//  */
-	// enterAdditiveExpression(ctx: AdditiveExpressionContext): void {}
+	// enterRelationalExpression(ctx: RelationalExpressionContext): void {}
 	//
 	// /**
-	//  * Exit a parse tree produced by `KipperParser.additiveExpression`.
+	//  * Exit a parse tree produced by `KipperParser.relationalExpression`.
 	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	//  */
-	// exitAdditiveExpression(ctx: AdditiveExpressionContext): void {}
-
-	/**
-	 * We are ignoring additive expressions, and only going to handle the rules 'passOnAdditiveExpression',
-	 * and 'actualAdditiveExpression', which implement a more precise 'additiveExpression' rule.
-	 *
-	 * This is to simplify the walking process, without having to check if the expression is actually used every time
-	 * an expression is called.
-	 */
+	// exitRelationalExpression(ctx: RelationalExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnRelationalExpression`
@@ -745,25 +820,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.relationalExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterRelationalExpression(ctx: RelationalExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.relationalExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitRelationalExpression(ctx: RelationalExpressionContext): void {}
-
 	/**
-	 * We are ignoring relational expressions, and only going to handle the rules 'passOnRelationalExpression',
-	 * and 'actualRelationalExpression', which implement a more precise 'relationalExpression' rule.
+	 * We are ignoring equality expressions, and only going to handle the rules 'passOnEqualityExpression',
+	 * and 'actualEqualityExpression', which implement a more precise 'equalityExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
 	 * expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.equalityExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterEqualityExpression(ctx: EqualityExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.equalityExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitEqualityExpression(ctx: EqualityExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnEqualityExpression`
@@ -797,25 +872,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.equalityExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterEqualityExpression(ctx: EqualityExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.equalityExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitEqualityExpression(ctx: EqualityExpressionContext): void {}
-
 	/**
-	 * We are ignoring equality expressions, and only going to handle the rules 'passOnEqualityExpression',
-	 * and 'actualEqualityExpression', which implement a more precise 'equalityExpression' rule.
+	 * We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
+	 * and 'actualLogicalAndExpression', which implement a more precise 'logicalAndExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
 	 * expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.logicalAndExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterLogicalAndExpression(ctx: LogicalAndExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.logicalAndExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitLogicalAndExpression(ctx: LogicalAndExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnLogicalAndExpression`
@@ -849,25 +924,26 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.logicalAndExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterLogicalAndExpression(ctx: LogicalAndExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.logicalAndExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitLogicalAndExpression(ctx: LogicalAndExpressionContext): void {}
-
 	/**
-	 * We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
-	 * and 'actualLogicalAndExpression', which implement a more precise 'logicalAndExpression' rule.
+	 * We are ignoring logical or expressions, and only going to handle the rules 'passOnLogicalOrExpression',
+	 * and 'actualLogicalOrExpression', which implement a more precise 'logicalOrExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
 	 * expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.logicalOrExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterLogicalOrExpression(ctx: LogicalOrExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.logicalOrExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitLogicalOrExpression(ctx: LogicalOrExpressionContext): void {}
+
 
 	/**
 	 * Enter a parse tree produced by the `passOnLogicalOrExpression`
@@ -901,25 +977,25 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.logicalOrExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterLogicalOrExpression(ctx: LogicalOrExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.logicalOrExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitLogicalOrExpression(ctx: LogicalOrExpressionContext): void {}
-
 	/**
-	 * We are ignoring logical or expressions, and only going to handle the rules 'passOnLogicalOrExpression',
-	 * and 'actualLogicalOrExpression', which implement a more precise 'logicalOrExpression' rule.
+	 * We are ignoring conditional expressions, and only going to handle the rules 'passOnConditionalExpression',
+	 * and 'actualConditionalExpression', which implement a more precise 'conditionalExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
 	 * expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.conditionalExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterConditionalExpression(ctx: ConditionalExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.conditionalExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitConditionalExpression(ctx: ConditionalExpressionContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
@@ -953,25 +1029,26 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingExpressionCtx();
 	}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.conditionalExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterConditionalExpression(ctx: ConditionalExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.conditionalExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitConditionalExpression(ctx: ConditionalExpressionContext): void {}
-
 	/**
-	 * We are ignoring conditional expressions, and only going to handle the rules 'passOnConditionalExpression',
-	 * and 'actualConditionalExpression', which implement a more precise 'conditionalExpression' rule.
+	 * We are ignoring assignment expressions, and only going to handle the rules 'passOnAssignmentExpression',
+	 * and 'actualAssignmentExpression', which implement a more precise 'assignmentExpression' rule.
 	 *
 	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
 	 * expression is called.
 	 */
+
+	// /**
+	//  * Enter a parse tree produced by `KipperParser.assignmentExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// enterAssignmentExpression(ctx: AssignmentExpressionContext): void {}
+	//
+	// /**
+	//  * Exit a parse tree produced by `KipperParser.assignmentExpression`.
+	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
+	//  */
+	// exitAssignmentExpression(ctx: AssignmentExpressionContext): void {}
+
 
 	/**
 	 * Enter a parse tree produced by the `passOnAssignmentExpression`
@@ -1017,24 +1094,8 @@ export class KipperFileListener implements KipperListener {
 	 */
 	exitAssignmentOperator(ctx: AssignmentOperatorContext): void {}
 
-	// /**
-	//  * Enter a parse tree produced by `KipperParser.assignmentExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// enterAssignmentExpression(ctx: AssignmentExpressionContext): void {}
-	//
-	// /**
-	//  * Exit a parse tree produced by `KipperParser.assignmentExpression`.
-	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	//  */
-	// exitAssignmentExpression(ctx: AssignmentExpressionContext): void {}
-
 	/**
-	 * We are ignoring assignment expressions, and only going to handle the rules 'passOnAssignmentExpression',
-	 * and 'actualAssignmentExpression', which implement a more precise 'assignmentExpression' rule.
-	 *
-	 * This is to simplify the walking process, without having to check if the expression is actually used every time an
-	 * expression is called.
+	 * We are ignoring constant expressions and default expressions, as the children will handle everything.
 	 */
 
 	// /**
@@ -1066,10 +1127,6 @@ export class KipperFileListener implements KipperListener {
 	//  * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	//  */
 	// exitExpression(ctx: ExpressionContext): void {}
-
-	/**
-	 * We are ignoring constant expressions and default expressions, as the children will handle everything.
-	 */
 
 	// -- Statement and Declaration section --
 

@@ -28,11 +28,12 @@ endOfItem
 
 primaryExpression
     :   Identifier # identifierPrimaryExpression
-    |   Constant # constantPrimaryExpression
     |   (StringLiteral WS*)+ # stringPrimaryExpression
     |   (FStringLiteral WS*)+ # fStringPrimaryExpression
     |   '(' expression ')' # tangledPrimaryExpression
-    |   listConstant #listConstantPrimaryExpression
+    |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
+    |   CharacterConstant #characterPrimaryExpression
+    |   listConstant #listPrimaryExpression
     ;
 
 listConstant
@@ -40,12 +41,10 @@ listConstant
     ;
 
 postfixExpression
-    :   primaryExpression (
-            arraySpecifier+ // array specifier
-            | incrementOrDecrementOperator // left-to-right increment/decrement
-        )? # referenceExpression
-        |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallExpression
+    :   primaryExpression #passOnPostfixExpression
+    |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
+    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
+    |   'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallPostfixExpression
     ;
 
 arraySpecifier
@@ -375,13 +374,6 @@ HexQuad
     :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
     ;
 
-Constant
-    :   IntegerConstant
-    |   FloatingConstant
-    |   CharacterConstant
-    ;
-
-fragment
 IntegerConstant
     :   DecimalConstant IntegerSuffix?
     |   OctalConstant IntegerSuffix?
@@ -452,7 +444,6 @@ LongLongSuffix
     :   'll' | 'LL'
     ;
 
-fragment
 FloatingConstant
     :   DecimalFloatingConstant
     |   HexadecimalFloatingConstant
@@ -510,12 +501,8 @@ FloatingSuffix
     :   [flFL]
     ;
 
-fragment
 CharacterConstant
     :   '\'' CCharSequence '\''
-    |   'L\'' CCharSequence '\''
-    |   'u\'' CCharSequence '\''
-    |   'U\'' CCharSequence '\''
     ;
 
 fragment

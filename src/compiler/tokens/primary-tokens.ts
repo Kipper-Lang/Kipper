@@ -17,63 +17,70 @@ import { CompilableParseToken } from "./parse-token";
 
 export class FunctionDefinition extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class Declaration extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class CompoundStatement extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class SelectionStatement extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class ExpressionStatement extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class IterationStatement extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }
 
 export class JumpStatement extends CompilableParseToken {
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 }

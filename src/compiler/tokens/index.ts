@@ -10,18 +10,5 @@
  * @since 0.0.6
  */
 export { ParseToken, CompilableParseToken } from "./parse-token";
-export {
-	Expression,
-	ConstantPrimaryExpression,
-	IdentifierPrimaryExpression,
-	StringPrimaryExpression,
-} from "./expressions";
-export {
-	ExpressionStatement,
-	IterationStatement,
-	FunctionDefinition,
-	CompoundStatement,
-	Declaration,
-	JumpStatement,
-	SelectionStatement,
-} from "./primary-tokens";
+export * from "./expressions";
+export * from "./primary-tokens";

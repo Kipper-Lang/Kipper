@@ -82,14 +82,18 @@ export {
   PassOnUnaryExpressionContext,
   IncrementOrDecrementUnaryExpressionContext,
   OperatorModifiedUnaryExpressionContext,
-  ReferenceExpressionContext,
-  FunctionCallExpressionContext,
+  FunctionCallPostfixExpressionContext,
   IdentifierPrimaryExpressionContext,
-  ConstantPrimaryExpressionContext,
   StringPrimaryExpressionContext,
   FStringPrimaryExpressionContext,
   TangledPrimaryExpressionContext,
   ArraySpecifierContext,
-  ListConstantPrimaryExpressionContext,
-  ListConstantContext
+  ListConstantContext,
+  CharacterPrimaryExpressionContext,
+  NumberPrimaryExpressionContext,
+  ListPrimaryExpressionContext,
+  ArraySpecifierPostfixExpressionContext,
+  IncrementOrDecrementPostfixExpressionContext,
+  PassOnPostfixExpressionContext,
+  IncrementOrDecrementOperatorContext
 } from './KipperParser';

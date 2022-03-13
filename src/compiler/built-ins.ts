@@ -10,10 +10,7 @@
 // TODO! Finish implementation of global functions and allow them to be passed to a compilation to make them available
 //  inside the programs global scope
 
-/**
- * All built-in types inside kipper that are allowed to be used.
- */
-export type KipperType = "void" | "num" | "str" | "char" | "bool" | "list";
+import { KipperType } from "./types";
 
 /**
  * Interface representation of an argument of a {@link GlobalFunction}.

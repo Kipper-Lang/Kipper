@@ -9,7 +9,6 @@ yarn-error.log*
 *-debug.log
 *-error.log
 /.nyc_output
-/lib
 /tmp
 /yarn.lock
 node_modules

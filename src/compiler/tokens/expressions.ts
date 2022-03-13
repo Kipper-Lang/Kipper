@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
  */
-import { CompilableParseToken } from "./parse-token";
+import { CompilableParseToken, ParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
 	AssignmentExpressionContext,
@@ -15,29 +15,36 @@ import {
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	RelationalExpressionContext,
-	ConstantPrimaryExpressionContext,
 	FStringPrimaryExpressionContext,
-	FunctionCallExpressionContext,
+	FunctionCallPostfixExpressionContext,
 	IdentifierPrimaryExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
-	ReferenceExpressionContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
+	CharacterPrimaryExpressionContext,
+	ListPrimaryExpressionContext,
+	ArraySpecifierPostfixExpressionContext,
+	IncrementOrDecrementPostfixExpressionContext,
+	NumberPrimaryExpressionContext,
 } from "../parser";
 import { KipperProgramContext } from "../program-ctx";
+import { KipperType } from "../types";
 
 /**
  * Every antlr4 expression type
  */
 export type antlrExpressionCtx =
-	IdentifierPrimaryExpressionContext
-	| ConstantPrimaryExpressionContext
+	NumberPrimaryExpressionContext
+	| CharacterPrimaryExpressionContext
+	|	ListPrimaryExpressionContext
+	| IdentifierPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
 	| TangledPrimaryExpressionContext
-	| ReferenceExpressionContext
-	| FunctionCallExpressionContext
+	|	ArraySpecifierPostfixExpressionContext
+	|	IncrementOrDecrementPostfixExpressionContext
+	| FunctionCallPostfixExpressionContext
 	| IncrementOrDecrementUnaryExpressionContext
 	| OperatorModifiedUnaryExpressionContext
 	| CastOrConvertExpressionContext
@@ -56,20 +63,26 @@ export type antlrExpressionCtx =
  * @param fileCtx The file context class that will be assigned to the instance.
  */
 export function getExpressionInstance(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext): Expression {
-	if (antlrContext instanceof IdentifierPrimaryExpressionContext) {
+	if (antlrContext instanceof NumberPrimaryExpressionContext) {
+		return new NumberPrimaryExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof CharacterPrimaryExpressionContext) {
+		return new CharacterPrimaryExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof ListPrimaryExpressionContext) {
+		return new ListPrimaryExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof IdentifierPrimaryExpressionContext) {
 		return new IdentifierPrimaryExpression(antlrContext, fileCtx);
-	} else if (antlrContext instanceof ConstantPrimaryExpressionContext) {
-		return new ConstantPrimaryExpression(antlrContext, fileCtx);
 	} else if (antlrContext instanceof StringPrimaryExpressionContext) {
 		return new StringPrimaryExpression(antlrContext, fileCtx);
 	} else if (antlrContext instanceof FStringPrimaryExpressionContext) {
 		return new FStringPrimaryExpression(antlrContext, fileCtx);
 	} else if (antlrContext instanceof TangledPrimaryExpressionContext) {
 		return new TangledPrimaryExpression(antlrContext, fileCtx);
-	} else if (antlrContext instanceof ReferenceExpressionContext) {
-		return new ReferenceExpression(antlrContext, fileCtx);
-	} else if (antlrContext instanceof FunctionCallExpressionContext) {
-		return new FunctionCallExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof ArraySpecifierPostfixExpressionContext) {
+		return new ArraySpecifierExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof IncrementOrDecrementPostfixExpressionContext) {
+		return new IncrementOrDecrementExpression(antlrContext, fileCtx);
+	} else if (antlrContext instanceof FunctionCallPostfixExpressionContext) {
+		return new FunctionCallPostfixExpression(antlrContext, fileCtx);
 	} else if (antlrContext instanceof IncrementOrDecrementUnaryExpressionContext) {
 		return new IncrementOrDecrementUnaryExpression(antlrContext, fileCtx);
 	} else if (antlrContext instanceof OperatorModifiedUnaryExpressionContext) {
@@ -101,7 +114,7 @@ export function getExpressionInstance(antlrContext: antlrExpressionCtx, fileCtx:
  * {@link compileCtxAndChildren}.
  * @since 0.0.6
  */
-export class Expression extends CompilableParseToken {
+export abstract class Expression extends CompilableParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
 	 * which is returned inside the getter 'antlrContext'.
@@ -109,22 +122,192 @@ export class Expression extends CompilableParseToken {
 	 */
 	protected override readonly _antlrContext: antlrExpressionCtx;
 
-	constructor(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext) {
+	protected constructor(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext) {
 		super(antlrContext, fileCtx);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	abstract compileCtxAndChildren(): Array<string>;
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): antlrExpressionCtx {
+		return this._antlrContext;
+	}
+}
+
+export abstract class ConstantExpression extends Expression {
+	/**
+	 * The type of the constant expression.
+	 */
+	public readonly type: KipperType;
+
+	protected constructor(antlrContext: antlrExpressionCtx, fileCtx: KipperProgramContext, type: KipperType) {
+		super(antlrContext, fileCtx);
+		this.type = type;
+	}
+}
+
+/**
+ *  Integer constant expression class, which represents an integer constant in the kipper language and is compilable
+ * using {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ */
+export class NumberPrimaryExpression extends ConstantExpression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: NumberPrimaryExpressionContext;
+
+	public readonly value: number;
+
+	constructor(antlrContext: NumberPrimaryExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx, "num" as KipperType);
+		this._antlrContext = antlrContext;
+
+		// Setting the numeric value
+		this.value = +this.sourceCode;
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): NumberPrimaryExpressionContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ *  Character constant expression class, which represents an integer constant in the kipper language and is
+ * compilable using {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ */
+export class CharacterPrimaryExpression extends ConstantExpression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: CharacterPrimaryExpressionContext;
+
+	/**
+	 * The value of this character expression
+	 */
+	public readonly value: string;
+
+	constructor(antlrContext: CharacterPrimaryExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx, "char" as KipperType);
+		this._antlrContext = antlrContext;
+
+		// Setting the character value
+		this.value = this.sourceCode.slice(1, this.sourceCode.length-1);
+
+		// TODO! Add check for length, which forbids empty characters and multi-characters!
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	compileCtxAndChildren(): Array<string> {
+		// TODO!
+		return [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): CharacterPrimaryExpressionContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ *  List constant expression class, which represents a list constant in the kipper language and is
+ * compilable using {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ */
+export class ListPrimaryExpression extends ConstantExpression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: ListPrimaryExpressionContext;
+
+	constructor(antlrContext: ListPrimaryExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx, "list" as KipperType);
+		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	compileCtxAndChildren(): Array<string> {
+		// TODO!
+		return [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): ListPrimaryExpressionContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ * String class, which represents a string expression in the kipper language and is compilable using
+ * {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ */
+export class StringPrimaryExpression extends ConstantExpression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: StringPrimaryExpressionContext;
+
+	/**
+	 * String content of this expression.
+	 */
+	public readonly stringContent: string;
+
+	constructor(antlrContext: StringPrimaryExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx, "str" as KipperType);
+		this._antlrContext = antlrContext;
+
+		// Get string content for the f-string. Removing start and end character
+		this.stringContent = this.sourceCode.slice(1, this.sourceCode.length-1);
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	compileCtxAndChildren(): Array<string> {
+		return [
+			`"${this.stringContent}"`
+		];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): StringPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -142,15 +325,24 @@ export class IdentifierPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: IdentifierPrimaryExpressionContext;
 
+	/**
+	 * The identifier of this expression.
+	 */
+	public readonly identifierValue: string;
+
 	constructor(antlrContext: IdentifierPrimaryExpressionContext, fileCtx: KipperProgramContext) {
 		super(antlrContext, fileCtx);
 		this._antlrContext = antlrContext;
+
+		// Fetching the identifier
+		this.identifierValue = this.sourceCode;
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
@@ -158,72 +350,6 @@ export class IdentifierPrimaryExpression extends Expression {
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	override get antlrContext(): IdentifierPrimaryExpressionContext {
-		return this._antlrContext;
-	}
-}
-
-/**
- * Constant expression class, which represents a constant expression in the kipper language and is compilable
- * using {@link compileCtxAndChildren}.
- * @since 0.0.6
- */
-export class ConstantPrimaryExpression extends Expression {
-	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
-	 * @private
-	 */
-	protected override readonly _antlrContext: ConstantPrimaryExpressionContext;
-
-	constructor(antlrContext: ConstantPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
-		this._antlrContext = antlrContext;
-	}
-
-	/**
-	 * Generates the typescript for this item, and all children (if they exist).
-	 */
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	override get antlrContext(): antlrExpressionCtx {
-		return this._antlrContext;
-	}
-}
-
-/**
- * String class, which represents a string expression in the kipper language and is compilable using
- * {@link compileCtxAndChildren}.
- * @since 0.0.6
- */
-export class StringPrimaryExpression extends Expression {
-	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
-	 * @private
-	 */
-	protected override readonly _antlrContext: StringPrimaryExpressionContext;
-
-	constructor(antlrContext: StringPrimaryExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
-		this._antlrContext = antlrContext;
-	}
-
-	/**
-	 * Generates the typescript for this item, and all children (if they exist).
-	 */
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	override get antlrContext(): antlrExpressionCtx {
 		return this._antlrContext;
 	}
 }
@@ -241,22 +367,25 @@ export class FStringPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: FStringPrimaryExpressionContext;
 
+	// TODO! Implement proper f-string value referencing using children expressions
+
 	constructor(antlrContext: FStringPrimaryExpressionContext, fileCtx: KipperProgramContext) {
 		super(antlrContext, fileCtx);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): FStringPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -264,6 +393,9 @@ export class FStringPrimaryExpression extends Expression {
 /**
  * Tangled expression class, which represents a tangled expression in the kipper language and is compilable
  * using {@link compileCtxAndChildren}.
+ *
+ * This class may only have children of type {@link CompilableParseToken}, as this expression itself does not
+ * compile anything and simply change the order of evaluation.
  * @since 0.0.6
  */
 export class TangledPrimaryExpression extends Expression {
@@ -274,61 +406,43 @@ export class TangledPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: TangledPrimaryExpressionContext;
 
+	/**
+	 * The private '_children' that actually stores the variable data,
+	 * which is returned inside the getter 'children'.
+	 * @private
+	 */
+	protected override readonly _children: Array<CompilableParseToken>;
+
 	constructor(antlrContext: TangledPrimaryExpressionContext, fileCtx: KipperProgramContext) {
 		super(antlrContext, fileCtx);
 		this._antlrContext = antlrContext;
+		this._children = [];
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * The children of this parse token, which **must** be of type {@link CompilableParseToken}, as this expression
+	 * itself does not compile anything and simply change the order of evaluation.
+	 */
+	get children(): Array<CompilableParseToken> {
+		return this._children;
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
-		return [];
+		// TODO! Add tests for this
+		let genCode: Array<string> = [];
+		for (let child of this._children) {
+			genCode = genCode.concat(child.compileCtxAndChildren());
+		}
+		return genCode;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
-		return this._antlrContext;
-	}
-}
-
-/**
- * Reference expression class, which represents an identifier reference expression in the kipper language and is
- * compilable using {@link compileCtxAndChildren}. This class is always going to be the context parent for the
- * following child classes:
- * - {@link IdentifierPrimaryExpression}
- * - {@link ConstantPrimaryExpression}
- * - {@link StringPrimaryExpression}
- * - {@link FStringPrimaryExpression}
- * - {@link TangledPrimaryExpression}
- * @since 0.0.6
- */
-export class ReferenceExpression extends Expression {
-	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
-	 * @private
-	 */
-	protected override readonly _antlrContext: ReferenceExpressionContext;
-
-	constructor(antlrContext: ReferenceExpressionContext, fileCtx: KipperProgramContext) {
-		super(antlrContext, fileCtx);
-		this._antlrContext = antlrContext;
-	}
-
-	/**
-	 * Generates the typescript for this item, and all children (if they exist).
-	 */
-	compileCtxAndChildren(): Array<string> {
-		return [];
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): TangledPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -340,30 +454,103 @@ export class ReferenceExpression extends Expression {
  * @example
  * call print("Hello world!")
  */
-export class FunctionCallExpression extends Expression {
+export class IncrementOrDecrementExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
 	 * which is returned inside the getter 'antlrContext'.
 	 * @private
 	 */
-	protected override readonly _antlrContext: FunctionCallExpressionContext;
+	protected override readonly _antlrContext: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrContext: FunctionCallExpressionContext, fileCtx: KipperProgramContext) {
+	constructor(antlrContext: IncrementOrDecrementPostfixExpressionContext, fileCtx: KipperProgramContext) {
 		super(antlrContext, fileCtx);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): IncrementOrDecrementPostfixExpressionContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ * Function call class, which represents a function call expression in the kipper language and is compilable using
+ * {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ * @example
+ * call print("Hello world!")
+ */
+export class ArraySpecifierExpression extends Expression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: ArraySpecifierPostfixExpressionContext;
+
+	constructor(antlrContext: ArraySpecifierPostfixExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx);
+		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	compileCtxAndChildren(): Array<string> {
+		// TODO!
+		return [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): ArraySpecifierPostfixExpressionContext {
+		return this._antlrContext;
+	}
+}
+
+/**
+ * Function call class, which represents a function call expression in the kipper language and is compilable using
+ * {@link compileCtxAndChildren}.
+ * @since 0.0.6
+ * @example
+ * call print("Hello world!")
+ */
+export class FunctionCallPostfixExpression extends Expression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the getter 'antlrContext'.
+	 * @private
+	 */
+	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
+
+	constructor(antlrContext: FunctionCallPostfixExpressionContext, fileCtx: KipperProgramContext) {
+		super(antlrContext, fileCtx);
+		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 */
+	compileCtxAndChildren(): Array<string> {
+		// TODO!
+		return [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	override get antlrContext(): FunctionCallPostfixExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -390,16 +577,17 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): IncrementOrDecrementUnaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -426,16 +614,17 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): OperatorModifiedUnaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -462,16 +651,17 @@ export class CastOrConvertExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): CastOrConvertExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -500,16 +690,17 @@ export class MultiplicativeExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): MultiplicativeExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -536,16 +727,17 @@ export class AdditiveExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): AdditiveExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -580,16 +772,17 @@ export class RelationalExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): RelationalExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -618,16 +811,17 @@ export class EqualityExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): EqualityExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -656,16 +850,17 @@ export class LogicalAndExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): LogicalAndExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -694,16 +889,17 @@ export class LogicalOrExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): LogicalOrExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -730,16 +926,17 @@ export class ConditionalExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): ConditionalExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -765,16 +962,17 @@ export class AssignmentExpression extends Expression {
 	}
 
 	/**
-	 * Generates the typescript for this item, and all children (if they exist).
+	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
 	compileCtxAndChildren(): Array<string> {
+		// TODO!
 		return [];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtx {
+	override get antlrContext(): AssignmentExpressionContext {
 		return this._antlrContext;
 	}
 }
