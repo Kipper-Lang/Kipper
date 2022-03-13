@@ -251,7 +251,7 @@ export class KipperFileListener implements KipperListener {
 		) {
 			this._currentPrimaryToken = this._currentPrimaryToken.parent;
 		} else {
-			this._currentExpression = undefined;
+			this._currentPrimaryToken = undefined;
 		}
 	}
 
