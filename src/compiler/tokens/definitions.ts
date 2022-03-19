@@ -2,10 +2,11 @@
  * Definition statements in the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
 import { CompilableParseToken, eligibleParentToken } from "./parse-token";
 import { DeclarationContext, FunctionDefinitionContext } from "../parser";
+import { KipperStorageType } from "../logic";
 
 /**
  * Every antlr4 definition ctx type
@@ -28,7 +29,7 @@ export function getDefinitionInstance(antlrContext: antlrDefinitionCtxType, pare
 /**
  * Base Definition class that represents a value or function definition in Kipper and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export abstract class Definition extends CompilableParseToken {
 	/**
@@ -38,9 +39,14 @@ export abstract class Definition extends CompilableParseToken {
 	 */
 	protected override readonly _antlrContext: antlrDefinitionCtxType;
 
+	protected readonly _storageType: KipperStorageType | undefined;
+
 	protected constructor(antlrContext: antlrDefinitionCtxType, parent: eligibleParentToken) {
 		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+
+		// TODO! Implement proper assignment
+		this._storageType = undefined;
 	}
 
 	/**
@@ -74,6 +80,7 @@ export class FunctionDefinition extends Definition {
 	override get antlrContext(): FunctionDefinitionContext {
 		return this._antlrContext;
 	}
+
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.

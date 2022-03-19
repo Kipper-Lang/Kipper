@@ -10,24 +10,24 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
-import { Function, globalWebPrintFunction } from "./built-ins";
+import { BuiltInFunction, builtInWebPrintFunction } from "./logic/built-ins";
 
 /**
  * Compilation Configuration for a Kipper program. This interface is wrapped using {@link RuntimeCompileConfig} and may
  * only be passed to {@link KipperCompiler.compile} if that class was used to wrap this interface.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export interface CompileConfig {
 	/**
 	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
 	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
 	 */
-	globals?: Array<Function>;
+	globals?: Array<BuiltInFunction>;
 	/**
 	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
 	 * the default array.
 	 */
-	extendGlobals?: Array<Function>;
+	extendGlobals?: Array<BuiltInFunction>;
 }
 
 /**
@@ -36,7 +36,7 @@ export interface CompileConfig {
  *
  * This class will store both the default values and actual values for the compilation. All actual values will be
  * processed and generated on construction.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class RuntimeCompileConfig {
 	/**
@@ -49,15 +49,15 @@ export class RuntimeCompileConfig {
 	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
-	public readonly defaultGlobals: Array<Function> = [
-		globalWebPrintFunction
+	public readonly defaultGlobals: Array<BuiltInFunction> = [
+		builtInWebPrintFunction,
 	];
 
 	/**
 	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
 	 * {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
-	public readonly actualGlobals: Array<Function>;
+	public readonly actualGlobals: Array<BuiltInFunction>;
 
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
@@ -128,7 +128,8 @@ export class KipperCompiler {
 	 */
 	private readonly _logger: KipperLogger;
 
-	constructor(logger: KipperLogger = new KipperLogger(() => {})) {
+	constructor(logger: KipperLogger = new KipperLogger(() => {
+	})) {
 		// using a general error listener for the entire compiler instance
 		this._errorListener = new KipperErrorListener<any>();
 		this._logger = logger;
@@ -198,7 +199,7 @@ export class KipperCompiler {
 	 * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
-	 * @param config {Function[]} Compilation Configuration, which defines how the compiler should handle the
+	 * @param config {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
 	 * program and compilation. This uses per default {@link RuntimeCompileConfig} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.

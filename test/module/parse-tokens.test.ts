@@ -1,9 +1,9 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import { CompilableParseToken, KipperParseStream } from "../../src";
-import { KipperProgramContext } from "../../src/compiler/program-ctx";
+import { KipperProgramContext } from "../../src/compiler/programCtx";
 import { KipperCompiler } from "../../src";
-import { RootFileParseToken } from "../../src/compiler/tokens/parse-token";
+import { RootFileParseToken } from "../../src/compiler/tokens/parseToken";
 
 const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
 

@@ -80,7 +80,8 @@ import {
 import { RootFileParseToken } from "./tokens/parse-token";
 import { IfStatementContext, SwitchStatementContext } from "./parser/KipperParser";
 
-const passOnHandler: () => void = () => {};
+const passOnHandler: () => void = () => {
+};
 
 /**
  * The listener for a {@link KipperProgramContext}, which walks through the generated
@@ -148,7 +149,7 @@ export class KipperFileListener implements KipperListener {
 	/**
 	 * The root token instance that represents a simplified Kipper parse tree that may be used for semantic analysis and
 	 * compilation.
-	 * @since 0.0.6
+	 * @since 0.1.0
 	 */
 	get kipperParseTree(): RootFileParseToken {
 		return this._kipperParseTree;
@@ -184,7 +185,7 @@ export class KipperFileListener implements KipperListener {
 		if (this.getCurrentProcessedToken instanceof RootFileParseToken) {
 			throw new Error(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
-					" definition",
+				" definition",
 			);
 		}
 
@@ -259,13 +260,15 @@ export class KipperFileListener implements KipperListener {
 	 * Function that is called every time an time is entered
 	 * @param ctx The context of the rule
 	 */
-	enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {}
+	enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {
+	}
 
 	/**
 	 * Function that is called every time an item is exited.
 	 * @param ctx The context of the rule.
 	 */
-	exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {}
+	exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {
+	}
 
 	// -- Top Item Section --
 
@@ -460,13 +463,15 @@ export class KipperFileListener implements KipperListener {
 	 * Enter a parse tree produced by `KipperParser.listConstant`.
 	 * @param ctx The parse tree
 	 */
-	enterListConstant(ctx: ListConstantContext): void {}
+	enterListConstant(ctx: ListConstantContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.listConstant`.
 	 * @param ctx The parse tree
 	 */
-	exitListConstant(ctx: ListConstantContext): void {}
+	exitListConstant(ctx: ListConstantContext): void {
+	}
 
 	/**
 	 * We are ignoring postfix expressions, and only going to handle the rules 'referenceExpression' and
@@ -563,7 +568,8 @@ export class KipperFileListener implements KipperListener {
 	 * the {@link ctx} instance.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterArgumentExpressionList(ctx: ArgumentExpressionListContext): void {}
+	enterArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
@@ -572,19 +578,22 @@ export class KipperFileListener implements KipperListener {
 	 * the {@link ctx} instance.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitArgumentExpressionList(ctx: ArgumentExpressionListContext): void {}
+	exitArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.arraySpecifier`.
 	 * @param ctx The parse tree
 	 */
-	enterArraySpecifier(ctx: ArraySpecifierContext): void {}
+	enterArraySpecifier(ctx: ArraySpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.arraySpecifier`.
 	 * @param ctx The parse tree
 	 */
-	exitArraySpecifier(ctx: ArraySpecifierContext): void {}
+	exitArraySpecifier(ctx: ArraySpecifierContext): void {
+	}
 
 	/**
 	 * We are ignoring unary expressions, and only going to handle the rules 'passOnUnaryExpression',
@@ -661,13 +670,15 @@ export class KipperFileListener implements KipperListener {
 	 * Enter a parse tree produced by `KipperParser.unaryOperator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterUnaryOperator(ctx: UnaryOperatorContext): void {}
+	enterUnaryOperator(ctx: UnaryOperatorContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.unaryOperator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitUnaryOperator(ctx: UnaryOperatorContext): void {}
+	exitUnaryOperator(ctx: UnaryOperatorContext): void {
+	}
 
 	/**
 	 * We are ignoring cast or convert expressions, and only going to handle the rules 'passOnCastOrConvertExpression',
@@ -1141,13 +1152,15 @@ export class KipperFileListener implements KipperListener {
 	 * Enter a parse tree produced by `KipperParser.assignmentOperator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterAssignmentOperator(ctx: AssignmentOperatorContext): void {}
+	enterAssignmentOperator(ctx: AssignmentOperatorContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.assignmentOperator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitAssignmentOperator(ctx: AssignmentOperatorContext): void {}
+	exitAssignmentOperator(ctx: AssignmentOperatorContext): void {
+	}
 
 	/**
 	 * We are ignoring constant expressions and default expressions, as the children will handle everything.
@@ -1377,7 +1390,8 @@ export class KipperFileListener implements KipperListener {
 	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitFunctionDefinition(ctx: FunctionDefinitionContext): void {}
+	exitFunctionDefinition(ctx: FunctionDefinitionContext): void {
+	}
 
 	// -- Child Rules Section --
 
@@ -1385,257 +1399,299 @@ export class KipperFileListener implements KipperListener {
 	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterStorageTypeSpecifier(ctx: StorageTypeSpecifierContext): void {}
+	enterStorageTypeSpecifier(ctx: StorageTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitStorageTypeSpecifier(ctx: StorageTypeSpecifierContext): void {}
+	exitStorageTypeSpecifier(ctx: StorageTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarationSpecifiers`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterDeclarationSpecifiers(ctx: DeclarationSpecifiersContext): void {}
+	enterDeclarationSpecifiers(ctx: DeclarationSpecifiersContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.declarationSpecifiers`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitDeclarationSpecifiers(ctx: DeclarationSpecifiersContext): void {}
+	exitDeclarationSpecifiers(ctx: DeclarationSpecifiersContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarationSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterDeclarationSpecifier(ctx: DeclarationSpecifierContext): void {}
+	enterDeclarationSpecifier(ctx: DeclarationSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.declarationSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitDeclarationSpecifier(ctx: DeclarationSpecifierContext): void {}
+	exitDeclarationSpecifier(ctx: DeclarationSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initDeclarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterInitDeclarator(ctx: InitDeclaratorContext): void {}
+	enterInitDeclarator(ctx: InitDeclaratorContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.initDeclarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitInitDeclarator(ctx: InitDeclaratorContext): void {}
+	exitInitDeclarator(ctx: InitDeclaratorContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by the `singleItemTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {}
+	enterSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by the `singleItemTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {}
+	exitSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by the `multiItemTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {}
+	enterMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by the `multiItemTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {}
+	exitMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by the `typeofTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {}
+	enterTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by the `typeofTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {}
+	exitTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterTypeSpecifier(ctx: TypeSpecifierContext): void {}
+	enterTypeSpecifier(ctx: TypeSpecifierContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitTypeSpecifier(ctx: TypeSpecifierContext): void {}
+	exitTypeSpecifier(ctx: TypeSpecifierContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterDeclarator(ctx: DeclaratorContext): void {}
+	enterDeclarator(ctx: DeclaratorContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.declarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitDeclarator(ctx: DeclaratorContext): void {}
+	exitDeclarator(ctx: DeclaratorContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.directDeclarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterDirectDeclarator(ctx: DirectDeclaratorContext): void {}
+	enterDirectDeclarator(ctx: DirectDeclaratorContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.directDeclarator`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitDirectDeclarator(ctx: DirectDeclaratorContext): void {}
+	exitDirectDeclarator(ctx: DirectDeclaratorContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.nestedParenthesesBlock`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {}
+	enterNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.nestedParenthesesBlock`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {}
+	exitNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterTypeList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterParameterTypeList(ctx: ParameterTypeListContext): void {}
+	enterParameterTypeList(ctx: ParameterTypeListContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.parameterTypeList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitParameterTypeList(ctx: ParameterTypeListContext): void {}
+	exitParameterTypeList(ctx: ParameterTypeListContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterParameterList(ctx: ParameterListContext): void {}
+	enterParameterList(ctx: ParameterListContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.parameterList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitParameterList(ctx: ParameterListContext): void {}
+	exitParameterList(ctx: ParameterListContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterParameterDeclaration(ctx: ParameterDeclarationContext): void {}
+	enterParameterDeclaration(ctx: ParameterDeclarationContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitParameterDeclaration(ctx: ParameterDeclarationContext): void {}
+	exitParameterDeclaration(ctx: ParameterDeclarationContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initializer`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterInitializer(ctx: InitializerContext): void {}
+	enterInitializer(ctx: InitializerContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.initializer`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitInitializer(ctx: InitializerContext): void {}
+	exitInitializer(ctx: InitializerContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.blockItemList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterBlockItemList(ctx: BlockItemListContext): void {}
+	enterBlockItemList(ctx: BlockItemListContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.blockItemList`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitBlockItemList(ctx: BlockItemListContext): void {}
+	exitBlockItemList(ctx: BlockItemListContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.blockItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterBlockItem(ctx: BlockItemContext): void {}
+	enterBlockItem(ctx: BlockItemContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.blockItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitBlockItem(ctx: BlockItemContext): void {}
+	exitBlockItem(ctx: BlockItemContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterCompilationUnit(ctx: CompilationUnitContext): void {}
+	enterCompilationUnit(ctx: CompilationUnitContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.compilationUnit`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitCompilationUnit(ctx: CompilationUnitContext): void {}
+	exitCompilationUnit(ctx: CompilationUnitContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.translationUnit`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterTranslationUnit(ctx: TranslationUnitContext): void {}
+	enterTranslationUnit(ctx: TranslationUnitContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.translationUnit`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitTranslationUnit(ctx: TranslationUnitContext): void {}
+	exitTranslationUnit(ctx: TranslationUnitContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.externalItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterExternalItem(ctx: ExternalItemContext): void {}
+	enterExternalItem(ctx: ExternalItemContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.externalItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitExternalItem(ctx: ExternalItemContext): void {}
+	exitExternalItem(ctx: ExternalItemContext): void {
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.endOfItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	enterEndOfItem(ctx: EndOfItemContext): void {}
+	enterEndOfItem(ctx: EndOfItemContext): void {
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.endOfItem`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	exitEndOfItem(ctx: EndOfItemContext): void {}
+	exitEndOfItem(ctx: EndOfItemContext): void {
+	}
 }

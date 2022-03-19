@@ -4,18 +4,15 @@
  * running Kipper itself.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
-
-// TODO! Finish implementation of global functions and allow them to be passed to a compilation to make them available
-//  inside the programs global scope
 
 import { KipperType } from "./types";
 
 /**
- * Interface representation of an argument of a {@link Function}.
+ * Interface representation of an argument of a {@link BuiltInFunction}.
  */
-export interface FunctionArgument {
+export interface BuiltInFunctionArgument {
 	/**
 	 * The name of the argument inside the function
 	 *
@@ -36,10 +33,10 @@ export interface FunctionArgument {
 }
 
 /**
- * Interface representation of a {@link Function}, which is available inside a Kipper program using the specified
+ * Interface representation of a {@link BuiltInFunction}, which is available inside a Kipper program using the specified
  * metadata.
  */
-export interface Function {
+export interface BuiltInFunction {
 	/**
 	 * The name of the global function that should be available inside the program.
 	 *
@@ -49,12 +46,12 @@ export interface Function {
 	 */
 	name: string;
 	/**
-	 * The args that are accepted inside this function. These are represented using {@link FunctionArgument}.
+	 * The args that are accepted inside this function. These are represented using {@link BuiltInFunctionArgument}.
 	 *
 	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
 	 * array maps to the first argument inside the function.
 	 */
-	args: Array<FunctionArgument>;
+	args: Array<BuiltInFunctionArgument>;
 	/**
 	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
 	 * implementation for the function name, prefixed by `'_kipperGlobal_'`.
@@ -83,12 +80,12 @@ export interface Function {
 /**
  * The code for the global print function that works inside the Web-Browser
  */
-export const globalWebPrintFunction: Function = {
+export const builtInWebPrintFunction: BuiltInFunction = {
 	name: "print",
 	args: [{
 		name: "printText",
-		type: "str"
+		type: "str",
 	}],
 	handler: `function _kipperGlobal_print(printText: string): void { console.log(printText); }`,
-	returnType: "void"
+	returnType: "void",
 };

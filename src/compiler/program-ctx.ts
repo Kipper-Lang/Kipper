@@ -6,11 +6,11 @@
  */
 
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
-import { KipperParser, KipperLexer, CompilationUnitContext } from "./parser";
+import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
+import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { Function } from "./built-ins";
+import { BuiltInFunction, ScopeDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
 import { RootFileParseToken } from "./tokens";
 
@@ -55,7 +55,7 @@ export class KipperProgramContext {
 	 * which is returned inside the getter 'globals'.
 	 * @private
 	 */
-	private _globals: Array<Function>;
+	private _globals: Array<BuiltInFunction>;
 
 	/**
 	 * The private '_processedParseTree' that actually stores the variable data,
@@ -70,6 +70,12 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private _compiledCode: Array<string> | undefined;
+
+	/**
+	 * The global scope of this program, containing all variable and function definitions
+	 * @private
+	 */
+	private _globalScope: Array<ScopeDeclaration>;
 
 	/**
 	 * The logger that should be used to log warnings and errors.
@@ -90,6 +96,7 @@ export class KipperProgramContext {
 		this._parser = parser;
 		this._lexer = lexer;
 		this._globals = [];
+		this._globalScope = [];
 		this._processedParseTree = undefined;
 	}
 
@@ -144,7 +151,7 @@ export class KipperProgramContext {
 	 * available inside the compiled Kipper program and callable using their specified identifier. This is designed to
 	 * allow calling external typescript functions, which can not be natively implemented inside Kipper.
 	 */
-	get globals(): Array<Function> {
+	get globals(): Array<BuiltInFunction> {
 		return this._globals;
 	}
 
@@ -172,7 +179,7 @@ export class KipperProgramContext {
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
-	registerGlobals(newGlobals: Array<Function>) {
+	registerGlobals(newGlobals: Array<BuiltInFunction>) {
 		this._globals = this._globals.concat(newGlobals);
 	}
 
@@ -228,7 +235,7 @@ export class KipperProgramContext {
 
 		this.logger.debug(
 			`Finished generation of processed Kipper parse tree for '${this.stream.name}'` +
-				` - Parsed ${listener.kipperParseTree.children.length} root items.`,
+			` - Parsed ${listener.kipperParseTree.children.length} root items.`,
 		);
 		return listener.kipperParseTree;
 	}
@@ -241,7 +248,7 @@ export class KipperProgramContext {
 		let code: Array<string> = [];
 
 		// Generating the code for the global functions
-		for(let global of this._globals) {
+		for (let global of this._globals) {
 			code = code.concat(global.handler);
 		}
 		return code;

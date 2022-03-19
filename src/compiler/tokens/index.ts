@@ -7,7 +7,7 @@
  * are omitted.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
 export * from "./parse-token";
 export * from "./expressions";

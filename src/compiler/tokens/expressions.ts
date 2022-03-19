@@ -2,33 +2,33 @@
  * Expressions of the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
 import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
+	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
 	CastOrConvertExpressionContext,
+	CharacterPrimaryExpressionContext,
 	ConditionalExpressionContext,
 	EqualityExpressionContext,
-	LogicalAndExpressionContext,
-	LogicalOrExpressionContext,
-	MultiplicativeExpressionContext,
-	RelationalExpressionContext,
 	FStringPrimaryExpressionContext,
 	FunctionCallPostfixExpressionContext,
 	IdentifierPrimaryExpressionContext,
+	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	ListPrimaryExpressionContext,
+	LogicalAndExpressionContext,
+	LogicalOrExpressionContext,
+	MultiplicativeExpressionContext,
+	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
+	RelationalExpressionContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
-	CharacterPrimaryExpressionContext,
-	ListPrimaryExpressionContext,
-	ArraySpecifierPostfixExpressionContext,
-	IncrementOrDecrementPostfixExpressionContext,
-	NumberPrimaryExpressionContext,
 } from "../parser";
-import { KipperType } from "../types";
+import { KipperType } from "../logic/types";
 
 /**
  * Every antlr4 expression ctx type
@@ -111,7 +111,7 @@ export function getExpressionInstance(antlrContext: antlrExpressionCtxType, pare
 /**
  * Expression class, which represents an expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export abstract class Expression extends CompilableParseToken {
 	/**
@@ -154,7 +154,7 @@ export abstract class ConstantExpression extends Expression {
 /**
  * Integer constant expression class, which represents an integer constant in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class NumberPrimaryExpression extends ConstantExpression {
 	/**
@@ -201,7 +201,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 /**
  *  Character constant expression class, which represents an integer constant in the Kipper language and is
  * compilable using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class CharacterPrimaryExpression extends ConstantExpression {
 	/**
@@ -253,7 +253,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 /**
  *  List constant expression class, which represents a list constant in the Kipper language and is
  * compilable using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class ListPrimaryExpression extends ConstantExpression {
 	/**
@@ -295,7 +295,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 /**
  * String class, which represents a string expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class StringPrimaryExpression extends ConstantExpression {
 	/**
@@ -344,7 +344,7 @@ export class StringPrimaryExpression extends ConstantExpression {
 /**
  * Expression class, which represents an expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class IdentifierPrimaryExpression extends Expression {
 	/**
@@ -394,7 +394,7 @@ export class IdentifierPrimaryExpression extends Expression {
 /**
  * F-String class, which represents an f-string expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class FStringPrimaryExpression extends Expression {
 	/**
@@ -441,7 +441,7 @@ export class FStringPrimaryExpression extends Expression {
  *
  * This class may only have children of type {@link CompilableParseToken}, as this expression itself does not
  * compile anything and simply change the order of evaluation.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export class TangledPrimaryExpression extends Expression {
 	/**
@@ -503,7 +503,7 @@ export class TangledPrimaryExpression extends Expression {
 /**
  * Function call class, which represents a function call expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * call print("Hello world!")
  */
@@ -547,7 +547,7 @@ export class IncrementOrDecrementExpression extends Expression {
 /**
  * Function call class, which represents a function call expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * call print("Hello world!")
  */
@@ -591,7 +591,7 @@ export class ArraySpecifierExpression extends Expression {
 /**
  * Function call class, which represents a function call expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * call print("Hello world!")
  */
@@ -635,7 +635,7 @@ export class FunctionCallPostfixExpression extends Expression {
 /**
  * Increment or decrement expression class, which represents an -- or ++ expression in the Kipper language and is
  * compilable using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * ++4 // 5
  * --61 // 60
@@ -680,7 +680,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 /**
  * Operator modified unary expression class, which represents a signed (+/-) unary expression in the Kipper language
  * and is compilable using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * -41 // -41
  * +59 // 59
@@ -725,7 +725,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 /**
  * Convert expression class, which represents a conversion expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * "4" as num // 4
  * 39 as str // "39"
@@ -770,7 +770,7 @@ export class CastOrConvertExpression extends Expression {
 /**
  * Multiplicative expression class, which represents a multiplicative expression in the Kipper language and is
  * compilable using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * 16 * 6 // 96
  * 12 / 5 // 2.4
@@ -817,7 +817,7 @@ export class MultiplicativeExpression extends Expression {
 /**
  * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * 4 + 4 // 8
  * 9 - 3 // 6
@@ -862,7 +862,7 @@ export class AdditiveExpression extends Expression {
 /**
  * Relational expression class, which represents a relational expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * 19 > 11 // true
  * 91 > 99 // false
@@ -915,7 +915,7 @@ export class RelationalExpression extends Expression {
 /**
  * Equality expression class, which represents an equality check expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * 4 == 4 // true
  * 9 == 3 // false
@@ -962,7 +962,7 @@ export class EqualityExpression extends Expression {
 /**
  * Logical-And expression class, which represents a logical-and expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * false && false // false
  * true && false // false
@@ -1009,7 +1009,7 @@ export class LogicalAndExpression extends Expression {
 /**
  * Logical-Or expression class, which represents a logical-or expression in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * false || false // false
  * true || false // true
@@ -1056,7 +1056,7 @@ export class LogicalOrExpression extends Expression {
 /**
  * Conditional expression class, which represents a conditional expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * true ? 3 : 4; // 3
  * false ? 3 : 4; // 4
@@ -1101,7 +1101,7 @@ export class ConditionalExpression extends Expression {
 /**
  * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}. This class only represents assigning a value, but not declaring it!
- * @since 0.0.6
+ * @since 0.1.0
  * @example
  * x = 4
  */

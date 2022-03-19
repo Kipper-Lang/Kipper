@@ -9,7 +9,7 @@
  * - Jump statement (Only valid in functions or loops)
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
 import { CompilableParseToken, eligibleParentToken } from "./parse-token";
 import {
@@ -53,7 +53,7 @@ export function getStatementInstance(antlrContext: antlrStatementCtxType, parent
 /**
  * Base Statement class, which represents a statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- * @since 0.0.6
+ * @since 0.1.0
  */
 export abstract class Statement extends CompilableParseToken {
 	/**

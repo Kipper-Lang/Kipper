@@ -9,6 +9,6 @@ export { KipperErrorListener } from "./error-handler";
 export { KipperParseStream } from "./parse-stream";
 export { KipperFileListener } from "./listener";
 export { KipperProgramContext } from "./program-ctx";
-export * from "./types";
+export * from "./logic/";
 export * from "./parser";
 export * from "./tokens";

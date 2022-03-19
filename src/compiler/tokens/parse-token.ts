@@ -2,21 +2,20 @@
  * Base Parse token classes for the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.0.6
+ * @since 0.1.0
  */
 
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { Interval } from "antlr4ts/misc/Interval";
 import { KipperParser } from "../parser";
 import { KipperProgramContext } from "../program-ctx";
-import { ParentAlreadyExistsError } from "../../errors";
 
 export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
 
 /**
  * Kipper Parse token, which is the base class all tokens will extend from
- * @since 0.0.6
+ * @since 0.1.0
  */
 export abstract class CompilableParseToken {
 	/**
