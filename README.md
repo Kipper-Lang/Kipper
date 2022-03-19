@@ -1,6 +1,6 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# Kipper - `@kipper/base`
+# Kipper Base Package - `@kipper/base`
 
 [![Version](https://img.shields.io/npm/v/@kipper/base)](https://npmjs.org/package/@kipper/base)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
