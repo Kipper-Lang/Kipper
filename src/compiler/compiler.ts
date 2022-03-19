@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
-import { GlobalFunction } from "./built-ins";
+import { Function, globalWebPrintFunction } from "./built-ins";
 
 /**
  * Compilation Configuration for a Kipper program. This interface is wrapped using {@link RuntimeCompileConfig} and may
@@ -22,12 +22,12 @@ export interface CompileConfig {
 	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
 	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
 	 */
-	globals?: Array<GlobalFunction>;
+	globals?: Array<Function>;
 	/**
 	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
 	 * the default array.
 	 */
-	extendGlobals?: Array<GlobalFunction>;
+	extendGlobals?: Array<Function>;
 }
 
 /**
@@ -49,13 +49,15 @@ export class RuntimeCompileConfig {
 	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
-	public readonly defaultGlobals: Array<GlobalFunction> = [];
+	public readonly defaultGlobals: Array<Function> = [
+		globalWebPrintFunction
+	];
 
 	/**
 	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
 	 * {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
-	public readonly actualGlobals: Array<GlobalFunction>;
+	public readonly actualGlobals: Array<Function>;
 
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
@@ -196,7 +198,7 @@ export class KipperCompiler {
 	 * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
-	 * @param config {GlobalFunction[]} Compilation Configuration, which defines how the compiler should handle the
+	 * @param config {Function[]} Compilation Configuration, which defines how the compiler should handle the
 	 * program and compilation. This uses per default {@link RuntimeCompileConfig} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.

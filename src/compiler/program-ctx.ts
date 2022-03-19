@@ -5,15 +5,14 @@
  * @since 0.0.3
  */
 
+import { ParseTreeWalker } from "antlr4ts/tree";
+import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
 import { KipperParser, KipperLexer, CompilationUnitContext } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { ParseTreeWalker } from "antlr4ts/tree";
-import { Token, ANTLRErrorListener, TokenStream } from "antlr4ts";
-import { GlobalFunction } from "./built-ins";
-import { CompilableParseToken } from "./tokens";
+import { Function } from "./built-ins";
 import { KipperLogger } from "../logger";
-import { RootFileParseToken } from "./tokens/parse-token";
+import { RootFileParseToken } from "./tokens";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -56,7 +55,7 @@ export class KipperProgramContext {
 	 * which is returned inside the getter 'globals'.
 	 * @private
 	 */
-	private _globals: Array<GlobalFunction>;
+	private _globals: Array<Function>;
 
 	/**
 	 * The private '_processedParseTree' that actually stores the variable data,
@@ -145,7 +144,7 @@ export class KipperProgramContext {
 	 * available inside the compiled Kipper program and callable using their specified identifier. This is designed to
 	 * allow calling external typescript functions, which can not be natively implemented inside Kipper.
 	 */
-	get globals(): Array<GlobalFunction> {
+	get globals(): Array<Function> {
 		return this._globals;
 	}
 
@@ -173,7 +172,7 @@ export class KipperProgramContext {
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
-	registerGlobals(newGlobals: Array<GlobalFunction>) {
+	registerGlobals(newGlobals: Array<Function>) {
 		this._globals = this._globals.concat(newGlobals);
 	}
 
@@ -198,6 +197,9 @@ export class KipperProgramContext {
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'`);
 		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
+
+		// Append required typescript code for Kipper for the program to work properly
+		genCode = this.generateRequired().concat(genCode);
 
 		this.logger.info(
 			`Generated ${genCode.length} lines - Processed ${this._processedParseTree.children.length} root items.`,
@@ -229,5 +231,19 @@ export class KipperProgramContext {
 				` - Parsed ${listener.kipperParseTree.children.length} root items.`,
 		);
 		return listener.kipperParseTree;
+	}
+
+	/**
+	 * Generates the required code for the execution of this kipper program
+	 * @private
+	 */
+	private generateRequired(): Array<string> {
+		let code: Array<string> = [];
+
+		// Generating the code for the global functions
+		for(let global of this._globals) {
+			code = code.concat(global.handler);
+		}
+		return code;
 	}
 }

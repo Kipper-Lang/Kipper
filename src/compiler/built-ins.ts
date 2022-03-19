@@ -13,9 +13,9 @@
 import { KipperType } from "./types";
 
 /**
- * Interface representation of an argument of a {@link GlobalFunction}.
+ * Interface representation of an argument of a {@link Function}.
  */
-export interface GlobalFunctionArgument {
+export interface FunctionArgument {
 	/**
 	 * The name of the argument inside the function
 	 *
@@ -32,14 +32,14 @@ export interface GlobalFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	type: string;
+	type: KipperType;
 }
 
 /**
- * Interface representation of a {@link GlobalFunction}, which is available inside a Kipper program using the specified
+ * Interface representation of a {@link Function}, which is available inside a Kipper program using the specified
  * metadata.
  */
-export interface GlobalFunction {
+export interface Function {
 	/**
 	 * The name of the global function that should be available inside the program.
 	 *
@@ -49,19 +49,19 @@ export interface GlobalFunction {
 	 */
 	name: string;
 	/**
-	 * The args that are accepted inside this function. These are represented using {@link GlobalFunctionArgument}.
+	 * The args that are accepted inside this function. These are represented using {@link FunctionArgument}.
 	 *
 	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
 	 * array maps to the first argument inside the function.
 	 */
-	args: Array<GlobalFunctionArgument>;
+	args: Array<FunctionArgument>;
 	/**
 	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
 	 * implementation for the function name, prefixed by `'_kipperGlobal_'`.
 	 *
 	 * @example
 	 *  // Example of a string that may be passed
-	 *  const yourFunction: GlobalFunction = {
+	 *  const yourFunction: Function = {
 	 *    name: "print",
 	 *    args: [{
 	 *      type: "str" as KipperType
@@ -79,3 +79,16 @@ export interface GlobalFunction {
 	 */
 	returnType: KipperType;
 }
+
+/**
+ * The code for the global print function that works inside the Web-Browser
+ */
+export const globalWebPrintFunction: Function = {
+	name: "print",
+	args: [{
+		name: "printText",
+		type: "str"
+	}],
+	handler: `function _kipperGlobal_print(printText: string): void { console.log(printText); }`,
+	returnType: "void"
+};
