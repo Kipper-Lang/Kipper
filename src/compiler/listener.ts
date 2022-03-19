@@ -77,7 +77,7 @@ import {
 	getStatementInstance,
 	Statement,
 } from "./tokens";
-import { RootFileParseToken } from "./tokens/parse-token";
+import { RootFileParseToken } from "./tokens";
 import { IfStatementContext, SwitchStatementContext } from "./parser/KipperParser";
 
 const passOnHandler: () => void = () => {
@@ -257,7 +257,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Function that is called every time an time is entered
+	 * Function that is called every time an item is entered.
 	 * @param ctx The context of the rule
 	 */
 	enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {

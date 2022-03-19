@@ -28,7 +28,7 @@ import {
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
 } from "../parser";
-import { KipperType } from "../logic/types";
+import { KipperType } from "../logic";
 
 /**
  * Every antlr4 expression ctx type

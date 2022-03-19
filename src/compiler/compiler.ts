@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, builtInWebPrintFunction } from "./logic/built-ins";
+import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
 
 /**
  * Compilation Configuration for a Kipper program. This interface is wrapped using {@link RuntimeCompileConfig} and may

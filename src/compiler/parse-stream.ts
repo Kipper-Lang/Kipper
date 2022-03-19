@@ -29,9 +29,9 @@ export class KipperParseStream {
 	/**
 	 * Parser File Constructor
 	 * @param {string} name The relative or absolute path to the file
-	 * @param {string} stringContent The content of the stream
-	 * @param {CodePointCharStream} charStream The {@link CodePointCharStream}, which if not set will be auto-generated
-	 * by the stringContent
+	 * @param {string} stringContent The content of the stream.
+	 * @param {CodePointCharStream} charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
+	 * by the stringContent.
 	 */
 	constructor(name: string, stringContent: string, charStream?: CodePointCharStream) {
 		this._name = name;
