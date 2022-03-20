@@ -44,21 +44,21 @@
     "compiler"
   ],
   "files": [
-    "dist",
+    "lib",
     "src",
     "kipper-standalone.js",
     "Kipper.g4",
     "CHANGELOG.md"
   ],
   "license": "GPL-3.0",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "posttest": "npm run lint:fix",
     "pretest": "npm run build",
     "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
     "build": "run-script-os",
-    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp dist/compiler/parser/ && cp ./src/compiler/parser/*.tokens dist/compiler/parser/",
+    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens lib/compiler/parser/",
     "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
     "prebuild": "npm run antlr4ts",
     "browserify": "browserify src/kipper-standalone.ts -p [ tsify --noImplicitAny] > kipper-standalone.js",
