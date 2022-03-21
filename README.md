@@ -3,8 +3,9 @@
 # Kipper Base Package - `@kipper/base`
 
 [![Version](https://img.shields.io/npm/v/@kipper/base)](https://npmjs.org/package/@kipper/base)
+![](https://img.shields.io/badge/Coverage-57%25-F2E96B.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
-![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)
+[![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
 
