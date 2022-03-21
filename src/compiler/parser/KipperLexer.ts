@@ -1,14 +1,19 @@
 // Generated from Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
+
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { CharStream } from "antlr4ts/CharStream";
 import { Lexer } from "antlr4ts/Lexer";
 import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
+import { NotNull } from "antlr4ts/Decorators";
+import { Override } from "antlr4ts/Decorators";
+import { RuleContext } from "antlr4ts/RuleContext";
 import { Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";
+
 
 export class KipperLexer extends Lexer {
 	public static readonly T__0 = 1;
@@ -89,45 +94,45 @@ export class KipperLexer extends Lexer {
 	];
 
 	public static readonly ruleNames: string[] = [
-		"T__0", "T__1", "T__2", "T__3", "T__4", "Const", "Var", "As", "Switch",
-		"Case", "Default", "Break", "Continue", "Do", "While", "If", "Else", "For",
-		"Enum", "DefFunc", "Return", "CallFunc", "Struct", "Typeof", "LeftParen",
-		"RightParen", "LeftBracket", "RightBracket", "LeftBrace", "RightBrace",
-		"Plus", "PlusPlus", "Minus", "MinusMinus", "Star", "Div", "Mod", "PowerTo",
-		"AndAnd", "OrOr", "Not", "Comma", "Assign", "StarAssign", "DivAssign",
-		"ModAssign", "PlusAssign", "MinusAssign", "Equal", "NotEqual", "Less",
-		"LessEqual", "Greater", "GreaterEqual", "Dot", "Identifier", "ExtensionTaskBlock",
-		"IdentifierNondigit", "Nondigit", "Digit", "UniversalCharacterName", "HexQuad",
-		"IntegerConstant", "BinaryConstant", "DecimalConstant", "OctalConstant",
-		"HexadecimalConstant", "HexadecimalPrefix", "NonzeroDigit", "OctalDigit",
-		"HexadecimalDigit", "IntegerSuffix", "UnsignedSuffix", "LongSuffix", "LongLongSuffix",
-		"FloatingConstant", "DecimalFloatingConstant", "HexadecimalFloatingConstant",
-		"FractionalConstant", "ExponentPart", "Sign", "DigitSequence", "HexadecimalFractionalConstant",
-		"BinaryExponentPart", "HexadecimalDigitSequence", "FloatingSuffix", "CharacterConstant",
-		"CCharSequence", "CChar", "EscapeSequence", "SimpleEscapeSequence", "OctalEscapeSequence",
-		"HexadecimalEscapeSequence", "FStringLiteral", "StringLiteral", "SCharSequence",
+		"T__0", "T__1", "T__2", "T__3", "T__4", "Const", "Var", "As", "Switch", 
+		"Case", "Default", "Break", "Continue", "Do", "While", "If", "Else", "For", 
+		"Enum", "DefFunc", "Return", "CallFunc", "Struct", "Typeof", "LeftParen", 
+		"RightParen", "LeftBracket", "RightBracket", "LeftBrace", "RightBrace", 
+		"Plus", "PlusPlus", "Minus", "MinusMinus", "Star", "Div", "Mod", "PowerTo", 
+		"AndAnd", "OrOr", "Not", "Comma", "Assign", "StarAssign", "DivAssign", 
+		"ModAssign", "PlusAssign", "MinusAssign", "Equal", "NotEqual", "Less", 
+		"LessEqual", "Greater", "GreaterEqual", "Dot", "Identifier", "ExtensionTaskBlock", 
+		"IdentifierNondigit", "Nondigit", "Digit", "UniversalCharacterName", "HexQuad", 
+		"IntegerConstant", "BinaryConstant", "DecimalConstant", "OctalConstant", 
+		"HexadecimalConstant", "HexadecimalPrefix", "NonzeroDigit", "OctalDigit", 
+		"HexadecimalDigit", "IntegerSuffix", "UnsignedSuffix", "LongSuffix", "LongLongSuffix", 
+		"FloatingConstant", "DecimalFloatingConstant", "HexadecimalFloatingConstant", 
+		"FractionalConstant", "ExponentPart", "Sign", "DigitSequence", "HexadecimalFractionalConstant", 
+		"BinaryExponentPart", "HexadecimalDigitSequence", "FloatingSuffix", "CharacterConstant", 
+		"CCharSequence", "CChar", "EscapeSequence", "SimpleEscapeSequence", "OctalEscapeSequence", 
+		"HexadecimalEscapeSequence", "FStringLiteral", "StringLiteral", "SCharSequence", 
 		"SChar", "WS", "Whitespace", "BlockComment", "Newline",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, "'->'", "';'", "'?'", "':'", "'...'", "'const'", "'var'", "'as'",
-		"'switch'", "'case'", "'default'", "'break'", "'continue'", "'do'", "'while'",
-		"'if'", "'else'", "'for'", "'enum'", "'def'", "'return'", "'call'", "'struct'",
-		"'typeof'", "'('", "')'", "'['", "']'", "'{'", "'}'", "'+'", "'++'", "'-'",
-		"'--'", "'*'", "'/'", "'%'", "'**'", "'&&'", "'||'", "'!'", "','", "'='",
-		"'*='", "'/='", "'%='", "'+='", "'-='", "'=='", "'!='", "'<'", "'<='",
+		undefined, "'->'", "';'", "'?'", "':'", "'...'", "'const'", "'var'", "'as'", 
+		"'switch'", "'case'", "'default'", "'break'", "'continue'", "'do'", "'while'", 
+		"'if'", "'else'", "'for'", "'enum'", "'def'", "'return'", "'call'", "'struct'", 
+		"'typeof'", "'('", "')'", "'['", "']'", "'{'", "'}'", "'+'", "'++'", "'-'", 
+		"'--'", "'*'", "'/'", "'%'", "'**'", "'&&'", "'||'", "'!'", "','", "'='", 
+		"'*='", "'/='", "'%='", "'+='", "'-='", "'=='", "'!='", "'<'", "'<='", 
 		"'>'", "'>='", "'.'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, undefined, undefined, undefined, undefined, undefined, "Const",
-		"Var", "As", "Switch", "Case", "Default", "Break", "Continue", "Do", "While",
-		"If", "Else", "For", "Enum", "DefFunc", "Return", "CallFunc", "Struct",
-		"Typeof", "LeftParen", "RightParen", "LeftBracket", "RightBracket", "LeftBrace",
-		"RightBrace", "Plus", "PlusPlus", "Minus", "MinusMinus", "Star", "Div",
-		"Mod", "PowerTo", "AndAnd", "OrOr", "Not", "Comma", "Assign", "StarAssign",
-		"DivAssign", "ModAssign", "PlusAssign", "MinusAssign", "Equal", "NotEqual",
-		"Less", "LessEqual", "Greater", "GreaterEqual", "Dot", "Identifier", "IntegerConstant",
-		"FloatingConstant", "DigitSequence", "CharacterConstant", "FStringLiteral",
+		undefined, undefined, undefined, undefined, undefined, undefined, "Const", 
+		"Var", "As", "Switch", "Case", "Default", "Break", "Continue", "Do", "While", 
+		"If", "Else", "For", "Enum", "DefFunc", "Return", "CallFunc", "Struct", 
+		"Typeof", "LeftParen", "RightParen", "LeftBracket", "RightBracket", "LeftBrace", 
+		"RightBrace", "Plus", "PlusPlus", "Minus", "MinusMinus", "Star", "Div", 
+		"Mod", "PowerTo", "AndAnd", "OrOr", "Not", "Comma", "Assign", "StarAssign", 
+		"DivAssign", "ModAssign", "PlusAssign", "MinusAssign", "Equal", "NotEqual", 
+		"Less", "LessEqual", "Greater", "GreaterEqual", "Dot", "Identifier", "IntegerConstant", 
+		"FloatingConstant", "DigitSequence", "CharacterConstant", "FStringLiteral", 
 		"StringLiteral", "WS", "Whitespace", "BlockComment", "Newline",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(KipperLexer._LITERAL_NAMES, KipperLexer._SYMBOLIC_NAMES, []);
@@ -137,8 +142,8 @@ export class KipperLexer extends Lexer {
 	public get vocabulary(): Vocabulary {
 		return KipperLexer.VOCABULARY;
 	}
-
 	// tslint:enable:no-trailing-whitespace
+
 
 	constructor(input: CharStream) {
 		super(input);
@@ -146,29 +151,19 @@ export class KipperLexer extends Lexer {
 	}
 
 	// @Override
-	public get grammarFileName(): string {
-		return "Kipper.g4";
-	}
+	public get grammarFileName(): string { return "Kipper.g4"; }
 
 	// @Override
-	public get ruleNames(): string[] {
-		return KipperLexer.ruleNames;
-	}
+	public get ruleNames(): string[] { return KipperLexer.ruleNames; }
 
 	// @Override
-	public get serializedATN(): string {
-		return KipperLexer._serializedATN;
-	}
+	public get serializedATN(): string { return KipperLexer._serializedATN; }
 
 	// @Override
-	public get channelNames(): string[] {
-		return KipperLexer.channelNames;
-	}
+	public get channelNames(): string[] { return KipperLexer.channelNames; }
 
 	// @Override
-	public get modeNames(): string[] {
-		return KipperLexer.modeNames;
-	}
+	public get modeNames(): string[] { return KipperLexer.modeNames; }
 
 	private static readonly _serializedATNSegments: number = 2;
 	private static readonly _serializedATNSegment0: string =

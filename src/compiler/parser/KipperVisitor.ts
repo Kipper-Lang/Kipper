@@ -1,98 +1,98 @@
 // Generated from Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
+
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
-import {
-	ActualAdditiveExpressionContext,
-	ActualAssignmentExpressionContext,
-	ActualCastOrConvertExpressionContext,
-	ActualConditionalExpressionContext,
-	ActualEqualityExpressionContext,
-	ActualLogicalAndExpressionContext,
-	ActualLogicalOrExpressionContext,
-	ActualMultiplicativeExpressionContext,
-	ActualRelationalExpressionContext,
-	AdditiveExpressionContext,
-	ArgumentExpressionListContext,
-	ArraySpecifierContext,
-	ArraySpecifierPostfixExpressionContext,
-	AssignmentExpressionContext,
-	AssignmentOperatorContext,
-	BlockItemContext,
-	BlockItemListContext,
-	CastOrConvertExpressionContext,
-	CharacterPrimaryExpressionContext,
-	CompilationUnitContext,
-	CompoundStatementContext,
-	ConditionalExpressionContext,
-	ConstantExpressionContext,
-	DeclarationContext,
-	DeclarationSpecifierContext,
-	DeclarationSpecifiersContext,
-	DeclaratorContext,
-	DirectDeclaratorContext,
-	EndOfItemContext,
-	EqualityExpressionContext,
-	ExpressionContext,
-	ExpressionStatementContext,
-	ExternalBlockItemContext,
-	ExternalFunctionDefinitionContext,
-	ExternalItemContext,
-	ForConditionContext,
-	ForDeclarationContext,
-	ForExpressionContext,
-	FStringPrimaryExpressionContext,
-	FunctionCallPostfixExpressionContext,
-	FunctionDefinitionContext,
-	IdentifierPrimaryExpressionContext,
-	IfStatementContext,
-	IncrementOrDecrementOperatorContext,
-	IncrementOrDecrementPostfixExpressionContext,
-	IncrementOrDecrementUnaryExpressionContext,
-	InitDeclaratorContext,
-	InitializerContext,
-	IterationStatementContext,
-	JumpStatementContext,
-	ListConstantContext,
-	ListPrimaryExpressionContext,
-	LogicalAndExpressionContext,
-	LogicalOrExpressionContext,
-	MultiItemTypeSpecifierContext,
-	MultiplicativeExpressionContext,
-	NestedParenthesesBlockContext,
-	NumberPrimaryExpressionContext,
-	OperatorModifiedUnaryExpressionContext,
-	ParameterDeclarationContext,
-	ParameterListContext,
-	ParameterTypeListContext,
-	PassOnAdditiveExpressionContext,
-	PassOnAssignmentExpressionContext,
-	PassOnCastOrConvertExpressionContext,
-	PassOnConditionalExpressionContext,
-	PassOnEqualityExpressionContext,
-	PassOnLogicalAndExpressionContext,
-	PassOnLogicalOrExpressionContext,
-	PassOnMultiplicativeExpressionContext,
-	PassOnPostfixExpressionContext,
-	PassOnRelationalExpressionContext,
-	PassOnUnaryExpressionContext,
-	PostfixExpressionContext,
-	PrimaryExpressionContext,
-	RelationalExpressionContext,
-	SelectionStatementContext,
-	SingleItemTypeSpecifierContext,
-	StatementContext,
-	StorageTypeSpecifierContext,
-	StringPrimaryExpressionContext,
-	SwitchLabeledStatementContext,
-	SwitchStatementContext,
-	TangledPrimaryExpressionContext,
-	TranslationUnitContext,
-	TypeofTypeSpecifierContext,
-	TypeSpecifierContext,
-	UnaryExpressionContext,
-	UnaryOperatorContext,
-} from "./KipperParser";
+import { PassOnLogicalAndExpressionContext } from "./KipperParser";
+import { ActualLogicalAndExpressionContext } from "./KipperParser";
+import { PassOnUnaryExpressionContext } from "./KipperParser";
+import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
+import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
+import { ExternalFunctionDefinitionContext } from "./KipperParser";
+import { ExternalBlockItemContext } from "./KipperParser";
+import { PassOnAssignmentExpressionContext } from "./KipperParser";
+import { ActualAssignmentExpressionContext } from "./KipperParser";
+import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
+import { ActualCastOrConvertExpressionContext } from "./KipperParser";
+import { PassOnEqualityExpressionContext } from "./KipperParser";
+import { ActualEqualityExpressionContext } from "./KipperParser";
+import { PassOnAdditiveExpressionContext } from "./KipperParser";
+import { ActualAdditiveExpressionContext } from "./KipperParser";
+import { PassOnRelationalExpressionContext } from "./KipperParser";
+import { ActualRelationalExpressionContext } from "./KipperParser";
+import { IfStatementContext } from "./KipperParser";
+import { SwitchStatementContext } from "./KipperParser";
+import { PassOnPostfixExpressionContext } from "./KipperParser";
+import { ArraySpecifierPostfixExpressionContext } from "./KipperParser";
+import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
+import { FunctionCallPostfixExpressionContext } from "./KipperParser";
+import { IdentifierPrimaryExpressionContext } from "./KipperParser";
+import { StringPrimaryExpressionContext } from "./KipperParser";
+import { FStringPrimaryExpressionContext } from "./KipperParser";
+import { TangledPrimaryExpressionContext } from "./KipperParser";
+import { NumberPrimaryExpressionContext } from "./KipperParser";
+import { CharacterPrimaryExpressionContext } from "./KipperParser";
+import { ListPrimaryExpressionContext } from "./KipperParser";
+import { PassOnConditionalExpressionContext } from "./KipperParser";
+import { ActualConditionalExpressionContext } from "./KipperParser";
+import { SingleItemTypeSpecifierContext } from "./KipperParser";
+import { MultiItemTypeSpecifierContext } from "./KipperParser";
+import { TypeofTypeSpecifierContext } from "./KipperParser";
+import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
+import { ActualMultiplicativeExpressionContext } from "./KipperParser";
+import { PassOnLogicalOrExpressionContext } from "./KipperParser";
+import { ActualLogicalOrExpressionContext } from "./KipperParser";
+import { CompilationUnitContext } from "./KipperParser";
+import { TranslationUnitContext } from "./KipperParser";
+import { ExternalItemContext } from "./KipperParser";
+import { FunctionDefinitionContext } from "./KipperParser";
+import { EndOfItemContext } from "./KipperParser";
+import { PrimaryExpressionContext } from "./KipperParser";
+import { ListConstantContext } from "./KipperParser";
+import { PostfixExpressionContext } from "./KipperParser";
+import { ArraySpecifierContext } from "./KipperParser";
+import { ArgumentExpressionListContext } from "./KipperParser";
+import { UnaryExpressionContext } from "./KipperParser";
+import { IncrementOrDecrementOperatorContext } from "./KipperParser";
+import { UnaryOperatorContext } from "./KipperParser";
+import { CastOrConvertExpressionContext } from "./KipperParser";
+import { MultiplicativeExpressionContext } from "./KipperParser";
+import { AdditiveExpressionContext } from "./KipperParser";
+import { RelationalExpressionContext } from "./KipperParser";
+import { EqualityExpressionContext } from "./KipperParser";
+import { LogicalAndExpressionContext } from "./KipperParser";
+import { LogicalOrExpressionContext } from "./KipperParser";
+import { ConditionalExpressionContext } from "./KipperParser";
+import { AssignmentExpressionContext } from "./KipperParser";
+import { AssignmentOperatorContext } from "./KipperParser";
+import { ExpressionContext } from "./KipperParser";
+import { ConstantExpressionContext } from "./KipperParser";
+import { DeclarationContext } from "./KipperParser";
+import { StorageTypeSpecifierContext } from "./KipperParser";
+import { DeclarationSpecifiersContext } from "./KipperParser";
+import { DeclarationSpecifierContext } from "./KipperParser";
+import { InitDeclaratorContext } from "./KipperParser";
+import { TypeSpecifierContext } from "./KipperParser";
+import { DeclaratorContext } from "./KipperParser";
+import { DirectDeclaratorContext } from "./KipperParser";
+import { NestedParenthesesBlockContext } from "./KipperParser";
+import { ParameterTypeListContext } from "./KipperParser";
+import { ParameterListContext } from "./KipperParser";
+import { ParameterDeclarationContext } from "./KipperParser";
+import { InitializerContext } from "./KipperParser";
+import { StatementContext } from "./KipperParser";
+import { CompoundStatementContext } from "./KipperParser";
+import { BlockItemListContext } from "./KipperParser";
+import { BlockItemContext } from "./KipperParser";
+import { ExpressionStatementContext } from "./KipperParser";
+import { SelectionStatementContext } from "./KipperParser";
+import { SwitchLabeledStatementContext } from "./KipperParser";
+import { IterationStatementContext } from "./KipperParser";
+import { ForConditionContext } from "./KipperParser";
+import { ForDeclarationContext } from "./KipperParser";
+import { ForExpressionContext } from "./KipperParser";
+import { JumpStatementContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced

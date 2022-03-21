@@ -134,20 +134,14 @@ export class KipperSyntaxError<Token> extends KipperError {
 	async reportError(): Promise<void> {}
 }
 
-export class ExpressionTypeAlreadySetError extends KipperError {
-	constructor(msg: string = "The type of this expression was already set. Only children may be added now!") {
+/**
+ * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.globals}.
+ */
+export class GlobalAlreadyRegisteredError extends KipperError {
+	constructor(msg: string) {
 		super(msg);
 
 		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, ParentAlreadyExistsError.prototype);
-	}
-}
-
-export class ParentAlreadyExistsError extends KipperError {
-	constructor(msg: string = "Parent already exists on this parse token.") {
-		super(msg);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, ParentAlreadyExistsError.prototype);
+		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
 	}
 }

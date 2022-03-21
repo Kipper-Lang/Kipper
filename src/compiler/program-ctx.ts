@@ -13,6 +13,7 @@ import { KipperFileListener } from "./listener";
 import { BuiltInFunction, ScopeDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
 import { RootFileParseToken } from "./tokens";
+import { GlobalAlreadyRegisteredError } from "../errors";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -179,7 +180,23 @@ export class KipperProgramContext {
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
-	registerGlobals(newGlobals: Array<BuiltInFunction>) {
+	registerGlobals(newGlobals: BuiltInFunction | Array<BuiltInFunction>) {
+		// If the function is not an array already, make it one
+		if (!(newGlobals instanceof Array)) {
+			newGlobals = [newGlobals];
+		}
+
+		for (let g of newGlobals) {
+			let identifierAlreadyExists =
+				this._globals.find((registered) => {
+					return registered.name == g.name;
+				}) !== undefined;
+			let globalAlreadyExists = this._globals.includes(g);
+			if (identifierAlreadyExists || globalAlreadyExists) {
+				throw new GlobalAlreadyRegisteredError(`Global function '${g.name}' already exists!`);
+			}
+		}
+
 		this._globals = this._globals.concat(newGlobals);
 	}
 

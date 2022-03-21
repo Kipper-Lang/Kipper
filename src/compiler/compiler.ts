@@ -49,7 +49,7 @@ export class RuntimeCompileConfig {
 	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
-	public readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
+	public static readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
 
 	/**
 	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
@@ -61,7 +61,7 @@ export class RuntimeCompileConfig {
 		this.userOptions = options;
 
 		// Setting the actual values that will be used inside the compilation
-		this.actualGlobals = (options.globals ?? this.defaultGlobals).concat(options.extendGlobals ?? []);
+		this.actualGlobals = (options.globals ?? RuntimeCompileConfig.defaultGlobals).concat(options.extendGlobals ?? []);
 	}
 }
 
