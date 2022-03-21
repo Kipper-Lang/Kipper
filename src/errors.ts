@@ -131,8 +131,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 	/**
 	 * Reports the syntax error and writes onto the console
 	 */
-	async reportError(): Promise<void> {
-	}
+	async reportError(): Promise<void> {}
 }
 
 export class ExpressionTypeAlreadySetError extends KipperError {

@@ -82,10 +82,12 @@ export interface BuiltInFunction {
  */
 export const builtInWebPrintFunction: BuiltInFunction = {
 	name: "print",
-	args: [{
-		name: "printText",
-		type: "str",
-	}],
+	args: [
+		{
+			name: "printText",
+			type: "str",
+		},
+	],
 	handler: `function _kipperGlobal_print(printText: string): void { console.log(printText); }`,
 	returnType: "void",
 };
