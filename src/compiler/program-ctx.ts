@@ -235,7 +235,7 @@ export class KipperProgramContext {
 
 		this.logger.debug(
 			`Finished generation of processed Kipper parse tree for '${this.stream.name}'` +
-			` - Parsed ${listener.kipperParseTree.children.length} root items.`,
+				` - Parsed ${listener.kipperParseTree.children.length} root items.`,
 		);
 		return listener.kipperParseTree;
 	}

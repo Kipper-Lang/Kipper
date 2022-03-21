@@ -21,8 +21,8 @@ export abstract class ScopeDeclaration {
 		// eslint-disable-next-line no-unused-vars
 		private _storageType: KipperStorageType,
 		// eslint-disable-next-line no-unused-vars
-		private _scope: KipperProgramContext | CompoundStatement) {
-	}
+		private _scope: KipperProgramContext | CompoundStatement,
+	) {}
 
 	/**
 	 * The identifier of this entry
@@ -52,4 +52,3 @@ export abstract class ScopeDeclaration {
 		return this._scope;
 	}
 }
-

@@ -36,7 +36,7 @@ export class KipperLogger {
 	 * which is returned inside the getter 'emitHandler'.
 	 * @private
 	 */
-		// eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 	private readonly _emitHandler: (level: LogLevel, msg: string) => void;
 
 	constructor(

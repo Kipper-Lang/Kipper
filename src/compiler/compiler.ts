@@ -49,9 +49,7 @@ export class RuntimeCompileConfig {
 	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
-	public readonly defaultGlobals: Array<BuiltInFunction> = [
-		builtInWebPrintFunction,
-	];
+	public readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
 
 	/**
 	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
@@ -128,8 +126,7 @@ export class KipperCompiler {
 	 */
 	private readonly _logger: KipperLogger;
 
-	constructor(logger: KipperLogger = new KipperLogger(() => {
-	})) {
+	constructor(logger: KipperLogger = new KipperLogger(() => {})) {
 		// using a general error listener for the entire compiler instance
 		this._errorListener = new KipperErrorListener<any>();
 		this._logger = logger;
