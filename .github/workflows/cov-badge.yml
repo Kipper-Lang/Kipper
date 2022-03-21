@@ -27,8 +27,10 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm test
-      - run: npm run cov-badge
-      - uses: EndBug/add-and-commit@v7
+      - name: Generating coverage badge
+        run: npm run cov-badge
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
         with:
           message: 'Added coverage report'
           add: './README.md'

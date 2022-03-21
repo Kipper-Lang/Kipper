@@ -28,7 +28,8 @@
     "@typescript-eslint/parser": "^5.4.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "json-parse-even-better-errors": "2.3.1",
-    "run-script-os": "^1.1.6"
+    "run-script-os": "^1.1.6",
+    "coverage-badge-creator": "^1.0.10"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -56,7 +57,8 @@
   "scripts": {
     "posttest": "npm run lint:fix",
     "pretest": "npm run build",
-    "test": "nyc --extension .ts mocha --forbid-only \"**/*.test.ts\"",
+    "test": "nyc -x \"**/parser/**\" --reporter=json-summary --extension .ts mocha --forbid-only \"**/*.test.ts\"",
+    "cov-badge": "coverage-badge-creator",
     "build": "run-script-os",
     "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens lib/compiler/parser/",
     "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
