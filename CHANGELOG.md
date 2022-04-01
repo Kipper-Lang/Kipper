@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.1.1] - 2022-04-01
+
+### Added
+- Added missing dependency `tslib`
+
 ## [0.1.0] - 2022-04-01
 
 ### Added
@@ -111,6 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
 [unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.1.0...HEAD
+[0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.0
 [0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
 [0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5

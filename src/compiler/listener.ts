@@ -63,7 +63,7 @@ import {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 } from "./parser";
-import { KipperProgramContext } from "./program-ctx";
+import type { KipperProgramContext } from "./program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
 	antlrDefinitionCtxType,

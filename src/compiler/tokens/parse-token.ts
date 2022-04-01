@@ -8,7 +8,7 @@
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { Interval } from "antlr4ts/misc/Interval";
 import { KipperParser } from "../parser";
-import { KipperProgramContext } from "../program-ctx";
+import type { KipperProgramContext } from "../program-ctx";
 
 export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;

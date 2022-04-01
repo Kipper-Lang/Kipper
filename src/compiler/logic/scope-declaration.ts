@@ -4,9 +4,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperStorageType, KipperType } from ".";
-import { KipperProgramContext } from "../program-ctx";
+import { KipperStorageType, KipperType } from "./types";
 import { CompoundStatement } from "../tokens";
+import type { KipperProgramContext } from "../program-ctx";
 
 /**
  * Represents the definition of a scope entry that may be a child of the global scope, a function scope or compound
