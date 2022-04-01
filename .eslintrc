@@ -1,19 +1,27 @@
 {
-  "extends": [
-    "eslint:recommended"
-  ],
+  "extends": ["eslint:recommended"],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 7,
+    "ecmaVersion": 12,
     "sourceType": "module"
   },
   "rules": {
-    "max-params": 1,
+    "max-params": 0,
     "no-unused-vars": 1,
     "no-warning-comments": 0,
     "no-useless-catch": 1,
     "comma-dangle": 0,
     "object-curly-spacing": 0,
     "quotes": 0,
-    "semi": 0
+    "semi": 2
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+    "commonjs": true
+  },
+  "globals": {
+    "BufferEncoding": true
   }
 }

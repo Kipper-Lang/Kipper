@@ -4,6 +4,12 @@
   <title>Test file</title>
 </head>
 <body>
-  <script src='../kipper-standalone.js'></script>
+  <script type="module" src='../kipper-standalone.js'></script>
+  <script type="module">
+    let compiler = new Kipper.KipperCompiler(new Kipper.KipperLogger((level, msg) => {
+      console.log(`[${level}] ${msg}`);
+    }));
+    compiler.syntaxAnalyse("This is a string");
+  </script>
 </body>
 </html>

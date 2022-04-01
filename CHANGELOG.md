@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+### Updated
+
+### Removed
+
+## [0.1.1] - 2022-04-01
+
+### Added
+- Added missing dependency `tslib`
+
+## [0.1.0] - 2022-04-01
+
+### Added
+- `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
+  generated in the walking step.
+- Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
+- General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
+- `KipperFileContext.translate()`, which walks through the listener and returns the generated code. The generated code
+  will be cached inside `KipperFileContext.typescriptCode` to allow reusing code instead of unnecessarily generating 
+  code again.
+- `LogLevel.UNKNOWN` as the default log level for `LogLevel`.
+- `KipperLogger.levels` as a static variable to access the enum `LogLevel`.
+- New abstract base class `CompilableParseToken`, which will represent the major parse tokens inside a kipper 
+  program. The token class has the additional functionality of wrapping an entire antlr4 statement, expression or 
+  block, and being able to semantically analyse it using `semanticAnalysis()` and translate it to TypeScript using 
+  `translateCtxAndChildren()`.
+- Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
+- File `builtIns.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
+  primarily includes global functions, which can be represented using the interface `BuiltInFunction`. (In work!)
+- Implemented `**` (Power-to) as a valid arithmetic expression.
+- Implemented `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to configure
+  the compilation behaviour.
+- Implemented new module `/compiler/tokens`, which contains the parse token implementations.
+- Implemented basic global function `print` that will be available inside a Kipper program per default (unless 
+  forcibly changed).
+- New Class `ScopeDeclaration` representing a declaration/entry inside a scope. This is used primarily inside
+  `KipperProgramContext`, which uses it to keep track of global definitions and also `CompoundStatement`s, which
+  may have children definitions.
+- Type Implementation with two new type aliases: `KipperStorageType` and `KipperType`.
+
+### Changed
+- Made return of `KipperCompiler.parse()` to `KipperFileContext`, which wraps the generated parse tree.
+- Behaviour of `KipperCompileResult`, which will now store the `programCtx: KipperFileContext` and `result: string[]`
+  of a compilation. 
+- Fixed bug in `KipperErrorListener`, which resulted in errors being not properly raised. The function is
+  now a template, where `<T>` represents the offending token. `<T>` will also be passed onto `KipperSyntaxError<T>`.
+- Changed type of `LogLevel`, which now returns string-representations of the log level.
+- Fixed `initializer` rule in Kipper.g4 and removed invalid designator rules.
+- Updated all expressions in `Kipper.g4` to contain proper labelled sub-rules, which clearly state if
+  the expression is used or if it's a pass on and an expression with higher importance is used (child of that
+  expression).
+- Renamed `KipperFileContext` to `KipperProgramContext`, which will now handle the entire compilation and store its
+  meta-data.
+
+### Removed
+- Unneeded namespace `KipperStreams` and its functions.
+- Unneeded variable `LogLevelNames`, as now the enum `LogLevel` per default returns the names of the level.
+- Removed `preferLogging` options in the entire module, as errors and warnings will always be logged no matter what. 
+  This also means that errors will always be logged *and* thrown as a catchable error instance.
+- Argument `streamName` in `KipperCompiler.syntaxAnalyse()` and `KipperCompiler.compile()`. 
+
 ## [0.0.5] - 2022-03-02
 
 ### Changed
@@ -51,8 +115,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.3...HEAD
-[0.0.5]: https://github.com/Luna-Klatzer/Kipper/tag/0.0.5
-[0.0.4]: https://github.com/Luna-Klatzer/Kipper/
-[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.2...0.0.3
-[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/0.0.2
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
+[0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
+[0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/v0.0.2

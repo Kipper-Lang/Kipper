@@ -9,10 +9,13 @@ yarn-error.log*
 *-debug.log
 *-error.log
 /.nyc_output
-/lib
 /tmp
 /yarn.lock
 node_modules
+
+# Web builds
+kipper-standalone.js
+kipper-standalone.min.js
 
 # Runtime data
 pids
@@ -68,7 +71,7 @@ typings/
 .env
 
 # Transpiled JavaScript files from Typescript
-/dist
+/lib
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo

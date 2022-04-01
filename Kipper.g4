@@ -15,7 +15,6 @@ translationUnit
 
 externalItem
     :   functionDefinition # externalFunctionDefinition
-    |   declaration # externalDeclaration
     |   blockItem # externalBlockItem
     ;
 
@@ -28,19 +27,28 @@ endOfItem
     ;
 
 primaryExpression
-    :   Identifier
-    |   Constant
-    |   StringLiteral+
-    |   '(' expression ')'
+    :   Identifier # identifierPrimaryExpression
+    |   (StringLiteral WS*)+ # stringPrimaryExpression
+    |   (FStringLiteral WS*)+ # fStringPrimaryExpression
+    |   '(' expression ')' # tangledPrimaryExpression
+    |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
+    |   CharacterConstant #characterPrimaryExpression
+    |   listConstant #listPrimaryExpression
+    ;
+
+listConstant
+    :   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']'
     ;
 
 postfixExpression
-    :   primaryExpression WS*
-        ('[' WS* expression WS* ']' // array specifier
-        | ('++' | '--')
-        )*
-        |
-        'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' // function call
+    :   primaryExpression #passOnPostfixExpression
+    |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
+    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
+    |   'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallPostfixExpression
+    ;
+
+arraySpecifier
+    :   '[' WS* expression WS* ']'
     ;
 
 argumentExpressionList
@@ -48,54 +56,62 @@ argumentExpressionList
     ;
 
 unaryExpression
-    :
-    ('++' |  '--')* WS*
-    (postfixExpression
-    |   unaryOperator WS* castOrConvertExpression
-    )
+    :   postfixExpression # passOnUnaryExpression
+    |   incrementOrDecrementOperator WS* postfixExpression # incrementOrDecrementUnaryExpression
+    |   unaryOperator WS* postfixExpression # operatorModifiedUnaryExpression
+    ;
+
+incrementOrDecrementOperator
+    :   ('++' |  '--')
     ;
 
 unaryOperator
-    :   '*' | '+' | '-' | '!'
+    :   '+' | '-' | '!'
     ;
 
 castOrConvertExpression
-    :   unaryExpression
-    |   DigitSequence // for
-    |   unaryExpression WS* 'as' WS* typeSpecifier // conversion function
+    :   unaryExpression # passOnCastOrConvertExpression
+    |   unaryExpression WS* 'as' WS* typeSpecifier # actualCastOrConvertExpression // conversion function
     ;
 
 multiplicativeExpression
-    :   castOrConvertExpression WS* (('*'|'/'|'%') WS* castOrConvertExpression WS*)*
+    :   castOrConvertExpression # passOnMultiplicativeExpression
+    |   castOrConvertExpression WS* (('*'|'/'|'%'|'**') WS* castOrConvertExpression WS*)* # actualMultiplicativeExpression
     ;
 
 additiveExpression
-    :   multiplicativeExpression WS* (('+'|'-') WS* multiplicativeExpression WS*)*
+    :   multiplicativeExpression # passOnAdditiveExpression
+    |   multiplicativeExpression WS* (('+'|'-') WS* multiplicativeExpression WS*)* # actualAdditiveExpression
     ;
 
 relationalExpression
-    :   additiveExpression WS* (('<'|'>'|'<='|'>=') WS* additiveExpression WS*)*
+    :   additiveExpression # passOnRelationalExpression
+    |   additiveExpression WS* (('<'|'>'|'<='|'>=') WS* additiveExpression WS*)* # actualRelationalExpression
     ;
 
 equalityExpression
-    :   relationalExpression WS* (('=='| '!=') WS* relationalExpression WS*)*
+    :   relationalExpression # passOnEqualityExpression
+    |   relationalExpression WS* (('=='| '!=') WS* relationalExpression WS*)* # actualEqualityExpression
     ;
 
 logicalAndExpression
-    :   equalityExpression WS* ('&&' WS* equalityExpression WS*)*
+    :   equalityExpression # passOnLogicalAndExpression
+    |   equalityExpression WS* ('&&' WS* equalityExpression WS*)* # actualLogicalAndExpression
     ;
 
 logicalOrExpression
-    :   logicalAndExpression WS* ( '||' WS* logicalAndExpression WS*)*
+    :   logicalAndExpression # passOnLogicalOrExpression
+    |   logicalAndExpression WS* ( '||' WS* logicalAndExpression WS*)* # actualLogicalOrExpression
     ;
 
 conditionalExpression
-    :   logicalOrExpression WS* ('?' WS* expression WS* ':' WS* conditionalExpression WS*)?
+    :   logicalOrExpression # passOnConditionalExpression
+    |   logicalOrExpression WS* '?' WS* expression WS* ':' WS* conditionalExpression WS* # actualConditionalExpression
     ;
 
 assignmentExpression
-    :   conditionalExpression
-    |   unaryExpression WS* assignmentOperator WS* assignmentExpression
+    :   conditionalExpression # passOnAssignmentExpression
+    |   unaryExpression WS* assignmentOperator WS* assignmentExpression # actualAssignmentExpression
     ;
 
 assignmentOperator
@@ -132,9 +148,9 @@ initDeclarator
     ;
 
 typeSpecifier
-    :   Identifier #singleItemTypeSpecifier // for single items, like 'num'
-    |   Identifier '<' WS* Identifier WS* '>' #multiItemTypeSpecifier // for lists
-    |   'typeof' WS* '(' Identifier ')' #typeofTypeSpecifier // typeof another variable
+    :   Identifier # singleItemTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' # multiItemTypeSpecifier // for lists
+    |   'typeof' WS* '(' Identifier ')' # typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
@@ -165,39 +181,14 @@ parameterDeclaration
 
 initializer
     :   assignmentExpression
-    |   '[' WS* initializerList? WS* ','? WS* ']' // for lists
-    ;
-
-initializerList
-    :   designation? WS* initializer WS* (',' WS* designation? WS* initializer WS*)*
-    ;
-
-// struct designator
-designation
-    :   designatorList WS* '='
-    ;
-
-designatorList
-    :   designator+
-    ;
-
-designator
-    :   '[' WS* constantExpression WS* ']'
-    |   '.' WS* Identifier
     ;
 
 statement
-    :   labeledStatement
-    |   compoundStatement
+    :   compoundStatement
     |   expressionStatement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
-    ;
-
-labeledStatement
-    :   'case' WS* constantExpression WS* ':' WS* statement
-    |   'default' WS* ':' WS* statement
     ;
 
 compoundStatement
@@ -217,8 +208,13 @@ expressionStatement
     ;
 
 selectionStatement
-    :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)?
-    |   'switch' WS* '(' WS* expression WS* ')' WS* statement
+    :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)? #ifStatement
+    |   'switch' WS* '(' WS* expression WS* ')' WS* '{' (WS* switchLabeledStatement)* '}' #switchStatement
+    ;
+
+switchLabeledStatement
+    :   'case' WS* constantExpression WS* ':' WS* statement
+    |   'default' WS* ':' WS* statement
     ;
 
 iterationStatement
@@ -307,6 +303,7 @@ MinusMinus : '--';
 Star : '*';
 Div : '/';
 Mod : '%';
+PowerTo : '**';
 
 // Boolish Logical Operations
 AndAnd : '&&';
@@ -377,13 +374,6 @@ HexQuad
     :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
     ;
 
-Constant
-    :   IntegerConstant
-    |   FloatingConstant
-    |   CharacterConstant
-    ;
-
-fragment
 IntegerConstant
     :   DecimalConstant IntegerSuffix?
     |   OctalConstant IntegerSuffix?
@@ -454,7 +444,6 @@ LongLongSuffix
     :   'll' | 'LL'
     ;
 
-fragment
 FloatingConstant
     :   DecimalFloatingConstant
     |   HexadecimalFloatingConstant
@@ -512,12 +501,8 @@ FloatingSuffix
     :   [flFL]
     ;
 
-fragment
 CharacterConstant
     :   '\'' CCharSequence '\''
-    |   'L\'' CCharSequence '\''
-    |   'u\'' CCharSequence '\''
-    |   'U\'' CCharSequence '\''
     ;
 
 fragment
@@ -554,16 +539,12 @@ HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit+
     ;
 
-StringLiteral
-    :   EncodingPrefix? '"' SCharSequence? '"'
+FStringLiteral
+    :   'f' '"' SCharSequence? '"'
     ;
 
-fragment
-EncodingPrefix
-    :   'u8'
-    |   'u'
-    |   'U'
-    |   'L'
+StringLiteral
+    :   '"' SCharSequence? '"'
     ;
 
 fragment
@@ -577,11 +558,6 @@ SChar
     |   EscapeSequence
     |   '\\\n'   // Added line
     |   '\\\r\n' // Added line
-    ;
-
-Directive
-    :   '#' ~[\r\n]*
-        -> skip
     ;
 
 WS
