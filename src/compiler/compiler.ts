@@ -153,7 +153,7 @@ export class KipperCompiler {
 	 */
 	private static _handleStreamInput(
 		stream: string | KipperParseStream,
-		name: string = "inline-stream",
+		name: string = "anonymous-script",
 	): KipperParseStream {
 		if (stream instanceof KipperParseStream) {
 			return stream;

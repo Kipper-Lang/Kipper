@@ -5,18 +5,17 @@
     "importHelpers": true,
     "removeComments": true,
     "module": "commonjs",
-    "outDir": "lib",
-    "rootDir": "src",
+    "rootDir": "browser",
     "strict": true,
     "target": "es2020",
     "lib": [
-      "ES7"
+      "ES7",
+      "dom"
     ]
     // ES7 -> ES2016
   },
   "include": [
-    "src/**/*",
-    "src/compiler/parser/*.*"
+    "browser/**/*"
   ],
   "exclude": [
     "node_modules"

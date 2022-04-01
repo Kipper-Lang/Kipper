@@ -13,7 +13,7 @@ const mainFile = `${__dirname}/../kipper-files/main.kip`;
 describe("KipperProgramContext", () => {
 	describe("constructor", async () => {
 		const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-		const stream: KipperParseStream = new KipperParseStream("inline-stream", fileContent);
+		const stream: KipperParseStream = new KipperParseStream("anonymous-script", fileContent);
 
 		it("DefaultConfiguration", async () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);

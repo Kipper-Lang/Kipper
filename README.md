@@ -2,7 +2,7 @@
 
 # Kipper Base Package - `@kipper/base`
 
-[![Version](https://img.shields.io/npm/v/@kipper/base)](https://npmjs.org/package/@kipper/base)
+[![Version](https://img.shields.io/npm/v/@kipper/base?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/base)
 ![](https://img.shields.io/badge/Coverage-55%25-F2E96B.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
@@ -44,22 +44,30 @@ Simple example of including your code in your browser:
 ```html
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<!-- Kipper dependency - Get it from the GitHub release page for Kipper -->
+<!-- Kipper dependency -->
 <script src="https://cdn.jsdelivr.net/npm/@kipper/base@latest/kipper-standalone.min.js"></script>
-<!-- Kipper will automatically compile all kipper script tags and replace them with javascript tags before runtime -->
-<script type="text/kipper">
-  /* Simple Program */
-  call print("Hello world!");
+
+<!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
+<!-- with the global 'Kipper' -->
+<script type="module">
+  // Define your own logger and compiler, which will handle the compilation
+  const yourLogger = new Kipper.KipperLogger((level, msg) => {
+    console.log(`[${level}] ${msg}`);
+  })
+  const yourCompiler = new Kipper.KipperCompiler(yourLogger);
+	
+  // Compile the code string or stream
+  let compileResult = yourCompiler.compile(fileContent);
 </script>
 ```
 
 ### Locally using Node.js and the CLI
 
-This is to recommend way to use Kipper if you are new to coding, as it allows you to locally use and run kipper, 
-without depending on a browser. 
+This is to recommend way to use Kipper if you want to dive deeper into Kipper, as it allows you to locally use and run 
+kipper, without depending on a browser. 
 
 This also enables the usage of files, which can be read and compiled to TypeScript, and run using the CLI, without
-having to do anything yourself. This also allows internally the input of data over the console and file-interactions, 
+having to do anything yourself. This also allows the input of data over the console and file-interactions, 
 which are not supported inside a browser.
 
 For more info go to the CLI repository [here](https://github.con/Luna-Klatzer/Kipper-CLI) or visit the npm page 
@@ -79,8 +87,14 @@ import { KipperCompiler } from "@kipper/base";
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8" as BufferEncoding).then(
   (fileContent: string) => {
-    const compiler = new KipperCompiler();
-    let compileResult = compiler.compile(fileContent);
+    // Define your own logger and compiler, which will handle the compilation
+    const yourLogger = new Kipper.KipperLogger((level, msg) => {
+      console.log(`[${level}] ${msg}`);
+    })
+    const yourCompiler = new Kipper.KipperCompiler(yourLogger);
+
+    // Compile the code string or stream
+    let compileResult = yourCompiler.compile(fileContent);
   }
 );
 ```

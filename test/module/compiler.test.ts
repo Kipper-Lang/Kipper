@@ -52,7 +52,7 @@ describe("KipperCompiler", () => {
     it("Syntax analyse valid code without error", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
 
       await compiler.syntaxAnalyse(stream);
     });
@@ -60,7 +60,7 @@ describe("KipperCompiler", () => {
     it("Syntax analyse invalid code with expected error", async () => {
       let fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
 
       try {
         await compiler.syntaxAnalyse(stream);
@@ -75,14 +75,14 @@ describe("KipperCompiler", () => {
     it("Validate file ctx return", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
       let instance = await compiler.parse(stream);
 
       assert(instance.stream === stream, "Expected streams to equal");
       assert(instance.antlrParseTree !== null, "Start item must exist");
-      assert(stream.name === "inline-stream");
+      assert(stream.name === "anonymous-script");
       assert(stream.stringContent === fileContent);
-      assert(stream.charStream.sourceName === "inline-stream");
+      assert(stream.charStream.sourceName === "anonymous-script");
       assert(stream.charStream.toString() === fileContent);
     });
   });
@@ -91,7 +91,7 @@ describe("KipperCompiler", () => {
     it("Single Function call compilation", async () => {
       let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
       let instance: KipperCompileResult = await compiler.compile(stream);
 
       assert(instance.programCtx);
@@ -101,7 +101,7 @@ describe("KipperCompiler", () => {
     it("Multi Function call compilation", async () => {
       let fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
       let instance: KipperCompileResult = await compiler.compile(stream);
 
       assert(instance.programCtx);
@@ -111,7 +111,7 @@ describe("KipperCompiler", () => {
     it("Print number function call compilation", async () => {
       let fileContent = (await fs.readFile(printNumberFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("inline-stream", fileContent);
+      let stream = new KipperParseStream("anonymous-script", fileContent);
       let instance: KipperCompileResult = await compiler.compile(stream);
 
       assert(instance.programCtx);

@@ -18,12 +18,12 @@ describe("Parse-Tokens", () => {
 		describe("sourceCode", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-				let stream: KipperParseStream = new KipperParseStream("inline-stream", fileContent);
+				let stream: KipperParseStream = new KipperParseStream("anonymous-script", fileContent);
 				let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
-				assert(stream.name === "inline-stream");
+				assert(stream.name === "anonymous-script");
 				assert(stream.stringContent === fileContent);
-				assert(stream.charStream.sourceName === "inline-stream");
+				assert(stream.charStream.sourceName === "anonymous-script");
 				assert(stream.charStream.toString() === fileContent);
 
 				let parenToken = new RootFileParseToken(programCtx);

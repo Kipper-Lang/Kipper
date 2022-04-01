@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Updated
+
+### R
+
+## [0.1.0] - 2022-04-01
+
+### Added
 - `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
   generated in the walking step.
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
@@ -102,8 +110,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.3...HEAD
-[0.0.5]: https://github.com/Luna-Klatzer/Kipper/tag/0.0.5
-[0.0.4]: https://github.com/Luna-Klatzer/Kipper/
-[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/0.0.2...0.0.3
-[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/0.0.2
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.0
+[0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/v0.0.2
