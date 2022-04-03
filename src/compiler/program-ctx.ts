@@ -10,10 +10,10 @@ import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { BuiltInFunction, ScopeDeclaration } from "./logic";
+import { BuiltInFunction, ScopeVariableDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
-import { RootFileParseToken } from "./tokens";
-import { GlobalAlreadyRegisteredError } from "../errors";
+import { RootFileParseToken, VariableDeclaration } from "./tokens";
+import { DuplicateIdentifierError, GlobalAlreadyRegisteredError, NoBuiltInOverwriteError } from "../errors";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -25,42 +25,42 @@ import { GlobalAlreadyRegisteredError } from "../errors";
 export class KipperProgramContext {
 	/**
 	 * The private '_stream' that actually stores the variable data,
-	 * which is returned inside the getter 'stream'.
+	 * which is returned inside the {@link this.stream}.
 	 * @private
 	 */
 	private readonly _stream: KipperParseStream;
 
 	/**
 	 * The private '_parseTreeEntry' that actually stores the variable data,
-	 * which is returned inside the getter 'parseTreeEntry'.
+	 * which is returned inside the {@link this.parseTreeEntry}.
 	 * @private
 	 */
 	private readonly _antlrParseTree: CompilationUnitContext;
 
 	/**
 	 * The private '_parser' that actually stores the variable data,
-	 * which is returned inside the getter 'parser'.
+	 * which is returned inside the {@link this.parser}.
 	 * @private
 	 */
 	private readonly _parser: KipperParser;
 
 	/**
 	 * The private '_lexer' that actually stores the variable data,
-	 * which is returned inside the getter 'lexer'.
+	 * which is returned inside the {@link this.lexer}.
 	 * @private
 	 */
 	private readonly _lexer: KipperLexer;
 
 	/**
-	 * The private '_globals' that actually stores the variable data,
-	 * which is returned inside the getter 'globals'.
+	 * The private '_builtInGlobals' that actually stores the variable data,
+	 * which is returned inside the getter {@link this.builtInGlobals}.
 	 * @private
 	 */
-	private _globals: Array<BuiltInFunction>;
+	private _builtInGlobals: Array<BuiltInFunction>;
 
 	/**
 	 * The private '_processedParseTree' that actually stores the variable data,
-	 * which is returned inside the getter 'processedParseTree'.
+	 * which is returned inside the {@link this.processedParseTree}.
 	 * @private
 	 */
 	private _processedParseTree: RootFileParseToken | undefined;
@@ -76,7 +76,7 @@ export class KipperProgramContext {
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
-	private _globalScope: Array<ScopeDeclaration>;
+	private _globalScope: Array<ScopeVariableDeclaration>;
 
 	/**
 	 * The logger that should be used to log warnings and errors.
@@ -96,7 +96,7 @@ export class KipperProgramContext {
 		this._antlrParseTree = parseTreeEntry;
 		this._parser = parser;
 		this._lexer = lexer;
-		this._globals = [];
+		this._builtInGlobals = [];
 		this._globalScope = [];
 		this._processedParseTree = undefined;
 	}
@@ -148,12 +148,20 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the globals registered for this Kipper program. These global functions defined in the array will be
+	 * Returns the builtInGlobals registered for this Kipper program. These global functions defined in the array will be
 	 * available inside the compiled Kipper program and callable using their specified identifier. This is designed to
 	 * allow calling external typescript functions, which can not be natively implemented inside Kipper.
 	 */
-	public get globals(): Array<BuiltInFunction> {
-		return this._globals;
+	public get builtInGlobals(): Array<BuiltInFunction> {
+		return this._builtInGlobals;
+	}
+
+	/**
+	 * The global scope of this file, which contains all {@link ScopeVariableDeclaration} instances that are accessible in the
+	 * entire program.
+	 */
+	public get globalScope(): Array<ScopeVariableDeclaration> {
+		return this._globalScope;
 	}
 
 	/**
@@ -176,7 +184,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Registers new globals that are available inside the Kipper program.
+	 * Registers new builtInGlobals that are available inside the Kipper program.
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
@@ -188,16 +196,16 @@ export class KipperProgramContext {
 
 		for (let g of newGlobals) {
 			let identifierAlreadyExists =
-				this._globals.find((registered) => {
-					return registered.name == g.name;
+				this._builtInGlobals.find((registered) => {
+					return registered.identifier == g.identifier;
 				}) !== undefined;
-			let globalAlreadyExists = this._globals.includes(g);
+			let globalAlreadyExists = this._builtInGlobals.includes(g);
 			if (identifierAlreadyExists || globalAlreadyExists) {
-				throw new GlobalAlreadyRegisteredError(`Global function '${g.name}' already exists!`);
+				throw new GlobalAlreadyRegisteredError(g.identifier);
 			}
 		}
 
-		this._globals = this._globals.concat(newGlobals);
+		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
 	}
 
 	/**
@@ -223,7 +231,7 @@ export class KipperProgramContext {
 		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
 
 		// Append required typescript code for Kipper for the program to work properly
-		genCode = this.generateRequired().concat(genCode);
+		genCode = this.generateRequirements().concat(genCode);
 
 		this.logger.info(
 			`Generated ${genCode.length} lines - Processed ${this._processedParseTree.children.length} root items.`,
@@ -239,6 +247,8 @@ export class KipperProgramContext {
 	/**
 	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
 	 * the program and compile it.
+	 *
+	 *
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
@@ -261,13 +271,54 @@ export class KipperProgramContext {
 	 * Generates the required code for the execution of this kipper program
 	 * @private
 	 */
-	private generateRequired(): Array<string> {
+	private generateRequirements(): Array<string> {
 		let code: Array<string> = [];
 
 		// Generating the code for the global functions
-		for (let global of this._globals) {
+		for (let global of this._builtInGlobals) {
 			code = code.concat(global.handler);
 		}
 		return code;
+	}
+
+	/**
+	 * Tries to fetch the specific identifier (Either {@link BuiltInFunction} or {@link ScopeVariableDeclaration}) and locate
+	 * it in the global scope.
+	 */
+	public getGlobalIdentifier(identifier: string): BuiltInFunction | ScopeVariableDeclaration | undefined {
+		return this.getGlobalFunction(identifier) ?? this.getGlobalVariable(identifier);
+	}
+
+	/**
+	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
+	 * @param identifier The identifier of the function
+	 */
+	public getGlobalFunction(identifier: string): BuiltInFunction | undefined {
+		return this.builtInGlobals.find((value) => {
+			return value.identifier === identifier;
+		});
+	}
+
+	/**
+	 * Tries to fetch a global variable from the {@link this.globalScope} based on the passed {@link identifier}.
+	 * @param identifier The identifier of the variable
+	 */
+	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
+		return this.globalScope.find((value) => {
+			return value.identifier == identifier;
+		});
+	}
+
+	/**
+	 * Adds a new declaration entry to the global scope.
+	 */
+	public addNewGlobalScopeEntry(token: VariableDeclaration) {
+		if (this.globalScope.find((v) => v.identifier === token.identifier) !== undefined) {
+			throw new DuplicateIdentifierError(token.identifier);
+		} else if (this.builtInGlobals.find((v) => v.identifier === token.identifier) !== undefined) {
+			throw new NoBuiltInOverwriteError(token.identifier);
+		} else {
+			this._globalScope = this._globalScope.concat(new ScopeVariableDeclaration(token));
+		}
 	}
 }

@@ -8,8 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a new variable
+  called `_currentScope` in `KipperFileListener`.
+- Added variable metadata handling in `VariableDeclaration`. This now includes the proper setting of identifier,
+  storage type, value type and whether the variable has been defined yet.
+- Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 
 ### Updated
+- Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
+  (`VariableDeclaration` instance).
+- Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
+  default to `"anonymous-script"`.
+- Updated `CompoundStatement` children behaviour, by adding a new array `localScope`, which will store the metadata
+  for all variables exclusively available in that compound statement.
 
 ### Removed
 

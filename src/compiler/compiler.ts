@@ -20,7 +20,7 @@ import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
 export interface CompileConfig {
 	/**
 	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
-	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
+	 * default builtInGlobals will be overwritten! If you wish to only extend the builtInGlobals write to {@link extendGlobals}.
 	 */
 	globals?: Array<BuiltInFunction>;
 
@@ -47,13 +47,13 @@ export class RuntimeCompileConfig {
 	public readonly userOptions: CompileConfig;
 
 	/**
-	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
+	 * The default builtInGlobals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
 	public static readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
 
 	/**
-	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
+	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged with the
 	 * {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
 	public readonly actualGlobals: Array<BuiltInFunction>;
@@ -73,14 +73,14 @@ export class RuntimeCompileConfig {
 export class KipperCompileResult {
 	/**
 	 * The private '_fileCtx' that actually stores the variable data,
-	 * which is returned inside the getter 'fileCtx'.
+	 * which is returned inside the {@link this.fileCtx}.
 	 * @private
 	 */
 	private readonly _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_result' that actually stores the variable data,
-	 * which is returned inside the getter 'result'.
+	 * which is returned inside the {@link this.result}.
 	 * @private
 	 */
 	private readonly _result: Array<string>;
@@ -115,14 +115,14 @@ export class KipperCompileResult {
 export class KipperCompiler {
 	/**
 	 * The private '_errorListener' that actually stores the variable data,
-	 * which is returned inside the getter 'errorListener'.
+	 * which is returned inside the {@link this.errorListener}.
 	 * @private
 	 */
 	private readonly _errorListener: KipperErrorListener<any>;
 
 	/**
 	 * The private '_logger' that actually stores the variable data,
-	 * which is returned inside the getter 'logger'.
+	 * which is returned inside the {@link this.logger}.
 	 * @private
 	 */
 	private readonly _logger: KipperLogger;
@@ -159,7 +159,7 @@ export class KipperCompiler {
 		if (stream instanceof KipperParseStream) {
 			return stream;
 		} else {
-			return new KipperParseStream(name, stream);
+			return new KipperParseStream(stream, name);
 		}
 	}
 
@@ -214,12 +214,12 @@ export class KipperCompiler {
 		// The file context storing the metadata for the "virtual file"
 		const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-		// If there are globals to register, register them
+		// If there are builtInGlobals to register, register them
 		let globals = config.actualGlobals;
 		if (globals !== undefined && globals.length > 0) {
 			this.logger.debug(`Registering the following globals for the Kipper program '${inStream.name}':`);
 			for (let item of globals) {
-				this.logger.debug(` - ${item.name} -> ${item.returnType}`);
+				this.logger.debug(` - ${item.identifier} -> ${item.returnType}`);
 			}
 			fileCtx.registerGlobals(globals);
 		} else {

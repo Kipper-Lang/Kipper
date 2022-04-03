@@ -70,7 +70,8 @@ import {
 	antlrExpressionCtxType,
 	antlrStatementCtxType,
 	CompilableParseToken,
-	Definition,
+	CompoundStatement,
+	Declaration,
 	Expression,
 	getDefinitionInstance,
 	getExpressionInstance,
@@ -92,14 +93,14 @@ const passOnHandler: () => void = () => {};
 export class KipperFileListener implements KipperListener {
 	/**
 	 * The private '_programCtx' that actually stores the variable data,
-	 * which is returned inside the getter 'programCtx'.
+	 * which is returned inside the {@link this.programCtx}.
 	 * @private
 	 */
 	private readonly _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_itemBuffer' that actually stores the variable data,
-	 * which is returned inside the getter 'itemBuffer'.
+	 * which is returned inside the {@link this.itemBuffer}.
 	 * @private
 	 */
 	private readonly _kipperParseTree: RootFileParseToken;
@@ -115,6 +116,12 @@ export class KipperFileListener implements KipperListener {
 	 * {@link _isExternalItem} is false.
 	 */
 	private _isFunctionDefinition: boolean;
+
+	/**
+	 * The current scope that new variables should be assigned to.
+	 * @private
+	 */
+	private _currentScope: KipperProgramContext | CompoundStatement;
 
 	/**
 	 * The correct Kipper token that is being walked through right now. This is the instance where current metadata
@@ -133,6 +140,7 @@ export class KipperFileListener implements KipperListener {
 	constructor(programCtx: KipperProgramContext) {
 		this._kipperParseTree = new RootFileParseToken(programCtx);
 		this._programCtx = programCtx;
+		this._currentScope = programCtx;
 		this._isExternalItem = false;
 		this._isFunctionDefinition = false;
 		this._currentPrimaryToken = undefined;
@@ -218,21 +226,27 @@ export class KipperFileListener implements KipperListener {
 	 * @private
 	 */
 	private handleIncomingStatementCtx(ctx: antlrStatementCtxType) {
-		this._currentPrimaryToken = getStatementInstance(ctx, this.getCurrentProcessedToken);
+		this._currentPrimaryToken = getStatementInstance(ctx, this.getCurrentProcessedToken, this._currentScope);
+
+		// If the new primary token is of type {@link CompoundStatement}, then make this new compound statement the new
+		// currently processed scope.
+		if (this._currentPrimaryToken instanceof CompoundStatement) {
+			this._currentScope = this._currentPrimaryToken;
+		}
 	}
 
 	/**
 	 * Handles an incoming statement context. The handling algorithm is:
 	 * - If {@link _currentPrimaryToken} is undefined, then it will be created and set as a child of
 	 * {@link _kipperParseTree}
-	 * - Otherwise, generate a new {@link Definition} instance, which will be added to the {@link _currentPrimaryToken} as
+	 * - Otherwise, generate a new {@link Declaration} instance, which will be added to the {@link _currentPrimaryToken} as
 	 * a child. Afterwards {@link _currentPrimaryToken} will be set to this new instance, as all new context instances
 	 * must be assigned to it. When the context is left, then the old {@link _currentPrimaryToken} will be restored as
 	 * {@link _currentPrimaryToken}, and all further context instances will be assigned to it.
 	 * @private
 	 */
 	private handleIncomingDefinitionCtx(ctx: antlrDefinitionCtxType) {
-		this._currentPrimaryToken = getDefinitionInstance(ctx, this.getCurrentProcessedToken);
+		this._currentPrimaryToken = getDefinitionInstance(ctx, this.getCurrentProcessedToken, this._currentScope);
 	}
 
 	/**
@@ -246,9 +260,14 @@ export class KipperFileListener implements KipperListener {
 	 */
 	private handleExitingStatementOrDefinitionCtx() {
 		if (
-			this._currentPrimaryToken?.parent instanceof Definition ||
+			this._currentPrimaryToken?.parent instanceof Declaration ||
 			this._currentPrimaryToken?.parent instanceof Statement
 		) {
+			// Reset the current scope
+			if (this._currentPrimaryToken instanceof CompoundStatement) {
+				this._currentScope = this._currentPrimaryToken.scope;
+			}
+
 			this._currentPrimaryToken = this._currentPrimaryToken.parent;
 		} else {
 			this._currentPrimaryToken = undefined;
@@ -1228,7 +1247,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterCompoundStatement(ctx: CompoundStatementContext): void {
-		throw new Error("Compound statements are not supported yet in Kipper");
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1236,7 +1255,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitCompoundStatement(ctx: CompoundStatementContext): void {
-		throw new Error("Compound statements are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	/**
@@ -1347,14 +1366,14 @@ export class KipperFileListener implements KipperListener {
 		throw new Error("Jump statements are not supported yet in Kipper");
 	}
 
-	// -- Declaration section --
+	// -- VariableDeclaration section --
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterDeclaration(ctx: DeclarationContext): void {
-		throw new Error("Declaration and definitions are not supported yet in Kipper");
+		this.handleIncomingDefinitionCtx(ctx);
 	}
 
 	/**
@@ -1362,7 +1381,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitDeclaration(ctx: DeclarationContext): void {
-		throw new Error("Declaration and definitions are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	/**
@@ -1370,14 +1389,16 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterFunctionDefinition(ctx: FunctionDefinitionContext): void {
-		throw new Error("Function definitions are not supported yet in Kipper");
+		this.handleIncomingDefinitionCtx(ctx);
 	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitFunctionDefinition(ctx: FunctionDefinitionContext): void {}
+	public exitFunctionDefinition(ctx: FunctionDefinitionContext): void {
+		this.handleExitingStatementOrDefinitionCtx();
+	}
 
 	// -- Child Rules Section --
 

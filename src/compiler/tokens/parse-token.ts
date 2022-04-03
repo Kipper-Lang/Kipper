@@ -14,27 +14,27 @@ export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
 
 /**
- * Kipper Parse token, which is the base class all tokens will extend from
+ * Kipper Parse token, which is the base class all tokens will extend from.
  * @since 0.1.0
  */
 export abstract class CompilableParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected readonly _antlrContext: ParserRuleContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the getter 'children'.
+	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<eligibleChildToken>;
 
 	/**
 	 * The private '_parent' that actually stores the variable data,
-	 * which is returned inside the getter 'parent'.
+	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _parent: eligibleParentToken;
@@ -132,14 +132,14 @@ export abstract class CompilableParseToken {
 export class RootFileParseToken {
 	/**
 	 * The private '_parent' that actually stores the variable data,
-	 * which is returned inside the getter 'parent'.
+	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the getter 'children'.
+	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<CompilableParseToken>;

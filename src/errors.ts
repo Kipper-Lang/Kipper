@@ -135,11 +135,61 @@ export class KipperSyntaxError<Token> extends KipperError {
 }
 
 /**
- * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.globals}.
+ * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.builtInGlobals}.
  */
 export class GlobalAlreadyRegisteredError extends KipperError {
+	constructor(identifier: string) {
+		super(`Global definition of function '${identifier}' already exists!`);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+	}
+}
+
+/**
+ * Error that is thrown when a new identifier is registered (function or variable identifier), but that identifier is
+ * already in use by another variable or function. No double definitions or overwrites of old definitions allowed!
+ */
+export class DuplicateIdentifierError extends KipperError {
+	constructor(identifier: string) {
+		super(`Definition of variable or function '${identifier}' already exists!`);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+	}
+}
+
+/**
+ * Error that is thrown when an identifier is registered that interferes with a built-in function or variable.
+ * No double definitions or overwrites of global built-in definitions allowed!
+ */
+export class NoBuiltInOverwriteError extends KipperError {
+	constructor(identifier: string) {
+		super(`May not overwrite built-in identifier '${identifier}'!`);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+	}
+}
+
+/**
+ * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances.
+ */
+export class UnableToDetermineMetadataError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
+
+		// Set the prototype explicitly.
+		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+	}
+}
+
+/**
+ * This error is raised when a variable type is used that is unknown the kipper language.
+ */
+export class UnknownTypeError extends KipperError {
+	constructor(type: string) {
+		super(`Unknown type '${type}'! Valid types: 'void', 'bool', 'string', 'char', 'num' and 'list'`);
 
 		// Set the prototype explicitly.
 		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);

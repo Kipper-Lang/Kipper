@@ -5,50 +5,51 @@
  * @since 0.1.0
  */
 import { KipperStorageType, KipperType } from "./types";
-import { CompoundStatement } from "../tokens";
+import { CompoundStatement, VariableDeclaration } from "../tokens";
 import type { KipperProgramContext } from "../program-ctx";
 
 /**
  * Represents the definition of a scope entry that may be a child of the global scope, a function scope or compound
  * statement scope
  */
-export abstract class ScopeDeclaration {
-	protected constructor(
+export class ScopeVariableDeclaration {
+	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _identifier: string,
-		// eslint-disable-next-line no-unused-vars
-		private _type: KipperType,
-		// eslint-disable-next-line no-unused-vars
-		private _storageType: KipperStorageType,
-		// eslint-disable-next-line no-unused-vars
-		private _scope: KipperProgramContext | CompoundStatement,
+		private _token: VariableDeclaration,
 	) {}
+
+	/**
+	 * Returns the {@link VariableDeclaration token} this scope declaration bases on.
+	 */
+	public get token(): VariableDeclaration {
+		return this._token;
+	}
 
 	/**
 	 * The identifier of this entry
 	 */
 	public get identifier(): string {
-		return this._identifier;
+		return this._token.identifier;
 	}
 
 	/**
 	 * The variable type or return type of this scope entry
 	 */
-	public get type(): KipperType {
-		return this._type;
+	public get type(): KipperType | undefined {
+		return this._token.valueType;
 	}
 
 	/**
 	 * The storage type of this scope entry
 	 */
-	public get storageType(): KipperStorageType {
-		return this._storageType;
+	public get storageType(): KipperStorageType | undefined {
+		return this._token.storageType;
 	}
 
 	/**
-	 * Returns the scope associated with this {@link ScopeDeclaration}
+	 * Returns the scope associated with this {@link ScopeVariableDeclaration}
 	 */
 	public get scope(): KipperProgramContext | CompoundStatement {
-		return this._scope;
+		return this._token.scope;
 	}
 }

@@ -19,6 +19,9 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../parser";
+import { KipperProgramContext } from "../program-ctx";
+import { ScopeVariableDeclaration } from "../logic";
+import { VariableDeclaration } from "./definitions";
 
 /**
  * Every antlr4 statement ctx type
@@ -34,19 +37,25 @@ export type antlrStatementCtxType =
  * Fetches the handler for the specified {@link antlrStatementCtxType}.
  * @param antlrContext The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
+ * @param scope The scope of the statement. This is necessary as the statements may need to access variables, and as
+ * such need to have metadata available of their scope and environment.
  */
-export function getStatementInstance(antlrContext: antlrStatementCtxType, parent: eligibleParentToken): Statement {
+export function getStatementInstance(
+	antlrContext: antlrStatementCtxType,
+	parent: eligibleParentToken,
+	scope: KipperProgramContext | CompoundStatement,
+): Statement {
 	if (antlrContext instanceof CompoundStatementContext) {
-		return new CompoundStatement(antlrContext, parent);
+		return new CompoundStatement(antlrContext, parent, scope);
 	} else if (antlrContext instanceof SelectionStatementContext) {
-		return new SelectionStatement(antlrContext, parent);
+		return new SelectionStatement(antlrContext, parent, scope);
 	} else if (antlrContext instanceof ExpressionStatementContext) {
-		return new ExpressionStatement(antlrContext, parent);
+		return new ExpressionStatement(antlrContext, parent, scope);
 	} else if (antlrContext instanceof IterationStatementContext) {
-		return new IterationStatement(antlrContext, parent);
+		return new IterationStatement(antlrContext, parent, scope);
 	} else {
 		// Can only be {@link JumpStatementContext}
-		return new JumpStatement(antlrContext, parent);
+		return new JumpStatement(antlrContext, parent, scope);
 	}
 }
 
@@ -58,21 +67,33 @@ export function getStatementInstance(antlrContext: antlrStatementCtxType, parent
 export abstract class Statement extends CompilableParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: antlrStatementCtxType;
 
-	protected constructor(antlrContext: antlrStatementCtxType, parent: eligibleParentToken) {
+	protected constructor(
+		antlrContext: antlrStatementCtxType,
+		parent: eligibleParentToken,
+		// eslint-disable-next-line no-unused-vars
+		private _scope: KipperProgramContext | CompoundStatement,
+	) {
 		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): antlrStatementCtxType {
 		return this._antlrContext;
+	}
+
+	/**
+	 * The scope of this statement. This allows the statement to access variable and environmental metadata.
+	 */
+	public get scope(): KipperProgramContext | CompoundStatement {
+		return this._scope;
 	}
 }
 
@@ -83,21 +104,43 @@ export abstract class Statement extends CompilableParseToken {
 export class CompoundStatement extends Statement {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: CompoundStatementContext;
 
-	constructor(antlrContext: CompoundStatementContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
+	private _localScope: Array<ScopeVariableDeclaration>;
+
+	constructor(
+		antlrContext: CompoundStatementContext,
+		parent: eligibleParentToken,
+		scope: KipperProgramContext | CompoundStatement,
+	) {
+		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
+		this._localScope = [];
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): CompoundStatementContext {
 		return this._antlrContext;
+	}
+
+	/**
+	 * Returns the local variables that are exclusively accessible inside this compound statement.
+	 */
+	public get localScope(): Array<ScopeVariableDeclaration> {
+		return this._localScope;
+	}
+
+	/**
+	 * Adds a new local variable to this scope.
+	 * @param token The {@link VariableDeclaration} token
+	 */
+	public addNewLocalVariable(token: VariableDeclaration) {
+		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}
 
 	/**
@@ -124,18 +167,22 @@ export class CompoundStatement extends Statement {
 export class SelectionStatement extends Statement {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: SelectionStatementContext;
 
-	constructor(antlrContext: SelectionStatementContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
+	constructor(
+		antlrContext: SelectionStatementContext,
+		parent: eligibleParentToken,
+		scope: KipperProgramContext | CompoundStatement,
+	) {
+		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): SelectionStatementContext {
 		return this._antlrContext;
@@ -165,18 +212,22 @@ export class SelectionStatement extends Statement {
 export class ExpressionStatement extends Statement {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: ExpressionStatementContext;
 
-	constructor(antlrContext: ExpressionStatementContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
+	constructor(
+		antlrContext: ExpressionStatementContext,
+		parent: eligibleParentToken,
+		scope: KipperProgramContext | CompoundStatement,
+	) {
+		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): ExpressionStatementContext {
 		return this._antlrContext;
@@ -206,18 +257,22 @@ export class ExpressionStatement extends Statement {
 export class IterationStatement extends Statement {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: IterationStatementContext;
 
-	constructor(antlrContext: IterationStatementContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
+	constructor(
+		antlrContext: IterationStatementContext,
+		parent: eligibleParentToken,
+		scope: KipperProgramContext | CompoundStatement,
+	) {
+		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): IterationStatementContext {
 		return this._antlrContext;
@@ -247,18 +302,22 @@ export class IterationStatement extends Statement {
 export class JumpStatement extends Statement {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: JumpStatementContext;
 
-	constructor(antlrContext: JumpStatementContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
+	constructor(
+		antlrContext: JumpStatementContext,
+		parent: eligibleParentToken,
+		scope: KipperProgramContext | CompoundStatement,
+	) {
+		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
+	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
 	public override get antlrContext(): JumpStatementContext {
 		return this._antlrContext;

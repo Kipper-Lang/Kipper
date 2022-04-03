@@ -18,7 +18,7 @@ describe("Parse-Tokens", () => {
 		describe("sourceCode", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-				let stream: KipperParseStream = new KipperParseStream("anonymous-script", fileContent);
+				let stream: KipperParseStream = new KipperParseStream(fileContent);
 				let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
 				assert(stream.name === "anonymous-script");

@@ -116,7 +116,7 @@ export function getExpressionInstance(antlrContext: antlrExpressionCtxType, pare
 export abstract class Expression extends CompilableParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: antlrExpressionCtxType;
@@ -159,7 +159,7 @@ export abstract class ConstantExpression extends Expression {
 export class NumberPrimaryExpression extends ConstantExpression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: NumberPrimaryExpressionContext;
@@ -206,7 +206,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 export class CharacterPrimaryExpression extends ConstantExpression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: CharacterPrimaryExpressionContext;
@@ -258,7 +258,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 export class ListPrimaryExpression extends ConstantExpression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: ListPrimaryExpressionContext;
@@ -300,7 +300,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 export class StringPrimaryExpression extends ConstantExpression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: StringPrimaryExpressionContext;
@@ -349,7 +349,7 @@ export class StringPrimaryExpression extends ConstantExpression {
 export class IdentifierPrimaryExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: IdentifierPrimaryExpressionContext;
@@ -399,7 +399,7 @@ export class IdentifierPrimaryExpression extends Expression {
 export class FStringPrimaryExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: FStringPrimaryExpressionContext;
@@ -446,14 +446,14 @@ export class FStringPrimaryExpression extends Expression {
 export class TangledPrimaryExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: TangledPrimaryExpressionContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the getter 'children'.
+	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected override readonly _children: Array<CompilableParseToken>;
@@ -510,7 +510,7 @@ export class TangledPrimaryExpression extends Expression {
 export class IncrementOrDecrementExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: IncrementOrDecrementPostfixExpressionContext;
@@ -554,7 +554,7 @@ export class IncrementOrDecrementExpression extends Expression {
 export class ArraySpecifierExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: ArraySpecifierPostfixExpressionContext;
@@ -598,7 +598,7 @@ export class ArraySpecifierExpression extends Expression {
 export class FunctionCallPostfixExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
@@ -643,7 +643,7 @@ export class FunctionCallPostfixExpression extends Expression {
 export class IncrementOrDecrementUnaryExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: IncrementOrDecrementUnaryExpressionContext;
@@ -688,7 +688,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 export class OperatorModifiedUnaryExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: OperatorModifiedUnaryExpressionContext;
@@ -733,7 +733,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 export class CastOrConvertExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: CastOrConvertExpressionContext;
@@ -780,7 +780,7 @@ export class CastOrConvertExpression extends Expression {
 export class MultiplicativeExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: MultiplicativeExpressionContext;
@@ -825,7 +825,7 @@ export class MultiplicativeExpression extends Expression {
 export class AdditiveExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: AdditiveExpressionContext;
@@ -878,7 +878,7 @@ export class AdditiveExpression extends Expression {
 export class RelationalExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: RelationalExpressionContext;
@@ -925,7 +925,7 @@ export class RelationalExpression extends Expression {
 export class EqualityExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: EqualityExpressionContext;
@@ -972,7 +972,7 @@ export class EqualityExpression extends Expression {
 export class LogicalAndExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: LogicalAndExpressionContext;
@@ -1019,7 +1019,7 @@ export class LogicalAndExpression extends Expression {
 export class LogicalOrExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: LogicalOrExpressionContext;
@@ -1064,7 +1064,7 @@ export class LogicalOrExpression extends Expression {
 export class ConditionalExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: ConditionalExpressionContext;
@@ -1108,7 +1108,7 @@ export class ConditionalExpression extends Expression {
 export class AssignmentExpression extends Expression {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected override readonly _antlrContext: AssignmentExpressionContext;

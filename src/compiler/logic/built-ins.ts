@@ -14,7 +14,7 @@ import { KipperType } from "./types";
  */
 export interface BuiltInFunctionArgument {
 	/**
-	 * The name of the argument inside the function
+	 * The identifier of the argument inside the function
 	 *
 	 * This value does not affect the behaviour of the language, as named-arguments are not implemented in Kipper. This
 	 * only serves the purpose of readability and allowing easier differentiation.
@@ -38,13 +38,13 @@ export interface BuiltInFunctionArgument {
  */
 export interface BuiltInFunction {
 	/**
-	 * The name of the global function that should be available inside the program.
+	 * The identifier of the global function that should be available inside the program.
 	 *
 	 * The identifier may only contain default numbers and alphabet characters!
 	 * @example
 	 *  call print(); // 'print' is the global function identifier
 	 */
-	name: string;
+	identifier: string;
 	/**
 	 * The args that are accepted inside this function. These are represented using {@link BuiltInFunctionArgument}.
 	 *
@@ -54,12 +54,12 @@ export interface BuiltInFunction {
 	args: Array<BuiltInFunctionArgument>;
 	/**
 	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
-	 * implementation for the function name, prefixed by `'_kipperGlobal_'`.
+	 * implementation for the function identifier, prefixed by `'_kipperGlobal_'`.
 	 *
 	 * @example
 	 *  // Example of a string that may be passed
 	 *  const yourFunction: Function = {
-	 *    name: "print",
+	 *    identifier: "print",
 	 *    args: [{
 	 *      type: "str" as KipperType
 	 *    }],
@@ -81,7 +81,7 @@ export interface BuiltInFunction {
  * The code for the global print function that works inside the Web-Browser
  */
 export const builtInWebPrintFunction: BuiltInFunction = {
-	name: "print",
+	identifier: "print",
 	args: [
 		{
 			name: "printText",
