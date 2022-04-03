@@ -52,7 +52,7 @@ export abstract class Definition extends CompilableParseToken {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrDefinitionCtxType {
+	public override get antlrContext(): antlrDefinitionCtxType {
 		return this._antlrContext;
 	}
 }
@@ -77,7 +77,7 @@ export class FunctionDefinition extends Definition {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): FunctionDefinitionContext {
+	public override get antlrContext(): FunctionDefinitionContext {
 		return this._antlrContext;
 	}
 
@@ -85,14 +85,14 @@ export class FunctionDefinition extends Definition {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -118,7 +118,7 @@ export class Declaration extends Definition {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): DeclarationContext {
+	public override get antlrContext(): DeclarationContext {
 		return this._antlrContext;
 	}
 
@@ -126,14 +126,14 @@ export class Declaration extends Definition {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}

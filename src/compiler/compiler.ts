@@ -23,6 +23,7 @@ export interface CompileConfig {
 	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
 	 */
 	globals?: Array<BuiltInFunction>;
+
 	/**
 	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
 	 * the default array.
@@ -92,14 +93,14 @@ export class KipperCompileResult {
 	/**
 	 * The program context for the compilation run, which stores the content of the program and meta-data.
 	 */
-	get programCtx(): KipperProgramContext {
+	public get programCtx(): KipperProgramContext {
 		return this._programCtx;
 	}
 
 	/**
 	 * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
 	 */
-	get result(): Array<string> {
+	public get result(): Array<string> {
 		return this._result;
 	}
 }
@@ -135,14 +136,14 @@ export class KipperCompiler {
 	/**
 	 * Returns the {@link KipperErrorListener} that is responsible for handling antlr4 errors
 	 */
-	get errorListener(): KipperErrorListener<any> {
+	public get errorListener(): KipperErrorListener<any> {
 		return this._errorListener;
 	}
 
 	/**
 	 * Returns the initialised logger for this class
 	 */
-	get logger(): KipperLogger {
+	public get logger(): KipperLogger {
 		return this._logger;
 	}
 
@@ -170,7 +171,7 @@ export class KipperCompiler {
 	 * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
+	public async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
 		this._logger.info(`Parsing '${parseStream.name}'`);
 
 		// Creating the char stream, based on the input
@@ -202,7 +203,7 @@ export class KipperCompiler {
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async compile(
+	public async compile(
 		stream: string | KipperParseStream,
 		config: RuntimeCompileConfig = new RuntimeCompileConfig({}),
 	): Promise<KipperCompileResult> {
@@ -241,7 +242,7 @@ export class KipperCompiler {
 	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
+	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
 		this.logger.info(`Starting syntax check for '${inStream.name}'`);

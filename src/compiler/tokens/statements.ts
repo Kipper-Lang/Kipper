@@ -71,7 +71,7 @@ export abstract class Statement extends CompilableParseToken {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrStatementCtxType {
+	public override get antlrContext(): antlrStatementCtxType {
 		return this._antlrContext;
 	}
 }
@@ -96,7 +96,7 @@ export class CompoundStatement extends Statement {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): CompoundStatementContext {
+	public override get antlrContext(): CompoundStatementContext {
 		return this._antlrContext;
 	}
 
@@ -104,14 +104,14 @@ export class CompoundStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -137,7 +137,7 @@ export class SelectionStatement extends Statement {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): SelectionStatementContext {
+	public override get antlrContext(): SelectionStatementContext {
 		return this._antlrContext;
 	}
 
@@ -145,14 +145,14 @@ export class SelectionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -178,7 +178,7 @@ export class ExpressionStatement extends Statement {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): ExpressionStatementContext {
+	public override get antlrContext(): ExpressionStatementContext {
 		return this._antlrContext;
 	}
 
@@ -186,14 +186,14 @@ export class ExpressionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -219,7 +219,7 @@ export class IterationStatement extends Statement {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): IterationStatementContext {
+	public override get antlrContext(): IterationStatementContext {
 		return this._antlrContext;
 	}
 
@@ -227,14 +227,14 @@ export class IterationStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -260,7 +260,7 @@ export class JumpStatement extends Statement {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): JumpStatementContext {
+	public override get antlrContext(): JumpStatementContext {
 		return this._antlrContext;
 	}
 
@@ -268,14 +268,14 @@ export class JumpStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}

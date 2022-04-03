@@ -53,7 +53,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 	 * @param {string} msg The msg that was generated as the error message in the Parser
 	 * @param {RecognitionException} error The error instance that raised the syntax error in the Lexer
 	 */
-	constructor(
+	public constructor(
 		recognizer: Recognizer<Token, any>,
 		offendingSymbol: Token | undefined,
 		line: number,
@@ -83,42 +83,42 @@ export class KipperSyntaxError<Token> extends KipperError {
 	/**
 	 * Returns the Antlr4 Parser - should normally always be {@link KipperParser}
 	 */
-	get recognizer(): Recognizer<Token, any> {
+	public get recognizer(): Recognizer<Token, any> {
 		return this._recognizer;
 	}
 
 	/**
 	 * Returns the token that caused the error
 	 */
-	get offendingSymbol(): Token | undefined {
+	public get offendingSymbol(): Token | undefined {
 		return this._offendingSymbol;
 	}
 
 	/**
 	 * Returns the line of the element that caused the error
 	 */
-	get line(): number {
+	public get line(): number {
 		return this._line;
 	}
 
 	/**
 	 * Returns the column of the element that caused the error
 	 */
-	get column(): number {
+	public get column(): number {
 		return this._column;
 	}
 
 	/**
 	 * Returns the msg that was generated as the error message in the Parser
 	 */
-	get msg(): string {
+	public get msg(): string {
 		return this._msg;
 	}
 
 	/**
 	 * Returns the error instance that raised the syntax error in the Lexer
 	 */
-	get error():
+	public get error():
 		| RecognitionException
 		| NoViableAltException
 		| LexerNoViableAltException
@@ -131,7 +131,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 	/**
 	 * Reports the syntax error and writes onto the console
 	 */
-	async reportError(): Promise<void> {}
+	public async reportError(): Promise<void> {}
 }
 
 /**

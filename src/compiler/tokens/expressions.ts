@@ -129,12 +129,12 @@ export abstract class Expression extends CompilableParseToken {
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	abstract translateCtxAndChildren(): Array<string>;
+	public abstract translateCtxAndChildren(): Array<string>;
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): antlrExpressionCtxType {
+	public override get antlrContext(): antlrExpressionCtxType {
 		return this._antlrContext;
 	}
 }
@@ -178,14 +178,14 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -193,7 +193,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): NumberPrimaryExpressionContext {
+	public override get antlrContext(): NumberPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -230,14 +230,14 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -245,7 +245,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): CharacterPrimaryExpressionContext {
+	public override get antlrContext(): CharacterPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -272,14 +272,14 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -287,7 +287,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): ListPrimaryExpressionContext {
+	public override get antlrContext(): ListPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -322,21 +322,21 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		return [`"${this.stringContent}"`];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): StringPrimaryExpressionContext {
+	public override get antlrContext(): StringPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -371,14 +371,14 @@ export class IdentifierPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -386,7 +386,7 @@ export class IdentifierPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): IdentifierPrimaryExpressionContext {
+	public override get antlrContext(): IdentifierPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -415,14 +415,14 @@ export class FStringPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -430,7 +430,7 @@ export class FStringPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): FStringPrimaryExpressionContext {
+	public override get antlrContext(): FStringPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -468,7 +468,7 @@ export class TangledPrimaryExpression extends Expression {
 	 * The children of this parse token, which **must** be of type {@link CompilableParseToken}, as this expression
 	 * itself does not compile anything and simply change the order of evaluation.
 	 */
-	get children(): Array<CompilableParseToken> {
+	public get children(): Array<CompilableParseToken> {
 		return this._children;
 	}
 
@@ -476,14 +476,14 @@ export class TangledPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO! Add tests for this
 		let genCode: Array<string> = [];
 		for (let child of this._children) {
@@ -495,7 +495,7 @@ export class TangledPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): TangledPrimaryExpressionContext {
+	public override get antlrContext(): TangledPrimaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -524,14 +524,14 @@ export class IncrementOrDecrementExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -539,7 +539,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): IncrementOrDecrementPostfixExpressionContext {
+	public override get antlrContext(): IncrementOrDecrementPostfixExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -568,14 +568,14 @@ export class ArraySpecifierExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -583,7 +583,7 @@ export class ArraySpecifierExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): ArraySpecifierPostfixExpressionContext {
+	public override get antlrContext(): ArraySpecifierPostfixExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -612,14 +612,14 @@ export class FunctionCallPostfixExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -627,7 +627,7 @@ export class FunctionCallPostfixExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): FunctionCallPostfixExpressionContext {
+	public override get antlrContext(): FunctionCallPostfixExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -657,14 +657,14 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -672,7 +672,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): IncrementOrDecrementUnaryExpressionContext {
+	public override get antlrContext(): IncrementOrDecrementUnaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -702,14 +702,14 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -717,7 +717,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): OperatorModifiedUnaryExpressionContext {
+	public override get antlrContext(): OperatorModifiedUnaryExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -747,14 +747,14 @@ export class CastOrConvertExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -762,7 +762,7 @@ export class CastOrConvertExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): CastOrConvertExpressionContext {
+	public override get antlrContext(): CastOrConvertExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -794,14 +794,14 @@ export class MultiplicativeExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -809,7 +809,7 @@ export class MultiplicativeExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): MultiplicativeExpressionContext {
+	public override get antlrContext(): MultiplicativeExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -839,14 +839,14 @@ export class AdditiveExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -854,7 +854,7 @@ export class AdditiveExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): AdditiveExpressionContext {
+	public override get antlrContext(): AdditiveExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -892,14 +892,14 @@ export class RelationalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -907,7 +907,7 @@ export class RelationalExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): RelationalExpressionContext {
+	public override get antlrContext(): RelationalExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -939,14 +939,14 @@ export class EqualityExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -954,7 +954,7 @@ export class EqualityExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): EqualityExpressionContext {
+	public override get antlrContext(): EqualityExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -986,14 +986,14 @@ export class LogicalAndExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -1001,7 +1001,7 @@ export class LogicalAndExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): LogicalAndExpressionContext {
+	public override get antlrContext(): LogicalAndExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -1033,14 +1033,14 @@ export class LogicalOrExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -1048,7 +1048,7 @@ export class LogicalOrExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): LogicalOrExpressionContext {
+	public override get antlrContext(): LogicalOrExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -1078,14 +1078,14 @@ export class ConditionalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -1093,7 +1093,7 @@ export class ConditionalExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): ConditionalExpressionContext {
+	public override get antlrContext(): ConditionalExpressionContext {
 		return this._antlrContext;
 	}
 }
@@ -1122,14 +1122,14 @@ export class AssignmentExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
 	}
@@ -1137,7 +1137,7 @@ export class AssignmentExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	override get antlrContext(): AssignmentExpressionContext {
+	public override get antlrContext(): AssignmentExpressionContext {
 		return this._antlrContext;
 	}
 }

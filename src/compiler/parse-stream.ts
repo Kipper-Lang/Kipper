@@ -33,7 +33,7 @@ export class KipperParseStream {
 	 * @param {CodePointCharStream} charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
 	 * by the stringContent.
 	 */
-	constructor(name: string, stringContent: string, charStream?: CodePointCharStream) {
+	public constructor(name: string, stringContent: string, charStream?: CodePointCharStream) {
 		this._name = name;
 		this._charStream = charStream ?? CharStreams.fromString(stringContent, this._name);
 	}
@@ -41,21 +41,21 @@ export class KipperParseStream {
 	/**
 	 * Returns the Antlr4 {@link CodePointCharStream} for the initialised {@link stringContent}
 	 */
-	get charStream(): CodePointCharStream {
+	public get charStream(): CodePointCharStream {
 		return this._charStream;
 	}
 
 	/**
 	 * Returns the string content of the file
 	 */
-	get stringContent(): string {
+	public get stringContent(): string {
 		return this._charStream.toString();
 	}
 
 	/**
 	 * Returns the name of the file
 	 */
-	get name(): string {
+	public get name(): string {
 		return this._name;
 	}
 }

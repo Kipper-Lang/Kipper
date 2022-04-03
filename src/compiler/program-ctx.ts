@@ -104,14 +104,14 @@ export class KipperProgramContext {
 	/**
 	 * Returns the {@link KipperParseStream} which contains the raw file data.
 	 */
-	get stream(): KipperParseStream {
+	public get stream(): KipperParseStream {
 		return this._stream;
 	}
 
 	/**
 	 * Returns the start item of the parser tree (top item).
 	 */
-	get antlrParseTree(): CompilationUnitContext {
+	public get antlrParseTree(): CompilationUnitContext {
 		return this._antlrParseTree;
 	}
 
@@ -119,14 +119,14 @@ export class KipperProgramContext {
 	 * Returns the {@link KipperParser}, which parsed this "virtual" file and generated the {@link this.parseTreeEntry} ctx
 	 * context.
 	 */
-	get parser(): KipperParser {
+	public get parser(): KipperParser {
 		return this._parser;
 	}
 
 	/**
 	 * Returns the {@link KipperLexer}, which lexed this "virtual" file and generated the tokens for it.
 	 */
-	get lexer(): KipperLexer {
+	public get lexer(): KipperLexer {
 		return this._lexer;
 	}
 
@@ -136,14 +136,14 @@ export class KipperProgramContext {
 	 * Considering this file is only generated after the lexing and parse step, no more errors will be handled by these
 	 * listeners, though they may be used to manually raise errors, so they are properly handled and formatted.
 	 */
-	get errorHandler(): ANTLRErrorListener<Token>[] {
+	public get errorHandler(): ANTLRErrorListener<Token>[] {
 		return this.parser.getErrorListeners();
 	}
 
 	/**
 	 * Returns the {@link TokenStream}, which contains all lexer tokens in a stream.
 	 */
-	get tokenStream(): TokenStream {
+	public get tokenStream(): TokenStream {
 		return this.parser.inputStream;
 	}
 
@@ -152,7 +152,7 @@ export class KipperProgramContext {
 	 * available inside the compiled Kipper program and callable using their specified identifier. This is designed to
 	 * allow calling external typescript functions, which can not be natively implemented inside Kipper.
 	 */
-	get globals(): Array<BuiltInFunction> {
+	public get globals(): Array<BuiltInFunction> {
 		return this._globals;
 	}
 
@@ -161,7 +161,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
-	get compiledCode(): Array<string> | undefined {
+	public get compiledCode(): Array<string> | undefined {
 		return this._compiledCode;
 	}
 
@@ -171,7 +171,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
-	get processedParseTree(): RootFileParseToken | undefined {
+	public get processedParseTree(): RootFileParseToken | undefined {
 		return this._processedParseTree;
 	}
 
@@ -180,7 +180,7 @@ export class KipperProgramContext {
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
-	registerGlobals(newGlobals: BuiltInFunction | Array<BuiltInFunction>) {
+	public registerGlobals(newGlobals: BuiltInFunction | Array<BuiltInFunction>) {
 		// If the function is not an array already, make it one
 		if (!(newGlobals instanceof Array)) {
 			newGlobals = [newGlobals];
@@ -210,7 +210,7 @@ export class KipperProgramContext {
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
-	compileProgram(): Array<string> {
+	public compileProgram(): Array<string> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
 
