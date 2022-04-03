@@ -8,15 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a new variable
-  called `_currentScope` in `KipperFileListener`.
-- Added variable metadata handling in `VariableDeclaration`. This now includes the proper setting of identifier,
-  storage type, value type and whether the variable has been defined yet.
+- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking variable
+  called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
+- Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
+  storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
 - Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 
 ### Updated
 - Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
-  (`VariableDeclaration` instance).
+  (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
+  and state).
 - Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
   default to `"anonymous-script"`.
 - Updated `CompoundStatement` children behaviour, by adding a new array `localScope`, which will store the metadata
