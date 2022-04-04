@@ -223,18 +223,18 @@ export class KipperProgramContext {
 		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Run the semantic analysis to validate the code
-		this.logger.debug(`Running semantic analysis for '${this.stream.name}'`);
+		this.logger.debug(`Running semantic analysis for '${this.stream.name}'.`);
 		this._processedParseTree.semanticAnalysis();
 
 		// Translating the context instances and children
-		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'`);
+		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
 		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
 
 		// Append required typescript code for Kipper for the program to work properly
 		genCode = this.generateRequirements().concat(genCode);
 
 		this.logger.info(
-			`Generated ${genCode.length} lines - Processed ${this._processedParseTree.children.length} root items.`,
+			`Generated '${genCode.length}' lines. Processed ${this._processedParseTree.children.length} root items.`,
 		);
 
 		// Cache the result
@@ -257,12 +257,12 @@ export class KipperProgramContext {
 		const walker = new ParseTreeWalker();
 
 		// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-		this.logger.debug(`Generating processed Kipper parse tree for '${this.stream.name}'`);
+		this.logger.debug(`Generating processed Kipper parse tree for '${this.stream.name}'.`);
 		walker.walk(listener, this.antlrParseTree);
 
 		this.logger.debug(
-			`Finished generation of processed Kipper parse tree for '${this.stream.name}'` +
-				` - Parsed ${listener.kipperParseTree.children.length} root items.`,
+			`Finished generation of processed Kipper parse tree for '${this.stream.name}'.` +
+				`Parsed '${listener.kipperParseTree.children.length}' root items.`,
 		);
 		return listener.kipperParseTree;
 	}

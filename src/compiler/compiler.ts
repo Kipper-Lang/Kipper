@@ -172,7 +172,7 @@ export class KipperCompiler {
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
-		this._logger.info(`Parsing '${parseStream.name}'`);
+		this._logger.info(`Parsing '${parseStream.name}'.`);
 
 		// Creating the char stream, based on the input
 		const inputStream: CodePointCharStream = parseStream.charStream;
@@ -188,7 +188,7 @@ export class KipperCompiler {
 		// Parse the input, where `compilationUnit` is whatever entry point you defined
 		return (() => {
 			let result = parser.compilationUnit();
-			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'`);
+			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'.`);
 			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger);
 		})();
 	}
@@ -209,7 +209,7 @@ export class KipperCompiler {
 	): Promise<KipperCompileResult> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
-		this.logger.info(`Starting compilation for '${inStream.name}'`);
+		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
 		// The file context storing the metadata for the "virtual file"
 		const fileCtx: KipperProgramContext = await this.parse(inStream);
@@ -217,20 +217,15 @@ export class KipperCompiler {
 		// If there are builtInGlobals to register, register them
 		let globals = config.actualGlobals;
 		if (globals !== undefined && globals.length > 0) {
-			this.logger.debug(`Registering the following globals for the Kipper program '${inStream.name}':`);
-			for (let item of globals) {
-				this.logger.debug(` - ${item.identifier} -> ${item.returnType}`);
-			}
 			fileCtx.registerGlobals(globals);
-		} else {
-			this.logger.debug(`Registered no globals for the Kipper program '${inStream.name}'`);
 		}
+		this.logger.debug(`Registering '${globals.length}' globals for the Kipper program '${inStream.name}'.`);
 
 		// Translate and compile the code
-		this.logger.info(`Starting compilation for '${inStream.name}'`);
+		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 		const code = fileCtx.compileProgram();
 
-		this.logger.info(`Finished compilation - Returning compilation result`);
+		this.logger.info(`Finished compilation. Generating compilation result instance.`);
 
 		// Return the result for the compilation
 		return new KipperCompileResult(fileCtx, code);
@@ -245,12 +240,12 @@ export class KipperCompiler {
 	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
-		this.logger.info(`Starting syntax check for '${inStream.name}'`);
+		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
 
 		// Parsing the content, if an error is found, it will be reported
 		await this.parse(inStream);
 
 		// If no exception was raised, then everything should be alright!
-		this.logger.info("Finished syntax check successfully!");
+		this.logger.info("Finished syntax check successfully.");
 	}
 }
