@@ -10,7 +10,7 @@ import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { BuiltInFunction, ScopeVariableDeclaration } from "./logic";
+import { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
 import { RootFileParseToken, VariableDeclaration } from "./tokens";
 import { DuplicateIdentifierError, GlobalAlreadyRegisteredError, NoBuiltInOverwriteError } from "../errors";
@@ -76,7 +76,7 @@ export class KipperProgramContext {
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
-	private _globalScope: Array<ScopeVariableDeclaration>;
+	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 	/**
 	 * The logger that should be used to log warnings and errors.
@@ -160,7 +160,7 @@ export class KipperProgramContext {
 	 * The global scope of this file, which contains all {@link ScopeVariableDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
-	public get globalScope(): Array<ScopeVariableDeclaration> {
+	public get globalScope(): Array<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
 		return this._globalScope;
 	}
 
@@ -304,8 +304,10 @@ export class KipperProgramContext {
 	 * @param identifier The identifier of the variable
 	 */
 	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		return this.globalScope.find((value) => {
-			return value.identifier == identifier;
+		// Casting the type, as the return type will always be either ScopeVariableDeclaration or undefined
+		// This is automatically the case, as we require the type inside find() to match ScopeVariableDeclaration!
+		return <ScopeVariableDeclaration | undefined>this.globalScope.find((value) => {
+			return value instanceof ScopeVariableDeclaration && value.identifier == identifier;
 		});
 	}
 

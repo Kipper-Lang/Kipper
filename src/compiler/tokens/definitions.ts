@@ -132,6 +132,8 @@ export class ParameterDeclaration extends Declaration {
 /**
  * Function definition class, which represents the definition of a function in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
+ *
+ * Functions will always be global and unlike {@link VariableDeclaration variables} therefore have no scope.
  * @since 0.1.2
  */
 export class FunctionDefinition extends Declaration {
@@ -144,7 +146,7 @@ export class FunctionDefinition extends Declaration {
 
 	protected override readonly _identifier: string;
 
-	protected readonly _returnType: KipperStorageType | undefined;
+	protected readonly _returnType: KipperType | undefined;
 
 	protected readonly _args: Array<ParameterDeclaration>;
 
@@ -172,7 +174,7 @@ export class FunctionDefinition extends Declaration {
 	/**
 	 * The return type of this function.
 	 */
-	public get returnType(): KipperStorageType | undefined {
+	public get returnType(): KipperType | undefined {
 		return this._returnType;
 	}
 

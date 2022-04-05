@@ -28,7 +28,7 @@ import {
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
 } from "../parser";
-import { KipperType } from "../logic";
+import { KipperType, ScopeFunctionDeclaration } from "../logic";
 
 /**
  * Every antlr4 expression ctx type
@@ -603,9 +603,14 @@ export class FunctionCallPostfixExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
 
+	private readonly function: ScopeFunctionDeclaration | undefined;
+
 	constructor(antlrContext: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
 		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
+
+		// TODO! Implement dynamic fetching from the program context instance
+		this.function = undefined;
 	}
 
 	/**

@@ -1,7 +1,7 @@
 {
   "name": "@kipper/base",
   "description": "The Kipper programming language and compiler for the browser! \uD83E\uDD8A",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "antlr4ts": "^0.5.0-alpha.4",

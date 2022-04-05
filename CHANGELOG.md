@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
   storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
 - Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
+- Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing 
+  `ScopeVariableDeclaration` and the added `ScopeFunctionDeclaration`.
+- Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
 
 ### Updated
 - Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
