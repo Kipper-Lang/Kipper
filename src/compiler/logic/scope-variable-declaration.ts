@@ -86,9 +86,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _token: FunctionDefinition,
-		// eslint-disable-next-line no-unused-vars
-		private _programCtx: KipperProgramContext,
+		private _token: FunctionDefinition
 	) {
 		super();
 	}

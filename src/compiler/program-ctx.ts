@@ -12,7 +12,7 @@ import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
 import { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
-import { RootFileParseToken, VariableDeclaration } from "./tokens";
+import { FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
 import { DuplicateIdentifierError, GlobalAlreadyRegisteredError, NoBuiltInOverwriteError } from "../errors";
 
 /**
@@ -314,13 +314,15 @@ export class KipperProgramContext {
 	/**
 	 * Adds a new declaration entry to the global scope.
 	 */
-	public addNewGlobalScopeEntry(token: VariableDeclaration) {
+	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition) {
 		if (this.globalScope.find((v) => v.identifier === token.identifier) !== undefined) {
 			throw new DuplicateIdentifierError(token.identifier);
 		} else if (this.builtInGlobals.find((v) => v.identifier === token.identifier) !== undefined) {
 			throw new NoBuiltInOverwriteError(token.identifier);
 		} else {
-			this._globalScope = this._globalScope.concat(new ScopeVariableDeclaration(token));
+			this._globalScope = this._globalScope.concat(
+				token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token)
+			);
 		}
 	}
 }
