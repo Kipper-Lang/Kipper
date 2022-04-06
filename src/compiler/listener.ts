@@ -76,9 +76,9 @@ import {
 	getDefinitionInstance,
 	getExpressionInstance,
 	getStatementInstance,
+	RootFileParseToken,
 	Statement,
 } from "./tokens";
-import { RootFileParseToken } from "./tokens";
 import { IfStatementContext, SwitchStatementContext } from "./parser/KipperParser";
 
 const passOnHandler: () => void = () => {};

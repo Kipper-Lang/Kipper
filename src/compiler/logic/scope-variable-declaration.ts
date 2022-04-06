@@ -20,6 +20,7 @@ import type { KipperProgramContext } from "../program-ctx";
  */
 export abstract class ScopeDeclaration {
 	public abstract get token(): Declaration;
+
 	public abstract get identifier(): string;
 
 	/**
@@ -86,7 +87,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _token: FunctionDefinition
+		private _token: FunctionDefinition,
 	) {
 		super();
 	}

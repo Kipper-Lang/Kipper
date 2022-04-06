@@ -10,10 +10,15 @@ import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
+import { BuiltInFunction, KipperType, kipperTypes, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
 import { KipperLogger } from "../logger";
 import { FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
-import { DuplicateIdentifierError, GlobalAlreadyRegisteredError, NoBuiltInOverwriteError } from "../errors";
+import {
+	DuplicateIdentifierError,
+	GlobalAlreadyRegisteredError,
+	NoBuiltInOverwriteError,
+	UnknownTypeError,
+} from "../errors";
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -321,8 +326,25 @@ export class KipperProgramContext {
 			throw new NoBuiltInOverwriteError(token.identifier);
 		} else {
 			this._globalScope = this._globalScope.concat(
-				token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token)
+				token instanceof VariableDeclaration
+					? new ScopeVariableDeclaration(token)
+					: new ScopeFunctionDeclaration(token),
 			);
+		}
+	}
+
+	/**
+	 * Validate if the type is valid, and if not raise an error!
+	 * @param type The type string to check
+	 * @throws UnknownTypeError If the type is unknown to Kipper!
+	 * @since 0.1.2
+	 */
+	public verifyType(type: string): KipperType {
+		// If the type does not exist in Kipper -> raise error
+		if (kipperTypes.find((val) => val === type) === undefined) {
+			throw new UnknownTypeError(type);
+		} else {
+			return <KipperType>type;
 		}
 	}
 }

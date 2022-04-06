@@ -1,0 +1,30 @@
+def func1() -> void {
+  {
+    {
+      var lx: bool;
+      var ly: num = 4;
+      const lz: str = "5";
+    }
+  }
+}
+
+def func2() -> void {
+  {
+    {
+      var lx: bool;
+      var ly: num = 4;
+      const lz: str = "5";
+    }
+  }
+}
+
+def func3() -> void {
+  {
+    {
+      var lx: bool;
+      var ly: num = 4;
+      const lz: str = "5";
+    }
+  }
+}
+
