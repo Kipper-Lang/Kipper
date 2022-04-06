@@ -33,7 +33,7 @@ export class KipperLogger {
 
 	/**
 	 * The private '_emitHandler' that actually stores the variable data,
-	 * which is returned inside the getter 'emitHandler'.
+	 * which is returned inside the {@link this.emitHandler}.
 	 * @private
 	 */
 	// eslint-disable-next-line no-unused-vars
@@ -50,7 +50,7 @@ export class KipperLogger {
 	 * The specific handler that should handle emitted log messages
 	 */
 	// eslint-disable-next-line no-unused-vars
-	get emitHandler(): ((level: LogLevel, msg: string) => void) | undefined {
+	public get emitHandler(): ((level: LogLevel, msg: string) => void) | undefined {
 		return this._emitHandler;
 	}
 
@@ -58,7 +58,7 @@ export class KipperLogger {
 	 * Logs a message with the severity 'debug'
 	 * @param {string} msg The message to log
 	 */
-	debug(msg: string): void {
+	public debug(msg: string): void {
 		return this.log(LogLevel.DEBUG, msg);
 	}
 
@@ -66,7 +66,7 @@ export class KipperLogger {
 	 * Logs a message with the severity 'info'
 	 * @param {string} msg The message to log
 	 */
-	info(msg: string): void {
+	public info(msg: string): void {
 		return this.log(LogLevel.INFO, msg);
 	}
 
@@ -74,7 +74,7 @@ export class KipperLogger {
 	 * Logs a message with the severity 'warn'
 	 * @param {string} msg The message to log
 	 */
-	warn(msg: string): void {
+	public warn(msg: string): void {
 		return this.log(LogLevel.WARN, msg);
 	}
 
@@ -82,7 +82,7 @@ export class KipperLogger {
 	 * Logs a message with the severity 'error'
 	 * @param {string} msg The message to log
 	 */
-	error(msg: string): void {
+	public error(msg: string): void {
 		return this.log(LogLevel.ERROR, msg);
 	}
 
@@ -90,7 +90,7 @@ export class KipperLogger {
 	 * Logs a message with the severity 'fatal'
 	 * @param {string} msg The message to log
 	 */
-	fatal(msg: string): void {
+	public fatal(msg: string): void {
 		return this.log(LogLevel.FATAL, msg);
 	}
 
@@ -98,7 +98,7 @@ export class KipperLogger {
 	 * Logs a message with traceback / stack information
 	 * @param {string} msg The message to log
 	 */
-	trace(msg: string): void {
+	public trace(msg: string): void {
 		return this.log(LogLevel.TRACE, msg);
 	}
 
@@ -108,7 +108,7 @@ export class KipperLogger {
 	 * @param {LogLevel} level The level of the logging message
 	 * @param {string} msg The content of the logging message
 	 */
-	log(level: LogLevel, msg: string): void {
+	public log(level: LogLevel, msg: string): void {
 		return this._emitHandler(level, msg);
 	}
 }

@@ -1,9 +1,43 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <title>Test file</title>
+  <meta charset="utf-8"/>
+  <title>Kipper test file</title>
+
+  <!-- Icon -->
+  <link rel="icon shortcut" type="image/ico" href="https://wmc-ahif-2021.github.io/Kipper-Web/favicon.ico"/>
+
+  <!-- Inter font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
+
+  <!-- Basic Styling -->
+  <style>
+    html {
+      font-family: 'Inter', Georgia, Verdana, monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  </style>
 </head>
 <body>
+  <!-- Content -->
+  <header>
+    <h1>Welcome to the Kipper test file</h1>
+    <p>
+      If Kipper is working properly you should see a console output depending on your input.
+    </p>
+  </header>
+
+  <!-- Tests here-->
   <script type="module" src='../kipper-standalone.js'></script>
   <script type="module">
     let compiler = new Kipper.KipperCompiler(new Kipper.KipperLogger((level, msg) => {

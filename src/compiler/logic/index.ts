@@ -6,5 +6,5 @@
  */
 
 export * from "./built-ins";
-export * from "./scope-declaration";
+export * from "./scope-variable-declaration";
 export * from "./types";

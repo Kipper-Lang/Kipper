@@ -13,6 +13,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.1.2] - 2022-04-06
+
+### Added
+- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking variable
+  called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
+- Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
+  storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
+- Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
+- Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing 
+  `ScopeVariableDeclaration` and the added `ScopeFunctionDeclaration`.
+- Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
+- Implemented support for function definitions that will be from now on automatically registered globally.
+
+### Updated
+- Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
+  (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
+  and state).
+- Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
+  default to `"anonymous-script"`.
+- Updated `CompoundStatement` children behaviour, by adding a new array `localScope`, which will store the metadata
+  for all variables exclusively available in that compound statement.
+
 ## [0.1.1] - 2022-04-01
 
 ### Added
@@ -116,6 +138,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
 [unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.1.1...HEAD
+[0.1.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
 [0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
 [0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5

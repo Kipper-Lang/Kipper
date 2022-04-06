@@ -9,6 +9,7 @@
  * All available variable types inside Kipper.
  */
 export type KipperType = "void" | "num" | "str" | "char" | "bool" | "list";
+export const kipperTypes: Array<string> = ["void", "num", "str", "char", "bool", "list"];
 
 /**
  * All available storage types inside Kipper.

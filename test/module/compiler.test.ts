@@ -1,5 +1,11 @@
 import { assert } from "chai";
-import { KipperCompiler, KipperLogger, KipperParseStream, KipperSyntaxError, LogLevel } from "../../src";
+import {
+  KipperCompiler,
+  KipperLogger,
+  KipperParseStream,
+  KipperSyntaxError,
+  LogLevel
+} from "../../src";
 import { promises as fs } from "fs";
 import { KipperCompileResult } from "../../src";
 
@@ -8,6 +14,9 @@ const singleFunctionFile = `${__dirname}/../kipper-files/single-function-call.ki
 const multiFunctionFile = `${__dirname}/../kipper-files/multi-function-call.kip`;
 const printNumberFile = `${__dirname}/../kipper-files/print-number.kip`;
 const invalidFile = `${__dirname}/../kipper-files/invalid.kip`;
+const nestedScopesFile = `${__dirname}/../kipper-files/nested-scopes.kip`;
+const singleFunctionDefinition = `${__dirname}/../kipper-files/single-function-definition.kip`;
+const multiFunctionDefinition = `${__dirname}/../kipper-files/multi-function-definition.kip`;
 
 describe("KipperCompiler", () => {
   describe("constructor", () => {
@@ -52,7 +61,7 @@ describe("KipperCompiler", () => {
     it("Syntax analyse valid code without error", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
+      let stream = new KipperParseStream(fileContent);
 
       await compiler.syntaxAnalyse(stream);
     });
@@ -60,7 +69,7 @@ describe("KipperCompiler", () => {
     it("Syntax analyse invalid code with expected error", async () => {
       let fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
+      let stream = new KipperParseStream(fileContent);
 
       try {
         await compiler.syntaxAnalyse(stream);
@@ -75,7 +84,7 @@ describe("KipperCompiler", () => {
     it("Validate file ctx return", async () => {
       let fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
       let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
+      let stream = new KipperParseStream(fileContent);
       let instance = await compiler.parse(stream);
 
       assert(instance.stream === stream, "Expected streams to equal");
@@ -88,34 +97,86 @@ describe("KipperCompiler", () => {
   });
 
   describe("compile", () => {
-    it("Single Function call compilation", async () => {
-      let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
-      let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
-      let instance: KipperCompileResult = await compiler.compile(stream);
+    describe("programs", () => {
+      it("Single Function call", async () => {
+        let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
 
-      assert(instance.programCtx);
-      assert(instance.programCtx.stream === stream);
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.programCtx.globalScope.length === 0, "Expected no definitions");
+      });
+
+      it("Multi Function call", async () => {
+        let fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.programCtx.globalScope.length === 0, "Expected no definitions");
+      });
+
+      it("Nested scopes in function", async () => {
+        let fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(
+          instance.programCtx.globalScope.length === 4,
+          "Expected three globals and one global function"
+        );
+      });
+
+      it("Single Function definition", async () => {
+        let fileContent = (await fs.readFile(singleFunctionDefinition, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.programCtx.globalScope.length === 1, "Expected a single global function");
+      });
+
+      it("Multi Function definition", async () => {
+        let fileContent = (await fs.readFile(multiFunctionDefinition, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.programCtx.globalScope.length === 3, "Expected three global functions");
+      });
+
+      it("Print number function call", async () => {
+        let fileContent = (await fs.readFile(printNumberFile, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+      });
     });
 
-    it("Multi Function call compilation", async () => {
-      let fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
-      let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
-      let instance: KipperCompileResult = await compiler.compile(stream);
-
-      assert(instance.programCtx);
-      assert(instance.programCtx.stream === stream);
-    });
-
-    it("Print number function call compilation", async () => {
-      let fileContent = (await fs.readFile(printNumberFile, "utf8" as BufferEncoding)).toString();
-      let compiler = new KipperCompiler();
-      let stream = new KipperParseStream("anonymous-script", fileContent);
-      let instance: KipperCompileResult = await compiler.compile(stream);
-
-      assert(instance.programCtx);
-      assert(instance.programCtx.stream === stream);
+    describe("Errors", () => {
+      it("UnknownTypeError", async () => {
+        try {
+          await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");
+        } catch (e) {
+          assert((<Error>e).message.startsWith("Unknown type"), "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'UnknownTypeError'");
+      });
     });
   });
 });

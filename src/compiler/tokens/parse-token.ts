@@ -14,27 +14,27 @@ export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
 
 /**
- * Kipper Parse token, which is the base class all tokens will extend from
+ * Kipper Parse token, which is the base class all tokens will extend from.
  * @since 0.1.0
  */
 export abstract class CompilableParseToken {
 	/**
 	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the getter 'antlrContext'.
+	 * which is returned inside the {@link this.antlrContext}.
 	 * @private
 	 */
 	protected readonly _antlrContext: ParserRuleContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the getter 'children'.
+	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<eligibleChildToken>;
 
 	/**
 	 * The private '_parent' that actually stores the variable data,
-	 * which is returned inside the getter 'parent'.
+	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _parent: eligibleParentToken;
@@ -51,7 +51,7 @@ export abstract class CompilableParseToken {
 	/**
 	 * The antlr context containing the antlr4 metadata for this parse token.
 	 */
-	get antlrContext(): ParserRuleContext {
+	public get antlrContext(): ParserRuleContext {
 		return this._antlrContext;
 	}
 
@@ -62,14 +62,14 @@ export abstract class CompilableParseToken {
 	 * In this case this is a top-level token, then the return type will be {@link KipperProgramContext}, which contains
 	 * the metadata for the entire program.
 	 */
-	get parent(): eligibleParentToken {
+	public get parent(): eligibleParentToken {
 		return this._parent;
 	}
 
 	/**
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
-	get sourceCode(): string {
+	public get sourceCode(): string {
 		let inputStream = this.antlrContext.start.inputStream;
 		let start = this.antlrContext.start.startIndex;
 
@@ -88,21 +88,21 @@ export abstract class CompilableParseToken {
 	/**
 	 * The parser that parsed the {@link antlrContext}
 	 */
-	get parser(): KipperParser {
+	public get parser(): KipperParser {
 		return this.programCtx.parser;
 	}
 
 	/**
 	 * The file context instance containing the metadata for the listener and this parse token.
 	 */
-	get programCtx(): KipperProgramContext {
+	public get programCtx(): KipperProgramContext {
 		return this.parent.programCtx;
 	}
 
 	/**
 	 * The children of this parse token.
 	 */
-	get children(): Array<eligibleChildToken> {
+	public get children(): Array<eligibleChildToken> {
 		return this._children;
 	}
 
@@ -113,7 +113,7 @@ export abstract class CompilableParseToken {
 	 *  let newExpression = new Expression(ctx, this.fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
-	addNewChild(newChild: eligibleChildToken) {
+	public addNewChild(newChild: eligibleChildToken) {
 		this._children.push(newChild);
 	}
 
@@ -121,25 +121,25 @@ export abstract class CompilableParseToken {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	abstract semanticAnalysis(): void;
+	public abstract semanticAnalysis(): void;
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 */
-	abstract translateCtxAndChildren(): Array<string>;
+	public abstract translateCtxAndChildren(): Array<string>;
 }
 
 export class RootFileParseToken {
 	/**
 	 * The private '_parent' that actually stores the variable data,
-	 * which is returned inside the getter 'parent'.
+	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the getter 'children'.
+	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<CompilableParseToken>;
@@ -152,14 +152,14 @@ export class RootFileParseToken {
 	/**
 	 * The program context of this root token / "virtual" file
 	 */
-	get programCtx(): KipperProgramContext {
+	public get programCtx(): KipperProgramContext {
 		return this._programCtx;
 	}
 
 	/**
 	 * The children of this parse token.
 	 */
-	get children(): Array<eligibleChildToken> {
+	public get children(): Array<eligibleChildToken> {
 		return this._children;
 	}
 
@@ -170,7 +170,7 @@ export class RootFileParseToken {
 	 *  let newExpression = new Expression(ctx, this.fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
-	addNewChild(newChild: eligibleChildToken) {
+	public addNewChild(newChild: eligibleChildToken) {
 		this._children.push(newChild);
 	}
 
@@ -178,7 +178,7 @@ export class RootFileParseToken {
 	 * Semantic analysis for all children tokens in this root token. This will log all warnings using
 	 * {@link programCtx.logger} and throw errors if encountered.
 	 */
-	semanticAnalysis(): void {
+	public semanticAnalysis(): void {
 		for (let child of this.children) {
 			child.semanticAnalysis();
 		}
@@ -188,7 +188,7 @@ export class RootFileParseToken {
 	 * Generates the typescript code for this item, and its children.  This will log all warnings using
 	 * {@link programCtx.logger} and throw errors if encountered.
 	 */
-	translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<string> {
 		let genCode: Array<string> = [];
 		for (let child of this.children) {
 			genCode = genCode.concat(child.translateCtxAndChildren());

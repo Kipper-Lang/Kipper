@@ -9,19 +9,21 @@ import { CharStreams, CodePointCharStream } from "antlr4ts";
 /**
  * The {@link KipperParseStream} class, which stores the content of a file/string in a "virtual" file in a UTF-16
  * encoded {@link CodePointCharStream}.
+ *
+ * If {@link name} is not set during construction, it will default to "anonymous-script".
  * @since 0.0.3
  */
 export class KipperParseStream {
 	/**
 	 * The private '_name' that actually stores the variable data,
-	 * which is returned inside the getter 'name'.
+	 * which is returned inside the {@link this.identifier}.
 	 * @private
 	 */
 	private readonly _name: string;
 
 	/**
 	 * The private '_charStream' that actually stores the variable data,
-	 * which is returned inside the getter 'charStream'.
+	 * which is returned inside the {@link this.charStream}.
 	 * @private
 	 */
 	private readonly _charStream: CodePointCharStream;
@@ -33,7 +35,7 @@ export class KipperParseStream {
 	 * @param {CodePointCharStream} charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
 	 * by the stringContent.
 	 */
-	constructor(name: string, stringContent: string, charStream?: CodePointCharStream) {
+	public constructor(stringContent: string, name: string = "anonymous-script", charStream?: CodePointCharStream) {
 		this._name = name;
 		this._charStream = charStream ?? CharStreams.fromString(stringContent, this._name);
 	}
@@ -41,21 +43,21 @@ export class KipperParseStream {
 	/**
 	 * Returns the Antlr4 {@link CodePointCharStream} for the initialised {@link stringContent}
 	 */
-	get charStream(): CodePointCharStream {
+	public get charStream(): CodePointCharStream {
 		return this._charStream;
 	}
 
 	/**
 	 * Returns the string content of the file
 	 */
-	get stringContent(): string {
+	public get stringContent(): string {
 		return this._charStream.toString();
 	}
 
 	/**
-	 * Returns the name of the file
+	 * Returns the identifier of the file
 	 */
-	get name(): string {
+	public get name(): string {
 		return this._name;
 	}
 }

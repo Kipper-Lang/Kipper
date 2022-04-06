@@ -20,9 +20,10 @@ import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
 export interface CompileConfig {
 	/**
 	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
-	 * default globals will be overwritten! If you wish to only extend the globals write to {@link extendGlobals}.
+	 * default builtInGlobals will be overwritten! If you wish to only extend the builtInGlobals write to {@link extendGlobals}.
 	 */
 	globals?: Array<BuiltInFunction>;
+
 	/**
 	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
 	 * the default array.
@@ -46,13 +47,13 @@ export class RuntimeCompileConfig {
 	public readonly userOptions: CompileConfig;
 
 	/**
-	 * The default globals, which will be used to set {@link userOptions.globals}, if it has not been set/is
+	 * The default builtInGlobals, which will be used to set {@link userOptions.globals}, if it has not been set/is
 	 * {@link undefined}.
 	 */
 	public static readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
 
 	/**
-	 * The actual globals that will be used inside a compilation with this configuration. This has been merged with the
+	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged with the
 	 * {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
 	public readonly actualGlobals: Array<BuiltInFunction>;
@@ -72,14 +73,14 @@ export class RuntimeCompileConfig {
 export class KipperCompileResult {
 	/**
 	 * The private '_fileCtx' that actually stores the variable data,
-	 * which is returned inside the getter 'fileCtx'.
+	 * which is returned inside the {@link this.fileCtx}.
 	 * @private
 	 */
 	private readonly _programCtx: KipperProgramContext;
 
 	/**
 	 * The private '_result' that actually stores the variable data,
-	 * which is returned inside the getter 'result'.
+	 * which is returned inside the {@link this.result}.
 	 * @private
 	 */
 	private readonly _result: Array<string>;
@@ -92,14 +93,14 @@ export class KipperCompileResult {
 	/**
 	 * The program context for the compilation run, which stores the content of the program and meta-data.
 	 */
-	get programCtx(): KipperProgramContext {
+	public get programCtx(): KipperProgramContext {
 		return this._programCtx;
 	}
 
 	/**
 	 * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
 	 */
-	get result(): Array<string> {
+	public get result(): Array<string> {
 		return this._result;
 	}
 }
@@ -114,14 +115,14 @@ export class KipperCompileResult {
 export class KipperCompiler {
 	/**
 	 * The private '_errorListener' that actually stores the variable data,
-	 * which is returned inside the getter 'errorListener'.
+	 * which is returned inside the {@link this.errorListener}.
 	 * @private
 	 */
 	private readonly _errorListener: KipperErrorListener<any>;
 
 	/**
 	 * The private '_logger' that actually stores the variable data,
-	 * which is returned inside the getter 'logger'.
+	 * which is returned inside the {@link this.logger}.
 	 * @private
 	 */
 	private readonly _logger: KipperLogger;
@@ -135,14 +136,14 @@ export class KipperCompiler {
 	/**
 	 * Returns the {@link KipperErrorListener} that is responsible for handling antlr4 errors
 	 */
-	get errorListener(): KipperErrorListener<any> {
+	public get errorListener(): KipperErrorListener<any> {
 		return this._errorListener;
 	}
 
 	/**
 	 * Returns the initialised logger for this class
 	 */
-	get logger(): KipperLogger {
+	public get logger(): KipperLogger {
 		return this._logger;
 	}
 
@@ -158,7 +159,7 @@ export class KipperCompiler {
 		if (stream instanceof KipperParseStream) {
 			return stream;
 		} else {
-			return new KipperParseStream(name, stream);
+			return new KipperParseStream(stream, name);
 		}
 	}
 
@@ -170,8 +171,8 @@ export class KipperCompiler {
 	 * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
-		this._logger.info(`Parsing '${parseStream.name}'`);
+	public async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
+		this._logger.info(`Parsing '${parseStream.name}'.`);
 
 		// Creating the char stream, based on the input
 		const inputStream: CodePointCharStream = parseStream.charStream;
@@ -187,7 +188,7 @@ export class KipperCompiler {
 		// Parse the input, where `compilationUnit` is whatever entry point you defined
 		return (() => {
 			let result = parser.compilationUnit();
-			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'`);
+			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'.`);
 			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger);
 		})();
 	}
@@ -202,34 +203,29 @@ export class KipperCompiler {
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async compile(
+	public async compile(
 		stream: string | KipperParseStream,
 		config: RuntimeCompileConfig = new RuntimeCompileConfig({}),
 	): Promise<KipperCompileResult> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
-		this.logger.info(`Starting compilation for '${inStream.name}'`);
+		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
 		// The file context storing the metadata for the "virtual file"
 		const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-		// If there are globals to register, register them
+		// If there are builtInGlobals to register, register them
 		let globals = config.actualGlobals;
 		if (globals !== undefined && globals.length > 0) {
-			this.logger.debug(`Registering the following globals for the Kipper program '${inStream.name}':`);
-			for (let item of globals) {
-				this.logger.debug(` - ${item.name} -> ${item.returnType}`);
-			}
 			fileCtx.registerGlobals(globals);
-		} else {
-			this.logger.debug(`Registered no globals for the Kipper program '${inStream.name}'`);
 		}
+		this.logger.debug(`Registering '${globals.length}' globals for the Kipper program '${inStream.name}'.`);
 
 		// Translate and compile the code
-		this.logger.info(`Starting compilation for '${inStream.name}'`);
+		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 		const code = fileCtx.compileProgram();
 
-		this.logger.info(`Finished compilation - Returning compilation result`);
+		this.logger.info(`Finished compilation. Generating compilation result instance.`);
 
 		// Return the result for the compilation
 		return new KipperCompileResult(fileCtx, code);
@@ -241,15 +237,15 @@ export class KipperCompiler {
 	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
+	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
-		this.logger.info(`Starting syntax check for '${inStream.name}'`);
+		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
 
 		// Parsing the content, if an error is found, it will be reported
 		await this.parse(inStream);
 
 		// If no exception was raised, then everything should be alright!
-		this.logger.info("Finished syntax check successfully!");
+		this.logger.info("Finished syntax check successfully.");
 	}
 }
