@@ -60,7 +60,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "prepack": "npm run build",
+    "prepack": "npm run build && npm run browserify",
     "prebuild": "npm run antlr4ts",
     "build": "run-script-os",
     "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens lib/compiler/parser/",
