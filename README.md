@@ -50,24 +50,22 @@ Simple example of running your code in your browser using Kipper and Babel:
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
 <script type="module">
-  // Define your own logger and compiler, which will handle the compilation
-  const logger = new Kipper.KipperLogger((level, msg) => {
-    console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
-  });
-  // Define your own compiler with your wanted configuration
-  const compiler = new Kipper.KipperCompiler(logger);
+	// Define your own logger and compiler, which will handle the compilation
+	const logger = new Kipper.KipperLogger((level, msg) => {
+		console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
+	});
+	// Define your own compiler with your wanted configuration
+	const compiler = new Kipper.KipperCompiler(logger);
 
-  // Call the compiler asynchronously
-  setTimeout(async () => {
-		// Compile the code to Typescript
-    const result = (await compiler.compile(`call print("Hello world!");`)).write();
-    
-		// Transpile the TS code into JS
-		const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
-		
-		// Finally, run your program
-    eval(jsCode.code);
-  }, 0);
+	// Compile the code to Typescript
+	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
+	const result = (await compiler.compile(`call print("Hello world!");`)).write();
+
+	// Transpile the TS code into JS
+	const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+
+	// Finally, run your program
+	eval(jsCode.code);
 </script>
 ```
 
@@ -103,15 +101,15 @@ fs.readFile(path, "utf8" as BufferEncoding).then(
       console.log(`[${level}] ${msg}`);
     })
     const yourCompiler = new Kipper.KipperCompiler(yourLogger);
-
+  
     // Compile the code string or stream
     let code = yourCompiler.compile(fileContent).write();
-		
-	// Compiling down to JS using the typescript node module
-	let jsCode = ts.transpile(code);
-	
-	// Running the Kipper program
-	eval(jsCode);
+      
+    // Compiling down to JS using the typescript node module
+    let jsCode = ts.transpile(code);
+    
+    // Running the Kipper program
+    eval(jsCode);
 	}
 );
 ```
