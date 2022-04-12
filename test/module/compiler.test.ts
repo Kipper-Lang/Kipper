@@ -2,9 +2,9 @@ import { assert } from "chai";
 import {
   KipperCompiler,
   KipperLogger,
-  KipperParseStream,
+  KipperParseStream, KipperProgramContext,
   KipperSyntaxError,
-  LogLevel
+  LogLevel,
 } from "../../src";
 import { promises as fs } from "fs";
 import { KipperCompileResult } from "../../src";
@@ -176,6 +176,64 @@ describe("KipperCompiler", () => {
           return;
         }
         assert(false, "Expected 'UnknownTypeError'");
+      });
+
+      it("InvalidGlobalError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("var i: num = 4;")
+          );
+
+          // Duplicate identifier
+          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+        } catch (e) {
+          assert((<Error>e).message.startsWith("Global definition"), "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'InvalidGlobalError'");
+      });
+
+      it("BuiltInOverwriteError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("var i: num = 4;")
+          );
+
+          // Register new global
+          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+          programCtx.compileProgram();
+        } catch (e) {
+          assert((<Error>e).message.startsWith("May not overwrite built-in identifier"), "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'BuiltInOverwriteError'");
+      });
+
+      it("DuplicateFunctionDefinitionError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("def x() -> void {} \n def x() -> void {}")
+          );
+          programCtx.compileProgram();
+        } catch (e) {
+          assert((<Error>e).message.startsWith("Definition of function"), "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'DuplicateFunctionDefinitionError'");
+      });
+
+      it("DuplicateVariableDefinitionError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("var x: num; var x: num;")
+          );
+          programCtx.compileProgram();
+        } catch (e) {
+          assert((<Error>e).message.startsWith("Definition of variable"), "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'DuplicateVariableDefinitionError'");
       });
     });
   });

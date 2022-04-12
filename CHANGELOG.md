@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
 - New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
 - Created new expression class `ArgumentExpressionList` representing an argument list inside function calls.
+- New function `KipperCompileResult.createFileContent()`, which creates a human-readable string from the generated 
+  source code.
 
 ### Updated
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.

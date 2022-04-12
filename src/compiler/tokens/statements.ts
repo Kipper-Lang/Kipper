@@ -11,7 +11,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken, eligibleChildToken, eligibleParentToken } from "./parse-token";
+import { CompilableParseToken, eligibleParentToken } from "./parse-token";
 import {
 	CompoundStatementContext,
 	ExpressionStatementContext,
@@ -158,7 +158,7 @@ export class CompoundStatement extends Statement {
 	 * @param token The {@link VariableDeclaration} token
 	 */
 	public addNewLocalVariable(token: VariableDeclaration) {
-		this.programCtx.assert.variableIsNotDefined(token.identifier, this);
+		this.programCtx.assert.variableIdentifierNotUsed(token.identifier, this);
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}
 

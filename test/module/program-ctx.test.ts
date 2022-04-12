@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import {
-	GlobalAlreadyRegisteredError,
+	InvalidGlobalError,
 	KipperCompiler,
 	KipperParseStream,
 	KipperProgramContext,
@@ -49,7 +49,7 @@ describe("KipperProgramContext", async () => {
 			try {
 				programCtx.registerGlobals(RuntimeCompileConfig.defaultGlobals[0]);
 			} catch (e) {
-				if (e instanceof GlobalAlreadyRegisteredError) {
+				if (e instanceof InvalidGlobalError) {
 					return;
 				} else {
 					assert(false, "Unexpected error!");

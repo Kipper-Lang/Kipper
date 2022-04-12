@@ -357,7 +357,7 @@ export class StringPrimaryExpression extends ConstantExpression {
 }
 
 /**
- * Expression class, which represents an expression in the Kipper language and is compilable using
+ * Identifier expression class, which represents an identifier in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
@@ -396,8 +396,7 @@ export class IdentifierPrimaryExpression extends Expression {
 	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
-		// TODO!
-		return [];
+		return ["identifierValue"];
 	}
 
 	/**
@@ -704,7 +703,11 @@ export class ArgumentExpressionList extends Expression {
 	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
-		return [];
+		let genCode: Array<string> = [];
+		for (let child of this.children) {
+			genCode = [...genCode, ...child.translateCtxAndChildren()];
+		}
+		return genCode;
 	}
 }
 
@@ -777,6 +780,13 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	}
 
 	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrContext(): OperatorModifiedUnaryExpressionContext {
+		return this._antlrContext;
+	}
+
+	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
@@ -792,13 +802,6 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
 		return [];
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrContext(): OperatorModifiedUnaryExpressionContext {
-		return this._antlrContext;
 	}
 }
 
