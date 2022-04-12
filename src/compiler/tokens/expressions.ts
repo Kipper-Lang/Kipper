@@ -7,6 +7,7 @@
 import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
+	ArgumentExpressionListContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
 	CastOrConvertExpressionContext,
@@ -29,6 +30,7 @@ import {
 	TangledPrimaryExpressionContext,
 } from "../parser";
 import { BuiltInFunction, KipperType, ScopeFunctionDeclaration } from "../logic";
+import { UnableToDetermineMetadataError } from "../../errors";
 
 /**
  * Every antlr4 expression ctx type
@@ -54,7 +56,8 @@ export type antlrExpressionCtxType =
 	| LogicalAndExpressionContext
 	| LogicalOrExpressionContext
 	| ConditionalExpressionContext
-	| AssignmentExpressionContext;
+	| AssignmentExpressionContext
+	| ArgumentExpressionListContext;
 
 /**
  * Fetches the handler for the specified {@link antlrExpressionCtxType}.
@@ -82,6 +85,8 @@ export function getExpressionInstance(antlrContext: antlrExpressionCtxType, pare
 		return new IncrementOrDecrementExpression(antlrContext, parent);
 	} else if (antlrContext instanceof FunctionCallPostfixExpressionContext) {
 		return new FunctionCallPostfixExpression(antlrContext, parent);
+	} else if (antlrContext instanceof ArgumentExpressionListContext) {
+		return new ArgumentExpressionList(antlrContext, parent);
 	} else if (antlrContext instanceof IncrementOrDecrementUnaryExpressionContext) {
 		return new IncrementOrDecrementUnaryExpression(antlrContext, parent);
 	} else if (antlrContext instanceof OperatorModifiedUnaryExpressionContext) {
@@ -128,6 +133,8 @@ export abstract class Expression extends CompilableParseToken {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public abstract translateCtxAndChildren(): Array<string>;
 
@@ -184,6 +191,8 @@ export class NumberPrimaryExpression extends ConstantExpression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -236,6 +245,8 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -278,6 +289,8 @@ export class ListPrimaryExpression extends ConstantExpression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -328,6 +341,8 @@ export class StringPrimaryExpression extends ConstantExpression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		return [`"${this.stringContent}"`];
@@ -377,6 +392,8 @@ export class IdentifierPrimaryExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -421,6 +438,8 @@ export class FStringPrimaryExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -438,9 +457,6 @@ export class FStringPrimaryExpression extends Expression {
 /**
  * Tangled expression class, which represents a tangled expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
- *
- * This class may only have children of type {@link CompilableParseToken}, as this expression itself does not
- * compile anything and simply change the order of evaluation.
  * @since 0.1.0
  */
 export class TangledPrimaryExpression extends Expression {
@@ -451,25 +467,9 @@ export class TangledPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: TangledPrimaryExpressionContext;
 
-	/**
-	 * The private '_children' that actually stores the variable data,
-	 * which is returned inside the {@link this.children}.
-	 * @private
-	 */
-	protected override readonly _children: Array<CompilableParseToken>;
-
 	constructor(antlrContext: TangledPrimaryExpressionContext, parent: CompilableParseToken) {
 		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
-		this._children = [];
-	}
-
-	/**
-	 * The children of this parse token, which **must** be of type {@link CompilableParseToken}, as this expression
-	 * itself does not compile anything and simply change the order of evaluation.
-	 */
-	public get children(): Array<CompilableParseToken> {
-		return this._children;
 	}
 
 	/**
@@ -482,6 +482,8 @@ export class TangledPrimaryExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO! Add tests for this
@@ -530,6 +532,8 @@ export class IncrementOrDecrementExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -573,6 +577,8 @@ export class ArraySpecifierExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -602,14 +608,37 @@ export class FunctionCallPostfixExpression extends Expression {
 	 */
 	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
 
-	private readonly function: BuiltInFunction | ScopeFunctionDeclaration | undefined;
+	private readonly function: BuiltInFunction | ScopeFunctionDeclaration;
 
 	constructor(antlrContext: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
 		super(antlrContext, parent);
 		this._antlrContext = antlrContext;
 
-		const identifier: string = ""; // TODO! Implement meta-data fetching
-		this.function = this.programCtx.getGlobalFunction(identifier);
+		const identifier: string = this.getMetadata().identifier; // TODO! Implement meta-data fetching
+
+		// Assert the existence of the function
+		this.programCtx.assert.functionIsDefined(identifier);
+		this.function = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(identifier);
+	}
+
+	/**
+	 * Fetch the metadata for the function call.
+	 * @private
+	 */
+	private getMetadata(): { identifier: string } {
+		// Fetch context instances
+		let identifierCtx = <IdentifierPrimaryExpressionContext | undefined>(
+			this.antlrContext.children?.find((val) => val instanceof IdentifierPrimaryExpressionContext)
+		);
+
+		// Throw an error if no children or not enough children are present - This should never happen
+		if (!this.antlrContext.children || !identifierCtx) {
+			throw new UnableToDetermineMetadataError();
+		}
+
+		return {
+			identifier: this.tokenStream.getText(identifierCtx.sourceInterval),
+		};
 	}
 
 	/**
@@ -622,10 +651,16 @@ export class FunctionCallPostfixExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
-		// TODO!
-		return [];
+		let argListCtx = <ArgumentExpressionList | undefined>(
+			this.children.find((val) => val instanceof ArgumentExpressionList)
+		);
+
+		const args: Array<string> = argListCtx ? argListCtx.translateCtxAndChildren() : [];
+		return [this.function.identifier, "(", ...args, ")"];
 	}
 
 	/**
@@ -633,6 +668,43 @@ export class FunctionCallPostfixExpression extends Expression {
 	 */
 	public override get antlrContext(): FunctionCallPostfixExpressionContext {
 		return this._antlrContext;
+	}
+}
+
+/**
+ * Argument expression list used inside a function call.
+ * @since 0.2.0
+ * @example
+ * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
+ */
+export class ArgumentExpressionList extends Expression {
+	/**
+	 * The private '_antlrContext' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrContext}.
+	 * @private
+	 */
+	protected override readonly _antlrContext: ArgumentExpressionListContext;
+
+	constructor(antlrContext: ArgumentExpressionListContext, parent: CompilableParseToken) {
+		super(antlrContext, parent);
+		this._antlrContext = antlrContext;
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public semanticAnalysis(): void {
+		// TODO!
+	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
+	 */
+	public translateCtxAndChildren(): Array<string> {
+		return [];
 	}
 }
 
@@ -667,6 +739,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -712,6 +786,8 @@ export class OperatorModifiedUnaryExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -757,6 +833,8 @@ export class CastOrConvertExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -804,6 +882,8 @@ export class MultiplicativeExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -849,6 +929,8 @@ export class AdditiveExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -902,6 +984,8 @@ export class RelationalExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -949,6 +1033,8 @@ export class EqualityExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -996,6 +1082,8 @@ export class LogicalAndExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -1043,6 +1131,8 @@ export class LogicalOrExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -1088,6 +1178,8 @@ export class ConditionalExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!
@@ -1132,6 +1224,8 @@ export class AssignmentExpression extends Expression {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
 	 */
 	public translateCtxAndChildren(): Array<string> {
 		// TODO!

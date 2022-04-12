@@ -151,7 +151,7 @@ export class GlobalAlreadyRegisteredError extends KipperError {
  */
 export class UnknownVariableDefinition extends KipperError {
 	constructor(identifier: string) {
-		super(`Unknown definition of variable '${identifier}'.`);
+		super(`Unknown variable definition '${identifier}'.`);
 
 		// Set the prototype explicitly.
 		Object.setPrototypeOf(this, DuplicateVariableDefinitionError.prototype);
@@ -163,7 +163,7 @@ export class UnknownVariableDefinition extends KipperError {
  */
 export class UnknownFunctionDefinition extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of variable '${identifier}' already exists! May not overwrite existing definitions.`);
+		super(`Unknown function definition '${identifier}'.`);
 
 		// Set the prototype explicitly.
 		Object.setPrototypeOf(this, DuplicateVariableDefinitionError.prototype);

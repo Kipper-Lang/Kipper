@@ -77,6 +77,13 @@ export abstract class Declaration extends CompilableParseToken {
 	 * The identifier of the declaration.
 	 */
 	public abstract get identifier(): string;
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
+	 */
+	public abstract translateCtxAndChildren(): Array<Array<string>>;
 }
 
 /**
@@ -125,10 +132,12 @@ export class ParameterDeclaration extends Declaration {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<Array<string>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }
 
@@ -193,7 +202,7 @@ export class FunctionDefinition extends Declaration {
 		return {
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			returnType: this.programCtx.verifyType(this.tokenStream.getText(returnTypeCtx.sourceInterval)),
-			args: paramListCtx ? [] : [] // TODO! Implement arg fetching
+			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 	}
 
@@ -235,10 +244,12 @@ export class FunctionDefinition extends Declaration {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<Array<string>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }
 
@@ -375,9 +386,11 @@ export class VariableDeclaration extends Declaration {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	public translateCtxAndChildren(): Array<Array<string>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }

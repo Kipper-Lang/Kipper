@@ -169,7 +169,7 @@ export class KipperProgramContext {
 	 * avoid running the function unnecessarily and generate code again, even though it already exists.
 	 * @private
 	 */
-	private _compiledCode: Array<string> | undefined;
+	private _compiledCode: Array<Array<string>> | undefined;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -276,7 +276,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
-	public get compiledCode(): Array<string> | undefined {
+	public get compiledCode(): Array<Array<string>> | undefined {
 		return this._compiledCode;
 	}
 
@@ -325,7 +325,7 @@ export class KipperProgramContext {
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
-	public compileProgram(): Array<string> {
+	public compileProgram(): Array<Array<string>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
 
@@ -335,7 +335,7 @@ export class KipperProgramContext {
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
-		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
+		let genCode: Array<Array<string>> = this._processedParseTree.translateCtxAndChildren();
 
 		// Append required typescript code for Kipper for the program to work properly
 		genCode = this.generateRequirements().concat(genCode);
@@ -378,12 +378,12 @@ export class KipperProgramContext {
 	 * Generates the required code for the execution of this kipper program
 	 * @private
 	 */
-	private generateRequirements(): Array<string> {
-		let code: Array<string> = [];
+	private generateRequirements(): Array<Array<string>> {
+		let code: Array<Array<string>> = [];
 
 		// Generating the code for the global functions
 		for (let global of this._builtInGlobals) {
-			code = code.concat(global.handler);
+			code = [...code, global.handler];
 		}
 		return code;
 	}

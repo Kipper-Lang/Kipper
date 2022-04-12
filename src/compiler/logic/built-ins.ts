@@ -72,7 +72,7 @@ export interface BuiltInFunction {
 	 *    `
 	 *  };
 	 */
-	handler: string;
+	handler: Array<string>;
 	/**
 	 * The expected return of the function. If the return type is "void", then the function will not return anything.
 	 */
@@ -91,6 +91,6 @@ export const builtInWebPrintFunction: BuiltInFunction = {
 			type: "str",
 		},
 	],
-	handler: `function _kipperGlobal_print(printText: string): void { console.log(printText); }`,
+	handler: ["function _kipperGlobal_print(printText: string): void { console.log(printText); }"],
 	returnType: "void",
 };

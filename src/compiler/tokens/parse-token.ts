@@ -134,8 +134,10 @@ export abstract class CompilableParseToken {
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Array<string>;
+	public abstract translateCtxAndChildren(): Array<any>;
 }
 
 export class RootFileParseToken {
@@ -194,11 +196,13 @@ export class RootFileParseToken {
 	}
 
 	/**
-	 * Generates the typescript code for this item, and its children.  This will log all warnings using
+	 * Generates the typescript code for this item, and its children. This will log all warnings using
 	 * {@link programCtx.logger} and throw errors if encountered.
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
-		let genCode: Array<string> = [];
+	public translateCtxAndChildren(): Array<Array<string>> {
+		let genCode: Array<Array<string>> = [];
 		for (let child of this.children) {
 			genCode = genCode.concat(child.translateCtxAndChildren());
 		}

@@ -83,9 +83,9 @@ export class KipperCompileResult {
 	 * which is returned inside the {@link this.result}.
 	 * @private
 	 */
-	private readonly _result: Array<string>;
+	private readonly _result: Array<Array<string>>;
 
-	constructor(fileCtx: KipperProgramContext, result: Array<string>) {
+	constructor(fileCtx: KipperProgramContext, result: Array<Array<string>>) {
 		this._programCtx = fileCtx;
 		this._result = result;
 	}
@@ -100,7 +100,7 @@ export class KipperCompileResult {
 	/**
 	 * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
 	 */
-	public get result(): Array<string> {
+	public get result(): Array<Array<string>> {
 		return this._result;
 	}
 }

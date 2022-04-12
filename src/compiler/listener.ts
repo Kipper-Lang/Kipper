@@ -582,7 +582,9 @@ export class KipperFileListener implements KipperListener {
 	 * the {@link ctx} instance.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterArgumentExpressionList(ctx: ArgumentExpressionListContext): void {}
+	public enterArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
@@ -591,7 +593,9 @@ export class KipperFileListener implements KipperListener {
 	 * the {@link ctx} instance.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitArgumentExpressionList(ctx: ArgumentExpressionListContext): void {}
+	public exitArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
+		this.handleExitingExpressionCtx();
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.arraySpecifier`.

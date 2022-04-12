@@ -12,11 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   corresponding errors.
 - New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
 - New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
+- Created new expression class `ArgumentExpressionList` representing an argument list inside function calls.
 
 ### Updated
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
 - Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
 - Made all `getMetadata` functions `/tokens/` instance-methods, removing all required parameters.
+- Changed compilation result from `Array<string>` to `Array<Array<string>>`, where each nested array represents a line
+  combined of string tokens.
+- Set explicit children type for expressions and statements, instead of letting them inherit the children type from
+  `CompilableParseToken`.
+- Set return type of `translateCtxAndChildren` to `Array<string>` in children classes of `Expression`. 
 
 ### Removed
 
