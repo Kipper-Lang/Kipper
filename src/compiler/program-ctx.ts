@@ -118,12 +118,10 @@ export class CompileAssert {
 	 * @param identifier The identifier to check.
 	 */
 	public globalCanBeRegistered(identifier: string): void {
-		let identifierAlreadyExists: boolean = this.programCtx.globalScope.find(
-			(val) => val.identifier == identifier
-		) !== undefined;
-		let globalAlreadyExists: boolean = this.programCtx.builtInGlobals.find(
-			(val) => val.identifier == identifier
-		) !== undefined;
+		let identifierAlreadyExists: boolean =
+			this.programCtx.globalScope.find((val) => val.identifier == identifier) !== undefined;
+		let globalAlreadyExists: boolean =
+			this.programCtx.builtInGlobals.find((val) => val.identifier == identifier) !== undefined;
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
