@@ -137,12 +137,12 @@ export class KipperSyntaxError<Token> extends KipperError {
 /**
  * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.builtInGlobals}.
  */
-export class GlobalAlreadyRegisteredError extends KipperError {
+export class InvalidGlobalError extends KipperError {
 	constructor(identifier: string) {
-		super(`Global definition of function '${identifier}' already exists!`);
+		super(`Global definition '${identifier}' already exists or identifier is already used`);
 
 		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+		Object.setPrototypeOf(this, InvalidGlobalError.prototype);
 	}
 }
 
