@@ -24,7 +24,7 @@ import {
 	BuiltInOverwriteError,
 	DuplicateFunctionDefinitionError,
 	DuplicateVariableDefinitionError,
-	GlobalAlreadyRegisteredError,
+	InvalidGlobalError,
 	UnknownFunctionDefinition,
 	UnknownTypeError,
 	UnknownVariableDefinition,
@@ -44,7 +44,7 @@ export class CompileAssert {
 
 	/**
 	 * Asserts that the passed type identifier exists.
-	 * @param type The type to check
+	 * @param type The type to check.
 	 */
 	public assertTypeExists(type: string): void {
 		if (kipperTypes.find((val) => val === type) === undefined) {
@@ -54,7 +54,7 @@ export class CompileAssert {
 
 	/**
 	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the function
+	 * @param identifier The identifier of the function.
 	 */
 	public functionIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
@@ -64,7 +64,7 @@ export class CompileAssert {
 
 	/**
 	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the variable
+	 * @param identifier The identifier of the variable.
 	 */
 	public variableIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
@@ -74,9 +74,9 @@ export class CompileAssert {
 
 	/**
 	 * Asserts that the passed function identifier is not defined.
-	 * @param identifier The identifier of the function
+	 * @param identifier The identifier of the function.
 	 */
-	public functionIsNotDefined(identifier: string): void {
+	public functionIdentifierNotUsed(identifier: string): void {
 		if (this.programCtx.getGlobalFunction(identifier)) {
 			throw new DuplicateFunctionDefinitionError(identifier);
 		}
@@ -84,11 +84,11 @@ export class CompileAssert {
 
 	/**
 	 * Asserts that the passed variable identifier is not defined.
-	 * @param identifier The identifier of the variable
+	 * @param identifier The identifier of the variable.
 	 * @param scope The scope to use. If undefined, then it will use the global scope of the
 	 * {@link KipperProgramContext program ctx}.
 	 */
-	public variableIsNotDefined(identifier: string, scope?: CompoundStatement | KipperProgramContext): void {
+	public variableIdentifierNotUsed(identifier: string, scope?: CompoundStatement | KipperProgramContext): void {
 		let actualScope: ScopeDeclaration[];
 		if (scope === undefined) {
 			actualScope = this.programCtx.globalScope;
@@ -98,18 +98,36 @@ export class CompileAssert {
 			actualScope = scope.globalScope;
 		}
 
-		if (actualScope.find((v) => v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined)) {
+		if (actualScope.find((v) => v instanceof ScopeVariableDeclaration && v.identifier === identifier)) {
 			throw new DuplicateVariableDefinitionError(identifier);
 		}
 	}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
-	 * @param identifier
+	 * @param identifier The identifier to check.
 	 */
 	public builtInNotDefined(identifier: string): void {
 		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
 			throw new BuiltInOverwriteError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that a new global with the passed identifier may be created.
+	 * @param identifier The identifier to check.
+	 */
+	public globalCanBeRegistered(identifier: string): void {
+		let identifierAlreadyExists: boolean = this.programCtx.globalScope.find(
+			(val) => val.identifier == identifier
+		) !== undefined;
+		let globalAlreadyExists: boolean = this.programCtx.builtInGlobals.find(
+			(val) => val.identifier == identifier
+		) !== undefined;
+
+		// If the identifier is already used or the global already exists, throw an error
+		if (identifierAlreadyExists || globalAlreadyExists) {
+			throw new InvalidGlobalError(identifier);
 		}
 	}
 }
@@ -301,15 +319,9 @@ export class KipperProgramContext {
 			newGlobals = [newGlobals];
 		}
 
+		// Make sure the global is valid and doesn't interfere with other identifiers
 		for (let g of newGlobals) {
-			let identifierAlreadyExists =
-				this._builtInGlobals.find((registered) => {
-					return registered.identifier == g.identifier;
-				}) !== undefined;
-			let globalAlreadyExists = this._builtInGlobals.includes(g);
-			if (identifierAlreadyExists || globalAlreadyExists) {
-				throw new GlobalAlreadyRegisteredError(g.identifier);
-			}
+			this.assert.globalCanBeRegistered(g.identifier);
 		}
 
 		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
@@ -429,8 +441,8 @@ export class KipperProgramContext {
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition) {
 		this.assert.builtInNotDefined(token.identifier);
-		this.assert.functionIsNotDefined(token.identifier);
-		this.assert.variableIsNotDefined(token.identifier);
+		this.assert.functionIdentifierNotUsed(token.identifier);
+		this.assert.variableIdentifierNotUsed(token.identifier);
 		this._globalScope = this._globalScope.concat(
 			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),
 		);
