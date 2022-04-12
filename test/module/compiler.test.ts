@@ -8,7 +8,9 @@ import {
 } from "../../src";
 import { promises as fs } from "fs";
 import { KipperCompileResult } from "../../src";
+import * as ts from "typescript";
 
+const helloWorld = `${__dirname}/../kipper-files/hello-world.kip`;
 const mainFile = `${__dirname}/../kipper-files/main.kip`;
 const singleFunctionFile = `${__dirname}/../kipper-files/single-function-call.kip`;
 const multiFunctionFile = `${__dirname}/../kipper-files/multi-function-call.kip`;
@@ -98,6 +100,33 @@ describe("KipperCompiler", () => {
 
   describe("compile", () => {
     describe("programs", () => {
+      it("Hello world", async () => {
+        let fileContent = (await fs.readFile(helloWorld, "utf8" as BufferEncoding)).toString();
+        let compiler = new KipperCompiler();
+        let stream = new KipperParseStream(fileContent);
+        let instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.programCtx.globalScope.length === 0, "Expected no definitions");
+
+        // Compile the program to JavaScript and evaluate it
+        const jsCode = ts.transpile(instance.createFileContent());
+
+        // Overwrite built-in to access output
+        const prevLog = console.log;
+        console.log = (message: string) => {
+          // Assert that the output is "Hello world!"
+          assert(message === "Hello world!");
+        };
+
+        // Evaluate expression
+        eval(jsCode);
+
+        // Restore old console.log
+        console.log = prevLog;
+      });
+
       it("Single Function call", async () => {
         let fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
         let compiler = new KipperCompiler();
