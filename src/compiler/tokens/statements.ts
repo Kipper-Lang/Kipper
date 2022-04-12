@@ -140,6 +140,7 @@ export class CompoundStatement extends Statement {
 	 * @param token The {@link VariableDeclaration} token
 	 */
 	public addNewLocalVariable(token: VariableDeclaration) {
+		this.programCtx.assert.variableIsNotDefined(token.identifier, this);
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}
 

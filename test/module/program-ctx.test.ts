@@ -6,7 +6,7 @@ import {
 	KipperProgramContext,
 } from "../../src";
 import { promises as fs } from "fs";
-import { BuiltInFunction, ScopeVariableDeclaration, RuntimeCompileConfig } from "../../src/";
+import { ScopeVariableDeclaration, RuntimeCompileConfig } from "../../src/";
 
 const mainFile = `${__dirname}/../kipper-files/main.kip`;
 

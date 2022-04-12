@@ -10,15 +10,109 @@ import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { BuiltInFunction, KipperType, kipperTypes, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
-import { KipperLogger } from "../logger";
-import { FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
 import {
-	DuplicateIdentifierError,
+	BuiltInFunction,
+	KipperType,
+	kipperTypes,
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeVariableDeclaration,
+} from "./logic";
+import { KipperLogger } from "../logger";
+import { CompoundStatement, FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
+import {
+	BuiltInOverwriteError,
+	DuplicateFunctionDefinitionError,
+	DuplicateVariableDefinitionError,
 	GlobalAlreadyRegisteredError,
-	NoBuiltInOverwriteError,
+	UnknownFunctionDefinition,
 	UnknownTypeError,
+	UnknownVariableDefinition,
 } from "../errors";
+
+/**
+ * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
+ * trigger corresponding errors.
+ * @since 0.2.0
+ */
+export class CompileAssert {
+	public readonly programCtx: KipperProgramContext;
+
+	constructor(programCtx: KipperProgramContext) {
+		this.programCtx = programCtx;
+	}
+
+	/**
+	 * Asserts that the passed type identifier exists.
+	 * @param type The type to check
+	 */
+	public assertTypeExists(type: string): void {
+		if (kipperTypes.find((val) => val === type) === undefined) {
+			throw new UnknownTypeError(type);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is defined.
+	 * @param identifier The identifier of the function
+	 */
+	public functionIsDefined(identifier: string): void {
+		if (!this.programCtx.getGlobalFunction(identifier)) {
+			throw new UnknownFunctionDefinition(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is defined.
+	 * @param identifier The identifier of the variable
+	 */
+	public variableIsDefined(identifier: string): void {
+		if (!this.programCtx.getGlobalFunction(identifier)) {
+			throw new UnknownVariableDefinition(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed function identifier is not defined.
+	 * @param identifier The identifier of the function
+	 */
+	public functionIsNotDefined(identifier: string): void {
+		if (this.programCtx.getGlobalFunction(identifier)) {
+			throw new DuplicateFunctionDefinitionError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is not defined.
+	 * @param identifier The identifier of the variable
+	 * @param scope The scope to use. If undefined, then it will use the global scope of the
+	 * {@link KipperProgramContext program ctx}.
+	 */
+	public variableIsNotDefined(identifier: string, scope?: CompoundStatement | KipperProgramContext): void {
+		let actualScope: ScopeDeclaration[];
+		if (scope === undefined) {
+			actualScope = this.programCtx.globalScope;
+		} else if (scope instanceof CompoundStatement) {
+			actualScope = scope.localScope;
+		} else {
+			actualScope = scope.globalScope;
+		}
+
+		if (actualScope.find((v) => v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined)) {
+			throw new DuplicateVariableDefinitionError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed identifier does not exist as a built-in global.
+	 * @param identifier
+	 */
+	public builtInNotDefined(identifier: string): void {
+		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
+			throw new BuiltInOverwriteError(identifier);
+		}
+	}
+}
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -89,6 +183,13 @@ export class KipperProgramContext {
 	 */
 	public logger: KipperLogger;
 
+	/**
+	 * The asserter that is used to validate compiler-required truths, which, if false, will trigger corresponding errors.
+	 * @public
+	 * @since 0.2.0
+	 */
+	public assert: CompileAssert;
+
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -97,6 +198,7 @@ export class KipperProgramContext {
 		logger: KipperLogger,
 	) {
 		this.logger = logger;
+		this.assert = new CompileAssert(this);
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this._parser = parser;
@@ -162,7 +264,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * The global scope of this file, which contains all {@link ScopeVariableDeclaration} instances that are accessible in the
+	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
 	public get globalScope(): Array<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
@@ -287,10 +389,11 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Tries to fetch the specific identifier (Either {@link BuiltInFunction} or {@link ScopeVariableDeclaration}) and locate
-	 * it in the global scope.
+	 * Tries to fetch the specific identifier from the global scope.
 	 */
-	public getGlobalIdentifier(identifier: string): BuiltInFunction | ScopeVariableDeclaration | undefined {
+	public getGlobalIdentifier(
+		identifier: string,
+	): BuiltInFunction | ScopeVariableDeclaration | ScopeFunctionDeclaration | undefined {
 		return this.getGlobalFunction(identifier) ?? this.getGlobalVariable(identifier);
 	}
 
@@ -298,10 +401,15 @@ export class KipperProgramContext {
 	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
 	 * @param identifier The identifier of the function
 	 */
-	public getGlobalFunction(identifier: string): BuiltInFunction | undefined {
-		return this.builtInGlobals.find((value) => {
-			return value.identifier === identifier;
-		});
+	public getGlobalFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration | undefined {
+		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
+		return (
+			this.builtInGlobals.find((value) => {
+				return value.identifier === identifier;
+			}) ?? <ScopeFunctionDeclaration | undefined>this.globalScope.find((value) => {
+				return value instanceof ScopeFunctionDeclaration && value.identifier == identifier;
+			})
+		);
 	}
 
 	/**
@@ -309,8 +417,8 @@ export class KipperProgramContext {
 	 * @param identifier The identifier of the variable
 	 */
 	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		// Casting the type, as the return type will always be either ScopeVariableDeclaration or undefined
-		// This is automatically the case, as we require the type inside find() to match ScopeVariableDeclaration!
+		// Casting the type, as the return type will always be either ScopeDeclaration or undefined
+		// This is automatically the case, as we require the type inside find() to match ScopeDeclaration!
 		return <ScopeVariableDeclaration | undefined>this.globalScope.find((value) => {
 			return value instanceof ScopeVariableDeclaration && value.identifier == identifier;
 		});
@@ -320,31 +428,24 @@ export class KipperProgramContext {
 	 * Adds a new declaration entry to the global scope.
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition) {
-		if (this.globalScope.find((v) => v.identifier === token.identifier) !== undefined) {
-			throw new DuplicateIdentifierError(token.identifier);
-		} else if (this.builtInGlobals.find((v) => v.identifier === token.identifier) !== undefined) {
-			throw new NoBuiltInOverwriteError(token.identifier);
-		} else {
-			this._globalScope = this._globalScope.concat(
-				token instanceof VariableDeclaration
-					? new ScopeVariableDeclaration(token)
-					: new ScopeFunctionDeclaration(token),
-			);
-		}
+		this.assert.builtInNotDefined(token.identifier);
+		this.assert.functionIsNotDefined(token.identifier);
+		this.assert.variableIsNotDefined(token.identifier);
+		this._globalScope = this._globalScope.concat(
+			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),
+		);
 	}
 
 	/**
-	 * Validate if the type is valid, and if not raise an error!
+	 * Return the proper {@link KipperType} if the type exists. If not raise an error.
 	 * @param type The type string to check
 	 * @throws UnknownTypeError If the type is unknown to Kipper!
 	 * @since 0.1.2
 	 */
 	public verifyType(type: string): KipperType {
+		this.assert.assertTypeExists(type);
+
 		// If the type does not exist in Kipper -> raise error
-		if (kipperTypes.find((val) => val === type) === undefined) {
-			throw new UnknownTypeError(type);
-		} else {
-			return <KipperType>type;
-		}
+		return <KipperType>type;
 	}
 }

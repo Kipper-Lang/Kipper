@@ -11,6 +11,7 @@ import { KipperType } from "./types";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
+ * @since 0.1.0
  */
 export interface BuiltInFunctionArgument {
 	/**
@@ -35,6 +36,7 @@ export interface BuiltInFunctionArgument {
 /**
  * Interface representation of a {@link BuiltInFunction}, which is available inside a Kipper program using the specified
  * metadata.
+ * @since 0.1.0
  */
 export interface BuiltInFunction {
 	/**
@@ -79,6 +81,7 @@ export interface BuiltInFunction {
 
 /**
  * The code for the global print function that works inside the Web-Browser
+ * @since 0.1.0
  */
 export const builtInWebPrintFunction: BuiltInFunction = {
 	identifier: "print",

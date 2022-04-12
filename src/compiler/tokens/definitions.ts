@@ -187,9 +187,7 @@ export class FunctionDefinition extends Declaration {
 
 		// Throw an error if no children or not enough children are present - This should never happen
 		if (!antlrContext.children || !declaratorCtx || !returnTypeCtx) {
-			throw new UnableToDetermineMetadataError(
-				`Failed to determine metadata for 'FunctionDefinition' (${antlrContext.sourceInterval}). Missing data.`,
-			);
+			throw new UnableToDetermineMetadataError();
 		}
 
 		return {
@@ -197,8 +195,8 @@ export class FunctionDefinition extends Declaration {
 			returnType: programCtx.verifyType(src.getText(returnTypeCtx.sourceInterval)),
 			args: paramListCtx
 				? ((): Array<ParameterDeclaration> => {
-						return []; // TODO! Implement arg fetching
-				  })()
+					return []; // TODO! Implement arg fetching
+				})()
 				: [],
 		};
 	}
@@ -317,9 +315,7 @@ export class VariableDeclaration extends Declaration {
 
 		// Throw an error if no children or not enough children are present - This should never happen
 		if (!antlrContext.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError(
-				`Failed to determine metadata for 'VariableDeclaration' (${antlrContext.sourceInterval}). Missing data.`,
-			);
+			throw new UnableToDetermineMetadataError();
 		}
 
 		return {
@@ -363,6 +359,13 @@ export class VariableDeclaration extends Declaration {
 	 */
 	public get valueType(): KipperType {
 		return this._valueType;
+	}
+
+	/**
+	 * Returns whether the variable declaration is defined and has a value set.
+	 */
+	public get isDefined(): boolean {
+		return this._isDefined;
 	}
 
 	/**

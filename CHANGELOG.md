@@ -8,8 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Created new class `CompileAssert`, which is used to assert certain compiler-required truths, which, if false, trigger
+  corresponding errors.
+- Added errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
 
 ### Updated
+- Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
+- Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`
 
 ### Removed
 
@@ -20,14 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
 - Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
   storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
-- Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
+- Added errors `BuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 - Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing 
-  `ScopeVariableDeclaration` and the added `ScopeFunctionDeclaration`.
+  `ScopeDeclaration` and the added `ScopeFunctionDeclaration`.
 - Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
 - Implemented support for function definitions that will be from now on automatically registered globally.
 
 ### Updated
-- Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
+- Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token 
   (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
   and state).
 - Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
