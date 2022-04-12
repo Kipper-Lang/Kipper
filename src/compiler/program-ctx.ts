@@ -337,14 +337,14 @@ export class KipperProgramContext {
 	 */
 	public async compileProgram(): Promise<Array<Array<string>>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
+		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
 		let genCode: Array<Array<string>> = await this._processedParseTree.compileCtx();
 
 		// Append required typescript code for Kipper for the program to work properly
-		genCode = this.generateRequirements().concat(genCode);
+		genCode = (await this.generateRequirements()).concat(genCode);
 
 		this.logger.debug(
 			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
@@ -366,7 +366,7 @@ export class KipperProgramContext {
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
-	private generateProcessedParseTree(listener: KipperFileListener): RootFileParseToken {
+	private async generateProcessedParseTree(listener: KipperFileListener): Promise<RootFileParseToken> {
 		// The walker used to go through the parse tree.
 		const walker = new ParseTreeWalker();
 
@@ -386,7 +386,7 @@ export class KipperProgramContext {
 	 * Generates the required code for the execution of this kipper program
 	 * @private
 	 */
-	private generateRequirements(): Array<Array<string>> {
+	private async generateRequirements(): Promise<Array<Array<string>>> {
 		let code: Array<Array<string>> = [];
 
 		// Generating the code for the global functions
@@ -435,7 +435,7 @@ export class KipperProgramContext {
 	/**
 	 * Adds a new declaration entry to the global scope.
 	 */
-	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition) {
+	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition): void {
 		this.assert.builtInNotDefined(token.identifier);
 		this.assert.functionIdentifierNotUsed(token.identifier);
 		this.assert.variableIdentifierNotUsed(token.identifier);

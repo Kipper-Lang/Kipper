@@ -267,8 +267,7 @@ export class KipperCompiler {
 			}'.`,
 		);
 
-		// Translate and compile the code
-		this.logger.info(`Starting compilation for '${inStream.name}'.`);
+		// Start actual async compilation
 		const code = await fileCtx.compileProgram();
 
 		// After the code is done, return the compilation result as an instance
