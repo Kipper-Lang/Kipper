@@ -86,7 +86,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 }
 
 /**
- * The result of a {@link KipperCompiler} compilation
+ * The result of a {@link KipperCompiler} compilation.
  * @since 0.0.3
  */
 export class KipperCompileResult {
@@ -127,7 +127,7 @@ export class KipperCompileResult {
 	 * Creates a string from the compiled code that can be written to a file in a human-readable way.
 	 * @param lineEnding The line ending for each line of the file.
 	 */
-	public createFileContent(lineEnding: string = "\n"): string {
+	public write(lineEnding: string = "\n"): string {
 		let genCode: string = "";
 		for (let line of this.result) {
 			for (let token of line) {
@@ -261,20 +261,23 @@ export class KipperCompiler {
 		if (globals.length > 0) {
 			fileCtx.registerGlobals(globals);
 		}
-		this.logger.debug(`Registering '${globals.length}' global functions for the Kipper program '${inStream.name}'.`);
+		this.logger.debug(`Registered ${globals.length} global function${globals.length <= 1 ? 's' : ''} for the Kipper program '${inStream.name}'.`);
 
 		// Translate and compile the code
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 		const code = fileCtx.compileProgram();
 
 		// After the code is done, return the compilation result as an instance
-		this.logger.info(`Finished compilation. Generating compilation result instance.`);
+		this.logger.info(`Compilation finished successfully!`);
 		return new KipperCompileResult(fileCtx, code);
 	}
 
 	/**
 	 * Analyses the syntax of the given file. Errors will be raised as an exception and warnings logged using the
 	 * {@link this.logger}.
+	 *
+	 * This function is async to not render-block the browser and allow rendering to happen in-between the
+	 * async processing.
 	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */

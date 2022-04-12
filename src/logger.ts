@@ -7,15 +7,45 @@
  * @since 0.0.3
  */
 
-// The LogLevels for the Logger
+/**
+ * The log levels for the {@link KipperLogger}, but as numeric values to allow comparisons.
+ * @since 0.2.0
+ */
 export enum LogLevel {
-	UNKNOWN = "UNKNOWN",
-	DEBUG = "DEBUG",
-	INFO = "INFO",
-	WARN = "WARN",
-	ERROR = "ERROR",
-	FATAL = "FATAL",
-	TRACE = "TRACE",
+	// eslint-disable-next-line no-unused-vars
+	UNKNOWN = 0,
+	// eslint-disable-next-line no-unused-vars
+	DEBUG = 10,
+	// eslint-disable-next-line no-unused-vars
+	INFO = 20,
+	// eslint-disable-next-line no-unused-vars
+	WARN = 30,
+	// eslint-disable-next-line no-unused-vars
+	ERROR = 40,
+	// eslint-disable-next-line no-unused-vars
+	FATAL = 50
+}
+
+/**
+ * Gets for the {@link LogLevel} the corresponding string representation.
+ * @param level The log level.
+ */
+export function getLogLevelString(level: LogLevel): string {
+	switch (level) {
+		case LogLevel.FATAL:
+			return "FATAL";
+	case LogLevel.ERROR:
+		return "ERROR";
+	case LogLevel.WARN:
+		return "WARN";
+	case LogLevel.INFO:
+		return "INFO";
+	case LogLevel.DEBUG:
+		return "DEBUG";
+		case LogLevel.UNKNOWN:
+		default:
+			return "UNKNOWN";
+	}
 }
 
 /**
@@ -25,11 +55,18 @@ export enum LogLevel {
  */
 export class KipperLogger {
 	/**
-	 * Available log levels for the {@link KipperLogger}
+	 * Available log levels for the {@link KipperLogger}.
 	 * @static
 	 * @public
 	 */
 	public static levels: typeof LogLevel = LogLevel;
+
+	/**
+	 * Available log levels in numeric form for the {@link KipperLogger}.
+	 * @static
+	 * @public
+	 */
+	public static numLevels: typeof LogLevel = LogLevel;
 
 	/**
 	 * The private '_emitHandler' that actually stores the variable data,
@@ -42,6 +79,8 @@ export class KipperLogger {
 	constructor(
 		// eslint-disable-next-line no-unused-vars
 		emitHandler: (level: LogLevel, msg: string) => void,
+		// eslint-disable-next-line no-unused-vars
+		public logLevel: LogLevel = LogLevel.INFO
 	) {
 		this._emitHandler = emitHandler;
 	}
@@ -50,7 +89,7 @@ export class KipperLogger {
 	 * The specific handler that should handle emitted log messages
 	 */
 	// eslint-disable-next-line no-unused-vars
-	public get emitHandler(): ((level: LogLevel, msg: string) => void) | undefined {
+	public get emitHandler(): ((level: LogLevel, msg: string) => void) {
 		return this._emitHandler;
 	}
 
@@ -95,20 +134,15 @@ export class KipperLogger {
 	}
 
 	/**
-	 * Logs a message with traceback / stack information
-	 * @param {string} msg The message to log
-	 */
-	public trace(msg: string): void {
-		return this.log(LogLevel.TRACE, msg);
-	}
-
-	/**
-	 * Logs a general message, and invokes the proper emit handler for it
-	 *
-	 * @param {LogLevel} level The level of the logging message
-	 * @param {string} msg The content of the logging message
+	 * Logs a general message, and invokes the proper emit handler for it.
+	 * @param {LogLevel} level The level of the logging message.
+	 * @param {string} msg The content of the logging message.
 	 */
 	public log(level: LogLevel, msg: string): void {
+		if (level < this.logLevel) {
+			return;
+		}
+
 		return this._emitHandler(level, msg);
 	}
 }

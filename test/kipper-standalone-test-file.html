@@ -38,12 +38,19 @@
   </header>
 
   <!-- Tests here-->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="module" src='../kipper-standalone.js'></script>
   <script type="module">
-    let compiler = new Kipper.KipperCompiler(new Kipper.KipperLogger((level, msg) => {
-      console.log(`[${level}] ${msg}`);
-    }));
-    compiler.syntaxAnalyse("This is a string");
+    const logger = new Kipper.KipperLogger((level, msg) => {
+      console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
+    });
+    const compiler = new Kipper.KipperCompiler(logger);
+
+    // Call the compiler asynchronously
+    setTimeout(async () => {
+      const result = (await compiler.compile(`call print("Hello world!");`)).write();
+      const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+      eval(jsCode.code);
+    }, 0);
   </script>
 </body>
-</html>

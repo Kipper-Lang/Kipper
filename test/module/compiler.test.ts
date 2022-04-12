@@ -111,7 +111,7 @@ describe("KipperCompiler", () => {
         assert(instance.programCtx.globalScope.length === 0, "Expected no definitions");
 
         // Compile the program to JavaScript and evaluate it
-        const jsCode = ts.transpile(instance.createFileContent());
+        const jsCode = ts.transpile(instance.write());
 
         // Overwrite built-in to access output
         const prevLog = console.log;

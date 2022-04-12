@@ -13,8 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
 - New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
 - Created new expression class `ArgumentExpressionList` representing an argument list inside function calls.
-- New function `KipperCompileResult.createFileContent()`, which creates a human-readable string from the generated 
+- New function `KipperCompileResult.write()`, which creates a human-readable string from the generated 
   source code.
+- Added new property and constructor parameter `logLevel`, which defines which messages should be logged. (Only messages
+  with equal or higher importance will be logged).
 
 ### Updated
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
@@ -28,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Changed visibility of `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()`
   to `protected`, as they will be replaced and tied together using `CompilableParseToken.compileCtx()`.
 - Replaced compilation in `RootParseToken.translateCtxAndChildren` with `RootParseToken.compileCtx()`.
+- Changed values of `LogLevel` to numeric values, which can be translated into strings using `getLogLevelString()`.
 
 ### Removed
 - Functions `RootParseToken.semanticAnalysis()` and `RootParseToken.translateCtxAndChildren`

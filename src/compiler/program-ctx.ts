@@ -346,8 +346,9 @@ export class KipperProgramContext {
 		// Append required typescript code for Kipper for the program to work properly
 		genCode = this.generateRequirements().concat(genCode);
 
-		this.logger.info(
-			`Generated '${genCode.length}' lines. Processed ${this._processedParseTree.children.length} root items.`,
+		this.logger.debug(
+			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
+			`${this._processedParseTree.children.length}`,
 		);
 
 		// Cache the result
@@ -370,12 +371,13 @@ export class KipperProgramContext {
 		const walker = new ParseTreeWalker();
 
 		// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-		this.logger.debug(`Generating processed Kipper parse tree for '${this.stream.name}'.`);
+		this.logger.debug(`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`);
 		walker.walk(listener, this.antlrParseTree);
 
+		const numRootItems: number = listener.kipperParseTree.children.length;
 		this.logger.debug(
 			`Finished generation of processed Kipper parse tree for '${this.stream.name}'.` +
-				`Parsed '${listener.kipperParseTree.children.length}' root items.`,
+				` Parsed ${numRootItems} root ${numRootItems <= 1 ? 'item' : 'items'}`
 		);
 		return listener.kipperParseTree;
 	}

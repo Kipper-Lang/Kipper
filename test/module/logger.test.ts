@@ -37,34 +37,29 @@ describe("KipperLogger", () => {
       const emitHandler = (level: LogLevel) => {
         levelReceived = level;
       };
-      const logger = new KipperLogger(emitHandler);
-
+      const logger = new KipperLogger(emitHandler, LogLevel.UNKNOWN);
       assert(logger.emitHandler === emitHandler, "emitHandler must be equal");
 
       // Simple message logging
       logger.debug("A message");
       // @ts-ignore
-      assert(levelReceived === LogLevel.DEBUG, "Level must be the same");
+      assert(levelReceived === LogLevel.DEBUG, "Expected DEBUG");
 
       logger.info("A message");
       // @ts-ignore
-      assert(levelReceived === LogLevel.INFO, "Level must be the same");
+      assert(levelReceived === LogLevel.INFO, "Expected INFO");
 
       logger.warn("A message");
       // @ts-ignore
-      assert(levelReceived === LogLevel.WARN, "Level must be the same");
+      assert(levelReceived === LogLevel.WARN, "Expected WARN");
 
       logger.error("A message");
       // @ts-ignore
-      assert(levelReceived === LogLevel.ERROR, "Level must be the same");
+      assert(levelReceived === LogLevel.ERROR, "Expected ERROR");
 
       logger.fatal("A message");
       // @ts-ignore
-      assert(levelReceived === LogLevel.FATAL, "Level must be the same");
-
-      logger.trace("A message");
-      // @ts-ignore
-      assert(levelReceived === LogLevel.TRACE, "Level must be the same");
+      assert(levelReceived === LogLevel.FATAL, "Expected FATAL");
     });
   });
 });
