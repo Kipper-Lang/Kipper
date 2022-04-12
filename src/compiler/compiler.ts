@@ -13,7 +13,7 @@ import { KipperProgramContext } from "./program-ctx";
 import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
 
 /**
- * Compilation Configuration for a Kipper program. This interface is wrapped using {@link RuntimeCompileConfig} and may
+ * Compilation Configuration for a Kipper program. This interface is wrapped using {@link CompilerOptions} and may
  * only be passed to {@link KipperCompiler.compile} if that class was used to wrap this interface.
  * @since 0.1.0
  */
@@ -39,7 +39,7 @@ export interface CompileConfig {
  * processed and generated on construction.
  * @since 0.1.0
  */
-export class RuntimeCompileConfig {
+export class CompilerOptions {
 	/**
 	 * Original user-defined {@link CompileConfig}, which may not be overwritten anymore, as the compile-arguments
 	 * were processed using the {@link constructor}.
@@ -62,7 +62,7 @@ export class RuntimeCompileConfig {
 		this.userOptions = options;
 
 		// Setting the actual values that will be used inside the compilation
-		this.actualGlobals = (options.globals ?? RuntimeCompileConfig.defaultGlobals).concat(options.extendGlobals ?? []);
+		this.actualGlobals = (options.globals ?? CompilerOptions.defaultGlobals).concat(options.extendGlobals ?? []);
 	}
 }
 
@@ -212,15 +212,15 @@ export class KipperCompiler {
 	 * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
-	 * @param config {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
-	 * program and compilation. This uses per default {@link RuntimeCompileConfig} with an empty interface as user args
+	 * @param compilerOptions {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
+	 * program and compilation. This uses per default {@link CompilerOptions} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
-		config: RuntimeCompileConfig = new RuntimeCompileConfig({}),
+		compilerOptions: CompilerOptions = new CompilerOptions({}),
 	): Promise<KipperCompileResult> {
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
 
@@ -230,7 +230,7 @@ export class KipperCompiler {
 		const fileCtx: KipperProgramContext = await this.parse(inStream);
 
 		// If there are builtInGlobals to register, register them
-		let globals = config.actualGlobals;
+		let globals = compilerOptions.actualGlobals;
 		if (globals !== undefined && globals.length > 0) {
 			fileCtx.registerGlobals(globals);
 		}
