@@ -103,6 +103,21 @@ export class KipperCompileResult {
 	public get result(): Array<Array<string>> {
 		return this._result;
 	}
+
+	/**
+	 * Creates a string from the compiled code that can be written to a file in a human-readable way.
+	 * @param lineEnding The line ending for each line of the file.
+	 */
+	public createFileContent(lineEnding: string = "\n"): string {
+		let genCode: string = "";
+		for (let line of this.result) {
+			for (let token of line) {
+				genCode = genCode.concat(token);
+			}
+			genCode = genCode.concat(lineEnding);
+		}
+		return genCode;
+	}
 }
 
 /**
