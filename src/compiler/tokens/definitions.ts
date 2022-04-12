@@ -20,7 +20,6 @@ import { KipperStorageType, KipperType } from "../logic";
 import { CompoundStatement } from "./statements";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
-import { TokenStream } from "antlr4ts/TokenStream";
 
 /**
  * Every antlr4 definition ctx type
