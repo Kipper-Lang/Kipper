@@ -41,15 +41,22 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="module" src='../kipper-standalone.js'></script>
   <script type="module">
+    // Define your own logger and compiler, which will handle the compilation
     const logger = new Kipper.KipperLogger((level, msg) => {
       console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
     });
+    // Define your own compiler with your wanted configuration
     const compiler = new Kipper.KipperCompiler(logger);
 
     // Call the compiler asynchronously
     setTimeout(async () => {
+      // Compile the code to Typescript
       const result = (await compiler.compile(`call print("Hello world!");`)).write();
+
+      // Transpile the TS code into JS
       const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+
+      // Finally, run your program
       eval(jsCode.code);
     }, 0);
   </script>

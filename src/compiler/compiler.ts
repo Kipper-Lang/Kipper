@@ -261,11 +261,15 @@ export class KipperCompiler {
 		if (globals.length > 0) {
 			fileCtx.registerGlobals(globals);
 		}
-		this.logger.debug(`Registered ${globals.length} global function${globals.length <= 1 ? 's' : ''} for the Kipper program '${inStream.name}'.`);
+		this.logger.debug(
+			`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
+				inStream.name
+			}'.`,
+		);
 
 		// Translate and compile the code
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
-		const code = fileCtx.compileProgram();
+		const code = await fileCtx.compileProgram();
 
 		// After the code is done, return the compilation result as an instance
 		this.logger.info(`Compilation finished successfully!`);

@@ -11,8 +11,8 @@ describe("Parse-Tokens", () => {
 	describe("CompilableParseToken", () => {
 		// Example class for testing purposes
 		class ExampleToken extends CompilableParseToken {
-			protected semanticAnalysis(): void { }
-			protected translateCtxAndChildren(): Array<any> { return []; }
+			protected async semanticAnalysis(): Promise<void> { }
+			protected async translateCtxAndChildren(): Promise<Array<Array<string>>> { return []; }
 		}
 
 		describe("sourceCode", () => {

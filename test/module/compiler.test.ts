@@ -231,7 +231,7 @@ describe("KipperCompiler", () => {
 
           // Register new global
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
-          programCtx.compileProgram();
+          await programCtx.compileProgram();
         } catch (e) {
           assert((<Error>e).message.startsWith("May not overwrite built-in identifier"), "Expected proper error");
           return;
@@ -244,7 +244,7 @@ describe("KipperCompiler", () => {
           const programCtx: KipperProgramContext = await new KipperCompiler().parse(
             new KipperParseStream("def x() -> void {} \n def x() -> void {}")
           );
-          programCtx.compileProgram();
+          await programCtx.compileProgram();
         } catch (e) {
           assert((<Error>e).message.startsWith("Definition of function"), "Expected proper error");
           return;
@@ -257,7 +257,7 @@ describe("KipperCompiler", () => {
           const programCtx: KipperProgramContext = await new KipperCompiler().parse(
             new KipperParseStream("var x: num; var x: num;")
           );
-          programCtx.compileProgram();
+          await programCtx.compileProgram();
         } catch (e) {
           assert((<Error>e).message.startsWith("Definition of variable"), "Expected proper error");
           return;

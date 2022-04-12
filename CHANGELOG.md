@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with equal or higher importance will be logged).
 
 ### Updated
+- Changed execution of most compilation functions to async. 
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
 - Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
 - Made all `getMetadata` functions `/tokens/` instance-methods, removing all required parameters.

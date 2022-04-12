@@ -83,7 +83,7 @@ export abstract class Declaration extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected abstract translateCtxAndChildren(): Array<any>;
+	protected abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
 }
 
 /**
@@ -126,7 +126,7 @@ export class ParameterDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -135,7 +135,7 @@ export class ParameterDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected translateCtxAndChildren(): Array<any> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}
@@ -238,7 +238,7 @@ export class FunctionDefinition extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -247,7 +247,7 @@ export class FunctionDefinition extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected translateCtxAndChildren(): Array<any> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}
@@ -380,7 +380,7 @@ export class VariableDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -389,7 +389,7 @@ export class VariableDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected translateCtxAndChildren(): Array<any> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}

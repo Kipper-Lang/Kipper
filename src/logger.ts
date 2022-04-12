@@ -23,7 +23,7 @@ export enum LogLevel {
 	// eslint-disable-next-line no-unused-vars
 	ERROR = 40,
 	// eslint-disable-next-line no-unused-vars
-	FATAL = 50
+	FATAL = 50,
 }
 
 /**
@@ -34,14 +34,14 @@ export function getLogLevelString(level: LogLevel): string {
 	switch (level) {
 		case LogLevel.FATAL:
 			return "FATAL";
-	case LogLevel.ERROR:
-		return "ERROR";
-	case LogLevel.WARN:
-		return "WARN";
-	case LogLevel.INFO:
-		return "INFO";
-	case LogLevel.DEBUG:
-		return "DEBUG";
+		case LogLevel.ERROR:
+			return "ERROR";
+		case LogLevel.WARN:
+			return "WARN";
+		case LogLevel.INFO:
+			return "INFO";
+		case LogLevel.DEBUG:
+			return "DEBUG";
 		case LogLevel.UNKNOWN:
 		default:
 			return "UNKNOWN";
@@ -80,7 +80,7 @@ export class KipperLogger {
 		// eslint-disable-next-line no-unused-vars
 		emitHandler: (level: LogLevel, msg: string) => void,
 		// eslint-disable-next-line no-unused-vars
-		public logLevel: LogLevel = LogLevel.INFO
+		public logLevel: LogLevel = LogLevel.INFO,
 	) {
 		this._emitHandler = emitHandler;
 	}
@@ -89,7 +89,7 @@ export class KipperLogger {
 	 * The specific handler that should handle emitted log messages
 	 */
 	// eslint-disable-next-line no-unused-vars
-	public get emitHandler(): ((level: LogLevel, msg: string) => void) {
+	public get emitHandler(): (level: LogLevel, msg: string) => void {
 		return this._emitHandler;
 	}
 

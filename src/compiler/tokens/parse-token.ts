@@ -130,23 +130,23 @@ export abstract class CompilableParseToken {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected abstract semanticAnalysis(): void;
+	protected abstract semanticAnalysis(): Promise<void>;
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected abstract translateCtxAndChildren(): Array<any>;
+	protected abstract translateCtxAndChildren(): Promise<Array<any>>;
 
 	/**
 	 * {@link this.semanticAnalysis Analyses} the context instance and {@link this.compileCtx translates}
 	 * the code into TypeScript.
 	 * @since 0.2.0
 	 */
-	public compileCtx(): Array<any> {
-		this.semanticAnalysis();
-		return this.translateCtxAndChildren();
+	public async compileCtx(): Promise<Array<any>> {
+		await this.semanticAnalysis();
+		return await this.translateCtxAndChildren();
 	}
 }
 
@@ -191,7 +191,7 @@ export class RootFileParseToken {
 	 *  let newExpression = new Expression(ctx, this.fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
-	public addNewChild(newChild: eligibleChildToken) {
+	public addNewChild(newChild: eligibleChildToken): void {
 		this._children.push(newChild);
 	}
 
@@ -201,10 +201,10 @@ export class RootFileParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public compileCtx(): Array<Array<string>> {
+	public async compileCtx(): Promise<Array<Array<string>>> {
 		let genCode: Array<Array<string>> = [];
 		for (let child of this.children) {
-			genCode = genCode.concat(child.compileCtx());
+			genCode = genCode.concat(await child.compileCtx());
 		}
 		return genCode;
 	}

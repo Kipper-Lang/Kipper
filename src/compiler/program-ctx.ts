@@ -335,20 +335,20 @@ export class KipperProgramContext {
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
-	public compileProgram(): Array<Array<string>> {
+	public async compileProgram(): Promise<Array<Array<string>>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
-		let genCode: Array<Array<string>> = this._processedParseTree.compileCtx();
+		let genCode: Array<Array<string>> = await this._processedParseTree.compileCtx();
 
 		// Append required typescript code for Kipper for the program to work properly
 		genCode = this.generateRequirements().concat(genCode);
 
 		this.logger.debug(
 			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
-			`${this._processedParseTree.children.length}`,
+				`${this._processedParseTree.children.length}`,
 		);
 
 		// Cache the result
@@ -377,7 +377,7 @@ export class KipperProgramContext {
 		const numRootItems: number = listener.kipperParseTree.children.length;
 		this.logger.debug(
 			`Finished generation of processed Kipper parse tree for '${this.stream.name}'.` +
-				` Parsed ${numRootItems} root ${numRootItems <= 1 ? 'item' : 'items'}`
+				` Parsed ${numRootItems} root ${numRootItems <= 1 ? "item" : "items"}`,
 		);
 		return listener.kipperParseTree;
 	}
