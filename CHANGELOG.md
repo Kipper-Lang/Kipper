@@ -24,9 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   combined of string tokens.
 - Set explicit children type for expressions and statements, instead of letting them inherit the children type from
   `CompilableParseToken`.
-- Set return type of `translateCtxAndChildren` to `Array<string>` in children classes of `Expression`. 
+- Set return type of `compileCtx` to `Array<string>` in children classes of `Expression`. 
+  - Changed visibility of `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()`
+  to `protected`, as they will be replaced and tied together using `CompilableParseToken.compileCtx()`.
+- Replaced compilation in `RootParseToken.translateCtxAndChildren` with `RootParseToken.compileCtx()`.
 
 ### Removed
+- Functions `RootParseToken.semanticAnalysis()` and `RootParseToken.translateCtxAndChildren`
 
 ## [0.1.2] - 2022-04-06
 
@@ -70,7 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New abstract base class `CompilableParseToken`, which will represent the major parse tokens inside a kipper 
   program. The token class has the additional functionality of wrapping an entire antlr4 statement, expression or 
   block, and being able to semantically analyse it using `semanticAnalysis()` and translate it to TypeScript using 
-  `translateCtxAndChildren()`.
+  `compileCtx()`.
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
 - File `builtIns.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `BuiltInFunction`. (In work!)

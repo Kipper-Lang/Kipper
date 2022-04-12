@@ -136,7 +136,7 @@ export abstract class Expression extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public abstract translateCtxAndChildren(): Array<string>;
+	protected abstract translateCtxAndChildren(): Array<any>;
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -185,7 +185,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -194,7 +194,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -239,7 +239,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -248,7 +248,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -283,7 +283,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -292,7 +292,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -335,7 +335,7 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -344,7 +344,7 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		return [`"${this.stringContent}"`];
 	}
 
@@ -386,7 +386,7 @@ export class IdentifierPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -395,7 +395,7 @@ export class IdentifierPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		return ["identifierValue"];
 	}
 
@@ -431,7 +431,7 @@ export class FStringPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -440,7 +440,7 @@ export class FStringPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -475,7 +475,7 @@ export class TangledPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -484,11 +484,11 @@ export class TangledPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO! Add tests for this
 		let genCode: Array<string> = [];
 		for (let child of this._children) {
-			genCode = genCode.concat(child.translateCtxAndChildren());
+			genCode = genCode.concat(child.compileCtx());
 		}
 		return genCode;
 	}
@@ -525,7 +525,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -534,7 +534,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -570,7 +570,7 @@ export class ArraySpecifierExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -579,7 +579,7 @@ export class ArraySpecifierExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -644,7 +644,7 @@ export class FunctionCallPostfixExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -653,7 +653,7 @@ export class FunctionCallPostfixExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		let argListCtx = <ArgumentExpressionList | undefined>(
 			this.children.find((val) => val instanceof ArgumentExpressionList)
 		);
@@ -662,7 +662,7 @@ export class FunctionCallPostfixExpression extends Expression {
 			this.function instanceof ScopeFunctionDeclaration
 				? this.function.identifier
 				: `_kipperGlobal_${this.function.identifier}`;
-		const args: Array<string> = argListCtx ? argListCtx.translateCtxAndChildren() : [];
+		const args: Array<string> = argListCtx ? argListCtx.compileCtx() : [];
 		return [identifier, "(", ...args, ")"];
 	}
 
@@ -697,7 +697,7 @@ export class ArgumentExpressionList extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -706,10 +706,10 @@ export class ArgumentExpressionList extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		let genCode: Array<string> = [];
 		for (let child of this.children) {
-			genCode = [...genCode, ...child.translateCtxAndChildren()];
+			genCode = [...genCode, ...child.compileCtx()];
 		}
 		return genCode;
 	}
@@ -740,7 +740,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -749,7 +749,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -794,7 +794,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -803,7 +803,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -834,7 +834,7 @@ export class CastOrConvertExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -843,7 +843,7 @@ export class CastOrConvertExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -883,7 +883,7 @@ export class MultiplicativeExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -892,7 +892,7 @@ export class MultiplicativeExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -930,7 +930,7 @@ export class AdditiveExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -939,7 +939,7 @@ export class AdditiveExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -985,7 +985,7 @@ export class RelationalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -994,7 +994,7 @@ export class RelationalExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -1034,7 +1034,7 @@ export class EqualityExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -1043,7 +1043,7 @@ export class EqualityExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -1083,7 +1083,7 @@ export class LogicalAndExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -1092,7 +1092,7 @@ export class LogicalAndExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -1132,7 +1132,7 @@ export class LogicalOrExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -1141,7 +1141,7 @@ export class LogicalOrExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -1179,7 +1179,7 @@ export class ConditionalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -1188,7 +1188,7 @@ export class ConditionalExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -1225,7 +1225,7 @@ export class AssignmentExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -1234,7 +1234,7 @@ export class AssignmentExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}

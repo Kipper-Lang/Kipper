@@ -130,14 +130,24 @@ export abstract class CompilableParseToken {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public abstract semanticAnalysis(): void;
+	protected abstract semanticAnalysis(): void;
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Array<any>;
+	protected abstract translateCtxAndChildren(): Array<any>;
+
+	/**
+	 * {@link this.semanticAnalysis Analyses} the context instance and {@link this.compileCtx translates}
+	 * the code into TypeScript.
+	 * @since 0.2.0
+	 */
+	public compileCtx(): Array<any> {
+		this.semanticAnalysis();
+		return this.translateCtxAndChildren();
+	}
 }
 
 export class RootFileParseToken {
@@ -186,25 +196,15 @@ export class RootFileParseToken {
 	}
 
 	/**
-	 * Semantic analysis for all children tokens in this root token. This will log all warnings using
-	 * {@link programCtx.logger} and throw errors if encountered.
-	 */
-	public semanticAnalysis(): void {
-		for (let child of this.children) {
-			child.semanticAnalysis();
-		}
-	}
-
-	/**
-	 * Generates the typescript code for this item, and its children. This will log all warnings using
-	 * {@link programCtx.logger} and throw errors if encountered.
+	 * Analysis the code and generates the typescript code for this item, and its children. This will log all warnings
+	 * using {@link programCtx.logger} and throw errors if encountered.
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	public compileCtx(): Array<Array<string>> {
 		let genCode: Array<Array<string>> = [];
 		for (let child of this.children) {
-			genCode = genCode.concat(child.translateCtxAndChildren());
+			genCode = genCode.concat(child.compileCtx());
 		}
 		return genCode;
 	}

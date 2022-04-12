@@ -83,7 +83,7 @@ export abstract class Declaration extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Array<Array<string>>;
+	protected abstract translateCtxAndChildren(): Array<any>;
 }
 
 /**
@@ -126,7 +126,7 @@ export class ParameterDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -135,7 +135,7 @@ export class ParameterDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [[]];
 	}
@@ -238,7 +238,7 @@ export class FunctionDefinition extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -247,7 +247,7 @@ export class FunctionDefinition extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [[]];
 	}
@@ -380,7 +380,7 @@ export class VariableDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -389,7 +389,7 @@ export class VariableDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [[]];
 	}

@@ -102,7 +102,7 @@ export abstract class Statement extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Array<Array<string>>;
+	protected abstract translateCtxAndChildren(): Array<any>;
 }
 
 /**
@@ -166,7 +166,7 @@ export class CompoundStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -175,10 +175,10 @@ export class CompoundStatement extends Statement {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		let childCode: Array<Array<string>> = [];
 		for (let child of this.children) {
-			childCode = [...childCode, ...child.translateCtxAndChildren()];
+			childCode = [...childCode, ...child.compileCtx()];
 		}
 		return [["{"], ...childCode, ["}"]];
 	}
@@ -226,7 +226,7 @@ export class SelectionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -235,7 +235,7 @@ export class SelectionStatement extends Statement {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -283,7 +283,7 @@ export class ExpressionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -292,10 +292,10 @@ export class ExpressionStatement extends Statement {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		let childCode: Array<string> = [];
 		for (let child of this.children) {
-			childCode = [...childCode, ...child.translateCtxAndChildren()];
+			childCode = [...childCode, ...child.compileCtx()];
 		}
 		return [[...childCode, ";"]];
 	}
@@ -343,7 +343,7 @@ export class IterationStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -352,7 +352,7 @@ export class IterationStatement extends Statement {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
@@ -400,7 +400,7 @@ export class JumpStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected semanticAnalysis(): void {
 		// TODO!
 	}
 
@@ -409,7 +409,7 @@ export class JumpStatement extends Statement {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<Array<string>> {
+	protected translateCtxAndChildren(): Array<any> {
 		// TODO!
 		return [];
 	}
