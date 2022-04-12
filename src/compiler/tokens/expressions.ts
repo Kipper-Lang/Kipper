@@ -658,7 +658,10 @@ export class FunctionCallPostfixExpression extends Expression {
 			this.children.find((val) => val instanceof ArgumentExpressionList)
 		);
 
-		const identifier = this.function instanceof ScopeFunctionDeclaration ? this.function.identifier : `_kipperGlobal_${this.function.identifier}`;
+		const identifier =
+			this.function instanceof ScopeFunctionDeclaration
+				? this.function.identifier
+				: `_kipperGlobal_${this.function.identifier}`;
 		const args: Array<string> = argListCtx ? argListCtx.translateCtxAndChildren() : [];
 		return [identifier, "(", ...args, ")"];
 	}

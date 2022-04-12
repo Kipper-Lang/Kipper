@@ -59,7 +59,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 	public static readonly defaults = {
 		globals: [builtInWebPrintFunction],
 		extendGlobals: [],
-		fileName: "anonymous-script"
+		fileName: "anonymous-script",
 	};
 
 	/**
@@ -242,7 +242,10 @@ export class KipperCompiler {
 		compilerOptions: CompileConfig = new CompilerEvaluatedOptions({}),
 	): Promise<KipperCompileResult> {
 		// Handle compiler options
-		const config: CompilerEvaluatedOptions = compilerOptions instanceof CompilerEvaluatedOptions ? compilerOptions : new CompilerEvaluatedOptions(compilerOptions);
+		const config: CompilerEvaluatedOptions =
+			compilerOptions instanceof CompilerEvaluatedOptions
+				? compilerOptions
+				: new CompilerEvaluatedOptions(compilerOptions);
 
 		// Handle the input and format it
 		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
