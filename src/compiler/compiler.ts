@@ -13,8 +13,8 @@ import { KipperProgramContext } from "./program-ctx";
 import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
 
 /**
- * Compilation Configuration for a Kipper program. This interface is wrapped using {@link CompilerOptions} and may
- * only be passed to {@link KipperCompiler.compile} if that class was used to wrap this interface.
+ * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
+ * if it's passed to {@link KipperCompiler.compile}.
  * @since 0.1.0
  */
 export interface CompileConfig {
@@ -29,6 +29,12 @@ export interface CompileConfig {
 	 * the default array.
 	 */
 	extendGlobals?: Array<BuiltInFunction>;
+
+	/**
+	 * The filename that should be used to represent the program.
+	 * @since 0.2.0
+	 */
+	fileName?: string;
 }
 
 /**
@@ -39,7 +45,7 @@ export interface CompileConfig {
  * processed and generated on construction.
  * @since 0.1.0
  */
-export class CompilerOptions {
+export class CompilerEvaluatedOptions implements CompileConfig {
 	/**
 	 * Original user-defined {@link CompileConfig}, which may not be overwritten anymore, as the compile-arguments
 	 * were processed using the {@link constructor}.
@@ -47,22 +53,35 @@ export class CompilerOptions {
 	public readonly userOptions: CompileConfig;
 
 	/**
-	 * The default builtInGlobals, which will be used to set {@link userOptions.globals}, if it has not been set/is
-	 * {@link undefined}.
+	 * The default configuration for this class.
+	 * @since 0.2.0
 	 */
-	public static readonly defaultGlobals: Array<BuiltInFunction> = [builtInWebPrintFunction];
+	public static readonly defaults = {
+		globals: [builtInWebPrintFunction],
+		extendGlobals: [],
+		fileName: "anonymous-script"
+	};
 
 	/**
-	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged with the
-	 * {@link userOptions.extendGlobals} argument as well, if it has been defined.
+	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged
+	 * with the {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
-	public readonly actualGlobals: Array<BuiltInFunction>;
+	public readonly globals: Array<BuiltInFunction>;
+
+	/**
+	 * Extensions to the globals that should not replace the main {@link globals} array.
+	 */
+	public readonly extendGlobals: Array<BuiltInFunction>;
+
+	public readonly fileName: string;
 
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
 
-		// Setting the actual values that will be used inside the compilation
-		this.actualGlobals = (options.globals ?? CompilerOptions.defaultGlobals).concat(options.extendGlobals ?? []);
+		// Write all items
+		this.globals = options.globals ?? CompilerEvaluatedOptions.defaults.globals;
+		this.extendGlobals = options.extendGlobals ?? CompilerEvaluatedOptions.defaults.extendGlobals;
+		this.fileName = options.fileName ?? CompilerEvaluatedOptions.defaults.fileName;
 	}
 }
 
@@ -213,36 +232,40 @@ export class KipperCompiler {
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
 	 * @param compilerOptions {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
-	 * program and compilation. This uses per default {@link CompilerOptions} with an empty interface as user args
+	 * program and compilation. This uses per default {@link CompilerEvaluatedOptions} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
-		compilerOptions: CompilerOptions = new CompilerOptions({}),
+		compilerOptions: CompileConfig = new CompilerEvaluatedOptions({}),
 	): Promise<KipperCompileResult> {
-		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
+		// Handle compiler options
+		const config: CompilerEvaluatedOptions = compilerOptions instanceof CompilerEvaluatedOptions ? compilerOptions : new CompilerEvaluatedOptions(compilerOptions);
 
+		// Handle the input and format it
+		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
+
+		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
 		// The file context storing the metadata for the "virtual file"
 		const fileCtx: KipperProgramContext = await this.parse(inStream);
 
 		// If there are builtInGlobals to register, register them
-		let globals = compilerOptions.actualGlobals;
-		if (globals !== undefined && globals.length > 0) {
+		let globals = [...config.globals, ...config.extendGlobals];
+		if (globals.length > 0) {
 			fileCtx.registerGlobals(globals);
 		}
-		this.logger.debug(`Registering '${globals.length}' globals for the Kipper program '${inStream.name}'.`);
+		this.logger.debug(`Registering '${globals.length}' global functions for the Kipper program '${inStream.name}'.`);
 
 		// Translate and compile the code
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 		const code = fileCtx.compileProgram();
 
+		// After the code is done, return the compilation result as an instance
 		this.logger.info(`Finished compilation. Generating compilation result instance.`);
-
-		// Return the result for the compilation
 		return new KipperCompileResult(fileCtx, code);
 	}
 
