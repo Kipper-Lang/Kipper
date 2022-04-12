@@ -501,11 +501,11 @@ export class TangledPrimaryExpression extends Expression {
 }
 
 /**
- * Function call class, which represents a function call expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Increment or Decrement expression, which represents a singular expression of ++ or --
  * @since 0.1.0
  * @example
- * call print("Hello world!")
+ * val++
+ * val--
  */
 export class IncrementOrDecrementExpression extends Expression {
 	/**
@@ -545,11 +545,10 @@ export class IncrementOrDecrementExpression extends Expression {
 }
 
 /**
- * Function call class, which represents a function call expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Array Specifier expression, which accesses a list/array based on its index.
  * @since 0.1.0
  * @example
- * call print("Hello world!")
+ * array[0]
  */
 export class ArraySpecifierExpression extends Expression {
 	/**
