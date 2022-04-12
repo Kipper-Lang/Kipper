@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Created new class `CompileAssert`, which is used to assert certain compiler-required truths, which, if false, trigger
   corresponding errors.
-- Added errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
+- New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
+- New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
 
 ### Updated
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
-- Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`
+- Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
+- Made all `getMetadata` functions `/tokens/` instance-methods, removing all required parameters.
 
 ### Removed
 

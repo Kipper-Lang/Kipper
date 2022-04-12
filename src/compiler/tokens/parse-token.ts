@@ -9,6 +9,7 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { Interval } from "antlr4ts/misc/Interval";
 import { KipperParser } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
+import { TokenStream } from "antlr4ts/TokenStream";
 
 export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
@@ -104,6 +105,14 @@ export abstract class CompilableParseToken {
 	 */
 	public get children(): Array<eligibleChildToken> {
 		return this._children;
+	}
+
+	/**
+	 * Returns the token stream source for this token.
+	 * @since 0.2.0
+	 */
+	public get tokenStream(): TokenStream {
+		return this.programCtx.tokenStream;
 	}
 
 	/**
