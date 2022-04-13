@@ -396,7 +396,7 @@ export class IdentifierPrimaryExpression extends Expression {
 	 * Every item in the array represents a token of the expression.
 	 */
 	protected async translateCtxAndChildren(): Promise<Array<string>> {
-		return ["identifierValue"];
+		return [this.identifierValue];
 	}
 
 	/**
