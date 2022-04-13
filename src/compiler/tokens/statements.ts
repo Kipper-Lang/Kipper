@@ -22,6 +22,7 @@ import {
 import { KipperProgramContext } from "../program-ctx";
 import { ScopeVariableDeclaration } from "../logic";
 import { VariableDeclaration } from "./definitions";
+import { Expression } from "./expressions";
 
 /**
  * Every antlr4 statement ctx type
@@ -95,6 +96,13 @@ export abstract class Statement extends CompilableParseToken {
 	public get scope(): KipperProgramContext | CompoundStatement {
 		return this._scope;
 	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
+	 */
+	protected abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
 }
 
 /**
@@ -109,6 +117,8 @@ export class CompoundStatement extends Statement {
 	 */
 	protected override readonly _antlrContext: CompoundStatementContext;
 
+	protected readonly _children: Array<Statement>;
+
 	private _localScope: Array<ScopeVariableDeclaration>;
 
 	constructor(
@@ -119,6 +129,14 @@ export class CompoundStatement extends Statement {
 		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
 		this._localScope = [];
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Statement> {
+		return this._children;
 	}
 
 	/**
@@ -140,6 +158,7 @@ export class CompoundStatement extends Statement {
 	 * @param token The {@link VariableDeclaration} token
 	 */
 	public addNewLocalVariable(token: VariableDeclaration) {
+		this.programCtx.assert.variableIdentifierNotUsed(token.identifier, this);
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}
 
@@ -147,16 +166,21 @@ export class CompoundStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
-		// TODO!
-		return [];
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
+		let childCode: Array<Array<string>> = [];
+		for (let child of this.children) {
+			childCode = [...childCode, ...(await child.compileCtx())];
+		}
+		return [["{"], ...childCode, ["}"]];
 	}
 }
 
@@ -172,6 +196,8 @@ export class SelectionStatement extends Statement {
 	 */
 	protected override readonly _antlrContext: SelectionStatementContext;
 
+	protected readonly _children: Array<Statement>;
+
 	constructor(
 		antlrContext: SelectionStatementContext,
 		parent: eligibleParentToken,
@@ -179,6 +205,14 @@ export class SelectionStatement extends Statement {
 	) {
 		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Statement> {
+		return this._children;
 	}
 
 	/**
@@ -192,14 +226,16 @@ export class SelectionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [];
 	}
@@ -217,6 +253,8 @@ export class ExpressionStatement extends Statement {
 	 */
 	protected override readonly _antlrContext: ExpressionStatementContext;
 
+	protected readonly _children: Array<Expression>;
+
 	constructor(
 		antlrContext: ExpressionStatementContext,
 		parent: eligibleParentToken,
@@ -224,6 +262,14 @@ export class ExpressionStatement extends Statement {
 	) {
 		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Expression> {
+		return this._children;
 	}
 
 	/**
@@ -237,16 +283,21 @@ export class ExpressionStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
-		// TODO!
-		return [];
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
+		let childCode: Array<string> = [];
+		for (let child of this.children) {
+			childCode = [...childCode, ...(await child.compileCtx())];
+		}
+		return [[...childCode, ";"]];
 	}
 }
 
@@ -262,6 +313,8 @@ export class IterationStatement extends Statement {
 	 */
 	protected override readonly _antlrContext: IterationStatementContext;
 
+	protected readonly _children: Array<Expression>;
+
 	constructor(
 		antlrContext: IterationStatementContext,
 		parent: eligibleParentToken,
@@ -269,6 +322,14 @@ export class IterationStatement extends Statement {
 	) {
 		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Expression> {
+		return this._children;
 	}
 
 	/**
@@ -282,14 +343,16 @@ export class IterationStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [];
 	}
@@ -307,6 +370,8 @@ export class JumpStatement extends Statement {
 	 */
 	protected override readonly _antlrContext: JumpStatementContext;
 
+	protected readonly _children: Array<Expression>;
+
 	constructor(
 		antlrContext: JumpStatementContext,
 		parent: eligibleParentToken,
@@ -314,6 +379,14 @@ export class JumpStatement extends Statement {
 	) {
 		super(antlrContext, parent, scope);
 		this._antlrContext = antlrContext;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Expression> {
+		return this._children;
 	}
 
 	/**
@@ -327,14 +400,16 @@ export class JumpStatement extends Statement {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [];
 	}

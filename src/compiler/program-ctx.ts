@@ -10,15 +10,125 @@ import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
 import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
-import { BuiltInFunction, KipperType, kipperTypes, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
-import { KipperLogger } from "../logger";
-import { FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
 import {
-	DuplicateIdentifierError,
-	GlobalAlreadyRegisteredError,
-	NoBuiltInOverwriteError,
+	BuiltInFunction,
+	KipperType,
+	kipperTypes,
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeVariableDeclaration,
+} from "./logic";
+import { KipperLogger } from "../logger";
+import { CompoundStatement, FunctionDefinition, RootFileParseToken, VariableDeclaration } from "./tokens";
+import {
+	BuiltInOverwriteError,
+	DuplicateFunctionDefinitionError,
+	DuplicateVariableDefinitionError,
+	InvalidGlobalError,
+	UnknownFunctionDefinition,
 	UnknownTypeError,
+	UnknownVariableDefinition,
 } from "../errors";
+
+/**
+ * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
+ * trigger corresponding errors.
+ * @since 0.2.0
+ */
+export class CompileAssert {
+	public readonly programCtx: KipperProgramContext;
+
+	constructor(programCtx: KipperProgramContext) {
+		this.programCtx = programCtx;
+	}
+
+	/**
+	 * Asserts that the passed type identifier exists.
+	 * @param type The type to check.
+	 */
+	public assertTypeExists(type: string): void {
+		if (kipperTypes.find((val) => val === type) === undefined) {
+			throw new UnknownTypeError(type);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is defined.
+	 * @param identifier The identifier of the function.
+	 */
+	public functionIsDefined(identifier: string): void {
+		if (!this.programCtx.getGlobalFunction(identifier)) {
+			throw new UnknownFunctionDefinition(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is defined.
+	 * @param identifier The identifier of the variable.
+	 */
+	public variableIsDefined(identifier: string): void {
+		if (!this.programCtx.getGlobalFunction(identifier)) {
+			throw new UnknownVariableDefinition(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed function identifier is not defined.
+	 * @param identifier The identifier of the function.
+	 */
+	public functionIdentifierNotUsed(identifier: string): void {
+		if (this.programCtx.getGlobalFunction(identifier)) {
+			throw new DuplicateFunctionDefinitionError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed variable identifier is not defined.
+	 * @param identifier The identifier of the variable.
+	 * @param scope The scope to use. If undefined, then it will use the global scope of the
+	 * {@link KipperProgramContext program ctx}.
+	 */
+	public variableIdentifierNotUsed(identifier: string, scope?: CompoundStatement | KipperProgramContext): void {
+		let actualScope: ScopeDeclaration[];
+		if (scope === undefined) {
+			actualScope = this.programCtx.globalScope;
+		} else if (scope instanceof CompoundStatement) {
+			actualScope = scope.localScope;
+		} else {
+			actualScope = scope.globalScope;
+		}
+
+		if (actualScope.find((v) => v instanceof ScopeVariableDeclaration && v.identifier === identifier)) {
+			throw new DuplicateVariableDefinitionError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that the passed identifier does not exist as a built-in global.
+	 * @param identifier The identifier to check.
+	 */
+	public builtInNotDefined(identifier: string): void {
+		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
+			throw new BuiltInOverwriteError(identifier);
+		}
+	}
+
+	/**
+	 * Asserts that a new global with the passed identifier may be created.
+	 * @param identifier The identifier to check.
+	 */
+	public globalCanBeRegistered(identifier: string): void {
+		let identifierAlreadyExists: boolean =
+			this.programCtx.globalScope.find((val) => val.identifier == identifier) !== undefined;
+		let globalAlreadyExists: boolean =
+			this.programCtx.builtInGlobals.find((val) => val.identifier == identifier) !== undefined;
+
+		// If the identifier is already used or the global already exists, throw an error
+		if (identifierAlreadyExists || globalAlreadyExists) {
+			throw new InvalidGlobalError(identifier);
+		}
+	}
+}
 
 /**
  * The program context class used to represent a file in a compilation.
@@ -75,7 +185,7 @@ export class KipperProgramContext {
 	 * avoid running the function unnecessarily and generate code again, even though it already exists.
 	 * @private
 	 */
-	private _compiledCode: Array<string> | undefined;
+	private _compiledCode: Array<Array<string>> | undefined;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -89,6 +199,13 @@ export class KipperProgramContext {
 	 */
 	public logger: KipperLogger;
 
+	/**
+	 * The asserter that is used to validate compiler-required truths, which, if false, will trigger corresponding errors.
+	 * @public
+	 * @since 0.2.0
+	 */
+	public assert: CompileAssert;
+
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -97,6 +214,7 @@ export class KipperProgramContext {
 		logger: KipperLogger,
 	) {
 		this.logger = logger;
+		this.assert = new CompileAssert(this);
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this._parser = parser;
@@ -162,7 +280,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * The global scope of this file, which contains all {@link ScopeVariableDeclaration} instances that are accessible in the
+	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
 	public get globalScope(): Array<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
@@ -174,7 +292,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
-	public get compiledCode(): Array<string> | undefined {
+	public get compiledCode(): Array<Array<string>> | undefined {
 		return this._compiledCode;
 	}
 
@@ -199,15 +317,9 @@ export class KipperProgramContext {
 			newGlobals = [newGlobals];
 		}
 
+		// Make sure the global is valid and doesn't interfere with other identifiers
 		for (let g of newGlobals) {
-			let identifierAlreadyExists =
-				this._builtInGlobals.find((registered) => {
-					return registered.identifier == g.identifier;
-				}) !== undefined;
-			let globalAlreadyExists = this._builtInGlobals.includes(g);
-			if (identifierAlreadyExists || globalAlreadyExists) {
-				throw new GlobalAlreadyRegisteredError(g.identifier);
-			}
+			this.assert.globalCanBeRegistered(g.identifier);
 		}
 
 		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
@@ -223,23 +335,20 @@ export class KipperProgramContext {
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
-	public compileProgram(): Array<string> {
+	public async compileProgram(): Promise<Array<Array<string>>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._processedParseTree = this.generateProcessedParseTree(new KipperFileListener(this));
-
-		// Run the semantic analysis to validate the code
-		this.logger.debug(`Running semantic analysis for '${this.stream.name}'.`);
-		this._processedParseTree.semanticAnalysis();
+		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
-		let genCode: Array<string> = this._processedParseTree.translateCtxAndChildren();
+		let genCode: Array<Array<string>> = await this._processedParseTree.compileCtx();
 
 		// Append required typescript code for Kipper for the program to work properly
-		genCode = this.generateRequirements().concat(genCode);
+		genCode = (await this.generateRequirements()).concat(genCode);
 
-		this.logger.info(
-			`Generated '${genCode.length}' lines. Processed ${this._processedParseTree.children.length} root items.`,
+		this.logger.debug(
+			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
+				`${this._processedParseTree.children.length}`,
 		);
 
 		// Cache the result
@@ -257,17 +366,18 @@ export class KipperProgramContext {
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
-	private generateProcessedParseTree(listener: KipperFileListener): RootFileParseToken {
+	private async generateProcessedParseTree(listener: KipperFileListener): Promise<RootFileParseToken> {
 		// The walker used to go through the parse tree.
 		const walker = new ParseTreeWalker();
 
 		// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-		this.logger.debug(`Generating processed Kipper parse tree for '${this.stream.name}'.`);
+		this.logger.debug(`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`);
 		walker.walk(listener, this.antlrParseTree);
 
+		const numRootItems: number = listener.kipperParseTree.children.length;
 		this.logger.debug(
 			`Finished generation of processed Kipper parse tree for '${this.stream.name}'.` +
-				`Parsed '${listener.kipperParseTree.children.length}' root items.`,
+				` Parsed ${numRootItems} root ${numRootItems <= 1 ? "item" : "items"}`,
 		);
 		return listener.kipperParseTree;
 	}
@@ -276,21 +386,22 @@ export class KipperProgramContext {
 	 * Generates the required code for the execution of this kipper program
 	 * @private
 	 */
-	private generateRequirements(): Array<string> {
-		let code: Array<string> = [];
+	private async generateRequirements(): Promise<Array<Array<string>>> {
+		let code: Array<Array<string>> = [];
 
 		// Generating the code for the global functions
 		for (let global of this._builtInGlobals) {
-			code = code.concat(global.handler);
+			code = [...code, global.handler];
 		}
 		return code;
 	}
 
 	/**
-	 * Tries to fetch the specific identifier (Either {@link BuiltInFunction} or {@link ScopeVariableDeclaration}) and locate
-	 * it in the global scope.
+	 * Tries to fetch the specific identifier from the global scope.
 	 */
-	public getGlobalIdentifier(identifier: string): BuiltInFunction | ScopeVariableDeclaration | undefined {
+	public getGlobalIdentifier(
+		identifier: string,
+	): BuiltInFunction | ScopeVariableDeclaration | ScopeFunctionDeclaration | undefined {
 		return this.getGlobalFunction(identifier) ?? this.getGlobalVariable(identifier);
 	}
 
@@ -298,10 +409,15 @@ export class KipperProgramContext {
 	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
 	 * @param identifier The identifier of the function
 	 */
-	public getGlobalFunction(identifier: string): BuiltInFunction | undefined {
-		return this.builtInGlobals.find((value) => {
-			return value.identifier === identifier;
-		});
+	public getGlobalFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration | undefined {
+		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
+		return (
+			this.builtInGlobals.find((value) => {
+				return value.identifier === identifier;
+			}) ?? <ScopeFunctionDeclaration | undefined>this.globalScope.find((value) => {
+				return value instanceof ScopeFunctionDeclaration && value.identifier == identifier;
+			})
+		);
 	}
 
 	/**
@@ -309,8 +425,8 @@ export class KipperProgramContext {
 	 * @param identifier The identifier of the variable
 	 */
 	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		// Casting the type, as the return type will always be either ScopeVariableDeclaration or undefined
-		// This is automatically the case, as we require the type inside find() to match ScopeVariableDeclaration!
+		// Casting the type, as the return type will always be either ScopeDeclaration or undefined
+		// This is automatically the case, as we require the type inside find() to match ScopeDeclaration!
 		return <ScopeVariableDeclaration | undefined>this.globalScope.find((value) => {
 			return value instanceof ScopeVariableDeclaration && value.identifier == identifier;
 		});
@@ -319,32 +435,25 @@ export class KipperProgramContext {
 	/**
 	 * Adds a new declaration entry to the global scope.
 	 */
-	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition) {
-		if (this.globalScope.find((v) => v.identifier === token.identifier) !== undefined) {
-			throw new DuplicateIdentifierError(token.identifier);
-		} else if (this.builtInGlobals.find((v) => v.identifier === token.identifier) !== undefined) {
-			throw new NoBuiltInOverwriteError(token.identifier);
-		} else {
-			this._globalScope = this._globalScope.concat(
-				token instanceof VariableDeclaration
-					? new ScopeVariableDeclaration(token)
-					: new ScopeFunctionDeclaration(token),
-			);
-		}
+	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDefinition): void {
+		this.assert.builtInNotDefined(token.identifier);
+		this.assert.functionIdentifierNotUsed(token.identifier);
+		this.assert.variableIdentifierNotUsed(token.identifier);
+		this._globalScope = this._globalScope.concat(
+			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),
+		);
 	}
 
 	/**
-	 * Validate if the type is valid, and if not raise an error!
+	 * Return the proper {@link KipperType} if the type exists. If not raise an error.
 	 * @param type The type string to check
 	 * @throws UnknownTypeError If the type is unknown to Kipper!
 	 * @since 0.1.2
 	 */
 	public verifyType(type: string): KipperType {
+		this.assert.assertTypeExists(type);
+
 		// If the type does not exist in Kipper -> raise error
-		if (kipperTypes.find((val) => val === type) === undefined) {
-			throw new UnknownTypeError(type);
-		} else {
-			return <KipperType>type;
-		}
+		return <KipperType>type;
 	}
 }

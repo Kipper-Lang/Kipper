@@ -20,7 +20,6 @@ import { KipperStorageType, KipperType } from "../logic";
 import { CompoundStatement } from "./statements";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
-import { TokenStream } from "antlr4ts/TokenStream";
 
 /**
  * Every antlr4 definition ctx type
@@ -78,6 +77,13 @@ export abstract class Declaration extends CompilableParseToken {
 	 * The identifier of the declaration.
 	 */
 	public abstract get identifier(): string;
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
+	 */
+	protected abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
 }
 
 /**
@@ -120,16 +126,18 @@ export class ParameterDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }
 
@@ -161,7 +169,7 @@ export class FunctionDefinition extends Declaration {
 		this._antlrContext = antlrContext;
 
 		// Fetching the metadata from the antlr4 context
-		const metadata = FunctionDefinition.getMetadata(antlrContext, this.programCtx.tokenStream, this.programCtx);
+		const metadata = this.getMetadata();
 		this._identifier = metadata.identifier;
 		this._returnType = metadata.returnType;
 		this._args = metadata.args;
@@ -170,36 +178,31 @@ export class FunctionDefinition extends Declaration {
 		this.programCtx.addNewGlobalScopeEntry(this);
 	}
 
-	private static getMetadata(
-		antlrContext: FunctionDefinitionContext,
-		src: TokenStream,
-		programCtx: KipperProgramContext,
-	): { identifier: string; args: Array<ParameterDeclaration>; returnType: KipperType } {
+	/**
+	 * Fetch the metadata for the function definition.
+	 * @private
+	 */
+	private getMetadata(): { identifier: string; args: Array<ParameterDeclaration>; returnType: KipperType } {
+		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>(
-			antlrContext.children?.find((val) => val instanceof DeclaratorContext)
+			this.antlrContext.children?.find((val) => val instanceof DeclaratorContext)
 		);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			antlrContext.children?.find((val) => val instanceof ParameterTypeListContext)
+			this.antlrContext.children?.find((val) => val instanceof ParameterTypeListContext)
 		);
 		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			antlrContext.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+			this.antlrContext.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!antlrContext.children || !declaratorCtx || !returnTypeCtx) {
-			throw new UnableToDetermineMetadataError(
-				`Failed to determine metadata for 'FunctionDefinition' (${antlrContext.sourceInterval}). Missing data.`,
-			);
+		if (!this.antlrContext.children || !declaratorCtx || !returnTypeCtx) {
+			throw new UnableToDetermineMetadataError();
 		}
 
 		return {
-			identifier: src.getText(declaratorCtx.sourceInterval),
-			returnType: programCtx.verifyType(src.getText(returnTypeCtx.sourceInterval)),
-			args: paramListCtx
-				? ((): Array<ParameterDeclaration> => {
-						return []; // TODO! Implement arg fetching
-				  })()
-				: [],
+			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
+			returnType: this.programCtx.verifyType(this.tokenStream.getText(returnTypeCtx.sourceInterval)),
+			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 	}
 
@@ -235,16 +238,18 @@ export class FunctionDefinition extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }
 
@@ -282,7 +287,7 @@ export class VariableDeclaration extends Declaration {
 		this._antlrContext = antlrContext;
 
 		// Fetching the metadata from the antlr4 context
-		const metadata = VariableDeclaration.getMetadata(antlrContext, this.programCtx.tokenStream, this.programCtx);
+		const metadata = this.getMetadata();
 		this._isDefined = metadata.isDefined;
 		this._identifier = metadata.identifier;
 		this._storageType = metadata.storageType;
@@ -297,16 +302,17 @@ export class VariableDeclaration extends Declaration {
 		}
 	}
 
-	private static getMetadata(
-		antlrContext: DeclarationContext,
-		src: TokenStream,
-		programCtx: KipperProgramContext,
-	): { isDefined: boolean; identifier: string; storageType: KipperStorageType; valueType: KipperType } {
+	private getMetadata(): {
+		isDefined: boolean;
+		identifier: string;
+		storageType: KipperStorageType;
+		valueType: KipperType;
+	} {
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			antlrContext.children?.find((val) => val instanceof StorageTypeSpecifierContext)
+			this.antlrContext.children?.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
-			antlrContext.children?.find((val) => val instanceof InitDeclaratorContext)
+			this.antlrContext.children?.find((val) => val instanceof InitDeclaratorContext)
 		);
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
@@ -316,17 +322,15 @@ export class VariableDeclaration extends Declaration {
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!antlrContext.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError(
-				`Failed to determine metadata for 'VariableDeclaration' (${antlrContext.sourceInterval}). Missing data.`,
-			);
+		if (!this.antlrContext.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
+			throw new UnableToDetermineMetadataError();
 		}
 
 		return {
 			isDefined: initDeclaratorCtx?.children?.find((val) => val instanceof InitializerContext) !== undefined,
-			identifier: src.getText(declaratorCtx.sourceInterval),
-			storageType: <KipperStorageType>src.getText(storageTypeCtx.sourceInterval),
-			valueType: programCtx.verifyType(src.getText(typeSpecifier.sourceInterval)),
+			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
+			storageType: <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval),
+			valueType: this.programCtx.verifyType(this.tokenStream.getText(typeSpecifier.sourceInterval)),
 		};
 	}
 
@@ -366,18 +370,27 @@ export class VariableDeclaration extends Declaration {
 	}
 
 	/**
+	 * Returns whether the variable declaration is defined and has a value set.
+	 */
+	public get isDefined(): boolean {
+		return this._isDefined;
+	}
+
+	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public semanticAnalysis(): void {
+	protected async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public translateCtxAndChildren(): Array<string> {
+	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
-		return [];
+		return [[]];
 	}
 }

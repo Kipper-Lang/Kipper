@@ -9,6 +9,7 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { Interval } from "antlr4ts/misc/Interval";
 import { KipperParser } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
+import { TokenStream } from "antlr4ts/TokenStream";
 
 export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
@@ -107,6 +108,14 @@ export abstract class CompilableParseToken {
 	}
 
 	/**
+	 * Returns the token stream source for this token.
+	 * @since 0.2.0
+	 */
+	public get tokenStream(): TokenStream {
+		return this.programCtx.tokenStream;
+	}
+
+	/**
 	 * Adds new child to this class. Must be in proper order, so that it can be properly compiled.
 	 * This will also automatically set the parent of the class to this instance.
 	 * @example
@@ -121,12 +130,24 @@ export abstract class CompilableParseToken {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public abstract semanticAnalysis(): void;
+	protected abstract semanticAnalysis(): Promise<void>;
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Array<string>;
+	protected abstract translateCtxAndChildren(): Promise<Array<any>>;
+
+	/**
+	 * {@link this.semanticAnalysis Analyses} the context instance and {@link this.compileCtx translates}
+	 * the code into TypeScript.
+	 * @since 0.2.0
+	 */
+	public async compileCtx(): Promise<Array<any>> {
+		await this.semanticAnalysis();
+		return await this.translateCtxAndChildren();
+	}
 }
 
 export class RootFileParseToken {
@@ -170,28 +191,20 @@ export class RootFileParseToken {
 	 *  let newExpression = new Expression(ctx, this.fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
-	public addNewChild(newChild: eligibleChildToken) {
+	public addNewChild(newChild: eligibleChildToken): void {
 		this._children.push(newChild);
 	}
 
 	/**
-	 * Semantic analysis for all children tokens in this root token. This will log all warnings using
-	 * {@link programCtx.logger} and throw errors if encountered.
+	 * Analysis the code and generates the typescript code for this item, and its children. This will log all warnings
+	 * using {@link programCtx.logger} and throw errors if encountered.
+	 *
+	 * Every item in the array represents a single line of code.
 	 */
-	public semanticAnalysis(): void {
+	public async compileCtx(): Promise<Array<Array<string>>> {
+		let genCode: Array<Array<string>> = [];
 		for (let child of this.children) {
-			child.semanticAnalysis();
-		}
-	}
-
-	/**
-	 * Generates the typescript code for this item, and its children.  This will log all warnings using
-	 * {@link programCtx.logger} and throw errors if encountered.
-	 */
-	public translateCtxAndChildren(): Array<string> {
-		let genCode: Array<string> = [];
-		for (let child of this.children) {
-			genCode = genCode.concat(child.translateCtxAndChildren());
+			genCode = genCode.concat(await child.compileCtx());
 		}
 		return genCode;
 	}

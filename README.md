@@ -3,7 +3,7 @@
 # Kipper Base Package - `@kipper/base`
 
 [![Version](https://img.shields.io/npm/v/@kipper/base?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/base)
-![](https://img.shields.io/badge/Coverage-67%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-69%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
@@ -39,7 +39,7 @@ the property `type="text/kipper"`, and replace the content with runnable JavaScr
 As a dependency you will also have to include `babel.min.js`, which is needed to allow for a compilation
 from TS to JS in your browser, as Kipper compiles only to TypeScript.
 
-Simple example of including your code in your browser:
+Simple example of running your code in your browser using Kipper and Babel:
 
 ```html
 <!-- Babel dependency -->
@@ -51,13 +51,21 @@ Simple example of including your code in your browser:
 <!-- with the global 'Kipper' -->
 <script type="module">
   // Define your own logger and compiler, which will handle the compilation
-  const yourLogger = new Kipper.KipperLogger((level, msg) => {
-    console.log(`[${level}] ${msg}`);
-  })
-  const yourCompiler = new Kipper.KipperCompiler(yourLogger);
-	
-  // Compile the code string or stream
-  let compileResult = yourCompiler.compile(fileContent);
+  const logger = new Kipper.KipperLogger((level, msg) => {
+    console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
+  });
+  // Define your own compiler with your wanted configuration
+  const compiler = new Kipper.KipperCompiler(logger);
+  
+  // Compile the code to Typescript
+  // Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
+  const result = (await compiler.compile(`call print("Hello world!");`)).write();
+  
+  // Transpile the TS code into JS
+  const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+  
+  // Finally, run your program
+  eval(jsCode.code);
 </script>
 ```
 
@@ -81,6 +89,7 @@ the compiler. This also allows for special handling of logging and customising t
 Simple example of using kipper using Node.js:
 
 ```ts
+import * as ts from "typescript";
 import { promises as fs } from "fs";
 import { KipperCompiler } from "@kipper/base";
 
@@ -92,9 +101,15 @@ fs.readFile(path, "utf8" as BufferEncoding).then(
       console.log(`[${level}] ${msg}`);
     })
     const yourCompiler = new Kipper.KipperCompiler(yourLogger);
-
+    
     // Compile the code string or stream
-    let compileResult = yourCompiler.compile(fileContent);
+    let code = yourCompiler.compile(fileContent).write();
+      
+    // Compiling down to JS using the typescript node module
+    let jsCode = ts.transpile(code);
+    
+    // Running the Kipper program
+    eval(jsCode);
   }
 );
 ```

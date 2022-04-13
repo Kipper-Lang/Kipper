@@ -13,6 +13,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.2.0] - 2022-04-13
+
+### Added
+- Created new class `CompileAssert`, which is used to assert certain compiler-required truths, which, if false, trigger
+  corresponding errors.
+- New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
+- New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
+- Created new expression class `ArgumentExpressionList` representing an argument list inside function calls.
+- New function `KipperCompileResult.write()`, which creates a human-readable string from the generated 
+  source code.
+- Added new property and constructor parameter `logLevel`, which defines which messages should be logged. (Only messages
+  with equal or higher importance will be logged).
+- Added class name insertion for custom Kipper errors by setting the `name` property explicitly.
+
+### Updated
+- Changed execution of most compilation functions to async. 
+- Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
+- Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
+- Made all `getMetadata` functions `/tokens/` instance-methods, removing all required parameters.
+- Changed compilation result from `Array<string>` to `Array<Array<string>>`, where each nested array represents a line
+  combined of string tokens.
+- Set explicit children type for expressions and statements, instead of letting them inherit the children type from
+  `CompilableParseToken`.
+- Set return type of `compileCtx` to `Array<string>` in children classes of `Expression`. 
+  - Changed visibility of `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()`
+  to `protected`, as they will be replaced and tied together using `CompilableParseToken.compileCtx()`.
+- Replaced compilation in `RootParseToken.translateCtxAndChildren` with `RootParseToken.compileCtx()`.
+- Changed values of `LogLevel` to numeric values, which can be translated into strings using `getLogLevelString()`.
+
+### Removed
+- Functions `RootParseToken.semanticAnalysis()` and `RootParseToken.translateCtxAndChildren`
+
 ## [0.1.2] - 2022-04-06
 
 ### Added
@@ -20,14 +52,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
 - Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
   storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
-- Added errors `NoBuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
+- Added errors `BuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 - Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing 
-  `ScopeVariableDeclaration` and the added `ScopeFunctionDeclaration`.
+  `ScopeDeclaration` and the added `ScopeFunctionDeclaration`.
 - Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
 - Implemented support for function definitions that will be from now on automatically registered globally.
 
 ### Updated
-- Renamed class `ScopeDeclaration` to `ScopeVariableDeclaration` and updated its constructor to require a token 
+- Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token 
   (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
   and state).
 - Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
@@ -55,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New abstract base class `CompilableParseToken`, which will represent the major parse tokens inside a kipper 
   program. The token class has the additional functionality of wrapping an entire antlr4 statement, expression or 
   block, and being able to semantically analyse it using `semanticAnalysis()` and translate it to TypeScript using 
-  `translateCtxAndChildren()`.
+  `compileCtx()`.
 - Properties `parser`, `lexer`, `errorHandler` and `tokenStream` inside the class `KipperFileContext`.
 - File `builtIns.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `BuiltInFunction`. (In work!)
@@ -137,7 +169,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.1.1...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0
 [0.1.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
 [0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1

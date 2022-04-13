@@ -16,9 +16,7 @@ import { Recognizer } from "antlr4ts/Recognizer";
 export class KipperError extends Error {
 	constructor(msg: string) {
 		super(msg);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, KipperError.prototype);
+		this.name = this.constructor.name;
 	}
 }
 
@@ -75,9 +73,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 		this._column = column;
 		this._msg = msg;
 		this._error = error;
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, KipperSyntaxError.prototype);
 	}
 
 	/**
@@ -137,25 +132,47 @@ export class KipperSyntaxError<Token> extends KipperError {
 /**
  * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.builtInGlobals}.
  */
-export class GlobalAlreadyRegisteredError extends KipperError {
+export class InvalidGlobalError extends KipperError {
 	constructor(identifier: string) {
-		super(`Global definition of function '${identifier}' already exists!`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+		super(`Global definition '${identifier}' already exists or identifier is already in use.`);
 	}
 }
 
 /**
- * Error that is thrown when a new identifier is registered (function or variable identifier), but that identifier is
- * already in use by another variable or function. No double definitions or overwrites of old definitions allowed!
+ * Error that is thrown when a variable definition is used, but it is unknown to the program.
  */
-export class DuplicateIdentifierError extends KipperError {
+export class UnknownVariableDefinition extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of variable or function '${identifier}' already exists!`);
+		super(`Unknown variable definition '${identifier}'.`);
+	}
+}
 
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+/**
+ * Error that is thrown when a function definition is used, but it is unknown to the program.
+ */
+export class UnknownFunctionDefinition extends KipperError {
+	constructor(identifier: string) {
+		super(`Unknown function definition '${identifier}'.`);
+	}
+}
+
+/**
+ * Error that is thrown when a new variable identifier is registered and the used identifier is already in use by
+ * another variable. No double definitions or overwrites of old definitions allowed!
+ */
+export class DuplicateVariableDefinitionError extends KipperError {
+	constructor(identifier: string) {
+		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+	}
+}
+
+/**
+ * Error that is thrown when a new function identifier is registered and the used identifier is already in use by
+ * another function. No double definitions or overwrites of old definitions allowed!
+ */
+export class DuplicateFunctionDefinitionError extends KipperError {
+	constructor(identifier: string) {
+		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
 	}
 }
 
@@ -163,12 +180,9 @@ export class DuplicateIdentifierError extends KipperError {
  * Error that is thrown when an identifier is registered that interferes with a built-in function or variable.
  * No double definitions or overwrites of global built-in definitions allowed!
  */
-export class NoBuiltInOverwriteError extends KipperError {
+export class BuiltInOverwriteError extends KipperError {
 	constructor(identifier: string) {
-		super(`May not overwrite built-in identifier '${identifier}'!`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+		super(`May not overwrite built-in identifier '${identifier}'.`);
 	}
 }
 
@@ -176,11 +190,8 @@ export class NoBuiltInOverwriteError extends KipperError {
  * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances.
  */
 export class UnableToDetermineMetadataError extends KipperError {
-	constructor(msg: string) {
-		super(msg);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+	constructor() {
+		super(`Failed to determine metadata for one or more tokens. View traceback.`);
 	}
 }
 
@@ -189,9 +200,6 @@ export class UnableToDetermineMetadataError extends KipperError {
  */
 export class UnknownTypeError extends KipperError {
 	constructor(type: string) {
-		super(`Unknown type '${type}'! Valid types: 'void', 'bool', 'string', 'char', 'num' and 'list'`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, GlobalAlreadyRegisteredError.prototype);
+		super(`Unknown type '${type}'!`);
 	}
 }

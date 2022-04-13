@@ -15,7 +15,7 @@ import {
 import type { KipperProgramContext } from "../program-ctx";
 
 /**
- * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link Scope}.
+ * Abstract class as a parent for {@link ScopeDeclaration} and {@link Scope}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
@@ -73,10 +73,17 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * Returns the scope associated with this {@link ScopeVariableDeclaration}
+	 * Returns the scope associated with this {@link ScopeDeclaration}
 	 */
 	public get scope(): KipperProgramContext | CompoundStatement {
 		return this._token.scope;
+	}
+
+	/**
+	 * Returns whether the variable declaration is defined and has a value set.
+	 */
+	public get isDefined(): boolean {
+		return this._token.isDefined;
 	}
 }
 
