@@ -16,9 +16,7 @@ import { Recognizer } from "antlr4ts/Recognizer";
 export class KipperError extends Error {
 	constructor(msg: string) {
 		super(msg);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, KipperError.prototype);
+		this.name = this.constructor.name;
 	}
 }
 
@@ -75,9 +73,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 		this._column = column;
 		this._msg = msg;
 		this._error = error;
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, KipperSyntaxError.prototype);
 	}
 
 	/**
@@ -139,10 +134,7 @@ export class KipperSyntaxError<Token> extends KipperError {
  */
 export class InvalidGlobalError extends KipperError {
 	constructor(identifier: string) {
-		super(`Global definition '${identifier}' already exists or identifier is already used`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, InvalidGlobalError.prototype);
+		super(`Global definition '${identifier}' already exists or identifier is already in use.`);
 	}
 }
 
@@ -152,9 +144,6 @@ export class InvalidGlobalError extends KipperError {
 export class UnknownVariableDefinition extends KipperError {
 	constructor(identifier: string) {
 		super(`Unknown variable definition '${identifier}'.`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, DuplicateVariableDefinitionError.prototype);
 	}
 }
 
@@ -164,9 +153,6 @@ export class UnknownVariableDefinition extends KipperError {
 export class UnknownFunctionDefinition extends KipperError {
 	constructor(identifier: string) {
 		super(`Unknown function definition '${identifier}'.`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, DuplicateVariableDefinitionError.prototype);
 	}
 }
 
@@ -176,10 +162,7 @@ export class UnknownFunctionDefinition extends KipperError {
  */
 export class DuplicateVariableDefinitionError extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of variable '${identifier}' already exists! May not overwrite existing definitions.`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, DuplicateVariableDefinitionError.prototype);
+		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
 	}
 }
 
@@ -189,10 +172,7 @@ export class DuplicateVariableDefinitionError extends KipperError {
  */
 export class DuplicateFunctionDefinitionError extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of function '${identifier}' already exists! May not overwrite existing definitions.`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, DuplicateFunctionDefinitionError.prototype);
+		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
 	}
 }
 
@@ -202,10 +182,7 @@ export class DuplicateFunctionDefinitionError extends KipperError {
  */
 export class BuiltInOverwriteError extends KipperError {
 	constructor(identifier: string) {
-		super(`May not overwrite built-in identifier '${identifier}'!`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, BuiltInOverwriteError.prototype);
+		super(`May not overwrite built-in identifier '${identifier}'.`);
 	}
 }
 
@@ -215,9 +192,6 @@ export class BuiltInOverwriteError extends KipperError {
 export class UnableToDetermineMetadataError extends KipperError {
 	constructor() {
 		super(`Failed to determine metadata for one or more tokens. View traceback.`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, UnableToDetermineMetadataError.prototype);
 	}
 }
 
@@ -226,9 +200,6 @@ export class UnableToDetermineMetadataError extends KipperError {
  */
 export class UnknownTypeError extends KipperError {
 	constructor(type: string) {
-		super(`Unknown type '${type}'! Valid types: 'void', 'bool', 'string', 'char', 'num' and 'list'`);
-
-		// Set the prototype explicitly.
-		Object.setPrototypeOf(this, UnknownTypeError.prototype);
+		super(`Unknown type '${type}'!`);
 	}
 }

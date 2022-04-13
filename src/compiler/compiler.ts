@@ -186,10 +186,10 @@ export class KipperCompiler {
 	 * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @param name The encoding to read the file with.
 	 */
-	private static _handleStreamInput(
+	private static async _handleStreamInput(
 		stream: string | KipperParseStream,
 		name: string = "anonymous-script",
-	): KipperParseStream {
+	): Promise<KipperParseStream> {
 		if (stream instanceof KipperParseStream) {
 			return stream;
 		} else {
@@ -200,6 +200,9 @@ export class KipperCompiler {
 	/**
 	 * Parses a file and generates the antlr4 tree ({@link CompilationUnitContext}), using
 	 * {@link KipperParser.compilationUnit} (the highest item of the tree / entry point to the tree).
+	 *
+	 * This function is async to not render-block the browser and allow rendering to happen in-between the
+	 * async processing.
 	 * @param {KipperParseStream} parseStream The {@link KipperParseStream} instance that contains the required string
 	 * content.
 	 * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}.
@@ -229,6 +232,9 @@ export class KipperCompiler {
 
 	/**
 	 * Compiles a file and generates a {@link KipperCompileResult} instance representing the generated code.
+	 *
+	 * This function is async to not render-block the browser and allow rendering to happen in-between the
+	 * async processing.
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
 	 * @param compilerOptions {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
@@ -248,7 +254,7 @@ export class KipperCompiler {
 				: new CompilerEvaluatedOptions(compilerOptions);
 
 		// Handle the input and format it
-		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
+		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
 
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
@@ -279,13 +285,15 @@ export class KipperCompiler {
 	 * Analyses the syntax of the given file. Errors will be raised as an exception and warnings logged using the
 	 * {@link this.logger}.
 	 *
+	 * If this function executes without any errors, then the syntax check succeeded.
+	 *
 	 * This function is async to not render-block the browser and allow rendering to happen in-between the
 	 * async processing.
 	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
-		let inStream: KipperParseStream = KipperCompiler._handleStreamInput(stream);
+		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream);
 
 		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
 

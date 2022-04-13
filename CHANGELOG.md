@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   source code.
 - Added new property and constructor parameter `logLevel`, which defines which messages should be logged. (Only messages
   with equal or higher importance will be logged).
+- Added class name insertion for custom Kipper errors by setting the `name` property explicitly.
 
 ### Updated
 - Changed execution of most compilation functions to async. 
