@@ -41,7 +41,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="module" src='../kipper-standalone.js'></script>
   <script type="module">
-    // Define your own logger and compiler, which will handle the compilation
     const logger = new Kipper.KipperLogger((level, msg) => {
       console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
     });
