@@ -8,10 +8,13 @@
 // Including the base kipper module
 import * as kipper from "../src";
 
-// Defining the global 'Kipper' variable, which may be accessed outside the included browserify file
-// @ts-ignore Ignoring since the DOM is loaded using 'tsconfig.web.json'
+// Try to determine the global scope
+// @ts-ignore
 // eslint-disable-next-line no-undef
-(<any>window).Kipper = (<any>window).Kipper || kipper;
+const globalScope = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+// @ts-ignore
+(<any>globalScope.Kipper) = (<any>globalScope).Kipper || kipper;
 
 // Validating integrity of the module
 (() => {
