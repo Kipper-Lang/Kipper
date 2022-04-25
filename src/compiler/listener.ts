@@ -289,8 +289,8 @@ export class KipperFileListener implements KipperListener {
 	 */
 	public enterExternalFunctionDeclaration(ctx: ExternalFunctionDeclarationContext): void {
 		// We don't check if this is a declaration, as if it were, then there will be no children that
-    // need to know they are in a function definition.
-    this._isFunctionDefinition = true;
+		// need to know they are in a function definition.
+		this._isFunctionDefinition = true;
 	}
 
 	/**

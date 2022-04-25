@@ -127,12 +127,11 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 		return this._token.args;
 	}
 
-
-  /**
-   * Returns whether the function declaration is defined and has a function body.
-   * @since 0.2.2
-   */
-  public get isDefined(): boolean {
-    return this._token.isDefined;
-  }
+	/**
+	 * Returns whether the function declaration is defined and has a function body.
+	 * @since 0.2.2
+	 */
+	public get isDefined(): boolean {
+		return this._token.isDefined;
+	}
 }

@@ -181,9 +181,9 @@ export class IdentifierAlreadyUsedByFunctionError extends KipperError {
  * already in use by a previous function definition.
  */
 export class FunctionDefinitionAlreadyExistsError extends KipperError {
-  constructor(identifier: string) {
-    super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
-  }
+	constructor(identifier: string) {
+		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
+	}
 }
 
 /**
@@ -191,9 +191,9 @@ export class FunctionDefinitionAlreadyExistsError extends KipperError {
  * already in use by a previous function definition.
  */
 export class VariableDefinitionAlreadyExistsError extends KipperError {
-  constructor(identifier: string) {
-    super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
-  }
+	constructor(identifier: string) {
+		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+	}
 }
 
 /**

@@ -21,14 +21,15 @@ import {
 import { KipperLogger } from "../logger";
 import { CompoundStatement, FunctionDeclaration, RootFileParseToken, VariableDeclaration } from "./tokens";
 import {
-  BuiltInOverwriteError,
-  FunctionDefinitionAlreadyExistsError,
-  IdentifierAlreadyUsedByFunctionError,
-  IdentifierAlreadyUsedByVariableError,
-  InvalidGlobalError,
-  UnknownFunctionIdentifier,
-  UnknownTypeError,
-  UnknownVariableIdentifier, VariableDefinitionAlreadyExistsError,
+	BuiltInOverwriteError,
+	FunctionDefinitionAlreadyExistsError,
+	IdentifierAlreadyUsedByFunctionError,
+	IdentifierAlreadyUsedByVariableError,
+	InvalidGlobalError,
+	UnknownFunctionIdentifier,
+	UnknownTypeError,
+	UnknownVariableIdentifier,
+	VariableDefinitionAlreadyExistsError,
 } from "../errors";
 
 /**
@@ -87,63 +88,63 @@ export class CompileAssert {
 	 * Asserts that the passed variable identifier is not defined.
 	 * @param identifier The identifier of the variable.
 	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-   * of the {@link KipperProgramContext program}.
+	 * of the {@link KipperProgramContext program}.
 	 */
 	public variableIdentifierNotUsed(identifier: string, scope?: CompoundStatement): void {
-    // Always check in the global scope
-    const check = (v: { identifier: string; }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
+		// Always check in the global scope
+		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
 		if (this.programCtx.globalScope.find(check)) {
 			throw new IdentifierAlreadyUsedByVariableError(identifier);
 		}
 
-    if (this.programCtx.getGlobalVariable(identifier)) {
-      throw new IdentifierAlreadyUsedByVariableError(identifier);
-    }
+		if (this.programCtx.getGlobalVariable(identifier)) {
+			throw new IdentifierAlreadyUsedByVariableError(identifier);
+		}
 
-    // Also check in the local scope if it was passed
-    if (scope !== undefined && scope?.localScope.find(check)) {
-      throw new IdentifierAlreadyUsedByVariableError(identifier);
-    }
-  }
+		// Also check in the local scope if it was passed
+		if (scope !== undefined && scope?.localScope.find(check)) {
+			throw new IdentifierAlreadyUsedByVariableError(identifier);
+		}
+	}
 
-  /**
-   * Asserts that the passed variable identifier has not been defined yet!
-   * @param identifier The identifier to check for in the global scope.
-   * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-   * of the {@link KipperProgramContext program}.
-   */
-  public variableIdentifierNotDefined(identifier: string, scope?: CompoundStatement): void {
-    // Always check in the global scope
-    const check = (v: { identifier: string; }) => {
-      // Return true only if the identifier match and the variable is DEFINED
-      return v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined;
-    };
+	/**
+	 * Asserts that the passed variable identifier has not been defined yet!
+	 * @param identifier The identifier to check for in the global scope.
+	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
+	 * of the {@link KipperProgramContext program}.
+	 */
+	public variableIdentifierNotDefined(identifier: string, scope?: CompoundStatement): void {
+		// Always check in the global scope
+		const check = (v: { identifier: string }) => {
+			// Return true only if the identifier match and the variable is DEFINED
+			return v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined;
+		};
 
-    if (this.programCtx.globalScope.find(check)) {
-      throw new VariableDefinitionAlreadyExistsError(identifier);
-    }
+		if (this.programCtx.globalScope.find(check)) {
+			throw new VariableDefinitionAlreadyExistsError(identifier);
+		}
 
-    // Also check in the local scope if it was passed
-    if (scope !== undefined && scope?.localScope.find(check)) {
-      throw new VariableDefinitionAlreadyExistsError(identifier);
-    }
-  }
+		// Also check in the local scope if it was passed
+		if (scope !== undefined && scope?.localScope.find(check)) {
+			throw new VariableDefinitionAlreadyExistsError(identifier);
+		}
+	}
 
-  /**
-   * Asserts that the passed variable identifier has not been defined yet!
-   * @param identifier The identifier to check for in the global scope.
-   */
-  public functionIdentifierNotDefined(identifier: string): void {
-    // Always check in the global scope
-    const check = (v: { identifier: string; }) => {
-      // Return true only if the identifier match and the function is DEFINED
-      return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
-    };
+	/**
+	 * Asserts that the passed variable identifier has not been defined yet!
+	 * @param identifier The identifier to check for in the global scope.
+	 */
+	public functionIdentifierNotDefined(identifier: string): void {
+		// Always check in the global scope
+		const check = (v: { identifier: string }) => {
+			// Return true only if the identifier match and the function is DEFINED
+			return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
+		};
 
-    if (this.programCtx.globalScope.find(check)) {
-      throw new FunctionDefinitionAlreadyExistsError(identifier);
-    }
-  }
+		if (this.programCtx.globalScope.find(check)) {
+			throw new FunctionDefinitionAlreadyExistsError(identifier);
+		}
+	}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
@@ -478,16 +479,16 @@ export class KipperProgramContext {
 	 * Adds a new declaration entry to the global scope.
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDeclaration): void {
-    this.assert.builtInNotDefined(token.identifier);
+		this.assert.builtInNotDefined(token.identifier);
 
-    // Check that the identifier is not used by some other definition and that there has not been a previous definition.
-    if (token instanceof VariableDeclaration) {
-      this.assert.functionIdentifierNotUsed(token.identifier);
-      this.assert.variableIdentifierNotDefined(token.identifier);
-    } else {
-      this.assert.variableIdentifierNotUsed(token.identifier);
-      this.assert.functionIdentifierNotDefined(token.identifier);
-    }
+		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
+		if (token instanceof VariableDeclaration) {
+			this.assert.functionIdentifierNotUsed(token.identifier);
+			this.assert.variableIdentifierNotDefined(token.identifier);
+		} else {
+			this.assert.variableIdentifierNotUsed(token.identifier);
+			this.assert.functionIdentifierNotDefined(token.identifier);
+		}
 
 		this._globalScope = this._globalScope.concat(
 			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),

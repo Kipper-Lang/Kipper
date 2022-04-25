@@ -6,16 +6,16 @@
  */
 import { CompilableParseToken, eligibleParentToken } from "./parse-token";
 import {
-  CompoundStatementContext,
-  DeclarationContext,
-  DeclaratorContext,
-  FunctionDeclarationContext,
-  InitDeclaratorContext,
-  InitializerContext,
-  ParameterDeclarationContext,
-  ParameterTypeListContext,
-  SingleItemTypeSpecifierContext,
-  StorageTypeSpecifierContext,
+	CompoundStatementContext,
+	DeclarationContext,
+	DeclaratorContext,
+	FunctionDeclarationContext,
+	InitDeclaratorContext,
+	InitializerContext,
+	ParameterDeclarationContext,
+	ParameterTypeListContext,
+	SingleItemTypeSpecifierContext,
+	StorageTypeSpecifierContext,
 } from "../parser";
 import { KipperStorageType, KipperType } from "../logic";
 import { CompoundStatement } from "./statements";
@@ -78,8 +78,8 @@ export abstract class Declaration extends CompilableParseToken {
 	 * The identifier of the declaration.
 	 */
 	public get identifier(): string {
-    return this._identifier;
-  }
+		return this._identifier;
+	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
@@ -156,9 +156,9 @@ export class FunctionDeclaration extends Declaration {
 
 	protected override readonly _identifier: string;
 
-  protected readonly _isDefined: boolean;
+	protected readonly _isDefined: boolean;
 
-  protected readonly _returnType: KipperType | undefined;
+	protected readonly _returnType: KipperType | undefined;
 
 	protected readonly _args: Array<ParameterDeclaration>;
 
@@ -168,7 +168,7 @@ export class FunctionDeclaration extends Declaration {
 
 		// Fetching the metadata from the antlr4 context
 		const metadata = this.getMetadata();
-    this._isDefined = metadata.isDefined;
+		this._isDefined = metadata.isDefined;
 		this._identifier = metadata.identifier;
 		this._returnType = metadata.returnType;
 		this._args = metadata.args;
@@ -181,7 +181,12 @@ export class FunctionDeclaration extends Declaration {
 	 * Fetch the metadata for the function definition.
 	 * @private
 	 */
-	private getMetadata(): { isDefined: boolean, identifier: string; args: Array<ParameterDeclaration>; returnType: KipperType } {
+	private getMetadata(): {
+		isDefined: boolean;
+		identifier: string;
+		args: Array<ParameterDeclaration>;
+		returnType: KipperType;
+	} {
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			this.antlrContext.children?.find((val) => val instanceof DeclaratorContext)
@@ -199,7 +204,7 @@ export class FunctionDeclaration extends Declaration {
 		}
 
 		return {
-      isDefined: this.antlrContext.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: this.antlrContext.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			returnType: this.programCtx.verifyType(this.tokenStream.getText(returnTypeCtx.sourceInterval)),
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
@@ -234,12 +239,12 @@ export class FunctionDeclaration extends Declaration {
 		return this._args;
 	}
 
-  /**
-   * Returns whether the function declaration is defined and has a function body.
-   */
-  public get isDefined(): boolean {
-    return this._isDefined;
-  }
+	/**
+	 * Returns whether the function declaration is defined and has a function body.
+	 */
+	public get isDefined(): boolean {
+		return this._isDefined;
+	}
 
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
