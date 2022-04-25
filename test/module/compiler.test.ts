@@ -10,6 +10,7 @@ import { promises as fs } from "fs";
 import { KipperCompileResult } from "../../src";
 import * as ts from "typescript";
 
+// Test files
 const mainFile = `${__dirname}/../kipper-files/main.kip`;
 const singleFunctionFile = `${__dirname}/../kipper-files/single-function-call.kip`;
 const multiFunctionFile = `${__dirname}/../kipper-files/multi-function-call.kip`;
@@ -18,6 +19,7 @@ const invalidFile = `${__dirname}/../kipper-files/invalid.kip`;
 const nestedScopesFile = `${__dirname}/../kipper-files/nested-scopes.kip`;
 const singleFunctionDefinition = `${__dirname}/../kipper-files/single-function-definition.kip`;
 const multiFunctionDefinition = `${__dirname}/../kipper-files/multi-function-definition.kip`;
+const variableDeclaration = `${__dirname}/../kipper-files/variable-declaration.kip`;
 
 describe("KipperCompiler", () => {
   describe("constructor", () => {
@@ -194,6 +196,15 @@ describe("KipperCompiler", () => {
         assert(instance.programCtx);
         assert(instance.programCtx.stream === stream, "Expected matching streams");
       });
+
+      it("Variable Declaration", async () => {
+        const fileContent = (await fs.readFile(variableDeclaration, "utf8" as BufferEncoding)).toString();
+        const stream = new KipperParseStream(fileContent);
+        const instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+      });
     });
 
     describe("Errors", () => {
@@ -201,7 +212,7 @@ describe("KipperCompiler", () => {
         try {
           await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");
         } catch (e) {
-          assert((<Error>e).message.startsWith("Unknown type"), "Expected proper error");
+          assert((<Error>e).name === "UnknownTypeError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'UnknownTypeError'");
@@ -217,7 +228,7 @@ describe("KipperCompiler", () => {
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
         } catch (e) {
-          assert((<Error>e).message.startsWith("Global definition"), "Expected proper error");
+          assert((<Error>e).name === "InvalidGlobalError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'InvalidGlobalError'");
@@ -233,36 +244,62 @@ describe("KipperCompiler", () => {
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).message.startsWith("May not overwrite built-in identifier"), "Expected proper error");
+          assert((<Error>e).name === "BuiltInOverwriteError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'BuiltInOverwriteError'");
       });
 
-      it("DuplicateFunctionDefinitionError", async () => {
+      it("IdentifierAlreadyUsedByFunctionError", async () => {
         try {
           const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("def x() -> void {} \n def x() -> void {}")
+            new KipperParseStream("def x() -> void; var x: num = 4;")
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).message.startsWith("Definition of function"), "Expected proper error");
+          assert((<Error>e).name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
           return;
         }
-        assert(false, "Expected 'DuplicateFunctionDefinitionError'");
+        assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
       });
 
-      it("DuplicateVariableDefinitionError", async () => {
+      it("IdentifierAlreadyUsedByVariableError", async () => {
         try {
           const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var x: num; var x: num;")
+            new KipperParseStream("var x: num; def x() -> void;")
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).message.startsWith("Definition of variable"), "Expected proper error");
+          assert((<Error>e).name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
           return;
         }
-        assert(false, "Expected 'DuplicateVariableDefinitionError'");
+        assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
+      });
+
+      it("FunctionDefinitionAlreadyExistsError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("def x() -> void {} def x() -> void {}")
+          );
+          await programCtx.compileProgram();
+        } catch (e) {
+          assert((<Error>e).name === "FunctionDefinitionAlreadyExistsError", "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'FunctionDefinitionAlreadyExistsError'");
+      });
+
+      it("VariableDefinitionAlreadyExistsError", async () => {
+        try {
+          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+            new KipperParseStream("var x: num = 4; var x: num = 5;")
+          );
+          await programCtx.compileProgram();
+        } catch (e) {
+          assert((<Error>e).name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
       });
     });
   });

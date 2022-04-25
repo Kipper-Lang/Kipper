@@ -141,39 +141,59 @@ export class InvalidGlobalError extends KipperError {
 /**
  * Error that is thrown when a variable definition is used, but it is unknown to the program.
  */
-export class UnknownVariableDefinition extends KipperError {
+export class UnknownVariableIdentifier extends KipperError {
 	constructor(identifier: string) {
-		super(`Unknown variable definition '${identifier}'.`);
+		super(`Unknown variable identifier '${identifier}'.`);
 	}
 }
 
 /**
  * Error that is thrown when a function definition is used, but it is unknown to the program.
  */
-export class UnknownFunctionDefinition extends KipperError {
+export class UnknownFunctionIdentifier extends KipperError {
 	constructor(identifier: string) {
-		super(`Unknown function definition '${identifier}'.`);
+		super(`Unknown function identifier '${identifier}'.`);
 	}
 }
 
 /**
- * Error that is thrown when a new variable identifier is registered and the used identifier is already in use by
- * another variable. No double definitions or overwrites of old definitions allowed!
+ * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
+ * a variable definition or declaration.
  */
-export class DuplicateVariableDefinitionError extends KipperError {
+export class IdentifierAlreadyUsedByVariableError extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+		super(`Identifier '${identifier}' already in use by a variable.`);
 	}
 }
 
 /**
- * Error that is thrown when a new function identifier is registered and the used identifier is already in use by
- * another function. No double definitions or overwrites of old definitions allowed!
+ * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
+ * a function definition or declaration.
  */
-export class DuplicateFunctionDefinitionError extends KipperError {
+export class IdentifierAlreadyUsedByFunctionError extends KipperError {
 	constructor(identifier: string) {
-		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
+		super(`Identifier '${identifier}' already in use by a function.`);
 	}
+}
+
+/**
+ * Error that is thrown when a new function definition or declaration is registered and the used identifier is
+ * already in use by a previous function definition.
+ */
+export class FunctionDefinitionAlreadyExistsError extends KipperError {
+  constructor(identifier: string) {
+    super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
+  }
+}
+
+/**
+ * Error that is thrown when a new variable definition or declaration is registered and the used identifier is
+ * already in use by a previous function definition.
+ */
+export class VariableDefinitionAlreadyExistsError extends KipperError {
+  constructor(identifier: string) {
+    super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+  }
 }
 
 /**

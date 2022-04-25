@@ -8,7 +8,7 @@ import { ActualLogicalAndExpressionContext } from "./KipperParser";
 import { PassOnUnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
 import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
-import { ExternalFunctionDefinitionContext } from "./KipperParser";
+import { ExternalFunctionDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
@@ -45,8 +45,8 @@ import { ActualLogicalOrExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
-import { FunctionDefinitionContext } from "./KipperParser";
-import { EndOfItemContext } from "./KipperParser";
+import { FunctionDeclarationContext } from "./KipperParser";
+import { EndOfLineContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { ListConstantContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
@@ -143,12 +143,12 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `externalFunctionDefinition`
+	 * Visit a parse tree produced by the `externalFunctionDeclaration`
 	 * labeled alternative in `KipperParser.externalItem`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitExternalFunctionDefinition?: (ctx: ExternalFunctionDefinitionContext) => Result;
+	visitExternalFunctionDeclaration?: (ctx: ExternalFunctionDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `externalBlockItem`
@@ -436,18 +436,18 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitExternalItem?: (ctx: ExternalItemContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.functionDefinition`.
+	 * Visit a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitFunctionDefinition?: (ctx: FunctionDefinitionContext) => Result;
+	visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.endOfItem`.
+	 * Visit a parse tree produced by `KipperParser.endOfLine`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitEndOfItem?: (ctx: EndOfItemContext) => Result;
+	visitEndOfLine?: (ctx: EndOfLineContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.primaryExpression`.

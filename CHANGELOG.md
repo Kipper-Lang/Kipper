@@ -8,8 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Implemented handling of declarations and definitions, where definitions can only appear once. (
+  Reassignments are not counted as definitions!)
+- New errors `FunctionDefinitionAlreadyExistsError` and `VariableDefinitionAlreadyExistsError`, which are raised if
+  definition rules are violated.
+- Added project version information constants in `index.ts`.
 
 ### Updated
+- Renamed definition errors:
+  - `DuplicateVariableDefinitionError` to `IdentifierAlreadyUsedByVariableError`
+  - `DuplicateFunctionDefinitionError` to `IdentifierAlreadyUsedByFunctionError`
 
 ### Removed
 

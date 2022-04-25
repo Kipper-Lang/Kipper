@@ -8,7 +8,7 @@ import { KipperStorageType, KipperType } from "./types";
 import {
 	CompoundStatement,
 	Declaration,
-	FunctionDefinition,
+	FunctionDeclaration,
 	ParameterDeclaration,
 	VariableDeclaration,
 } from "../tokens";
@@ -94,15 +94,15 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _token: FunctionDefinition,
+		private _token: FunctionDeclaration,
 	) {
 		super();
 	}
 
 	/**
-	 * Returns the {@link FunctionDefinition token} this scope function declaration bases on.
+	 * Returns the {@link FunctionDeclaration token} this scope function declaration bases on.
 	 */
-	public get token(): FunctionDefinition {
+	public get token(): FunctionDeclaration {
 		return this._token;
 	}
 
@@ -126,4 +126,13 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	public get args(): Array<ParameterDeclaration> | undefined {
 		return this._token.args;
 	}
+
+
+  /**
+   * Returns whether the function declaration is defined and has a function body.
+   * @since 0.2.2
+   */
+  public get isDefined(): boolean {
+    return this._token.isDefined;
+  }
 }

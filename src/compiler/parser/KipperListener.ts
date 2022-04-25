@@ -8,7 +8,7 @@ import { ActualLogicalAndExpressionContext } from "./KipperParser";
 import { PassOnUnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
 import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
-import { ExternalFunctionDefinitionContext } from "./KipperParser";
+import { ExternalFunctionDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
@@ -45,8 +45,8 @@ import { ActualLogicalOrExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
-import { FunctionDefinitionContext } from "./KipperParser";
-import { EndOfItemContext } from "./KipperParser";
+import { FunctionDeclarationContext } from "./KipperParser";
+import { EndOfLineContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { ListConstantContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
@@ -165,17 +165,17 @@ export interface KipperListener extends ParseTreeListener {
 	exitOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `externalFunctionDefinition`
+	 * Enter a parse tree produced by the `externalFunctionDeclaration`
 	 * labeled alternative in `KipperParser.externalItem`.
 	 * @param ctx the parse tree
 	 */
-	enterExternalFunctionDefinition?: (ctx: ExternalFunctionDefinitionContext) => void;
+	enterExternalFunctionDeclaration?: (ctx: ExternalFunctionDeclarationContext) => void;
 	/**
-	 * Exit a parse tree produced by the `externalFunctionDefinition`
+	 * Exit a parse tree produced by the `externalFunctionDeclaration`
 	 * labeled alternative in `KipperParser.externalItem`.
 	 * @param ctx the parse tree
 	 */
-	exitExternalFunctionDefinition?: (ctx: ExternalFunctionDefinitionContext) => void;
+	exitExternalFunctionDeclaration?: (ctx: ExternalFunctionDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `externalBlockItem`
@@ -640,26 +640,26 @@ export interface KipperListener extends ParseTreeListener {
 	exitExternalItem?: (ctx: ExternalItemContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
+	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	enterFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
+	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
+	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	exitFunctionDefinition?: (ctx: FunctionDefinitionContext) => void;
+	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.endOfItem`.
+	 * Enter a parse tree produced by `KipperParser.endOfLine`.
 	 * @param ctx the parse tree
 	 */
-	enterEndOfItem?: (ctx: EndOfItemContext) => void;
+	enterEndOfLine?: (ctx: EndOfLineContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.endOfItem`.
+	 * Exit a parse tree produced by `KipperParser.endOfLine`.
 	 * @param ctx the parse tree
 	 */
-	exitEndOfItem?: (ctx: EndOfItemContext) => void;
+	exitEndOfLine?: (ctx: EndOfLineContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.primaryExpression`.

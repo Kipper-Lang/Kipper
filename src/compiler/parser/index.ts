@@ -9,7 +9,7 @@ export { KipperListener } from "./KipperListener";
 export { KipperVisitor } from "./KipperVisitor";
 export {
 	KipperParser,
-	ExternalFunctionDefinitionContext,
+	ExternalFunctionDeclarationContext,
 	ExternalBlockItemContext,
 	SingleItemTypeSpecifierContext,
 	MultiItemTypeSpecifierContext,
@@ -59,8 +59,8 @@ export {
 	CompilationUnitContext,
 	TranslationUnitContext,
 	ExternalItemContext,
-	FunctionDefinitionContext,
-	EndOfItemContext,
+	FunctionDeclarationContext,
+	EndOfLineContext,
 	PassOnCastOrConvertExpressionContext,
 	ActualCastOrConvertExpressionContext,
 	PassOnMultiplicativeExpressionContext,
