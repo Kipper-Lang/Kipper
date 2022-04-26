@@ -1,8 +1,8 @@
 /**
- * Types and type matching that is used to differentiate types in the Kipper language.
+ * Constant values for Kipper.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.1.0
+ * @since 0.3.0
  */
 
 /**
@@ -15,3 +15,15 @@ export const kipperTypes: Array<string> = ["void", "num", "str", "char", "bool",
  * All available storage types inside Kipper.
  */
 export type KipperStorageType = "var" | "const";
+
+/**
+ * All available arithmetic operations inside Kipper.
+ * @since 0.3.0
+ */
+export type KipperArithmeticOperation = "+" | "-" | "*" | "**" | "/" | "%";
+
+/**
+ * All available arithmetic assignment operations inside Kipper.
+ * @since 0.3.0
+ */
+export type KipperArithmeticAssignOperation = "+=" | "-=" | "*=" | "/=";

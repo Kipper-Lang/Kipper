@@ -87,12 +87,9 @@ describe("KipperProgramContext", async () => {
 		});
 
 		it("Get existing variable", async () => {
-			const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+			const programCtx: KipperProgramContext = (await new KipperCompiler().compile(
 				new KipperParseStream("var i: num = 4;")
-			);
-
-			// Compiling the short program
-			programCtx.compileProgram();
+			)).programCtx;
 
 			// Getting the variable -> Should not return a defined value
 			const variable = <ScopeVariableDeclaration | undefined>programCtx.getGlobalIdentifier("i");

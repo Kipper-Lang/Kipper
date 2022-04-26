@@ -61,55 +61,55 @@ export type antlrExpressionCtxType =
 
 /**
  * Fetches the handler for the specified {@link antlrExpressionCtxType}.
- * @param antlrContext The context instance that the handler class should be fetched for.
+ * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  */
-export function getExpressionInstance(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken): Expression {
-	if (antlrContext instanceof NumberPrimaryExpressionContext) {
-		return new NumberPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof CharacterPrimaryExpressionContext) {
-		return new CharacterPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof ListPrimaryExpressionContext) {
-		return new ListPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof IdentifierPrimaryExpressionContext) {
-		return new IdentifierPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof StringPrimaryExpressionContext) {
-		return new StringPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof FStringPrimaryExpressionContext) {
-		return new FStringPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof TangledPrimaryExpressionContext) {
-		return new TangledPrimaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof ArraySpecifierPostfixExpressionContext) {
-		return new ArraySpecifierExpression(antlrContext, parent);
-	} else if (antlrContext instanceof IncrementOrDecrementPostfixExpressionContext) {
-		return new IncrementOrDecrementExpression(antlrContext, parent);
-	} else if (antlrContext instanceof FunctionCallPostfixExpressionContext) {
-		return new FunctionCallPostfixExpression(antlrContext, parent);
-	} else if (antlrContext instanceof ArgumentExpressionListContext) {
-		return new ArgumentExpressionList(antlrContext, parent);
-	} else if (antlrContext instanceof IncrementOrDecrementUnaryExpressionContext) {
-		return new IncrementOrDecrementUnaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof OperatorModifiedUnaryExpressionContext) {
-		return new OperatorModifiedUnaryExpression(antlrContext, parent);
-	} else if (antlrContext instanceof CastOrConvertExpressionContext) {
-		return new CastOrConvertExpression(antlrContext, parent);
-	} else if (antlrContext instanceof MultiplicativeExpressionContext) {
-		return new MultiplicativeExpression(antlrContext, parent);
-	} else if (antlrContext instanceof AdditiveExpressionContext) {
-		return new AdditiveExpression(antlrContext, parent);
-	} else if (antlrContext instanceof RelationalExpressionContext) {
-		return new RelationalExpression(antlrContext, parent);
-	} else if (antlrContext instanceof EqualityExpressionContext) {
-		return new EqualityExpression(antlrContext, parent);
-	} else if (antlrContext instanceof LogicalAndExpressionContext) {
-		return new LogicalAndExpression(antlrContext, parent);
-	} else if (antlrContext instanceof LogicalOrExpressionContext) {
-		return new LogicalOrExpression(antlrContext, parent);
-	} else if (antlrContext instanceof ConditionalExpressionContext) {
-		return new ConditionalExpression(antlrContext, parent);
+export function getExpressionInstance(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken): Expression {
+	if (antlrCtx instanceof NumberPrimaryExpressionContext) {
+		return new NumberPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof CharacterPrimaryExpressionContext) {
+		return new CharacterPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof ListPrimaryExpressionContext) {
+		return new ListPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof IdentifierPrimaryExpressionContext) {
+		return new IdentifierPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof StringPrimaryExpressionContext) {
+		return new StringPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof FStringPrimaryExpressionContext) {
+		return new FStringPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof TangledPrimaryExpressionContext) {
+		return new TangledPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof ArraySpecifierPostfixExpressionContext) {
+		return new ArraySpecifierExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof IncrementOrDecrementPostfixExpressionContext) {
+		return new IncrementOrDecrementExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof FunctionCallPostfixExpressionContext) {
+		return new FunctionCallPostfixExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof ArgumentExpressionListContext) {
+		return new ArgumentExpressionList(antlrCtx, parent);
+	} else if (antlrCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
+		return new IncrementOrDecrementUnaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof OperatorModifiedUnaryExpressionContext) {
+		return new OperatorModifiedUnaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof CastOrConvertExpressionContext) {
+		return new CastOrConvertExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof MultiplicativeExpressionContext) {
+		return new MultiplicativeExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof AdditiveExpressionContext) {
+		return new AdditiveExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof RelationalExpressionContext) {
+		return new RelationalExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof EqualityExpressionContext) {
+		return new EqualityExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof LogicalAndExpressionContext) {
+		return new LogicalAndExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof LogicalOrExpressionContext) {
+		return new LogicalOrExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof ConditionalExpressionContext) {
+		return new ConditionalExpression(antlrCtx, parent);
 	} else {
 		// Last remaining possible type {@link AssignmentExpression}
-		return new AssignmentExpression(antlrContext, parent);
+		return new AssignmentExpression(antlrCtx, parent);
 	}
 }
 
@@ -120,15 +120,15 @@ export function getExpressionInstance(antlrContext: antlrExpressionCtxType, pare
  */
 export abstract class Expression extends CompilableParseToken {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: antlrExpressionCtxType;
+	protected override readonly _antlrCtx: antlrExpressionCtxType;
 
-	protected constructor(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -141,8 +141,8 @@ export abstract class Expression extends CompilableParseToken {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): antlrExpressionCtxType {
-		return this._antlrContext;
+	public override get antlrCtx(): antlrExpressionCtxType {
+		return this._antlrCtx;
 	}
 }
 
@@ -152,8 +152,8 @@ export abstract class ConstantExpression extends Expression {
 	 */
 	public readonly type: KipperType;
 
-	protected constructor(antlrContext: antlrExpressionCtxType, parent: CompilableParseToken, type: KipperType) {
-		super(antlrContext, parent);
+	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken, type: KipperType) {
+		super(antlrCtx, parent);
 		this.type = type;
 	}
 }
@@ -165,17 +165,17 @@ export abstract class ConstantExpression extends Expression {
  */
 export class NumberPrimaryExpression extends ConstantExpression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: NumberPrimaryExpressionContext;
+	protected override readonly _antlrCtx: NumberPrimaryExpressionContext;
 
 	public readonly value: number;
 
-	constructor(antlrContext: NumberPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent, "num" as KipperType);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent, "num" as KipperType);
+		this._antlrCtx = antlrCtx;
 
 		// Setting the numeric value
 		this.value = +this.sourceCode;
@@ -202,8 +202,8 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): NumberPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): NumberPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -214,20 +214,20 @@ export class NumberPrimaryExpression extends ConstantExpression {
  */
 export class CharacterPrimaryExpression extends ConstantExpression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: CharacterPrimaryExpressionContext;
+	protected override readonly _antlrCtx: CharacterPrimaryExpressionContext;
 
 	/**
 	 * The value of this character expression
 	 */
 	public readonly value: string;
 
-	constructor(antlrContext: CharacterPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent, "char" as KipperType);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent, "char" as KipperType);
+		this._antlrCtx = antlrCtx;
 
 		// Setting the character value
 		this.value = this.sourceCode.slice(1, this.sourceCode.length - 1);
@@ -256,8 +256,8 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): CharacterPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): CharacterPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -268,15 +268,15 @@ export class CharacterPrimaryExpression extends ConstantExpression {
  */
 export class ListPrimaryExpression extends ConstantExpression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: ListPrimaryExpressionContext;
+	protected override readonly _antlrCtx: ListPrimaryExpressionContext;
 
-	constructor(antlrContext: ListPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent, "list" as KipperType);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent, "list" as KipperType);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -300,8 +300,8 @@ export class ListPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): ListPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): ListPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -312,20 +312,20 @@ export class ListPrimaryExpression extends ConstantExpression {
  */
 export class StringPrimaryExpression extends ConstantExpression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: StringPrimaryExpressionContext;
+	protected override readonly _antlrCtx: StringPrimaryExpressionContext;
 
 	/**
 	 * String content of this expression.
 	 */
 	public readonly stringContent: string;
 
-	constructor(antlrContext: StringPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent, "str" as KipperType);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent, "str" as KipperType);
+		this._antlrCtx = antlrCtx;
 
 		// Get string content for the f-string. Removing start and end character
 		this.stringContent = this.sourceCode.slice(1, this.sourceCode.length - 1);
@@ -351,8 +351,8 @@ export class StringPrimaryExpression extends ConstantExpression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): StringPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): StringPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -363,20 +363,20 @@ export class StringPrimaryExpression extends ConstantExpression {
  */
 export class IdentifierPrimaryExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: IdentifierPrimaryExpressionContext;
+	protected override readonly _antlrCtx: IdentifierPrimaryExpressionContext;
 
 	/**
 	 * The identifier of this expression.
 	 */
 	public readonly identifierValue: string;
 
-	constructor(antlrContext: IdentifierPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 
 		// Fetching the identifier
 		this.identifierValue = this.sourceCode;
@@ -402,8 +402,8 @@ export class IdentifierPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): IdentifierPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): IdentifierPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -414,17 +414,17 @@ export class IdentifierPrimaryExpression extends Expression {
  */
 export class FStringPrimaryExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: FStringPrimaryExpressionContext;
+	protected override readonly _antlrCtx: FStringPrimaryExpressionContext;
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrContext: FStringPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -448,8 +448,8 @@ export class FStringPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): FStringPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): FStringPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -460,15 +460,15 @@ export class FStringPrimaryExpression extends Expression {
  */
 export class TangledPrimaryExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: TangledPrimaryExpressionContext;
+	protected override readonly _antlrCtx: TangledPrimaryExpressionContext;
 
-	constructor(antlrContext: TangledPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -496,8 +496,8 @@ export class TangledPrimaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): TangledPrimaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): TangledPrimaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -510,15 +510,15 @@ export class TangledPrimaryExpression extends Expression {
  */
 export class IncrementOrDecrementExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: IncrementOrDecrementPostfixExpressionContext;
+	protected override readonly _antlrCtx: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrContext: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -542,8 +542,8 @@ export class IncrementOrDecrementExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): IncrementOrDecrementPostfixExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): IncrementOrDecrementPostfixExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -555,15 +555,15 @@ export class IncrementOrDecrementExpression extends Expression {
  */
 export class ArraySpecifierExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: ArraySpecifierPostfixExpressionContext;
+	protected override readonly _antlrCtx: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrContext: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -587,8 +587,8 @@ export class ArraySpecifierExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): ArraySpecifierPostfixExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): ArraySpecifierPostfixExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -601,23 +601,20 @@ export class ArraySpecifierExpression extends Expression {
  */
 export class FunctionCallPostfixExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: FunctionCallPostfixExpressionContext;
+	protected override readonly _antlrCtx: FunctionCallPostfixExpressionContext;
 
-	private readonly function: BuiltInFunction | ScopeFunctionDeclaration;
+	private readonly identifier: string;
 
-	constructor(antlrContext: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 
-		const identifier: string = this.getMetadata().identifier; // TODO! Implement meta-data fetching
-
-		// Assert the existence of the function
-		this.programCtx.assert.functionIsDefined(identifier);
-		this.function = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(identifier);
+		// Set identifier
+		this.identifier = this.getMetadata().identifier;
 	}
 
 	/**
@@ -627,11 +624,11 @@ export class FunctionCallPostfixExpression extends Expression {
 	private getMetadata(): { identifier: string } {
 		// Fetch context instances
 		let identifierCtx = <IdentifierPrimaryExpressionContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof IdentifierPrimaryExpressionContext)
+			this.antlrCtx.children?.find((val) => val instanceof IdentifierPrimaryExpressionContext)
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrContext.children || !identifierCtx) {
+		if (!this.antlrCtx.children || !identifierCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
@@ -645,7 +642,8 @@ export class FunctionCallPostfixExpression extends Expression {
 	 * and throw errors if encountered.
 	 */
 	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+		// Assert that the function exists
+		this.programCtx.assert(this).functionIsDefined(this.identifier);
 	}
 
 	/**
@@ -654,23 +652,29 @@ export class FunctionCallPostfixExpression extends Expression {
 	 * Every item in the array represents a token of the expression.
 	 */
 	protected async translateCtxAndChildren(): Promise<Array<string>> {
+		// Get the function
+		const func = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(this.identifier);
+
+		// Get the arguments
 		let argListCtx = <ArgumentExpressionList | undefined>(
 			this.children.find((val) => val instanceof ArgumentExpressionList)
 		);
 
-		const identifier =
-			this.function instanceof ScopeFunctionDeclaration
-				? this.function.identifier
-				: `_kipperGlobal_${this.function.identifier}`;
+		// Add builtin identifier prefix '_kipperGlobal_'
+		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
+
+		// Compile the arguments
 		const args: Array<string> = argListCtx ? await argListCtx.compileCtx() : [];
+
+		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): FunctionCallPostfixExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): FunctionCallPostfixExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -682,15 +686,15 @@ export class FunctionCallPostfixExpression extends Expression {
  */
 export class ArgumentExpressionList extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: ArgumentExpressionListContext;
+	protected override readonly _antlrCtx: ArgumentExpressionListContext;
 
-	constructor(antlrContext: ArgumentExpressionListContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -725,15 +729,15 @@ export class ArgumentExpressionList extends Expression {
  */
 export class IncrementOrDecrementUnaryExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: IncrementOrDecrementUnaryExpressionContext;
+	protected override readonly _antlrCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrContext: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -757,8 +761,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): IncrementOrDecrementUnaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): IncrementOrDecrementUnaryExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -772,22 +776,22 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
  */
 export class OperatorModifiedUnaryExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: OperatorModifiedUnaryExpressionContext;
+	protected override readonly _antlrCtx: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrContext: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): OperatorModifiedUnaryExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): OperatorModifiedUnaryExpressionContext {
+		return this._antlrCtx;
 	}
 
 	/**
@@ -819,15 +823,15 @@ export class OperatorModifiedUnaryExpression extends Expression {
  */
 export class CastOrConvertExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: CastOrConvertExpressionContext;
+	protected override readonly _antlrCtx: CastOrConvertExpressionContext;
 
-	constructor(antlrContext: CastOrConvertExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -851,8 +855,8 @@ export class CastOrConvertExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): CastOrConvertExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): CastOrConvertExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -868,15 +872,15 @@ export class CastOrConvertExpression extends Expression {
  */
 export class MultiplicativeExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: MultiplicativeExpressionContext;
+	protected override readonly _antlrCtx: MultiplicativeExpressionContext;
 
-	constructor(antlrContext: MultiplicativeExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -900,8 +904,8 @@ export class MultiplicativeExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): MultiplicativeExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): MultiplicativeExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -915,15 +919,15 @@ export class MultiplicativeExpression extends Expression {
  */
 export class AdditiveExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: AdditiveExpressionContext;
+	protected override readonly _antlrCtx: AdditiveExpressionContext;
 
-	constructor(antlrContext: AdditiveExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -947,8 +951,8 @@ export class AdditiveExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): AdditiveExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): AdditiveExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -970,15 +974,15 @@ export class AdditiveExpression extends Expression {
  */
 export class RelationalExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: RelationalExpressionContext;
+	protected override readonly _antlrCtx: RelationalExpressionContext;
 
-	constructor(antlrContext: RelationalExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1002,8 +1006,8 @@ export class RelationalExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): RelationalExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): RelationalExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -1019,15 +1023,15 @@ export class RelationalExpression extends Expression {
  */
 export class EqualityExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: EqualityExpressionContext;
+	protected override readonly _antlrCtx: EqualityExpressionContext;
 
-	constructor(antlrContext: EqualityExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1051,8 +1055,8 @@ export class EqualityExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): EqualityExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): EqualityExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -1068,15 +1072,15 @@ export class EqualityExpression extends Expression {
  */
 export class LogicalAndExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: LogicalAndExpressionContext;
+	protected override readonly _antlrCtx: LogicalAndExpressionContext;
 
-	constructor(antlrContext: LogicalAndExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1100,8 +1104,8 @@ export class LogicalAndExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): LogicalAndExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): LogicalAndExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -1117,15 +1121,15 @@ export class LogicalAndExpression extends Expression {
  */
 export class LogicalOrExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: LogicalOrExpressionContext;
+	protected override readonly _antlrCtx: LogicalOrExpressionContext;
 
-	constructor(antlrContext: LogicalOrExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1149,8 +1153,8 @@ export class LogicalOrExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): LogicalOrExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): LogicalOrExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -1164,15 +1168,15 @@ export class LogicalOrExpression extends Expression {
  */
 export class ConditionalExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: ConditionalExpressionContext;
+	protected override readonly _antlrCtx: ConditionalExpressionContext;
 
-	constructor(antlrContext: ConditionalExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1196,8 +1200,8 @@ export class ConditionalExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): ConditionalExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): ConditionalExpressionContext {
+		return this._antlrCtx;
 	}
 }
 
@@ -1210,15 +1214,15 @@ export class ConditionalExpression extends Expression {
  */
 export class AssignmentExpression extends Expression {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: AssignmentExpressionContext;
+	protected override readonly _antlrCtx: AssignmentExpressionContext;
 
-	constructor(antlrContext: AssignmentExpressionContext, parent: CompilableParseToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
@@ -1242,7 +1246,7 @@ export class AssignmentExpression extends Expression {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): AssignmentExpressionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): AssignmentExpressionContext {
+		return this._antlrCtx;
 	}
 }
