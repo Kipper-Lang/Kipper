@@ -10,19 +10,19 @@ compilationUnit
     ;
 
 translationUnit
-    :   (externalItem | endOfItem | WS+)+
+    :   (externalItem | endOfLine | WS+)+
     ;
 
 externalItem
-    :   functionDefinition # externalFunctionDefinition
+    :   functionDeclaration # externalFunctionDeclaration
     |   blockItem # externalBlockItem
     ;
 
-functionDefinition
-    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* compoundStatement
+functionDeclaration
+    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* (compoundStatement | endOfLine)
     ;
 
-endOfItem
+endOfLine
     :   Whitespace* ';' Whitespace*
     ;
 
@@ -127,7 +127,7 @@ constantExpression
     ;
 
 declaration
-    :   storageTypeSpecifier WS* initDeclarator endOfItem
+    :   storageTypeSpecifier WS* initDeclarator endOfLine
     ;
 
 storageTypeSpecifier
@@ -204,7 +204,7 @@ blockItem
     ;
 
 expressionStatement
-    :   expression? endOfItem
+    :   expression? endOfLine
     ;
 
 selectionStatement
@@ -220,11 +220,11 @@ switchLabeledStatement
 iterationStatement
     :   For WS* '(' forCondition ')' WS* statement
     |   While WS* '(' WS* expression WS* ')' WS* statement
-    |   Do WS* statement WS* While WS* '(' WS* expression WS* ')' endOfItem
+    |   Do WS* statement WS* While WS* '(' WS* expression WS* ')' endOfLine
     ;
 
 forCondition
-	  :   (forDeclaration | expression?) endOfItem forExpression? endOfItem forExpression?
+	  :   (forDeclaration | expression?) endOfLine forExpression? endOfLine forExpression?
 	  ;
 
 forDeclaration
@@ -239,7 +239,7 @@ jumpStatement
     :   (('continue' | 'break')
     |   'return' WS* expression?
     )
-    endOfItem
+    endOfLine
     ;
 
 // Lexer Rules (tokens / token rules)

@@ -6,10 +6,10 @@
  */
 
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { Interval } from "antlr4ts/misc/Interval";
 import { KipperParser } from "../parser";
-import type { KipperProgramContext } from "../program-ctx";
 import { TokenStream } from "antlr4ts/TokenStream";
+import { Utils } from "../../utils";
+import type { KipperProgramContext } from "../program-ctx";
 
 export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken;
@@ -20,11 +20,11 @@ export type eligibleChildToken = CompilableParseToken;
  */
 export abstract class CompilableParseToken {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected readonly _antlrContext: ParserRuleContext;
+	protected readonly _antlrCtx: ParserRuleContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
@@ -40,8 +40,8 @@ export abstract class CompilableParseToken {
 	 */
 	protected _parent: eligibleParentToken;
 
-	constructor(antlrContext: ParserRuleContext, parent: eligibleParentToken) {
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
+		this._antlrCtx = antlrCtx;
 		this._parent = parent;
 		this._children = [];
 
@@ -52,8 +52,8 @@ export abstract class CompilableParseToken {
 	/**
 	 * The antlr context containing the antlr4 metadata for this parse token.
 	 */
-	public get antlrContext(): ParserRuleContext {
-		return this._antlrContext;
+	public get antlrCtx(): ParserRuleContext {
+		return this._antlrCtx;
 	}
 
 	/**
@@ -71,23 +71,11 @@ export abstract class CompilableParseToken {
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	public get sourceCode(): string {
-		let inputStream = this.antlrContext.start.inputStream;
-		let start = this.antlrContext.start.startIndex;
-
-		// If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
-		if (inputStream === undefined) {
-			return this.antlrContext.text;
-		}
-
-		// If {@link this.antlrContext.stop} is defined, then use {@link this.antlrContext.stop.stopIndex}, otherwise use
-		// the last index of the "virtual" file/buffer, which is {@link inputStream.size} - 2 (Accounting for the
-		// additional EOF at the end that we do not want, and the fact arrays start at 0)
-		let end = this.antlrContext.stop !== undefined ? this.antlrContext.stop.stopIndex : inputStream.size - 2;
-		return inputStream.getText(new Interval(start, end));
+		return Utils.getTokenSource(this.antlrCtx);
 	}
 
 	/**
-	 * The parser that parsed the {@link antlrContext}
+	 * The parser that parsed the {@link antlrCtx}
 	 */
 	public get parser(): KipperParser {
 		return this.programCtx.parser;

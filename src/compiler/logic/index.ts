@@ -7,4 +7,4 @@
 
 export * from "./built-ins";
 export * from "./scope-declaration";
-export * from "./types";
+export * from "./const";

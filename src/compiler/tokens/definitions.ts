@@ -6,9 +6,10 @@
  */
 import { CompilableParseToken, eligibleParentToken } from "./parse-token";
 import {
+	CompoundStatementContext,
 	DeclarationContext,
 	DeclaratorContext,
-	FunctionDefinitionContext,
+	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	InitializerContext,
 	ParameterDeclarationContext,
@@ -24,25 +25,25 @@ import { UnableToDetermineMetadataError } from "../../errors";
 /**
  * Every antlr4 definition ctx type
  */
-export type antlrDefinitionCtxType = FunctionDefinitionContext | ParameterDeclarationContext | DeclarationContext;
+export type antlrDefinitionCtxType = FunctionDeclarationContext | ParameterDeclarationContext | DeclarationContext;
 
 /**
  * Fetches the handler for the specified {@link antlrDefinitionCtxType}.
- * @param antlrContext The context instance that the handler class should be fetched for.
+ * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  * @param scope The scope of the definition. (This is only used for {@link VariableDeclaration variables}.
  */
 export function getDefinitionInstance(
-	antlrContext: antlrDefinitionCtxType,
+	antlrCtx: antlrDefinitionCtxType,
 	parent: eligibleParentToken,
 	scope: KipperProgramContext | CompoundStatement,
 ): Declaration {
-	if (antlrContext instanceof FunctionDefinitionContext) {
-		return new FunctionDefinition(antlrContext, parent);
-	} else if (antlrContext instanceof ParameterDeclarationContext) {
-		return new ParameterDeclaration(antlrContext, parent);
+	if (antlrCtx instanceof FunctionDeclarationContext) {
+		return new FunctionDeclaration(antlrCtx, parent);
+	} else if (antlrCtx instanceof ParameterDeclarationContext) {
+		return new ParameterDeclaration(antlrCtx, parent);
 	} else {
-		return new VariableDeclaration(antlrContext, parent, scope);
+		return new VariableDeclaration(antlrCtx, parent, scope);
 	}
 }
 
@@ -53,30 +54,32 @@ export function getDefinitionInstance(
  */
 export abstract class Declaration extends CompilableParseToken {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: antlrDefinitionCtxType;
+	protected override readonly _antlrCtx: antlrDefinitionCtxType;
 
 	protected abstract readonly _identifier: string;
 
-	protected constructor(antlrContext: antlrDefinitionCtxType, parent: eligibleParentToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): antlrDefinitionCtxType {
-		return this._antlrContext;
+	public override get antlrCtx(): antlrDefinitionCtxType {
+		return this._antlrCtx;
 	}
 
 	/**
 	 * The identifier of the declaration.
 	 */
-	public abstract get identifier(): string;
+	public get identifier(): string {
+		return this._identifier;
+	}
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
@@ -87,39 +90,42 @@ export abstract class Declaration extends CompilableParseToken {
 }
 
 /**
- * Declaration of a parameter inside a {@link FunctionDefinition}.
+ * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
 export class ParameterDeclaration extends Declaration {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: ParameterDeclarationContext;
+	protected override readonly _antlrCtx: ParameterDeclarationContext;
 
 	protected override readonly _identifier: string;
 
-	constructor(antlrContext: ParameterDeclarationContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	protected readonly _type: KipperType;
+
+	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 
 		// TODO! Fetch valid identifier
 		this._identifier = "";
+		this._type = "void";
+	}
+
+	/**
+	 * The type of the argument
+	 */
+	public get type(): KipperType {
+		return this._type;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): ParameterDeclarationContext {
-		return this._antlrContext;
-	}
-
-	/**
-	 * The identifier of the parameter.
-	 */
-	public get identifier(): string {
-		return this._identifier;
+	public override get antlrCtx(): ParameterDeclarationContext {
+		return this._antlrCtx;
 	}
 
 	/**
@@ -150,58 +156,64 @@ export class ParameterDeclaration extends Declaration {
  * @todo Implement support for arguments using {@link ParameterDeclaration}.
  * @since 0.1.2
  */
-export class FunctionDefinition extends Declaration {
+export class FunctionDeclaration extends Declaration {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: FunctionDefinitionContext;
+	protected override readonly _antlrCtx: FunctionDeclarationContext;
 
 	protected override readonly _identifier: string;
 
-	protected readonly _returnType: KipperType | undefined;
+	protected readonly _isDefined: boolean;
+
+	protected readonly _returnType: KipperType;
 
 	protected readonly _args: Array<ParameterDeclaration>;
 
-	constructor(antlrContext: FunctionDefinitionContext, parent: eligibleParentToken) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 
 		// Fetching the metadata from the antlr4 context
 		const metadata = this.getMetadata();
+		this._isDefined = metadata.isDefined;
 		this._identifier = metadata.identifier;
 		this._returnType = metadata.returnType;
 		this._args = metadata.args;
-
-		// Add function definition to the global scope
-		this.programCtx.addNewGlobalScopeEntry(this);
 	}
 
 	/**
 	 * Fetch the metadata for the function definition.
 	 * @private
 	 */
-	private getMetadata(): { identifier: string; args: Array<ParameterDeclaration>; returnType: KipperType } {
+	private getMetadata(): {
+		isDefined: boolean;
+		identifier: string;
+		args: Array<ParameterDeclaration>;
+		returnType: KipperType;
+	} {
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof DeclaratorContext)
+			this.antlrCtx.children?.find((val) => val instanceof DeclaratorContext)
 		);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof ParameterTypeListContext)
+			this.antlrCtx.children?.find((val) => val instanceof ParameterTypeListContext)
 		);
 		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+			this.antlrCtx.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrContext.children || !declaratorCtx || !returnTypeCtx) {
+		if (!this.antlrCtx.children || !declaratorCtx || !returnTypeCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
 		return {
+			isDefined: this.antlrCtx.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
-			returnType: this.programCtx.verifyType(this.tokenStream.getText(returnTypeCtx.sourceInterval)),
+			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 	}
@@ -209,8 +221,8 @@ export class FunctionDefinition extends Declaration {
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): FunctionDefinitionContext {
-		return this._antlrContext;
+	public override get antlrCtx(): FunctionDeclarationContext {
+		return this._antlrCtx;
 	}
 
 	/**
@@ -223,15 +235,22 @@ export class FunctionDefinition extends Declaration {
 	/**
 	 * The return type of this function.
 	 */
-	public get returnType(): KipperType | undefined {
+	public get returnType(): KipperType {
 		return this._returnType;
 	}
 
 	/**
 	 * The {@link ParameterDeclaration parameter/arguments} of this function definition.
 	 */
-	public get args(): Array<ParameterDeclaration> | undefined {
+	public get args(): Array<ParameterDeclaration> {
 		return this._args;
+	}
+
+	/**
+	 * Returns whether the function declaration is defined and has a function body.
+	 */
+	public get isDefined(): boolean {
+		return this._isDefined;
 	}
 
 	/**
@@ -239,7 +258,11 @@ export class FunctionDefinition extends Declaration {
 	 * and throw errors if encountered.
 	 */
 	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+		// Assert that the variable type exists
+		this.programCtx.assert(this).assertTypeExists(this.returnType);
+
+		// Add function definition to the global scope
+		this.programCtx.addNewGlobalScopeEntry(this);
 	}
 
 	/**
@@ -262,11 +285,11 @@ export class FunctionDefinition extends Declaration {
  */
 export class VariableDeclaration extends Declaration {
 	/**
-	 * The private '_antlrContext' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrContext}.
+	 * The private '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrContext: DeclarationContext;
+	protected override readonly _antlrCtx: DeclarationContext;
 
 	protected override readonly _identifier: string;
 
@@ -279,12 +302,12 @@ export class VariableDeclaration extends Declaration {
 	protected _scope: KipperProgramContext | CompoundStatement;
 
 	constructor(
-		antlrContext: DeclarationContext,
+		antlrCtx: DeclarationContext,
 		parent: eligibleParentToken,
 		scope: KipperProgramContext | CompoundStatement,
 	) {
-		super(antlrContext, parent);
-		this._antlrContext = antlrContext;
+		super(antlrCtx, parent);
+		this._antlrCtx = antlrCtx;
 
 		// Fetching the metadata from the antlr4 context
 		const metadata = this.getMetadata();
@@ -293,13 +316,6 @@ export class VariableDeclaration extends Declaration {
 		this._storageType = metadata.storageType;
 		this._valueType = metadata.valueType;
 		this._scope = scope;
-
-		// Load variable into global scope, if the assigned scope is of type {@link KipperProgramContext}
-		if (this.scope instanceof KipperProgramContext) {
-			this.scope.addNewGlobalScopeEntry(this);
-		} else {
-			this.scope.addNewLocalVariable(this);
-		}
 	}
 
 	private getMetadata(): {
@@ -309,10 +325,10 @@ export class VariableDeclaration extends Declaration {
 		valueType: KipperType;
 	} {
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof StorageTypeSpecifierContext)
+			this.antlrCtx.children?.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
-			this.antlrContext.children?.find((val) => val instanceof InitDeclaratorContext)
+			this.antlrCtx.children?.find((val) => val instanceof InitDeclaratorContext)
 		);
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
@@ -322,7 +338,7 @@ export class VariableDeclaration extends Declaration {
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrContext.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
+		if (!this.antlrCtx.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
 
@@ -330,15 +346,15 @@ export class VariableDeclaration extends Declaration {
 			isDefined: initDeclaratorCtx?.children?.find((val) => val instanceof InitializerContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			storageType: <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval),
-			valueType: this.programCtx.verifyType(this.tokenStream.getText(typeSpecifier.sourceInterval)),
+			valueType: <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval),
 		};
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrContext(): DeclarationContext {
-		return this._antlrContext;
+	public override get antlrCtx(): DeclarationContext {
+		return this._antlrCtx;
 	}
 
 	/**
@@ -381,7 +397,15 @@ export class VariableDeclaration extends Declaration {
 	 * and throw errors if encountered.
 	 */
 	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+		// Assert that the variable type exists
+		this.programCtx.assert(this).assertTypeExists(this.valueType);
+
+		// Load variable into global scope, if the assigned scope is of type {@link KipperProgramContext}
+		if (this.scope instanceof KipperProgramContext) {
+			this.scope.addNewGlobalScopeEntry(this);
+		} else {
+			this.scope.addNewLocalVariable(this);
+		}
 	}
 
 	/**

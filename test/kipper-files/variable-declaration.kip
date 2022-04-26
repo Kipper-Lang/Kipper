@@ -1,0 +1,7 @@
+/* Variable declaration */
+var name: num;
+
+/* Variable definition */
+var name: num = 4;
+
+call print(name as str);
