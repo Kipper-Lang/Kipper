@@ -2,12 +2,14 @@ import { assert } from "chai";
 import {
   KipperCompiler,
   KipperLogger,
-  KipperParseStream, KipperProgramContext,
+  KipperParseStream,
+  KipperProgramContext,
   KipperSyntaxError,
   LogLevel,
+  KipperError,
+  KipperCompileResult
 } from "../../src";
 import { promises as fs } from "fs";
-import { KipperCompileResult } from "../../src";
 import * as ts from "typescript";
 
 // Test files
@@ -208,11 +210,21 @@ describe("KipperCompiler", () => {
     });
 
     describe("Errors", () => {
+      it("GetTraceback", async () => {
+        try {
+          await new KipperCompiler().compile("var i: str = \"4\";\n var i: str = \"4\";");
+        } catch (e) {
+          assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+      });
+
       it("UnknownTypeError", async () => {
         try {
           await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");
         } catch (e) {
-          assert((<Error>e).name === "UnknownTypeError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "UnknownTypeError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'UnknownTypeError'");
@@ -228,7 +240,7 @@ describe("KipperCompiler", () => {
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
         } catch (e) {
-          assert((<Error>e).name === "InvalidGlobalError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'InvalidGlobalError'");
@@ -244,7 +256,7 @@ describe("KipperCompiler", () => {
           programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).name === "BuiltInOverwriteError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'BuiltInOverwriteError'");
@@ -257,7 +269,7 @@ describe("KipperCompiler", () => {
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
@@ -270,7 +282,7 @@ describe("KipperCompiler", () => {
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
@@ -283,7 +295,7 @@ describe("KipperCompiler", () => {
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).name === "FunctionDefinitionAlreadyExistsError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "FunctionDefinitionAlreadyExistsError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'FunctionDefinitionAlreadyExistsError'");
@@ -296,7 +308,7 @@ describe("KipperCompiler", () => {
           );
           await programCtx.compileProgram();
         } catch (e) {
-          assert((<Error>e).name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+          assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
           return;
         }
         assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");

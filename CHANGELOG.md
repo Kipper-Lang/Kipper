@@ -12,12 +12,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Reassignments are not counted as definitions!)
 - New errors `FunctionDefinitionAlreadyExistsError` and `VariableDefinitionAlreadyExistsError`, which are raised if
   definition rules are violated.
-- Added project version information constants in `index.ts`.
+- Project version information constants in `index.ts`.
+- Implemented abstract classes to differentiate error groups: `InvalidOverwriteError` and `IdentifierError`.
+- Traceback handling using `KipperErorr.getTraceback()` and `KipperError.setMetadata`.
+- New namespace `Utils` with new function `getTokenSource()`.
 
 ### Updated
 - Renamed definition errors:
   - `DuplicateVariableDefinitionError` to `IdentifierAlreadyUsedByVariableError`
   - `DuplicateFunctionDefinitionError` to `IdentifierAlreadyUsedByFunctionError`
+- Renamed `antlrContext` to `antlrCtx` across all files.
+- Changed behaviour of the `assert` system:
+  - All assertion will if possible now handled using the expression `KipperProgramContext.assert(ctx).ASSERT_FUNC()`.
+  - Assertions should happen in the `semanticAnalysis()` step.
+  - Registrations and updates of stack information should also happen in the `semanticAnalysis()` step to properly
+    compile top to bottom. (For now there is no support for calling functions that are defined afterwards in the file.
+    So a pre-declaration is required!)
 
 ### Removed
 

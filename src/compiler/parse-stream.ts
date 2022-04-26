@@ -14,48 +14,55 @@ import { CharStreams, CodePointCharStream } from "antlr4ts";
  * @since 0.0.3
  */
 export class KipperParseStream {
-	/**
-	 * The private '_name' that actually stores the variable data,
-	 * which is returned inside the {@link this.identifier}.
-	 * @private
-	 */
 	private readonly _name: string;
 
-	/**
-	 * The private '_charStream' that actually stores the variable data,
-	 * which is returned inside the {@link this.charStream}.
-	 * @private
-	 */
+	private readonly _filePath: string;
+
 	private readonly _charStream: CodePointCharStream;
 
 	/**
 	 * Parser File Constructor
-	 * @param {string} name The relative or absolute path to the file
-	 * @param {string} stringContent The content of the stream.
-	 * @param {CodePointCharStream} charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
+	 * @param stringContent The content of the stream.
+	 * @param name The relative or absolute path to the file
+	 * @param filePath The path to the file. If this is undefined, then it will default to the value in {@link name}.
+	 * @param charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
 	 * by the stringContent.
 	 */
-	public constructor(stringContent: string, name: string = "anonymous-script", charStream?: CodePointCharStream) {
+	public constructor(
+		stringContent: string,
+		name: string = "anonymous-script",
+		filePath?: string,
+		charStream?: CodePointCharStream,
+	) {
 		this._name = name;
+		this._filePath = filePath ?? name;
 		this._charStream = charStream ?? CharStreams.fromString(stringContent, this._name);
 	}
 
 	/**
-	 * Returns the Antlr4 {@link CodePointCharStream} for the initialised {@link stringContent}
+	 * Returns the Antlr4 {@link CodePointCharStream} for the initialised {@link stringContent}.
 	 */
 	public get charStream(): CodePointCharStream {
 		return this._charStream;
 	}
 
 	/**
-	 * Returns the string content of the file
+	 * Returns the string content of the file.
 	 */
 	public get stringContent(): string {
 		return this._charStream.toString();
 	}
 
 	/**
-	 * Returns the identifier of the file
+	 * Returns the file path of the file.
+	 * @note If {@link _filePath} wasn't set during construction, then this defaults to {@link name}.
+	 */
+	public get filePath(): string {
+		return this._filePath;
+	}
+
+	/**
+	 * Returns the identifier of the file.
 	 */
 	public get name(): string {
 		return this._name;

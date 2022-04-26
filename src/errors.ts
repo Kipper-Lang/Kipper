@@ -5,18 +5,55 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
+import { InputMismatchException, LexerNoViableAltException, NoViableAltException, ParserRuleContext } from "antlr4ts";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
+import { Utils } from "./utils";
 
 /**
  * The base error for the Kipper module
  */
 export class KipperError extends Error {
-	constructor(msg: string) {
+	public tracebackData: {
+		location: { line: number | undefined; col: number | undefined };
+		filePath: string | undefined;
+	};
+
+	public antlrCtx: ParserRuleContext | undefined;
+
+	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
+		this.tracebackData = { location: { line: undefined, col: undefined }, filePath: undefined };
+		this.antlrCtx = token;
+	}
+
+	/**
+	 * Update traceback context based on a file-line and column.
+	 * @param traceback The traceback data.
+	 * @since 0.3.0
+	 */
+	public setMetadata(traceback: {
+		location: { line: number | undefined; col: number | undefined };
+		filePath: string | undefined;
+	}) {
+		this.tracebackData = traceback;
+	}
+
+	/**
+	 * Get the traceback of this item.
+	 * @note The metadata in this traceback should be set using {@link setMetadata}.
+	 * @since 0.3.0
+	 */
+	public getTraceback(): string {
+		return (
+			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
+			`line ${this.tracebackData.location ? this.tracebackData.location.line : "Unknown"}, ` +
+			`col ${this.tracebackData.location ? this.tracebackData.location.col : "Unknown"}:` +
+			`    ${this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : ""}` +
+			`\n${this.name}: ${this.message}`
+		);
 	}
 }
 
@@ -139,9 +176,20 @@ export class InvalidGlobalError extends KipperError {
 }
 
 /**
+ * Represents all errors in the identifier error group.
+ * @since 0.3.0
+ */
+export abstract class IdentifierError extends KipperError {
+	protected constructor(msg: string) {
+		super(msg);
+		this.name = "IdentifierError";
+	}
+}
+
+/**
  * Error that is thrown when a variable definition is used, but it is unknown to the program.
  */
-export class UnknownVariableIdentifier extends KipperError {
+export class UnknownVariableIdentifier extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown variable identifier '${identifier}'.`);
 	}
@@ -150,7 +198,7 @@ export class UnknownVariableIdentifier extends KipperError {
 /**
  * Error that is thrown when a function definition is used, but it is unknown to the program.
  */
-export class UnknownFunctionIdentifier extends KipperError {
+export class UnknownFunctionIdentifier extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown function identifier '${identifier}'.`);
 	}
@@ -160,7 +208,7 @@ export class UnknownFunctionIdentifier extends KipperError {
  * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
  * a variable definition or declaration.
  */
-export class IdentifierAlreadyUsedByVariableError extends KipperError {
+export class IdentifierAlreadyUsedByVariableError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Identifier '${identifier}' already in use by a variable.`);
 	}
@@ -170,9 +218,20 @@ export class IdentifierAlreadyUsedByVariableError extends KipperError {
  * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
  * a function definition or declaration.
  */
-export class IdentifierAlreadyUsedByFunctionError extends KipperError {
+export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Identifier '${identifier}' already in use by a function.`);
+	}
+}
+
+/**
+ * Represents all errors in the invalid overwrite group.
+ * @since 0.3.0
+ */
+export abstract class InvalidOverwriteError extends KipperError {
+	protected constructor(msg: string) {
+		super(msg);
+		this.name = "InvalidOverwriteError";
 	}
 }
 
@@ -180,7 +239,7 @@ export class IdentifierAlreadyUsedByFunctionError extends KipperError {
  * Error that is thrown when a new function definition or declaration is registered and the used identifier is
  * already in use by a previous function definition.
  */
-export class FunctionDefinitionAlreadyExistsError extends KipperError {
+export class FunctionDefinitionAlreadyExistsError extends InvalidOverwriteError {
 	constructor(identifier: string) {
 		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
 	}
@@ -190,9 +249,40 @@ export class FunctionDefinitionAlreadyExistsError extends KipperError {
  * Error that is thrown when a new variable definition or declaration is registered and the used identifier is
  * already in use by a previous function definition.
  */
-export class VariableDefinitionAlreadyExistsError extends KipperError {
+export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError {
 	constructor(identifier: string) {
 		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+	}
+}
+
+/**
+ * Represents all errors in the mismatching type group.
+ * @since 0.3.0
+ */
+export class MismatchedTypesErrors extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "InvalidOverwriteError";
+	}
+}
+
+/**
+ * Invalid argument type that is not assignable/usable on the parameter.
+ */
+export class InvalidArgumentTypeError extends MismatchedTypesErrors {
+	constructor(argIdentifier: string, expectedType: string, receivedType: string) {
+		super(
+			`Argument of type '${receivedType}' is not assignable to parameter '${argIdentifier}' of type '${expectedType}'.`,
+		);
+	}
+}
+
+/**
+ * This error is raised when a variable type is used that is unknown the kipper language.
+ */
+export class UnknownTypeError extends KipperError {
+	constructor(type: string) {
+		super(`Unknown type '${type}'!`);
 	}
 }
 
@@ -212,14 +302,5 @@ export class BuiltInOverwriteError extends KipperError {
 export class UnableToDetermineMetadataError extends KipperError {
 	constructor() {
 		super(`Failed to determine metadata for one or more tokens. View traceback.`);
-	}
-}
-
-/**
- * This error is raised when a variable type is used that is unknown the kipper language.
- */
-export class UnknownTypeError extends KipperError {
-	constructor(type: string) {
-		super(`Unknown type '${type}'!`);
 	}
 }

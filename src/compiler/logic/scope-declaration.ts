@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperStorageType, KipperType } from "./types";
+import { KipperStorageType, KipperType } from "./const";
 import {
 	CompoundStatement,
 	Declaration,
@@ -116,20 +116,20 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	/**
 	 * The function return type.
 	 */
-	public get returnType(): KipperType | undefined {
+	public get returnType(): KipperType {
 		return this._token.returnType;
 	}
 
 	/**
 	 * The storage type of this scope entry.
 	 */
-	public get args(): Array<ParameterDeclaration> | undefined {
+	public get args(): Array<ParameterDeclaration> {
 		return this._token.args;
 	}
 
 	/**
 	 * Returns whether the function declaration is defined and has a function body.
-	 * @since 0.2.2
+	 * @since 0.3.0
 	 */
 	public get isDefined(): boolean {
 		return this._token.isDefined;
