@@ -118,24 +118,14 @@ export abstract class CompilableParseToken {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected abstract semanticAnalysis(): Promise<void>;
+	public abstract semanticAnalysis(): Promise<void>;
 
 	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected abstract translateCtxAndChildren(): Promise<Array<any>>;
-
-	/**
-	 * {@link this.semanticAnalysis Analyses} the context instance and {@link this.compileCtx translates}
-	 * the code into TypeScript.
-	 * @since 0.2.0
-	 */
-	public async compileCtx(): Promise<Array<any>> {
-		await this.semanticAnalysis();
-		return await this.translateCtxAndChildren();
-	}
+	public abstract translateCtxAndChildren(): Promise<Array<any>>;
 }
 
 export class RootFileParseToken {
@@ -190,9 +180,26 @@ export class RootFileParseToken {
 	 * Every item in the array represents a single line of code.
 	 */
 	public async compileCtx(): Promise<Array<Array<string>>> {
+		// Semantically analyse the code and properly register the logical content
+		const runAnalysis = async (ctx: CompilableParseToken) => {
+			// Start with the children, and then work upwards as the structures get more complex
+			for (let child of ctx.children) {
+				await runAnalysis(child);
+			}
+
+			// Finally, check if the entire token is semantically valid
+			await ctx.semanticAnalysis();
+		};
+
+		// Run for every child the analysis
+		for (let child of this.children) {
+			await runAnalysis(child);
+		}
+
+		// Compile the code
 		let genCode: Array<Array<string>> = [];
 		for (let child of this.children) {
-			genCode = genCode.concat(await child.compileCtx());
+			genCode = genCode.concat(await child.translateCtxAndChildren());
 		}
 		return genCode;
 	}

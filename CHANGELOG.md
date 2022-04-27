@@ -30,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     So a pre-declaration is required!)
 
 ### Removed
+- Method `CompilableParseToken.compileCtx()` added in `0.2.0`, and split the handling of the semantic analysis and
+  compilation into two separate stages. This means that before compilation, all children will be semantically analysed.
+  Starting from the bottom/the simplest tokens working upwards as the tokens get more complicated.
 
 ## [0.2.1] - 2022-04-22
 

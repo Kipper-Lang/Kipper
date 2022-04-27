@@ -86,7 +86,7 @@ export abstract class Declaration extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
+	public abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
 }
 
 /**
@@ -132,7 +132,7 @@ export class ParameterDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -141,7 +141,7 @@ export class ParameterDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
+	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}
@@ -257,7 +257,7 @@ export class FunctionDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// Assert that the variable type exists
 		this.programCtx.assert(this).assertTypeExists(this.returnType);
 
@@ -270,7 +270,7 @@ export class FunctionDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
+	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}
@@ -396,7 +396,7 @@ export class VariableDeclaration extends Declaration {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// Assert that the variable type exists
 		this.programCtx.assert(this).assertTypeExists(this.valueType);
 
@@ -413,7 +413,7 @@ export class VariableDeclaration extends Declaration {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<Array<string>>> {
+	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
 		// TODO!
 		return [[]];
 	}
