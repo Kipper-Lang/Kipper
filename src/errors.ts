@@ -297,10 +297,11 @@ export class BuiltInOverwriteError extends KipperError {
 }
 
 /**
- * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances.
+ * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances or a
+ * compilation is started without the required semantic data.
  */
 export class UnableToDetermineMetadataError extends KipperError {
 	constructor() {
-		super(`Failed to determine metadata for one or more tokens. View traceback.`);
+		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
 	}
 }

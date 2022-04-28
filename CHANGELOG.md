@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project version information constants in `index.ts`.
 - Implemented abstract classes to differentiate error groups: `InvalidOverwriteError` and `IdentifierError`.
 - Traceback handling using `KipperErorr.getTraceback()` and `KipperError.setMetadata`.
-- New namespace `Utils` with new function `getTokenSource()`.
+- New namespace `Utils` with new function `getTokenSource()` and `determineScope`.
 
 ### Updated
 - Renamed definition errors:
@@ -28,11 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Registrations and updates of stack information should also happen in the `semanticAnalysis()` step to properly
     compile top to bottom. (For now there is no support for calling functions that are defined afterwards in the file.
     So a pre-declaration is required!)
+- Updated behaviour of `CompilableParseToken` to determine semantics and semantic types using generic classes. This
+  means all semantic data is now stored using the get and setter `CompilableParseToken.semanticData`.
 
 ### Removed
 - Method `CompilableParseToken.compileCtx()` added in `0.2.0`, and split the handling of the semantic analysis and
   compilation into two separate stages. This means that before compilation, all children will be semantically analysed.
   Starting from the bottom/the simplest tokens working upwards as the tokens get more complicated.
+- Unneeded private tracking of `_currentScope` in `KipperFileListener`, as the scope handling system has been replaced
+  with a dynamic determination using `semanticAnalysis()`.
 
 ## [0.2.1] - 2022-04-22
 

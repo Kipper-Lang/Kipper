@@ -10,15 +10,22 @@ import { KipperParser } from "../parser";
 import { TokenStream } from "antlr4ts/TokenStream";
 import { Utils } from "../../utils";
 import type { KipperProgramContext } from "../program-ctx";
+import { UnableToDetermineMetadataError } from "../../errors";
 
-export type eligibleParentToken = CompilableParseToken | RootFileParseToken;
-export type eligibleChildToken = CompilableParseToken;
+export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
+export type eligibleChildToken = CompilableParseToken<any>;
+
+/**
+ * Defines the blueprint for {@link CompilableParseToken.semanticData semanticData} inside a {@link CompilableParseToken}.
+ * @since 0.3.0
+ */
+export type SemanticData = Record<string, any>;
 
 /**
  * Kipper Parse token, which is the base class all tokens will extend from.
  * @since 0.1.0
  */
-export abstract class CompilableParseToken {
+export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -38,7 +45,9 @@ export abstract class CompilableParseToken {
 	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
-	protected _parent: eligibleParentToken;
+	protected readonly _parent: eligibleParentToken;
+
+	protected _semanticData: Semantics | undefined;
 
 	constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
 		this._antlrCtx = antlrCtx;
@@ -47,6 +56,22 @@ export abstract class CompilableParseToken {
 
 		// Adding to the parent this instance
 		parent.addNewChild(this);
+	}
+
+	/**
+	 * Returns the semantic data of this token.
+	 */
+	public get semanticData(): Semantics | undefined {
+		return this._semanticData;
+	}
+
+	/**
+	 * Sets the semantic data of this item.
+	 * @param value The semantic data that should be written onto this item.
+	 * @protected
+	 */
+	protected set semanticData(value: Semantics | undefined) {
+		this._semanticData = value;
 	}
 
 	/**
@@ -117,6 +142,17 @@ export abstract class CompilableParseToken {
 	}
 
 	/**
+	 * Ensures the semantic data of this item exists. This is always checked whenever a compilation is started.
+	 * @protected
+	 */
+	protected ensureSemanticDataExists(): Semantics {
+		if (this.semanticData === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+		return this.semanticData;
+	}
+
+	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
@@ -143,7 +179,7 @@ export class RootFileParseToken {
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
-	protected readonly _children: Array<CompilableParseToken>;
+	protected readonly _children: Array<eligibleChildToken>;
 
 	constructor(programCtx: KipperProgramContext) {
 		this._programCtx = programCtx;
@@ -183,7 +219,7 @@ export class RootFileParseToken {
 	 */
 	public async compileCtx(): Promise<Array<Array<string>>> {
 		// Semantically analyse the code and properly register the logical content
-		const runAnalysis = async (ctx: CompilableParseToken) => {
+		const runAnalysis = async (ctx: eligibleChildToken) => {
 			// Start with the children, and then work upwards as the structures get more complex
 			for (let child of ctx.children) {
 				await runAnalysis(child);

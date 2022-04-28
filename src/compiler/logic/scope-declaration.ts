@@ -9,17 +9,20 @@ import {
 	CompoundStatement,
 	Declaration,
 	FunctionDeclaration,
+	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	VariableDeclaration,
+	VariableDeclarationSemantics,
 } from "../tokens";
 import type { KipperProgramContext } from "../program-ctx";
+import { UnableToDetermineMetadataError } from "../../errors";
 
 /**
  * Abstract class as a parent for {@link ScopeDeclaration} and {@link Scope}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
-	public abstract get token(): Declaration;
+	public abstract get token(): Declaration<any>;
 
 	public abstract get identifier(): string;
 
@@ -37,11 +40,19 @@ export abstract class ScopeDeclaration {
  * @since 0.1.0
  */
 export class ScopeVariableDeclaration extends ScopeDeclaration {
+	private readonly semanticData: VariableDeclarationSemantics;
+
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
 		private _token: VariableDeclaration,
 	) {
 		super();
+
+		if (_token.semanticData === undefined) {
+			throw new UnableToDetermineMetadataError();
+		} else {
+			this.semanticData = _token.semanticData;
+		}
 	}
 
 	/**
@@ -52,38 +63,38 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The identifier of this entry
+	 * The identifier of this entry.
 	 */
 	public get identifier(): string {
-		return this._token.identifier;
+		return this.semanticData.identifier;
 	}
 
 	/**
-	 * The variable type or return type of this scope entry
+	 * The variable type or return type of this scope entry.
 	 */
 	public get type(): KipperType {
-		return this._token.valueType;
+		return this.semanticData.valueType;
 	}
 
 	/**
-	 * The storage type of this scope entry
+	 * The storage type of this scope entry.
 	 */
 	public get storageType(): KipperStorageType {
-		return this._token.storageType;
+		return this.semanticData.storageType;
 	}
 
 	/**
-	 * Returns the scope associated with this {@link ScopeDeclaration}
+	 * Returns the scope associated with this {@link ScopeDeclaration}.
 	 */
 	public get scope(): KipperProgramContext | CompoundStatement {
-		return this._token.scope;
+		return this.semanticData.scope;
 	}
 
 	/**
 	 * Returns whether the variable declaration is defined and has a value set.
 	 */
 	public get isDefined(): boolean {
-		return this._token.isDefined;
+		return this.semanticData.isDefined;
 	}
 }
 
@@ -92,11 +103,19 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
  * @since 0.1.2
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
+	private readonly semanticData: FunctionDeclarationSemantics;
+
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
 		private _token: FunctionDeclaration,
 	) {
 		super();
+
+		if (_token.semanticData === undefined) {
+			throw new UnableToDetermineMetadataError();
+		} else {
+			this.semanticData = _token.semanticData;
+		}
 	}
 
 	/**
@@ -110,21 +129,21 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The identifier of this entry.
 	 */
 	public get identifier(): string {
-		return this._token.identifier;
+		return this.semanticData.identifier;
 	}
 
 	/**
 	 * The function return type.
 	 */
 	public get returnType(): KipperType {
-		return this._token.returnType;
+		return this.semanticData.returnType;
 	}
 
 	/**
 	 * The storage type of this scope entry.
 	 */
 	public get args(): Array<ParameterDeclaration> {
-		return this._token.args;
+		return this.semanticData.args;
 	}
 
 	/**
@@ -132,6 +151,6 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @since 0.3.0
 	 */
 	public get isDefined(): boolean {
-		return this._token.isDefined;
+		return this.semanticData.isDefined;
 	}
 }
