@@ -1,0 +1,45 @@
+name-template: 'Development Release v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+tag-prefix: 'v'
+categories:
+  - title: 'New Features'
+    labels:
+      - 'Feature'
+  - title: 'Bug Fixes'
+    labels:
+      - 'Fix'
+  - title: 'Maintenance'
+    labels:
+      - 'Maintenance'
+  - title: 'Dependency Updates'
+    label: 
+      - 'Dependencies'    
+    collapse-after: 4  
+version-resolver:
+  major:
+    labels:
+      - 'Breaking Change'
+  minor:
+    labels:
+      - 'Feature'
+  patch:
+    labels:
+      - 'Bug'
+      - 'Maintenance'
+      - 'Documentation'
+      - 'Dependencies'
+      - 'Fix'      
+template: |
+  # {INSERT_NAME} Update
+  ## $RESOLVED_VERSION - {DATE}
+
+  $CHANGES
+  
+  ## Full Changelog
+  
+  **CHANGELOG.md**: https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md
+  **Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
+  
+exclude-labels:
+  - 'Skip Changelog'
+  
