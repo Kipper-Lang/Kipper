@@ -126,9 +126,20 @@ export abstract class Expression extends CompilableParseToken {
 	 */
 	protected override readonly _antlrCtx: antlrExpressionCtxType;
 
+	protected override _children: Array<Expression>;
+
 	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
+		this._children = [];
+	}
+
+	public get children(): Array<Expression> {
+		return this._children;
+	}
+
+	public addNewChild(newChild: Expression) {
+		this._children.push(newChild);
 	}
 
 	/**

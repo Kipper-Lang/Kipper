@@ -104,10 +104,12 @@ export abstract class CompilableParseToken {
 	}
 
 	/**
-	 * Adds new child to this class. Must be in proper order, so that it can be properly compiled.
-	 * This will also automatically set the parent of the class to this instance.
+	 * Adds new child ctx item to this expression. The child item should be in the order that they appeared in the
+	 * {@link this.antlrCtx} parse tree.
+	 *
+	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @example
-	 *  let newExpression = new Expression(ctx, this.fileCtx);
+	 *  let newExpression = new Expression(ctx, fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
 	public addNewChild(newChild: eligibleChildToken) {
