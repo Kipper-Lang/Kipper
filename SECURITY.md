@@ -6,12 +6,16 @@ Note that considering this is a work-in-progress project with no stable version 
 only the most recent versions will be supported, while older versions will not get updated,
 and must be migrated to newer versions to work continuously.
 
-Currently supported versions that will receive updates:
+### List of supported versions
+
+The following versions are supported and will get bug-fixes and security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.0.5   | :white_check_mark: |
-| < 0.0.5 | :x:                |
+| 0.3.0   | :white_check_mark: |
+| 0.2.x   | :x:                |
+| 0.1.x   | :x:                |
+| 0.0.x   | :x:                |
 
 ## Reporting a Vulnerability
 
