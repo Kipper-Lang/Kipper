@@ -1,7 +1,7 @@
 name: Feature Request
 description: File an enhancement proposal for the language, compiler or library.
 title: "[Feature] <title>"
-labels: [enhancement, question]
+labels: [Feature, Question]
 assignees: Luna-Klatzer
 body:
   - type: checkboxes
