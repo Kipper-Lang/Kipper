@@ -1,5 +1,12 @@
 import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext } from "antlr4ts";
+import {
+	CompilableParseToken,
+	CompoundStatement,
+	eligibleParentToken,
+	KipperProgramContext,
+	RootFileParseToken,
+} from "./compiler";
 
 export namespace Utils {
 	/**
@@ -20,5 +27,23 @@ export namespace Utils {
 		// additional EOF at the end that we do not want, and the fact arrays start at 0)
 		let end = antlrCtx.stop !== undefined ? antlrCtx.stop.stopIndex : inputStream.size - 2;
 		return inputStream.getText(new Interval(start, end));
+	}
+
+	/**
+	 * Determine the scope of the token.
+	 * @param ctx The token ctx.
+	 */
+	export function determineScope(ctx: CompilableParseToken<any>): KipperProgramContext | CompoundStatement {
+		// Determine type by going up the parent structure, until a compound statement is hit or the root file parse
+		// token, which represents the entire programCtx.
+		let parent: eligibleParentToken = ctx.parent;
+		while (!(parent instanceof RootFileParseToken) && !(parent instanceof CompoundStatement)) {
+			parent = parent.parent;
+		}
+
+		if (parent instanceof RootFileParseToken) {
+			return ctx.programCtx;
+		}
+		return parent;
 	}
 }

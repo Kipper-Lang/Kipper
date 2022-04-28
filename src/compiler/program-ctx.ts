@@ -24,9 +24,11 @@ import {
 	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
+	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	RootFileParseToken,
 	VariableDeclaration,
+	VariableDeclarationSemantics,
 } from "./tokens";
 import {
 	BuiltInOverwriteError,
@@ -36,6 +38,7 @@ import {
 	InvalidArgumentTypeError,
 	InvalidGlobalError,
 	KipperError,
+	UnableToDetermineMetadataError,
 	UnknownFunctionIdentifier,
 	UnknownTypeError,
 	UnknownVariableIdentifier,
@@ -54,7 +57,7 @@ export class CompileAssert {
 
 	private col: number | undefined;
 
-	private ctx: CompilableParseToken | undefined;
+	private ctx: CompilableParseToken<any> | undefined;
 
 	constructor(programCtx: KipperProgramContext) {
 		this.programCtx = programCtx;
@@ -67,7 +70,7 @@ export class CompileAssert {
 	 * @param ctx The token context.
 	 * @since 0.3.0
 	 */
-	public setTracebackData(line?: number, col?: number, ctx?: CompilableParseToken): void {
+	public setTracebackData(line?: number, col?: number, ctx?: CompilableParseToken<any>): void {
 		this.line = line;
 		this.col = col;
 		this.ctx = ctx;
@@ -194,8 +197,12 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 */
 	public argumentTypesMatch(arg: ParameterDeclaration, receivedType: KipperType): void {
-		if (arg.type !== receivedType) {
-			throw this.error(new InvalidArgumentTypeError(arg.identifier, arg.type, receivedType));
+		if (arg.semanticData === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+
+		if (arg.semanticData.type !== receivedType) {
+			throw this.error(new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType));
 		}
 	}
 
@@ -204,7 +211,7 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 * @todo Implement assignment checks
 	 */
-	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression): void {}
+	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression<any>): void {}
 
 	/**
 	 * Checks whether the passed type allows the arithmetic operation.
@@ -214,7 +221,11 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 * @todo Implement arithmetic checks
 	 */
-	private arithmeticExpressionValid(exp1: Expression, exp2: Expression, op: KipperArithmeticOperation): void {}
+	private arithmeticExpressionValid(
+		exp1: Expression<any>,
+		exp2: Expression<any>,
+		op: KipperArithmeticOperation,
+	): void {}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
@@ -343,7 +354,7 @@ export class KipperProgramContext {
 	 * @returns The default asserter that has the line and col arguments set as traceback info in case an exception
 	 * is encountered.
 	 */
-	public assert(ctx: CompilableParseToken | undefined): CompileAssert {
+	public assert(ctx: CompilableParseToken<any> | undefined): CompileAssert {
 		// Set the active traceback data on the item
 		this._assert.setTracebackData(ctx?.antlrCtx.start.line, ctx?.antlrCtx.start.charPositionInLine, ctx);
 		return this._assert;
@@ -574,17 +585,22 @@ export class KipperProgramContext {
 
 	/**
 	 * Adds a new declaration entry to the global scope.
+	 * @param token The token that should be added.
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDeclaration): void {
-		this.assert(token).builtInNotDefined(token.identifier);
+		if (token.semanticData === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+
+		this.assert(token).builtInNotDefined(token.semanticData.identifier);
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
 		if (token instanceof VariableDeclaration) {
-			this.assert(token).functionIdentifierNotUsed(token.identifier);
-			this.assert(token).variableIdentifierNotDefined(token.identifier);
+			this.assert(token).functionIdentifierNotUsed(token.semanticData.identifier);
+			this.assert(token).variableIdentifierNotDefined(token.semanticData.identifier);
 		} else {
-			this.assert(token).variableIdentifierNotUsed(token.identifier);
-			this.assert(token).functionIdentifierNotDefined(token.identifier);
+			this.assert(token).variableIdentifierNotUsed(token.semanticData.identifier);
+			this.assert(token).functionIdentifierNotDefined(token.semanticData.identifier);
 		}
 
 		this._globalScope = this._globalScope.concat(

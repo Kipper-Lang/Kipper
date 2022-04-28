@@ -502,7 +502,7 @@ FloatingSuffix
     ;
 
 CharacterConstant
-    :   '\'' CCharSequence '\''
+    :   '\'' CChar '\''
     ;
 
 fragment

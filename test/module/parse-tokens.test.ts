@@ -10,9 +10,9 @@ const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
 describe("Parse-Tokens", () => {
 	describe("CompilableParseToken", () => {
 		// Example class for testing purposes
-		class ExampleToken extends CompilableParseToken {
-			protected async semanticAnalysis(): Promise<void> { }
-			protected async translateCtxAndChildren(): Promise<Array<Array<string>>> { return []; }
+		class ExampleToken extends CompilableParseToken<{}> {
+			public async semanticAnalysis(): Promise<void> { }
+			public async translateCtxAndChildren(): Promise<Array<Array<string>>> { return []; }
 		}
 
 		describe("sourceCode", () => {

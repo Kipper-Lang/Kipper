@@ -64,7 +64,10 @@ export type antlrExpressionCtxType =
  * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  */
-export function getExpressionInstance(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken): Expression {
+export function getExpressionInstance(
+	antlrCtx: antlrExpressionCtxType,
+	parent: CompilableParseToken<any>,
+): Expression<any> {
 	if (antlrCtx instanceof NumberPrimaryExpressionContext) {
 		return new NumberPrimaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof CharacterPrimaryExpressionContext) {
@@ -118,7 +121,7 @@ export function getExpressionInstance(antlrCtx: antlrExpressionCtxType, parent: 
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export abstract class Expression extends CompilableParseToken {
+export abstract class Expression<Semantics> extends CompilableParseToken<Semantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -126,9 +129,20 @@ export abstract class Expression extends CompilableParseToken {
 	 */
 	protected override readonly _antlrCtx: antlrExpressionCtxType;
 
-	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken) {
+	protected override _children: Array<Expression<any>>;
+
+	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
+		this._children = [];
+	}
+
+	public get children(): Array<Expression<any>> {
+		return this._children;
+	}
+
+	public addNewChild(newChild: Expression<any>) {
+		this._children.push(newChild);
 	}
 
 	/**
@@ -136,7 +150,7 @@ export abstract class Expression extends CompilableParseToken {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected abstract translateCtxAndChildren(): Promise<Array<any>>;
+	public abstract translateCtxAndChildren(): Promise<Array<any>>;
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -146,24 +160,20 @@ export abstract class Expression extends CompilableParseToken {
 	}
 }
 
-export abstract class ConstantExpression extends Expression {
-	/**
-	 * The type of the constant expression.
-	 */
-	public readonly type: KipperType;
-
-	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken, type: KipperType) {
-		super(antlrCtx, parent);
-		this.type = type;
-	}
-}
+/**
+ * Abstract base class constant expression representing a constant expression. This type only exists to narrow down the
+ * generic type.
+ */
+export abstract class ConstantExpression<
+	Semantics extends { type: KipperType; value: any },
+> extends Expression<Semantics> {}
 
 /**
  * Integer constant expression class, which represents an integer constant in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class NumberPrimaryExpression extends ConstantExpression {
+export class NumberPrimaryExpression extends ConstantExpression<{ type: KipperType; value: number }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -171,22 +181,20 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	 */
 	protected override readonly _antlrCtx: NumberPrimaryExpressionContext;
 
-	public readonly value: number;
-
-	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrCtx, parent, "num" as KipperType);
+	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
-
-		// Setting the numeric value
-		this.value = +this.sourceCode;
 	}
 
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			value: +this.sourceCode,
+			type: "num",
+		};
 	}
 
 	/**
@@ -194,7 +202,7 @@ export class NumberPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -208,11 +216,10 @@ export class NumberPrimaryExpression extends ConstantExpression {
 }
 
 /**
- *  Character constant expression class, which represents an integer constant in the Kipper language and is
- * compilable using {@link translateCtxAndChildren}.
+ * Character constant expression class, which represents an integer constant in the Kipper language.
  * @since 0.1.0
  */
-export class CharacterPrimaryExpression extends ConstantExpression {
+export class CharacterPrimaryExpression extends ConstantExpression<{ type: KipperType; value: string }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -220,27 +227,20 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 */
 	protected override readonly _antlrCtx: CharacterPrimaryExpressionContext;
 
-	/**
-	 * The value of this character expression
-	 */
-	public readonly value: string;
-
-	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrCtx, parent, "char" as KipperType);
+	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
-
-		// Setting the character value
-		this.value = this.sourceCode.slice(1, this.sourceCode.length - 1);
-
-		// TODO! Add check for length, which forbids empty characters and multi-characters!
 	}
 
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
+			type: "char",
+		};
 	}
 
 	/**
@@ -248,7 +248,7 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -262,11 +262,10 @@ export class CharacterPrimaryExpression extends ConstantExpression {
 }
 
 /**
- *  List constant expression class, which represents a list constant in the Kipper language and is
- * compilable using {@link translateCtxAndChildren}.
+ *  List constant expression class, which represents a list constant in the Kipper language.
  * @since 0.1.0
  */
-export class ListPrimaryExpression extends ConstantExpression {
+export class ListPrimaryExpression extends ConstantExpression<{ type: KipperType; value: Array<Expression<any>> }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -274,8 +273,8 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 */
 	protected override readonly _antlrCtx: ListPrimaryExpressionContext;
 
-	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrCtx, parent, "list" as KipperType);
+	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
 
@@ -283,8 +282,11 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			type: "list",
+			value: [], // TODO! Implement list data fetching.
+		};
 	}
 
 	/**
@@ -292,7 +294,7 @@ export class ListPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -310,7 +312,7 @@ export class ListPrimaryExpression extends ConstantExpression {
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class StringPrimaryExpression extends ConstantExpression {
+export class StringPrimaryExpression extends ConstantExpression<{ type: KipperType; value: string }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -318,25 +320,20 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 */
 	protected override readonly _antlrCtx: StringPrimaryExpressionContext;
 
-	/**
-	 * String content of this expression.
-	 */
-	public readonly stringContent: string;
-
-	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken) {
-		super(antlrCtx, parent, "str" as KipperType);
+	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
-
-		// Get string content for the f-string. Removing start and end character
-		this.stringContent = this.sourceCode.slice(1, this.sourceCode.length - 1);
 	}
 
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			type: "str",
+			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
+		};
 	}
 
 	/**
@@ -344,8 +341,10 @@ export class StringPrimaryExpression extends ConstantExpression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
-		return [`"${this.stringContent}"`];
+	public async translateCtxAndChildren(): Promise<Array<string>> {
+		this.semanticData = this.ensureSemanticDataExists();
+
+		return [`"${this.semanticData.value}"`];
 	}
 
 	/**
@@ -361,7 +360,7 @@ export class StringPrimaryExpression extends ConstantExpression {
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class IdentifierPrimaryExpression extends Expression {
+export class IdentifierPrimaryExpression extends Expression<{ identifier: string }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -369,25 +368,19 @@ export class IdentifierPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: IdentifierPrimaryExpressionContext;
 
-	/**
-	 * The identifier of this expression.
-	 */
-	public readonly identifierValue: string;
-
-	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
-
-		// Fetching the identifier
-		this.identifierValue = this.sourceCode;
 	}
 
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			identifier: this.sourceCode,
+		};
 	}
 
 	/**
@@ -395,8 +388,10 @@ export class IdentifierPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
-		return [this.identifierValue];
+	public async translateCtxAndChildren(): Promise<Array<string>> {
+		this.semanticData = this.ensureSemanticDataExists();
+
+		return [this.semanticData.identifier];
 	}
 
 	/**
@@ -412,7 +407,7 @@ export class IdentifierPrimaryExpression extends Expression {
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class FStringPrimaryExpression extends Expression {
+export class FStringPrimaryExpression extends Expression<{ items: Array<string | Expression<any>> }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -422,7 +417,7 @@ export class FStringPrimaryExpression extends Expression {
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -431,8 +426,10 @@ export class FStringPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
-		// TODO!
+	public async semanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
+		};
 	}
 
 	/**
@@ -440,7 +437,7 @@ export class FStringPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -458,7 +455,7 @@ export class FStringPrimaryExpression extends Expression {
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class TangledPrimaryExpression extends Expression {
+export class TangledPrimaryExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -466,7 +463,7 @@ export class TangledPrimaryExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: TangledPrimaryExpressionContext;
 
-	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -475,7 +472,7 @@ export class TangledPrimaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -484,11 +481,11 @@ export class TangledPrimaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO! Add tests for this
 		let genCode: Array<string> = [];
 		for (let child of this._children) {
-			genCode = genCode.concat(await child.compileCtx());
+			genCode = genCode.concat(await child.translateCtxAndChildren());
 		}
 		return genCode;
 	}
@@ -508,7 +505,7 @@ export class TangledPrimaryExpression extends Expression {
  * val++
  * val--
  */
-export class IncrementOrDecrementExpression extends Expression {
+export class IncrementOrDecrementExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -516,7 +513,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -525,7 +522,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -534,7 +531,7 @@ export class IncrementOrDecrementExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -553,7 +550,7 @@ export class IncrementOrDecrementExpression extends Expression {
  * @example
  * array[0]
  */
-export class ArraySpecifierExpression extends Expression {
+export class ArraySpecifierExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -561,7 +558,7 @@ export class ArraySpecifierExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -570,7 +567,7 @@ export class ArraySpecifierExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -579,7 +576,7 @@ export class ArraySpecifierExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -599,7 +596,7 @@ export class ArraySpecifierExpression extends Expression {
  * @example
  * call print("Hello world!")
  */
-export class FunctionCallPostfixExpression extends Expression {
+export class FunctionCallPostfixExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -609,7 +606,7 @@ export class FunctionCallPostfixExpression extends Expression {
 
 	private readonly identifier: string;
 
-	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 
@@ -641,7 +638,7 @@ export class FunctionCallPostfixExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// Assert that the function exists
 		this.programCtx.assert(this).functionIsDefined(this.identifier);
 	}
@@ -651,7 +648,7 @@ export class FunctionCallPostfixExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// Get the function
 		const func = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(this.identifier);
 
@@ -664,7 +661,7 @@ export class FunctionCallPostfixExpression extends Expression {
 		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
 
 		// Compile the arguments
-		const args: Array<string> = argListCtx ? await argListCtx.compileCtx() : [];
+		const args: Array<string> = argListCtx ? await argListCtx.translateCtxAndChildren() : [];
 
 		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];
@@ -684,7 +681,7 @@ export class FunctionCallPostfixExpression extends Expression {
  * @example
  * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
  */
-export class ArgumentExpressionList extends Expression {
+export class ArgumentExpressionList extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -692,7 +689,7 @@ export class ArgumentExpressionList extends Expression {
 	 */
 	protected override readonly _antlrCtx: ArgumentExpressionListContext;
 
-	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -701,7 +698,7 @@ export class ArgumentExpressionList extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -710,24 +707,23 @@ export class ArgumentExpressionList extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		let genCode: Array<string> = [];
 		for (let child of this.children) {
-			genCode = [...genCode, ...(await child.compileCtx())];
+			genCode = [...genCode, ...(await child.translateCtxAndChildren())];
 		}
 		return genCode;
 	}
 }
 
 /**
- * Increment or decrement expression class, which represents an -- or ++ expression in the Kipper language and is
- * compilable using {@link translateCtxAndChildren}.
+ * Increment or decrement expression class, which represents an -- or ++ expression in the Kipper language.
  * @since 0.1.0
  * @example
  * ++4 // 5
  * --61 // 60
  */
-export class IncrementOrDecrementUnaryExpression extends Expression {
+export class IncrementOrDecrementUnaryExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -735,7 +731,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -744,7 +740,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -753,7 +749,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -774,7 +770,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression {
  * -41 // -41
  * +59 // 59
  */
-export class OperatorModifiedUnaryExpression extends Expression {
+export class OperatorModifiedUnaryExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -782,7 +778,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -798,7 +794,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -807,7 +803,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -821,7 +817,7 @@ export class OperatorModifiedUnaryExpression extends Expression {
  * "4" as num // 4
  * 39 as str // "39"
  */
-export class CastOrConvertExpression extends Expression {
+export class CastOrConvertExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -829,7 +825,7 @@ export class CastOrConvertExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: CastOrConvertExpressionContext;
 
-	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -838,7 +834,7 @@ export class CastOrConvertExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -847,7 +843,7 @@ export class CastOrConvertExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -861,8 +857,7 @@ export class CastOrConvertExpression extends Expression {
 }
 
 /**
- * Multiplicative expression class, which represents a multiplicative expression in the Kipper language and is
- * compilable using {@link translateCtxAndChildren}.
+ * Multiplicative expression class, which represents a multiplicative expression in the Kipper language.
  * @since 0.1.0
  * @example
  * 16 * 6 // 96
@@ -870,7 +865,7 @@ export class CastOrConvertExpression extends Expression {
  * 96 % 15 // 6
  * 2 ** 8 // 256
  */
-export class MultiplicativeExpression extends Expression {
+export class MultiplicativeExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -878,7 +873,7 @@ export class MultiplicativeExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: MultiplicativeExpressionContext;
 
-	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -887,7 +882,7 @@ export class MultiplicativeExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -896,7 +891,7 @@ export class MultiplicativeExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -917,7 +912,7 @@ export class MultiplicativeExpression extends Expression {
  * 4 + 4 // 8
  * 9 - 3 // 6
  */
-export class AdditiveExpression extends Expression {
+export class AdditiveExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -925,7 +920,7 @@ export class AdditiveExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: AdditiveExpressionContext;
 
-	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -934,7 +929,7 @@ export class AdditiveExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -943,7 +938,7 @@ export class AdditiveExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -972,7 +967,7 @@ export class AdditiveExpression extends Expression {
  * 77 <= 77 // true
  * 36 <= 12 // false
  */
-export class RelationalExpression extends Expression {
+export class RelationalExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -980,7 +975,7 @@ export class RelationalExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: RelationalExpressionContext;
 
-	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -989,7 +984,7 @@ export class RelationalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -998,7 +993,7 @@ export class RelationalExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -1021,7 +1016,7 @@ export class RelationalExpression extends Expression {
  * 32 != 9 // true
  * 59 != 59 // false
  */
-export class EqualityExpression extends Expression {
+export class EqualityExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1029,7 +1024,7 @@ export class EqualityExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: EqualityExpressionContext;
 
-	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -1038,7 +1033,7 @@ export class EqualityExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -1047,7 +1042,7 @@ export class EqualityExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -1070,7 +1065,7 @@ export class EqualityExpression extends Expression {
  * false && true // false
  * true && true // true
  */
-export class LogicalAndExpression extends Expression {
+export class LogicalAndExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1078,7 +1073,7 @@ export class LogicalAndExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: LogicalAndExpressionContext;
 
-	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -1087,7 +1082,7 @@ export class LogicalAndExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -1096,7 +1091,7 @@ export class LogicalAndExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -1119,7 +1114,7 @@ export class LogicalAndExpression extends Expression {
  * false || true // true
  * true || true // true
  */
-export class LogicalOrExpression extends Expression {
+export class LogicalOrExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1127,7 +1122,7 @@ export class LogicalOrExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: LogicalOrExpressionContext;
 
-	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -1136,7 +1131,7 @@ export class LogicalOrExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -1145,7 +1140,7 @@ export class LogicalOrExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -1166,7 +1161,7 @@ export class LogicalOrExpression extends Expression {
  * true ? 3 : 4; // 3
  * false ? 3 : 4; // 4
  */
-export class ConditionalExpression extends Expression {
+export class ConditionalExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1174,7 +1169,7 @@ export class ConditionalExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: ConditionalExpressionContext;
 
-	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -1183,7 +1178,7 @@ export class ConditionalExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -1192,7 +1187,7 @@ export class ConditionalExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}
@@ -1212,7 +1207,7 @@ export class ConditionalExpression extends Expression {
  * @example
  * x = 4
  */
-export class AssignmentExpression extends Expression {
+export class AssignmentExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1220,7 +1215,7 @@ export class AssignmentExpression extends Expression {
 	 */
 	protected override readonly _antlrCtx: AssignmentExpressionContext;
 
-	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken) {
+	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 	}
@@ -1229,7 +1224,7 @@ export class AssignmentExpression extends Expression {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	protected async semanticAnalysis(): Promise<void> {
+	public async semanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -1238,7 +1233,7 @@ export class AssignmentExpression extends Expression {
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	protected async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<Array<string>> {
 		// TODO!
 		return [];
 	}

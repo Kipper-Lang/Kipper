@@ -112,29 +112,22 @@ export class KipperFileListener implements KipperListener {
 	private _isFunctionDefinition: boolean;
 
 	/**
-	 * The current scope that new variables should be assigned to.
-	 * @private
-	 */
-	private _currentScope: KipperProgramContext | CompoundStatement;
-
-	/**
 	 * The correct Kipper token that is being walked through right now. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and convert the context items that were walked
 	 * through during this operation.
 	 */
-	private _currentPrimaryToken: CompilableParseToken | undefined;
+	private _currentPrimaryToken: CompilableParseToken<any> | undefined;
 
 	/**
 	 * The current expression that is being walked through. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and convert the context items that were walked
 	 * through during this operation.
 	 */
-	private _currentExpression: Expression | undefined;
+	private _currentExpression: Expression<any> | undefined;
 
 	constructor(programCtx: KipperProgramContext) {
 		this._kipperParseTree = new RootFileParseToken(programCtx);
 		this._programCtx = programCtx;
-		this._currentScope = programCtx;
 		this._isExternalItem = false;
 		this._isFunctionDefinition = false;
 		this._currentPrimaryToken = undefined;
@@ -161,7 +154,7 @@ export class KipperFileListener implements KipperListener {
 	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryToken}.
 	 * @private
 	 */
-	private get getCurrentProcessedToken(): CompilableParseToken | RootFileParseToken {
+	private get getCurrentProcessedToken(): CompilableParseToken<any> | RootFileParseToken {
 		if (this._currentExpression !== undefined) {
 			return this._currentExpression;
 		} else if (this._currentPrimaryToken !== undefined) {
@@ -220,13 +213,7 @@ export class KipperFileListener implements KipperListener {
 	 * @private
 	 */
 	private handleIncomingStatementCtx(ctx: antlrStatementCtxType) {
-		this._currentPrimaryToken = getStatementInstance(ctx, this.getCurrentProcessedToken, this._currentScope);
-
-		// If the new primary token is of type {@link CompoundStatement}, then make this new compound statement the new
-		// currently processed scope.
-		if (this._currentPrimaryToken instanceof CompoundStatement) {
-			this._currentScope = this._currentPrimaryToken;
-		}
+		this._currentPrimaryToken = getStatementInstance(ctx, this.getCurrentProcessedToken);
 	}
 
 	/**
@@ -240,7 +227,7 @@ export class KipperFileListener implements KipperListener {
 	 * @private
 	 */
 	private handleIncomingDefinitionCtx(ctx: antlrDefinitionCtxType) {
-		this._currentPrimaryToken = getDefinitionInstance(ctx, this.getCurrentProcessedToken, this._currentScope);
+		this._currentPrimaryToken = getDefinitionInstance(ctx, this.getCurrentProcessedToken);
 	}
 
 	/**
@@ -257,11 +244,6 @@ export class KipperFileListener implements KipperListener {
 			this._currentPrimaryToken?.parent instanceof Declaration ||
 			this._currentPrimaryToken?.parent instanceof Statement
 		) {
-			// Reset the current scope
-			if (this._currentPrimaryToken instanceof CompoundStatement) {
-				this._currentScope = this._currentPrimaryToken.scope;
-			}
-
 			this._currentPrimaryToken = this._currentPrimaryToken.parent;
 		} else {
 			this._currentPrimaryToken = undefined;
