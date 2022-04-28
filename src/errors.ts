@@ -62,10 +62,10 @@ export class KipperError extends Error {
  * @since 0.3.0
  */
 export class InternalKipperError extends Error {
-  constructor(msg: string) {
-    super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
-    this.name = this.constructor.name;
-  }
+	constructor(msg: string) {
+		super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
+		this.name = this.constructor.name;
+	}
 }
 
 /**
