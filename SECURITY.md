@@ -17,6 +17,13 @@ The following versions are supported and will get bug-fixes and security updates
 | 0.1.x   | :x:                |
 | 0.0.x   | :x:                |
 
+### NPM Deprecation
+
+If a version gets deprecated/loses support, it will be deprecated as well on the NPM registry. 
+This means the version will be marked as outdated and NPM will provide a deprecation warning to everyone who attempts to install it.
+
+View a list of all available NPM versions [here](https://www.npmjs.com/package/@kipper/base/).
+
 ## Reporting a Vulnerability
 
 Reporting a vulnerability or issue can be done under the [issues page](https://github.com/Luna-Klatzer/Kipper/issues/new/choose). 
