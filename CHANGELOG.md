@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-### Updated
+### Changed
 - Fixed missing line of origin issue ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
 
 ### Removed
@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented abstract classes to differentiate error groups: `InvalidOverwriteError` and `IdentifierError`.
 - `KipperInternalError`, which is raised in case there is an internal error/bug.
 
-### Updated
+### Changed
 - Renamed definition errors:
   - `DuplicateVariableDefinitionError` to `IdentifierAlreadyUsedByVariableError`
   - `DuplicateFunctionDefinitionError` to `IdentifierAlreadyUsedByFunctionError`
@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with equal or higher importance will be logged).
 - Added class name insertion for custom Kipper errors by setting the `name` property explicitly.
 
-### Updated
+### Changed
 - Changed execution of most compilation functions to async. 
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
 - Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
@@ -98,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
 - Implemented support for function definitions that will be from now on automatically registered globally.
 
-### Updated
+### Changed
 - Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token 
   (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
   and state).
