@@ -44,7 +44,8 @@
   },
   "keywords": [
     "language",
-    "compiler"
+    "compiler",
+    "backend"
   ],
   "files": [
     "lib",
