@@ -304,7 +304,7 @@ describe("KipperCompiler", () => {
       it("VariableDefinitionAlreadyExistsError", async () => {
         try {
           const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var x: num = 4; \nvar x: num = 5;")
+            new KipperParseStream("var x: num = 4; \n    var x: num = 5;")
           );
           await programCtx.compileProgram();
         } catch (e) {

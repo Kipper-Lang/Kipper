@@ -47,12 +47,14 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
+    const tokenSrc = this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined;
 		return (
 			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "Unknown"}, ` +
-			`col ${this.tracebackData.location ? this.tracebackData.location.col : "Unknown"}:` +
-			`    ${this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : ""}` +
-			`\n${this.name}: ${this.message}`
+			`col ${this.tracebackData.location ? this.tracebackData.location.col : "Unknown"}:\n` +
+			`    ${tokenSrc ? tokenSrc + '\n' : ""}` +
+      `    ${tokenSrc ? "^".repeat(tokenSrc.length) + '\n' : ""}` +
+			`${this.name}: ${this.message}`
 		);
 	}
 }
@@ -252,7 +254,7 @@ export abstract class InvalidOverwriteError extends KipperError {
  */
 export class FunctionDefinitionAlreadyExistsError extends InvalidOverwriteError {
 	constructor(identifier: string) {
-		super(`Definition of function '${identifier}' already exists. May not overwrite existing definitions.`);
+		super(`Definition of function '${identifier}' already exists.`);
 	}
 }
 
@@ -262,7 +264,7 @@ export class FunctionDefinitionAlreadyExistsError extends InvalidOverwriteError 
  */
 export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError {
 	constructor(identifier: string) {
-		super(`Definition of variable '${identifier}' already exists. May not overwrite existing definitions.`);
+		super(`Definition of variable '${identifier}' already exists.`);
 	}
 }
 

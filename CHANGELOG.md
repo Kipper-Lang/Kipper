@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Updated
+- Fixed missing line of origin issue ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
 
 ### Removed
 
