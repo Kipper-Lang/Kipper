@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   definition rules are violated.
 - Project version information constants in `index.ts`.
 - Implemented abstract classes to differentiate error groups: `InvalidOverwriteError` and `IdentifierError`.
+- `KipperInternalError`, which is raised in case there is an internal error/bug.
 
 ### Updated
 - Renamed definition errors:
