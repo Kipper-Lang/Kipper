@@ -24,11 +24,9 @@ import {
 	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
-	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	RootFileParseToken,
 	VariableDeclaration,
-	VariableDeclarationSemantics,
 } from "./tokens";
 import {
 	BuiltInOverwriteError,
@@ -65,12 +63,12 @@ export class CompileAssert {
 
 	/**
 	 * Sets the traceback related line and column info.
+   * @param ctx The token context.
 	 * @param line The line that is being processed at the moment.
 	 * @param col The column that is being processed at the moment.
-	 * @param ctx The token context.
 	 * @since 0.3.0
 	 */
-	public setTracebackData(line?: number, col?: number, ctx?: CompilableParseToken<any>): void {
+	public setTracebackData(ctx?: CompilableParseToken<any>, line?: number, col?: number): void {
 		this.line = line;
 		this.col = col;
 		this.ctx = ctx;
@@ -82,6 +80,7 @@ export class CompileAssert {
 	 */
 	public error(error: KipperError): KipperError {
 		error.setMetadata({ location: { line: this.line ?? 1, col: this.col ?? 1 }, filePath: this.programCtx.filePath });
+    error.antlrCtx = this.ctx?.antlrCtx;
 		return error;
 	}
 
@@ -356,7 +355,7 @@ export class KipperProgramContext {
 	 */
 	public assert(ctx: CompilableParseToken<any> | undefined): CompileAssert {
 		// Set the active traceback data on the item
-		this._assert.setTracebackData(ctx?.antlrCtx.start.line, ctx?.antlrCtx.start.charPositionInLine, ctx);
+		this._assert.setTracebackData(ctx, ctx?.antlrCtx.start.line, ctx?.antlrCtx.start.charPositionInLine);
 		return this._assert;
 	}
 
