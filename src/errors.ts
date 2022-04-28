@@ -12,7 +12,7 @@ import { Recognizer } from "antlr4ts/Recognizer";
 import { Utils } from "./utils";
 
 /**
- * The base error for the Kipper module
+ * The base error for the Kipper module.
  */
 export class KipperError extends Error {
 	public tracebackData: {
@@ -55,6 +55,17 @@ export class KipperError extends Error {
 			`\n${this.name}: ${this.message}`
 		);
 	}
+}
+
+/**
+ * Internal error for Kipper.
+ * @since 0.3.0
+ */
+export class InternalKipperError extends Error {
+  constructor(msg: string) {
+    super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
+    this.name = this.constructor.name;
+  }
 }
 
 /**
@@ -300,7 +311,7 @@ export class BuiltInOverwriteError extends KipperError {
  * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances or a
  * compilation is started without the required semantic data.
  */
-export class UnableToDetermineMetadataError extends KipperError {
+export class UnableToDetermineMetadataError extends InternalKipperError {
 	constructor() {
 		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
 	}
