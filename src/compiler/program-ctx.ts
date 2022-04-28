@@ -63,7 +63,7 @@ export class CompileAssert {
 
 	/**
 	 * Sets the traceback related line and column info.
-   * @param ctx The token context.
+	 * @param ctx The token context.
 	 * @param line The line that is being processed at the moment.
 	 * @param col The column that is being processed at the moment.
 	 * @since 0.3.0
@@ -80,7 +80,7 @@ export class CompileAssert {
 	 */
 	public error(error: KipperError): KipperError {
 		error.setMetadata({ location: { line: this.line ?? 1, col: this.col ?? 1 }, filePath: this.programCtx.filePath });
-    error.antlrCtx = this.ctx?.antlrCtx;
+		error.antlrCtx = this.ctx?.antlrCtx;
 		return error;
 	}
 

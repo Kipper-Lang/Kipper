@@ -47,13 +47,13 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
-    const tokenSrc = this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined;
+		const tokenSrc = this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined;
 		return (
 			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "Unknown"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "Unknown"}:\n` +
-			`    ${tokenSrc ? tokenSrc + '\n' : ""}` +
-      `    ${tokenSrc ? "^".repeat(tokenSrc.length) + '\n' : ""}` +
+			`    ${tokenSrc ? tokenSrc + "\n" : ""}` +
+			`    ${tokenSrc ? "^".repeat(tokenSrc.length) + "\n" : ""}` +
 			`${this.name}: ${this.message}`
 		);
 	}
