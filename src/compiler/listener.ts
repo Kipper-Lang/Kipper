@@ -64,7 +64,6 @@ import {
 	antlrExpressionCtxType,
 	antlrStatementCtxType,
 	CompilableParseToken,
-	CompoundStatement,
 	Declaration,
 	Expression,
 	getDefinitionInstance,

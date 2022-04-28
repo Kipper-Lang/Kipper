@@ -24,11 +24,9 @@ import {
 	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
-	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	RootFileParseToken,
 	VariableDeclaration,
-	VariableDeclarationSemantics,
 } from "./tokens";
 import {
 	BuiltInOverwriteError,
