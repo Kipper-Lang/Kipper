@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken, eligibleParentToken, RootFileParseToken, SemanticData } from "./parse-token";
+import { CompilableParseToken, eligibleParentToken, SemanticData } from "./parse-token";
 import {
 	CompoundStatementContext,
 	DeclarationContext,

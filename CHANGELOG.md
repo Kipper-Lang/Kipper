@@ -5,15 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [vUnreleased]
+## [Unreleased]
 
 ### Added
 
-### Updated
+### Changed
+- Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
 
 ### Removed
 
-## [v0.3.0] - 2022-04-28
+## [0.3.0] - 2022-04-28
 
 ### Added
 - Implemented handling of declarations and definitions, where definitions can only appear once. (
@@ -26,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented abstract classes to differentiate error groups: `InvalidOverwriteError` and `IdentifierError`.
 - `KipperInternalError`, which is raised in case there is an internal error/bug.
 
-### Updated
+### Changed
 - Renamed definition errors:
   - `DuplicateVariableDefinitionError` to `IdentifierAlreadyUsedByVariableError`
   - `DuplicateFunctionDefinitionError` to `IdentifierAlreadyUsedByFunctionError`
@@ -47,12 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unneeded private tracking of `_currentScope` in `KipperFileListener`, as the scope handling system has been replaced
   with a dynamic determination using `semanticAnalysis()`.
 
-## [v0.2.1] - 2022-04-22
+## [0.2.1] - 2022-04-22
 
 ### Added
 - Updated kipper-standalone global identifier behaviour and added support for WebWorkers.
 
-## [v0.2.0] - 2022-04-13
+## [0.2.0] - 2022-04-13
 
 ### Added
 - Created new class `CompileAssert`, which is used to assert certain compiler-required truths, which, if false, trigger
@@ -66,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with equal or higher importance will be logged).
 - Added class name insertion for custom Kipper errors by setting the `name` property explicitly.
 
-### Updated
+### Changed
 - Changed execution of most compilation functions to async. 
 - Replaced `DuplicateIdentifierError` with `DuplicateVariableDefinitionError` and `DuplicateFunctionDefinitionError`.
 - Renamed `NoBuiltInOverwriteError` to `BuiltInOverwriteError`.
@@ -84,7 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Functions `RootParseToken.semanticAnalysis()` and `RootParseToken.translateCtxAndChildren`
 
-## [v0.1.2] - 2022-04-06
+## [0.1.2] - 2022-04-06
 
 ### Added
 - Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking variable
@@ -97,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented `KipperProgramContext.globalScope`, which contains all global variables and function definitions.
 - Implemented support for function definitions that will be from now on automatically registered globally.
 
-### Updated
+### Changed
 - Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token 
   (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope 
   and state).
@@ -106,12 +107,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `CompoundStatement` children behaviour, by adding a new array `localScope`, which will store the metadata
   for all variables exclusively available in that compound statement.
 
-## [v0.1.1] - 2022-04-01
+## [0.1.1] - 2022-04-01
 
 ### Added
 - Added missing dependency `tslib`
 
-## [v0.1.0] - 2022-04-01
+## [0.1.0] - 2022-04-01
 
 ### Added
 - `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
@@ -162,16 +163,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This also means that errors will always be logged *and* thrown as a catchable error instance.
 - Argument `streamName` in `KipperCompiler.syntaxAnalyse()` and `KipperCompiler.compile()`. 
 
-## [v0.0.5] - 2022-03-02
+## [0.0.5] - 2022-03-02
 
 ### Changed
 - Fixed invalid publish of the module on npm
 
-## [v0.0.4] - 2022-03-02
+## [0.0.4] - 2022-03-02
 
 **Broken version!**
 
-## [v0.0.3] - 2022-03-02
+## [0.0.3] - 2022-03-02
 
 ### Added
 - Build Option for the browser-compatible script `kipper-standalone.js`
@@ -197,7 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   inside a browser.
 - `KipperParseFile`, which will be implemented in the NodeJS CLI implementation for Kipper
 
-## [v0.0.2] - 2021-11-23
+## [0.0.2] - 2021-11-23
 
 ### Added
 - `oclif` environment with the appropriate tests
@@ -209,13 +210,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
 [unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.3.0...HEAD
-[v0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
-[v0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1
-[v0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0
-[v0.1.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.1...v0.1.2
-[v0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
-[v0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
-[v0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
-[v0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
-[v0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.2...v0.0.3
-[v0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/v0.0.2
+[0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0
+[0.1.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
+[0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
+[0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
+[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/v0.0.2
