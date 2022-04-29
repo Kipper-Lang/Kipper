@@ -37,7 +37,7 @@ template: |
   
   ## Full Changelog
   
-  **CHANGELOG.md**: https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md
+  **Developer Changelog**: https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
   
 exclude-labels:
