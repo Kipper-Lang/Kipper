@@ -1,0 +1,30 @@
+name: PR Format
+title: "<title>"
+labels: [Development, Question]
+assignees: Luna-Klatzer
+body:
+
+- type: textarea
+  attributes:
+    label: Summary
+    description: Explain the reason for this pr, changes and solution briefly.
+- type: textarea
+  attributes:
+    label: Changes
+    description: Please explain the changes in this PR and what they do.
+- type: textarea
+  attributes:
+    label: Changes
+    description: Please explain the changes in this PR and what they do. If this fixes an issue, explain what fixed the issue.
+- type: textarea
+  attributes:
+    label: Does this PR create new warnings?
+    description: Add any new warnings or possible issues that could occur with this PR.
+- type: textarea
+  attributes:
+    label: Changelog
+    description: Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added).
+    value: |
+      ### Added
+      ### Changed
+      ### Removed
