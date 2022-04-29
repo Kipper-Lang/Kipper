@@ -1,5 +1,5 @@
 name: Bug Report
-description: File a bug/issue for the core language.
+description: File a bug/issue for the core language
 title: "[Bug] <title>"
 labels: [Bug, Question]
 assignees: Luna-Klatzer
