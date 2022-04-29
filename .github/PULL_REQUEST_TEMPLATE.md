@@ -1,19 +1,14 @@
 ## What type of change does this PR perform?
 
-<!-- Add an x in the checkbox to mark it. -->
+<!-- Add an x in the checkbox to mark it. Remove any non-checked option -->
 
+- [ ] Requires a documentation update
 - [ ] Maintenance Change (Non-breaking change that updates dependencies or updated other text files)
 - [ ] Bug fix (Non-breaking change which fixes an issue)
 - [ ] New feature (Non-breaking change which adds functionality)
 - [ ] Breaking change (Fix or feature that would cause existing functionality to not work as expected.)
 
 <!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
-
-## Does this PR require a documentation change?
-
-<!-- Add an x in the checkbox to mark it. -->
-
-- [ ] Requires a documentation update
 
 ## Summary
 <!-- Explain the reason for this pr, changes and solution briefly. -->
