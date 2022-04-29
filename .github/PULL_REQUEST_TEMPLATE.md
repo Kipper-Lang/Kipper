@@ -46,7 +46,7 @@ Fixes # (issue) <!-- Remove this if this is not a bug fix isse -->
 ### Changed
 ### Removed
 
-<-- Remove any header with no item. -->
+<!-- Remove any header with no item. -->
 
 ## Linked other issues or PRs
 <!-- Include other issues and PRs that are related to this if any exist. -->
