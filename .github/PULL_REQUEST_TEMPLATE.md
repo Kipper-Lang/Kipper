@@ -2,7 +2,7 @@
 
 <!-- Add an x in the checkbox to mark it. -->
 
-- [ ] Maintainence Change (Non-breaking change that updates dependencies or updated other text files)
+- [ ] Maintenance Change (Non-breaking change that updates dependencies or updated other text files)
 - [ ] Bug fix (Non-breaking change which fixes an issue)
 - [ ] New feature (Non-breaking change which adds functionality)
 - [ ] Breaking change (Fix or feature that would cause existing functionality to not work as expected.)
