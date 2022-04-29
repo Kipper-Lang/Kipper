@@ -1,25 +1,57 @@
-## Does this PR contain a breaking change?
+## What type of change does this PR perform?
 
-- [ ] This code will break backwards compatibility
+<!-- Add an x in the checkbox to mark it. -->
 
-## Does this PR fix a bug
+- [ ] Maintainence Change (Non-breaking change that updates dependencies or updated other text files)
+- [ ] Bug fix (Non-breaking change which fixes an issue)
+- [ ] New feature (Non-breaking change which adds functionality)
+- [ ] Breaking change (Fix or feature that would cause existing functionality to not work as expected.)
 
-- [ ] This code fixes an active issue
+<!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
+
+## Does this PR require a documentation change?
+
+<!-- Add an x in the checkbox to mark it. -->
+
+- [ ] Requires a documentation update
 
 ## Summary
 <!-- Explain the reason for this pr, changes and solution briefly. -->
 
+...
+
+Fixes # (issue) <!-- Remove this if this is not a bug fix isse -->
+
 ## Changes
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, explain what fixed the issue. -->
+
+- I fixed ...
+- I replaced ...
+- I removed ...
+
+<!-- Remove example text! -->
 
 ## Does this PR create new warnings?
 <!-- Add any new warnings or possible issues that could occur with this PR. -->
 
+- Eslint reported ...
+- CodeQL returned ...
+
+<!-- Remove example text! -->
+
 ## Changelog
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
+
 ### Added
 ### Changed
 ### Removed
 
+<-- Remove any header with no item. -->
+
 ## Linked other issues or PRs
 <!-- Include other issues and PRs that are related to this if any exist. -->
+
+<!-- Use this format: - [ ] #ISSUE_OR_PR -->
+
+<!-- Default: -->
+No linked issues.
