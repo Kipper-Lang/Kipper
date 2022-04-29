@@ -31,7 +31,7 @@ version-resolver:
       - 'Fix'      
 template: |
   # {INSERT_NAME} Update
-  ## $RESOLVED_VERSION - {DATE}
+  ## v$RESOLVED_VERSION - {DATE}
 
   $CHANGES
   
