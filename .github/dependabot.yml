@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    # Add assignees
+    assignees:
+      - "Luna-Klatzer"
+    # Specify labels for npm pull requests
+    labels:
+      - "Dependencies"   
