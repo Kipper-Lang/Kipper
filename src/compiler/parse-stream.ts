@@ -55,8 +55,8 @@ export class KipperParseStream {
 
 	/**
 	 * Returns the lines of code inside the {@link charStream}.
-   *
-   * The returned lines have the line ending stripped away!
+	 *
+	 * The returned lines have the line ending stripped away!
 	 * @since 0.4.0
 	 */
 	public get lines(): Array<string> {
