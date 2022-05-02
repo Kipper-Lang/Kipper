@@ -8,9 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- New function `KipperLogger.reportError()` for reporting and logging errors.
 
 ### Changed
 - Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
+- Fixed missing error and fatal error logs ([#34](https://github.com/Luna-Klatzer/Kipper/issues/34)).
+- Renamed `CompileAssert.error` to `CompileAssert.throwError`.
 
 ### Removed
 
