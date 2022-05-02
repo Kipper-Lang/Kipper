@@ -7,6 +7,8 @@
  * @since 0.0.3
  */
 
+import {KipperError} from "./errors";
+
 /**
  * The log levels for the {@link KipperLogger}, but as numeric values to allow comparisons.
  * @since 0.2.0
@@ -145,4 +147,14 @@ export class KipperLogger {
 
 		return this._emitHandler(level, msg);
 	}
+
+  /**
+   * Reports an error with the passed level.
+   * @param level The {@link LogLevel level} to log the error with.
+   * @param err The error to log.
+   * @since 0.3.1
+   */
+  public reportError(level: LogLevel.WARN | LogLevel.ERROR | LogLevel.FATAL, err: KipperError | string) {
+    this.log(level, err instanceof KipperError ? err.getTraceback() : err);
+  }
 }
