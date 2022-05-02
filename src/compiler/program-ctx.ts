@@ -77,11 +77,15 @@ export class CompileAssert {
 	/**
 	 * Updates the error and adds the proper traceback data, and returns it.
 	 * @param error The error to update.
-   * @throws KipperError The {@link error} passed onto this function.
+	 * @throws KipperError The {@link error} passed onto this function.
 	 */
 	private throwError(error: KipperError): void {
 		// Update error metadata
-		error.setMetadata({ location: { line: this.line ?? 1, col: this.col ?? 1 }, filePath: this.programCtx.filePath });
+		error.setMetadata({
+			location: { line: this.line ?? 1, col: this.col ?? 1 },
+			filePath: this.programCtx.filePath,
+			tokenSrc: undefined,
+		});
 		error.antlrCtx = this.ctx?.antlrCtx;
 
 		// Log the error
@@ -340,7 +344,7 @@ export class KipperProgramContext {
 		parseTreeEntry: CompilationUnitContext,
 		parser: KipperParser,
 		lexer: KipperLexer,
-		logger: KipperLogger
+		logger: KipperLogger,
 	) {
 		this.logger = logger;
 		this._assert = new CompileAssert(this);

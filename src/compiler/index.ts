@@ -6,7 +6,7 @@
  */
 
 export * from "./parser";
-export * from "./error-handler";
+export * from "./antlr-error-listener";
 export * from "./parse-stream";
 export * from "./tokens";
 export * from "./logic";

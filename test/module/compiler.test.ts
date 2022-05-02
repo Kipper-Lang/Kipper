@@ -220,6 +220,16 @@ describe("KipperCompiler", () => {
         assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
       });
 
+      it("KipperSyntaxError", async () => {
+        try {
+          await new KipperCompiler().compile("var invalid: x = 4; \n var invalid: number = 4");
+        } catch (e) {
+          assert((<KipperError>e).constructor.name === "KipperSyntaxError", "Expected proper error");
+          return;
+        }
+        assert(false, "Expected 'KipperSyntaxError'");
+      });
+
       it("UnknownTypeError", async () => {
         try {
           await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");

@@ -16,16 +16,33 @@ import { Utils } from "./utils";
  */
 export class KipperError extends Error {
 	public tracebackData: {
+		/**
+		 * Represents the line and column of the error.
+		 * @since 0.3.0
+		 */
 		location: { line: number | undefined; col: number | undefined };
+		/**
+		 * Represents the path to the file where the error occurred.
+		 * @since 0.3.0
+		 */
 		filePath: string | undefined;
+		/**
+		 * Represents the original line of code that caused this error.
+		 * @since 0.4.0
+		 */
+		tokenSrc: string | undefined;
 	};
 
+	/**
+	 * The original {@link ParserRuleContext antlr4 context} instance for this token.
+	 * @since 0.3.0
+	 */
 	public antlrCtx: ParserRuleContext | undefined;
 
 	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
-		this.tracebackData = { location: { line: undefined, col: undefined }, filePath: undefined };
+		this.tracebackData = { location: { line: undefined, col: undefined }, filePath: undefined, tokenSrc: undefined };
 		this.antlrCtx = token;
 	}
 
@@ -37,6 +54,7 @@ export class KipperError extends Error {
 	public setMetadata(traceback: {
 		location: { line: number | undefined; col: number | undefined };
 		filePath: string | undefined;
+		tokenSrc: string | undefined;
 	}) {
 		this.tracebackData = traceback;
 	}
@@ -47,7 +65,8 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
-		const tokenSrc = this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined;
+		// Get the token source
+		const tokenSrc = this.tracebackData.tokenSrc ?? (this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined);
 		return (
 			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
