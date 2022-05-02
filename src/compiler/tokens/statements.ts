@@ -24,7 +24,7 @@ import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { KipperProgramContext } from "../program-ctx";
-import { Utils } from "../../utils";
+import {determineScope} from "../../utils";
 
 /**
  * Every antlr4 statement ctx type
@@ -152,7 +152,7 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 	}
 
@@ -210,7 +210,7 @@ export class SelectionStatement extends Statement<{ scope: KipperProgramContext 
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 	}
 
@@ -264,7 +264,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 	}
 
@@ -322,7 +322,7 @@ export class IterationStatement extends Statement<{ scope: KipperProgramContext 
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 	}
 
@@ -377,7 +377,7 @@ export class JumpStatement extends Statement<{ scope: KipperProgramContext | Com
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 	}
 
