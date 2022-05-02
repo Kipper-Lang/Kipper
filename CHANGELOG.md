@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
 - Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
 - Getter fields `line`, `col`, `filePath` and `tokenSrc` in `KipperError`, which returns the metadata for the error.
+- Fallback option for Lexer errors, where if `offendingSymbol` is `undefined` the entire line of code is set as 
+  `tokenSrc` ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
 
 ### Changed
 - Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
