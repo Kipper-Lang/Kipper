@@ -15,7 +15,12 @@ import { Utils } from "./utils";
  * The base error for the Kipper module.
  */
 export class KipperError extends Error {
-	public tracebackData: {
+	/**
+	 * Traceback metadata.
+	 * @private
+	 * @since 0.3.0
+	 */
+	private tracebackData: {
 		/**
 		 * Represents the line and column of the error.
 		 * @since 0.3.0
@@ -65,16 +70,48 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
-		// Get the token source
-		const tokenSrc = this.tracebackData.tokenSrc ?? (this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined);
 		return (
 			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
-			`${tokenSrc ? "    " + tokenSrc + "\n" : ""}` +
-			`${tokenSrc ? "    " + "^".repeat(tokenSrc.length) + "\n" : ""}` +
+			`${this.tokenSrc ? "    " + this.tokenSrc + "\n" : ""}` +
+			`${this.tokenSrc ? "    " + "^".repeat(this.tokenSrc.length) + "\n" : ""}` +
 			`${this.name}: ${this.message}`
 		);
+	}
+
+	/**
+	 * Returns the line where the error occurred.
+	 * @since 0.4.0
+	 */
+	public get line(): number | undefined {
+		return this.tracebackData.location.line;
+	}
+
+	/**
+	 * Returns the column where the error occurred.
+	 * @since 0.4.0
+	 */
+	public get col(): number | undefined {
+		return this.tracebackData.location.col;
+	}
+
+	/**
+	 * The path to the file where the error occurred.
+	 * @since 0.4.0
+	 */
+	public get filePath(): string | undefined {
+		return this.tracebackData.filePath;
+	}
+
+	/**
+	 * Returns the token source where the error occurred.
+	 * @since 0.4.0
+	 */
+	public get tokenSrc(): string | undefined {
+		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
+		// otherwise it will default to undefined.
+		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined);
 	}
 }
 
@@ -82,7 +119,7 @@ export class KipperError extends Error {
  * Internal error for Kipper.
  * @since 0.3.0
  */
-export class InternalKipperError extends Error {
+export class KipperInternalError extends Error {
 	constructor(msg: string) {
 		super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
 		this.name = this.constructor.name;
@@ -96,10 +133,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 	private readonly _recognizer: Recognizer<Token, any>;
 
 	private readonly _offendingSymbol: Token | undefined;
-
-	private readonly _line: number;
-
-	private readonly _column: number;
 
 	private readonly _msg: string;
 
@@ -115,16 +148,12 @@ export class KipperSyntaxError<Token> extends KipperError {
 	 * KipperSyntaxError Constructor
 	 * @param {Recognizer<KipperParser, any>} recognizer The Antlr4 Parser - should normally always be KipperParser
 	 * @param {Token | undefined} offendingSymbol The token that caused the error
-	 * @param {number} line The line of the element that caused the error
-	 * @param {number} column The column of the element that caused the error
 	 * @param {string} msg The msg that was generated as the error message in the Parser
 	 * @param {RecognitionException} error The error instance that raised the syntax error in the Lexer
 	 */
 	public constructor(
 		recognizer: Recognizer<Token, any>,
 		offendingSymbol: Token | undefined,
-		line: number,
-		column: number,
 		msg: string,
 		error:
 			| RecognitionException
@@ -138,8 +167,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 
 		this._recognizer = recognizer;
 		this._offendingSymbol = offendingSymbol;
-		this._line = line;
-		this._column = column;
 		this._msg = msg;
 		this._error = error;
 	}
@@ -156,20 +183,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 	 */
 	public get offendingSymbol(): Token | undefined {
 		return this._offendingSymbol;
-	}
-
-	/**
-	 * Returns the line of the element that caused the error
-	 */
-	public get line(): number {
-		return this._line;
-	}
-
-	/**
-	 * Returns the column of the element that caused the error
-	 */
-	public get column(): number {
-		return this._column;
 	}
 
 	/**
@@ -332,7 +345,7 @@ export class BuiltInOverwriteError extends KipperError {
  * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances or a
  * compilation is started without the required semantic data.
  */
-export class UnableToDetermineMetadataError extends InternalKipperError {
+export class UnableToDetermineMetadataError extends KipperInternalError {
 	constructor() {
 		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
 	}
