@@ -56,6 +56,21 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 	}
 
 	/**
+	 * Gets a line of code from the original {@link this.parseStream}.
+	 * @param line The line of code to fetch.
+	 * @protected
+	 * @since 0.4.0
+	 */
+	protected getLineOfCode(line: number): string {
+		const cleanLineEndings = (str: string) => {
+			return str.replace("\r\n", "\n").replace("\r", "\n");
+		};
+
+		// Get the line ending by splitting using a common line ending
+		return cleanLineEndings(this.parseStream.stringContent).split("\n")[line - 1];
+	}
+
+	/**
 	 * Default handler for Antlr4 syntax errors.
 	 * @param recognizer The recognizer which usually represents a {@link KipperParser}.
 	 * @param offendingSymbol The symbol/token that caused the error. In most cases, this is of type {@link CommonToken}.
