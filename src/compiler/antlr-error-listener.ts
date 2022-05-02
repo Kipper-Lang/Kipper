@@ -1,5 +1,5 @@
 /**
- * Error handler for a syntax error that was caught by Antlr4
+ * Antlr4 Error listener handling Antlr4 errors and reporting them.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
