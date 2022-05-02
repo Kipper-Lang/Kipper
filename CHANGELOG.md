@@ -18,10 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed function `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error 
   passed as argument.
 - Renamed `KipperErrorListener` to `KipperAntlrErrorListener`.
-- Removed field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)) 
-  the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 
 ### Removed
+- Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
+  the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 
 ## [0.3.0] - 2022-04-28
 
