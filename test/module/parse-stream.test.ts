@@ -4,8 +4,8 @@ import { KipperParseStream } from "../../src";
 
 const fileLocation: string = `${__dirname}/../kipper-files/main.kip`;
 
-describe("KipperStreams", () => {
-  describe("fromString", () => {
+describe("KipperParseStream", () => {
+  describe("constructor", () => {
     it("Simple file initialisation", async () => {
       let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
       let stream: KipperParseStream = new KipperParseStream(fileContent);
@@ -14,6 +14,20 @@ describe("KipperStreams", () => {
       assert(stream.stringContent === fileContent);
       assert(stream.charStream.sourceName === "anonymous-script");
       assert(stream.charStream.toString() === fileContent);
+    });
+  });
+
+  describe("fields", () => {
+    it("lines", () => {
+      const content = "1\r\n2\r3\n4";
+      let stream: KipperParseStream = new KipperParseStream(content);
+
+      assert(stream.name === "anonymous-script");
+      assert(stream.stringContent === content);
+      assert(stream.charStream.sourceName === "anonymous-script");
+      assert(stream.charStream.toString() === content);
+      assert(stream.lines.length == 4, "Expected three lines");
+      assert(JSON.stringify(stream.lines) === JSON.stringify(["1", "2", "3", "4"]), "Expected identical content");
     });
   });
 });
