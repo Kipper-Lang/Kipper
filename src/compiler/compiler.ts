@@ -7,7 +7,7 @@
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperErrorListener } from "./error-handler";
 import { KipperLexer, KipperParser } from "./parser";
-import { KipperLogger } from "../logger";
+import {KipperLogger, LogLevel} from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
 import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
@@ -247,38 +247,43 @@ export class KipperCompiler {
 		stream: string | KipperParseStream,
 		compilerOptions: CompileConfig = new CompilerEvaluatedOptions({}),
 	): Promise<KipperCompileResult> {
-		// Handle compiler options
-		const config: CompilerEvaluatedOptions =
-			compilerOptions instanceof CompilerEvaluatedOptions
-				? compilerOptions
-				: new CompilerEvaluatedOptions(compilerOptions);
+    // Handle compiler options
+    const config: CompilerEvaluatedOptions =
+      compilerOptions instanceof CompilerEvaluatedOptions
+        ? compilerOptions
+        : new CompilerEvaluatedOptions(compilerOptions);
 
-		// Handle the input and format it
-		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
+    // Handle the input and format it
+    let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
 
-		// Log as the initialisation finished
-		this.logger.info(`Starting compilation for '${inStream.name}'.`);
+    // Log as the initialisation finished
+    this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		// The file context storing the metadata for the "virtual file"
-		const fileCtx: KipperProgramContext = await this.parse(inStream);
+    try {
+      // The file context storing the metadata for the "virtual file"
+      const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-		// If there are builtInGlobals to register, register them
-		let globals = [...config.globals, ...config.extendGlobals];
-		if (globals.length > 0) {
-			fileCtx.registerGlobals(globals);
-		}
-		this.logger.debug(
-			`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
-				inStream.name
-			}'.`,
-		);
+      // If there are builtInGlobals to register, register them
+      let globals = [...config.globals, ...config.extendGlobals];
+      if (globals.length > 0) {
+        fileCtx.registerGlobals(globals);
+      }
+      this.logger.debug(
+        `Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
+          inStream.name
+        }'.`,
+      );
 
-		// Start actual async compilation
-		const code = await fileCtx.compileProgram();
+      // Start actual async compilation
+      const code = await fileCtx.compileProgram();
 
-		// After the code is done, return the compilation result as an instance
-		this.logger.info(`Compilation finished successfully!`);
-		return new KipperCompileResult(fileCtx, code);
+      // After the code is done, return the compilation result as an instance
+      this.logger.info(`Compilation finished successfully!`);
+      return new KipperCompileResult(fileCtx, code);
+    } catch (e) {
+      this.logger.reportError(LogLevel.FATAL, `Failed to compile '${inStream.name}'.`);
+      throw e;
+    }
 	}
 
 	/**
