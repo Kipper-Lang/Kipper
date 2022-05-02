@@ -53,6 +53,17 @@ export class KipperParseStream {
 		return this._charStream.toString();
 	}
 
+  /**
+   * Returns the lines of code inside the {@link charStream}.
+   * @since 0.4.0
+   */
+  public get lines(): Array<string> {
+    const cleanLineEndings = (str: string) => {
+      return str.replace("\r\n", "\n").replace("\r", "\n");
+    };
+    return cleanLineEndings(this.stringContent).split('\n');
+  }
+
 	/**
 	 * Returns the file path of the file.
 	 * @note If {@link _filePath} wasn't set during construction, then this defaults to {@link name}.
