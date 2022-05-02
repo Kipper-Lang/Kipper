@@ -10,7 +10,7 @@ import { KipperParser } from "../parser";
 import { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
-import {getTokenSource} from "../../utils";
+import { getTokenSource } from "../../utils";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;

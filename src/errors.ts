@@ -346,7 +346,7 @@ export class BuiltInOverwriteError extends KipperError {
  * compilation is started without the required semantic data.
  */
 export class UnableToDetermineMetadataError extends KipperInternalError {
-  constructor() {
-    super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
-  }
+	constructor() {
+		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
+	}
 }

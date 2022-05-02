@@ -24,7 +24,7 @@ import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { KipperProgramContext } from "../program-ctx";
-import {determineScope} from "../../utils";
+import { determineScope } from "../../utils";
 
 /**
  * Every antlr4 statement ctx type

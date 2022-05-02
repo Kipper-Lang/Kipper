@@ -1,11 +1,11 @@
 import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext } from "antlr4ts";
 import {
-  CompilableParseToken,
-  CompoundStatement,
-  eligibleParentToken, KipperParseStream,
-  KipperProgramContext,
-  RootFileParseToken,
+	CompilableParseToken,
+	CompoundStatement,
+	eligibleParentToken,
+	KipperProgramContext,
+	RootFileParseToken,
 } from "./compiler";
 
 /**
@@ -14,19 +14,19 @@ import {
  * @since 0.4.0
  */
 export function getTokenSource(antlrCtx: ParserRuleContext): string {
-  let inputStream = antlrCtx.start.inputStream;
-  let start = antlrCtx.start.startIndex;
+	let inputStream = antlrCtx.start.inputStream;
+	let start = antlrCtx.start.startIndex;
 
-  // If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
-  if (inputStream === undefined) {
-    return antlrCtx.text;
-  }
+	// If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
+	if (inputStream === undefined) {
+		return antlrCtx.text;
+	}
 
-  // If {@link this.antlrCtx.stop} is defined, then use {@link this.antlrCtx.stop.stopIndex}, otherwise use
-  // the last index of the "virtual" file/buffer, which is {@link inputStream.size} - 2 (Accounting for the
-  // additional EOF at the end that we do not want, and the fact arrays start at 0)
-  let end = antlrCtx.stop !== undefined ? antlrCtx.stop.stopIndex : inputStream.size - 2;
-  return inputStream.getText(new Interval(start, end));
+	// If {@link this.antlrCtx.stop} is defined, then use {@link this.antlrCtx.stop.stopIndex}, otherwise use
+	// the last index of the "virtual" file/buffer, which is {@link inputStream.size} - 2 (Accounting for the
+	// additional EOF at the end that we do not want, and the fact arrays start at 0)
+	let end = antlrCtx.stop !== undefined ? antlrCtx.stop.stopIndex : inputStream.size - 2;
+	return inputStream.getText(new Interval(start, end));
 }
 
 /**
@@ -35,17 +35,17 @@ export function getTokenSource(antlrCtx: ParserRuleContext): string {
  * @since 0.4.0
  */
 export function determineScope(ctx: CompilableParseToken<any>): KipperProgramContext | CompoundStatement {
-  // Determine type by going up the parent structure, until a compound statement is hit or the root file parse
-  // token, which represents the entire programCtx.
-  let parent: eligibleParentToken = ctx.parent;
-  while (!(parent instanceof RootFileParseToken) && !(parent instanceof CompoundStatement)) {
-    parent = parent.parent;
-  }
+	// Determine type by going up the parent structure, until a compound statement is hit or the root file parse
+	// token, which represents the entire programCtx.
+	let parent: eligibleParentToken = ctx.parent;
+	while (!(parent instanceof RootFileParseToken) && !(parent instanceof CompoundStatement)) {
+		parent = parent.parent;
+	}
 
-  if (parent instanceof RootFileParseToken) {
-    return ctx.programCtx;
-  }
-  return parent;
+	if (parent instanceof RootFileParseToken) {
+		return ctx.programCtx;
+	}
+	return parent;
 }
 
 /**
@@ -53,5 +53,5 @@ export function determineScope(ctx: CompilableParseToken<any>): KipperProgramCon
  * @since 0.4.0
  */
 export function getNaturalOrZero(num: number): number {
-  return num < 0 ? 0 : num;
+	return num < 0 ? 0 : num;
 }

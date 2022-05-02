@@ -21,7 +21,7 @@ import { KipperStorageType, KipperType } from "../logic";
 import { CompoundStatement } from "./statements";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
-import {determineScope} from "../../utils";
+import { determineScope } from "../../utils";
 
 /**
  * Every antlr4 definition ctx type
