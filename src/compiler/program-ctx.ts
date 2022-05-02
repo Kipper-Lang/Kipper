@@ -344,7 +344,7 @@ export class KipperProgramContext {
 		parseTreeEntry: CompilationUnitContext,
 		parser: KipperParser,
 		lexer: KipperLexer,
-		logger: KipperLogger
+		logger: KipperLogger,
 	) {
 		this.logger = logger;
 		this._assert = new CompileAssert(this);
