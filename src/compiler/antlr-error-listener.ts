@@ -39,10 +39,10 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 
 		// Determine start and stop
 		let start: number = (() => {
-      // Try to get as much of the original line as possible
-      // First try to get the line by doing:
-      //   symbol.stopIndex - charPositionInLine
-      let calcStart = symbol.stopIndex - col;
+			// Try to get as much of the original line as possible
+			// First try to get the line by doing:
+			//   symbol.stopIndex - charPositionInLine
+			let calcStart = symbol.stopIndex - col;
 
 			// Avoid negative values
 			let start = calcStart < 0 ? 0 : calcStart;
