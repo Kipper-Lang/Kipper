@@ -210,118 +210,175 @@ describe("KipperCompiler", () => {
     });
 
     describe("Errors", () => {
-      it("GetTraceback", async () => {
-        try {
-          await new KipperCompiler().compile("var i: str = \"4\";\n var i: str = \"4\";");
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+      describe("KipperSyntaxError", () => {
+        it("LexerError", async () => {
+          try {
+            await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5; \\\\D");
+          } catch (e) {
+            assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
+            assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'KipperSyntaxError'");
+        });
+
+        it("ParserError", async () => {
+          try {
+            await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5");
+          } catch (e) {
+            assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
+            assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'KipperSyntaxError'");
+        });
       });
 
-      it("KipperSyntaxError", async () => {
-        try {
-          await new KipperCompiler().compile("var invalid: x = 4; \n var invalid: number = 4");
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "KipperSyntaxError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'KipperSyntaxError'");
-      });
+      describe("Compilation errors", () => {
 
-      it("UnknownTypeError", async () => {
-        try {
-          await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "UnknownTypeError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'UnknownTypeError'");
-      });
+        it("GetTraceback", async () => {
+          try {
+            await new KipperCompiler().compile("var i: str = \"4\";\n var i: str = \"4\";");
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+        });
 
-      it("InvalidGlobalError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var i: num = 4;")
-          );
+        it("UnknownTypeError", async () => {
+          try {
+            await new KipperCompiler().compile("var invalid: UNKNOWN = 4;");
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "UnknownTypeError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'UnknownTypeError'");
+        });
 
-          // Duplicate identifier
-          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
-          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'InvalidGlobalError'");
-      });
+        it("InvalidGlobalError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("var i: num = 4;")
+            );
 
-      it("BuiltInOverwriteError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var i: num = 4;")
-          );
+            // Duplicate identifier
+            programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+            programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 
-          // Register new global
-          programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
-          await programCtx.compileProgram();
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'BuiltInOverwriteError'");
-      });
+            // Token src should not exist, since this is a configuration error!
+            assert((<KipperError>e).tokenSrc === undefined, "Expected non-existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'InvalidGlobalError'");
+        });
 
-      it("IdentifierAlreadyUsedByFunctionError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("def x() -> void; var x: num = 4;")
-          );
-          await programCtx.compileProgram();
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
-      });
+        it("BuiltInOverwriteError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("var i: num = 4;")
+            );
 
-      it("IdentifierAlreadyUsedByVariableError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var x: num; def x() -> void;")
-          );
-          await programCtx.compileProgram();
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
-      });
+            // Register new global
+            programCtx.registerGlobals({identifier: "i", args: [], handler: [""], returnType: "void"});
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'BuiltInOverwriteError'");
+        });
 
-      it("FunctionDefinitionAlreadyExistsError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("def x() -> void {} def x() -> void {}")
-          );
-          await programCtx.compileProgram();
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "FunctionDefinitionAlreadyExistsError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'FunctionDefinitionAlreadyExistsError'");
-      });
+        it("IdentifierAlreadyUsedByFunctionError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("def x() -> void; var x: num = 4;")
+            );
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
+        });
 
-      it("VariableDefinitionAlreadyExistsError", async () => {
-        try {
-          const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-            new KipperParseStream("var x: num = 4; \n    var x: num = 5;")
-          );
-          await programCtx.compileProgram();
-        } catch (e) {
-          assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
-          return;
-        }
-        assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+        it("IdentifierAlreadyUsedByVariableError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("var x: num; def x() -> void;")
+            );
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
+        });
+
+        it("FunctionDefinitionAlreadyExistsError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("def x() -> void {} def x() -> void {}")
+            );
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "FunctionDefinitionAlreadyExistsError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'FunctionDefinitionAlreadyExistsError'");
+        });
+
+        it("VariableDefinitionAlreadyExistsError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("var x: num = 4; \n    var x: num = 5;")
+            );
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+        });
       });
     });
   });
