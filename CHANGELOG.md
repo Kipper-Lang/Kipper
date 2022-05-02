@@ -9,12 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - New function `KipperLogger.reportError()` for reporting and logging errors.
+- New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code/original code for a syntax error.
+- Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
 
 ### Changed
 - Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
 - Fixed missing error and fatal error logs ([#34](https://github.com/Luna-Klatzer/Kipper/issues/34)).
-- Renamed `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error passed as 
-  argument.
+- Renamed function `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error 
+  passed as argument.
+- Renamed `KipperErrorListener` to `KipperAntlrErrorListener`.
+- Removed field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)) 
+  the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 
 ### Removed
 
