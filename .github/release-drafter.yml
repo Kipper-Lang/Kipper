@@ -10,7 +10,7 @@ categories:
       - 'Fix'    
   - title: 'Other Changes'
     labels:
-      - 'Development'
+      - 'Other'
       - 'Maintenance'
   - title: 'Dependency Updates'
     label: 
@@ -26,11 +26,11 @@ version-resolver:
   patch:
     labels:
       - 'Bug'
+      - 'Fix'
       - 'Maintenance'
       - 'Documentation'
       - 'Dependencies'
-      - 'Development'
-      - 'Fix'      
+      - 'Other' 
 template: |
   # {INSERT_NAME} Update
   ## v$RESOLVED_VERSION - {DATE}
