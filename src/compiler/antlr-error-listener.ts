@@ -46,7 +46,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 			let calcStart = symbol.stopIndex - col;
 
 			// Avoid negative values
-			let start = calcStart < 0 ? 0 : calcStart;
+			let start = getNaturalOrZero(calcStart);
 			if (symbol.startIndex < start) start = symbol.startIndex;
 			return start;
 		})();
