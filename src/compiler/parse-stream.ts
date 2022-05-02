@@ -59,7 +59,7 @@ export class KipperParseStream {
    */
   public get lines(): Array<string> {
     const cleanLineEndings = (str: string) => {
-      return str.replace("\r\n", "\n").replace("\r", "\n");
+      return str.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
     };
     return cleanLineEndings(this.stringContent).split('\n');
   }
