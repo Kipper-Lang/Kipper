@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - New function `KipperLogger.reportError()` for reporting and logging errors.
-- New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code/original code for a syntax error.
+- New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
 - Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
 
 ### Changed
