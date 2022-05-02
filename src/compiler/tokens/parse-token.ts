@@ -8,9 +8,9 @@
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperParser } from "../parser";
 import { TokenStream } from "antlr4ts/TokenStream";
-import { Utils } from "../../utils";
 import type { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
+import {getTokenSource} from "../../utils";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -96,7 +96,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	public get sourceCode(): string {
-		return Utils.getTokenSource(this.antlrCtx);
+		return getTokenSource(this.antlrCtx);
 	}
 
 	/**
