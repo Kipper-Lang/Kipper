@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Getter fields `line`, `col`, `filePath` and `tokenSrc` in `KipperError`, which returns the metadata for the error.
 - Fallback option for Lexer errors, where if `offendingSymbol` is `undefined` the entire line of code is set as 
   `tokenSrc` ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
+- Getter field `KipperParseStream.lines` returning all lines in the source file as an array.
 
 ### Changed
 - Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
@@ -27,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
   the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
+- Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
+  `import * as Utils from "@kipper/base/utils"`, where the user can themselves define the wanted scope identifier.
 
 ## [0.3.0] - 2022-04-28
 
