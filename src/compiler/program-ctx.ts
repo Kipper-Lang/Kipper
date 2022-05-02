@@ -18,7 +18,7 @@ import {
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 } from "./logic";
-import { KipperLogger } from "../logger";
+import { KipperLogger, LogLevel } from "../logger";
 import {
 	CompilableParseToken,
 	CompoundStatement,
@@ -76,12 +76,18 @@ export class CompileAssert {
 
 	/**
 	 * Updates the error and adds the proper traceback data, and returns it.
-	 * @param error The error to update
+	 * @param error The error to update.
+   * @throws KipperError The {@link error} passed onto this function.
 	 */
-	public error(error: KipperError): KipperError {
+	private throwError(error: KipperError): void {
+		// Update error metadata
 		error.setMetadata({ location: { line: this.line ?? 1, col: this.col ?? 1 }, filePath: this.programCtx.filePath });
 		error.antlrCtx = this.ctx?.antlrCtx;
-		return error;
+
+		// Log the error
+		this.programCtx.logger.reportError(LogLevel.ERROR, error);
+
+		throw error;
 	}
 
 	/**
@@ -90,7 +96,7 @@ export class CompileAssert {
 	 */
 	public assertTypeExists(type: string): void {
 		if (kipperTypes.find((val) => val === type) === undefined) {
-			throw this.error(new UnknownTypeError(type));
+			this.throwError(new UnknownTypeError(type));
 		}
 	}
 
@@ -100,7 +106,7 @@ export class CompileAssert {
 	 */
 	public functionIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
-			throw this.error(new UnknownFunctionIdentifier(identifier));
+			this.throwError(new UnknownFunctionIdentifier(identifier));
 		}
 	}
 
@@ -110,7 +116,7 @@ export class CompileAssert {
 	 */
 	public variableIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
-			throw this.error(new UnknownVariableIdentifier(identifier));
+			this.throwError(new UnknownVariableIdentifier(identifier));
 		}
 	}
 
@@ -120,7 +126,7 @@ export class CompileAssert {
 	 */
 	public functionIdentifierNotUsed(identifier: string): void {
 		if (this.programCtx.getGlobalFunction(identifier)) {
-			throw this.error(new IdentifierAlreadyUsedByFunctionError(identifier));
+			this.throwError(new IdentifierAlreadyUsedByFunctionError(identifier));
 		}
 	}
 
@@ -134,16 +140,16 @@ export class CompileAssert {
 		// Always check in the global scope
 		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
 		if (this.programCtx.globalScope.find(check)) {
-			throw this.error(new IdentifierAlreadyUsedByVariableError(identifier));
+			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
 		if (this.programCtx.getGlobalVariable(identifier)) {
-			throw this.error(new IdentifierAlreadyUsedByVariableError(identifier));
+			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
 		// Also check in the local scope if it was passed
 		if (scope !== undefined && scope?.localScope.find(check)) {
-			throw this.error(new IdentifierAlreadyUsedByVariableError(identifier));
+			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 	}
 
@@ -161,12 +167,12 @@ export class CompileAssert {
 		};
 
 		if (this.programCtx.globalScope.find(check)) {
-			throw this.error(new VariableDefinitionAlreadyExistsError(identifier));
+			this.throwError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 
 		// Also check in the local scope if it was passed
 		if (scope !== undefined && scope?.localScope.find(check)) {
-			throw this.error(new VariableDefinitionAlreadyExistsError(identifier));
+			this.throwError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 	}
 
@@ -182,7 +188,7 @@ export class CompileAssert {
 		};
 
 		if (this.programCtx.globalScope.find(check)) {
-			throw this.error(new FunctionDefinitionAlreadyExistsError(identifier));
+			this.throwError(new FunctionDefinitionAlreadyExistsError(identifier));
 		}
 	}
 
@@ -201,7 +207,7 @@ export class CompileAssert {
 		}
 
 		if (arg.semanticData.type !== receivedType) {
-			throw this.error(new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType));
+			this.throwError(new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType));
 		}
 	}
 
@@ -232,7 +238,7 @@ export class CompileAssert {
 	 */
 	public builtInNotDefined(identifier: string): void {
 		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
-			throw this.error(new BuiltInOverwriteError(identifier));
+			this.throwError(new BuiltInOverwriteError(identifier));
 		}
 	}
 
@@ -248,7 +254,7 @@ export class CompileAssert {
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
-			throw this.error(new InvalidGlobalError(identifier));
+			this.throwError(new InvalidGlobalError(identifier));
 		}
 	}
 }
@@ -334,7 +340,7 @@ export class KipperProgramContext {
 		parseTreeEntry: CompilationUnitContext,
 		parser: KipperParser,
 		lexer: KipperLexer,
-		logger: KipperLogger,
+		logger: KipperLogger
 	) {
 		this.logger = logger;
 		this._assert = new CompileAssert(this);
