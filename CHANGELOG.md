@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New function `KipperLogger.reportError()` for reporting and logging errors.
 - New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
 - Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
+- Getter fields `line`, `col`, `filePath` and `tokenSrc` in `KipperError`, which returns the metadata for the error.
+- Fallback option for Lexer errors, where if `offendingSymbol` is `undefined` the entire line of code is set as 
+  `tokenSrc` ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
 
 ### Changed
 - Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
@@ -18,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed function `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error 
   passed as argument.
 - Renamed `KipperErrorListener` to `KipperAntlrErrorListener`.
+- Renamed `InternalKipperError` to `KipperInternalError`.
+- Fixed usage of default antlr4 listeners for lexer errors ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
 
 ### Removed
 - Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))

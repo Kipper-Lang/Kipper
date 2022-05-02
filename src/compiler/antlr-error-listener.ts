@@ -56,6 +56,21 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 	}
 
 	/**
+	 * Gets a line of code from the original {@link this.parseStream}.
+	 * @param line The line of code to fetch.
+	 * @protected
+	 * @since 0.4.0
+	 */
+	protected getLineOfCode(line: number): string {
+		const cleanLineEndings = (str: string) => {
+			return str.replace("\r\n", "\n").replace("\r", "\n");
+		};
+
+		// Get the line ending by splitting using a common line ending
+		return cleanLineEndings(this.parseStream.stringContent).split("\n")[line - 1];
+	}
+
+	/**
 	 * Default handler for Antlr4 syntax errors.
 	 * @param recognizer The recognizer which usually represents a {@link KipperParser}.
 	 * @param offendingSymbol The symbol/token that caused the error. In most cases, this is of type {@link CommonToken}.
@@ -78,15 +93,19 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 		/**
 		 * The source code. This may be undefined, if fetching the source code failed or the symbol is not of a known type.
 		 */
-		let src: string | undefined =
-			offendingSymbol instanceof CommonToken ? this.getSourceCode(offendingSymbol) : undefined;
+		let src: string = (() => {
+			let src = offendingSymbol instanceof CommonToken ? this.getSourceCode(offendingSymbol) : undefined;
+			if (src === undefined) return this.getLineOfCode(line);
+			else return src;
+		})();
 
 		// Create new error and add traceback metadata
-		const err = new KipperSyntaxError<T>(recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+		const err = new KipperSyntaxError<T>(recognizer, offendingSymbol, msg, e);
 		err.setMetadata({
 			location: { line: line, col: charPositionInLine },
 			filePath: this.parseStream.filePath,
-			tokenSrc: src,
+			tokenSrc: src, // Explicitly set the tokenSrc, since syntax errors should be handled differently than
+			// compilation errors.
 		});
 
 		// Log the error

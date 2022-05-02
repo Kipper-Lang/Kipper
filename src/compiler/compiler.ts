@@ -203,6 +203,10 @@ export class KipperCompiler {
 
 		// Create the lexer and parser, which will parse this inputStream
 		const lexer = new KipperLexer(inputStream);
+		lexer.removeErrorListeners(); // removing all error listeners
+		lexer.addErrorListener(errorListener); // adding our own error listener
+
+		// Let the lexer run and generate a token stream
 		const tokenStream = new CommonTokenStream(lexer);
 		const parser = new KipperParser(tokenStream);
 
