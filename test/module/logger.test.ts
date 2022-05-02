@@ -1,10 +1,11 @@
-import { assert } from "chai";
-import { KipperLogger, LogLevel } from "../../src/";
+import {assert} from "chai";
+import {KipperCompiler, KipperError, KipperLogger, KipperParseStream, KipperProgramContext, LogLevel} from "../../src/";
 
 describe("KipperLogger", () => {
   describe("constructor", () => {
     it("Construction with empty emit handler", () => {
-      const emitHandler = () => {};
+      const emitHandler = () => {
+      };
       const logger = new KipperLogger(emitHandler);
 
       assert(logger.emitHandler === emitHandler, "emitHandler must be equal");
@@ -60,6 +61,35 @@ describe("KipperLogger", () => {
       logger.fatal("A message");
       // @ts-ignore
       assert(levelReceived === LogLevel.FATAL, "Expected FATAL");
+    });
+
+    it("Test automatic logging on compilation exceptions", async () => {
+      let fatalErrors = 0;
+      let errors = 0;
+      const logger = new KipperLogger(
+        (level) => {
+          if (level === LogLevel.ERROR)
+            errors++;
+          else if (level === LogLevel.FATAL)
+            fatalErrors++;
+        },
+        LogLevel.ERROR
+      );
+
+      try {
+        await new KipperCompiler(logger).compile(
+          new KipperParseStream("var x: num = 4; \n    var x: num = 5;")
+        );
+      } catch (e) {
+        assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+
+        // Check logging errors
+        assert(errors > 0, "Expected at least 0 errors");
+        assert(fatalErrors > 0, "Expected at least 0 fatal errors");
+
+        return;
+      }
+      assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
     });
   });
 });
