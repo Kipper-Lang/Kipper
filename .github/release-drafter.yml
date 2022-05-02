@@ -7,9 +7,10 @@ categories:
       - 'Feature'
   - title: 'Bug Fixes'
     labels:
-      - 'Fix'
-  - title: 'Maintenance'
+      - 'Fix'    
+  - title: 'Other Changes'
     labels:
+      - 'Development'
       - 'Maintenance'
   - title: 'Dependency Updates'
     label: 
@@ -28,6 +29,7 @@ version-resolver:
       - 'Maintenance'
       - 'Documentation'
       - 'Dependencies'
+      - 'Development'
       - 'Fix'      
 template: |
   # {INSERT_NAME} Update
