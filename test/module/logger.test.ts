@@ -67,21 +67,22 @@ describe("KipperLogger", () => {
       let fatalErrors = 0;
       let errors = 0;
       const logger = new KipperLogger(
-        (level) => {
+        (level, msg) => {
           if (level === LogLevel.ERROR)
             errors++;
           else if (level === LogLevel.FATAL)
             fatalErrors++;
+          assert(msg, "Expected non-empty message.");
         },
         LogLevel.ERROR
       );
 
       try {
         await new KipperCompiler(logger).compile(
-          new KipperParseStream("var x: num = 4; \n    var x: num = 5;")
+          new KipperParseStream("var x: num = 4; \nvar x: num = 5")
         );
       } catch (e) {
-        assert((<KipperError>e).constructor.name === "VariableDefinitionAlreadyExistsError", "Expected proper error");
+        assert((<KipperError>e).constructor.name === "KipperSyntaxError", "Expected proper error");
 
         // Check logging errors
         assert(errors > 0, "Expected at least 0 errors");
@@ -89,7 +90,7 @@ describe("KipperLogger", () => {
 
         return;
       }
-      assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
+      assert(false, "Expected 'KipperSyntaxError'");
     });
   });
 });
