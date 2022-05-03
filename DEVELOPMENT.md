@@ -86,14 +86,35 @@ npm run build
 
 ## Making a new release
 
-First login to your account:
+1. Bump version with the identifier (Visit GitHub for to recommended version):
 
-```bash
-npm login
-```
+   ```bash
+   npm version MAJOR.MINOR.PATCH
+   ```
 
-Afterwards publish publicly using:
+2. Updated CHANGELOG.md and create a new release identifier:
+ 
+   ```markdown
+   ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
+  
+   ### Added
+   ### Changed
+   ### Removed
+   ```
 
-```bash
-npm publish --access public
-```
+3. Updated static version identifier `version` in `index.ts`:
+
+   ```ts
+   export const version = "0.4.0";
+   ```
+
+5. Then login into your accexport const version = "0.4.0";ount:
+   ```bash
+   npm login
+   ```
+
+5. Afterwards publish publicly using:
+
+   ```bash
+   npm publish --access public
+   ```
