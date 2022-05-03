@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Removed
+
+## [0.4.0] - 2022-05-03
+
+### Added
 - New function `KipperLogger.reportError()` for reporting and logging errors.
 - New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
 - Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
@@ -226,7 +234,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.3.0...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0
