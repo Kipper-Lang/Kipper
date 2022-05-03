@@ -33,7 +33,7 @@ version-resolver:
       - 'Other' 
 template: |
   # {INSERT_NAME} Update
-  ## v$RESOLVED_VERSION - {DATE}
+  ## v$RESOLVED_VERSION - {YEAR-MONTH-DAY}
 
   $CHANGES
   
