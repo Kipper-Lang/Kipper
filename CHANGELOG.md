@@ -10,9 +10,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Changed
-- Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
 
 ### Removed
+
+## [0.4.0] - 2022-05-03
+
+### Added
+- New function `KipperLogger.reportError()` for reporting and logging errors.
+- New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
+- Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
+- Getter fields `line`, `col`, `filePath` and `tokenSrc` in `KipperError`, which returns the metadata for the error.
+- Fallback option for Lexer errors, where if `offendingSymbol` is `undefined` the entire line of code is set as 
+  `tokenSrc` ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
+- Getter field `KipperParseStream.lines` returning all lines in the source file as an array.
+
+### Changed
+- Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
+- Fixed missing error and fatal error logs ([#34](https://github.com/Luna-Klatzer/Kipper/issues/34)).
+- Renamed function `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error 
+  passed as argument.
+- Renamed `KipperErrorListener` to `KipperAntlrErrorListener`.
+- Renamed `InternalKipperError` to `KipperInternalError`.
+- Fixed usage of default antlr4 listeners for lexer errors ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
+
+### Removed
+- Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
+  the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
+- Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
+  `import * as Utils from "@kipper/base/utils"`, where the user can themselves define the wanted scope identifier.
 
 ## [0.3.0] - 2022-04-28
 
@@ -209,7 +234,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.3.0...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0

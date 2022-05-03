@@ -5,9 +5,9 @@
  * @since 0.0.1
  */
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
-import { KipperErrorListener } from "./error-handler";
+import { KipperAntlrErrorListener } from "./antlr-error-listener";
 import { KipperLexer, KipperParser } from "./parser";
-import { KipperLogger } from "../logger";
+import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
 import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
@@ -148,13 +148,6 @@ export class KipperCompileResult {
  */
 export class KipperCompiler {
 	/**
-	 * The private '_errorListener' that actually stores the variable data,
-	 * which is returned inside the {@link this.errorListener}.
-	 * @private
-	 */
-	private readonly _errorListener: KipperErrorListener<any>;
-
-	/**
 	 * The private '_logger' that actually stores the variable data,
 	 * which is returned inside the {@link this.logger}.
 	 * @private
@@ -162,16 +155,7 @@ export class KipperCompiler {
 	private readonly _logger: KipperLogger;
 
 	constructor(logger: KipperLogger = new KipperLogger(() => {})) {
-		// using a general error listener for the entire compiler instance
-		this._errorListener = new KipperErrorListener<any>();
 		this._logger = logger;
-	}
-
-	/**
-	 * Returns the {@link KipperErrorListener} that is responsible for handling antlr4 errors
-	 */
-	public get errorListener(): KipperErrorListener<any> {
-		return this._errorListener;
 	}
 
 	/**
@@ -214,13 +198,20 @@ export class KipperCompiler {
 		// Creating the char stream, based on the input
 		const inputStream: CodePointCharStream = parseStream.charStream;
 
+		// Error listener that will log syntax errors
+		const errorListener = new KipperAntlrErrorListener(this.logger, parseStream);
+
 		// Create the lexer and parser, which will parse this inputStream
 		const lexer = new KipperLexer(inputStream);
+		lexer.removeErrorListeners(); // removing all error listeners
+		lexer.addErrorListener(errorListener); // adding our own error listener
+
+		// Let the lexer run and generate a token stream
 		const tokenStream = new CommonTokenStream(lexer);
 		const parser = new KipperParser(tokenStream);
 
 		parser.removeErrorListeners(); // removing all error listeners
-		parser.addErrorListener(this._errorListener); // adding our own error listener
+		parser.addErrorListener(errorListener); // adding our own error listener
 
 		// Parse the input, where `compilationUnit` is whatever entry point you defined
 		return (() => {
@@ -259,26 +250,31 @@ export class KipperCompiler {
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		// The file context storing the metadata for the "virtual file"
-		const fileCtx: KipperProgramContext = await this.parse(inStream);
+		try {
+			// The file context storing the metadata for the "virtual file"
+			const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-		// If there are builtInGlobals to register, register them
-		let globals = [...config.globals, ...config.extendGlobals];
-		if (globals.length > 0) {
-			fileCtx.registerGlobals(globals);
+			// If there are builtInGlobals to register, register them
+			let globals = [...config.globals, ...config.extendGlobals];
+			if (globals.length > 0) {
+				fileCtx.registerGlobals(globals);
+			}
+			this.logger.debug(
+				`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
+					inStream.name
+				}'.`,
+			);
+
+			// Start actual async compilation
+			const code = await fileCtx.compileProgram();
+
+			// After the code is done, return the compilation result as an instance
+			this.logger.info(`Compilation finished successfully!`);
+			return new KipperCompileResult(fileCtx, code);
+		} catch (e) {
+			this.logger.reportError(LogLevel.FATAL, `Failed to compile '${inStream.name}'.`);
+			throw e;
 		}
-		this.logger.debug(
-			`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
-				inStream.name
-			}'.`,
-		);
-
-		// Start actual async compilation
-		const code = await fileCtx.compileProgram();
-
-		// After the code is done, return the compilation result as an instance
-		this.logger.info(`Compilation finished successfully!`);
-		return new KipperCompileResult(fileCtx, code);
 	}
 
 	/**
