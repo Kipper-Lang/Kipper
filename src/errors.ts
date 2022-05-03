@@ -9,7 +9,7 @@ import { InputMismatchException, LexerNoViableAltException, NoViableAltException
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
-import { Utils } from "./utils";
+import { getTokenSource } from "./utils";
 
 /**
  * The base error for the Kipper module.
@@ -111,7 +111,7 @@ export class KipperError extends Error {
 	public get tokenSrc(): string | undefined {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
-		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? Utils.getTokenSource(this.antlrCtx) : undefined);
+		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getTokenSource(this.antlrCtx) : undefined);
 	}
 }
 

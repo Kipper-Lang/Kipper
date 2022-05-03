@@ -12,6 +12,7 @@ import { KipperSyntaxError } from "../errors";
 import { KipperParseStream } from "./parse-stream";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
+import { getNaturalOrZero } from "../utils";
 
 /**
  * The Error Handler for the Kipper implementation of {@link ANTLRErrorListener}
@@ -45,7 +46,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 			let calcStart = symbol.stopIndex - col;
 
 			// Avoid negative values
-			let start = calcStart < 0 ? 0 : calcStart;
+			let start = getNaturalOrZero(calcStart);
 			if (symbol.startIndex < start) start = symbol.startIndex;
 			return start;
 		})();
@@ -62,12 +63,9 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 	 * @since 0.4.0
 	 */
 	protected getLineOfCode(line: number): string {
-		const cleanLineEndings = (str: string) => {
-			return str.replace("\r\n", "\n").replace("\r", "\n");
-		};
+		if (line < 0 || line > this.parseStream.lines.length) throw new RangeError("Range out of parse stream bounds.");
 
-		// Get the line ending by splitting using a common line ending
-		return cleanLineEndings(this.parseStream.stringContent).split("\n")[line - 1];
+		return this.parseStream.lines[line - 1];
 	}
 
 	/**

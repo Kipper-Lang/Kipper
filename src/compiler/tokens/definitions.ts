@@ -21,7 +21,7 @@ import { KipperStorageType, KipperType } from "../logic";
 import { CompoundStatement } from "./statements";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
-import { Utils } from "../../utils";
+import { determineScope } from "../../utils";
 
 /**
  * Every antlr4 definition ctx type
@@ -277,7 +277,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			storageType: <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval),
 			valueType: <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval),
-			scope: Utils.determineScope(this),
+			scope: determineScope(this),
 		};
 
 		// Assert that the variable type exists
