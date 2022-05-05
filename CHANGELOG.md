@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- New type `TargetTokenSemanticAnalyser`, which represents a function type that semantically analyses a 
+  `CompilableParseToken`.
+- New type `TokenCodeGenerator`, which represents a function type that semantically analyses a
+  `CompilableParseToken`.
+- Target-specific code generator `KipperCodeGenerator`, which defines the functions that convert the Kipper code into
+  a specific target language.
+- Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis 
+  logic for a compilation target.
+- New class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
+  specific target.
+- New class `TypeScriptTarget`, which defines the default target for Kipper.
 
 ### Changed
 
