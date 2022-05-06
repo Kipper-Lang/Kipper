@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   # Run tests with 'npm ci' dependencies
-  run-tests-with-ci:
+  tests-with-pck-lock-dependencies:
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,7 +22,7 @@ jobs:
       - run: npm test
       
   # Run tests with 'npm i' dependencies
-  run-tests-with-i:
+  tests-with-pck-dependencies:
     runs-on: ubuntu-latest
 
     strategy:
