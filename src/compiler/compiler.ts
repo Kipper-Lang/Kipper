@@ -11,6 +11,8 @@ import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
 import { BuiltInFunction, builtInWebPrintFunction } from "./logic";
+import { KipperCompileTarget } from "./target/compile-target";
+import { TypeScriptTarget } from "./target/typescript";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
@@ -23,18 +25,21 @@ export interface CompileConfig {
 	 * default builtInGlobals will be overwritten! If you wish to only extend the builtInGlobals write to {@link extendGlobals}.
 	 */
 	globals?: Array<BuiltInFunction>;
-
 	/**
 	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
 	 * the default array.
 	 */
 	extendGlobals?: Array<BuiltInFunction>;
-
 	/**
 	 * The filename that should be used to represent the program.
 	 * @since 0.2.0
 	 */
 	fileName?: string;
+  /**
+   * The target languages for the compilation.
+   * @since 0.5.0
+   */
+  target?: KipperCompileTarget;
 }
 
 /**
@@ -60,6 +65,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		globals: [builtInWebPrintFunction],
 		extendGlobals: [],
 		fileName: "anonymous-script",
+    target: new TypeScriptTarget()
 	};
 
 	/**
@@ -75,6 +81,8 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 
 	public readonly fileName: string;
 
+  public readonly target: KipperCompileTarget;
+
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
 
@@ -82,6 +90,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		this.globals = options.globals ?? CompilerEvaluatedOptions.defaults.globals;
 		this.extendGlobals = options.extendGlobals ?? CompilerEvaluatedOptions.defaults.extendGlobals;
 		this.fileName = options.fileName ?? CompilerEvaluatedOptions.defaults.fileName;
+    this.target = options.target ?? CompilerEvaluatedOptions.defaults.target;
 	}
 }
 
@@ -187,12 +196,17 @@ export class KipperCompiler {
 	 *
 	 * This function is async to not render-block the browser and allow rendering to happen in-between the
 	 * async processing.
-	 * @param {KipperParseStream} parseStream The {@link KipperParseStream} instance that contains the required string
+	 * @param parseStream The {@link KipperParseStream} instance that contains the required string
 	 * content.
-	 * @returns {CompilationUnitContext} The generated and parsed {@link CompilationUnitContext}.
-	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
+   * @param target The {@link KipperCompileTarget} which specifies the compilation target for the
+   * language. Per default this is {@link TypeScriptTarget}.
+	 * @returns The generated and parsed {@link CompilationUnitContext}.
+	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
 	 */
-	public async parse(parseStream: KipperParseStream): Promise<KipperProgramContext> {
+	public async parse(
+    parseStream: KipperParseStream,
+    target: KipperCompileTarget = new TypeScriptTarget()
+  ): Promise<KipperProgramContext> {
 		this._logger.info(`Parsing '${parseStream.name}'.`);
 
 		// Creating the char stream, based on the input
@@ -217,7 +231,7 @@ export class KipperCompiler {
 		return (() => {
 			let result = parser.compilationUnit();
 			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'.`);
-			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger);
+			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger, target);
 		})();
 	}
 

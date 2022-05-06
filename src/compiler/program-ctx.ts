@@ -42,6 +42,7 @@ import {
 	UnknownVariableIdentifier,
 	VariableDefinitionAlreadyExistsError,
 } from "../errors";
+import { KipperCompileTarget } from "./target/compile-target";
 
 /**
  * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
@@ -264,10 +265,7 @@ export class CompileAssert {
 }
 
 /**
- * The program context class used to represent a file in a compilation.
- *
- * In this case, even a simple stream or string are represented using this class, as a virtual "file" is created for
- * them and their environment.
+ * The program context class used to represent a program for a compilation.
  * @since 0.0.3
  */
 export class KipperProgramContext {
@@ -326,6 +324,14 @@ export class KipperProgramContext {
 	 */
 	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
+  /**
+   * Represents the compilation target for the program. This contains the
+   * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
+   * specific for the target, and {@link KipperTargetCodeGenerator}, which
+   * translates the Kipper code into a target language.
+   */
+  public readonly target: KipperCompileTarget;
+
 	/**
 	 * The logger that should be used to log warnings and errors.
 	 * @public
@@ -337,7 +343,7 @@ export class KipperProgramContext {
 	 * @public
 	 * @since 0.2.0
 	 */
-	private _assert: CompileAssert;
+  private readonly _assert: CompileAssert;
 
 	constructor(
 		stream: KipperParseStream,
@@ -345,8 +351,10 @@ export class KipperProgramContext {
 		parser: KipperParser,
 		lexer: KipperLexer,
 		logger: KipperLogger,
+    target: KipperCompileTarget
 	) {
 		this.logger = logger;
+    this.target = target;
 		this._assert = new CompileAssert(this);
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
