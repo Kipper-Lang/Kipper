@@ -5,7 +5,7 @@
  * @since 0.5.0
  */
 
-import { KipperCodeGenerator } from "../code-generator";
+import { KipperTargetCodeGenerator } from "../code-generator";
 import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
 
 /**
@@ -16,9 +16,9 @@ import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
 export class KipperCompileTarget {
 	public readonly targetName: string;
 	public readonly semanticAnalyser: KipperTargetSemanticAnalyser;
-	public readonly codeGenerator: KipperCodeGenerator;
+	public readonly codeGenerator: KipperTargetCodeGenerator;
 
-	constructor(targetName: string, semanticAnalyser: KipperTargetSemanticAnalyser, codeGenerator: KipperCodeGenerator) {
+	constructor(targetName: string, semanticAnalyser: KipperTargetSemanticAnalyser, codeGenerator: KipperTargetCodeGenerator) {
 		this.targetName = targetName;
 		this.semanticAnalyser = semanticAnalyser;
 		this.codeGenerator = codeGenerator;

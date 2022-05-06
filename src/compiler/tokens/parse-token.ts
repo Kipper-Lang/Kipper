@@ -11,6 +11,9 @@ import { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { getTokenSource } from "../../utils";
+import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
+import { KipperCompileTarget } from "../target/compile-target";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;

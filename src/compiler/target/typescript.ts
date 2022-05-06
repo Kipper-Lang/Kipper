@@ -6,7 +6,7 @@
  */
 import { KipperCompileTarget } from "./compile-target";
 import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
-import { KipperCodeGenerator } from "../code-generator";
+import { KipperTargetCodeGenerator } from "../code-generator";
 import {
 	type AdditiveExpression,
 	type ArgumentExpressionList,
@@ -169,7 +169,7 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	assignmentExpression = async (token: AssignmentExpression) => {};
 }
 
-export class TypeScriptTargetCodeGenerator extends KipperCodeGenerator {
+export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
