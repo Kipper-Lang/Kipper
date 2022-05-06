@@ -176,109 +176,109 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
-	compoundStatement = async (token: CompoundStatement): Promise<Array<any>> => {
+	compoundStatement = async (token: CompoundStatement): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link SelectionStatement} into the typescript language.
 	 */
-	selectionStatement = async (token: SelectionStatement): Promise<Array<any>> => {
+	selectionStatement = async (token: SelectionStatement): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ExpressionStatement} into the typescript language.
 	 */
-	expressionStatement = async (token: ExpressionStatement): Promise<Array<any>> => {
+	expressionStatement = async (token: ExpressionStatement): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link IterationStatement} into the typescript language.
 	 */
-	iterationStatement = async (token: IterationStatement): Promise<Array<any>> => {
+	iterationStatement = async (token: IterationStatement): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link JumpStatement} into the typescript language.
 	 */
-	jumpStatement = async (token: JumpStatement): Promise<Array<any>> => {
+	jumpStatement = async (token: JumpStatement): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ParameterDeclaration} into the typescript language.
 	 */
-	parameterDeclaration = async (token: ParameterDeclaration): Promise<Array<any>> => {
+	parameterDeclaration = async (token: ParameterDeclaration): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link FunctionDeclaration} into the typescript language.
 	 */
-	functionDeclaration = async (token: FunctionDeclaration): Promise<Array<any>> => {
+	functionDeclaration = async (token: FunctionDeclaration): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link VariableDeclaration} into the typescript language.
 	 */
-	variableDeclaration = async (token: VariableDeclaration): Promise<Array<any>> => {
+	variableDeclaration = async (token: VariableDeclaration): Promise<Array<Array<string>>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
 	 */
-	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<Array<any>> => {
+	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
 	 */
-	characterPrimaryExpression = async (token: CharacterPrimaryExpression): Promise<Array<any>> => {
+	characterPrimaryExpression = async (token: CharacterPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ListPrimaryExpression} into the typescript language.
 	 */
-	listPrimaryExpression = async (token: ListPrimaryExpression): Promise<Array<any>> => {
+	listPrimaryExpression = async (token: ListPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into the typescript language.
 	 */
-	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression): Promise<Array<any>> => {
+	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link StringPrimaryExpression} into the typescript language.
 	 */
-	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<Array<any>> => {
+	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link FStringPrimaryExpression} into the typescript language.
 	 */
-	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<Array<any>> => {
+	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into the typescript language.
 	 */
-	tangledPrimaryExpression = async (token: TangledPrimaryExpression): Promise<Array<any>> => {
+	tangledPrimaryExpression = async (token: TangledPrimaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ArraySpecifierExpression} into the typescript language.
 	 */
-	arraySpecifierExpression = async (token: ArraySpecifierExpression): Promise<Array<any>> => {
+	arraySpecifierExpression = async (token: ArraySpecifierExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link IncrementOrDecrementExpression} into the typescript language.
 	 */
-	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression): Promise<Array<any>> => {
+	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link FunctionCallPostfixExpression} into the typescript language.
 	 */
-	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<Array<any>> => {
+	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
@@ -290,67 +290,67 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the typescript language.
 	 */
-	incrementOrDecrementUnaryExpression = async (token: IncrementOrDecrementUnaryExpression): Promise<Array<any>> => {
+	incrementOrDecrementUnaryExpression = async (token: IncrementOrDecrementUnaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link OperatorModifiedUnaryExpression} into the typescript language.
 	 */
-	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression): Promise<Array<any>> => {
+	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
-	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<Array<any>> => {
+	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link MultiplicativeExpression} into the typescript language.
 	 */
-	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<Array<any>> => {
+	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link AdditiveExpression} into the typescript language.
 	 */
-	additiveExpression = async (token: AdditiveExpression): Promise<Array<any>> => {
+	additiveExpression = async (token: AdditiveExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link RelationalExpression} into the typescript language.
 	 */
-	relationalExpression = async (token: RelationalExpression): Promise<Array<any>> => {
+	relationalExpression = async (token: RelationalExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link EqualityExpression} into the typescript language.
 	 */
-	equalityExpression = async (token: EqualityExpression): Promise<Array<any>> => {
+	equalityExpression = async (token: EqualityExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link LogicalAndExpression} into the typescript language.
 	 */
-	logicalAndExpression = async (token: LogicalAndExpression): Promise<Array<any>> => {
+	logicalAndExpression = async (token: LogicalAndExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link LogicalOrExpression} into the typescript language.
 	 */
-	logicalOrExpression = async (token: LogicalOrExpression): Promise<Array<any>> => {
+	logicalOrExpression = async (token: LogicalOrExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ConditionalExpression} into the typescript language.
 	 */
-	conditionalExpression = async (token: ConditionalExpression): Promise<Array<any>> => {
+	conditionalExpression = async (token: ConditionalExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link AssignmentExpression} into the typescript language.
 	 */
-	assignmentExpression = async (token: AssignmentExpression): Promise<Array<any>> => {
+	assignmentExpression = async (token: AssignmentExpression): Promise<Array<string>> => {
 		return [];
 	};
 }
