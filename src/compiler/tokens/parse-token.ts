@@ -131,6 +131,32 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 		return this.programCtx.tokenStream;
 	}
 
+  /**
+   * The compilation target for this specific token.
+   * @since 0.5.0
+   */
+  public get target(): KipperCompileTarget {
+    return this.programCtx.target;
+  }
+
+  /**
+   * The code generator, which will generate the code for this specific token
+   * into the {@link this.target target language}.
+   * @since 0.5.0
+   */
+  public get codeGenerator(): KipperTargetCodeGenerator {
+    return this.target.codeGenerator;
+  }
+
+  /**
+   * The target-specific semantic analyser, which will perform semantic analysis
+   * specific for the {@link this.target target language}.
+   * @since 0.5.0
+   */
+  public get semanticAnalyser(): KipperTargetSemanticAnalyser {
+    return this.target.semanticAnalyser;
+  }
+
 	/**
 	 * Adds new child ctx item to this expression. The child item should be in the order that they appeared in the
 	 * {@link this.antlrCtx} parse tree.
