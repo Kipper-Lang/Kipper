@@ -41,7 +41,10 @@ import {
 } from "../tokens";
 
 export class TypeScriptTarget extends KipperCompileTarget {
-	constructor(semanticAnalyser: TypeScriptTargetSemanticAnalyser, codeGenerator: TypeScriptTargetCodeGenerator) {
+	constructor(
+    semanticAnalyser: TypeScriptTargetSemanticAnalyser = new TypeScriptTargetSemanticAnalyser(),
+    codeGenerator: TypeScriptTargetCodeGenerator = new TypeScriptTargetCodeGenerator()
+  ) {
 		super("typescript", semanticAnalyser, codeGenerator);
 	}
 }
