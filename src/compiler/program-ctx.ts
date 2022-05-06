@@ -324,13 +324,13 @@ export class KipperProgramContext {
 	 */
 	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
-  /**
-   * Represents the compilation target for the program. This contains the
-   * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
-   * specific for the target, and {@link KipperTargetCodeGenerator}, which
-   * translates the Kipper code into a target language.
-   */
-  public readonly target: KipperCompileTarget;
+	/**
+	 * Represents the compilation target for the program. This contains the
+	 * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
+	 * specific for the target, and {@link KipperTargetCodeGenerator}, which
+	 * translates the Kipper code into a target language.
+	 */
+	public readonly target: KipperCompileTarget;
 
 	/**
 	 * The logger that should be used to log warnings and errors.
@@ -343,7 +343,7 @@ export class KipperProgramContext {
 	 * @public
 	 * @since 0.2.0
 	 */
-  private readonly _assert: CompileAssert;
+	private readonly _assert: CompileAssert;
 
 	constructor(
 		stream: KipperParseStream,
@@ -351,10 +351,10 @@ export class KipperProgramContext {
 		parser: KipperParser,
 		lexer: KipperLexer,
 		logger: KipperLogger,
-    target: KipperCompileTarget
+		target: KipperCompileTarget,
 	) {
 		this.logger = logger;
-    this.target = target;
+		this.target = target;
 		this._assert = new CompileAssert(this);
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;

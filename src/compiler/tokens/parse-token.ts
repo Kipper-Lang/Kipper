@@ -14,6 +14,9 @@ import { getTokenSource } from "../../utils";
 import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
 import { KipperCompileTarget } from "../target/compile-target";
+import { Declaration } from "./definitions";
+import { Statement } from "./statements";
+import { TranslatedCodeLine } from "../logic";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -56,9 +59,6 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 		this._antlrCtx = antlrCtx;
 		this._parent = parent;
 		this._children = [];
-
-		// Adding to the parent this instance
-		parent.addNewChild(this);
 	}
 
 	/**
@@ -131,31 +131,31 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 		return this.programCtx.tokenStream;
 	}
 
-  /**
-   * The compilation target for this specific token.
-   * @since 0.5.0
-   */
-  public get target(): KipperCompileTarget {
-    return this.programCtx.target;
-  }
+	/**
+	 * The compilation target for this specific token.
+	 * @since 0.5.0
+	 */
+	public get target(): KipperCompileTarget {
+		return this.programCtx.target;
+	}
 
-  /**
-   * The code generator, which will generate the code for this specific token
-   * into the {@link this.target target language}.
-   * @since 0.5.0
-   */
-  public get codeGenerator(): KipperTargetCodeGenerator {
-    return this.target.codeGenerator;
-  }
+	/**
+	 * The code generator, which will generate the code for this specific token
+	 * into the {@link this.target target language}.
+	 * @since 0.5.0
+	 */
+	public get codeGenerator(): KipperTargetCodeGenerator {
+		return this.target.codeGenerator;
+	}
 
-  /**
-   * The target-specific semantic analyser, which will perform semantic analysis
-   * specific for the {@link this.target target language}.
-   * @since 0.5.0
-   */
-  public get semanticAnalyser(): KipperTargetSemanticAnalyser {
-    return this.target.semanticAnalyser;
-  }
+	/**
+	 * The target-specific semantic analyser, which will perform semantic analysis
+	 * specific for the {@link this.target target language}.
+	 * @since 0.5.0
+	 */
+	public get semanticAnalyser(): KipperTargetSemanticAnalyser {
+		return this.target.semanticAnalyser;
+	}
 
 	/**
 	 * Adds new child ctx item to this expression. The child item should be in the order that they appeared in the
@@ -182,19 +182,65 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public abstract semanticAnalysis(): Promise<void>;
-
-	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 *
-	 * Every item in the array represents a single line of code.
+	 * If the return is of type {@link Array Array<string>} then each item
+	 * is a single token of a line, where each item should be seperated by a
+	 * whitespace.
 	 */
-	public abstract translateCtxAndChildren(): Promise<Array<any>>;
+	public async translateCtxAndChildren(): Promise<Array<string | Array<string>>> {
+		return await this.targetCodeGenerator(this);
+	}
+
+	/**
+	 * Semantically analyses the code inside this token. This function will
+	 * recursively call itself on the {@link this.children} instances and
+	 * analyse the simplest tokens first, working up as the tokens get more
+	 * complex. This way the parent tokens can access the semantics of the
+	 * children and properly process itself.
+	 */
+	public async semanticAnalysis(): Promise<void> {
+		// Start with the children, and then work upwards as the structures get more complex
+		for (let child of this.children) {
+			await child.semanticAnalysis();
+		}
+
+		// Finally, check if the entire token is semantically valid
+		await this.primarySemanticAnalysis();
+		await this.targetSemanticAnalysis(this);
+	}
+
+	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.5.0
+	 * @abstract
+	 */
+	protected abstract primarySemanticAnalysis(): Promise<void>;
+
+	/**
+	 * Semantic analysis for the code inside the parse token that is specific
+	 * for a {@link KipperCompileTarget}.
+	 *
+	 * This only should perform logical analysis and not interpret the code/modify
+	 * the {@link semanticData} field.
+	 * @since 0.5.0
+	 * @abstract
+	 */
+	protected abstract targetSemanticAnalysis: TargetTokenSemanticAnalyser<any>;
+
+	/**
+	 * Code generator for the code inside the parse token that is specific
+	 * for a {@link KipperCompileTarget}.
+	 * @since 0.5.0
+	 * @abstract
+	 */
+	protected abstract targetCodeGenerator: TargetTokenCodeGenerator<any, TranslatedCodeLine | Array<TranslatedCodeLine>>;
 }
 
+/**
+ * Represents a token that contains all tokens of a file. This class can be seen as a direct file representation.
+ */
 export class RootFileParseToken {
 	/**
 	 * The private '_parent' that actually stores the variable data,
@@ -208,7 +254,7 @@ export class RootFileParseToken {
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
-	protected readonly _children: Array<eligibleChildToken>;
+	protected readonly _children: Array<Declaration<any> | Statement<any>>;
 
 	constructor(programCtx: KipperProgramContext) {
 		this._programCtx = programCtx;
@@ -225,7 +271,7 @@ export class RootFileParseToken {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<eligibleChildToken> {
+	public get children(): Array<Declaration<any> | Statement<any>> {
 		return this._children;
 	}
 
@@ -236,8 +282,36 @@ export class RootFileParseToken {
 	 *  let newExpression = new Expression(ctx, this.fileCtx);
 	 *  oldExpression.addNewChild(newExpression);
 	 */
-	public addNewChild(newChild: eligibleChildToken): void {
+	public addNewChild(newChild: Declaration<any> | Statement<any>): void {
 		this._children.push(newChild);
+	}
+
+	/**
+	 * Semantically analyses the children tokens of this
+	 * {@link RootFileParseToken instance} and performs additional
+	 * {@link CompilableParseToken.targetSemanticAnalysis target specific analysis}.
+	 * @since 0.5.0
+	 */
+	public async semanticAnalysis(): Promise<void> {
+		// Run for every child the analysis
+		for (let child of this.children) {
+			await child.semanticAnalysis();
+		}
+	}
+
+	/**
+	 * Translates the children tokens of this {@link RootFileParseToken instance}
+	 * into the specific {@link this.programCtx.target target}.
+	 * @since 0.5.0
+	 * @protected
+	 */
+	protected async translate(): Promise<Array<TranslatedCodeLine>> {
+		let genCode: Array<TranslatedCodeLine> = [];
+		for (let child of this.children) {
+			const code = await child.translateCtxAndChildren();
+			genCode = genCode.concat(code);
+		}
+		return genCode;
 	}
 
 	/**
@@ -246,28 +320,8 @@ export class RootFileParseToken {
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public async compileCtx(): Promise<Array<Array<string>>> {
-		// Semantically analyse the code and properly register the logical content
-		const runAnalysis = async (ctx: eligibleChildToken) => {
-			// Start with the children, and then work upwards as the structures get more complex
-			for (let child of ctx.children) {
-				await runAnalysis(child);
-			}
-
-			// Finally, check if the entire token is semantically valid
-			await ctx.semanticAnalysis();
-		};
-
-		// Run for every child the analysis
-		for (let child of this.children) {
-			await runAnalysis(child);
-		}
-
-		// Compile the code
-		let genCode: Array<Array<string>> = [];
-		for (let child of this.children) {
-			genCode = genCode.concat(await child.translateCtxAndChildren());
-		}
-		return genCode;
+	public async compileCtx(): Promise<Array<TranslatedCodeLine>> {
+		await this.semanticAnalysis();
+		return await this.translate();
 	}
 }

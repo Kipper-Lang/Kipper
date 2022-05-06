@@ -35,11 +35,11 @@ export interface CompileConfig {
 	 * @since 0.2.0
 	 */
 	fileName?: string;
-  /**
-   * The target languages for the compilation.
-   * @since 0.5.0
-   */
-  target?: KipperCompileTarget;
+	/**
+	 * The target languages for the compilation.
+	 * @since 0.5.0
+	 */
+	target?: KipperCompileTarget;
 }
 
 /**
@@ -65,7 +65,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		globals: [builtInWebPrintFunction],
 		extendGlobals: [],
 		fileName: "anonymous-script",
-    target: new TypeScriptTarget()
+		target: new TypeScriptTarget(),
 	};
 
 	/**
@@ -81,7 +81,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 
 	public readonly fileName: string;
 
-  public readonly target: KipperCompileTarget;
+	public readonly target: KipperCompileTarget;
 
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
@@ -90,7 +90,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		this.globals = options.globals ?? CompilerEvaluatedOptions.defaults.globals;
 		this.extendGlobals = options.extendGlobals ?? CompilerEvaluatedOptions.defaults.extendGlobals;
 		this.fileName = options.fileName ?? CompilerEvaluatedOptions.defaults.fileName;
-    this.target = options.target ?? CompilerEvaluatedOptions.defaults.target;
+		this.target = options.target ?? CompilerEvaluatedOptions.defaults.target;
 	}
 }
 
@@ -198,15 +198,15 @@ export class KipperCompiler {
 	 * async processing.
 	 * @param parseStream The {@link KipperParseStream} instance that contains the required string
 	 * content.
-   * @param target The {@link KipperCompileTarget} which specifies the compilation target for the
-   * language. Per default this is {@link TypeScriptTarget}.
+	 * @param target The {@link KipperCompileTarget} which specifies the compilation target for the
+	 * language. Per default this is {@link TypeScriptTarget}.
 	 * @returns The generated and parsed {@link CompilationUnitContext}.
 	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
 	 */
 	public async parse(
-    parseStream: KipperParseStream,
-    target: KipperCompileTarget = new TypeScriptTarget()
-  ): Promise<KipperProgramContext> {
+		parseStream: KipperParseStream,
+		target: KipperCompileTarget = new TypeScriptTarget(),
+	): Promise<KipperProgramContext> {
 		this._logger.info(`Parsing '${parseStream.name}'.`);
 
 		// Creating the char stream, based on the input

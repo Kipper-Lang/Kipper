@@ -29,8 +29,19 @@ import {
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
 } from "../parser";
-import { BuiltInFunction, KipperType, ScopeFunctionDeclaration } from "../logic";
+import {
+	BuiltInFunction,
+	KipperCharType,
+	KipperListType,
+	KipperNumType,
+	KipperStrType,
+	KipperType,
+	ScopeFunctionDeclaration,
+	TranslatedExpression,
+} from "../logic";
 import { UnableToDetermineMetadataError } from "../../errors";
+import { TargetTokenCodeGenerator } from "../code-generator";
+import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Every antlr4 expression ctx type
@@ -135,6 +146,9 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
 		this._children = [];
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
 	}
 
 	public get children(): Array<Expression<any>> {
@@ -146,34 +160,70 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
 	}
 
 	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public abstract translateCtxAndChildren(): Promise<Array<any>>;
-
-	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrCtx(): antlrExpressionCtxType {
 		return this._antlrCtx;
 	}
+
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 *
+	 * Every item in the array represents a token of the expression.
+	 */
+	public async translateCtxAndChildren(): Promise<Array<string>> {
+		return await this.targetCodeGenerator(this);
+	}
+
+	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, TranslatedExpression>;
+}
+
+/**
+ * Semantics for {@link ConstantExpression}.
+ * @since 0.5.0
+ */
+export interface ConstantExpressionSemantics {
+	/**
+	 * The type of the constant expression.
+	 * @since 0.5.0
+	 */
+	type: KipperType;
+	/**
+	 * The value of the constant expression. This is usually either a {@link String} or {@link Number}.
+	 * @since 0.5.0
+	 */
+	value: any;
 }
 
 /**
  * Abstract base class constant expression representing a constant expression. This type only exists to narrow down the
  * generic type.
  */
-export abstract class ConstantExpression<
-	Semantics extends { type: KipperType; value: any },
-> extends Expression<Semantics> {}
+export abstract class ConstantExpression<Semantics extends ConstantExpressionSemantics> extends Expression<Semantics> {}
+
+/**
+ * Semantics for {@link NumberPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface NumberPrimaryExpressionSemantics {
+	/**
+	 * The type of the constant expression.
+	 * @since 0.5.0
+	 */
+	type: KipperNumType;
+	/**
+	 * The value of the constant number expression.
+	 * @since 0.5.0
+	 */
+	value: number;
+}
 
 /**
  * Integer constant expression class, which represents an integer constant in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class NumberPrimaryExpression extends ConstantExpression<{ type: KipperType; value: number }> {
+export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -190,21 +240,11 @@ export class NumberPrimaryExpression extends ConstantExpression<{ type: KipperTy
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: +this.sourceCode,
 			type: "num",
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -213,13 +253,35 @@ export class NumberPrimaryExpression extends ConstantExpression<{ type: KipperTy
 	public override get antlrCtx(): NumberPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<NumberPrimaryExpression> =
+		this.semanticAnalyser.numberPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.numberPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link CharacterPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface CharacterPrimaryExpressionSemantics {
+	/**
+	 * The type of the constant character expression.
+	 * @since 0.5.0
+	 */
+	type: KipperCharType;
+	/**
+	 * The value of the constant character expression.
+	 * @since 0.5.0
+	 */
+	value: string;
 }
 
 /**
  * Character constant expression class, which represents an integer constant in the Kipper language.
  * @since 0.1.0
  */
-export class CharacterPrimaryExpression extends ConstantExpression<{ type: KipperType; value: string }> {
+export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -236,21 +298,11 @@ export class CharacterPrimaryExpression extends ConstantExpression<{ type: Kippe
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
 			type: "char",
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -259,13 +311,35 @@ export class CharacterPrimaryExpression extends ConstantExpression<{ type: Kippe
 	public override get antlrCtx(): CharacterPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CharacterPrimaryExpression> =
+		this.semanticAnalyser.characterPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.characterPrimaryExpression;
 }
 
 /**
- *  List constant expression class, which represents a list constant in the Kipper language.
+ * Semantics for {@link ListPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface ListPrimaryExpressionSemantics {
+	/**
+	 * The type of the constant list expression.
+	 * @since 0.5.0
+	 */
+	type: KipperListType<KipperType>;
+	/**
+	 * The value of the constant list expression.
+	 * @since 0.5.0
+	 */
+	value: Array<Expression<any>>;
+}
+
+/**
+ * List constant expression class, which represents a list constant in the Kipper language.
  * @since 0.1.0
  */
-export class ListPrimaryExpression extends ConstantExpression<{ type: KipperType; value: Array<Expression<any>> }> {
+export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -282,21 +356,11 @@ export class ListPrimaryExpression extends ConstantExpression<{ type: KipperType
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			type: "list",
 			value: [], // TODO! Implement list data fetching.
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -305,6 +369,28 @@ export class ListPrimaryExpression extends ConstantExpression<{ type: KipperType
 	public override get antlrCtx(): ListPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ListPrimaryExpression> =
+		this.semanticAnalyser.listPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.listPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link StringPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface StringPrimaryExpressionSemantics {
+	/**
+	 * The type of the constant string expression.
+	 * @since 0.5.0
+	 */
+	type: KipperStrType;
+	/**
+	 * The value of the constant string expression.
+	 * @since 0.5.0
+	 */
+	value: string;
 }
 
 /**
@@ -312,7 +398,7 @@ export class ListPrimaryExpression extends ConstantExpression<{ type: KipperType
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class StringPrimaryExpression extends ConstantExpression<{ type: KipperType; value: string }> {
+export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -329,7 +415,7 @@ export class StringPrimaryExpression extends ConstantExpression<{ type: KipperTy
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			type: "str",
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
@@ -353,6 +439,23 @@ export class StringPrimaryExpression extends ConstantExpression<{ type: KipperTy
 	public override get antlrCtx(): StringPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<StringPrimaryExpression> =
+		this.semanticAnalyser.stringPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<StringPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.stringPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link IdentifierPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface IdentifierPrimaryExpressionSemantics {
+	/**
+	 * The constant identifier.
+	 * @since 0.5.0
+	 */
+	identifier: string;
 }
 
 /**
@@ -360,7 +463,7 @@ export class StringPrimaryExpression extends ConstantExpression<{ type: KipperTy
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class IdentifierPrimaryExpression extends Expression<{ identifier: string }> {
+export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -377,7 +480,7 @@ export class IdentifierPrimaryExpression extends Expression<{ identifier: string
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			identifier: this.sourceCode,
 		};
@@ -400,6 +503,24 @@ export class IdentifierPrimaryExpression extends Expression<{ identifier: string
 	public override get antlrCtx(): IdentifierPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IdentifierPrimaryExpression> =
+		this.semanticAnalyser.identifierPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.identifierPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link FStringPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface FStringPrimaryExpressionSemantics {
+	/**
+	 * Returns the items of the f-strings, where each item represents one section of a string. The section may either be
+	 * a {@link String constant string} or {@link Expression evaluable runtime expression}.
+	 * @since 0.5.0
+	 */
+	items: Array<string | Expression<any>>;
 }
 
 /**
@@ -407,7 +528,7 @@ export class IdentifierPrimaryExpression extends Expression<{ identifier: string
  * {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class FStringPrimaryExpression extends Expression<{ items: Array<string | Expression<any>> }> {
+export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -426,20 +547,10 @@ export class FStringPrimaryExpression extends Expression<{ items: Array<string |
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -448,14 +559,25 @@ export class FStringPrimaryExpression extends Expression<{ items: Array<string |
 	public override get antlrCtx(): FStringPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FStringPrimaryExpression> =
+		this.semanticAnalyser.fStringPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.fStringPrimaryExpression;
 }
+
+/**
+ * Semantics for {@link TangledPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface TangledPrimaryExpressionSemantics {}
 
 /**
  * Tangled expression class, which represents a tangled expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export class TangledPrimaryExpression extends Expression<{}> {
+export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -472,7 +594,7 @@ export class TangledPrimaryExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -496,16 +618,27 @@ export class TangledPrimaryExpression extends Expression<{}> {
 	public override get antlrCtx(): TangledPrimaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TangledPrimaryExpression> =
+		this.semanticAnalyser.tangledPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<TangledPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.tangledPrimaryExpression;
 }
 
 /**
- * Increment or Decrement expression, which represents a singular expression of ++ or --
+ * Semantics for {@link IncrementOrDecrementExpression}.
+ * @since 0.5.0
+ */
+export interface IncrementOrDecrementExpressionSemantics {}
+
+/**
+ * Increment or Decrement expression,  which represents a left-side -- or ++ expression in the Kipper language.
  * @since 0.1.0
  * @example
  * val++
  * val--
  */
-export class IncrementOrDecrementExpression extends Expression<{}> {
+export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrementExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -522,18 +655,8 @@ export class IncrementOrDecrementExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -542,7 +665,18 @@ export class IncrementOrDecrementExpression extends Expression<{}> {
 	public override get antlrCtx(): IncrementOrDecrementPostfixExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementExpression> =
+		this.semanticAnalyser.incrementOrDecrementExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
+		this.codeGenerator.incrementOrDecrementExpression;
 }
+
+/**
+ * Semantics for {@link ArraySpecifierExpression}.
+ * @since 0.5.0
+ */
+export interface ArraySpecifierExpressionSemantics {}
 
 /**
  * Array Specifier expression, which accesses a list/array based on its index.
@@ -550,7 +684,7 @@ export class IncrementOrDecrementExpression extends Expression<{}> {
  * @example
  * array[0]
  */
-export class ArraySpecifierExpression extends Expression<{}> {
+export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -567,18 +701,8 @@ export class ArraySpecifierExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -587,7 +711,18 @@ export class ArraySpecifierExpression extends Expression<{}> {
 	public override get antlrCtx(): ArraySpecifierPostfixExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArraySpecifierExpression> =
+		this.semanticAnalyser.arraySpecifierExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.arraySpecifierExpression;
 }
+
+/**
+ * Semantics for {@link FunctionCallPostfixExpression}.
+ * @since 0.5.0
+ */
+export interface FunctionCallPostfixExpressionSemantics {}
 
 /**
  * Function call class, which represents a function call expression in the Kipper language and is compilable using
@@ -596,7 +731,7 @@ export class ArraySpecifierExpression extends Expression<{}> {
  * @example
  * call print("Hello world!")
  */
-export class FunctionCallPostfixExpression extends Expression<{}> {
+export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfixExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -638,7 +773,7 @@ export class FunctionCallPostfixExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// Assert that the function exists
 		this.programCtx.assert(this).functionIsDefined(this.identifier);
 	}
@@ -673,7 +808,18 @@ export class FunctionCallPostfixExpression extends Expression<{}> {
 	public override get antlrCtx(): FunctionCallPostfixExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression> =
+		this.semanticAnalyser.functionCallPostfixExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<FunctionCallPostfixExpression, TranslatedExpression> =
+		this.codeGenerator.functionCallPostfixExpression;
 }
+
+/**
+ * Semantics for {@link ArgumentExpressionListExpression}.
+ * @since 0.5.0
+ */
+export interface ArgumentExpressionListExpressionSemantics {}
 
 /**
  * Argument expression list used inside a function call.
@@ -681,7 +827,7 @@ export class FunctionCallPostfixExpression extends Expression<{}> {
  * @example
  * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
  */
-export class ArgumentExpressionListExpression extends Expression<{}> {
+export class ArgumentExpressionListExpression extends Expression<ArgumentExpressionListExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -698,7 +844,7 @@ export class ArgumentExpressionListExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
 	}
 
@@ -714,16 +860,34 @@ export class ArgumentExpressionListExpression extends Expression<{}> {
 		}
 		return genCode;
 	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrCtx(): ArgumentExpressionListContext {
+		return this._antlrCtx;
+	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArgumentExpressionListExpression> =
+		this.semanticAnalyser.argumentExpressionList;
+	targetCodeGenerator: TargetTokenCodeGenerator<ArgumentExpressionListExpression, TranslatedExpression> =
+		this.codeGenerator.argumentExpressionList;
 }
 
 /**
- * Increment or decrement expression class, which represents an -- or ++ expression in the Kipper language.
+ * Semantics for {@link IncrementOrDecrementUnaryExpression}.
+ * @since 0.5.0
+ */
+export interface IncrementOrDecrementUnaryExpressionSemantics {}
+
+/**
+ * Increment or decrement expression class, which represents a left-side -- or ++ expression in the Kipper language.
  * @since 0.1.0
  * @example
  * ++4 // 5
  * --61 // 60
  */
-export class IncrementOrDecrementUnaryExpression extends Expression<{}> {
+export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -740,18 +904,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -760,7 +914,18 @@ export class IncrementOrDecrementUnaryExpression extends Expression<{}> {
 	public override get antlrCtx(): IncrementOrDecrementUnaryExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
+		this.semanticAnalyser.incrementOrDecrementUnaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
+		this.codeGenerator.incrementOrDecrementUnaryExpression;
 }
+
+/**
+ * Semantics for {@link OperatorModifiedUnaryExpression}.
+ * @since 0.5.0
+ */
+export interface OperatorModifiedUnaryExpressionSemantics {}
 
 /**
  * Operator modified unary expression class, which represents a signed (+/-) unary expression in the Kipper language
@@ -770,7 +935,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<{}> {
  * -41 // -41
  * +59 // 59
  */
-export class OperatorModifiedUnaryExpression extends Expression<{}> {
+export class OperatorModifiedUnaryExpression extends Expression<OperatorModifiedUnaryExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -784,30 +949,31 @@ export class OperatorModifiedUnaryExpression extends Expression<{}> {
 	}
 
 	/**
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrCtx(): OperatorModifiedUnaryExpressionContext {
 		return this._antlrCtx;
 	}
 
-	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async semanticAnalysis(): Promise<void> {
-		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<OperatorModifiedUnaryExpression> =
+		this.semanticAnalyser.operatorModifiedUnaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<OperatorModifiedUnaryExpression, TranslatedExpression> =
+		this.codeGenerator.operatorModifiedUnaryExpression;
 }
+
+/**
+ * Semantics for {@link CastOrConvertExpression}.
+ * @since 0.5.0
+ */
+export interface CastOrConvertExpressionSemantics {}
 
 /**
  * Convert expression class, which represents a conversion expression in the Kipper language and is compilable using
@@ -817,7 +983,7 @@ export class OperatorModifiedUnaryExpression extends Expression<{}> {
  * "4" as num // 4
  * 39 as str // "39"
  */
-export class CastOrConvertExpression extends Expression<{}> {
+export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -834,18 +1000,8 @@ export class CastOrConvertExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -854,7 +1010,18 @@ export class CastOrConvertExpression extends Expression<{}> {
 	public override get antlrCtx(): CastOrConvertExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CastOrConvertExpression> =
+		this.semanticAnalyser.castOrConvertExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
+		this.codeGenerator.castOrConvertExpression;
 }
+
+/**
+ * Semantics for {@link MultiplicativeExpression}.
+ * @since 0.5.0
+ */
+export interface MultiplicativeExpressionSemantics {}
 
 /**
  * Multiplicative expression class, which represents a multiplicative expression in the Kipper language.
@@ -865,7 +1032,7 @@ export class CastOrConvertExpression extends Expression<{}> {
  * 96 % 15 // 6
  * 2 ** 8 // 256
  */
-export class MultiplicativeExpression extends Expression<{}> {
+export class MultiplicativeExpression extends Expression<MultiplicativeExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -882,18 +1049,8 @@ export class MultiplicativeExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -902,7 +1059,18 @@ export class MultiplicativeExpression extends Expression<{}> {
 	public override get antlrCtx(): MultiplicativeExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<MultiplicativeExpression> =
+		this.semanticAnalyser.multiplicativeExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
+		this.codeGenerator.multiplicativeExpression;
 }
+
+/**
+ * Semantics for {@link AdditiveExpression}.
+ * @since 0.5.0
+ */
+export interface AdditiveExpressionSemantics {}
 
 /**
  * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
@@ -912,7 +1080,7 @@ export class MultiplicativeExpression extends Expression<{}> {
  * 4 + 4 // 8
  * 9 - 3 // 6
  */
-export class AdditiveExpression extends Expression<{}> {
+export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -929,18 +1097,8 @@ export class AdditiveExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -949,7 +1107,17 @@ export class AdditiveExpression extends Expression<{}> {
 	public override get antlrCtx(): AdditiveExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<AdditiveExpression, TranslatedExpression> =
+		this.codeGenerator.additiveExpression;
 }
+
+/**
+ * Semantics for {@link RelationalExpression}.
+ * @since 0.5.0
+ */
+export interface RelationalExpressionSemantics {}
 
 /**
  * Relational expression class, which represents a relational expression in the Kipper language and is compilable using
@@ -967,7 +1135,7 @@ export class AdditiveExpression extends Expression<{}> {
  * 77 <= 77 // true
  * 36 <= 12 // false
  */
-export class RelationalExpression extends Expression<{}> {
+export class RelationalExpression extends Expression<RelationalExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -984,18 +1152,8 @@ export class RelationalExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1004,7 +1162,18 @@ export class RelationalExpression extends Expression<{}> {
 	public override get antlrCtx(): RelationalExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<RelationalExpression> =
+		this.semanticAnalyser.relationalExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<RelationalExpression, TranslatedExpression> =
+		this.codeGenerator.relationalExpression;
 }
+
+/**
+ * Semantics for {@link EqualityExpressionSemantics}.
+ * @since 0.5.0
+ */
+export interface EqualityExpressionSemantics {}
 
 /**
  * Equality expression class, which represents an equality check expression in the Kipper language and is compilable
@@ -1016,7 +1185,7 @@ export class RelationalExpression extends Expression<{}> {
  * 32 != 9 // true
  * 59 != 59 // false
  */
-export class EqualityExpression extends Expression<{}> {
+export class EqualityExpression extends Expression<EqualityExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1033,18 +1202,8 @@ export class EqualityExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1053,7 +1212,17 @@ export class EqualityExpression extends Expression<{}> {
 	public override get antlrCtx(): EqualityExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<EqualityExpression, TranslatedExpression> =
+		this.codeGenerator.equalityExpression;
 }
+
+/**
+ * Semantics for {@link LogicalAndExpression}.
+ * @since 0.5.0
+ */
+export interface LogicalAndExpressionSemantics {}
 
 /**
  * Logical-And expression class, which represents a logical-and expression in the Kipper language and is compilable
@@ -1065,7 +1234,7 @@ export class EqualityExpression extends Expression<{}> {
  * false && true // false
  * true && true // true
  */
-export class LogicalAndExpression extends Expression<{}> {
+export class LogicalAndExpression extends Expression<LogicalAndExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1082,18 +1251,8 @@ export class LogicalAndExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1102,7 +1261,18 @@ export class LogicalAndExpression extends Expression<{}> {
 	public override get antlrCtx(): LogicalAndExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalAndExpression> =
+		this.semanticAnalyser.logicalAndExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<LogicalAndExpression, TranslatedExpression> =
+		this.codeGenerator.logicalAndExpression;
 }
+
+/**
+ * Semantics for {@link LogicalOrExpression}.
+ * @since 0.5.0
+ */
+export interface LogicalOrExpressionSemantics {}
 
 /**
  * Logical-Or expression class, which represents a logical-or expression in the Kipper language and is compilable using
@@ -1114,7 +1284,7 @@ export class LogicalAndExpression extends Expression<{}> {
  * false || true // true
  * true || true // true
  */
-export class LogicalOrExpression extends Expression<{}> {
+export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1131,18 +1301,8 @@ export class LogicalOrExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1151,7 +1311,17 @@ export class LogicalOrExpression extends Expression<{}> {
 	public override get antlrCtx(): LogicalOrExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalOrExpression> = this.semanticAnalyser.logicalOrExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<LogicalOrExpression, TranslatedExpression> =
+		this.codeGenerator.logicalOrExpression;
 }
+
+/**
+ * Semantics for {@link ConditionalExpression}.
+ * @since 0.5.0
+ */
+export interface ConditionalExpressionSemantics {}
 
 /**
  * Conditional expression class, which represents a conditional expression in the Kipper language and is compilable
@@ -1161,7 +1331,7 @@ export class LogicalOrExpression extends Expression<{}> {
  * true ? 3 : 4; // 3
  * false ? 3 : 4; // 4
  */
-export class ConditionalExpression extends Expression<{}> {
+export class ConditionalExpression extends Expression<ConditionalExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1178,18 +1348,8 @@ export class ConditionalExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1198,7 +1358,18 @@ export class ConditionalExpression extends Expression<{}> {
 	public override get antlrCtx(): ConditionalExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ConditionalExpression> =
+		this.semanticAnalyser.conditionalExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<ConditionalExpression, TranslatedExpression> =
+		this.codeGenerator.conditionalExpression;
 }
+
+/**
+ * Semantics for {@link AssignmentExpression}.
+ * @since 0.5.0
+ */
+export interface AssignmentExpressionSemantics {}
 
 /**
  * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
@@ -1207,7 +1378,7 @@ export class ConditionalExpression extends Expression<{}> {
  * @example
  * x = 4
  */
-export class AssignmentExpression extends Expression<{}> {
+export class AssignmentExpression extends Expression<AssignmentExpressionSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -1224,18 +1395,8 @@ export class AssignmentExpression extends Expression<{}> {
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO!
-		return [];
 	}
 
 	/**
@@ -1244,4 +1405,9 @@ export class AssignmentExpression extends Expression<{}> {
 	public override get antlrCtx(): AssignmentExpressionContext {
 		return this._antlrCtx;
 	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AssignmentExpression> =
+		this.semanticAnalyser.assignmentExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<AssignmentExpression, TranslatedExpression> =
+		this.codeGenerator.assignmentExpression;
 }

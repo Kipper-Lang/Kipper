@@ -37,139 +37,169 @@ import {
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
 } from "./tokens";
+import { TranslatedCodeLine, TranslatedExpression } from "./logic";
 
 /**
  * Represents a function that generates code into a
  * {@link KipperCompileTarget specific language} for a
  * {@link CompilableParseToken}.
+ *
+ * The return may only be of type {@link Array string[]} or {@link Array string[][] }. The first
+ * option represents the return of multiple tokens, like in a {@link Expression}. The second options represents
+ * multiple lines of tokens, where each sub-array represents a single line. This is primarily used for
+ * {@link Declaration declarations} and {@link Statement statements}.
  * @since 0.5.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TargetTokenCodeGenerator<T extends CompilableParseToken<any>> = (token: T) => Promise<Array<string | Array<string>>>;
+export type TargetTokenCodeGenerator<
+	T extends CompilableParseToken<any>,
+	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
+> = (token: T) => Promise<R>;
 
 /**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @since 0.5.0
  */
-export abstract class KipperCodeGenerator {
+export abstract class KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link CompoundStatement} into a specific language.
 	 */
-	public abstract compoundStatement: TokenCodeGenerator<CompoundStatement>;
+	public abstract compoundStatement: TargetTokenCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link SelectionStatement} into a specific language.
 	 */
-	public abstract selectionStatement: TokenCodeGenerator<SelectionStatement>;
+	public abstract selectionStatement: TargetTokenCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link ExpressionStatement} into a specific language.
 	 */
-	public abstract expressionStatement: TokenCodeGenerator<ExpressionStatement>;
+	public abstract expressionStatement: TargetTokenCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link IterationStatement} into a specific language.
 	 */
-	public abstract iterationStatement: TokenCodeGenerator<IterationStatement>;
+	public abstract iterationStatement: TargetTokenCodeGenerator<IterationStatement, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
 	 */
-	public abstract jumpStatement: TokenCodeGenerator<JumpStatement>;
+	public abstract jumpStatement: TargetTokenCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link ParameterDeclaration} into a specific language.
 	 */
-	public abstract parameterDeclaration: TokenCodeGenerator<ParameterDeclaration>;
+	public abstract parameterDeclaration: TargetTokenCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link FunctionDeclaration} into a specific language.
 	 */
-	public abstract functionDeclaration: TokenCodeGenerator<FunctionDeclaration>;
+	public abstract functionDeclaration: TargetTokenCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
-	public abstract variableDeclaration: TokenCodeGenerator<VariableDeclaration>;
+	public abstract variableDeclaration: TargetTokenCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>>;
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.
 	 */
-	public abstract numberPrimaryExpression: TokenCodeGenerator<NumberPrimaryExpression>;
+	public abstract numberPrimaryExpression: TargetTokenCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link CharacterPrimaryExpression} into a specific language.
 	 */
-	public abstract characterPrimaryExpression: TokenCodeGenerator<CharacterPrimaryExpression>;
+	public abstract characterPrimaryExpression: TargetTokenCodeGenerator<
+		CharacterPrimaryExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link ListPrimaryExpression} into a specific language.
 	 */
-	public abstract listPrimaryExpression: TokenCodeGenerator<ListPrimaryExpression>;
+	public abstract listPrimaryExpression: TargetTokenCodeGenerator<ListPrimaryExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.
 	 */
-	public abstract identifierPrimaryExpression: TokenCodeGenerator<IdentifierPrimaryExpression>;
+	public abstract identifierPrimaryExpression: TargetTokenCodeGenerator<
+		IdentifierPrimaryExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link StringPrimaryExpression} into a specific language.
 	 */
-	public abstract stringPrimaryExpression: TokenCodeGenerator<StringPrimaryExpression>;
+	public abstract stringPrimaryExpression: TargetTokenCodeGenerator<StringPrimaryExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link FStringPrimaryExpression} into a specific language.
 	 */
-	public abstract fStringPrimaryExpression: TokenCodeGenerator<FStringPrimaryExpression>;
+	public abstract fStringPrimaryExpression: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.
 	 */
-	public abstract tangledPrimaryExpression: TokenCodeGenerator<TangledPrimaryExpression>;
+	public abstract tangledPrimaryExpression: TargetTokenCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link ArraySpecifierExpression} into a specific language.
 	 */
-	public abstract arraySpecifierExpression: TokenCodeGenerator<ArraySpecifierExpression>;
+	public abstract arraySpecifierExpression: TargetTokenCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link IncrementOrDecrementExpression} into a specific language.
 	 */
-	public abstract incrementOrDecrementExpression: TokenCodeGenerator<IncrementOrDecrementExpression>;
+	public abstract incrementOrDecrementExpression: TargetTokenCodeGenerator<
+		IncrementOrDecrementExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link FunctionCallPostfixExpression} into a specific language.
 	 */
-	public abstract functionCallPostfixExpression: TokenCodeGenerator<FunctionCallPostfixExpression>;
+	public abstract functionCallPostfixExpression: TargetTokenCodeGenerator<
+		FunctionCallPostfixExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link ArgumentExpressionListExpression} into a specific language.
 	 */
-	public abstract argumentExpressionList: TargetTokenCodeGenerator<ArgumentExpressionListExpression, string>;
+	public abstract argumentExpressionList: TargetTokenCodeGenerator<
+		ArgumentExpressionListExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.
 	 */
-	public abstract incrementOrDecrementUnaryExpression: TokenCodeGenerator<IncrementOrDecrementUnaryExpression>;
+	public abstract incrementOrDecrementUnaryExpression: TargetTokenCodeGenerator<
+		IncrementOrDecrementUnaryExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link OperatorModifiedUnaryExpression} into a specific language.
 	 */
-	public abstract operatorModifiedUnaryExpression: TokenCodeGenerator<OperatorModifiedUnaryExpression>;
+	public abstract operatorModifiedUnaryExpression: TargetTokenCodeGenerator<
+		OperatorModifiedUnaryExpression,
+		TranslatedExpression
+	>;
 	/**
 	 * Translates a {@link CastOrConvertExpression} into a specific language.
 	 */
-	public abstract castOrConvertExpression: TokenCodeGenerator<CastOrConvertExpression>;
+	public abstract castOrConvertExpression: TargetTokenCodeGenerator<CastOrConvertExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link MultiplicativeExpression} into a specific language.
 	 */
-	public abstract multiplicativeExpression: TokenCodeGenerator<MultiplicativeExpression>;
+	public abstract multiplicativeExpression: TargetTokenCodeGenerator<MultiplicativeExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link AdditiveExpression} into a specific language.
 	 */
-	public abstract additiveExpression: TokenCodeGenerator<AdditiveExpression>;
+	public abstract additiveExpression: TargetTokenCodeGenerator<AdditiveExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link RelationalExpression} into a specific language.
 	 */
-	public abstract relationalExpression: TokenCodeGenerator<RelationalExpression>;
+	public abstract relationalExpression: TargetTokenCodeGenerator<RelationalExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link EqualityExpression} into a specific language.
 	 */
-	public abstract equalityExpression: TokenCodeGenerator<EqualityExpression>;
+	public abstract equalityExpression: TargetTokenCodeGenerator<EqualityExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link LogicalAndExpression} into a specific language.
 	 */
-	public abstract logicalAndExpression: TokenCodeGenerator<LogicalAndExpression>;
+	public abstract logicalAndExpression: TargetTokenCodeGenerator<LogicalAndExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link LogicalOrExpression} into a specific language.
 	 */
-	public abstract logicalOrExpression: TokenCodeGenerator<LogicalOrExpression>;
+	public abstract logicalOrExpression: TargetTokenCodeGenerator<LogicalOrExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link ConditionalExpression} into a specific language.
 	 */
-	public abstract conditionalExpression: TokenCodeGenerator<ConditionalExpression>;
+	public abstract conditionalExpression: TargetTokenCodeGenerator<ConditionalExpression, TranslatedExpression>;
 	/**
 	 * Translates a {@link AssignmentExpression} into a specific language.
 	 */
-	public abstract assignmentExpression: TokenCodeGenerator<AssignmentExpression>;
+	public abstract assignmentExpression: TargetTokenCodeGenerator<AssignmentExpression, TranslatedExpression>;
 }

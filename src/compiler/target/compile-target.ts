@@ -18,7 +18,11 @@ export class KipperCompileTarget {
 	public readonly semanticAnalyser: KipperTargetSemanticAnalyser;
 	public readonly codeGenerator: KipperTargetCodeGenerator;
 
-	constructor(targetName: string, semanticAnalyser: KipperTargetSemanticAnalyser, codeGenerator: KipperTargetCodeGenerator) {
+	constructor(
+		targetName: string,
+		semanticAnalyser: KipperTargetSemanticAnalyser,
+		codeGenerator: KipperTargetCodeGenerator,
+	) {
 		this.targetName = targetName;
 		this.semanticAnalyser = semanticAnalyser;
 		this.codeGenerator = codeGenerator;
