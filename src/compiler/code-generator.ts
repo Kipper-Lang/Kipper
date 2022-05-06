@@ -39,11 +39,13 @@ import {
 } from "./tokens";
 
 /**
- * Represents a function that generates code for a {@link CompilableParseToken}.
+ * Represents a function that generates code into a
+ * {@link KipperCompileTarget specific language} for a
+ * {@link CompilableParseToken}.
  * @since 0.5.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TokenCodeGenerator<T extends CompilableParseToken<any>> = (token: T) => Promise<Array<any>>;
+export type TargetTokenCodeGenerator<T extends CompilableParseToken<any>> = (token: T) => Promise<Array<string | Array<string>>>;
 
 /**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
