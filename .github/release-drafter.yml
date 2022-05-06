@@ -7,9 +7,10 @@ categories:
       - 'Feature'
   - title: 'Bug Fixes'
     labels:
-      - 'Fix'
-  - title: 'Maintenance'
+      - 'Fix'    
+  - title: 'Other Changes'
     labels:
+      - 'Other'
       - 'Maintenance'
   - title: 'Dependency Updates'
     label: 
@@ -25,13 +26,14 @@ version-resolver:
   patch:
     labels:
       - 'Bug'
+      - 'Fix'
       - 'Maintenance'
       - 'Documentation'
       - 'Dependencies'
-      - 'Fix'      
+      - 'Other' 
 template: |
   # {INSERT_NAME} Update
-  ## v$RESOLVED_VERSION - {DATE}
+  ## v$RESOLVED_VERSION - {YEAR-MONTH-DAY}
 
   $CHANGES
   
@@ -41,5 +43,6 @@ template: |
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
   
 exclude-labels:
+  - 'Release'
   - 'Skip Changelog'
   

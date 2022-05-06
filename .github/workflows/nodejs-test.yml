@@ -1,13 +1,10 @@
 name: Node.js CI
 
-on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+on: [push, pull_request]
 
 jobs:
-  run:
+  # Run tests with 'npm ci' dependencies
+  tests-with-pck-lock-dependencies:
     runs-on: ubuntu-latest
 
     strategy:
@@ -22,4 +19,22 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
+      - run: npm test
+      
+  # Run tests with 'npm i' dependencies
+  tests-with-pck-dependencies:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm i
       - run: npm test
