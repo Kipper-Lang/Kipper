@@ -89,7 +89,7 @@ export function getExpressionInstance(
 	} else if (antlrCtx instanceof FunctionCallPostfixExpressionContext) {
 		return new FunctionCallPostfixExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof ArgumentExpressionListContext) {
-		return new ArgumentExpressionList(antlrCtx, parent);
+		return new ArgumentExpressionListExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
 		return new IncrementOrDecrementUnaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof OperatorModifiedUnaryExpressionContext) {
@@ -653,8 +653,8 @@ export class FunctionCallPostfixExpression extends Expression<{}> {
 		const func = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(this.identifier);
 
 		// Get the arguments
-		let argListCtx = <ArgumentExpressionList | undefined>(
-			this.children.find((val) => val instanceof ArgumentExpressionList)
+		let argListCtx = <ArgumentExpressionListExpression | undefined>(
+			this.children.find((val) => val instanceof ArgumentExpressionListExpression)
 		);
 
 		// Add builtin identifier prefix '_kipperGlobal_'
@@ -681,7 +681,7 @@ export class FunctionCallPostfixExpression extends Expression<{}> {
  * @example
  * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
  */
-export class ArgumentExpressionList extends Expression<{}> {
+export class ArgumentExpressionListExpression extends Expression<{}> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.

@@ -6,7 +6,7 @@
  */
 import {
 	type AdditiveExpression,
-	type ArgumentExpressionList,
+	type ArgumentExpressionListExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
 	type CastOrConvertExpression,
@@ -125,9 +125,9 @@ export abstract class KipperCodeGenerator {
 	 */
 	public abstract functionCallPostfixExpression: TokenCodeGenerator<FunctionCallPostfixExpression>;
 	/**
-	 * Translates a {@link ArgumentExpressionList} into a specific language.
+	 * Translates a {@link ArgumentExpressionListExpression} into a specific language.
 	 */
-	public abstract argumentExpressionList: TokenCodeGenerator<ArgumentExpressionList>;
+	public abstract argumentExpressionList: TargetTokenCodeGenerator<ArgumentExpressionListExpression, string>;
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.
 	 */
