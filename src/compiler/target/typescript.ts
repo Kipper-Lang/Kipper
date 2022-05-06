@@ -9,7 +9,7 @@ import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
 import { KipperTargetCodeGenerator } from "../code-generator";
 import {
 	type AdditiveExpression,
-	type ArgumentExpressionList,
+	type ArgumentExpressionListExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
 	type CastOrConvertExpression,
@@ -123,9 +123,9 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 */
 	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression) => {};
 	/**
-	 * Translates a {@link ArgumentExpressionList} into the typescript language.
+	 * Translates a {@link ArgumentExpressionListExpression} into the typescript language.
 	 */
-	argumentExpressionList = async (token: ArgumentExpressionList) => {};
+	argumentExpressionList = async (token: ArgumentExpressionListExpression) => {};
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the typescript language.
 	 */
@@ -282,9 +282,9 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [];
 	};
 	/**
-	 * Translates a {@link ArgumentExpressionList} into the typescript language.
+	 * Translates a {@link ArgumentExpressionListExpression} into the typescript language.
 	 */
-	argumentExpressionList = async (token: ArgumentExpressionList): Promise<Array<any>> => {
+	argumentExpressionList = async (token: ArgumentExpressionListExpression): Promise<Array<string>> => {
 		return [];
 	};
 	/**

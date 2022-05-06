@@ -1,6 +1,6 @@
 import {
 	type AdditiveExpression,
-	type ArgumentExpressionList,
+	type ArgumentExpressionListExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
 	type CastOrConvertExpression,
@@ -119,9 +119,9 @@ export abstract class KipperTargetSemanticAnalyser {
 	 */
 	public abstract functionCallPostfixExpression: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression>;
 	/**
-	 * Translates a {@link ArgumentExpressionList} into a specific language.
+	 * Translates a {@link ArgumentExpressionListExpression} into a specific language.
 	 */
-	public abstract argumentExpressionList: TargetTokenSemanticAnalyser<ArgumentExpressionList>;
+	public abstract argumentExpressionList: TargetTokenSemanticAnalyser<ArgumentExpressionListExpression>;
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.
 	 */
