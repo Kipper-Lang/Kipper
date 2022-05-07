@@ -22,7 +22,7 @@ For proper documentation on the kipper language go [here](https://wmc-ahif-2021.
 
 *This is a project in work, and as such some docs pages can be work in progress!*
 
-## Usage
+## How to use Kipper?
 
 To use, Kipper you have three options:
 - Run it in the browser using the CDN `kipper-standalone.min.js` file, which bundles the entire compiler
@@ -113,3 +113,4 @@ fs.readFile(path, "utf8" as BufferEncoding).then(
   }
 );
 ```
+
