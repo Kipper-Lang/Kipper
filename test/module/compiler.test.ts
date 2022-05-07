@@ -379,6 +379,24 @@ describe("KipperCompiler", () => {
           }
           assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
         });
+
+        it("UnknownFunctionIdentifierError", async () => {
+          try {
+            const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+              new KipperParseStream("var x: num = call pr(\"pr\");")
+            );
+            await programCtx.compileProgram();
+          } catch (e) {
+            assert((<KipperError>e).constructor.name === "UnknownFunctionIdentifierError", "Expected proper error");
+            assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+            assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+            assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+            assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+            assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+            return;
+          }
+          assert(false, "Expected 'IdentifierError'");
+        });
       });
     });
   });
