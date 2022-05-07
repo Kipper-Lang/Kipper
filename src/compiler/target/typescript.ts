@@ -9,7 +9,7 @@ import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
 import { KipperTargetCodeGenerator } from "../code-generator";
 import {
 	type AdditiveExpression,
-	type ArgumentExpressionListExpression,
+	ArgumentExpressionListExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
 	type CastOrConvertExpression,
@@ -39,6 +39,7 @@ import {
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
 } from "../tokens";
+import { BuiltInFunction, ScopeFunctionDeclaration, TranslatedCodeLine, TranslatedExpression } from "../logic";
 
 export class TypeScriptTarget extends KipperCompileTarget {
 	constructor(
@@ -51,123 +52,123 @@ export class TypeScriptTarget extends KipperCompileTarget {
 
 export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
 	/**
-	 * Translates a {@link CompoundStatement} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
 	compoundStatement = async (token: CompoundStatement) => {};
 	/**
-	 * Translates a {@link SelectionStatement} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link SelectionStatement} instances.
 	 */
 	selectionStatement = async (token: SelectionStatement) => {};
 	/**
-	 * Translates a {@link ExpressionStatement} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ExpressionStatement} instances.
 	 */
 	expressionStatement = async (token: ExpressionStatement) => {};
 	/**
-	 * Translates a {@link IterationStatement} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link IterationStatement} instances.
 	 */
 	iterationStatement = async (token: IterationStatement) => {};
 	/**
-	 * Translates a {@link JumpStatement} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
 	 */
 	jumpStatement = async (token: JumpStatement) => {};
 	/**
-	 * Translates a {@link ParameterDeclaration} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
 	parameterDeclaration = async (token: ParameterDeclaration) => {};
 	/**
-	 * Translates a {@link FunctionDeclaration} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link FunctionDeclaration} instances.
 	 */
 	functionDeclaration = async (token: FunctionDeclaration) => {};
 	/**
-	 * Translates a {@link VariableDeclaration} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	variableDeclaration = async (token: VariableDeclaration) => {};
 	/**
-	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
 	numberPrimaryExpression = async (token: NumberPrimaryExpression) => {};
 	/**
-	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
 	 */
 	characterPrimaryExpression = async (token: CharacterPrimaryExpression) => {};
 	/**
-	 * Translates a {@link ListPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ListPrimaryExpression} instances.
 	 */
 	listPrimaryExpression = async (token: ListPrimaryExpression) => {};
 	/**
-	 * Translates a {@link IdentifierPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
 	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression) => {};
 	/**
-	 * Translates a {@link StringPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link StringPrimaryExpression} instances.
 	 */
 	stringPrimaryExpression = async (token: StringPrimaryExpression) => {};
 	/**
-	 * Translates a {@link FStringPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
 	fStringPrimaryExpression = async (token: FStringPrimaryExpression) => {};
 	/**
-	 * Translates a {@link TangledPrimaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
 	tangledPrimaryExpression = async (token: TangledPrimaryExpression) => {};
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ArraySpecifierExpression} instances.
 	 */
 	arraySpecifierExpression = async (token: ArraySpecifierExpression) => {};
 	/**
-	 * Translates a {@link IncrementOrDecrementExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
 	 */
 	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression) => {};
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
 	 */
 	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression) => {};
 	/**
-	 * Translates a {@link ArgumentExpressionListExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ArgumentExpressionListExpression} instances.
 	 */
 	argumentExpressionList = async (token: ArgumentExpressionListExpression) => {};
 	/**
-	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
 	 */
 	incrementOrDecrementUnaryExpression = async (token: IncrementOrDecrementUnaryExpression) => {};
 	/**
-	 * Translates a {@link OperatorModifiedUnaryExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
 	 */
 	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression) => {};
 	/**
-	 * Translates a {@link CastOrConvertExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link CastOrConvertExpression} instances.
 	 */
 	castOrConvertExpression = async (token: CastOrConvertExpression) => {};
 	/**
-	 * Translates a {@link MultiplicativeExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link MultiplicativeExpression} instances.
 	 */
 	multiplicativeExpression = async (token: MultiplicativeExpression) => {};
 	/**
-	 * Translates a {@link AdditiveExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link AdditiveExpression} instances.
 	 */
 	additiveExpression = async (token: AdditiveExpression) => {};
 	/**
-	 * Translates a {@link RelationalExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link RelationalExpression} instances.
 	 */
 	relationalExpression = async (token: RelationalExpression) => {};
 	/**
-	 * Translates a {@link EqualityExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
 	equalityExpression = async (token: EqualityExpression) => {};
 	/**
-	 * Translates a {@link LogicalAndExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.
 	 */
 	logicalAndExpression = async (token: LogicalAndExpression) => {};
 	/**
-	 * Translates a {@link LogicalOrExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link LogicalOrExpression} instances.
 	 */
 	logicalOrExpression = async (token: LogicalOrExpression) => {};
 	/**
-	 * Translates a {@link ConditionalExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link ConditionalExpression} instances.
 	 */
 	conditionalExpression = async (token: ConditionalExpression) => {};
 	/**
-	 * Translates a {@link AssignmentExpression} into the typescript language.
+	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	assignmentExpression = async (token: AssignmentExpression) => {};
 }
@@ -176,181 +177,220 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
-	compoundStatement = async (token: CompoundStatement): Promise<Array<Array<string>>> => {
-		return [];
+	compoundStatement = async (token: CompoundStatement): Promise<Array<TranslatedCodeLine>> => {
+		let childCode: Array<TranslatedCodeLine> = [];
+		for (let child of token.children) {
+			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
+		}
+		return [["{"], ...childCode, ["}"]];
 	};
 	/**
 	 * Translates a {@link SelectionStatement} into the typescript language.
 	 */
-	selectionStatement = async (token: SelectionStatement): Promise<Array<Array<string>>> => {
+	selectionStatement = async (token: SelectionStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ExpressionStatement} into the typescript language.
 	 */
-	expressionStatement = async (token: ExpressionStatement): Promise<Array<Array<string>>> => {
-		return [];
+	expressionStatement = async (token: ExpressionStatement): Promise<Array<TranslatedCodeLine>> => {
+		let childCode: TranslatedExpression = [];
+		for (let child of token.children) {
+			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
+		}
+		return [[...childCode, ";"]];
 	};
 	/**
 	 * Translates a {@link IterationStatement} into the typescript language.
 	 */
-	iterationStatement = async (token: IterationStatement): Promise<Array<Array<string>>> => {
+	iterationStatement = async (token: IterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link JumpStatement} into the typescript language.
 	 */
-	jumpStatement = async (token: JumpStatement): Promise<Array<Array<string>>> => {
+	jumpStatement = async (token: JumpStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ParameterDeclaration} into the typescript language.
 	 */
-	parameterDeclaration = async (token: ParameterDeclaration): Promise<Array<Array<string>>> => {
+	parameterDeclaration = async (token: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link FunctionDeclaration} into the typescript language.
 	 */
-	functionDeclaration = async (token: FunctionDeclaration): Promise<Array<Array<string>>> => {
+	functionDeclaration = async (token: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link VariableDeclaration} into the typescript language.
 	 */
-	variableDeclaration = async (token: VariableDeclaration): Promise<Array<Array<string>>> => {
+	variableDeclaration = async (token: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
 	 */
-	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<Array<string>> => {
+	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
 	 */
-	characterPrimaryExpression = async (token: CharacterPrimaryExpression): Promise<Array<string>> => {
+	characterPrimaryExpression = async (token: CharacterPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ListPrimaryExpression} into the typescript language.
 	 */
-	listPrimaryExpression = async (token: ListPrimaryExpression): Promise<Array<string>> => {
+	listPrimaryExpression = async (token: ListPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into the typescript language.
 	 */
-	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression): Promise<Array<string>> => {
-		return [];
+	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
+		const semanticData = token.ensureSemanticDataExists();
+
+		return [semanticData.identifier];
 	};
 	/**
 	 * Translates a {@link StringPrimaryExpression} into the typescript language.
 	 */
-	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<Array<string>> => {
-		return [];
+	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<TranslatedExpression> => {
+		const semanticData = token.ensureSemanticDataExists();
+
+		return [`"${semanticData.value}"`];
 	};
 	/**
 	 * Translates a {@link FStringPrimaryExpression} into the typescript language.
 	 */
-	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<Array<string>> => {
+	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into the typescript language.
 	 */
-	tangledPrimaryExpression = async (token: TangledPrimaryExpression): Promise<Array<string>> => {
-		return [];
+	tangledPrimaryExpression = async (token: TangledPrimaryExpression): Promise<TranslatedExpression> => {
+		// TODO! Add tests for this
+		let genCode: TranslatedExpression = [];
+		for (let child of token.children) {
+			genCode = genCode.concat(await child.translateCtxAndChildren());
+		}
+		return genCode;
 	};
 	/**
 	 * Translates a {@link ArraySpecifierExpression} into the typescript language.
 	 */
-	arraySpecifierExpression = async (token: ArraySpecifierExpression): Promise<Array<string>> => {
+	arraySpecifierExpression = async (token: ArraySpecifierExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link IncrementOrDecrementExpression} into the typescript language.
 	 */
-	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression): Promise<Array<string>> => {
+	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link FunctionCallPostfixExpression} into the typescript language.
 	 */
-	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<Array<string>> => {
-		return [];
+	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
+		// Get the function and semantic data
+		const semanticData = token.ensureSemanticDataExists();
+		const func = token.programCtx.assert(token).getExistingFunction(semanticData.identifier);
+
+		// Get the arguments
+		let argListCtx = <ArgumentExpressionListExpression | undefined>(
+			token.children.find((val) => val instanceof ArgumentExpressionListExpression)
+		);
+
+		// Add builtin identifier prefix '_kipperGlobal_'
+		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
+
+		// Compile the arguments
+		const args: TranslatedExpression = argListCtx ? await argListCtx.translateCtxAndChildren() : [];
+
+		// Return the compiled function call
+		return [identifier, "(", ...args, ")"];
 	};
 	/**
 	 * Translates a {@link ArgumentExpressionListExpression} into the typescript language.
 	 */
-	argumentExpressionList = async (token: ArgumentExpressionListExpression): Promise<Array<string>> => {
-		return [];
+	argumentExpressionList = async (token: ArgumentExpressionListExpression): Promise<TranslatedExpression> => {
+		let genCode: TranslatedExpression = [];
+		for (let child of token.children) {
+			genCode = [...genCode, ...(await child.translateCtxAndChildren())];
+		}
+		return genCode;
 	};
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the typescript language.
 	 */
-	incrementOrDecrementUnaryExpression = async (token: IncrementOrDecrementUnaryExpression): Promise<Array<string>> => {
+	incrementOrDecrementUnaryExpression = async (
+		token: IncrementOrDecrementUnaryExpression,
+	): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link OperatorModifiedUnaryExpression} into the typescript language.
 	 */
-	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression): Promise<Array<string>> => {
+	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
-	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<Array<string>> => {
+	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link MultiplicativeExpression} into the typescript language.
 	 */
-	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<Array<string>> => {
+	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link AdditiveExpression} into the typescript language.
 	 */
-	additiveExpression = async (token: AdditiveExpression): Promise<Array<string>> => {
+	additiveExpression = async (token: AdditiveExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link RelationalExpression} into the typescript language.
 	 */
-	relationalExpression = async (token: RelationalExpression): Promise<Array<string>> => {
+	relationalExpression = async (token: RelationalExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link EqualityExpression} into the typescript language.
 	 */
-	equalityExpression = async (token: EqualityExpression): Promise<Array<string>> => {
+	equalityExpression = async (token: EqualityExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link LogicalAndExpression} into the typescript language.
 	 */
-	logicalAndExpression = async (token: LogicalAndExpression): Promise<Array<string>> => {
+	logicalAndExpression = async (token: LogicalAndExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link LogicalOrExpression} into the typescript language.
 	 */
-	logicalOrExpression = async (token: LogicalOrExpression): Promise<Array<string>> => {
+	logicalOrExpression = async (token: LogicalOrExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link ConditionalExpression} into the typescript language.
 	 */
-	conditionalExpression = async (token: ConditionalExpression): Promise<Array<string>> => {
+	conditionalExpression = async (token: ConditionalExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 	/**
 	 * Translates a {@link AssignmentExpression} into the typescript language.
 	 */
-	assignmentExpression = async (token: AssignmentExpression): Promise<Array<string>> => {
+	assignmentExpression = async (token: AssignmentExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 }

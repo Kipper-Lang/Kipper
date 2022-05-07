@@ -232,7 +232,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		};
 
 		// Assert that the variable type exists
-		this.programCtx.assert(this).assertTypeExists(this.semanticData.returnType);
+		this.programCtx.assert(this).typeExists(this.semanticData.returnType);
 
 		// Add function definition to the global scope
 		this.programCtx.addNewGlobalScopeEntry(this);
@@ -315,7 +315,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		};
 
 		// Assert that the variable type exists
-		this.programCtx.assert(this).assertTypeExists(this.semanticData.valueType);
+		this.programCtx.assert(this).typeExists(this.semanticData.valueType);
 
 		// Load variable into global scope, if the assigned scope is of type {@link KipperProgramContext}
 		if (this.semanticData.scope instanceof KipperProgramContext) {

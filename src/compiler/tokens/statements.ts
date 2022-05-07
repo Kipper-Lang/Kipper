@@ -165,19 +165,6 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
-		let childCode: Array<TranslatedCodeLine> = [];
-		for (let child of this.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
-		}
-		return [["{"], ...childCode, ["}"]];
-	}
-
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
 	targetCodeGenerator: TargetTokenCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.compoundStatement;
@@ -273,19 +260,6 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
 		this.semanticData = {
 			scope: determineScope(this),
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
-		let childCode: Array<string> = [];
-		for (let child of this.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
-		}
-		return [[...childCode, ";"]];
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExpressionStatement> = this.semanticAnalyser.expressionStatement;

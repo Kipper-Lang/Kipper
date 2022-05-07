@@ -171,7 +171,7 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
+	public async translateCtxAndChildren(): Promise<TranslatedExpression> {
 		return await this.targetCodeGenerator(this);
 	}
 
@@ -423,17 +423,6 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	}
 
 	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		this.semanticData = this.ensureSemanticDataExists();
-
-		return [`"${this.semanticData.value}"`];
-	}
-
-	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrCtx(): StringPrimaryExpressionContext {
@@ -484,17 +473,6 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		this.semanticData = {
 			identifier: this.sourceCode,
 		};
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		this.semanticData = this.ensureSemanticDataExists();
-
-		return [this.semanticData.identifier];
 	}
 
 	/**
@@ -596,20 +574,6 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// TODO! Add tests for this
-		let genCode: Array<string> = [];
-		for (let child of this._children) {
-			genCode = genCode.concat(await child.translateCtxAndChildren());
-		}
-		return genCode;
 	}
 
 	/**
@@ -722,7 +686,18 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
  * Semantics for {@link FunctionCallPostfixExpression}.
  * @since 0.5.0
  */
-export interface FunctionCallPostfixExpressionSemantics {}
+export interface FunctionCallPostfixExpressionSemantics {
+	/**
+	 * The identifier of the function that is called.
+	 * @since 0.5.0
+	 */
+	identifier: string;
+	/**
+	 * The function that is called.
+	 * @since 0.5.0
+	 */
+	function: BuiltInFunction | ScopeFunctionDeclaration;
+}
 
 /**
  * Function call class, which represents a function call expression in the Kipper language and is compilable using
@@ -739,21 +714,16 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 */
 	protected override readonly _antlrCtx: FunctionCallPostfixExpressionContext;
 
-	private readonly identifier: string;
-
 	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
-
-		// Set identifier
-		this.identifier = this.getMetadata().identifier;
 	}
 
 	/**
-	 * Fetch the metadata for the function call.
-	 * @private
+	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
 	 */
-	private getMetadata(): { identifier: string } {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetch context instances
 		let identifierCtx = <IdentifierPrimaryExpressionContext | undefined>(
 			this.antlrCtx.children?.find((val) => val instanceof IdentifierPrimaryExpressionContext)
@@ -764,42 +734,13 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 			throw new UnableToDetermineMetadataError();
 		}
 
-		return {
-			identifier: this.tokenStream.getText(identifierCtx.sourceInterval),
+		// Get the identifier of the function that is called
+		const identifier = this.tokenStream.getText(identifierCtx.sourceInterval);
+		this.semanticData = {
+			identifier: identifier,
+			// Tries to fetch the function and if it fails it will throw a {@link UnknownFunctionIdentifier} error.
+			function: this.programCtx.assert(this).getExistingFunction(identifier),
 		};
-	}
-
-	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		// Assert that the function exists
-		this.programCtx.assert(this).functionIsDefined(this.identifier);
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		// Get the function
-		const func = <BuiltInFunction | ScopeFunctionDeclaration>this.programCtx.getGlobalFunction(this.identifier);
-
-		// Get the arguments
-		let argListCtx = <ArgumentExpressionListExpression | undefined>(
-			this.children.find((val) => val instanceof ArgumentExpressionListExpression)
-		);
-
-		// Add builtin identifier prefix '_kipperGlobal_'
-		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
-
-		// Compile the arguments
-		const args: Array<string> = argListCtx ? await argListCtx.translateCtxAndChildren() : [];
-
-		// Return the compiled function call
-		return [identifier, "(", ...args, ")"];
 	}
 
 	/**
@@ -846,19 +787,6 @@ export class ArgumentExpressionListExpression extends Expression<ArgumentExpress
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a token of the expression.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<string>> {
-		let genCode: Array<string> = [];
-		for (let child of this.children) {
-			genCode = [...genCode, ...(await child.translateCtxAndChildren())];
-		}
-		return genCode;
 	}
 
 	/**

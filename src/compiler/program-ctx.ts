@@ -37,12 +37,12 @@ import {
 	InvalidGlobalError,
 	KipperError,
 	UnableToDetermineMetadataError,
-	UnknownFunctionIdentifier,
+	UnknownFunctionIdentifierError,
 	UnknownTypeError,
 	UnknownVariableIdentifier,
 	VariableDefinitionAlreadyExistsError,
 } from "../errors";
-import { KipperCompileTarget } from "./target/compile-target";
+import { KipperCompileTarget } from "./target";
 
 /**
  * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
@@ -77,10 +77,12 @@ export class CompileAssert {
 
 	/**
 	 * Updates the error and adds the proper traceback data, and returns it.
+	 *
+	 * This function also automatically logs the error.
 	 * @param error The error to update.
-	 * @throws KipperError The {@link error} passed onto this function.
+	 * @returns The Kipper error.
 	 */
-	private throwError(error: KipperError): void {
+	private assertError(error: KipperError): KipperError {
 		// Update error metadata
 		error.setMetadata({
 			location: { line: this.line ?? 1, col: this.col ?? 1 },
@@ -92,16 +94,17 @@ export class CompileAssert {
 		// Log the error
 		this.programCtx.logger.reportError(LogLevel.ERROR, error);
 
-		throw error;
+		return error;
 	}
 
 	/**
 	 * Asserts that the passed type identifier exists.
 	 * @param type The type to check.
+	 * @since 0.5.0
 	 */
-	public assertTypeExists(type: string): void {
+	public typeExists(type: string): void {
 		if (kipperTypes.find((val) => val === type) === undefined) {
-			this.throwError(new UnknownTypeError(type));
+			throw this.assertError(new UnknownTypeError(type));
 		}
 	}
 
@@ -111,7 +114,7 @@ export class CompileAssert {
 	 */
 	public functionIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
-			this.throwError(new UnknownFunctionIdentifier(identifier));
+			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
 		}
 	}
 
@@ -121,7 +124,7 @@ export class CompileAssert {
 	 */
 	public variableIsDefined(identifier: string): void {
 		if (!this.programCtx.getGlobalFunction(identifier)) {
-			this.throwError(new UnknownVariableIdentifier(identifier));
+			throw this.assertError(new UnknownVariableIdentifier(identifier));
 		}
 	}
 
@@ -131,7 +134,7 @@ export class CompileAssert {
 	 */
 	public functionIdentifierNotUsed(identifier: string): void {
 		if (this.programCtx.getGlobalFunction(identifier)) {
-			this.throwError(new IdentifierAlreadyUsedByFunctionError(identifier));
+			throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
 		}
 	}
 
@@ -145,16 +148,16 @@ export class CompileAssert {
 		// Always check in the global scope
 		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
 		if (this.programCtx.globalScope.find(check)) {
-			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
+			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
 		if (this.programCtx.getGlobalVariable(identifier)) {
-			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
+			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
 		// Also check in the local scope if it was passed
 		if (scope !== undefined && scope?.localScope.find(check)) {
-			this.throwError(new IdentifierAlreadyUsedByVariableError(identifier));
+			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 	}
 
@@ -172,12 +175,12 @@ export class CompileAssert {
 		};
 
 		if (this.programCtx.globalScope.find(check)) {
-			this.throwError(new VariableDefinitionAlreadyExistsError(identifier));
+			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 
 		// Also check in the local scope if it was passed
 		if (scope !== undefined && scope?.localScope.find(check)) {
-			this.throwError(new VariableDefinitionAlreadyExistsError(identifier));
+			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 	}
 
@@ -193,7 +196,7 @@ export class CompileAssert {
 		};
 
 		if (this.programCtx.globalScope.find(check)) {
-			this.throwError(new FunctionDefinitionAlreadyExistsError(identifier));
+			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
 		}
 	}
 
@@ -212,14 +215,16 @@ export class CompileAssert {
 		}
 
 		if (arg.semanticData.type !== receivedType) {
-			this.throwError(new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType));
+			throw this.assertError(
+				new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType),
+			);
 		}
 	}
 
 	/**
 	 * Checks whether the assignment of the expression to the variable is valid.
 	 * @since 0.3.0
-	 * @todo Implement assignment checks
+	 * @todo Implement assignment checks!
 	 */
 	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression<any>): void {}
 
@@ -229,7 +234,7 @@ export class CompileAssert {
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
 	 * @since 0.3.0
-	 * @todo Implement arithmetic checks
+	 * @todo Implement arithmetic checks!
 	 */
 	private arithmeticExpressionValid(
 		exp1: Expression<any>,
@@ -243,7 +248,7 @@ export class CompileAssert {
 	 */
 	public builtInNotDefined(identifier: string): void {
 		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
-			this.throwError(new BuiltInOverwriteError(identifier));
+			throw this.assertError(new BuiltInOverwriteError(identifier));
 		}
 	}
 
@@ -259,7 +264,21 @@ export class CompileAssert {
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
-			this.throwError(new InvalidGlobalError(identifier));
+			throw this.assertError(new InvalidGlobalError(identifier));
+		}
+	}
+
+	/**
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
+	 * @param identifier The identifier to fetch.
+	 * @since 0.5.0
+	 */
+	public getExistingFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration {
+		const func = this.programCtx.getGlobalFunction(identifier);
+		if (func === undefined) {
+			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
+		} else {
+			return func;
 		}
 	}
 }

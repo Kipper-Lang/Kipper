@@ -243,7 +243,7 @@ export class UnknownVariableIdentifier extends IdentifierError {
 /**
  * Error that is thrown when a function definition is used, but it is unknown to the program.
  */
-export class UnknownFunctionIdentifier extends IdentifierError {
+export class UnknownFunctionIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown function identifier '${identifier}'.`);
 	}

@@ -174,7 +174,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * Ensures the semantic data of this item exists. This is always checked whenever a compilation is started.
 	 * @protected
 	 */
-	protected ensureSemanticDataExists(): Semantics {
+	public ensureSemanticDataExists(): Semantics {
 		if (this.semanticData === undefined) {
 			throw new UnableToDetermineMetadataError();
 		}

@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   core/primary semantic analysis and the target specific semantic analysis.
 - New types `KipperVoidType`, `KipperNumType`, `KipperStrType`, `KipperCharType`, `KipperBoolType` and `KipperListType`,
   which represent Kipper available types in the Kipper language.  core/primary semantic analysis and the target specific semantic analysis.
+- Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
+  not exist.
 
 ### Changed
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
@@ -40,6 +42,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `CompilableParseToken.targetSemanticAnalysis`.
 - Changed semantic definitions for `CompilableParseToken` children classes and created for each child class a 
   representing semantics class defining the metadata for the token. 
+- Renamed error `UnknownFunctionIdentifier` to `UnknownFunctionIdentifierError`.
+- Renamed function `CompileAssert.assertTypeExists` to `typeExists`. 
 
 ### Removed
 
