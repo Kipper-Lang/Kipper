@@ -17,11 +17,13 @@ import {
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../parser";
-import { KipperStorageType, KipperType } from "../logic";
+import { KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
 import { CompoundStatement } from "./statements";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
+import { TargetTokenCodeGenerator } from "../code-generator";
+import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Every antlr4 definition ctx type
@@ -44,11 +46,23 @@ export function getDefinitionInstance(antlrCtx: antlrDefinitionCtxType, parent: 
 }
 
 /**
+ * Semantics for {@link FunctionDeclaration}.
+ * @since 0.5.0
+ */
+export interface DeclarationSemantics {
+	/**
+	 * The identifier of the declaration.
+	 * @since 0.5.0
+	 */
+	identifier: string;
+}
+
+/**
  * Base Declaration class that represents a value or function declaration or definition in Kipper and is compilable
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export abstract class Declaration<Semantics extends { identifier: string }> extends CompilableParseToken<Semantics> {
+export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -59,6 +73,9 @@ export abstract class Declaration<Semantics extends { identifier: string }> exte
 	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
 	}
 
 	/**
@@ -68,19 +85,35 @@ export abstract class Declaration<Semantics extends { identifier: string }> exte
 		return this._antlrCtx;
 	}
 
+	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
+		return await this.targetCodeGenerator(this);
+	}
+
+	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, Array<TranslatedCodeLine>>;
+}
+
+/**
+ * Semantics for {@link ParameterDeclaration}.
+ * @since 0.5.0
+ */
+export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
+	 * The identifier of the declaration.
+	 * @since 0.5.0
 	 */
-	public abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
+	identifier: string;
+	/**
+	 * The {@link KipperType variable type} of the declaration.
+	 * @since 0.5.0
+	 */
+	type: KipperType;
 }
 
 /**
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<{ identifier: string; type: KipperType }> {
+export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -104,22 +137,14 @@ export class ParameterDeclaration extends Declaration<{ identifier: string; type
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			identifier: "", // TODO! Fetch valid identifier
-			type: "void",
-		};
+	public async primarySemanticAnalysis(): Promise<void> {
+		// TODO!
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [[]];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ParameterDeclaration> =
+		this.semanticAnalyser.parameterDeclaration;
+	targetCodeGenerator: TargetTokenCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
+		this.codeGenerator.parameterDeclaration;
 }
 
 /**
@@ -127,9 +152,24 @@ export class ParameterDeclaration extends Declaration<{ identifier: string; type
  * @since 0.3.0
  */
 export interface FunctionDeclarationSemantics {
+	/**
+	 * The identifier of the function.
+	 * @since 0.5.0
+	 */
 	identifier: string;
-	isDefined: boolean;
+	/**
+	 * The {@link KipperType return type} of the function.
+	 * @since 0.5.0
+	 */
 	returnType: KipperType;
+	/**
+	 * Returns true if this declaration defines the function body for the function.
+	 * @since 0.5.0
+	 */
+	isDefined: boolean;
+	/**
+	 * The {@link ParameterDeclaration arguments} for the function.
+	 */
 	args: Array<ParameterDeclaration>;
 }
 
@@ -166,7 +206,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			this.antlrCtx.children?.find((val) => val instanceof DeclaratorContext)
@@ -192,21 +232,15 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		};
 
 		// Assert that the variable type exists
-		this.programCtx.assert(this).assertTypeExists(this.semanticData.returnType);
+		this.programCtx.assert(this).typeExists(this.semanticData.returnType);
 
 		// Add function definition to the global scope
 		this.programCtx.addNewGlobalScopeEntry(this);
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [[]];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionDeclaration> = this.semanticAnalyser.functionDeclaration;
+	targetCodeGenerator: TargetTokenCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
+		this.codeGenerator.functionDeclaration;
 }
 
 /**
@@ -252,7 +286,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		// Determine the ctx instances
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
 			this.antlrCtx.children?.find((val) => val instanceof StorageTypeSpecifierContext)
@@ -281,7 +315,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		};
 
 		// Assert that the variable type exists
-		this.programCtx.assert(this).assertTypeExists(this.semanticData.valueType);
+		this.programCtx.assert(this).typeExists(this.semanticData.valueType);
 
 		// Load variable into global scope, if the assigned scope is of type {@link KipperProgramContext}
 		if (this.semanticData.scope instanceof KipperProgramContext) {
@@ -291,13 +325,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [[]];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<VariableDeclaration> = this.semanticAnalyser.variableDeclaration;
+	targetCodeGenerator: TargetTokenCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
+		this.codeGenerator.variableDeclaration;
 }

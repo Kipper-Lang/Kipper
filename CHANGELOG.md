@@ -8,8 +8,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- New field `target` in `CompileConfig`, which defines the compilation target for a Kipper program.
+- New field and constructor argument `KipperProgramContext.target`, which defines the compilation target for the 
+  program.
+- New type `TargetTokenSemanticAnalyser`, which represents a function type that semantically analyses a 
+  `CompilableParseToken`.
+- New type `TargetTokenCodeGenerator`, which represents a function type that semantically analyses a
+  `CompilableParseToken`.
+- Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code into
+  a specific target language.
+- Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis 
+  logic for a compilation target.
+- Abstract
+- Class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
+  specific target.
+- Class `TypeScriptTarget`, which defines the default target for Kipper.
+- Abstract fields `targetCodeGenerator` and `targetSemanticAnalysis`, which must be defined in child classes of
+  abstract base class `CompilableParseToken`.
+- New getters `target`, `codeGenerator` and `semanticAnalyser` in class `CompilableParseToken`.
+- New protected functions `primarySemanticAnalysis` and `targetSemanticAnalysis`, which are split to separate the 
+  core/primary semantic analysis and the target specific semantic analysis.
+- New types `KipperVoidType`, `KipperNumType`, `KipperStrType`, `KipperCharType`, `KipperBoolType` and `KipperListType`,
+  which represent Kipper available types in the Kipper language.  core/primary semantic analysis and the target specific semantic analysis.
+- Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
+  not exist.
 
 ### Changed
+- Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
+  `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific 
+  semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
+- Made `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()` non-abstract and
+  implemented basic processing algorithm to run the code from `CompilableParseToken.targetCodeGenerator` and
+  `CompilableParseToken.targetSemanticAnalysis`.
+- Changed semantic definitions for `CompilableParseToken` children classes and created for each child class a 
+  representing semantics class defining the metadata for the token. 
+- Renamed error `UnknownFunctionIdentifier` to `UnknownFunctionIdentifierError`.
+- Renamed function `CompileAssert.assertTypeExists` to `typeExists`. 
 
 ### Removed
 
