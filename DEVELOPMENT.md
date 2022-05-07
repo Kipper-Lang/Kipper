@@ -105,10 +105,10 @@ npm run build
 3. Updated static version identifier `version` in `index.ts`:
 
    ```ts
-   export const version = "0.4.0";
+   export const version = "MAJOR.MINOR.PATCH";
    ```
 
-5. Then login into your accexport const version = "0.4.0";ount:
+5. Then login into your account:
    ```bash
    npm login
    ```
