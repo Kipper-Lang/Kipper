@@ -19,12 +19,14 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../parser";
-import { ScopeVariableDeclaration } from "../logic";
+import { ScopeVariableDeclaration, TranslatedCodeLine, TranslatedExpression } from "../logic";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { KipperProgramContext } from "../program-ctx";
 import { determineScope } from "../../utils";
+import { TargetTokenCodeGenerator } from "../code-generator";
+import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Every antlr4 statement ctx type
@@ -72,6 +74,9 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
 	protected constructor(antlrCtx: antlrStatementCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
 		this._antlrCtx = antlrCtx;
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
 	}
 
 	/**
@@ -86,7 +91,11 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
 	 *
 	 * Every item in the array represents a single line of code.
 	 */
-	public abstract translateCtxAndChildren(): Promise<Array<Array<string>>>;
+	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
+		return await this.targetCodeGenerator(this);
+	}
+
+	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
 /**
@@ -150,24 +159,15 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		let childCode: Array<Array<string>> = [];
-		for (let child of this.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
-		}
-		return [["{"], ...childCode, ["}"]];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
+	targetCodeGenerator: TargetTokenCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.compoundStatement;
 }
 
 /**
@@ -208,21 +208,15 @@ export class SelectionStatement extends Statement<{ scope: KipperProgramContext 
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SelectionStatement> = this.semanticAnalyser.selectionStatement;
+	targetCodeGenerator: TargetTokenCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.selectionStatement;
 }
 
 /**
@@ -262,24 +256,15 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		let childCode: Array<string> = [];
-		for (let child of this.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
-		}
-		return [[...childCode, ";"]];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExpressionStatement> = this.semanticAnalyser.expressionStatement;
+	targetCodeGenerator: TargetTokenCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.expressionStatement;
 }
 
 /**
@@ -320,21 +305,15 @@ export class IterationStatement extends Statement<{ scope: KipperProgramContext 
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
+	targetCodeGenerator: TargetTokenCodeGenerator<IterationStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.iterationStatement;
 }
 
 /**
@@ -375,19 +354,13 @@ export class JumpStatement extends Statement<{ scope: KipperProgramContext | Com
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async semanticAnalysis(): Promise<void> {
+	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
 	}
 
-	/**
-	 * Generates the typescript code for this item, and all children (if they exist).
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async translateCtxAndChildren(): Promise<Array<Array<string>>> {
-		// TODO!
-		return [];
-	}
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
+	targetCodeGenerator: TargetTokenCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.jumpStatement;
 }
