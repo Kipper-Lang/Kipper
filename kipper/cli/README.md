@@ -2,7 +2,7 @@
 
 # Kipper CLI - `@kipper/cli`
 
-The Kipper programming language (CLI implementation) - Currently in development. No usable/stable versions available
+The CLI implementation for the Kipper programming language and compiler.
 
 *Note that this is a development preview! Stable releases might take until January-March 2022*
 
@@ -17,6 +17,12 @@ The Kipper programming language (CLI implementation) - Currently in development.
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
+
+## Kipper Docs
+
+For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
+
+*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
 
 # Usage
 

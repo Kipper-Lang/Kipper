@@ -6,21 +6,25 @@
 ![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
-[![Install size](https://packagephobia.com/badge?p=kipper)](https://packagephobia.com/result?p=kipper)
-[![Publish size](https://badgen.net/packagephobia/publish/kipper)](https://packagephobia.com/result?p=kipper)
 
 The full module for Kipper, which contains the core language, compiler and CLI.
 
 Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
 simple and straightforward coding similar to TypeScript and Python.
 
-*Note that this is a development version! Stable releases might take until April/May 2022*
+## Child Packages
 
-## Docs
+These are the child packages that are shipped with this bundle of Kipper:
+- [`@kipper/base`](https://www.npmjs.com/package/@kipper/base): The Kipper programming language and compiler for the 
+  browser and Node.js! 🦊
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper programming language compiler for NodeJS (CLI 
+  implementation) 🦊
+
+## Kipper Docs
 
 For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
-*This is a project in work, and as such some docs pages can be work in progress!*
+*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
 
 ## How to use Kipper?
 

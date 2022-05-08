@@ -16,11 +16,11 @@ simple and straightforward coding similar to TypeScript and Python.
 
 *Note that this is a development version! Stable releases might take until April/May 2022*
 
-## Docs
+## Kipper Docs
 
 For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
-*This is a project in work, and as such some docs pages can be work in progress!*
+*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
 
 ## How to use Kipper?
 
