@@ -15,8 +15,8 @@
     // ES7 -> ES2016
   },
   "include": [
-    "kipper/base/src/**/*",
-    "kipper/base/src/compiler/parser/*.*"
+    "./src/**/*",
+    "./src/compiler/parser/*.*"
   ],
   "exclude": [
     "node_modules"

@@ -1,0 +1,19 @@
+import {expect, test} from "@oclif/test";
+import {constants, promises as fs} from "fs";
+import {assert} from "chai";
+
+const filePath = `${__dirname}/../../kipper-files/hello-world.kip`;
+
+describe("run", () => {
+  test
+    .stdout()
+    .command(["run", filePath])
+    .it("'run' command", async ctx => {
+      expect(ctx.stdout).to.equal("");
+      try {
+        await fs.access(filePath, constants.R_OK);
+      } catch (e) {
+        assert(false, `Expected file '${filePath}' to exist.`);
+      }
+    });
+});

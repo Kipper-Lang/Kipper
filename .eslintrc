@@ -14,7 +14,9 @@
     "comma-dangle": 0,
     "object-curly-spacing": 0,
     "quotes": 0,
-    "semi": 2
+    "semi": 2,
+    "no-dupe-class-members": 0,
+    "@typescript-eslint/no-dupe-class-members": 2
   },
   "env": {
     "node": true,
