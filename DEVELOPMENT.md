@@ -94,18 +94,19 @@ pnpm run build
    ### Removed
    ```
 
-3. Updated static version identifier `version` in `index.ts`:
+3. Updated static version identifier `version` in every `src/index.ts` file of each child package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
    ```
 
-5. Then login into your account:
+4. Then login into your account:
    ```bash
    pnpm login
    ```
 
-5. Afterwards publish publicly using:
+5. Afterwards publish each package. View for every file the specific release notes in their
+   respective `DEVELOPMENT.md` files:
 
    ```bash
    pnpm publish --access public

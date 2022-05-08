@@ -27,7 +27,7 @@ pnpm install
 To only install resolved dependencies in `package-lock.json`:
 
 ```sh
-pnpm ci
+pnpm install --frozen-lockfile
 ```
 
 ## Development workflow
@@ -56,14 +56,6 @@ pnpm ci
    and linter errors will be printed to the terminal.
 
 ## Other scripts for Development
-
-### Run the application
-
-```sh
-pnpm start
-```
-
-You can also run `node .` to skip the build step.
 
 ### Rebuild the project
 
