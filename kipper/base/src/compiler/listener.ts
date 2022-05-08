@@ -253,14 +253,14 @@ export class KipperFileListener implements KipperListener {
 	 * Function that is called every time an item is entered.
 	 * @param ctx The context of the rule
 	 */
-  // eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 	public enterEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {}
 
 	/**
 	 * Function that is called every time an item is exited.
 	 * @param ctx The context of the rule.
 	 */
-  // eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 	public exitEveryRule(/*@NotNull*/ ctx: ParserRuleContext): void {}
 
 	// -- Top Item Section --

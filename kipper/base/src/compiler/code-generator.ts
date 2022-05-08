@@ -54,7 +54,7 @@ import { TranslatedCodeLine, TranslatedExpression } from "./logic";
 export type TargetTokenCodeGenerator<
 	T extends CompilableParseToken<any>,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
-// eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 > = (token: T) => Promise<R>;
 
 /**

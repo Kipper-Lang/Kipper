@@ -226,7 +226,7 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 * @todo Implement assignment checks!
 	 */
-  // eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars
 	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression<any>): void {}
 
 	/**
