@@ -1,6 +1,6 @@
 {
   "name": "@kipper/cli",
-  "description": "The Kipper programming language Compiler for NodeJS (CLI implementation)",
+  "description": "The Kipper programming language compiler for NodeJS (CLI implementation) 🦊",
   "version": "0.5.0-beta.1",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
