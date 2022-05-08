@@ -26,7 +26,7 @@ jobs:
           version: 7.0.0
           run_install: |
             - recursive: true
-      - run: pnpm ci
+      - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - name: Generating coverage badge
         run: pnpm run cov-badge

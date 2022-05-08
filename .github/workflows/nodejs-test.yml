@@ -3,7 +3,7 @@ name: Node.js Tests
 on: [push, pull_request]
 
 jobs:
-  # Run tests with 'pnpm ci' dependencies
+  # Run tests with 'pnpm install --frozen-lockfile' dependencies
   tests-with-pck-lock-dependencies:
     runs-on: ubuntu-latest
 
@@ -22,7 +22,7 @@ jobs:
           version: 7.0.0
           run_install: |
             - recursive: true
-      - run: pnpm ci
+      - run: pnpm install --frozen-lockfile
       - run: pnpm test
 
   # Run tests with 'pnpm i' dependencies
