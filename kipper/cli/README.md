@@ -13,7 +13,7 @@ The Kipper programming language (CLI implementation) - Currently in development.
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 
 <!-- toc -->
-* [Kipper](#kipper-cli---kippercli)
+* [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -26,13 +26,14 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (-v|--version|version)
-@kipper/cli/0.0.5 win32-x64 node-v16.13.0
+@kipper/cli/0.5.0-beta.1 win32-x64 node-v16.13.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
 ...
 ```
 <!-- usagestop -->
+
 
 # Commands
 
@@ -44,37 +45,40 @@ USAGE
 
 ## `kipper analyse FILE`
 
-Analyses a file and validates its syntax
+Analyses a file and validates its syntax.
 
 ```
 USAGE
   $ kipper analyse FILE
 
 ARGUMENTS
-  FILE  The file that should be analysed
+  FILE  The file that should be analysed.
 
 OPTIONS
-  --encoding=encoding  [default: utf16] The encoding that should be used to read the file
+  --encoding=encoding  [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.0.5/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/analyse.ts)_
 
 ## `kipper compile FILE`
 
-Compiles a Kipper source file file into TypeScript
+Compiles a Kipper source file file into TypeScript.
 
 ```
 USAGE
   $ kipper compile FILE
 
 ARGUMENTS
-  FILE  The file that should be compiled
+  FILE  The file that should be compiled.
 
 OPTIONS
-  --encoding=encoding  [default: utf16] The encoding that should be used to read the file
+  --encoding=encoding    [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
+
+  --outputDir=outputDir  [default: build] The build directory where the compiled files should be placed. If the path
+                         does not exist, it will be created.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.0.5/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -91,22 +95,25 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
 
 ## `kipper run FILE`
 
-Runs a Kipper program
+Compiles a Kipper program and transpiles it to JavaScript using tsc to execute it.
 
 ```
 USAGE
   $ kipper run FILE
 
 ARGUMENTS
-  FILE  The file that should be run (js/ts)
+  FILE  The file that should be compiled and run.
 
 OPTIONS
-  --encoding=encoding  [default: utf16] The encoding that should be used to read the file
+  --encoding=encoding    [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
+
+  --outputDir=outputDir  [default: build] The build directory where the compiled files should be placed. If the path
+                         does not exist, it will be created.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.0.5/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/run.ts)_
 <!-- commandsstop -->
