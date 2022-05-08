@@ -68,6 +68,7 @@
     "version": "oclif-dev readme && git add README.md",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
+    "cov-badge": "coverage-badge-creator",
     "build": "tsc",
     "prettier": "prettier --write ./src/",
     "tslint": "eslint ./src/**/*.ts --ext .ts --config ../../.eslintrc",

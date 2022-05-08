@@ -1,15 +1,15 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# Kipper Base Package - `@kipper/base`
+# The Kipper programming language - `kipper`
 
 [![Version](https://img.shields.io/npm/v/@kipper/base?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/base)
 ![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
-[![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
-[![Install size](https://packagephobia.com/badge?p=@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
-[![Publish size](https://badgen.net/packagephobia/publish/@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
+[![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
+[![Install size](https://packagephobia.com/badge?p=kipper)](https://packagephobia.com/result?p=kipper)
+[![Publish size](https://badgen.net/packagephobia/publish/kipper)](https://packagephobia.com/result?p=kipper)
 
-The base module and dependency for the entire Kipper project, which contains the core language and compiler.
+The full module for Kipper, which contains the core language, compiler and CLI.
 
 Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
 simple and straightforward coding similar to TypeScript and Python.

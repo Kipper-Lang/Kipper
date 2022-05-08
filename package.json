@@ -67,7 +67,7 @@
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",
     "test-no-rebuild": "nyc -x \"**/parser/**\" --reporter=json-summary --extension .ts mocha --forbid-only \"**/*.test.ts\"",
-    "cov-badge": "coverage-badge-creator",
+    "cov-badge": "coverage-badge-creator && pnpm run -r cov-badge",
     "antlr4ts": "pnpm run -r antlr4ts",
     "lint": "pnpm run -r tslint",
     "tslint": "pnpm run lint",
