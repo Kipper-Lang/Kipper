@@ -12,7 +12,7 @@ export * from "./errors";
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/base";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.5.0";
+export const version = "0.5.0-beta.0";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars
