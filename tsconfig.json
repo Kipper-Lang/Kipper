@@ -16,7 +16,8 @@
   },
   "include": [
     "kipper/base/src/**/*",
-    "kipper/base/src/compiler/parser/*.*"
+    "kipper/base/src/compiler/parser/*.*",
+    "kipper/cli/src/**/*"
   ],
   "exclude": [
     "node_modules"
