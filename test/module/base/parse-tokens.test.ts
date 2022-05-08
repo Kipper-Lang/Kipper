@@ -7,6 +7,8 @@ import { RootFileParseToken } from "@kipper/base/lib";
 import { TranslatedCodeLine } from "@kipper/base/lib";
 import { TargetTokenCodeGenerator } from "@kipper/base/lib/compiler/code-generator";
 import { TargetTokenSemanticAnalyser } from "@kipper/base/lib/compiler/semantic-analyser";
+import {eligibleParentToken} from "@kipper/base";
+import {ParserRuleContext} from "antlr4ts";
 
 const fileLocation: string = `${__dirname}/../../kipper-files/main.kip`;
 
@@ -14,10 +16,16 @@ describe("Parse-Tokens", () => {
 	describe("CompilableParseToken", () => {
 		// Example class for testing purposes
 		class ExampleToken extends CompilableParseToken<any> {
+      constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
+        super(antlrCtx, parent);
+      }
+
 			public async primarySemanticAnalysis(): Promise<void> { }
+
       targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleToken> = async (T: ExampleToken) => {
         return;
       };
+
       targetCodeGenerator: TargetTokenCodeGenerator<ExampleToken, TranslatedCodeLine> = async (T: ExampleToken) => {
         return <TranslatedCodeLine>[];
       };
