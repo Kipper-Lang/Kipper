@@ -53,7 +53,7 @@
     "prepack": "pnpm run build && pnpm run browserify",
     "prebuild": "pnpm run antlr4ts",
     "build": "run-script-os",
-    "build:linux:macos:default": "tsc && cp kipper/src/compiler/parser/*.interp lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens lib/compiler/parser/",
+    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp ./lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens ./lib/compiler/parser/",
     "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
     "browserify": "browserify browser/kipper-standalone.ts -p [ tsify --noImplicitAny -p tsconfig.web.json ] > kipper-standalone.js",
     "postbrowserify": "uglifyjs kipper-standalone.js -o kipper-standalone.min.js",
