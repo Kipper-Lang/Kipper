@@ -87,7 +87,7 @@ pnpm run build
    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
    For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
-3. Updated CHANGELOG.md and create a new release identifier:
+2. Updated CHANGELOG.md and create a new release identifier:
 
    ```markdown
    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
@@ -97,18 +97,18 @@ pnpm run build
    ### Removed
    ```
 
-4. Updated static version identifier `version` in every `src/index.ts` file of each child package:
+3. Updated static version identifier `version` in every `src/index.ts` file of each child package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
    ```
 
-5. Then login into your account:
+4. Then login into your account:
    ```bash
    pnpm login
    ```
 
-6. Afterwards publish each package. View for every file the specific release notes in their
+5. Afterwards publish each package. View for every file the specific release notes in their
    respective `DEVELOPMENT.md` files:
 
    - For a stable release: 
