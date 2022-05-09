@@ -60,6 +60,9 @@
   "license": "GPL-3.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "oclif": {
+    "commands": "./kipper/cli/lib/commands"
+  },
   "scripts": {
     "build": "pnpm run -r build",
     "pretest": "pnpm run build && pnpm run lint:fix",
