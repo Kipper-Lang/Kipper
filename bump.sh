@@ -2,10 +2,14 @@
 
 set -e
 
-if [ -z "$1" ]
-then
+if [ -z "$1" ]; then
   echo "No version identifier supplied"
 else
+  if [ "$(git tag -l "$1")" ]; then
+      echo "Tag/Version v$1 already exists"
+      exit 1
+  fi
+
   # Run the version command for the root package
   pnpm version "$1"
 
