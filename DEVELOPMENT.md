@@ -81,7 +81,7 @@ pnpm run build
 1. Bump version with the identifier (Visit GitHub for to recommended version):
 
    ```bash
-   pnpm version MAJOR.MINOR.PATCH && npm version -r MAJOR.MINOR.PATCH
+   pnpm version MAJOR.MINOR.PATCH 
    ```
    
    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
