@@ -5,12 +5,12 @@ set -e
 
 # Check whether there is a version argument
 if [ -z "$1" ]; then
-  printf "No version identifier supplied"
+  printf "No version identifier supplied\n"
   exit 1
 else
   # shellcheck disable=SC2046
   if [ $(git tag -l "v$1") ]; then
-    echo "ERR: Git tag v$1 already exists"
+    printf "ERR: Git tag v%s already exists\n" "$1"
     exit 1
   fi
 
