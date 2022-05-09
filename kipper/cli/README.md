@@ -32,7 +32,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (-v|--version|version)
-@kipper/cli/0.5.0-beta.1 win32-x64 node-v16.13.0
+@kipper/cli/0.5.0-beta.2 win32-x64 node-v16.13.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -63,7 +63,7 @@ OPTIONS
   --encoding=encoding  [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.2/src/commands/analyse.ts)_
 
 ## `kipper compile FILE`
 
@@ -83,7 +83,7 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.2/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -120,5 +120,31 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.2/src/commands/run.ts)_
 <!-- commandsstop -->
+
+## Copyright and License
+
+![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
+
+Copyright (C) 2021-2022 Luna Klatzer
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+
+See the [LICENSE](https://raw.githubusercontent.com/Para-Lang/Para/main/LICENSE)
+for information on terms & conditions for usage.
+
+### FOSSA License Report
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_large)

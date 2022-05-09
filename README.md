@@ -17,8 +17,7 @@ simple and straightforward coding similar to TypeScript and Python.
 These are the child packages that are shipped with this bundle of Kipper:
 - [`@kipper/base`](https://www.npmjs.com/package/@kipper/base): The Kipper programming language and compiler for the 
   browser and Node.js! 🦊
-- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper programming language compiler for NodeJS (CLI 
-  implementation) 🦊
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The CLI for the Kipper compiler 🦊
 
 ## Kipper Docs
 
@@ -118,3 +117,28 @@ fs.readFile(path, "utf8" as BufferEncoding).then(
 );
 ```
 
+## Copyright and License
+
+![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
+
+Copyright (C) 2021-2022 Luna Klatzer
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+
+See the [LICENSE](https://raw.githubusercontent.com/Para-Lang/Para/main/LICENSE)
+for information on terms & conditions for usage.
+
+### FOSSA License Report
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_large)
