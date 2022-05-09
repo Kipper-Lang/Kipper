@@ -75,38 +75,3 @@ otherwise, run simply the default `build` script:
 ```bash
 pnpm run build
 ```
-
-## Making a new release
-
-1. Bump version with the identifier (Visit GitHub for to recommended version):
-
-   ```bash
-   pnpm version MAJOR.MINOR.PATCH
-   ```
-
-2. Updated CHANGELOG.md and create a new release identifier:
-
-   ```markdown
-   ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
-  
-   ### Added
-   ### Changed
-   ### Removed
-   ```
-
-3. Updated static version identifier `version` in `index.ts`:
-
-   ```ts
-   export const version = "MAJOR.MINOR.PATCH";
-   ```
-
-5. Then login into your account:
-   ```bash
-   pnpm login
-   ```
-
-5. Afterwards publish publicly using:
-
-   ```bash
-   pnpm publish --access public
-   ```

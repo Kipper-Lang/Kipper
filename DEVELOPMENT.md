@@ -81,8 +81,10 @@ pnpm run build
 1. Bump version with the identifier (Visit GitHub for to recommended version):
 
    ```bash
-   pnpm version MAJOR.MINOR.PATCH
+   pnpm version MAJOR.MINOR.PATCH && npm version -r MAJOR.MINOR.PATCH
    ```
+   
+   Add `alpha`, `beta` or `rc` in case its a development version.
 
 2. Updated CHANGELOG.md and create a new release identifier:
 
@@ -108,6 +110,19 @@ pnpm run build
 5. Afterwards publish each package. View for every file the specific release notes in their
    respective `DEVELOPMENT.md` files:
 
+   - For a stable release: 
    ```bash
-   pnpm publish --access public
+   pnpm -r publish --access public
+   ```
+   - For a release-candidate:
+   ```
+   pnpm -r publish --access public --tag rc
+   ```
+   - For a beta release:
+   ```bash
+   pnpm -r publish --access public --tag beta
+   ```
+   - For an alpha release:
+   ```bash
+   pnpm -r publish --access public --tag alpha
    ```
