@@ -5,7 +5,8 @@ set -e
 if [ -z "$1" ]; then
   printf "No version identifier supplied"
 else
-  if [ "$(git tag -l "$1")" ]; then
+  # shellcheck disable=SC2046
+  if [ $(git tag -l "v$1") ]; then
       echo "Tag/Version v$1 already exists"
       exit 1
   fi
