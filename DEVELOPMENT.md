@@ -85,7 +85,7 @@ pnpm run build
    ```
    
    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
-   For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.2` or `0.5.0-rc.0`.
+   For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
 3. Updated CHANGELOG.md and create a new release identifier:
 
