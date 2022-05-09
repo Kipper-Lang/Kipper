@@ -26,4 +26,5 @@ jobs:
           run_install: |
             - recursive: true
       - run: pnpm install --frozen-lockfile
-      - run: ./bin/run
+      - run: node ./kipper/cli/bin/run
+      - run: ./kipper/cli/bin/run
