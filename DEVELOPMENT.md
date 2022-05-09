@@ -109,7 +109,7 @@ pnpm run build
    
    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
 
-4. Bump version:
+4. Bump version with a pre-written script:
    ```bash
    sh ./bump.sh MAJOR.MINOR.PATCH
    ```
