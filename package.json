@@ -74,6 +74,7 @@
     "tslint:fix": "pnpm run -r tslint:fix",
     "posttslint": "pnpm run prettier",
     "browserify": "pnpm --filter \"@kipper/base\" run browserify",
-    "start": "pnpm --filter \"@kipper/cli\" run start"
+    "start": "pnpm --filter \"@kipper/cli\" run start",
+    "bump": "sh ./bump.sh"
   }
 }
