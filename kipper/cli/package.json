@@ -38,9 +38,7 @@
     "lib",
     "src",
     "npm-shrinkwrap.json",
-    "oclif.manifest.json",
-    "../../Kipper.g4",
-    "../../CHANGELOG.md"
+    "oclif.manifest.json"
   ],
   "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
   "bugs": "https://github.com/Luna-Klatzer/Kipper-CLI/issues",

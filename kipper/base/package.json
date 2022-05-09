@@ -43,8 +43,7 @@
     "kipper-standalone.js",
     "kipper-standalone.min.js",
     "LICENSE",
-    "../../Kipper.g4",
-    "../../CHANGELOG.md"
+    "Kipper.g4"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
@@ -58,7 +57,7 @@
     "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
     "browserify": "browserify browser/kipper-standalone.ts -p [ tsify --noImplicitAny -p tsconfig.web.json ] > kipper-standalone.js",
     "postbrowserify": "uglifyjs kipper-standalone.js -o kipper-standalone.min.js",
-    "antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/ ./../../Kipper.g4",
+    "antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/ ./Kipper.g4",
     "cov-badge": "coverage-badge-creator",
     "lint": "pnpm run tslint",
     "lint:fix": "pnpm run tslint:fix",
