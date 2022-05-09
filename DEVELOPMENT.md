@@ -78,16 +78,20 @@ pnpm run build
 
 ## Making a new release
 
-1. Bump version with the identifier (Visit GitHub for to recommended version):
+1. Get new version for the next release 
+   (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
 
    ```bash
-   pnpm version MAJOR.MINOR.PATCH 
+   MAJOR.MINOR.PATCH
    ```
-   
+
    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
    For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
-2. Updated CHANGELOG.md and create a new release identifier:
+
+2. Update CHANGELOG.md and replace `Unreleased` with new version identifier:
+
+   *Skip this step unless it's a stable release!*
 
    ```markdown
    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
@@ -102,28 +106,35 @@ pnpm run build
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
    ```
+   
+   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
 
-4. Then login into your account:
+4. Bump version:
+   ```bash
+   sh ./bump.sh MAJOR.MINOR.PATCH
+   ```
+
+5. Then login into your account:
    ```bash
    pnpm login
    ```
 
-5. Afterwards publish each package. View for every file the specific release notes in their
+6. Afterwards publish each package. View for every file the specific release notes in their
    respective `DEVELOPMENT.md` files:
 
    - For a stable release: 
    ```bash
-   pnpm -r publish --access public
+   pnpm publish --access public && pnpm -r publish --access public
    ```
-   - For a release-candidate:
-   ```
-   pnpm -r publish --access public --tag rc
+   - For a release candidate:
+   ```bash
+   pnpm publish --access public --tag rc && pnpm -r publish --access public --tag rc
    ```
    - For a beta release:
    ```bash
-   pnpm -r publish --access public --tag beta
+   pnpm publish --access public --tag beta && pnpm -r publish --access public --tag beta
    ```
    - For an alpha release:
    ```bash
-   pnpm -r publish --access public --tag alpha
+   pnpm publish --access public --tag alpha && pnpm -r publish --access public --tag alpha
    ```
