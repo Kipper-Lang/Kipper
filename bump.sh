@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+# Enable errors
 set -e
 
 if [ -z "$1" ]; then
@@ -7,8 +8,10 @@ if [ -z "$1" ]; then
 else
   # shellcheck disable=SC2046
   if [ $(git tag -l "v$1") ]; then
-      echo "Tag/Version v$1 already exists"
-      exit 1
+    echo "ERR: Version v$1 already exists"
+    exit 1
+  else
+    exit 0
   fi
 
   # Run the version command for the root package
@@ -35,4 +38,7 @@ else
   # Update lock files
   printf "\n -- Updating lock files:\n"
   pnpm install
+
+  # Push tags
+  git push origin "v$1"
 fi
