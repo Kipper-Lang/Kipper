@@ -20,4 +20,7 @@ else
 
   git commit -a -m "Bumped package versions to \"$1\""
   git tag -a "v$1" -m "Release $1"
+
+  # Update lock files
+  pnpm install
 fi
