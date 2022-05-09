@@ -59,7 +59,8 @@
     "commands": "./lib/commands",
     "bin": "kipper",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-update"
     ],
     "repositoryPrefix": "https://github.com/Luna-Klatzer/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>"
   },
