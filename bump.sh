@@ -10,7 +10,7 @@ if [ -z "$1" ]; then
 else
   # shellcheck disable=SC2046
   if [ $(git tag -l "v$1") ]; then
-    echo "ERR: Version v$1 already exists"
+    echo "ERR: Git tag v$1 already exists"
     exit 1
   fi
 
