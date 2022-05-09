@@ -41,10 +41,10 @@
     "oclif.manifest.json"
   ],
   "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
-  "bugs": "https://github.com/Luna-Klatzer/Kipper-CLI/issues",
+  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper-CLI"
+    "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
     "oclif",
@@ -60,7 +60,8 @@
     "bin": "kipper",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "repositoryPrefix": "https://github.com/Luna-Klatzer/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>"
   },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
