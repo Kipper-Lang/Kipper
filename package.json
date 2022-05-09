@@ -64,7 +64,6 @@
     "build": "pnpm run -r build",
     "pretest": "pnpm run build && pnpm run lint:fix",
     "test": "pnpm run test-no-rebuild",
-    "version": "pnpm --filter \"@kipper/*\" -r version",
     "test-no-rebuild": "nyc -x \"**/parser/**\" --reporter=json-summary --extension .ts mocha --forbid-only \"**/*.test.ts\"",
     "cov-badge": "coverage-badge-creator && pnpm run -r cov-badge",
     "antlr4ts": "pnpm run -r antlr4ts",
