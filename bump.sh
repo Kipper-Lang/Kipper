@@ -3,15 +3,15 @@
 # Enable errors
 set -e
 
+# Check whether there is a version argument
 if [ -z "$1" ]; then
   printf "No version identifier supplied"
+  exit 1
 else
   # shellcheck disable=SC2046
   if [ $(git tag -l "v$1") ]; then
     echo "ERR: Version v$1 already exists"
     exit 1
-  else
-    exit 0
   fi
 
   # Run the version command for the root package
@@ -41,4 +41,7 @@ else
 
   # Push tags
   git push origin "v$1"
+
+  # Exit
+  exit 0
 fi
