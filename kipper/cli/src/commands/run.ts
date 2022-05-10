@@ -33,7 +33,7 @@ export function executeKipperProgram(jsCode: string) {
 }
 
 export default class Run extends Command {
-	static description = "Compiles a Kipper program and transpiles it to JavaScript using tsc to execute it.";
+	static description = "Compiles and executes a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
