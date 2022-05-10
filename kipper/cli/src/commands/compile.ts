@@ -12,7 +12,7 @@ import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from
 import { writeCompilationResult } from "../compile";
 
 export default class Compile extends Command {
-	static description = "Compiles a Kipper source file file into TypeScript.";
+	static description = "Compiles a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
