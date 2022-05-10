@@ -48,6 +48,7 @@ USAGE
 * [`kipper help [COMMAND]`](#kipper-help-command)
 * [`kipper run FILE`](#kipper-run-file)
 * [`kipper update [CHANNEL]`](#kipper-update-channel)
+* [`kipper version`](#kipper-version)
 
 ## `kipper analyse FILE`
 
@@ -88,7 +89,7 @@ _See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob
 
 ## `kipper help [COMMAND]`
 
-display help for kipper
+Displays help for the Kipper CLI
 
 ```
 USAGE
@@ -101,7 +102,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.3.1/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run FILE`
 
@@ -125,7 +126,7 @@ _See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.
 
 ## `kipper update [CHANNEL]`
 
-update the kipper CLI
+Update the Kipper compiler and CLI
 
 ```
 USAGE
@@ -144,7 +145,18 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
+_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/update.ts)_
+
+## `kipper version`
+
+Displays the currently installed Kipper version
+
+```
+USAGE
+  $ kipper version
+```
+
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Copyright and License
