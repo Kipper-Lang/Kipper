@@ -32,7 +32,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (-v|--version|version)
-@kipper/cli/0.5.0-beta.1 linux-x64 node-v16.15.0
+@kipper/cli/0.5.0-beta.2 linux-x64 node-v16.15.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -47,6 +47,7 @@ USAGE
 * [`kipper compile FILE`](#kipper-compile-file)
 * [`kipper help [COMMAND]`](#kipper-help-command)
 * [`kipper run FILE`](#kipper-run-file)
+* [`kipper update [CHANNEL]`](#kipper-update-channel)
 
 ## `kipper analyse FILE`
 
@@ -63,7 +64,7 @@ OPTIONS
   --encoding=encoding  [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile FILE`
 
@@ -83,7 +84,7 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -120,7 +121,30 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper-CLI/blob/v0.5.0-beta.1/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/run.ts)_
+
+## `kipper update [CHANNEL]`
+
+update the kipper CLI
+
+```
+USAGE
+  $ kipper update [CHANNEL]
+
+OPTIONS
+  -a, --available        Install a specific version.
+  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
+  -v, --version=version  Install a specific version.
+  --force                Force a re-download of the requested version.
+
+EXAMPLES
+  [object Object]
+  [object Object]
+  [object Object]
+  [object Object]
+```
+
+_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v3.0.0/src/commands/update.ts)_
 <!-- commandsstop -->
 
 ## Copyright and License
