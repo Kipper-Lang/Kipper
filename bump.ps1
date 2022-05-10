@@ -40,12 +40,12 @@ else
 
   # Run the version command for the root package
   Write-Output "-- Updating root project"
-  $(pnpm version ("{0}" -f $args[0]))
+  $null = $(pnpm version ("{0}" -f $args[0]))
   ExitOnFailure
 
   # Revert the auto-generated commit
-  Write-Output "-- Removed generated commit from pnpm version"
-  $null = $(git reset--soft HEAD~1)
+  Write-Output "-- Removed auto-generated commit from pnpm version"
+  $null = $(git reset --soft HEAD~1)
   ExitOnFailure
 
   # Delete the auto generated tag
@@ -69,10 +69,9 @@ else
   $null = $(pnpm install)
   ExitOnFailure
 
-  Exit 0
-
   # Push tags
   $(git push origin ("v{0}" -f $args[0]))
+  ExitOnFailure
 
   # Exit
   Exit 0
