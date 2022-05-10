@@ -11,7 +11,9 @@ import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from
 import { defaultCliEmitHandler } from "../logger";
 
 export default class Analyse extends Command {
-	static description = "Analyses a file and validates its syntax.";
+	static description = "Analyses a file and validates its syntax and semantic integrity.";
+
+  // TODO! Add examples when the command moves out of development
 	static examples = [];
 
 	static args = [
