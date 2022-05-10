@@ -7,7 +7,7 @@ on:
     branches: [main, dev]
 
 jobs:
-  cli:
+  cli-lock:
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,5 +26,49 @@ jobs:
           run_install: |
             - recursive: true
       - run: pnpm install --frozen-lockfile
+      - run: node ./kipper/cli/bin/run
+      - run: ./kipper/cli/bin/run
+
+  cli-dev:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.0.0
+          run_install: |
+            - recursive: true
+      - run: pnpm install
+      - run: node ./kipper/cli/bin/run
+      - run: ./kipper/cli/bin/run
+
+  cli-prod:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.0.0
+          run_install: |
+            - recursive: true
+      - run: pnpm install --prod
       - run: node ./kipper/cli/bin/run
       - run: ./kipper/cli/bin/run
