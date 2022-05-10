@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a specific target language.
 - Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis 
   logic for a compilation target.
-- Abstract
 - Class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
   specific target.
 - Class `TypeScriptTarget`, which defines the default target for Kipper.
@@ -32,6 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which represent Kipper available types in the Kipper language.  core/primary semantic analysis and the target specific semantic analysis.
 - Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
   not exist.
+- New CLI commands:
+  - `version`, which returns the currently installed Kipper version.
+  - `update`, which updates the CLI if a new version is available.
+- New CLI plugins:
+  - Plugin and manual command `update`, which updates the CLI if a new release is available.
+  - Plugin `warn-if-update-available`, which will display a warning when the CLI is used that a new version can be
+    installed.
 
 ### Changed
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
