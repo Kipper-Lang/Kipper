@@ -20,6 +20,9 @@ else
     exit 1
   fi
 
+  printf "-- Building files"
+  pnpm run build
+
   # Run the version command for the root package
   printf "-- Updating root project"
   pnpm version "$1"

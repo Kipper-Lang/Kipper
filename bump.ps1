@@ -38,6 +38,11 @@ else
     Exit 1
   }
 
+  # Build all files
+  Write-Output "-- Building files"
+  $(pnpm run build)
+  ExitOnFailure
+
   # Run the version command for the root package
   Write-Output "-- Updating root project"
   $null = $(pnpm version ("{0}" -f $args[0]))
@@ -70,6 +75,7 @@ else
   ExitOnFailure
 
   # Push tags
+  Write-Output "-- Pushing to remote"
   $(git push origin ("v{0}" -f $args[0]))
   ExitOnFailure
 
