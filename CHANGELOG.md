@@ -19,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a specific target language.
 - Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis 
   logic for a compilation target.
-- Abstract
 - Class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
   specific target.
 - Class `TypeScriptTarget`, which defines the default target for Kipper.
@@ -32,8 +31,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which represent Kipper available types in the Kipper language.  core/primary semantic analysis and the target specific semantic analysis.
 - Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
   not exist.
+- New CLI commands:
+  - `version`, which returns the currently installed Kipper version.
+  - `update`, which updates the CLI if a new version is available.
+- New CLI plugins:
+  - Plugin and manual command `update`, which updates the CLI if a new release is available.
+  - Plugin `warn-if-update-available`, which will display a warning when the CLI is used that a new version can be
+    installed.
 
 ### Changed
+- Deprecated `@kipper/base` as it is now replaced with `@kipper/core`.
+- Fixed `@kipper/cli` bug causing logging messages to only contain "anonymous-script".
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
   `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific 
   semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
@@ -46,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed function `CompileAssert.assertTypeExists` to `typeExists`. 
 
 ### Removed
+- File `CHANGELOG.md` from `@kipper/cli` and `@kipper/core`, as it is now only shipped with `kipper`.
 
 ## [0.4.0] - 2022-05-03
 
@@ -71,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
   the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 - Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
-  `import * as Utils from "@kipper/base/utils"`, where the user can themselves define the wanted scope identifier.
+  `import * as Utils from "@kipper/core/utils"`, where the user can themselves define the wanted scope identifier.
 
 ## [0.3.0] - 2022-04-28
 

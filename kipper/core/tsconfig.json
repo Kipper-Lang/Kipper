@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": true,
+    "importHelpers": true,
+    "removeComments": true,
+    "module": "commonjs",
+    "outDir": "lib",
+    "rootDir": "src",
+    "strict": true,
+    "target": "es2020",
+    "lib": [
+      "ES7"
+    ]
+    // ES7 -> ES2016
+  },
+  "include": [
+    "./src/**/*",
+    "./src/compiler/parser/*.*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

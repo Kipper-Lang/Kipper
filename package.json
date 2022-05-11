@@ -1,21 +1,23 @@
 {
-  "name": "@kipper/base",
-  "description": "The Kipper programming language and compiler for the browser! 🦊",
-  "version": "0.5.0",
+  "name": "kipper",
+  "description": "The Kipper programming language! 🦊",
+  "version": "0.5.0-beta.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
+    "@kipper/core": "workspace:*",
+    "@kipper/cli": "workspace:*",
     "antlr4ts": "^0.5.0-alpha.4",
-    "tslib": "~2.4.0"
+    "tslib": "~2.4.0",
+    "typescript": "~4.6.4"
   },
   "devDependencies": {
-    "typescript": "~4.6.4",
-    "ts-node": "~10.7.0",
     "uuid": "^8.3.2",
     "mkdirp": "^1.0.4",
     "chai": "^4.3.0",
     "eslint": "^8.14.0",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
+    "ts-node": "^10.7.0",
     "ansi-regex": "^6.0.1",
     "minimist": "^1.2.6",
     "prettier": "2.6.2",
@@ -23,9 +25,12 @@
     "browserify": "~17.0.0",
     "watchify": "~4.0.0",
     "antlr4ts-cli": "^0.5.0-alpha.4",
+    "oclif": "^3.0.1",
+    "@oclif/test": "^1.2.8",
+    "@oclif/config": "^1.18.3",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.30",
-    "@types/chai": "^4.3.0",
+    "@types/chai": "4.3.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "json-parse-even-better-errors": "2.3.1",
@@ -34,7 +39,8 @@
     "uglify-js": "^3.15.3"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "pnpm": ">=7"
   },
   "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
@@ -48,37 +54,32 @@
     "backend"
   ],
   "files": [
-    "lib",
-    "web-lib",
-    "browser",
-    "src",
-    "kipper-standalone.js",
-    "kipper-standalone.min.js",
-    "Kipper.g4",
+    "LICENSE",
     "CHANGELOG.md"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "oclif": {
+    "commands": "./kipper/cli/lib/commands"
+  },
   "scripts": {
-    "prepack": "npm run build && npm run browserify",
-    "prebuild": "npm run antlr4ts",
-    "build": "run-script-os",
-    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens lib/compiler/parser/",
-    "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
-    "browserify": "browserify browser/kipper-standalone.ts -p [ tsify --noImplicitAny -p tsconfig.web.json ] > kipper-standalone.js",
-    "postbrowserify": "uglifyjs kipper-standalone.js -o kipper-standalone.min.js",
-    "antlr4ts": "antlr4ts -visitor -o src/compiler/parser/ Kipper.g4",
-    "posttest": "npm run lint:fix",
-    "pretest": "npm run build",
-    "test": "npm run test-no-rebuild",
+    "build": "pnpm run -r build",
+    "pretest": "pnpm run build && pnpm run lint:fix",
+    "test": "pnpm run test-no-rebuild",
     "test-no-rebuild": "nyc -x \"**/parser/**\" --reporter=json-summary --extension .ts mocha --forbid-only \"**/*.test.ts\"",
-    "cov-badge": "coverage-badge-creator",
-    "lint": "npm run tslint",
-    "lint:fix": "npm run tslint:fix",
-    "prettier": "prettier --write ./src/",
-    "tslint": "eslint src/**/*.ts --ext .ts --config .eslintrc",
-    "tslint:fix": "npm run tslint -- --fix",
-    "posttslint": "npm run prettier"
+    "cov-badge": "coverage-badge-creator && pnpm run -r cov-badge",
+    "antlr4ts": "pnpm run -r antlr4ts",
+    "prettier": "pnpm run -r prettier",
+    "lint": "pnpm run tslint",
+    "lint:fix": "pnpm run tslint:fix",
+    "tslint": "pnpm run -r tslint",
+    "tslint:fix": "pnpm run -r tslint:fix",
+    "posttslint": "pnpm run prettier",
+    "browserify": "pnpm --filter \"@kipper/core\" run browserify",
+    "start": "pnpm --filter \"@kipper/cli\" run start",
+    "bump": "run-script-os",
+    "bump:linux:macos:default": "./bump.sh",
+    "bump:windows": "powershell.exe .\\bump.ps1"
   }
 }

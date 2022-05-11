@@ -39,7 +39,7 @@
 
   <!-- Tests here-->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="module" src='../kipper-standalone.js'></script>
+  <script type="module" src='../kipper/core/kipper-standalone.js'></script>
   <script type="module">
     const logger = new Kipper.KipperLogger((level, msg) => {
       console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
