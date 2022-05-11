@@ -101,25 +101,36 @@ pnpm run build
    ### Removed
    ```
 
-4. Bump version with a pre-written script:
+3. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to 
+   the remote host):
    ```bash
    sh ./bump.sh MAJOR.MINOR.PATCH
    ```
 
-3. Updated static version identifier `version` in every `src/index.ts` file of each child package:
+4. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
    ```
 
-   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
+   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
+   changes must be committed yourself with a commit message preferably similar to this:
 
-5. Then login into your account:
+   ```
+   Bumped static index.ts versions to MAJOR.MINOR.PATCH
+   ```
+   
+   For example:
+   ```
+   Bumped static versions to 0.5.0-rc.0
+   ```
+
+6. Then login into your account:
    ```bash
    pnpm login
    ```
 
-6. Afterwards publish each package. View for every file the specific release notes in their
+7. Afterwards publish each package. View for every file the specific release notes in their
    respective `DEVELOPMENT.md` files:
 
    - For a stable release: 
