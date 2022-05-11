@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Deprecated `@kipper/base` as it is now replaced with `@kipper/core`.
+- Fixed `@kipper/cli` bug causing logging messages to only contain "anonymous-script".
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
   `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific 
   semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
