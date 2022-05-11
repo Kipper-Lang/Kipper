@@ -5,8 +5,8 @@ import { KipperProgramContext } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
 import { RootFileParseToken } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
-import { TargetTokenCodeGenerator } from "@kipper/core/compiler/code-generator";
-import { TargetTokenSemanticAnalyser } from "@kipper/core/compiler/semantic-analyser";
+import { TargetTokenCodeGenerator } from "@kipper/core/";
+import { TargetTokenSemanticAnalyser } from "@kipper/core";
 import {eligibleParentToken} from "@kipper/core";
 import {ParserRuleContext} from "antlr4ts";
 

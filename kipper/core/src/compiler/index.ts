@@ -17,4 +17,5 @@ export * from "./listener";
 export * from "./program-ctx";
 export * from "./compiler";
 export * from "./semantic-analyser";
+export * from "./code-generator";
 export * from "./const";
