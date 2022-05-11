@@ -122,7 +122,7 @@ pnpm run build
 4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
    the remote host):
    ```bash
-   sh ./bump.sh MAJOR.MINOR.PATCH
+   pnpm run bump MAJOR.MINOR.PATCH
    ```
 
    It is important that this script is run *AFTER* the previous step, so that the commits associated with the tags
