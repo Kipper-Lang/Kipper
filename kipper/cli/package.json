@@ -38,15 +38,13 @@
     "node": ">=14.0.0"
   },
   "files": [
+    "lib",
     "src",
     "bin",
     "npm-shrinkwrap.json",
-    "oclif.manifest.json"
+    "oclif.manifest.json",
+    "LICENSE"
   ],
-  "directories": {
-    "lib": "lib",
-    "commands": "src/commands"
-  },
   "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
