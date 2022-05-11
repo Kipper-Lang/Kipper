@@ -134,7 +134,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 
-See the [LICENSE](https://raw.githubusercontent.com/Para-Lang/Para/main/LICENSE)
+See the [LICENSE](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/LICENSE)
 for information on terms & conditions for usage.
 
 ### FOSSA License Report
