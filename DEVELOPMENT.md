@@ -101,13 +101,7 @@ pnpm run build
    ### Removed
    ```
 
-3. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to 
-   the remote host):
-   ```bash
-   sh ./bump.sh MAJOR.MINOR.PATCH
-   ```
-
-4. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
+3. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
@@ -124,6 +118,15 @@ pnpm run build
    ```
    Bumped static versions to 0.5.0-rc.0
    ```
+
+4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
+   the remote host):
+   ```bash
+   sh ./bump.sh MAJOR.MINOR.PATCH
+   ```
+
+   It is important that this script is run *AFTER* the previous step, so that the commits associated with the tags
+   already have the version identifiers in the `index.ts` files updated.
 
 6. Then login into your account:
    ```bash
