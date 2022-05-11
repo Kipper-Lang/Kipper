@@ -101,18 +101,18 @@ pnpm run build
    ### Removed
    ```
 
+4. Bump version with a pre-written script:
+   ```bash
+   sh ./bump.sh MAJOR.MINOR.PATCH
+   ```
+
 3. Updated static version identifier `version` in every `src/index.ts` file of each child package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
    ```
-   
-   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
 
-4. Bump version with a pre-written script:
-   ```bash
-   sh ./bump.sh MAJOR.MINOR.PATCH
-   ```
+   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
 
 5. Then login into your account:
    ```bash
