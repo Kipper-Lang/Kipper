@@ -22,7 +22,6 @@ specifiers:
   mkdirp: ^1.0.4
   mocha: ^10.0.0
   nyc: ^15.1.0
-  pnpm: ^7.0.1
   prettier: 2.6.2
   run-script-os: ^1.1.6
   ts-node: ~10.7.0
@@ -59,7 +58,6 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.0.0
   nyc: 15.1.0
-  pnpm: 7.0.1
   prettier: 2.6.2
   run-script-os: 1.1.6
   ts-node: 10.7.0_l47be6km5p57gglrggidw5gsgm
@@ -3262,12 +3260,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       find-up: 4.1.0
-    dev: true
-
-  /pnpm/7.0.1:
-    resolution: {integrity: sha512-jDXatNQpx+KYoCg0sSEBj4ryS8dIfo05TkhH5GOyi0ClhmkdmdHr2PgbReQyzZzuQpKWefCAvwOB8PxE1tgQNg==}
-    engines: {node: '>=14.19'}
-    hasBin: true
     dev: true
 
   /prelude-ls/1.2.1:
