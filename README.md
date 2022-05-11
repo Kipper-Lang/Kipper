@@ -15,8 +15,7 @@ simple and straightforward coding similar to TypeScript and Python.
 ## Child Packages
 
 These are the child packages that are shipped with this bundle of Kipper:
-- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper programming language and compiler for the 
-  browser and Node.js! 🦊
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The CLI for the Kipper compiler 🦊
 
 ## Kipper Docs
@@ -28,16 +27,15 @@ For proper documentation on the kipper language go [here](https://wmc-ahif-2021.
 ## How to use Kipper?
 
 To use, Kipper you have three options:
-- Run it in the browser using the CDN `kipper-standalone.min.js` file, which bundles the entire compiler
+- Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js) file, which bundles the entire compiler
   for your browser.
-- Run it using the `@kipper/cli` interface for the terminal.
-- Import the package `@kipper/core` in NodeJS or Deno.
+- Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
+- Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.
 
 ### In a browser
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
-provides the kipper compiler for the browser. This script will fetch your code from script tags with
-the property `type="text/kipper"`, and replace the content with runnable JavaScript.
+provides the kipper compiler for the browser. 
 
 As a dependency you will also have to include `babel.min.js`, which is needed to allow for a compilation
 from TS to JS in your browser, as Kipper compiles only to TypeScript.
