@@ -1,7 +1,6 @@
 import {expect, test} from "@oclif/test";
 import * as path from "path";
 import {KipperSyntaxError} from "@kipper/core";
-import {RecognitionException} from "antlr4ts";
 
 const validFilePath = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 const invalidFilePath = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
