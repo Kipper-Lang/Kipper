@@ -78,7 +78,7 @@
   },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "prepack": "rimraf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rimraf lib && tsc -b && oclif manifest && oclif-dev readme",
     "version": "oclif readme && git add README.md && pnpm version",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
