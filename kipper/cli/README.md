@@ -31,8 +31,8 @@ For proper documentation on the kipper language go [here](https://wmc-ahif-2021.
 $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
-$ kipper (-v|--version|version)
-@kipper/cli/0.5.0-beta.2 linux-x64 node-v16.15.0
+$ kipper (--version)
+@kipper/cli/0.5.0-rc.0 win32-x64 node-v16.13.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -52,7 +52,7 @@ USAGE
 
 ## `kipper analyse FILE`
 
-Analyses a file and validates its syntax.
+Analyses a file and validates its syntax and semantic integrity.
 
 ```
 USAGE
@@ -65,11 +65,11 @@ OPTIONS
   --encoding=encoding  [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile FILE`
 
-Compiles a Kipper source file file into TypeScript.
+Compiles a Kipper program.
 
 ```
 USAGE
@@ -85,11 +85,11 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
-Displays help for the Kipper CLI
+Displays help for the Kipper CLI.
 
 ```
 USAGE
@@ -102,11 +102,11 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run FILE`
 
-Compiles a Kipper program and transpiles it to JavaScript using tsc to execute it.
+Compiles and executes a Kipper program.
 
 ```
 USAGE
@@ -122,11 +122,11 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/run.ts)_
 
 ## `kipper update [CHANNEL]`
 
-Update the Kipper compiler and CLI
+Update the Kipper compiler and CLI.
 
 ```
 USAGE
@@ -145,18 +145,18 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/update.ts)_
+_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/update.ts)_
 
 ## `kipper version`
 
-Displays the currently installed Kipper version
+Displays the currently installed Kipper version.
 
 ```
 USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-beta.2/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0-rc.0/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Copyright and License
