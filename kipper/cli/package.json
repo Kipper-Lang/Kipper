@@ -16,7 +16,6 @@
     "@oclif/help": "^1.0.1",
     "@oclif/plugin-update": "^3.0.0",
     "@oclif/plugin-warn-if-update-available": "^2.0.4",
-    "ts-node": "^8.10.2",
     "tslog": "^3.3.0",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",

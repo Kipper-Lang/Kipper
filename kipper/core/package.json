@@ -9,7 +9,6 @@
   },
   "devDependencies": {
     "typescript": "~4.6.4",
-    "ts-node": "~10.7.0",
     "uuid": "^8.3.2",
     "mkdirp": "^1.0.4",
     "ansi-regex": "^6.0.1",
