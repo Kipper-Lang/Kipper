@@ -2,9 +2,10 @@
 
 # Kipper CLI - `@kipper/cli`
 
-The CLI implementation for the Kipper programming language and compiler.
+The Kipper command line interface (CLI) to interact with the Kipper compiler.
 
-*Note that this is a development preview! Stable releases might take until January-March 2022*
+Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
+simple and straightforward coding similar to TypeScript and Python! 🦊
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 ![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
@@ -18,11 +19,9 @@ The CLI implementation for the Kipper programming language and compiler.
 * [Commands](#commands)
 <!-- tocstop -->
 
-## Kipper Docs
+# Kipper Docs
 
-For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
-
-*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
+Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
 # Usage
 
@@ -126,7 +125,7 @@ _See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.
 
 ## `kipper update [CHANNEL]`
 
-Update the Kipper compiler and CLI.
+Updates the Kipper compiler and CLI.
 
 ```
 USAGE

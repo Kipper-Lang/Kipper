@@ -9,20 +9,18 @@
 [![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 
-The core module for the Kipper project, which contains the primary language and compiler.
+The core module for Kipper, which contains the primary language and compiler.
 
-Kipper is a simple strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python.
+Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
+simple and straightforward coding similar to TypeScript and Python! 🦊
 
 ## Kipper Docs
 
-For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
-
-*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
+Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
 ## How to use Kipper?
 
-To use, Kipper you have three options:
+To use Kipper you have three options:
 - Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js) file, which bundles the entire compiler
   for your browser.
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).

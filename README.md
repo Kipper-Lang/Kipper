@@ -7,26 +7,25 @@
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 
-The full module for Kipper, which contains the core language, compiler and CLI.
+The full module for Kipper, which contains the core language, compiler and command line interface (CLI).
 
 Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python.
+simple and straightforward coding similar to TypeScript and Python! 🦊
 
 ## Child Packages
 
 These are the child packages that are shipped with this bundle of Kipper:
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
-- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The CLI for the Kipper compiler 🦊
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact 
+  with the Kipper compiler! 🦊
 
 ## Kipper Docs
 
-For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
-
-*This is a project in work, and as such some docs pages can be incomplete or work in progress!*
+Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
 ## How to use Kipper?
 
-To use, Kipper you have three options:
+To use Kipper you have three options:
 - Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js) file, which bundles the entire compiler
   for your browser.
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
