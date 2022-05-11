@@ -9,8 +9,9 @@ import { TargetTokenCodeGenerator } from "@kipper/core/";
 import { TargetTokenSemanticAnalyser } from "@kipper/core";
 import {eligibleParentToken} from "@kipper/core";
 import {ParserRuleContext} from "antlr4ts";
+import * as path from "path";
 
-const fileLocation: string = `${__dirname}/../../kipper-files/main.kip`;
+const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("Parse-Tokens", () => {
 	describe("CompilableParseToken", () => {

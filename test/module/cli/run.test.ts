@@ -1,8 +1,9 @@
 import {expect, test} from "@oclif/test";
 import {constants, promises as fs} from "fs";
 import {assert} from "chai";
+import * as path from "path";
 
-const filePath = `${__dirname}/../../kipper-files/hello-world.kip`;
+const filePath = path.resolve(`${__dirname}/../../kipper-files/hello-world.kip`);
 
 describe("run", () => {
   test

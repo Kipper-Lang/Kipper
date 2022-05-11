@@ -1,6 +1,7 @@
 import {expect, test} from "@oclif/test";
+import * as path from "path";
 
-const filePath = `${__dirname}/../../kipper-files/main.kip`;
+const filePath = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("analyse", () => {
   test

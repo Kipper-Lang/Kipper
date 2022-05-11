@@ -11,17 +11,18 @@ import {
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
+import * as path from "path";
 
 // Test files
-const mainFile = `${__dirname}/../../kipper-files/main.kip`;
-const singleFunctionFile = `${__dirname}/../../kipper-files/single-function-call.kip`;
-const multiFunctionFile = `${__dirname}/../../kipper-files/multi-function-call.kip`;
-const printNumberFile = `${__dirname}/../../kipper-files/print-number.kip`;
-const invalidFile = `${__dirname}/../../kipper-files/invalid.kip`;
-const nestedScopesFile = `${__dirname}/../../kipper-files/nested-scopes.kip`;
-const singleFunctionDefinition = `${__dirname}/../../kipper-files/single-function-definition.kip`;
-const multiFunctionDefinition = `${__dirname}/../../kipper-files/multi-function-definition.kip`;
-const variableDeclaration = `${__dirname}/../../kipper-files/variable-declaration.kip`;
+const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
+const singleFunctionFile = path.resolve(`${__dirname}/../../kipper-files/single-function-call.kip`);
+const multiFunctionFile = path.resolve(`${__dirname}/../../kipper-files/multi-function-call.kip`);
+const printNumberFile = path.resolve(`${__dirname}/../../kipper-files/print-number.kip`);
+const invalidFile = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
+const nestedScopesFile = path.resolve(`${__dirname}/../../kipper-files/nested-scopes.kip`);
+const singleFunctionDefinition = path.resolve(`${__dirname}/../../kipper-files/single-function-definition.kip`);
+const multiFunctionDefinition = path.resolve(`${__dirname}/../../kipper-files/multi-function-definition.kip`);
+const variableDeclaration = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
 
 describe("KipperCompiler", () => {
   describe("constructor", () => {

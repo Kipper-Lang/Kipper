@@ -1,8 +1,9 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import { KipperParseStream } from "@kipper/core";
+import * as path from "path";
 
-const fileLocation: string = `${__dirname}/../../kipper-files/main.kip`;
+const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("KipperParseStream", () => {
   describe("constructor", () => {

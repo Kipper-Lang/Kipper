@@ -7,8 +7,9 @@ import {
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import { ScopeVariableDeclaration, CompilerEvaluatedOptions } from "@kipper/core";
+import * as path from "path";
 
-const mainFile = `${__dirname}/../../kipper-files/main.kip`;
+const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("KipperProgramContext", async () => {
 	const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
