@@ -15,7 +15,7 @@
     // ES7 -> ES2016
   },
   "include": [
-    "browser/**/*"
+    "kipper/core/browser/**/*"
   ],
   "exclude": [
     "node_modules"

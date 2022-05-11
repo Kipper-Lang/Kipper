@@ -24,7 +24,7 @@ If a version gets deprecated/loses support, it will be deprecated as well on the
 This means the version will be marked as outdated and NPM will provide a deprecation warning to everyone who attempts to
 install it.
 
-View a list of all available NPM versions [here](https://www.npmjs.com/package/@kipper/base/).
+View a list of all available NPM versions [here](https://www.npmjs.com/package/@kipper/core/).
 
 ## Reporting a Vulnerability
 

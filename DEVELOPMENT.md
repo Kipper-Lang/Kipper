@@ -21,31 +21,23 @@ Install the following extensions:
 Whenever dependencies in `package.json` are changed, run the following command:
 
 ```sh
-npm install
+pnpm install
 ```
 
 To only install resolved dependencies in `package-lock.json`:
 
 ```sh
-npm ci
+pnpm install --frozen-lockfile
 ```
 
 ## Other scripts for Development
-
-### Run the application
-
-```sh
-npm start
-```
-
-You can also run `node .` to skip the build step.
 
 ### Rebuild the project
 
 To incrementally build the project:
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 ### Fix code style and formatting issues
@@ -53,19 +45,19 @@ npm run build
 (Using `lint` will also call `prettier` afterwards. For a pure `typescript-eslint` execution use `tslint`)
 
 ```sh
-npm run lint
+pnpm run lint
 ```
 
 To automatically fix such issues:
 
 ```sh
-npm run lint:fix
+pnpm run lint:fix
 ```
 
 ### Tests
 
 ```sh
-npm test
+pnpm test
 ```
 
 ### Generate Antlr4 Files
@@ -73,7 +65,7 @@ npm test
 If you only want to generate the antlr4-files:
 
 ```bash
-npm run antlr4ts
+pnpm run antlr4ts
 ```
 
 (If antlr4 is not installed, install it from here: https://www.antlr.org/)
@@ -81,19 +73,26 @@ npm run antlr4ts
 otherwise, run simply the default `build` script:
 
 ```bash
-npm run build
+pnpm run build
 ```
 
 ## Making a new release
 
-1. Bump version with the identifier (Visit GitHub for to recommended version):
+1. Get new version for the next release 
+   (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
 
    ```bash
-   npm version MAJOR.MINOR.PATCH
+   MAJOR.MINOR.PATCH
    ```
 
-2. Updated CHANGELOG.md and create a new release identifier:
- 
+   Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
+   For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
+
+
+2. Update CHANGELOG.md and replace `Unreleased` with new version identifier:
+
+   *Skip this step unless it's a stable release!*
+
    ```markdown
    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
   
@@ -102,19 +101,54 @@ npm run build
    ### Removed
    ```
 
-3. Updated static version identifier `version` in `index.ts`:
+3. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
 
    ```ts
-   export const version = "0.4.0";
+   export const version = "MAJOR.MINOR.PATCH";
    ```
 
-5. Then login into your accexport const version = "0.4.0";ount:
-   ```bash
-   npm login
+   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
+   changes must be committed yourself with a commit message preferably similar to this:
+
+   ```
+   Bumped static index.ts versions to MAJOR.MINOR.PATCH
+   ```
+   
+   For example:
+   ```
+   Bumped static versions to 0.5.0-rc.0
    ```
 
-5. Afterwards publish publicly using:
-
+4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
+   the remote host):
    ```bash
-   npm publish --access public
+   pnpm run bump MAJOR.MINOR.PATCH
+   ```
+
+   It is important that this script is run *AFTER* the previous step, so that the commits associated with the tags
+   already have the version identifiers in the `index.ts` files updated.
+
+6. Then login into your account:
+   ```bash
+   pnpm login
+   ```
+
+7. Afterwards publish each package. View for every file the specific release notes in their
+   respective `DEVELOPMENT.md` files:
+
+   - For a stable release: 
+   ```bash
+   pnpm publish --access public && pnpm -r publish --access public
+   ```
+   - For a release candidate:
+   ```bash
+   pnpm publish --access public --tag rc && pnpm -r publish --access public --tag rc
+   ```
+   - For a beta release:
+   ```bash
+   pnpm publish --access public --tag beta && pnpm -r publish --access public --tag beta
+   ```
+   - For an alpha release:
+   ```bash
+   pnpm publish --access public --tag alpha && pnpm -r publish --access public --tag alpha
    ```

@@ -1,0 +1,70 @@
+{
+  "name": "@kipper/core",
+  "description": "The Kipper programming language and compiler for the browser and Node.js! 🦊",
+  "version": "0.5.0",
+  "author": "Luna-Klatzer @Luna-Klatzer",
+  "dependencies": {
+    "antlr4ts": "^0.5.0-alpha.4",
+    "tslib": "~2.4.0"
+  },
+  "devDependencies": {
+    "typescript": "~4.6.4",
+    "uuid": "^8.3.2",
+    "mkdirp": "^1.0.4",
+    "ansi-regex": "^6.0.1",
+    "minimist": "^1.2.6",
+    "prettier": "2.6.2",
+    "tsify": "^5.0.4",
+    "browserify": "~17.0.0",
+    "watchify": "~4.0.0",
+    "antlr4ts-cli": "^0.5.0-alpha.4",
+    "json-parse-even-better-errors": "2.3.1",
+    "run-script-os": "^1.1.6",
+    "ts-node": "^10.7.0",
+    "@types/node": "^17.0.32"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
+  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luna-Klatzer/Kipper"
+  },
+  "keywords": [
+    "kipper",
+    "language",
+    "compiler",
+    "backend"
+  ],
+  "files": [
+    "lib",
+    "src",
+    "browser",
+    "kipper-standalone.js",
+    "kipper-standalone.min.js",
+    "LICENSE",
+    "Kipper.g4"
+  ],
+  "license": "GPL-3.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "prepack": "pnpm run build && pnpm run browserify",
+    "prebuild": "pnpm run antlr4ts",
+    "build": "run-script-os",
+    "version": "pnpm version",
+    "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp ./lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens ./lib/compiler/parser/",
+    "build:windows": "tsc && copy .\\src\\compiler\\parser\\*.interp .\\lib\\compiler\\parser\\ /Y && copy .\\src\\compiler\\parser\\*.tokens .\\lib\\compiler\\parser\\",
+    "browserify": "browserify browser/kipper-standalone.ts -p [ tsify --noImplicitAny -p tsconfig.web.json ] > kipper-standalone.js",
+    "postbrowserify": "uglifyjs kipper-standalone.js -o kipper-standalone.min.js",
+    "antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/ ./Kipper.g4",
+    "cov-badge": "coverage-badge-creator",
+    "lint": "pnpm run tslint",
+    "lint:fix": "pnpm run tslint:fix",
+    "prettier": "prettier --write ./src/",
+    "tslint": "eslint ./src/**/*.ts --ext .ts --config ./../../.eslintrc",
+    "tslint:fix": "eslint ./src/**/*.ts --ext .ts --config ./../../.eslintrc --fix"
+  }
+}

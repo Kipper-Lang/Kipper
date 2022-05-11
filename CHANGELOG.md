@@ -5,13 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.5.0] - 2022-05-11
 
 ### Added
+- New field `target` in `CompileConfig`, which defines the compilation target for a Kipper program.
+- New field and constructor argument `KipperProgramContext.target`, which defines the compilation target for the 
+  program.
+- New type `TargetTokenSemanticAnalyser`, which represents a function type that semantically analyses a 
+  `CompilableParseToken`.
+- New type `TargetTokenCodeGenerator`, which represents a function type that semantically analyses a
+  `CompilableParseToken`.
+- Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code into
+  a specific target language.
+- Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis 
+  logic for a compilation target.
+- Class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
+  specific target.
+- Class `TypeScriptTarget`, which defines the default target for Kipper.
+- Abstract fields `targetCodeGenerator` and `targetSemanticAnalysis`, which must be defined in child classes of
+  abstract base class `CompilableParseToken`.
+- New getters `target`, `codeGenerator` and `semanticAnalyser` in class `CompilableParseToken`.
+- New protected functions `primarySemanticAnalysis` and `targetSemanticAnalysis`, which are split to separate the 
+  core/primary semantic analysis and the target specific semantic analysis.
+- New types `KipperVoidType`, `KipperNumType`, `KipperStrType`, `KipperCharType`, `KipperBoolType` and `KipperListType`,
+  which represent Kipper available types in the Kipper language.  core/primary semantic analysis and the target specific semantic analysis.
+- Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
+  not exist.
+- New CLI commands:
+  - `version`, which returns the currently installed Kipper version.
+  - `update`, which updates the CLI if a new version is available.
+- New CLI plugins:
+  - Plugin and manual command `update`, which updates the CLI if a new release is available.
+  - Plugin `warn-if-update-available`, which will display a warning when the CLI is used that a new version can be
+    installed.
 
 ### Changed
+- Deprecated `@kipper/base` as it is now replaced with `@kipper/core`.
+- Fixed `@kipper/cli` bug causing logging messages to only contain "anonymous-script".
+- Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
+  `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific 
+  semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
+- Made `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()` non-abstract and
+  implemented basic processing algorithm to run the code from `CompilableParseToken.targetCodeGenerator` and
+  `CompilableParseToken.targetSemanticAnalysis`.
+- Changed semantic definitions for `CompilableParseToken` children classes and created for each child class a 
+  representing semantics class defining the metadata for the token. 
+- Renamed error `UnknownFunctionIdentifier` to `UnknownFunctionIdentifierError`.
+- Renamed function `CompileAssert.assertTypeExists` to `typeExists`. 
 
 ### Removed
+- File `CHANGELOG.md` from `@kipper/cli` and `@kipper/core`, as it is now only shipped with `kipper`.
 
 ## [0.4.0] - 2022-05-03
 
@@ -37,7 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
   the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 - Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
-  `import * as Utils from "@kipper/base/utils"`, where the user can themselves define the wanted scope identifier.
+  `import * as Utils from "@kipper/core/utils"`, where the user can themselves define the wanted scope identifier.
 
 ## [0.3.0] - 2022-04-28
 
@@ -234,7 +277,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.4.0...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
 [0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1

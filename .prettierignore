@@ -1,3 +1,4 @@
-lib
-src/compiler/parser
+kipper/core/lib
+kipper/cli/
+kipper/core/src/compiler/parser
 *.json

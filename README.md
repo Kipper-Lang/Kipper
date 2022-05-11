@@ -1,41 +1,41 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# Kipper Base Package - `@kipper/base`
+# The Kipper programming language - `kipper`
 
-[![Version](https://img.shields.io/npm/v/@kipper/base?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/base)
-![](https://img.shields.io/badge/Coverage-73%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+[![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
+![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
-[![License](https://img.shields.io/github/license/Para-Lang/Para?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
-[![Install size](https://packagephobia.com/badge?p=@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
-[![Publish size](https://badgen.net/packagephobia/publish/@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
 
-The base module and dependency for the entire Kipper project, which contains the core language and compiler.
+The full module for Kipper, which contains the core language, compiler and command line interface (CLI).
 
 Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python.
+simple and straightforward coding similar to TypeScript and Python! 🦊
 
-*Note that this is a development version! Stable releases might take until April/May 2022*
+## Child Packages
 
-## Docs
+These are the child packages that are shipped with this bundle of Kipper:
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact 
+  with the Kipper compiler! 🦊
 
-For proper documentation on the kipper language go [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
+## Kipper Docs
 
-*This is a project in work, and as such some docs pages can be work in progress!*
+Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
 
-## Usage
+## How to use Kipper?
 
-To use, Kipper you have three options:
-- Run it in the browser using the CDN `kipper-standalone.min.js` file, which bundles the entire compiler
+To use Kipper you have three options:
+- Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js) file, which bundles the entire compiler
   for your browser.
-- Run it using the NodeJS CLI
-- Import it as a NodeJS package in your code
+- Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
+- Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.
 
 ### In a browser
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
-provides the kipper compiler for the browser. This script will fetch your code from script tags with
-the property `type="text/kipper"`, and replace the content with runnable JavaScript.
+provides the kipper compiler for the browser. 
 
 As a dependency you will also have to include `babel.min.js`, which is needed to allow for a compilation
 from TS to JS in your browser, as Kipper compiles only to TypeScript.
@@ -46,7 +46,7 @@ Simple example of running your code in your browser using Kipper and Babel:
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency -->
-<script src="https://cdn.jsdelivr.net/npm/@kipper/base@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"></script>
 
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
@@ -92,7 +92,7 @@ Simple example of using kipper using Node.js:
 ```ts
 import * as ts from "typescript";
 import { promises as fs } from "fs";
-import { KipperCompiler } from "@kipper/base";
+import { KipperCompiler } from "@kipper/core";
 
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8" as BufferEncoding).then(
@@ -115,6 +115,28 @@ fs.readFile(path, "utf8" as BufferEncoding).then(
 );
 ```
 
+## Copyright and License
 
-## License
+![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
+
+Copyright (C) 2021-2022 Luna Klatzer
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+
+See the [LICENSE](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/LICENSE)
+for information on terms & conditions for usage.
+
+### FOSSA License Report
+
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_large)

@@ -1,9 +1,9 @@
-name: Node.js CI
+name: Node.js Tests
 
 on: [push, pull_request]
 
 jobs:
-  # Run tests with 'npm ci' dependencies
+  # Run tests with 'pnpm install --frozen-lockfile' dependencies
   tests-with-pck-lock-dependencies:
     runs-on: ubuntu-latest
 
@@ -17,11 +17,15 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-      - run: npm ci
-      - run: npm test
-      
-  # Run tests with 'npm i' dependencies
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.0.0
+          run_install: |
+            - recursive: true
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+  # Run tests with 'pnpm i' dependencies
   tests-with-pck-dependencies:
     runs-on: ubuntu-latest
 
@@ -35,6 +39,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-      - run: npm i
-      - run: npm test
+      - uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 7.0.0
+          run_install: |
+            - recursive: true
+      - run: pnpm i
+      - run: pnpm test
