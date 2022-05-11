@@ -78,6 +78,8 @@
     "posttslint": "pnpm run prettier",
     "browserify": "pnpm --filter \"@kipper/base\" run browserify",
     "start": "pnpm --filter \"@kipper/cli\" run start",
-    "bump": "sh ./bump.sh"
+    "bump": "run-script-os",
+    "bump:linux:macos:default": "./bump.sh",
+    "bump:windows": "powershell.exe .\\bump.ps1"
   }
 }
