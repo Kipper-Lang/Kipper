@@ -15,7 +15,7 @@ simple and straightforward coding similar to TypeScript and Python.
 ## Child Packages
 
 These are the child packages that are shipped with this bundle of Kipper:
-- [`@kipper/base`](https://www.npmjs.com/package/@kipper/base): The Kipper programming language and compiler for the 
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper programming language and compiler for the 
   browser and Node.js! 🦊
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The CLI for the Kipper compiler 🦊
 
@@ -30,8 +30,8 @@ For proper documentation on the kipper language go [here](https://wmc-ahif-2021.
 To use, Kipper you have three options:
 - Run it in the browser using the CDN `kipper-standalone.min.js` file, which bundles the entire compiler
   for your browser.
-- Run it using the NodeJS CLI
-- Import it as a NodeJS package in your code
+- Run it using the `@kipper/cli` interface for the terminal.
+- Import the package `@kipper/core` in NodeJS or Deno.
 
 ### In a browser
 
@@ -48,7 +48,7 @@ Simple example of running your code in your browser using Kipper and Babel:
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency -->
-<script src="https://cdn.jsdelivr.net/npm/@kipper/base@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"></script>
 
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
@@ -94,7 +94,7 @@ Simple example of using kipper using Node.js:
 ```ts
 import * as ts from "typescript";
 import { promises as fs } from "fs";
-import { KipperCompiler } from "@kipper/base";
+import { KipperCompiler } from "@kipper/core";
 
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8" as BufferEncoding).then(

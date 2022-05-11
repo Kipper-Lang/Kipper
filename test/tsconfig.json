@@ -1,13 +1,12 @@
 {
-  "extends": "@kipper/base/tsconfig.json",
+  "extends": "@kipper/core/tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
     "rootDir": "."
   },
   "references": [
-    {"path": "../kipper/base"},
     {"path": "../kipper"},
-    {"path": "../kipper/base"},
+    {"path": "../kipper/core"},
     {"path": "../kipper/cli"}
   ],
   "include": [

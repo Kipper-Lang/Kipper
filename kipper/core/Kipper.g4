@@ -281,7 +281,7 @@ DefFunc: 'def';
 Return : 'return';
 CallFunc : 'call';
 
-// struct specifier - not implemented in base lang
+// struct specifier - not implemented in core lang
 Struct : 'struct';
 
 // typeof operator

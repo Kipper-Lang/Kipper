@@ -7,7 +7,7 @@
     "kipper": "./bin/run"
   },
   "dependencies": {
-    "@kipper/base": "workspace:*",
+    "@kipper/core": "workspace:*",
     "@oclif/core": "^1.8.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
@@ -37,12 +37,15 @@
     "node": ">=14.0.0"
   },
   "files": [
-    "bin",
-    "lib",
     "src",
+    "bin",
     "npm-shrinkwrap.json",
     "oclif.manifest.json"
   ],
+  "directories": {
+    "lib": "lib",
+    "commands": "src/commands"
+  },
   "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
@@ -50,10 +53,11 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
-    "oclif",
+    "kipper",
     "language",
     "compiler",
     "backend",
+    "oclif",
     "cli"
   ],
   "license": "GPL-3.0",

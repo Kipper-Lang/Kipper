@@ -5,7 +5,7 @@
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  */
-// Including the base kipper module
+// Including the core kipper module
 import * as kipper from "../src";
 
 // Try to determine the global scope

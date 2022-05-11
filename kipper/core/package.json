@@ -1,5 +1,5 @@
 {
-  "name": "@kipper/base",
+  "name": "@kipper/core",
   "description": "The Kipper programming language and compiler for the browser and Node.js! 🦊",
   "version": "0.5.0-beta.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
@@ -32,6 +32,7 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
+    "kipper",
     "language",
     "compiler",
     "backend"

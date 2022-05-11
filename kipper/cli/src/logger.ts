@@ -1,11 +1,11 @@
 /**
- * CLI Logger implementing the base logger from '@kipper/base'
+ * CLI Logger implementing the core logger from '@kipper/core'
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
  */
 
-import { LogLevel } from "@kipper/base/lib";
+import { LogLevel } from "@kipper/core";
 import { ILogObject, ISettingsParam, Logger } from "tslog";
 
 /**

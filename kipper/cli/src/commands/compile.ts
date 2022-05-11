@@ -5,8 +5,8 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler } from "@kipper/base";
-import { KipperLogger } from "@kipper/base/lib/logger";
+import { KipperCompiler } from "@kipper/core";
+import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";

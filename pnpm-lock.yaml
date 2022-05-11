@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@kipper/base': workspace:*
+  '@kipper/core': workspace:*
   '@kipper/cli': workspace:*
   '@oclif/dev-cli': ^1.26.0
   '@oclif/test': ^1.2.8
@@ -33,7 +33,7 @@ specifiers:
   watchify: ~4.0.0
 
 dependencies:
-  '@kipper/base': link:kipper/base
+  '@kipper/core': link:kipper/core
   '@kipper/cli': link:kipper/cli
   antlr4ts: 0.5.0-alpha.4
   tslib: 2.4.0

@@ -5,13 +5,13 @@
  * @since 0.0.3
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler } from "@kipper/base/lib";
-import { KipperLogger } from "@kipper/base/lib/logger";
+import { KipperCompiler } from "@kipper/core";
+import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
-import { LogLevel } from "@kipper/base/lib";
+import { LogLevel } from "@kipper/core";
 import ts = require("typescript");
 
 /**

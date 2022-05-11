@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperCompileResult } from "@kipper/base";
+import { KipperCompileResult } from "@kipper/core";
 import { constants, promises as fs } from "fs";
 import { KipperFileWriteError } from "./errors";
 import * as path from "path";

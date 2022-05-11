@@ -1,13 +1,13 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { CompilableParseToken, KipperParseStream } from "@kipper/base/lib";
-import { KipperProgramContext } from "@kipper/base/lib";
-import { KipperCompiler } from "@kipper/base/lib";
-import { RootFileParseToken } from "@kipper/base/lib";
-import { TranslatedCodeLine } from "@kipper/base/lib";
-import { TargetTokenCodeGenerator } from "@kipper/base/lib/compiler/code-generator";
-import { TargetTokenSemanticAnalyser } from "@kipper/base/lib/compiler/semantic-analyser";
-import {eligibleParentToken} from "@kipper/base";
+import { CompilableParseToken, KipperParseStream } from "@kipper/core";
+import { KipperProgramContext } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
+import { RootFileParseToken } from "@kipper/core";
+import { TranslatedCodeLine } from "@kipper/core";
+import { TargetTokenCodeGenerator } from "@kipper/core/compiler/code-generator";
+import { TargetTokenSemanticAnalyser } from "@kipper/core/compiler/semantic-analyser";
+import {eligibleParentToken} from "@kipper/core";
 import {ParserRuleContext} from "antlr4ts";
 
 const fileLocation: string = `${__dirname}/../../kipper-files/main.kip`;

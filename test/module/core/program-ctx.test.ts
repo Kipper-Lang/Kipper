@@ -4,9 +4,9 @@ import {
 	KipperCompiler,
 	KipperParseStream,
 	KipperProgramContext,
-} from "@kipper/base/lib";
+} from "@kipper/core";
 import { promises as fs } from "fs";
-import { ScopeVariableDeclaration, CompilerEvaluatedOptions } from "@kipper/base/lib";
+import { ScopeVariableDeclaration, CompilerEvaluatedOptions } from "@kipper/core";
 
 const mainFile = `${__dirname}/../../kipper-files/main.kip`;
 

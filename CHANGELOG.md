@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     installed.
 
 ### Changed
+- Deprecated `@kipper/base` as it is now replaced with `@kipper/core`.
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
   `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific 
   semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
@@ -52,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed function `CompileAssert.assertTypeExists` to `typeExists`. 
 
 ### Removed
-- File `CHANGELOG.md` from `@kipper/cli` and `@kipper/base`, as it is now only shipped with `kipper`.
+- File `CHANGELOG.md` from `@kipper/cli` and `@kipper/core`, as it is now only shipped with `kipper`.
 
 ## [0.4.0] - 2022-05-03
 
@@ -78,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
   the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 - Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
-  `import * as Utils from "@kipper/base/utils"`, where the user can themselves define the wanted scope identifier.
+  `import * as Utils from "@kipper/core/utils"`, where the user can themselves define the wanted scope identifier.
 
 ## [0.3.0] - 2022-04-28
 

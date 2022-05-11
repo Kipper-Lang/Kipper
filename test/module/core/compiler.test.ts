@@ -8,7 +8,7 @@ import {
   LogLevel,
   KipperError,
   KipperCompileResult
-} from "@kipper/base/lib";
+} from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 

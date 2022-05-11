@@ -1,5 +1,5 @@
 import {assert} from "chai";
-import {KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel} from "@kipper/base/lib";
+import {KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel} from "@kipper/core";
 
 describe("KipperLogger", () => {
   describe("constructor", () => {

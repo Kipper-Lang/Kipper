@@ -28,7 +28,7 @@ export type eligibleChildToken = CompilableParseToken<any>;
 export type SemanticData = Record<string, any>;
 
 /**
- * Kipper Parse token, which is the base class all tokens will extend from.
+ * Kipper Parse token, which is the core class all tokens will extend from.
  * @since 0.1.0
  */
 export abstract class CompilableParseToken<Semantics extends SemanticData> {

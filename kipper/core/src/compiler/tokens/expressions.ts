@@ -196,7 +196,7 @@ export interface ConstantExpressionSemantics {
 }
 
 /**
- * Abstract base class constant expression representing a constant expression. This type only exists to narrow down the
+ * Abstract core class constant expression representing a constant expression. This type only exists to narrow down the
  * generic type.
  */
 export abstract class ConstantExpression<Semantics extends ConstantExpressionSemantics> extends Expression<Semantics> {}

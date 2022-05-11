@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { KipperParseStream } from "@kipper/base/lib";
+import { KipperParseStream } from "@kipper/core";
 
 const fileLocation: string = `${__dirname}/../../kipper-files/main.kip`;
 

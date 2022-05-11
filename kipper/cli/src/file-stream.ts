@@ -1,12 +1,12 @@
 /**
  * Classes implementing antlr4 streams and providing an interface to interact with the compiler. Extends basic
- * stream functionality from the base kipper module.
+ * stream functionality from the core kipper module.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 
-import { KipperParseStream } from "@kipper/base/lib";
+import { KipperParseStream } from "@kipper/core";
 import { constants, promises as fs } from "fs";
 import * as path from "path";
 import { KipperFileAccessError, KipperUnsupportedEncodingError } from "./errors";

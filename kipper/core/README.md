@@ -1,15 +1,15 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper Base Package - `@kipper/base`
+# Kipper Core Package - `@kipper/core`
 
-[![Version](https://img.shields.io/npm/v/@kipper/base?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/base)
+[![Version](https://img.shields.io/npm/v/@kipper/core?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/core)
 ![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
-[![Install size](https://packagephobia.com/badge?p=@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
-[![Publish size](https://badgen.net/packagephobia/publish/@kipper/base)](https://packagephobia.com/result?p=@kipper/base)
+[![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
+[![Publish size](https://badgen.net/packagephobia/publish/@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 
-The base module and dependency for the entire Kipper project, which contains the core language and compiler.
+The core module and dependency for the entire Kipper project, which contains the core language and compiler.
 
 Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
 simple and straightforward coding similar to TypeScript and Python.
@@ -28,7 +28,7 @@ To use, Kipper you have three options:
 - Run it in the browser using the CDN `kipper-standalone.min.js` file, which bundles the entire compiler
   for your browser.
 - Run it using the NodeJS CLI
-- Import it as a NodeJS package in your code
+- Import the package `@kipper/core` in NodeJS or Deno
 
 ### In a browser
 
@@ -45,7 +45,7 @@ Simple example of running your code in your browser using Kipper and Babel:
 <!-- Babel dependency -->
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency -->
-<script src="https://cdn.jsdelivr.net/npm/@kipper/base@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"></script>
 
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
@@ -91,7 +91,7 @@ Simple example of using kipper using Node.js:
 ```ts
 import * as ts from "typescript";
 import { promises as fs } from "fs";
-import { KipperCompiler } from "@kipper/base";
+import { KipperCompiler } from "@kipper/core";
 
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8" as BufferEncoding).then(

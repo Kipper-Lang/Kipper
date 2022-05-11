@@ -4,13 +4,17 @@
  * @copyright 2021-2022 Luna Klatzer
  */
 export * from "./compiler";
-export * from "./logger";
 export * from "./errors";
+export * from "./logger";
+export * as compiler from "./compiler";
+export * as logger from "./logger";
+export * as errors from "./errors";
+export * as utils from "./utils";
 
 // Global variables to identify the project
 
 // eslint-disable-next-line no-unused-vars
-export const name = "@kipper/base";
+export const name = "@kipper/core";
 // eslint-disable-next-line no-unused-vars
 export const version = "0.5.0-beta.1";
 // eslint-disable-next-line no-unused-vars

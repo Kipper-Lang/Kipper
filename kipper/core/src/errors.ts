@@ -1,5 +1,5 @@
 /**
- * Errors for the {@link KipperCompiler} that are used throughout this library. All errors inherit from the base
+ * Errors for the {@link KipperCompiler} that are used throughout this library. All errors inherit from the core
  * {@link KipperError}
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
@@ -12,7 +12,7 @@ import { Recognizer } from "antlr4ts/Recognizer";
 import { getTokenSource } from "./utils";
 
 /**
- * The base error for the Kipper module.
+ * The core error for the Kipper module.
  */
 export class KipperError extends Error {
 	/**

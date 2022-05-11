@@ -1,5 +1,5 @@
 /**
- * 'help' command for displaying help for the CLI. This implements the base help class which generates the help
+ * 'help' command for displaying help for the CLI. This implements the core help class which generates the help
  * interface.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
