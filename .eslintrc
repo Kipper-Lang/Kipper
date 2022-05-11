@@ -7,6 +7,9 @@
     "sourceType": "module"
   },
   "rules": {
+    "linebreak-style": [
+      "error", "unix"
+    ],
     "max-params": 0,
     "no-unused-vars": 1,
     "no-warning-comments": 0,
