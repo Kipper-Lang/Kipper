@@ -22,7 +22,6 @@ import {
 import { ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
-import { UnableToDetermineMetadataError } from "../../errors";
 import { KipperProgramContext } from "../program-ctx";
 import { determineScope } from "../../utils";
 import { TargetTokenCodeGenerator } from "../code-generator";
@@ -147,11 +146,8 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 * @param token The {@link VariableDeclaration} token.
 	 */
 	public addNewLocalVariable(token: VariableDeclaration) {
-		if (token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		}
-
-		this.programCtx.assert(token).variableIdentifierNotDefined(token.semanticData.identifier, this);
+    const semanticData = token.ensureSemanticDataExists();
+		this.programCtx.assert(token).variableIdentifierNotDefined(semanticData.identifier, this);
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}
 

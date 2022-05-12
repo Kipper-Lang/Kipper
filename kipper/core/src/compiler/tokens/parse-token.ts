@@ -9,14 +9,15 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperParser } from "../parser";
 import { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { getTokenSource } from "../../utils";
+import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
+import { getParseRuleSource } from "../../utils";
 import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
 import { KipperCompileTarget } from "../target";
 import { Declaration } from "./definitions";
 import { Statement } from "./statements";
 import { TranslatedCodeLine } from "../logic";
+import { ParseTree } from "antlr4ts/tree";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -99,7 +100,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	public get sourceCode(): string {
-		return getTokenSource(this.antlrCtx);
+		return getParseRuleSource(this.antlrCtx);
 	}
 
 	/**
@@ -187,7 +188,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 */
 	public ensureSemanticDataExists(): Semantics {
 		if (this.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
+			throw new UndefinedSemanticsError();
 		}
 		return this.semanticData;
 	}
