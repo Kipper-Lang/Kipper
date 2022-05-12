@@ -20,9 +20,10 @@ const multiFunctionFile = path.resolve(`${__dirname}/../../kipper-files/multi-fu
 const printNumberFile = path.resolve(`${__dirname}/../../kipper-files/print-number.kip`);
 const invalidFile = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
 const nestedScopesFile = path.resolve(`${__dirname}/../../kipper-files/nested-scopes.kip`);
-const singleFunctionDefinition = path.resolve(`${__dirname}/../../kipper-files/single-function-definition.kip`);
-const multiFunctionDefinition = path.resolve(`${__dirname}/../../kipper-files/multi-function-definition.kip`);
-const variableDeclaration = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
+const singleFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-files/single-function-definition.kip`);
+const multiFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-files/multi-function-definition.kip`);
+const variableDeclarationFile = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
+const arithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/arithmetics.kip`);
 
 describe("KipperCompiler", () => {
   describe("constructor", () => {
@@ -172,7 +173,7 @@ describe("KipperCompiler", () => {
       });
 
       it("Single Function definition", async () => {
-        const fileContent = (await fs.readFile(singleFunctionDefinition, "utf8" as BufferEncoding)).toString();
+        const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
         const stream = new KipperParseStream(fileContent);
         const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -182,7 +183,7 @@ describe("KipperCompiler", () => {
       });
 
       it("Multi Function definition", async () => {
-        const fileContent = (await fs.readFile(multiFunctionDefinition, "utf8" as BufferEncoding)).toString();
+        const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
         const stream = new KipperParseStream(fileContent);
         const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -201,12 +202,22 @@ describe("KipperCompiler", () => {
       });
 
       it("Variable Declaration", async () => {
-        const fileContent = (await fs.readFile(variableDeclaration, "utf8" as BufferEncoding)).toString();
+        const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
         const stream = new KipperParseStream(fileContent);
         const instance: KipperCompileResult = await compiler.compile(stream);
 
         assert(instance.programCtx);
         assert(instance.programCtx.stream === stream, "Expected matching streams");
+      });
+
+      it("Arithmetics", async () => {
+        const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
+        const stream = new KipperParseStream(fileContent);
+        const instance: KipperCompileResult = await compiler.compile(stream);
+
+        assert(instance.programCtx);
+        assert(instance.programCtx.stream === stream, "Expected matching streams");
+        assert(instance.write() === fileContent, "Expected compiled code to not change");
       });
     });
 
@@ -242,7 +253,6 @@ describe("KipperCompiler", () => {
       });
 
       describe("Compilation errors", () => {
-
         it("GetTraceback", async () => {
           try {
             await new KipperCompiler().compile("var i: str = \"4\";\n var i: str = \"4\";");
