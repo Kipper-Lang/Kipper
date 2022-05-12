@@ -7,6 +7,8 @@ import {
 	KipperProgramContext,
 	RootFileParseToken,
 } from "./compiler";
+import { ParseTree } from "antlr4ts/tree";
+import { CharStream } from "antlr4ts/CharStream";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
@@ -31,16 +33,12 @@ export function getParseRuleSource(antlrCtx: ParserRuleContext): string {
 
 /**
  * Get the source code for two tokens (interval between these two tokens).
+ * @param inputStream The input stream to fetch from.
  * @param start The start token
  * @param stop The stop token
  * @since 0.6.0
  */
-export function getTokenIntervalSource(start: Token, stop: Token): string {
-  let inputStream = start.inputStream ?? stop.inputStream;
-  if (inputStream === undefined) {
-    throw new Error("Input stream is undefined. Unable to fetch data");
-  }
-
+export function getTokenIntervalSource(inputStream: CharStream, start: Token, stop: Token): string {
   return inputStream.getText(
     new Interval(start.startIndex, stop.stopIndex)
   );
@@ -48,18 +46,24 @@ export function getTokenIntervalSource(start: Token, stop: Token): string {
 
 /**
  * Get the source code for a single token.
+ * @param inputStream The input stream to fetch from.
  * @param token The token to get the source code from.
  * @since 0.6.0
  */
-export function getTokenSource(token: Token) {
-  let inputStream = token.inputStream;
-  if (inputStream === undefined) {
-    throw new Error("Input stream is undefined. Unable to fetch data");
-  }
-
+export function getTokenSource(inputStream: CharStream, token: Token) {
   return inputStream.getText(
     new Interval(token.startIndex, token.stopIndex)
   );
+}
+
+/**
+ * Get the source code for a parse tree.
+ * @param inputStream The input stream to fetch from.
+ * @param parseTree The parse tree.
+ * @since 0.6.0
+ */
+export function getParseTreeSource(inputStream: CharStream, parseTree: ParseTree) {
+  return inputStream.getText(parseTree.sourceInterval);
 }
 
 /**
