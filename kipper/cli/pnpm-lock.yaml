@@ -13,7 +13,7 @@ specifiers:
   '@oclif/test': 2.1.0
   '@sinonjs/fake-timers': 6.0.1
   '@types/node': 17.0.32
-  '@types/sinon': 7.5.2
+  '@types/sinon': 10.0.11
   antlr4ts: ^0.5.0-alpha.4
   json-parse-even-better-errors: 2.3.1
   os-tmpdir: 1.0.2
@@ -45,7 +45,7 @@ devDependencies:
   '@oclif/test': 2.1.0
   '@sinonjs/fake-timers': 6.0.1
   '@types/node': 17.0.32
-  '@types/sinon': 7.5.2
+  '@types/sinon': 10.0.11
   json-parse-even-better-errors: 2.3.1
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
@@ -318,8 +318,14 @@ packages:
     resolution: {integrity: sha512-eAIcfAvhf/BkHcf4pkLJ7ECpBAhh9kcxRBpip9cTiO+hf+aJrsxYxBeS6OXvOd9WqNAJmavXVpZvY1rBjNsXmw==}
     dev: true
 
-  /@types/sinon/7.5.2:
-    resolution: {integrity: sha512-T+m89VdXj/eidZyejvmoP9jivXgBDdkOSBVQjU9kF349NEx10QdPNGxHeZUaj1IlJ32/ewdyXJjnJxyxJroYwg==}
+  /@types/sinon/10.0.11:
+    resolution: {integrity: sha512-dmZsHlBsKUtBpHriNjlK0ndlvEh8dcb9uV9Afsbt89QIyydpC7NcR+nWlAhASfy3GHnxTl4FX/aKE7XZUt/B4g==}
+    dependencies:
+      '@types/sinonjs__fake-timers': 8.1.2
+    dev: true
+
+  /@types/sinonjs__fake-timers/8.1.2:
+    resolution: {integrity: sha512-9GcLXF0/v3t80caGs5p2rRfkB+a8VBGLJZVih6CNFkx8IZ994wiKKLSRs9nuFwk1HevWs/1mnUmkApGrSGsShA==}
     dev: true
 
   /acorn-walk/8.2.0:
@@ -616,7 +622,7 @@ packages:
       '@types/chai': 4.3.1
       '@types/lodash': 4.14.182
       '@types/node': 17.0.32
-      '@types/sinon': 7.5.2
+      '@types/sinon': 10.0.11
       lodash: 4.17.21
       mock-stdin: 1.0.0
       nock: 13.2.4
