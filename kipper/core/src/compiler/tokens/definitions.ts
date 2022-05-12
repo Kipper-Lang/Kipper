@@ -207,15 +207,17 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+    const children = this.ensureTokenChildrenExist();
+
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof DeclaratorContext)
+			children.find((val) => val instanceof DeclaratorContext)
 		);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof ParameterTypeListContext)
+			children.find((val) => val instanceof ParameterTypeListContext)
 		);
 		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
@@ -225,7 +227,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
-			isDefined: this.antlrCtx.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
@@ -287,12 +289,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// Determine the ctx instances
+    const children = this.ensureTokenChildrenExist();
+
+    // Determine the ctx instances
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof StorageTypeSpecifierContext)
+			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof InitDeclaratorContext)
+			children.find((val) => val instanceof InitDeclaratorContext)
 		);
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
@@ -302,7 +306,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
+		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
 

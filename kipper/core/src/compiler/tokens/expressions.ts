@@ -724,13 +724,15 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// Fetch context instances
+    const children = this.ensureTokenChildrenExist();
+
+    // Fetch context instances
 		let identifierCtx = <IdentifierPrimaryExpressionContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof IdentifierPrimaryExpressionContext)
+			children.find((val) => val instanceof IdentifierPrimaryExpressionContext)
 		);
 
 		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !identifierCtx) {
+		if (!identifierCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
