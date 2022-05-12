@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- New function `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError` 
+  error in case that the children tokens are undefined.
+- New types `KipperMultiplicativeOperator` and `KipperAdditiveOperator`.
+- New constant variables `kipperStorageTypes`, `kipperMultiplicativeOperators`, `kipperAdditiveOperators`,
+  `kipperArithmeticOperators` and `kipperArithmeticAssignOperators`.
+- New function `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
+- New function `getParseTreeSource`, which fetches the source code for a parse tree.
+- New error `UndefinedSemanticsError`, which specifically is thrown whenever the semantics are undefined.
+- New interface `ArithmeticExpressionSemantics` which is used as a parent for `MultiplicativeExpressionSemantics` and
+  `AdditiveExpressionSemantics`.
+
+### Changed
+- Renamed `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
+  fetches the code for a single `Token` instance.
+
 ## [0.5.0] - 2022-05-11
 
 ### Added
