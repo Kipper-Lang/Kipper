@@ -28,7 +28,7 @@ dependencies:
   '@kipper/core': link:../core
   '@oclif/command': 1.8.16
   '@oclif/config': 1.18.3
-  '@oclif/core': 1.8.0
+  '@oclif/core': 1.8.1
   '@oclif/errors': 1.3.5
   '@oclif/help': 1.0.1
   '@oclif/plugin-help': 5.1.12
@@ -135,8 +135,8 @@ packages:
       - supports-color
     dev: false
 
-  /@oclif/core/1.8.0:
-    resolution: {integrity: sha512-XAaqkacs4JiCOKWAX43jhuWcs7IdVMQaYWkeRiD8wan/wlmd7/WlvTFzpNeLOwylbty7uwiPQOFVYHdKj6UPvQ==}
+  /@oclif/core/1.8.1:
+    resolution: {integrity: sha512-6pNQnkL2Uk9SbRUb12BFminLPhrPab1euNzVl1eh+Q7+X8+JGMw8vgKUfQRlGZesmcd+8fByQMZBaoOAEozJsw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
@@ -148,7 +148,7 @@ packages:
       clean-stack: 3.0.1
       cli-progress: 3.11.0
       debug: 4.3.4_supports-color@8.1.1
-      ejs: 3.1.7
+      ejs: 3.1.8
       fs-extra: 9.1.0
       get-package-type: 0.1.0
       globby: 11.1.0
@@ -222,7 +222,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.1
-      '@oclif/core': 1.8.0
+      '@oclif/core': 1.8.1
       cross-spawn: 7.0.3
       debug: 4.3.4
       filesize: 6.4.0
@@ -241,7 +241,7 @@ packages:
     resolution: {integrity: sha512-9dprC1CWPjesg0Vf/rDSQH2tzJXhP1ow84cb2My1kj6e6ESulPKpctiCFSZ1WaCQFfq+crKhzlNoP/vRaXNUAg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.8.0
+      '@oclif/core': 1.8.1
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
@@ -260,7 +260,7 @@ packages:
     resolution: {integrity: sha512-o+JTv3k28aMUxywJUlJY1/DORLqumoZFRII492phOmtXM16rD6Luy3z1qinT4BvEtPj2BzOPd2whr/VdYszaYw==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.8.0
+      '@oclif/core': 1.8.1
       fancy-test: 2.0.0
     transitivePeerDependencies:
       - supports-color
@@ -558,8 +558,8 @@ packages:
     dependencies:
       path-type: 4.0.0
 
-  /ejs/3.1.7:
-    resolution: {integrity: sha512-BIar7R6abbUxDA3bfXrO4DSgwo8I+fB5/1zgujl3HLLjwd6+9iOnrT+t3grn2qbk9vOgBubXOFwX2m9axoFaGw==}
+  /ejs/3.1.8:
+    resolution: {integrity: sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==}
     engines: {node: '>=0.10.0'}
     hasBin: true
     dependencies:
@@ -641,8 +641,8 @@ packages:
       escape-string-regexp: 1.0.5
     dev: false
 
-  /filelist/1.0.3:
-    resolution: {integrity: sha512-LwjCsruLWQULGYKy7TX0OPtrL9kLpojOFKc5VCTxdFTV7w5zbsgqVKfnkKG7Qgjtq50gKfO56hJv88OfcGb70Q==}
+  /filelist/1.0.4:
+    resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
     dependencies:
       minimatch: 5.0.1
 
@@ -854,7 +854,7 @@ packages:
     dependencies:
       async: 3.2.3
       chalk: 4.1.2
-      filelist: 1.0.3
+      filelist: 1.0.4
       minimatch: 3.1.2
 
   /js-yaml/3.14.1:
