@@ -214,7 +214,7 @@ packages:
     resolution: {integrity: sha512-HvH/RubJxqCinP0vUWQLTOboT+SfjfL8h40s+PymkWaldIcXlpoRaJX50vz+SjZIs7uewZwEk8fzLqpF/BWXlg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.8.0
+      '@oclif/core': 1.8.1
     dev: false
 
   /@oclif/plugin-update/3.0.0:
