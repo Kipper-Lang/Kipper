@@ -2,8 +2,13 @@
   "extends": [
     "config:base"
   ],
-  "labels": ["Dependencies"],
-  "rangeStrategy": "replace",
-  "compatibility": { "pnpm": "^7.0.0" },
-  "lockFileMaintenance": { "enabled": true },
+  "labels": [
+    "Dependencies"
+  ],
+  "compatibility": { 
+    "pnpm": "^7.0.0" 
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
 }
