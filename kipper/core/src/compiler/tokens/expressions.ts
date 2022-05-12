@@ -30,18 +30,24 @@ import {
 	TangledPrimaryExpressionContext,
 } from "../parser";
 import {
-	BuiltInFunction,
-	KipperCharType,
-	KipperListType,
-	KipperNumType,
-	KipperStrType,
-	KipperType,
-	ScopeFunctionDeclaration,
-	TranslatedExpression,
+  BuiltInFunction,
+  KipperAdditiveOperator,
+  kipperAdditiveOperators,
+  KipperArithmeticOperator,
+  KipperCharType,
+  KipperListType,
+  KipperMultiplicativeOperator,
+  KipperNumType,
+  KipperStrType,
+  KipperType,
+  ScopeFunctionDeclaration,
+  TranslatedExpression
 } from "../logic";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { getParseRuleSource, getParseTreeSource, getTokenSource } from "../../utils";
+import { Token } from "antlr4ts";
 
 /**
  * Every antlr4 expression ctx type
@@ -724,24 +730,14 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-    const children = this.ensureTokenChildrenExist();
-
-    // Fetch context instances
-		let identifierCtx = <IdentifierPrimaryExpressionContext | undefined>(
-			children.find((val) => val instanceof IdentifierPrimaryExpressionContext)
-		);
-
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!identifierCtx) {
-			throw new UnableToDetermineMetadataError();
-		}
-
 		// Get the identifier of the function that is called
-		const identifier = this.tokenStream.getText(identifierCtx.sourceInterval);
+    const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].ensureSemanticDataExists();
 		this.semanticData = {
-			identifier: identifier,
-			// Tries to fetch the function and if it fails it will throw a {@link UnknownFunctionIdentifier} error.
-			function: this.programCtx.assert(this).getExistingFunction(identifier),
+			identifier: identifierSemantics.identifier,
+			// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
+			function: this.programCtx.assert(this).getExistingFunction(
+        identifierSemantics.identifier
+      ),
 		};
 	}
 
@@ -948,10 +944,48 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 }
 
 /**
+ * Semantics for the Arithmetic expressions: {@link MultiplicativeExpression} and {@link AdditiveExpression}.
+ * @since 0.6.0
+ */
+export interface ArithmeticExpressionSemantics {
+  /**
+   * The first expression. The left side of the expression.
+   * @since 0.6.0
+   */
+  exp1: Expression<any>,
+  /**
+   * The second expression. The right side of the expression.
+   * @since 0.6.0
+   */
+  exp2: Expression<any>,
+  /**
+   * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+   * @since 0.6.0
+   */
+  operator: KipperArithmeticOperator
+}
+
+/**
  * Semantics for {@link MultiplicativeExpression}.
  * @since 0.5.0
  */
-export interface MultiplicativeExpressionSemantics {}
+export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionSemantics {
+  /**
+   * The first expression. The left side of the expression.
+   * @since 0.6.0
+   */
+  exp1: Expression<any>,
+  /**
+   * The second expression. The right side of the expression.
+   * @since 0.6.0
+   */
+  exp2: Expression<any>,
+  /**
+   * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+   * @since 0.6.0
+   */
+  operator: KipperMultiplicativeOperator
+}
 
 /**
  * Multiplicative expression class, which represents a multiplicative expression in the Kipper language.
@@ -1000,7 +1034,23 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
  * Semantics for {@link AdditiveExpression}.
  * @since 0.5.0
  */
-export interface AdditiveExpressionSemantics {}
+export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
+  /**
+   * The first expression. The left side of the expression.
+   * @since 0.6.0
+   */
+  exp1: Expression<any>,
+  /**
+   * The second expression. The right side of the expression.
+   * @since 0.6.0
+   */
+  exp2: Expression<any>,
+  /**
+   * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+   * @since 0.6.0
+   */
+  operator: KipperAdditiveOperator
+}
 
 /**
  * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
@@ -1028,7 +1078,21 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+    const children = this.ensureTokenChildrenExist();
+
+    const operator = children.find(token => {
+      return kipperAdditiveOperators.find(op => op === token.text) !== undefined;
+    })?.text;
+
+    if (!operator) {
+      throw new UnableToDetermineMetadataError();
+    }
+
+		this.semanticData = {
+      exp1: this.children[0], // First expression
+      exp2: this.children[1], // Second expression
+      operator: <KipperAdditiveOperator>operator
+    };
 	}
 
 	/**

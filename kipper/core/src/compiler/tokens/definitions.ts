@@ -220,8 +220,8 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !declaratorCtx || !returnTypeCtx) {
+		// Throw an error if children are incomplete
+		if (!declaratorCtx || !returnTypeCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
@@ -305,7 +305,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
+		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
