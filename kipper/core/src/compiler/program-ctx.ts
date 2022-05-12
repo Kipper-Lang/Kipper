@@ -12,7 +12,7 @@ import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
 import {
 	BuiltInFunction,
-	KipperArithmeticOperation,
+	KipperArithmeticOperator,
 	KipperType,
 	kipperTypes,
 	ScopeFunctionDeclaration,
@@ -36,7 +36,6 @@ import {
 	InvalidArgumentTypeError,
 	InvalidGlobalError,
 	KipperError,
-	UnableToDetermineMetadataError,
 	UnknownFunctionIdentifierError,
 	UnknownTypeError,
 	UnknownVariableIdentifier,
@@ -238,7 +237,7 @@ export class CompileAssert {
 	private arithmeticExpressionValid(
 		exp1: Expression<any>,
 		exp2: Expression<any>,
-		op: KipperArithmeticOperation,
+		op: KipperArithmeticOperator,
 	): void {}
 
 	/**
