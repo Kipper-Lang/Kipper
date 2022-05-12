@@ -72,16 +72,58 @@ export const kipperTypes: Array<string> = ["void", "num", "str", "char", "bool",
 export type KipperStorageType = "var" | "const";
 
 /**
+ * All available storage types inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperStorageTypes = ["var", "const"];
+
+/**
+ * All available multiplicative operations inside Kipper.
+ * @since 0.6.0
+ */
+export type KipperMultiplicativeOperator = '*' | '**' | "/" | "%";
+
+/**
+ * All available multiplicative operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperMultiplicativeOperators = ['*', '**', "/", "%"];
+
+/**
+ * All available additive operations inside Kipper.
+ * @since 0.6.0
+ */
+export type KipperAdditiveOperator = '-' | '+';
+
+/**
+ * All available additive operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperAdditiveOperators = ['-', '+'];
+
+/**
  * All available arithmetic operations inside Kipper.
  * @since 0.3.0
  */
-export type KipperArithmeticOperation = "+" | "-" | "*" | "**" | "/" | "%";
+export type KipperArithmeticOperator = KipperAdditiveOperator | KipperMultiplicativeOperator;
+
+/**
+ * All available arithmetic operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperArithmeticOperators = [...kipperMultiplicativeOperators, ...kipperAdditiveOperators];
 
 /**
  * All available arithmetic assignment operations inside Kipper.
  * @since 0.3.0
  */
-export type KipperArithmeticAssignOperation = "+=" | "-=" | "*=" | "/=";
+export type KipperArithmeticAssignOperator = "+=" | "-=" | "*=" | "/=";
+
+/**
+ * All available arithmetic assignment operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperArithmeticAssignOperators = ["+=", "-=", "*=", "/="];
 
 /**
  * Represents a single token of translated Kipper code. This is usually used without a {@link TranslatedCodeLine}, which
