@@ -11,7 +11,7 @@ specifiers:
   '@oclif/plugin-update': ^3.0.0
   '@oclif/plugin-warn-if-update-available': ^2.0.4
   '@oclif/test': 2.1.0
-  '@sinonjs/fake-timers': 6.0.1
+  '@sinonjs/fake-timers': 9.1.2
   '@types/node': 17.0.32
   '@types/sinon': 7.5.2
   antlr4ts: ^0.5.0-alpha.4
@@ -43,7 +43,7 @@ dependencies:
 
 devDependencies:
   '@oclif/test': 2.1.0
-  '@sinonjs/fake-timers': 6.0.1
+  '@sinonjs/fake-timers': 9.1.2
   '@types/node': 17.0.32
   '@types/sinon': 7.5.2
   json-parse-even-better-errors: 2.3.1
@@ -284,8 +284,8 @@ packages:
       type-detect: 4.0.8
     dev: true
 
-  /@sinonjs/fake-timers/6.0.1:
-    resolution: {integrity: sha512-MZPUxrmFubI36XS1DI3qmI0YdN1gks62JtFZvxR67ljjSNCeK6U08Zx4msEWOXuofgqUt6zPHSi1H9fbjR/NRA==}
+  /@sinonjs/fake-timers/9.1.2:
+    resolution: {integrity: sha512-BPS4ynJW/o92PUR4wgriz2Ud5gpST5vz6GQfMixEDK0Z8ZCUv2M7SkBLykH56T++Xs+8ln9zTGbOvNGIe02/jw==}
     dependencies:
       '@sinonjs/commons': 1.8.3
     dev: true

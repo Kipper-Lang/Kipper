@@ -29,7 +29,7 @@
     "@types/sinon": "7.5.2",
     "ts-node": "10.7.0",
     "@types/node": "17.0.32",
-    "@sinonjs/fake-timers": "6.0.1",
+    "@sinonjs/fake-timers": "9.1.2",
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
     "json-parse-even-better-errors": "2.3.1"
