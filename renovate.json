@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "labels": [
+    "Dependencies"
+  ],
+  "compatibility": { 
+    "pnpm": "^7.0.0" 
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  }
+}

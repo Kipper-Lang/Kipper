@@ -1,22 +1,22 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@types/node': ^17.0.32
-  ansi-regex: ^6.0.1
+  '@types/node': 17.0.32
+  ansi-regex: 6.0.1
   antlr4ts: ^0.5.0-alpha.4
-  antlr4ts-cli: ^0.5.0-alpha.4
-  browserify: ~17.0.0
+  antlr4ts-cli: 0.5.0-alpha.4
+  browserify: 17.0.0
   json-parse-even-better-errors: 2.3.1
-  minimist: ^1.2.6
-  mkdirp: ^1.0.4
+  minimist: 1.2.6
+  mkdirp: 1.0.4
   prettier: 2.6.2
-  run-script-os: ^1.1.6
-  ts-node: ^10.7.0
-  tsify: ^5.0.4
+  run-script-os: 1.1.6
+  ts-node: 10.7.0
+  tsify: 5.0.4
   tslib: ~2.4.0
-  typescript: ~4.6.4
-  uuid: ^8.3.2
-  watchify: ~4.0.0
+  typescript: 4.6.4
+  uuid: 8.3.2
+  watchify: 4.0.0
 
 dependencies:
   antlr4ts: 0.5.0-alpha.4
@@ -619,8 +619,8 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /foreach/2.0.5:
-    resolution: {integrity: sha1-C+4AUBiusmDQo6865ljdATbsG5k=}
+  /foreach/2.0.6:
+    resolution: {integrity: sha512-k6GAGDyqLe9JaebCsFCoudPPWfihKu8pylYXRlqP1J7ms39iPoTtk2fviNglIeQEwdh0bQeKJ01ZPyuyQvKzwg==}
     dev: true
 
   /fs.realpath/1.0.0:
@@ -929,7 +929,7 @@ packages:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
       es-abstract: 1.20.0
-      foreach: 2.0.5
+      foreach: 2.0.6
       has-tostringtag: 1.0.0
     dev: true
 
@@ -1607,7 +1607,7 @@ packages:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
       es-abstract: 1.20.0
-      foreach: 2.0.5
+      foreach: 2.0.6
       has-tostringtag: 1.0.0
       is-typed-array: 1.1.8
     dev: true
