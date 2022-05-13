@@ -68,11 +68,11 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: antlrDefinitionCtxType;
+	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
 	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -81,8 +81,8 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): antlrDefinitionCtxType {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): antlrDefinitionCtxType {
+		return this._antlrRuleCtx;
 	}
 
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
@@ -119,18 +119,18 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ParameterDeclarationContext;
+	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
 	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ParameterDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ParameterDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -188,18 +188,18 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: FunctionDeclarationContext;
+	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
 	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): FunctionDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): FunctionDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -207,25 +207,25 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const children = this.ensureTokenChildrenExist();
+
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof DeclaratorContext)
-		);
+		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof ParameterTypeListContext)
+			children.find((val) => val instanceof ParameterTypeListContext)
 		);
 		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !declaratorCtx || !returnTypeCtx) {
+		// Throw an error if children are incomplete
+		if (!declaratorCtx || !returnTypeCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
-			isDefined: this.antlrCtx.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
@@ -268,18 +268,18 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: DeclarationContext;
+	protected override readonly _antlrRuleCtx: DeclarationContext;
 
 	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): DeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): DeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -287,12 +287,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const children = this.ensureTokenChildrenExist();
+
 		// Determine the ctx instances
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof StorageTypeSpecifierContext)
+			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof InitDeclaratorContext)
+			children.find((val) => val instanceof InitDeclaratorContext)
 		);
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
@@ -301,8 +303,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
+		// Throw an error if children are incomplete
+		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
 

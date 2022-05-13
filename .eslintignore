@@ -1,2 +1,5 @@
-/lib
-/img
+lib
+img
+node_modules
+dist
+kipper-standalone.*

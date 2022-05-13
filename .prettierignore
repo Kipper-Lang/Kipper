@@ -1,4 +1,14 @@
-kipper/core/lib
-kipper/cli/
-kipper/core/src/compiler/parser
+lib
+dist
+node_modules
+bin
+.editorconfig
+.eslintrc
+.gitignore
+.npmrc
+.npmignore
+.prettierignore
+kipper-standalone.js
+kipper-standalone.min.js
+*.yaml
 *.json

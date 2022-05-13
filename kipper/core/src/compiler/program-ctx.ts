@@ -12,7 +12,7 @@ import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
 import {
 	BuiltInFunction,
-	KipperArithmeticOperation,
+	KipperArithmeticOperator,
 	KipperType,
 	kipperTypes,
 	ScopeFunctionDeclaration,
@@ -36,7 +36,6 @@ import {
 	InvalidArgumentTypeError,
 	InvalidGlobalError,
 	KipperError,
-	UnableToDetermineMetadataError,
 	UnknownFunctionIdentifierError,
 	UnknownTypeError,
 	UnknownVariableIdentifier,
@@ -89,7 +88,7 @@ export class CompileAssert {
 			filePath: this.programCtx.filePath,
 			tokenSrc: undefined,
 		});
-		error.antlrCtx = this.ctx?.antlrCtx;
+		error.antlrCtx = this.ctx?.antlrRuleCtx;
 
 		// Log the error
 		this.programCtx.logger.reportError(LogLevel.ERROR, error);
@@ -210,14 +209,10 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 */
 	public argumentTypesMatch(arg: ParameterDeclaration, receivedType: KipperType): void {
-		if (arg.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		}
+		const semanticData = arg.ensureSemanticDataExists();
 
-		if (arg.semanticData.type !== receivedType) {
-			throw this.assertError(
-				new InvalidArgumentTypeError(arg.semanticData.identifier, arg.semanticData.type, receivedType),
-			);
+		if (semanticData.type !== receivedType) {
+			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
 		}
 	}
 
@@ -237,11 +232,7 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 * @todo Implement arithmetic checks!
 	 */
-	private arithmeticExpressionValid(
-		exp1: Expression<any>,
-		exp2: Expression<any>,
-		op: KipperArithmeticOperation,
-	): void {}
+	private arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
@@ -393,7 +384,7 @@ export class KipperProgramContext {
 	 */
 	public assert(ctx: CompilableParseToken<any> | undefined): CompileAssert {
 		// Set the active traceback data on the item
-		this._assert.setTracebackData(ctx, ctx?.antlrCtx.start.line, ctx?.antlrCtx.start.charPositionInLine);
+		this._assert.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
 		return this._assert;
 	}
 
@@ -625,19 +616,16 @@ export class KipperProgramContext {
 	 * @param token The token that should be added.
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDeclaration): void {
-		if (token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		}
-
-		this.assert(token).builtInNotDefined(token.semanticData.identifier);
+		const semanticData = token.ensureSemanticDataExists();
+		this.assert(token).builtInNotDefined(semanticData.identifier);
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
 		if (token instanceof VariableDeclaration) {
-			this.assert(token).functionIdentifierNotUsed(token.semanticData.identifier);
-			this.assert(token).variableIdentifierNotDefined(token.semanticData.identifier);
+			this.assert(token).functionIdentifierNotUsed(semanticData.identifier);
+			this.assert(token).variableIdentifierNotDefined(semanticData.identifier);
 		} else {
-			this.assert(token).variableIdentifierNotUsed(token.semanticData.identifier);
-			this.assert(token).functionIdentifierNotDefined(token.semanticData.identifier);
+			this.assert(token).variableIdentifierNotUsed(semanticData.identifier);
+			this.assert(token).functionIdentifierNotDefined(semanticData.identifier);
 		}
 
 		this._globalScope = this._globalScope.concat(

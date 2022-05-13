@@ -1,5 +1,5 @@
 import { Interval } from "antlr4ts/misc/Interval";
-import { ParserRuleContext } from "antlr4ts";
+import { ParserRuleContext, Token } from "antlr4ts";
 import {
 	CompilableParseToken,
 	CompoundStatement,
@@ -7,13 +7,15 @@ import {
 	KipperProgramContext,
 	RootFileParseToken,
 } from "./compiler";
+import { ParseTree } from "antlr4ts/tree";
+import { CharStream } from "antlr4ts/CharStream";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
  * @param antlrCtx The token antlr4 context.
  * @since 0.4.0
  */
-export function getTokenSource(antlrCtx: ParserRuleContext): string {
+export function getParseRuleSource(antlrCtx: ParserRuleContext): string {
 	let inputStream = antlrCtx.start.inputStream;
 	let start = antlrCtx.start.startIndex;
 
@@ -27,6 +29,37 @@ export function getTokenSource(antlrCtx: ParserRuleContext): string {
 	// additional EOF at the end that we do not want, and the fact arrays start at 0)
 	let end = antlrCtx.stop !== undefined ? antlrCtx.stop.stopIndex : inputStream.size - 2;
 	return inputStream.getText(new Interval(start, end));
+}
+
+/**
+ * Get the source code for two tokens (interval between these two tokens).
+ * @param inputStream The input stream to fetch from.
+ * @param start The start token
+ * @param stop The stop token
+ * @since 0.6.0
+ */
+export function getTokenIntervalSource(inputStream: CharStream, start: Token, stop: Token): string {
+	return inputStream.getText(new Interval(start.startIndex, stop.stopIndex));
+}
+
+/**
+ * Get the source code for a single token.
+ * @param inputStream The input stream to fetch from.
+ * @param token The token to get the source code from.
+ * @since 0.6.0
+ */
+export function getTokenSource(inputStream: CharStream, token: Token) {
+	return inputStream.getText(new Interval(token.startIndex, token.stopIndex));
+}
+
+/**
+ * Get the source code for a parse tree.
+ * @param inputStream The input stream to fetch from.
+ * @param parseTree The parse tree.
+ * @since 0.6.0
+ */
+export function getParseTreeSource(inputStream: CharStream, parseTree: ParseTree) {
+	return inputStream.getText(parseTree.sourceInterval);
 }
 
 /**

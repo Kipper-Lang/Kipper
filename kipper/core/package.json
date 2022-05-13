@@ -52,7 +52,6 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "prepack": "pnpm run build && pnpm run browserify",
-    "prebuild": "pnpm run antlr4ts",
     "build": "run-script-os",
     "version": "pnpm version",
     "build:linux:macos:default": "tsc && cp ./src/compiler/parser/*.interp ./lib/compiler/parser/ && cp ./src/compiler/parser/*.tokens ./lib/compiler/parser/",
@@ -63,7 +62,6 @@
     "cov-badge": "coverage-badge-creator",
     "lint": "pnpm run tslint",
     "lint:fix": "pnpm run tslint:fix",
-    "prettier": "prettier --write ./src/",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix"
   }

@@ -9,14 +9,15 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperParser } from "../parser";
 import { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { getTokenSource } from "../../utils";
+import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
+import { getParseRuleSource } from "../../utils";
 import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
 import { KipperCompileTarget } from "../target";
 import { Declaration } from "./definitions";
 import { Statement } from "./statements";
 import { TranslatedCodeLine } from "../logic";
+import { ParseTree } from "antlr4ts/tree";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -37,7 +38,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected readonly _antlrCtx: ParserRuleContext;
+	protected readonly _antlrRuleCtx: ParserRuleContext;
 
 	/**
 	 * The private '_children' that actually stores the variable data,
@@ -56,7 +57,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	protected _semanticData: Semantics | undefined;
 
 	protected constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._parent = parent;
 		this._children = [];
 	}
@@ -79,9 +80,10 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this parse token.
+	 * @since 0.6.0
 	 */
-	public get antlrCtx(): ParserRuleContext {
-		return this._antlrCtx;
+	public get antlrRuleCtx(): ParserRuleContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -99,11 +101,11 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	public get sourceCode(): string {
-		return getTokenSource(this.antlrCtx);
+		return getParseRuleSource(this.antlrRuleCtx);
 	}
 
 	/**
-	 * The parser that parsed the {@link antlrCtx}
+	 * The parser that parsed the {@link antlrRuleCtx}
 	 */
 	public get parser(): KipperParser {
 		return this.programCtx.parser;
@@ -171,12 +173,22 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
+	 * Ensures that the token children of this item exist.
+	 * @since 0.6.0
+	 */
+	public ensureTokenChildrenExist(): ParseTree[] {
+		if (this.antlrRuleCtx.children === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+		return this.antlrRuleCtx.children;
+	}
+
+	/**
 	 * Ensures the semantic data of this item exists. This is always checked whenever a compilation is started.
-	 * @protected
 	 */
 	public ensureSemanticDataExists(): Semantics {
 		if (this.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
+			throw new UndefinedSemanticsError();
 		}
 		return this.semanticData;
 	}

@@ -1,48 +1,47 @@
-name-template: 'Development Release v$RESOLVED_VERSION'
-tag-template: 'v$RESOLVED_VERSION'
-tag-prefix: 'v'
+name-template: "Development Release v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+tag-prefix: "v"
 categories:
-  - title: 'New Features'
+  - title: "New Features"
     labels:
-      - 'Feature'
-  - title: 'Bug Fixes'
+      - "Feature"
+  - title: "Bug Fixes"
     labels:
-      - 'Fix'    
-  - title: 'Other Changes'
+      - "Fix"
+  - title: "Other Changes"
     labels:
-      - 'Other'
-      - 'Maintenance'
-  - title: 'Dependency Updates'
-    label: 
-      - 'Dependencies'    
-    collapse-after: 4  
+      - "Other"
+      - "Maintenance"
+  - title: "Dependency Updates"
+    label:
+      - "Dependencies"
+    collapse-after: 4
 version-resolver:
   major:
     labels:
-      - 'Breaking Change'
+      - "Breaking Change"
   minor:
     labels:
-      - 'Feature'
+      - "Feature"
   patch:
     labels:
-      - 'Bug'
-      - 'Fix'
-      - 'Maintenance'
-      - 'Documentation'
-      - 'Dependencies'
-      - 'Other' 
+      - "Bug"
+      - "Fix"
+      - "Maintenance"
+      - "Documentation"
+      - "Dependencies"
+      - "Other"
 template: |
   # {INSERT_NAME} Update
   ## v$RESOLVED_VERSION - {YEAR-MONTH-DAY}
 
   $CHANGES
-  
+
   ## Full Changelog
-  
+
   **Detailed Changelog**: [`CHANGELOG.md`](https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md)
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
-  
+
 exclude-labels:
-  - 'Release'
-  - 'Skip Changelog'
-  
+  - "Release"
+  - "Skip Changelog"

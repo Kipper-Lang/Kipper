@@ -9,7 +9,7 @@ import { InputMismatchException, LexerNoViableAltException, NoViableAltException
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
-import { getTokenSource } from "./utils";
+import { getParseRuleSource } from "./utils";
 
 /**
  * The core error for the Kipper module.
@@ -111,12 +111,12 @@ export class KipperError extends Error {
 	public get tokenSrc(): string | undefined {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
-		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getTokenSource(this.antlrCtx) : undefined);
+		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
 	}
 }
 
 /**
- * Internal error for Kipper.
+ * Internal error for Kipper. This error should always be printed with its stack.
  * @since 0.3.0
  */
 export class KipperInternalError extends Error {
@@ -323,7 +323,7 @@ export class InvalidArgumentTypeError extends MismatchedTypesErrors {
 }
 
 /**
- * This error is raised when a variable type is used that is unknown the kipper language.
+ * This error is thrown whenever a variable type is used that is unknown the kipper language.
  */
 export class UnknownTypeError extends KipperError {
 	constructor(type: string) {
@@ -332,7 +332,7 @@ export class UnknownTypeError extends KipperError {
 }
 
 /**
- * Error that is thrown when an identifier is registered that interferes with a built-in function or variable.
+ * This error is thrown whenever an identifier is registered that interferes with a built-in function or variable.
  * No double definitions or overwrites of global built-in definitions allowed!
  */
 export class BuiltInOverwriteError extends KipperError {
@@ -342,11 +342,21 @@ export class BuiltInOverwriteError extends KipperError {
 }
 
 /**
- * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances or a
+ * This error is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
  * compilation is started without the required semantic data.
  */
 export class UnableToDetermineMetadataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
+		super(`Failed to determine metadata for one or more tokens.`);
+	}
+}
+
+/**
+ * This error is thrown whenever the semantics of a token is undefined.
+ * @since 0.6.0
+ */
+export class UndefinedSemanticsError extends KipperInternalError {
+	constructor() {
+		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'token.semanticAnalysis'?`);
 	}
 }

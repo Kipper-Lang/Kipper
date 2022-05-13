@@ -15,7 +15,6 @@ import {
 	VariableDeclarationSemantics,
 } from "../tokens";
 import type { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
 
 /**
  * Abstract class as a parent for {@link ScopeDeclaration} and {@link Scope}.
@@ -48,11 +47,8 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-		if (_token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		} else {
-			this.semanticData = _token.semanticData;
-		}
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**
@@ -111,11 +107,8 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-		if (_token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		} else {
-			this.semanticData = _token.semanticData;
-		}
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**
