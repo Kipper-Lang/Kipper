@@ -356,7 +356,7 @@ export class UnableToDetermineMetadataError extends KipperInternalError {
  * @since 0.6.0
  */
 export class UndefinedSemanticsError extends KipperInternalError {
-  constructor() {
-    super(`Failed to determine semantics for one or more tokens. Did you forget to run 'token.semanticAnalysis'?`);
-  }
+	constructor() {
+		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'token.semanticAnalysis'?`);
+	}
 }

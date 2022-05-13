@@ -9,4 +9,4 @@ updates:
       - "Luna-Klatzer"
     # Specify labels for npm pull requests
     labels:
-      - "Dependencies"   
+      - "Dependencies"

@@ -207,12 +207,10 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-    const children = this.ensureTokenChildrenExist();
+		const children = this.ensureTokenChildrenExist();
 
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>(
-			children.find((val) => val instanceof DeclaratorContext)
-		);
+		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
 			children.find((val) => val instanceof ParameterTypeListContext)
 		);
@@ -289,9 +287,9 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-    const children = this.ensureTokenChildrenExist();
+		const children = this.ensureTokenChildrenExist();
 
-    // Determine the ctx instances
+		// Determine the ctx instances
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
 			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);

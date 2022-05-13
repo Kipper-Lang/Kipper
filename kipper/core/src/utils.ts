@@ -39,9 +39,7 @@ export function getParseRuleSource(antlrCtx: ParserRuleContext): string {
  * @since 0.6.0
  */
 export function getTokenIntervalSource(inputStream: CharStream, start: Token, stop: Token): string {
-  return inputStream.getText(
-    new Interval(start.startIndex, stop.stopIndex)
-  );
+	return inputStream.getText(new Interval(start.startIndex, stop.stopIndex));
 }
 
 /**
@@ -51,9 +49,7 @@ export function getTokenIntervalSource(inputStream: CharStream, start: Token, st
  * @since 0.6.0
  */
 export function getTokenSource(inputStream: CharStream, token: Token) {
-  return inputStream.getText(
-    new Interval(token.startIndex, token.stopIndex)
-  );
+	return inputStream.getText(new Interval(token.startIndex, token.stopIndex));
 }
 
 /**
@@ -63,7 +59,7 @@ export function getTokenSource(inputStream: CharStream, token: Token) {
  * @since 0.6.0
  */
 export function getParseTreeSource(inputStream: CharStream, parseTree: ParseTree) {
-  return inputStream.getText(parseTree.sourceInterval);
+	return inputStream.getText(parseTree.sourceInterval);
 }
 
 /**

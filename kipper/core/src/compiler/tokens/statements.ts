@@ -146,7 +146,7 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 * @param token The {@link VariableDeclaration} token.
 	 */
 	public addNewLocalVariable(token: VariableDeclaration) {
-    const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.ensureSemanticDataExists();
 		this.programCtx.assert(token).variableIdentifierNotDefined(semanticData.identifier, this);
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
 	}

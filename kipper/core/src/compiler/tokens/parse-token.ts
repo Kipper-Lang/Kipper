@@ -171,16 +171,16 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 		this._children.push(newChild);
 	}
 
-  /**
-   * Ensures that the token children of this item exist.
-   * @since 0.6.0
-   */
-  public ensureTokenChildrenExist(): ParseTree[] {
-    if (this.antlrCtx.children === undefined) {
-      throw new UnableToDetermineMetadataError();
-    }
-    return this.antlrCtx.children;
-  }
+	/**
+	 * Ensures that the token children of this item exist.
+	 * @since 0.6.0
+	 */
+	public ensureTokenChildrenExist(): ParseTree[] {
+		if (this.antlrCtx.children === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+		return this.antlrCtx.children;
+	}
 
 	/**
 	 * Ensures the semantic data of this item exists. This is always checked whenever a compilation is started.

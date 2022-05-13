@@ -209,12 +209,10 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 */
 	public argumentTypesMatch(arg: ParameterDeclaration, receivedType: KipperType): void {
-    const semanticData = arg.ensureSemanticDataExists();
+		const semanticData = arg.ensureSemanticDataExists();
 
 		if (semanticData.type !== receivedType) {
-			throw this.assertError(
-				new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType),
-			);
+			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
 		}
 	}
 
@@ -234,11 +232,7 @@ export class CompileAssert {
 	 * @since 0.3.0
 	 * @todo Implement arithmetic checks!
 	 */
-	private arithmeticExpressionValid(
-		exp1: Expression<any>,
-		exp2: Expression<any>,
-		op: KipperArithmeticOperator,
-	): void {}
+	private arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
@@ -622,7 +616,7 @@ export class KipperProgramContext {
 	 * @param token The token that should be added.
 	 */
 	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDeclaration): void {
-    const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.ensureSemanticDataExists();
 		this.assert(token).builtInNotDefined(semanticData.identifier);
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.

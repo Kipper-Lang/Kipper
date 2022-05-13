@@ -47,8 +47,8 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-    // Ensure the token is valid
-    this.semanticData = _token.ensureSemanticDataExists();
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**
@@ -107,8 +107,8 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-    // Ensure the token is valid
-    this.semanticData = _token.ensureSemanticDataExists();
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**

@@ -81,25 +81,25 @@ export const kipperStorageTypes = ["var", "const"];
  * All available multiplicative operations inside Kipper.
  * @since 0.6.0
  */
-export type KipperMultiplicativeOperator = '*' | '**' | "/" | "%";
+export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
 
 /**
  * All available multiplicative operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperMultiplicativeOperators = ['*', '**', "/", "%"];
+export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export type KipperAdditiveOperator = '-' | '+';
+export type KipperAdditiveOperator = "-" | "+";
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperAdditiveOperators = ['-', '+'];
+export const kipperAdditiveOperators = ["-", "+"];
 
 /**
  * All available arithmetic operations inside Kipper.
