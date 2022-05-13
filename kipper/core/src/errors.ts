@@ -121,8 +121,18 @@ export class KipperError extends Error {
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
+		super(`Internal error: ${msg} - Report this bug to the developer using the traceback!`);
 		this.name = this.constructor.name;
+	}
+}
+
+/**
+ * An error that is raised whenever a feature is used that has not been implemented yet.
+ * @since 0.6.0
+ */
+export class KipperNotImplementedError extends KipperError {
+	constructor(msg: string) {
+		super(`${msg} Update Kipper or watch out for future updates.`);
 	}
 }
 
