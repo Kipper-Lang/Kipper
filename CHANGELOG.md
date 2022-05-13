@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented TypeScript translation for constant numeric values (`NumberPrimaryExpression`).
+- Implemented TypeScript translation for arithmetic expressions: `MultiplicativeExpression` and `AdditiveExpression`.
 - New function `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
   error in case that the children tokens are undefined.
 - New types `KipperMultiplicativeOperator` and `KipperAdditiveOperator`.
@@ -24,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
   fetches the code for a single `Token` instance.
+- Renamed `CompilableParseToken.antlrCtx` to `antlrRuleCtx`.
 
 ## [0.5.0] - 2022-05-11
 
