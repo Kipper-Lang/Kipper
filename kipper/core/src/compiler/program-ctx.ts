@@ -13,11 +13,14 @@ import { KipperFileListener } from "./listener";
 import {
 	BuiltInFunction,
 	KipperArithmeticOperator,
+	KipperFunction,
+	KipperRef,
 	KipperType,
 	kipperTypes,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
+	TranslatedCodeLine,
 } from "./logic";
 import { KipperLogger, LogLevel } from "../logger";
 import {
@@ -37,6 +40,7 @@ import {
 	InvalidArgumentTypeError,
 	InvalidGlobalError,
 	KipperError,
+	KipperNotImplementedError,
 	UndefinedIdentifierError,
 	UnknownFunctionIdentifierError,
 	UnknownIdentifier,
@@ -113,10 +117,19 @@ export class CompileAssert {
 	/**
 	 * Checks whether an identifier is declared. If the variable is defined it will also pass.
 	 * @param identifier The identifier to check for.
+	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
+	 * of the {@link KipperProgramContext program}.
 	 * @since 0.6.0
 	 */
-	public identifierIsDeclared(identifier: string): void {
-		if (!this.programCtx.getGlobalIdentifier(identifier)) {
+	public identifierIsDeclared(identifier: string, scope?: CompoundStatement): void {
+		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+		if (!val) {
+			throw this.assertError(new UnknownIdentifier(identifier));
+		}
+
+		const isBuiltinDeclared = "handler" in val; // BuiltInFunction 'handler' property -> always declared/defined
+		const isDeclarationDeclared = val instanceof ScopeDeclaration; // User-defined -> always declared, sometimes defined
+		if (!isBuiltinDeclared && !isDeclarationDeclared) {
 			throw this.assertError(new UnknownIdentifier(identifier));
 		}
 	}
@@ -124,10 +137,12 @@ export class CompileAssert {
 	/**
 	 * Checks whether an identifier is defined. If the variable is declared it will also fail!
 	 * @param identifier The identifier to check for.
+	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
+	 * of the {@link KipperProgramContext program}.
 	 * @since 0.6.0
 	 */
-	public identifierIsDefined(identifier: string): void {
-		const val = this.programCtx.getGlobalIdentifier(identifier);
+	public identifierIsDefined(identifier: string, scope?: CompoundStatement): void {
+		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
 		if (!val) {
 			throw this.assertError(new UnknownIdentifier(identifier));
 		}
@@ -164,7 +179,7 @@ export class CompileAssert {
 	}
 
 	/**
-	 * Asserts that the passed function identifier is not defined.
+	 * Asserts that the passed function identifier has not been declared yet.
 	 * @param identifier The identifier of the function.
 	 */
 	public functionIdentifierNotDeclared(identifier: string): void {
@@ -174,7 +189,7 @@ export class CompileAssert {
 	}
 
 	/**
-	 * Asserts that the passed variable identifier is not defined.
+	 * Asserts that the passed variable identifier has not been declared yet.
 	 * @param identifier The identifier of the variable.
 	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
 	 * of the {@link KipperProgramContext program}.
@@ -194,7 +209,7 @@ export class CompileAssert {
 	}
 
 	/**
-	 * Asserts that the passed variable identifier has not been defined yet!
+	 * Asserts that the passed variable identifier has not been defined yet.
 	 * @param identifier The identifier to check for in the global scope.
 	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
 	 * of the {@link KipperProgramContext program}.
@@ -217,7 +232,7 @@ export class CompileAssert {
 	}
 
 	/**
-	 * Asserts that the passed variable identifier has not been defined yet!
+	 * Asserts that the passed variable identifier has not been defined yet.
 	 * @param identifier The identifier to check for in the global scope.
 	 */
 	public functionIdentifierNotDefined(identifier: string): void {
@@ -251,7 +266,6 @@ export class CompileAssert {
 
 	/**
 	 * Checks whether the assignment of the expression to the variable is valid.
-	 * @since 0.3.0
 	 * @todo Implement assignment checks!
 	 */
 	// eslint-disable-next-line no-unused-vars
@@ -262,7 +276,6 @@ export class CompileAssert {
 	 * @param exp1 The first expression.
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
-	 * @since 0.3.0
 	 * @todo Implement arithmetic checks!
 	 */
 	private arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {}
@@ -296,9 +309,39 @@ export class CompileAssert {
 	/**
 	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
 	 * @param identifier The identifier to fetch.
+	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
+	 * of the {@link KipperProgramContext program}.
+	 */
+	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
+		const ref = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+		if (ref === undefined) {
+			throw this.assertError(new UnknownIdentifier(identifier));
+		} else {
+			return ref;
+		}
+	}
+
+	/**
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
+	 * @param identifier The identifier to fetch.
+	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
+	 * of the {@link KipperProgramContext program}.
+	 */
+	public getExistingVariable(identifier: string, scope?: CompoundStatement): ScopeVariableDeclaration {
+		const variable = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalVariable(identifier);
+		if (variable === undefined) {
+			throw this.assertError(new UnknownIdentifier(identifier));
+		} else {
+			return variable;
+		}
+	}
+
+	/**
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
+	 * @param identifier The identifier to fetch.
 	 * @since 0.5.0
 	 */
-	public getExistingFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration {
+	public getExistingFunction(identifier: string): KipperFunction {
 		const func = this.programCtx.getGlobalFunction(identifier);
 		if (func === undefined) {
 			throw this.assertError(new UnknownIdentifier(identifier));
@@ -621,7 +664,7 @@ export class KipperProgramContext {
 	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
 	 * @param identifier The identifier of the function
 	 */
-	public getGlobalFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration | undefined {
+	public getGlobalFunction(identifier: string): KipperFunction | undefined {
 		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
 		return (
 			this.builtInGlobals.find((value) => {
