@@ -5,6 +5,10 @@
  * @since 0.3.0
  */
 
+import type { KipperProgramContext } from "./program-ctx";
+import type { CompoundStatement } from "./tokens";
+import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
+
 /**
  * Function type in Kipper.
  * @since 0.6.0
@@ -155,3 +159,26 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
  * @since 0.5.0
  */
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
+
+/**
+ * Represents a scope for a {@link CompilableParseToken}.
+ * @since 0.6.0
+ */
+export type KipperScope = KipperProgramContext | CompoundStatement;
+
+/**
+ * Represents a Kipper function that can be either declared or defined.
+ * @since 0.6.0
+ */
+export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
+
+/**
+ * Represents a Kipper variable that can be either declared or defined.
+ */
+export type KipperVariable = ScopeVariableDeclaration;
+
+/**
+ * Represents a reference that can be used as an identifier.
+ * @since 0.6.0
+ */
+export type KipperRef = KipperFunction | KipperVariable;

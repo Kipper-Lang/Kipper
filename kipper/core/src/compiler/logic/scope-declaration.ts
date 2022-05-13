@@ -4,9 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperStorageType, KipperType } from "../const";
+import { KipperScope, KipperStorageType, KipperType } from "../const";
 import {
-	CompoundStatement,
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
@@ -17,7 +16,7 @@ import {
 import type { KipperProgramContext } from "../program-ctx";
 
 /**
- * Abstract class as a parent for {@link ScopeDeclaration} and {@link Scope}.
+ * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
@@ -82,7 +81,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	/**
 	 * Returns the scope associated with this {@link ScopeDeclaration}.
 	 */
-	public get scope(): KipperProgramContext | CompoundStatement {
+	public get scope(): KipperScope {
 		return this.semanticData.scope;
 	}
 

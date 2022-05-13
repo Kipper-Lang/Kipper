@@ -19,7 +19,7 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../parser";
-import { ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
+import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
 import { KipperProgramContext } from "../program-ctx";
@@ -101,7 +101,7 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
  * Compound statement class, which represents a compound statement containing other items in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  */
-export class CompoundStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -145,7 +145,7 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 * Adds a new local variable to this scope.
 	 * @param token The {@link VariableDeclaration} token.
 	 */
-	public addNewLocalVariable(token: VariableDeclaration) {
+	public addNewLocalVariable(token: VariableDeclaration): void {
 		const semanticData = token.ensureSemanticDataExists();
 
 		// Make sure the identifier is available
@@ -174,7 +174,7 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
  * Selection statement class, which represents a selection statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class SelectionStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -222,7 +222,7 @@ export class SelectionStatement extends Statement<{ scope: KipperProgramContext 
 /**
  * Expression statement class, which represents a statement made up of an expression in the Kipper language.
  */
-export class ExpressionStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -271,7 +271,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class IterationStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -320,7 +320,7 @@ export class IterationStatement extends Statement<{ scope: KipperProgramContext 
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The private '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.

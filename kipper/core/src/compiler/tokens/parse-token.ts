@@ -5,19 +5,19 @@
  * @since 0.1.0
  */
 
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { KipperParser } from "../parser";
-import { TokenStream } from "antlr4ts/TokenStream";
-import type { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
-import { getParseRuleSource } from "../../utils";
-import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
-import { KipperCompileTarget } from "../target";
-import { Declaration } from "./definitions";
-import { Statement } from "./statements";
-import { TranslatedCodeLine } from "../logic";
-import { ParseTree } from "antlr4ts/tree";
+import { determineScope, getParseRuleSource } from "../../utils";
+import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import type { KipperParser } from "../parser";
+import type { TokenStream } from "antlr4ts/TokenStream";
+import type { KipperProgramContext } from "../program-ctx";
+import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
+import type { KipperCompileTarget } from "../target";
+import type { Declaration } from "./definitions";
+import type { Statement } from "./statements";
+import type { KipperScope, TranslatedCodeLine } from "../logic";
+import type { ParseTree } from "antlr4ts/tree";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -53,6 +53,8 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * @private
 	 */
 	protected readonly _parent: eligibleParentToken;
+
+	protected _scope: KipperScope | undefined;
 
 	protected _semanticData: Semantics | undefined;
 
@@ -148,6 +150,16 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 */
 	public get codeGenerator(): KipperTargetCodeGenerator {
 		return this.target.codeGenerator;
+	}
+
+	/**
+	 * The {@link scope} of this token. Dynamically fetched using {@link determineScope}.
+	 * @since 0.6.0
+	 */
+	public get scope(): KipperScope {
+		// Uses caching to speed up accessing this field multiple times
+		this._scope = this._scope ?? determineScope(this);
+		return <KipperScope>this._scope;
 	}
 
 	/**
