@@ -6,12 +6,19 @@
  */
 
 /**
+ * Function type in Kipper.
+ * @since 0.6.0
+ */
+export type KipperFuncType = "func";
+
+/**
  * Void type in Kipper.
  * @since 0.5.0
  * @example
  * void
  */
 export type KipperVoidType = "void";
+
 /**
  * Numeric type in Kipper.
  * @since 0.5.0
@@ -19,6 +26,7 @@ export type KipperVoidType = "void";
  * num
  */
 export type KipperNumType = "num";
+
 /**
  * String type in Kipper.
  * @since 0.5.0
@@ -26,6 +34,7 @@ export type KipperNumType = "num";
  * str
  */
 export type KipperStrType = "str";
+
 /**
  * Char type in Kipper.
  * @since 0.5.0
@@ -33,6 +42,7 @@ export type KipperStrType = "str";
  * char
  */
 export type KipperCharType = "char";
+
 /**
  * Boolean type in Kipper.
  * @since 0.5.0
@@ -40,6 +50,7 @@ export type KipperCharType = "char";
  * bool
  */
 export type KipperBoolType = "bool";
+
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
  * type checking generic type, it will not change the type itself.
@@ -54,6 +65,7 @@ export type KipperListType<ValueType extends KipperType> = "list";
  * All available variable types inside Kipper.
  */
 export type KipperType =
+  | KipperFuncType
 	| KipperVoidType
 	| KipperNumType
 	| KipperStrType
