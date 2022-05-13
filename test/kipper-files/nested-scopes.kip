@@ -1,12 +1,15 @@
 var x: bool;
 var y: num = 4;
-const z: str = "5";
+const z: str = "1";
 
 def function() -> void {
   {
+    var rx: bool;
+    var ry: num = 5 * y;
+    var rz: str = "3";
     {
       var lx: bool;
-      var ly: num = 4;
+      var ly: num = 4 * y + y;
       const lz: str = "5";
     }
   }

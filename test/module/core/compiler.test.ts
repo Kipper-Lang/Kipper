@@ -158,7 +158,7 @@ describe("KipperCompiler", () => {
 				console.log = prevLog;
 			});
 
-			it("Nested scopes in function", async () => {
+			it("Nested scopes", async () => {
 				const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
@@ -401,22 +401,76 @@ describe("KipperCompiler", () => {
 					assert(false, "Expected 'VariableDefinitionAlreadyExistsError'");
 				});
 
-				it("UnknownFunctionIdentifierError", async () => {
-					try {
-						const programCtx: KipperProgramContext = await new KipperCompiler().parse(
-							new KipperParseStream('var x: num = call pr("pr");'),
-						);
-						await programCtx.compileProgram();
-					} catch (e) {
-						assert((<KipperError>e).constructor.name === "UnknownFunctionIdentifierError", "Expected proper error");
-						assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
-						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
-						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
-						return;
-					}
-					assert(false, "Expected 'IdentifierError'");
+				describe("UnknownIdentifier", () => {
+					it("Simple reference", async () => {
+						try {
+							const programCtx: KipperProgramContext = await new KipperCompiler().parse(new KipperParseStream("x;"));
+							await programCtx.compileProgram();
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+							assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+							assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+							assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+							return;
+						}
+						assert(false, "Expected 'IdentifierError'");
+					});
+
+					it("Function Call", async () => {
+						try {
+							const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+								new KipperParseStream('var x: num = call pr("pr");'),
+							);
+							await programCtx.compileProgram();
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+							assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+							assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+							assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+							return;
+						}
+						assert(false, "Expected 'IdentifierError'");
+					});
+
+					it("Arithmetics", async () => {
+						try {
+							const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+								new KipperParseStream("var x: num = y + y;"),
+							);
+							await programCtx.compileProgram();
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+							assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+							assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+							assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+							return;
+						}
+						assert(false, "Expected 'IdentifierError'");
+					});
+
+					it("Nested reference", async () => {
+						try {
+							const programCtx: KipperProgramContext = await new KipperCompiler().parse(
+								new KipperParseStream("{ { { { x; } } } }"),
+							);
+							await programCtx.compileProgram();
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).name === "UnknownIdentifier", "Expected proper error");
+							assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+							assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+							assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+							assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+							return;
+						}
+						assert(false, "Expected 'IdentifierError'");
+					});
 				});
 			});
 		});
