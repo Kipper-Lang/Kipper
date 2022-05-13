@@ -16,10 +16,11 @@
   },
   "include": [
     "kipper/core/src/**/*",
-    "kipper/core/src/compiler/parser/*.*",
     "kipper/cli/src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "lib",
+    "dist"
   ]
 }
