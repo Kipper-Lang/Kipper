@@ -547,13 +547,13 @@ export class KipperProgramContext {
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
-	public async compileProgram(): Promise<Array<Array<string>>> {
+	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
-		let genCode: Array<Array<string>> = await this._processedParseTree.compileCtx();
+		let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.compileCtx();
 
 		// Append required typescript code for Kipper for the program to work properly
 		genCode = (await this.generateRequirements()).concat(genCode);
