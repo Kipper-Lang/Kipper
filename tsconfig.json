@@ -6,7 +6,7 @@
     "removeComments": true,
     "module": "commonjs",
     "outDir": "lib",
-    "rootDir": "src",
+    "rootDir": "kipper",
     "strict": true,
     "target": "es2020",
     "lib": [
