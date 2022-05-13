@@ -37,6 +37,7 @@ import {
 	KipperCharType,
 	KipperListType,
 	KipperMultiplicativeOperator,
+	kipperMultiplicativeOperators,
 	KipperNumType,
 	KipperStrType,
 	KipperType,
@@ -46,8 +47,7 @@ import {
 import { UnableToDetermineMetadataError } from "../../errors";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import { getParseRuleSource, getParseTreeSource, getTokenSource } from "../../utils";
-import { Token } from "antlr4ts";
+import { TerminalNode } from "antlr4ts/tree";
 
 /**
  * Every antlr4 expression ctx type
@@ -144,13 +144,13 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: antlrExpressionCtxType;
+	protected override readonly _antlrRuleCtx: antlrExpressionCtxType;
 
 	protected override _children: Array<Expression<any>>;
 
 	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 
 		// Manually add the child to the parent
@@ -168,8 +168,8 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): antlrExpressionCtxType {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): antlrExpressionCtxType {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -218,10 +218,11 @@ export interface NumberPrimaryExpressionSemantics {
 	 */
 	type: KipperNumType;
 	/**
-	 * The value of the constant number expression.
+	 * The value of the constant number expression. We don't bother converting this to a number, since it's an unnecessary
+	 * conversion.
 	 * @since 0.5.0
 	 */
-	value: number;
+	value: string;
 }
 
 /**
@@ -235,11 +236,11 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: NumberPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
 
 	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -248,7 +249,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			value: +this.sourceCode,
+			value: this.sourceCode,
 			type: "num",
 		};
 	}
@@ -256,8 +257,8 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): NumberPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): NumberPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<NumberPrimaryExpression> =
@@ -293,11 +294,11 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: CharacterPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: CharacterPrimaryExpressionContext;
 
 	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -314,8 +315,8 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): CharacterPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): CharacterPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CharacterPrimaryExpression> =
@@ -351,11 +352,11 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ListPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: ListPrimaryExpressionContext;
 
 	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -372,8 +373,8 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ListPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ListPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ListPrimaryExpression> =
@@ -410,11 +411,11 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: StringPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
 	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -431,8 +432,8 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): StringPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): StringPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<StringPrimaryExpression> =
@@ -464,11 +465,11 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: IdentifierPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
 
 	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -484,8 +485,8 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): IdentifierPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): IdentifierPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IdentifierPrimaryExpression> =
@@ -518,13 +519,13 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: FStringPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: FStringPrimaryExpressionContext;
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
 	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -540,8 +541,8 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): FStringPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): FStringPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FStringPrimaryExpression> =
@@ -567,11 +568,11 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: TangledPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: TangledPrimaryExpressionContext;
 
 	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -585,8 +586,8 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): TangledPrimaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): TangledPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TangledPrimaryExpression> =
@@ -614,11 +615,11 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: IncrementOrDecrementPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
 
 	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -632,8 +633,8 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): IncrementOrDecrementPostfixExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): IncrementOrDecrementPostfixExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementExpression> =
@@ -660,11 +661,11 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ArraySpecifierPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: ArraySpecifierPostfixExpressionContext;
 
 	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -678,8 +679,8 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ArraySpecifierPostfixExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ArraySpecifierPostfixExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArraySpecifierExpression> =
@@ -718,11 +719,11 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: FunctionCallPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: FunctionCallPostfixExpressionContext;
 
 	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -742,8 +743,8 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): FunctionCallPostfixExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): FunctionCallPostfixExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression> =
@@ -770,11 +771,11 @@ export class ArgumentExpressionListExpression extends Expression<ArgumentExpress
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ArgumentExpressionListContext;
+	protected override readonly _antlrRuleCtx: ArgumentExpressionListContext;
 
 	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -788,8 +789,8 @@ export class ArgumentExpressionListExpression extends Expression<ArgumentExpress
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ArgumentExpressionListContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ArgumentExpressionListContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArgumentExpressionListExpression> =
@@ -817,11 +818,11 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: IncrementOrDecrementUnaryExpressionContext;
+	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
 
 	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -835,8 +836,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): IncrementOrDecrementUnaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): IncrementOrDecrementUnaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
@@ -865,11 +866,11 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: OperatorModifiedUnaryExpressionContext;
+	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
 
 	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -883,8 +884,8 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): OperatorModifiedUnaryExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): OperatorModifiedUnaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<OperatorModifiedUnaryExpression> =
@@ -913,11 +914,11 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: CastOrConvertExpressionContext;
+	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
 
 	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -931,8 +932,8 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): CastOrConvertExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): CastOrConvertExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CastOrConvertExpression> =
@@ -1000,11 +1001,11 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: MultiplicativeExpressionContext;
+	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
 	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1015,7 +1016,9 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		const children = this.ensureTokenChildrenExist();
 
 		const operator = children.find((token) => {
-			return kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
+			return (
+				token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
+			);
 		})?.text;
 
 		if (!operator) {
@@ -1032,8 +1035,8 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): MultiplicativeExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): MultiplicativeExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<MultiplicativeExpression> =
@@ -1078,11 +1081,11 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: AdditiveExpressionContext;
+	protected override readonly _antlrRuleCtx: AdditiveExpressionContext;
 
 	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1093,7 +1096,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		const children = this.ensureTokenChildrenExist();
 
 		const operator = children.find((token) => {
-			return kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
+			return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
 		})?.text;
 
 		if (!operator) {
@@ -1110,8 +1113,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): AdditiveExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): AdditiveExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
@@ -1147,11 +1150,11 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: RelationalExpressionContext;
+	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
 
 	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1165,8 +1168,8 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): RelationalExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): RelationalExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<RelationalExpression> =
@@ -1197,11 +1200,11 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: EqualityExpressionContext;
+	protected override readonly _antlrRuleCtx: EqualityExpressionContext;
 
 	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1215,8 +1218,8 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): EqualityExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): EqualityExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
@@ -1246,11 +1249,11 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: LogicalAndExpressionContext;
+	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
 
 	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1264,8 +1267,8 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): LogicalAndExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): LogicalAndExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalAndExpression> =
@@ -1296,11 +1299,11 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: LogicalOrExpressionContext;
+	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
 	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1314,8 +1317,8 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): LogicalOrExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): LogicalOrExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalOrExpression> = this.semanticAnalyser.logicalOrExpression;
@@ -1343,11 +1346,11 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ConditionalExpressionContext;
+	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
 	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1361,8 +1364,8 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ConditionalExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ConditionalExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ConditionalExpression> =
@@ -1390,11 +1393,11 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: AssignmentExpressionContext;
+	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
 	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken<any>) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
@@ -1408,8 +1411,8 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): AssignmentExpressionContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): AssignmentExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AssignmentExpression> =

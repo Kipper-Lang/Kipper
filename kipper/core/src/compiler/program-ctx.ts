@@ -88,7 +88,7 @@ export class CompileAssert {
 			filePath: this.programCtx.filePath,
 			tokenSrc: undefined,
 		});
-		error.antlrCtx = this.ctx?.antlrCtx;
+		error.antlrCtx = this.ctx?.antlrRuleCtx;
 
 		// Log the error
 		this.programCtx.logger.reportError(LogLevel.ERROR, error);
@@ -384,7 +384,7 @@ export class KipperProgramContext {
 	 */
 	public assert(ctx: CompilableParseToken<any> | undefined): CompileAssert {
 		// Set the active traceback data on the item
-		this._assert.setTracebackData(ctx, ctx?.antlrCtx.start.line, ctx?.antlrCtx.start.charPositionInLine);
+		this._assert.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
 		return this._assert;
 	}
 

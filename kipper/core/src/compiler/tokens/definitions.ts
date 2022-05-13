@@ -68,11 +68,11 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: antlrDefinitionCtxType;
+	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
 	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -81,8 +81,8 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): antlrDefinitionCtxType {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): antlrDefinitionCtxType {
+		return this._antlrRuleCtx;
 	}
 
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
@@ -119,18 +119,18 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ParameterDeclarationContext;
+	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
 	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ParameterDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ParameterDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -188,18 +188,18 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: FunctionDeclarationContext;
+	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
 	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): FunctionDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): FunctionDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -268,18 +268,18 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: DeclarationContext;
+	protected override readonly _antlrRuleCtx: DeclarationContext;
 
 	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): DeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): DeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
