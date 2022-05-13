@@ -237,7 +237,7 @@ export abstract class IdentifierError extends KipperError {
 export class UndefinedIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Identifier '${identifier}' has been declared, but not defined.`);
-    this.name = "UndefinedIdentifierError";
+		this.name = "UndefinedIdentifierError";
 	}
 }
 
@@ -248,7 +248,7 @@ export class UndefinedIdentifierError extends IdentifierError {
 export class UnknownIdentifier extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown identifier '${identifier}'.`);
-    this.name = "UnknownIdentifier";
+		this.name = "UnknownIdentifier";
 	}
 }
 
