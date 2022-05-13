@@ -104,6 +104,15 @@ export class CompileAssert {
 	}
 
 	/**
+	 * Modifies the metadata for a {@link KipperNotImplementedError}
+	 * @param error The {@link KipperNotImplementedError} instance.
+	 * @since 0.6.0
+	 */
+	public notImplementedError(error: KipperNotImplementedError): KipperNotImplementedError {
+		return this.assertError(error);
+	}
+
+	/**
 	 * Asserts that the passed type identifier exists.
 	 * @param type The type to check.
 	 * @since 0.5.0
