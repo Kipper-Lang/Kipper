@@ -64,6 +64,7 @@
     "commands": "./kipper/cli/lib/commands"
   },
   "scripts": {
+    "fastbuild": "pnpm run -r build",
     "build": "pnpm run -r build",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
