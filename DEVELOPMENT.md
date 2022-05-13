@@ -79,13 +79,7 @@ If you only want to generate the antlr4-files:
 pnpm run antlr4ts
 ```
 
-(If antlr4 is not installed, install it from here: https://www.antlr.org/)
-
-otherwise, run simply the default `build` script:
-
-```bash
-pnpm run build
-```
+If antlr4 is not installed, install it from here: https://www.antlr.org/
 
 ## Making a new release
 
