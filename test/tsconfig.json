@@ -1,5 +1,5 @@
 {
-  "extends": "@kipper/core/tsconfig.json",
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
     "rootDir": "."
