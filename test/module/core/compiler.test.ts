@@ -205,7 +205,6 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 			});
-
 			it("Arithmetics", async () => {
 				const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);

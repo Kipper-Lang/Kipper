@@ -43,11 +43,10 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
 
 <!-- ### Added -->
-<!-- ### Changed -->
+<!-- ### Changed --> 
 <!-- ### Removed -->
 
 <!-- Default: -->
-
 None.
 
 <!-- Remove any header with no item. -->
