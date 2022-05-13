@@ -73,7 +73,7 @@ pnpm test
 
 ### Generate Antlr4 Files
 
-If you only want to generate the antlr4-files:
+If you want to generate the antlr4 lexer and parser files run:
 
 ```bash
 pnpm run antlr4ts
