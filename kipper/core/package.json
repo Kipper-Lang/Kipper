@@ -64,7 +64,7 @@
     "lint": "pnpm run tslint",
     "lint:fix": "pnpm run tslint:fix",
     "prettier": "prettier --write ./src/",
-    "tslint": "eslint ./src/**/*.ts --ext .ts --config ./../../.eslintrc",
-    "tslint:fix": "eslint ./src/**/*.ts --ext .ts --config ./../../.eslintrc --fix"
+    "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
+    "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix"
   }
 }
