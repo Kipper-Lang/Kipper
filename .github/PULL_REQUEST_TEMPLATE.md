@@ -14,7 +14,7 @@
 ## Summary
 <!-- Explain the reason for this pr, changes and solution briefly. -->
 
-...
+<!-- Summary -->
 
 Closes # (issue) <!-- Remove this if this is not a bug fix PR -->
 
@@ -38,9 +38,12 @@ Closes # (issue) <!-- Remove this if this is not a bug fix PR -->
 ## Changelog
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
 
-### Added
-### Changed
-### Removed
+<!-- ### Added -->
+<!-- ### Changed --> 
+<!-- ### Removed -->
+
+<!-- Default: -->
+None.
 
 <!-- Remove any header with no item. -->
 
