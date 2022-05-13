@@ -4,12 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
-import {Command} from '@oclif/core';
+import { Command } from "@oclif/core";
 
 export default class Version extends Command {
-  static description = "Displays the currently installed Kipper version.";
+	static description = "Displays the currently installed Kipper version.";
 
-  async run(): Promise<void> {
-    process.stdout.write(this.config.userAgent + '\n');
-  }
+	async run(): Promise<void> {
+		process.stdout.write(this.config.userAgent + "\n");
+	}
 }

@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import {KipperCompiler, KipperParseStream} from "@kipper/core";
+import { KipperCompiler, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
@@ -50,13 +50,8 @@ export default class Compile extends Command {
 		// Analyse the file
 		const file: KipperParseFile = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
 		const result = await compiler.compile(
-      new KipperParseStream(
-        file.stringContent,
-        file.name,
-        file.absolutePath,
-        file.charStream
-      )
-    );
+			new KipperParseStream(file.stringContent, file.name, file.absolutePath, file.charStream),
+		);
 
 		await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
 

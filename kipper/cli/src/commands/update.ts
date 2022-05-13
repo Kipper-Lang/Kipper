@@ -7,5 +7,5 @@
 import UpdateCommand from "@oclif/plugin-update/lib/commands/update";
 
 export default class Update extends UpdateCommand {
-  static description = "Updates the Kipper compiler and CLI.";
+	static description = "Updates the Kipper compiler and CLI.";
 }
