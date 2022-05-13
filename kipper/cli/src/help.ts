@@ -5,8 +5,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
-import {Help as OclifHelp} from "@oclif/help";
+import { Help as OclifHelp } from "@oclif/help";
 
 export default class Help extends OclifHelp {
-  static description = "Displays help for the Kipper CLI";
+	static description = "Displays help for the Kipper CLI";
 }

@@ -7,5 +7,5 @@
 import HelpCommand from "@oclif/plugin-help/lib/commands/help";
 
 export default class Help extends HelpCommand {
-  static description = "Displays help for the Kipper CLI.";
+	static description = "Displays help for the Kipper CLI.";
 }

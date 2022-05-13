@@ -1,60 +1,59 @@
 <!DOCTYPE html>
-<html lang='en'>
-<head>
-  <meta charset="utf-8"/>
-  <title>Kipper test file</title>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Kipper test file</title>
 
-  <!-- Icon -->
-  <link rel="icon shortcut" type="image/ico" href="https://wmc-ahif-2021.github.io/Kipper-Web/favicon.ico"/>
+		<!-- Icon -->
+		<link rel="icon shortcut" type="image/ico" href="https://wmc-ahif-2021.github.io/Kipper-Web/favicon.ico" />
 
-  <!-- Inter font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
+		<!-- Inter font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
 
-  <!-- Basic Styling -->
-  <style>
-    html {
-      font-family: 'Inter', Georgia, Verdana, monospace;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      align-content: center;
-    }
+		<!-- Basic Styling -->
+		<style>
+			html {
+				font-family: "Inter", Georgia, Verdana, monospace;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				align-content: center;
+			}
 
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-  </style>
-</head>
-<body>
-  <!-- Content -->
-  <header>
-    <h1>Welcome to the Kipper test file</h1>
-    <p>
-      If Kipper is working properly you should see a console output depending on your input.
-    </p>
-  </header>
+			header {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Content -->
+		<header>
+			<h1>Welcome to the Kipper test file</h1>
+			<p>If Kipper is working properly you should see a console output depending on your input.</p>
+		</header>
 
-  <!-- Tests here-->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="module" src='../kipper/core/kipper-standalone.js'></script>
-  <script type="module">
-    const logger = new Kipper.KipperLogger((level, msg) => {
-      console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
-    });
-    // Define your own compiler with your wanted configuration
-    const compiler = new Kipper.KipperCompiler(logger);
+		<!-- Tests here-->
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script type="module" src="../kipper/core/kipper-standalone.js"></script>
+		<script type="module">
+			const logger = new Kipper.KipperLogger((level, msg) => {
+				console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
+			});
+			// Define your own compiler with your wanted configuration
+			const compiler = new Kipper.KipperCompiler(logger);
 
-    // Compile the code to Typescript
-    // Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-    const result = (await compiler.compile(`call print("Hello world!");`)).write();
+			// Compile the code to Typescript
+			// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
+			const result = (await compiler.compile(`call print("Hello world!");`)).write();
 
-    // Transpile the TS code into JS
-    const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+			// Transpile the TS code into JS
+			const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
 
-    // Finally, run your program
-    eval(jsCode.code);
-  </script>
-</body>
+			// Finally, run your program
+			eval(jsCode.code);
+		</script>
+	</body>
+</html>

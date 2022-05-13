@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import {KipperCompiler, KipperParseStream} from "@kipper/core";
+import { KipperCompiler, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { defaultCliEmitHandler } from "../logger";
@@ -13,7 +13,7 @@ import { defaultCliEmitHandler } from "../logger";
 export default class Analyse extends Command {
 	static description = "Analyses a file and validates its syntax and semantic integrity.";
 
-  // TODO! Add examples when the command moves out of development
+	// TODO! Add examples when the command moves out of development
 	static examples = [];
 
 	static args = [
@@ -45,13 +45,8 @@ export default class Analyse extends Command {
 		// Analyse the file
 		const file: KipperParseFile = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
 		await compiler.syntaxAnalyse(
-      new KipperParseStream(
-        file.stringContent,
-        file.name,
-        file.absolutePath,
-        file.charStream
-      )
-    );
+			new KipperParseStream(file.stringContent, file.name, file.absolutePath, file.charStream),
+		);
 
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;
