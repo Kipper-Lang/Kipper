@@ -65,7 +65,7 @@
   },
   "scripts": {
     "build": "pnpm run -r build",
-    "postbuild": "pnpm run lint:fix && pnpm run prettier",
+    "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",
     "test-no-rebuild": "nyc -x \"**/parser/**\" --reporter=json-summary --extension .ts mocha --forbid-only \"**/*.test.ts\"",
