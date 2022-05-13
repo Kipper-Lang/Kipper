@@ -134,7 +134,7 @@ export class CompileAssert {
 	 * Asserts that the passed function identifier is not defined.
 	 * @param identifier The identifier of the function.
 	 */
-	public functionIdentifierNotUsed(identifier: string): void {
+	public functionIdentifierNotDeclared(identifier: string): void {
 		if (this.programCtx.getGlobalFunction(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
 		}
@@ -146,7 +146,7 @@ export class CompileAssert {
 	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
 	 * of the {@link KipperProgramContext program}.
 	 */
-	public variableIdentifierNotUsed(identifier: string, scope?: CompoundStatement): void {
+	public variableIdentifierNotDeclared(identifier: string, scope?: CompoundStatement): void {
 		// Always check in the global scope
 		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
 		if (this.programCtx.globalScope.find(check)) {
