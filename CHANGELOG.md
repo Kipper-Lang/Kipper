@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implemented TypeScript translation for constant numeric values (`NumberPrimaryExpression`).
 - Implemented TypeScript translation for arithmetic expressions: `MultiplicativeExpression` and `AdditiveExpression`.
+- New functions `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling) and 
+  `KipperProgramContext.translate`.
 - New function `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
   error in case that the children tokens are undefined.
 - New types `KipperMultiplicativeOperator` and `KipperAdditiveOperator`.
@@ -19,14 +21,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New function `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
 - New function `getParseTreeSource`, which fetches the source code for a parse tree.
 - New error `UndefinedSemanticsError`, which specifically is thrown whenever the semantics are undefined.
+- New base interface `ExpressionSemantics`, which is the base for all expression semantics.
 - New interface `ArithmeticExpressionSemantics` which is used as a parent for `MultiplicativeExpressionSemantics` and
   `AdditiveExpressionSemantics`.
+- New error `UndefinedIdentifierError`, which is raised when an identifier is referenced that does not exist.
+- New assert functions `identifierIsDeclared` and `identifierIsDefined` to replace deprecated functions
+  `variableIsDefined` and `functionIsDefined`.
+- New functions `getExistingVariable` and `getExistingReference` for fetching reference variables based on an
+  identifier.
+- New functions `CompoundStatement.getLocalVariable()` and `CompoundStatement.getVariableRecursively()` for fetching
+  a variable based on an identifier inside a `CompoundStatement`/`KipperScope`.
+- Errors when using features that are not implemented yet using a new error class `KipperNotImplementedError`.
 
 ### Changed
 
 - Renamed `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
   fetches the code for a single `Token` instance.
 - Renamed `CompilableParseToken.antlrCtx` to `antlrRuleCtx`.
+- Renamed `functionIdentifierNotUsed` to `functionIdentifierNotDeclared`.
+- Renamed `variableIdentifierNotUsed` to `variableIdentifierNotDeclared`.
+- Deprecated the following items (Should be removed in `0.8.0`):
+  - `variableIsDefined`
+  - `functionIsDefined`
+  - `UnknownVariableIdentifierError`
+  - `UnknownFunctionIdentifierError`
+
+### Removed
+
+- Removed invalid expression class `ArgumentExpressionListExpression` and its abstract translation function in 
+  `KipperTargetCodeGenerator`.
+- Removed unneeded function `RootFileParseToken.compileCtx`.
 
 ## [0.5.0] - 2022-05-11
 
