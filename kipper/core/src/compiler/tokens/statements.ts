@@ -22,7 +22,6 @@ import {
 import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
-import { KipperProgramContext } from "../program-ctx";
 import { determineScope } from "../../utils";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
@@ -153,6 +152,30 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 
 		// Add new declaration or definition
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
+	}
+
+	/**
+	 * Tries to fetch the passed identifier in the current scope.
+	 * @since 0.6.0
+	 */
+	public getLocalVariable(identifier: string): ScopeVariableDeclaration | undefined {
+		return this.localScope.find((val) => val.identifier === identifier);
+	}
+
+	/**
+	 * Tries to fetch the passed identifier in the current scope and all parent scopes recursively.
+	 * @since 0.6.0
+	 */
+	public getVariableRecursively(identifier: string): ScopeVariableDeclaration | undefined {
+		const localVar = this.getLocalVariable(identifier);
+		if (!localVar) {
+			if (this.scope instanceof CompoundStatement) {
+				return this.scope.getVariableRecursively(identifier);
+			} else {
+				return this.scope.getGlobalVariable(identifier);
+			}
+		}
+		return localVar;
 	}
 
 	/**
