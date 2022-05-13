@@ -1,6 +1,6 @@
 {
   "extension": ["ts"],
-  "timeout": 5000,
+  "timeout": 15000,
   "exit": true,
   "require": "ts-node/register"
 }
