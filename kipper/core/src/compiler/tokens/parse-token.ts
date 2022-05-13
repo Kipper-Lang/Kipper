@@ -329,7 +329,7 @@ export class RootFileParseToken {
 	 * @since 0.5.0
 	 * @protected
 	 */
-  public async translate(): Promise<Array<TranslatedCodeLine>> {
+	public async translate(): Promise<Array<TranslatedCodeLine>> {
 		let genCode: Array<TranslatedCodeLine> = [];
 		for (let child of this.children) {
 			const code = await child.translateCtxAndChildren();

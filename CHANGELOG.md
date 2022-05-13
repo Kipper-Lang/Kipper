@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implemented TypeScript translation for constant numeric values (`NumberPrimaryExpression`).
 - Implemented TypeScript translation for arithmetic expressions: `MultiplicativeExpression` and `AdditiveExpression`.
-- New functions `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling) and 
+- New functions `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling) and
   `KipperProgramContext.translate`.
 - New function `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
   error in case that the children tokens are undefined.
@@ -48,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- Removed invalid expression class `ArgumentExpressionListExpression` and its abstract translation function in 
+- Removed invalid expression class `ArgumentExpressionListExpression` and its abstract translation function in
   `KipperTargetCodeGenerator`.
 - Removed unneeded function `RootFileParseToken.compileCtx`.
 

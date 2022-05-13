@@ -33,21 +33,21 @@ import {
 	VariableDeclaration,
 } from "./tokens";
 import {
-  BuiltInOverwriteError,
-  FunctionDefinitionAlreadyExistsError,
-  IdentifierAlreadyUsedByFunctionError,
-  IdentifierAlreadyUsedByVariableError,
-  InvalidArgumentTypeError,
-  InvalidGlobalError,
-  KipperError,
-  KipperNotImplementedError,
-  UndefinedIdentifierError,
-  UndefinedSemanticsError,
-  UnknownFunctionIdentifierError,
-  UnknownIdentifier,
-  UnknownTypeError,
-  UnknownVariableIdentifierError,
-  VariableDefinitionAlreadyExistsError,
+	BuiltInOverwriteError,
+	FunctionDefinitionAlreadyExistsError,
+	IdentifierAlreadyUsedByFunctionError,
+	IdentifierAlreadyUsedByVariableError,
+	InvalidArgumentTypeError,
+	InvalidGlobalError,
+	KipperError,
+	KipperNotImplementedError,
+	UndefinedIdentifierError,
+	UndefinedSemanticsError,
+	UnknownFunctionIdentifierError,
+	UnknownIdentifier,
+	UnknownTypeError,
+	UnknownVariableIdentifierError,
+	VariableDefinitionAlreadyExistsError,
 } from "../errors";
 import { KipperCompileTarget } from "./target";
 
@@ -410,7 +410,7 @@ export class KipperProgramContext {
 
 	/**
 	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
-   * to avoid running the function unnecessarily and generate code again, even though it already exists.
+	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
 	 * @private
 	 */
 	private _compiledCode: Array<Array<string>> | undefined;
@@ -590,41 +590,41 @@ export class KipperProgramContext {
 		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
 	}
 
-  /**
-   * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
-   * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
-   *
-   * If {@link this.processedParseTree} is undefined, then it will automatically run
-   * {@link this.generateProcessedParseTree} to generate it.
-   * @since 0.6.0
-   */
-  public async semanticAnalysis(): Promise<void> {
-    if (!this._processedParseTree) {
-      this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
-    }
+	/**
+	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
+	 * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
+	 *
+	 * If {@link this.processedParseTree} is undefined, then it will automatically run
+	 * {@link this.generateProcessedParseTree} to generate it.
+	 * @since 0.6.0
+	 */
+	public async semanticAnalysis(): Promise<void> {
+		if (!this._processedParseTree) {
+			this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
+		}
 
-    return await this._processedParseTree.semanticAnalysis();
-  }
+		return await this._processedParseTree.semanticAnalysis();
+	}
 
-  /**
-   * Translates the {@link CompilableParseToken} contained in the {@link this.processedParseTree}. This function should
-   * only be used if {@link semanticAnalysis} has been run before, otherwise it will throw an
-   * {@link UndefinedSemanticsError}.
-   *
-   * If {@link this.processedParseTree} is undefined, then it will automatically run
-   * {@link this.generateProcessedParseTree} to generate it.
-   * @since 0.6.0
-   */
-  public async translate(): Promise<Array<TranslatedCodeLine>> {
-    if (!this._processedParseTree) {
-      throw new UndefinedSemanticsError();
-    }
+	/**
+	 * Translates the {@link CompilableParseToken} contained in the {@link this.processedParseTree}. This function should
+	 * only be used if {@link semanticAnalysis} has been run before, otherwise it will throw an
+	 * {@link UndefinedSemanticsError}.
+	 *
+	 * If {@link this.processedParseTree} is undefined, then it will automatically run
+	 * {@link this.generateProcessedParseTree} to generate it.
+	 * @since 0.6.0
+	 */
+	public async translate(): Promise<Array<TranslatedCodeLine>> {
+		if (!this._processedParseTree) {
+			throw new UndefinedSemanticsError();
+		}
 
-    let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
+		let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
 
-    // Append required typescript code for Kipper for the program to work properly
-    return (await this.generateRequirements()).concat(genCode);
-  }
+		// Append required typescript code for Kipper for the program to work properly
+		return (await this.generateRequirements()).concat(genCode);
+	}
 
 	/**
 	 * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
@@ -640,9 +640,9 @@ export class KipperProgramContext {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
-    // Running the semantic analysis
-    this.logger.info(`Running the semantic analysis for '${this.stream.name}'.`);
-    await this.semanticAnalysis();
+		// Running the semantic analysis
+		this.logger.info(`Running the semantic analysis for '${this.stream.name}'.`);
+		await this.semanticAnalysis();
 
 		// Translating the context instances and children
 		this.logger.info(`Translating code to '${this.target.targetName}' for '${this.stream.name}'.`);
