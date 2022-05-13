@@ -4,6 +4,7 @@
     "declaration": true,
     "importHelpers": true,
     "removeComments": true,
+    "moduleResolution": "node",
     "module": "commonjs",
     "outDir": "lib",
     "rootDir": "kipper",
@@ -14,10 +15,6 @@
     ]
     // ES7 -> ES2016
   },
-  "include": [
-    "kipper/core/src/**/*",
-    "kipper/cli/src/**/*"
-  ],
   "exclude": [
     "node_modules",
     "lib",
