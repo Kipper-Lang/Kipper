@@ -234,7 +234,11 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
 	 */
 	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = token.ensureSemanticDataExists();
+
+		return [
+			semanticData.value, // Simply get the constant value
+		];
 	};
 	/**
 	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
@@ -349,13 +353,23 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link MultiplicativeExpression} into the typescript language.
 	 */
 	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<TranslatedExpression> => {
-		return [];
+		// Get the semantic data
+		const semanticData = token.ensureSemanticDataExists();
+
+		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+		return [...exp1, semanticData.operator, ...exp2];
 	};
 	/**
 	 * Translates a {@link AdditiveExpression} into the typescript language.
 	 */
 	additiveExpression = async (token: AdditiveExpression): Promise<TranslatedExpression> => {
-		return [];
+		// Get the semantic data
+		const semanticData = token.ensureSemanticDataExists();
+
+		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+		return [...exp1, semanticData.operator, ...exp2];
 	};
 	/**
 	 * Translates a {@link RelationalExpression} into the typescript language.
