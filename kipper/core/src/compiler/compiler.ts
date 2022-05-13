@@ -100,14 +100,14 @@ export class CompilerEvaluatedOptions implements CompileConfig {
  */
 export class KipperCompileResult {
 	/**
-	 * The private '_fileCtx' that actually stores the variable data,
+	 * The private field '_fileCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.fileCtx}.
 	 * @private
 	 */
 	private readonly _programCtx: KipperProgramContext;
 
 	/**
-	 * The private '_result' that actually stores the variable data,
+	 * The private field '_result' that actually stores the variable data,
 	 * which is returned inside the {@link this.result}.
 	 * @private
 	 */
@@ -157,7 +157,7 @@ export class KipperCompileResult {
  */
 export class KipperCompiler {
 	/**
-	 * The private '_logger' that actually stores the variable data,
+	 * The private field '_logger' that actually stores the variable data,
 	 * which is returned inside the {@link this.logger}.
 	 * @private
 	 */

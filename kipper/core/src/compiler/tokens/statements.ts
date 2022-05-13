@@ -63,7 +63,7 @@ export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: el
  */
 export abstract class Statement<Semantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -102,7 +102,7 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
  */
 export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -199,7 +199,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
  */
 export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -247,7 +247,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
  */
 export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -296,7 +296,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
  */
 export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -345,7 +345,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
  */
 export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */

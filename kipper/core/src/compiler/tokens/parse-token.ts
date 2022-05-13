@@ -34,21 +34,21 @@ export type SemanticData = Record<string, any>;
  */
 export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
 	protected readonly _antlrRuleCtx: ParserRuleContext;
 
 	/**
-	 * The private '_children' that actually stores the variable data,
+	 * The private field '_children' that actually stores the variable data,
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<eligibleChildToken>;
 
 	/**
-	 * The private '_parent' that actually stores the variable data,
+	 * The private field '_parent' that actually stores the variable data,
 	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
@@ -267,14 +267,14 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
  */
 export class RootFileParseToken {
 	/**
-	 * The private '_parent' that actually stores the variable data,
+	 * The private field '_parent' that actually stores the variable data,
 	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _programCtx: KipperProgramContext;
 
 	/**
-	 * The private '_children' that actually stores the variable data,
+	 * The private field '_children' that actually stores the variable data,
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
@@ -329,23 +329,12 @@ export class RootFileParseToken {
 	 * @since 0.5.0
 	 * @protected
 	 */
-	protected async translate(): Promise<Array<TranslatedCodeLine>> {
+  public async translate(): Promise<Array<TranslatedCodeLine>> {
 		let genCode: Array<TranslatedCodeLine> = [];
 		for (let child of this.children) {
 			const code = await child.translateCtxAndChildren();
 			genCode = genCode.concat(code);
 		}
 		return genCode;
-	}
-
-	/**
-	 * Analysis the code and generates the typescript code for this item, and its children. This will log all warnings
-	 * using {@link programCtx.logger} and throw errors if encountered.
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async compileCtx(): Promise<Array<TranslatedCodeLine>> {
-		await this.semanticAnalysis();
-		return await this.translate();
 	}
 }

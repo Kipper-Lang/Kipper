@@ -33,20 +33,21 @@ import {
 	VariableDeclaration,
 } from "./tokens";
 import {
-	BuiltInOverwriteError,
-	FunctionDefinitionAlreadyExistsError,
-	IdentifierAlreadyUsedByFunctionError,
-	IdentifierAlreadyUsedByVariableError,
-	InvalidArgumentTypeError,
-	InvalidGlobalError,
-	KipperError,
-	KipperNotImplementedError,
-	UndefinedIdentifierError,
-	UnknownFunctionIdentifierError,
-	UnknownIdentifier,
-	UnknownTypeError,
-	UnknownVariableIdentifierError,
-	VariableDefinitionAlreadyExistsError,
+  BuiltInOverwriteError,
+  FunctionDefinitionAlreadyExistsError,
+  IdentifierAlreadyUsedByFunctionError,
+  IdentifierAlreadyUsedByVariableError,
+  InvalidArgumentTypeError,
+  InvalidGlobalError,
+  KipperError,
+  KipperNotImplementedError,
+  UndefinedIdentifierError,
+  UndefinedSemanticsError,
+  UnknownFunctionIdentifierError,
+  UnknownIdentifier,
+  UnknownTypeError,
+  UnknownVariableIdentifierError,
+  VariableDefinitionAlreadyExistsError,
 } from "../errors";
 import { KipperCompileTarget } from "./target";
 
@@ -366,50 +367,50 @@ export class CompileAssert {
  */
 export class KipperProgramContext {
 	/**
-	 * The private '_stream' that actually stores the variable data,
+	 * The private field '_stream' that actually stores the variable data,
 	 * which is returned inside the {@link this.stream}.
 	 * @private
 	 */
 	private readonly _stream: KipperParseStream;
 
 	/**
-	 * The private '_parseTreeEntry' that actually stores the variable data,
+	 * The private field '_parseTreeEntry' that actually stores the variable data,
 	 * which is returned inside the {@link this.parseTreeEntry}.
 	 * @private
 	 */
 	private readonly _antlrParseTree: CompilationUnitContext;
 
 	/**
-	 * The private '_parser' that actually stores the variable data,
+	 * The private field '_parser' that actually stores the variable data,
 	 * which is returned inside the {@link this.parser}.
 	 * @private
 	 */
 	private readonly _parser: KipperParser;
 
 	/**
-	 * The private '_lexer' that actually stores the variable data,
+	 * The private field '_lexer' that actually stores the variable data,
 	 * which is returned inside the {@link this.lexer}.
 	 * @private
 	 */
 	private readonly _lexer: KipperLexer;
 
 	/**
-	 * The private '_builtInGlobals' that actually stores the variable data,
+	 * The private field '_builtInGlobals' that actually stores the variable data,
 	 * which is returned inside the getter {@link this.builtInGlobals}.
 	 * @private
 	 */
 	private _builtInGlobals: Array<BuiltInFunction>;
 
 	/**
-	 * The private '_processedParseTree' that actually stores the variable data,
+	 * The private field '_processedParseTree' that actually stores the variable data,
 	 * which is returned inside the {@link this.processedParseTree}.
 	 * @private
 	 */
 	private _processedParseTree: RootFileParseToken | undefined;
 
 	/**
-	 * The private '_typescriptCode' that will store the cached code, once 'typescriptCode' has been called. This is to
-	 * avoid running the function unnecessarily and generate code again, even though it already exists.
+	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
+   * to avoid running the function unnecessarily and generate code again, even though it already exists.
 	 * @private
 	 */
 	private _compiledCode: Array<Array<string>> | undefined;
@@ -589,6 +590,42 @@ export class KipperProgramContext {
 		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
 	}
 
+  /**
+   * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
+   * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
+   *
+   * If {@link this.processedParseTree} is undefined, then it will automatically run
+   * {@link this.generateProcessedParseTree} to generate it.
+   * @since 0.6.0
+   */
+  public async semanticAnalysis(): Promise<void> {
+    if (!this._processedParseTree) {
+      this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
+    }
+
+    return await this._processedParseTree.semanticAnalysis();
+  }
+
+  /**
+   * Translates the {@link CompilableParseToken} contained in the {@link this.processedParseTree}. This function should
+   * only be used if {@link semanticAnalysis} has been run before, otherwise it will throw an
+   * {@link UndefinedSemanticsError}.
+   *
+   * If {@link this.processedParseTree} is undefined, then it will automatically run
+   * {@link this.generateProcessedParseTree} to generate it.
+   * @since 0.6.0
+   */
+  public async translate(): Promise<Array<TranslatedCodeLine>> {
+    if (!this._processedParseTree) {
+      throw new UndefinedSemanticsError();
+    }
+
+    let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
+
+    // Append required typescript code for Kipper for the program to work properly
+    return (await this.generateRequirements()).concat(genCode);
+  }
+
 	/**
 	 * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
 	 *
@@ -603,12 +640,13 @@ export class KipperProgramContext {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
 		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
-		// Translating the context instances and children
-		this.logger.info(`Translating code to TypeScript for '${this.stream.name}'.`);
-		let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.compileCtx();
+    // Running the semantic analysis
+    this.logger.info(`Running the semantic analysis for '${this.stream.name}'.`);
+    await this.semanticAnalysis();
 
-		// Append required typescript code for Kipper for the program to work properly
-		genCode = (await this.generateRequirements()).concat(genCode);
+		// Translating the context instances and children
+		this.logger.info(`Translating code to '${this.target.targetName}' for '${this.stream.name}'.`);
+		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
 		this.logger.debug(
 			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +

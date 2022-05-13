@@ -63,7 +63,7 @@ export interface DeclarationSemantics {
  */
 export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -114,7 +114,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  */
 export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -183,7 +183,7 @@ export interface FunctionDeclarationSemantics {
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -263,7 +263,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
