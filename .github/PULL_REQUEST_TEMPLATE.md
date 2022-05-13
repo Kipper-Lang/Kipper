@@ -14,9 +14,9 @@
 ## Summary
 <!-- Explain the reason for this pr, changes and solution briefly. -->
 
-<!-- Summary -->
+... <!-- Summary -->
 
-Closes # (issue) <!-- Remove this if this is not a bug fix PR -->
+Closes # <!-- Remove this if this is not a bug fix PR -->
 
 ## Changes
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, explain what fixed the issue. -->
