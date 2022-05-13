@@ -15,6 +15,7 @@ import {
 	KipperArithmeticOperator,
 	KipperType,
 	kipperTypes,
+	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 } from "./logic";
@@ -29,16 +30,19 @@ import {
 	VariableDeclaration,
 } from "./tokens";
 import {
-  BuiltInOverwriteError,
-  FunctionDefinitionAlreadyExistsError,
-  IdentifierAlreadyUsedByFunctionError,
-  IdentifierAlreadyUsedByVariableError,
-  InvalidArgumentTypeError,
-  InvalidGlobalError,
-  KipperError,
-  UnknownFunctionIdentifierError, UnknownIdentifier,
-  UnknownTypeError,
-  VariableDefinitionAlreadyExistsError,
+	BuiltInOverwriteError,
+	FunctionDefinitionAlreadyExistsError,
+	IdentifierAlreadyUsedByFunctionError,
+	IdentifierAlreadyUsedByVariableError,
+	InvalidArgumentTypeError,
+	InvalidGlobalError,
+	KipperError,
+	UndefinedIdentifierError,
+	UnknownFunctionIdentifierError,
+	UnknownIdentifier,
+	UnknownTypeError,
+	UnknownVariableIdentifierError,
+	VariableDefinitionAlreadyExistsError,
 } from "../errors";
 import { KipperCompileTarget } from "./target";
 
@@ -107,28 +111,57 @@ export class CompileAssert {
 	}
 
 	/**
+	 * Checks whether an identifier is declared. If the variable is defined it will also pass.
+	 * @param identifier The identifier to check for.
+	 * @since 0.6.0
+	 */
+	public identifierIsDeclared(identifier: string): void {
+		if (!this.programCtx.getGlobalIdentifier(identifier)) {
+			throw this.assertError(new UnknownIdentifier(identifier));
+		}
+	}
+
+	/**
+	 * Checks whether an identifier is defined. If the variable is declared it will also fail!
+	 * @param identifier The identifier to check for.
+	 * @since 0.6.0
+	 */
+	public identifierIsDefined(identifier: string): void {
+		const val = this.programCtx.getGlobalIdentifier(identifier);
+		if (!val) {
+			throw this.assertError(new UnknownIdentifier(identifier));
+		}
+
+		const isBuiltinDefined = "handler" in val; // BuiltInFunction 'handler' property -> always defined
+		const isDeclarationDefined = val instanceof ScopeDeclaration && val.isDefined; // User-defined -> may be defined
+		if (!isBuiltinDefined && !isDeclarationDefined) {
+			throw this.assertError(new UndefinedIdentifierError(identifier));
+		}
+	}
+
+	/**
 	 * Asserts that the passed variable identifier is defined.
 	 * @param identifier The identifier of the function.
-   * @deprecated
+	 * @deprecated
 	 */
 	public functionIsDefined(identifier: string): void {
-    console.warn("'CompileAssert.functionIsDefined' is deprecated, replace with 'identifierIsDefined'");
+		console.warn("'CompileAssert.functionIsDefined' is deprecated, replace with 'identifierIsDefined'");
 		if (!this.programCtx.getGlobalFunction(identifier)) {
 			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
 		}
 	}
 
-  /**
-   * Asserts that the passed variable identifier is defined.
-   * @param identifier The identifier of the variable.
-   * @deprecated
-   */
-  public variableIsDefined(identifier: string): void {
-    console.warn("'CompileAssert.variableIsDefined' is deprecated, replace with 'identifierIsDefined'");
-    if (!this.programCtx.getGlobalVariable(identifier)) {
-      throw this.assertError(new UnknownIdentifier(identifier));
-    }
-  }
+	/**
+	 * Asserts that the passed variable identifier is defined.
+	 * @param identifier The identifier of the variable.
+	 * @deprecated
+	 */
+	public variableIsDefined(identifier: string): void {
+		console.warn("'CompileAssert.variableIsDefined' is deprecated, replace with 'identifierIsDefined'");
+		if (!this.programCtx.getGlobalVariable(identifier)) {
+			throw this.assertError(new UnknownVariableIdentifierError(identifier));
+		}
+	}
 
 	/**
 	 * Asserts that the passed function identifier is not defined.
@@ -147,13 +180,10 @@ export class CompileAssert {
 	 * of the {@link KipperProgramContext program}.
 	 */
 	public variableIdentifierNotDeclared(identifier: string, scope?: CompoundStatement): void {
-		// Always check in the global scope
 		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
-		if (this.programCtx.globalScope.find(check)) {
-			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
-		}
 
-		if (this.programCtx.getGlobalVariable(identifier)) {
+		// Always check in the global scope
+		if (this.programCtx.globalScope.find(check)) {
 			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
@@ -170,12 +200,12 @@ export class CompileAssert {
 	 * of the {@link KipperProgramContext program}.
 	 */
 	public variableIdentifierNotDefined(identifier: string, scope?: CompoundStatement): void {
-    // Always check in the global scope
 		const check = (v: { identifier: string }) => {
 			// Return true only if the identifier match and the variable is DEFINED
 			return v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined;
 		};
 
+		// Always check in the global scope
 		if (this.programCtx.globalScope.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
@@ -271,7 +301,7 @@ export class CompileAssert {
 	public getExistingFunction(identifier: string): BuiltInFunction | ScopeFunctionDeclaration {
 		const func = this.programCtx.getGlobalFunction(identifier);
 		if (func === undefined) {
-			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
+			throw this.assertError(new UnknownIdentifier(identifier));
 		} else {
 			return func;
 		}
@@ -624,10 +654,10 @@ export class KipperProgramContext {
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
 		if (token instanceof VariableDeclaration) {
-			this.assert(token).functionIdentifierNotUsed(semanticData.identifier);
+			this.assert(token).functionIdentifierNotDeclared(semanticData.identifier);
 			this.assert(token).variableIdentifierNotDefined(semanticData.identifier);
 		} else {
-			this.assert(token).variableIdentifierNotUsed(semanticData.identifier);
+			this.assert(token).variableIdentifierNotDeclared(semanticData.identifier);
 			this.assert(token).functionIdentifierNotDefined(semanticData.identifier);
 		}
 
@@ -635,13 +665,4 @@ export class KipperProgramContext {
 			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),
 		);
 	}
-
-  /**
-   * Gets the evaluated type of an identifier.
-   * @param identifier The identifier to check for.
-   */
-  public getTypeOfIdentifier(identifier: string): void {
-    this.assert(token).identifierIsDefined(identifier);
-
-  }
 }

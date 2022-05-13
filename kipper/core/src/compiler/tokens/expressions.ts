@@ -477,6 +477,11 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const identifier = this.sourceCode;
+
+    // Make sure the referenced variable even exists!
+		this.programCtx.assert(this).identifierIsDefined(identifier);
+
 		this.semanticData = {
 			identifier: this.sourceCode,
 		};

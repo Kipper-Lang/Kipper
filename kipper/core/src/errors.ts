@@ -232,12 +232,23 @@ export abstract class IdentifierError extends KipperError {
 }
 
 /**
+ * Error that is thrown when a variable is used that is only declared and has no value set.
+ */
+export class UndefinedIdentifierError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`Identifier '${identifier}' has been declared, but not defined.`);
+    this.name = "UndefinedIdentifierError";
+	}
+}
+
+/**
  * Error that is thrown when an identifier is used that is unknown to the program.
  * @since 0.6.0
  */
 export class UnknownIdentifier extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown identifier '${identifier}'.`);
+    this.name = "UnknownIdentifier";
 	}
 }
 
@@ -245,11 +256,11 @@ export class UnknownIdentifier extends IdentifierError {
  * Error that is thrown when a variable definition is used, but it is unknown to the program.
  * @deprecated
  */
-export class UnknownVariableIdentifier extends IdentifierError {
-  constructor(identifier: string) {
-    super(`Unknown variable identifier '${identifier}'.`);
-    console.warn("'UnknownVariableIdentifier' is deprecated, replace with 'UnknownIdentifier'");
-  }
+export class UnknownVariableIdentifierError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`Unknown variable identifier '${identifier}'.`);
+		console.warn("'UnknownVariableIdentifier' is deprecated, replace with 'UnknownIdentifier'");
+	}
 }
 
 /**
@@ -259,7 +270,7 @@ export class UnknownVariableIdentifier extends IdentifierError {
 export class UnknownFunctionIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown function identifier '${identifier}'.`);
-    console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifier'");
+		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifier'");
 	}
 }
 

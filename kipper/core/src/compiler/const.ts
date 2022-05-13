@@ -65,7 +65,7 @@ export type KipperListType<ValueType extends KipperType> = "list";
  * All available variable types inside Kipper.
  */
 export type KipperType =
-  | KipperFuncType
+	| KipperFuncType
 	| KipperVoidType
 	| KipperNumType
 	| KipperStrType
