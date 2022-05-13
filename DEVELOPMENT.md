@@ -16,7 +16,7 @@ Install the following extensions:
 - [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-### Install dependencies
+## Install dependencies
 
 Whenever dependencies in `package.json` are changed, run the following command:
 
@@ -29,6 +29,17 @@ To only install resolved dependencies in `package-lock.json`:
 ```sh
 pnpm install --frozen-lockfile
 ```
+
+## Force LF line-endings
+
+To force git to use LF line endings everywhere, run the following commands in your console:
+
+```bash
+git config --global core.autocrlf false
+git config --global core.eol lf
+```
+
+Remove the `--global` tags if you want to keep using `CRLF` on other git repositories.
 
 ## Other scripts for Development
 
@@ -78,7 +89,7 @@ pnpm run build
 
 ## Making a new release
 
-1. Get new version for the next release 
+1. Get new version for the next release
    (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
 
    ```bash
@@ -88,16 +99,17 @@ pnpm run build
    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
    For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
-
 2. Update CHANGELOG.md and replace `Unreleased` with new version identifier:
 
-   *Skip this step unless it's a stable release!*
+   _Skip this step unless it's a stable release!_
 
    ```markdown
    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
-  
+
    ### Added
+
    ### Changed
+
    ### Removed
    ```
 
@@ -113,42 +125,52 @@ pnpm run build
    ```
    Bumped static index.ts versions to MAJOR.MINOR.PATCH
    ```
-   
+
    For example:
+
    ```
    Bumped static versions to 0.5.0-rc.0
    ```
 
 4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
    the remote host):
+
    ```bash
    pnpm run bump MAJOR.MINOR.PATCH
    ```
 
-   It is important that this script is run *AFTER* the previous step, so that the commits associated with the tags
+   It is important that this script is run _AFTER_ the previous step, so that the commits associated with the tags
    already have the version identifiers in the `index.ts` files updated.
 
-6. Then login into your account:
+5. Then login into your account:
+
    ```bash
    pnpm login
    ```
 
-7. Afterwards publish each package. View for every file the specific release notes in their
+6. Afterwards publish each package. View for every file the specific release notes in their
    respective `DEVELOPMENT.md` files:
 
-   - For a stable release: 
+   - For a stable release:
+
    ```bash
    pnpm publish --access public && pnpm -r publish --access public
    ```
+
    - For a release candidate:
+
    ```bash
    pnpm publish --access public --tag rc && pnpm -r publish --access public --tag rc
    ```
+
    - For a beta release:
+
    ```bash
    pnpm publish --access public --tag beta && pnpm -r publish --access public --tag beta
    ```
+
    - For an alpha release:
+
    ```bash
    pnpm publish --access public --tag alpha && pnpm -r publish --access public --tag alpha
    ```
