@@ -7,7 +7,6 @@
 import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
-	ArgumentExpressionListContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
 	CastOrConvertExpressionContext,
@@ -74,8 +73,7 @@ export type antlrExpressionCtxType =
 	| LogicalAndExpressionContext
 	| LogicalOrExpressionContext
 	| ConditionalExpressionContext
-	| AssignmentExpressionContext
-	| ArgumentExpressionListContext;
+	| AssignmentExpressionContext;
 
 /**
  * Fetches the handler for the specified {@link antlrExpressionCtxType}.
@@ -106,8 +104,6 @@ export function getExpressionInstance(
 		return new IncrementOrDecrementExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof FunctionCallPostfixExpressionContext) {
 		return new FunctionCallPostfixExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof ArgumentExpressionListContext) {
-		return new ArgumentExpressionListExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
 		return new IncrementOrDecrementUnaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof OperatorModifiedUnaryExpressionContext) {
@@ -157,7 +153,7 @@ export interface ExpressionSemantics {
  */
 export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -249,7 +245,7 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -307,7 +303,7 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -365,7 +361,7 @@ export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -424,7 +420,7 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -478,7 +474,7 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
  */
 export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -548,7 +544,7 @@ export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -598,7 +594,7 @@ export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -652,7 +648,7 @@ export interface IncrementOrDecrementExpressionSemantics extends ExpressionSeman
  */
 export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrementExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -707,7 +703,7 @@ export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {
  */
 export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -772,7 +768,7 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
  */
 export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfixExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -814,52 +810,6 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 }
 
 /**
- * Semantics for {@link ArgumentExpressionListExpression}.
- * @since 0.5.0
- */
-export interface ArgumentExpressionListExpressionSemantics {}
-
-/**
- * Argument expression list used inside a function call.
- * @since 0.2.0
- * @example
- * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
- */
-export class ArgumentExpressionListExpression extends Expression<ArgumentExpressionListExpressionSemantics> {
-	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: ArgumentExpressionListContext;
-
-	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
-	}
-
-	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ArgumentExpressionListContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArgumentExpressionListExpression> =
-		this.semanticAnalyser.argumentExpressionList;
-	targetCodeGenerator: TargetTokenCodeGenerator<ArgumentExpressionListExpression, TranslatedExpression> =
-		this.codeGenerator.argumentExpressionList;
-}
-
-/**
  * Semantics for {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
@@ -874,7 +824,7 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends Expression
  */
 export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -931,7 +881,7 @@ export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSema
  */
 export class OperatorModifiedUnaryExpression extends Expression<OperatorModifiedUnaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -988,7 +938,7 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {}
  */
 export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1082,7 +1032,7 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
  */
 export class MultiplicativeExpression extends Expression<MultiplicativeExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1163,7 +1113,7 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
  */
 export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1233,7 +1183,7 @@ export interface RelationalExpressionSemantics extends ExpressionSemantics {}
  */
 export class RelationalExpression extends Expression<RelationalExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1292,7 +1242,7 @@ export interface EqualityExpressionSemantics extends ExpressionSemantics {}
  */
 export class EqualityExpression extends Expression<EqualityExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1350,7 +1300,7 @@ export interface LogicalAndExpressionSemantics extends ExpressionSemantics {}
  */
 export class LogicalAndExpression extends Expression<LogicalAndExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1407,7 +1357,7 @@ export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
  */
 export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1461,7 +1411,7 @@ export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
  */
 export class ConditionalExpression extends Expression<ConditionalExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1515,7 +1465,7 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {}
  */
 export class AssignmentExpression extends Expression<AssignmentExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
