@@ -17,8 +17,7 @@ import {
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../parser";
-import { KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
-import { CompoundStatement } from "./statements";
+import { KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
@@ -252,7 +251,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	storageType: KipperStorageType;
 	valueType: KipperType;
 	isDefined: boolean;
-	scope: KipperProgramContext | CompoundStatement;
+	scope: KipperScope;
 }
 
 /**
