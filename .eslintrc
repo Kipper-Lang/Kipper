@@ -26,5 +26,8 @@
 	},
 	"globals": {
 		"BufferEncoding": true
-	}
+	},
+  "ignorePatterns": [
+    "parser/*.ts"
+  ]
 }
