@@ -4,6 +4,7 @@
     "declaration": true,
     "importHelpers": true,
     "removeComments": true,
+    "noImplicitAny": false,
     "moduleResolution": "node",
     "module": "commonjs",
     "rootDir": "kipper",
