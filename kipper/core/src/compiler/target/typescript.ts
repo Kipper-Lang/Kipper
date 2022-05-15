@@ -352,11 +352,11 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Compile the arguments
 		let args: Array<TranslatedCodeToken> = [];
-    for (const i of semanticData.args) {
-      // Generating the code for each expression and adding a whitespace for primitive formatting
-      args = [...args, ...(await i.translateCtxAndChildren()), " "];
-    }
-    args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
+		for (const i of semanticData.args) {
+			// Generating the code for each expression and adding a whitespace for primitive formatting
+			args = [...args, ...(await i.translateCtxAndChildren()), " "];
+		}
+		args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
 
 		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];

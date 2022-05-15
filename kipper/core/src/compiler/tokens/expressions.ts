@@ -757,11 +757,11 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
 	 * @since 0.5.0
 	 */
 	function: KipperFunction;
-  /**
-   * The arguments that were passed to this function.
-   * @since 0.6.0
-   */
-  args: Array<Expression<any>>;
+	/**
+	 * The arguments that were passed to this function.
+	 * @since 0.6.0
+	 */
+	args: Array<Expression<any>>;
 }
 
 /**
@@ -795,7 +795,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 			evaluatedType: "void",
 			identifier: identifierSemantics.identifier,
 			args: this.children.slice(1, this.children.length), // Every item from index 0 to the end is an argument
-      // Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
+			// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
 			function: this.programCtx.assert(this).getExistingFunction(identifierSemantics.identifier),
 		};
 
