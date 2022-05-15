@@ -95,3 +95,19 @@ export const builtinPrint: BuiltInFunction = {
 	handler: ["function _kipperGlobal_print(printText: string): void { console.log(printText); }"],
 	returnType: "void",
 };
+
+/**
+ * The default built-in functions that are supported in the browser.
+ * @since 0.6.0
+ */
+export const defaultWebBuiltIns: Array<BuiltInFunction> = [
+  builtinPrint
+];
+
+/**
+ * The default built-in functions that are supported in Node.js
+ * @since 0.6.0
+ */
+export const defaultNodeBuiltIns: Array<BuiltInFunction> = [
+  builtinPrint
+];

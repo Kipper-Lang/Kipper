@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parse-stream";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, builtinPrint } from "./logic";
+import { BuiltInFunction, defaultNodeBuiltIns, defaultWebBuiltIns, isBrowser } from "./logic";
 import { KipperCompileTarget } from "./target";
 import { TypeScriptTarget } from "./target/typescript";
 
@@ -62,7 +62,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		globals: [builtinPrint],
+		globals: isBrowser ? defaultWebBuiltIns : defaultNodeBuiltIns, // Assume node if it's not a browser
 		extendGlobals: [],
 		fileName: "anonymous-script",
 		target: new TypeScriptTarget(),
