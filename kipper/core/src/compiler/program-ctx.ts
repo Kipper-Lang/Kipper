@@ -49,7 +49,7 @@ import {
 	UndefinedIdentifierError,
 	UndefinedSemanticsError,
 	UnknownFunctionIdentifierError,
-	UnknownIdentifier,
+	UnknownIdentifierError,
 	UnknownTypeError,
 	UnknownVariableIdentifierError,
 	VariableDefinitionAlreadyExistsError,
@@ -139,13 +139,13 @@ export class CompileAssert {
 	public identifierIsDeclared(identifier: string, scope?: CompoundStatement): void {
 		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
 		if (!val) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		}
 
 		const isBuiltinDeclared = "handler" in val; // BuiltInFunction 'handler' property -> always declared/defined
 		const isDeclarationDeclared = val instanceof ScopeDeclaration; // User-defined -> always declared, sometimes defined
 		if (!isBuiltinDeclared && !isDeclarationDeclared) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		}
 	}
 
@@ -159,7 +159,7 @@ export class CompileAssert {
 	public identifierIsDefined(identifier: string, scope?: CompoundStatement): void {
 		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
 		if (!val) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		}
 
 		const isBuiltinDefined = "handler" in val; // BuiltInFunction 'handler' property -> always defined
@@ -280,14 +280,14 @@ export class CompileAssert {
 	}
 
 	/**
-	 * Checks whether the assignment of the expression to the variable is valid.
+	 * Asserts that the assignment of the expression to the variable is valid.
 	 * @todo Implement assignment checks!
 	 */
 	// eslint-disable-next-line no-unused-vars
 	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression<any>): void {}
 
 	/**
-	 * Checks whether the passed type allows the arithmetic operation.
+	 * Asserts that the passed type allows the arithmetic operation.
 	 * @param exp1 The first expression.
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
@@ -359,7 +359,7 @@ export class CompileAssert {
 	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
 		const ref = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
 		if (ref === undefined) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
 			return ref;
 		}
@@ -374,7 +374,7 @@ export class CompileAssert {
 	public getExistingVariable(identifier: string, scope?: CompoundStatement): ScopeVariableDeclaration {
 		const variable = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalVariable(identifier);
 		if (variable === undefined) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
 			return variable;
 		}
@@ -388,7 +388,7 @@ export class CompileAssert {
 	public getExistingFunction(identifier: string): KipperFunction {
 		const func = this.programCtx.getGlobalFunction(identifier);
 		if (func === undefined) {
-			throw this.assertError(new UnknownIdentifier(identifier));
+			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
 			return func;
 		}
