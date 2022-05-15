@@ -212,7 +212,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.write().includes(fileContent.replace(/ /g, "")), "Expected compiled code to not change");
+				assert(instance.write().includes(fileContent), "Expected compiled code to not change");
 			});
 		});
 

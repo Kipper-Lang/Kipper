@@ -38,7 +38,7 @@ import {
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
 } from "../tokens";
-import { ScopeFunctionDeclaration, TranslatedCodeLine, TranslatedExpression } from "../logic";
+import { ScopeFunctionDeclaration, TranslatedCodeLine, TranslatedCodeToken, TranslatedExpression } from "../logic";
 import { ArgumentExpressionListContext } from "../parser";
 
 export class TypeScriptTarget extends KipperCompileTarget {
@@ -347,16 +347,16 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const tokenChildren = token.ensureTokenChildrenExist();
 		const func = token.programCtx.assert(token).getExistingFunction(semanticData.identifier);
 
-		// Get the arguments
-		let argListCtx = <ArgumentExpressionListContext | undefined>(
-			tokenChildren.find((val) => val instanceof ArgumentExpressionListContext)
-		);
-
 		// Add builtin identifier prefix '_kipperGlobal_'
 		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
 
 		// Compile the arguments
-		const args: TranslatedExpression = []; // TODO! Implement argument compilation
+		let args: Array<TranslatedCodeToken> = [];
+    for (const i of semanticData.args) {
+      // Generating the code for each expression and adding a whitespace for primitive formatting
+      args = [...args, ...(await i.translateCtxAndChildren()), " "];
+    }
+    args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
 
 		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];
