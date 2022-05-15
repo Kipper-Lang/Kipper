@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New functions `CompoundStatement.getLocalVariable()` and `CompoundStatement.getVariableRecursively()` for fetching
   a variable based on an identifier inside a `CompoundStatement`/`KipperScope`.
 - Errors when using features that are not implemented yet using a new error class `KipperNotImplementedError`.
-- Field `args` to `FunctionCallPostfixExpressionSemantics` to contain the `Expression` instances used to represent
+- Field `args` in `FunctionCallPostfixExpressionSemantics`, which contains the `Expression` instances representing
   the arguments of a function call.
 
 ### Changed
