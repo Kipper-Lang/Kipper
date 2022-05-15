@@ -2,5 +2,13 @@
   "extension": ["ts"],
   "timeout": 15000,
   "exit": true,
-  "require": "ts-node/register"
+  "recursive": true,
+  "reporter": "spec",
+  "require": "ts-node/register",
+  "extensions": ["ts", "tsx"],
+  "watch-files": [
+    "test/**/*",
+    "kipper/cli/src/**/*",
+    "kipper/core/src/**/*"
+  ]
 }
