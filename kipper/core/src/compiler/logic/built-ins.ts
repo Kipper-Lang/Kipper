@@ -20,7 +20,7 @@ export interface BuiltInFunctionArgument {
 	 * This value does not affect the behaviour of the language, as named-arguments are not implemented in Kipper. This
 	 * only serves the purpose of readability and allowing easier differentiation.
 	 * @since 0.6.0
-   */
+	 */
 	identifier: string;
 	/**
 	 * The type of the argument inside the function
@@ -81,14 +81,14 @@ export interface BuiltInFunction {
 }
 
 /**
- * The code for the global print function that works inside the Web-Browser
+ * The code for the global print function that works inside the Web-Browser and Node.js.
  * @since 0.1.0
  */
-export const builtInWebPrintFunction: BuiltInFunction = {
+export const builtinPrint: BuiltInFunction = {
 	identifier: "print",
 	args: [
 		{
-			identifier: "printText",
+			identifier: "msg",
 			type: "str",
 		},
 	],
