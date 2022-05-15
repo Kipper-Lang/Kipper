@@ -512,66 +512,66 @@ describe("KipperCompiler", () => {
 
 				describe("InvalidAmountOfArgumentsError", () => {
 					describe("Error", () => {
-            it("One too many", async () => {
-              try {
-                await new KipperCompiler().compile(new KipperParseStream('call print("x", "x");'));
-              } catch (e) {
-                assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
-                assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
-                assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-                assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
-                assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-                assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
-                return;
-              }
-              assert(false, "Expected 'InvalidAmountOfArgumentsError'");
-            });
+						it("One too many", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream('call print("x", "x");'));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
+								assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+						});
 
-            it("Two too many", async () => {
-              try {
-                await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x");'));
-              } catch (e) {
-                assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
-                assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
-                assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-                assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
-                assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-                assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
-                return;
-              }
-              assert(false, "Expected 'InvalidAmountOfArgumentsError'");
-            });
+						it("Two too many", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x");'));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
+								assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+						});
 
-            it("Three too many", async () => {
-              try {
-                await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x", "x");'));
-              } catch (e) {
-                assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
-                assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
-                assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-                assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
-                assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-                assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
-                return;
-              }
-              assert(false, "Expected 'InvalidAmountOfArgumentsError'");
-            });
+						it("Three too many", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x", "x");'));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
+								assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+						});
 
-            it("Too little", async () => {
-              try {
-                await new KipperCompiler().compile(new KipperParseStream('call print();'));
-              } catch (e) {
-                assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
-                assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
-                assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-                assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
-                assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-                assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
-                return;
-              }
-              assert(false, "Expected 'InvalidAmountOfArgumentsError'");
-            });
-          });
+						it("Too little", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream("call print();"));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
+								assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+						});
+					});
 
 					it("NoError", async () => {
 						try {

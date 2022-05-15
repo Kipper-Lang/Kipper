@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
   - `getParseTreeSource`, which fetches the source code for a parse tree.
   - `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
-     error in case that the children tokens are undefined.
+    error in case that the children tokens are undefined.
   - `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling)
   - `KipperProgramContext.translate`, which translates a processed parse tree.
   - `CompileAssert.getExistingVariable` and `CompileAssert.getExistingReference` for fetching reference variables based
