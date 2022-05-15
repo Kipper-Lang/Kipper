@@ -17,7 +17,7 @@ import {
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../parser";
-import { KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
@@ -57,8 +57,11 @@ export interface DeclarationSemantics {
 }
 
 /**
- * Base Declaration class that represents a value or function declaration or definition in Kipper and is compilable
- * using {@link translateCtxAndChildren}.
+ * Base Declaration class that represents a value or function declaration or definition in Kipper.
+ *
+ * Any declarations in Kipper will be registered in a {@link KipperScope} or be associated with another parent
+ * declaration, like {@link ParameterDeclaration parameter declarations} in
+ * {@link FunctionDeclaration function declarations}.
  * @since 0.1.0
  */
 export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
@@ -160,7 +163,7 @@ export interface FunctionDeclarationSemantics {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: KipperType;
+	returnType: KipperReturnType;
 	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
@@ -222,11 +225,14 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			throw new UnableToDetermineMetadataError();
 		}
 
+		const type: KipperType = <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval);
+		this.programCtx.assert(this).validReturnType(type);
+
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
 			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
-			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
+			returnType: <KipperReturnType>type,
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 
