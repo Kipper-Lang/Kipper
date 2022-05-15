@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperScope, KipperStorageType, KipperType } from "../const";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "../const";
 import {
 	Declaration,
 	FunctionDeclaration,
@@ -118,21 +118,24 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The identifier of this entry.
+	 * The identifier of this function.
 	 */
 	public get identifier(): string {
 		return this.semanticData.identifier;
 	}
 
 	/**
-	 * The function return type.
+	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): KipperType {
+	public get returnType(): KipperReturnType {
 		return this.semanticData.returnType;
 	}
 
 	/**
-	 * The storage type of this scope entry.
+	 * The args that are accepted inside this function. These are represented using {@link ParameterDeclaration}.
+	 *
+	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
+	 * array maps to the first argument inside the function.
 	 */
 	public get args(): Array<ParameterDeclaration> {
 		return this.semanticData.args;
