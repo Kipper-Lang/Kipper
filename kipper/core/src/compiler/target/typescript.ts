@@ -394,7 +394,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
-		return [...exp1, semanticData.operator, ...exp2];
+		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 
 	/**
@@ -406,7 +406,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
-		return [...exp1, semanticData.operator, ...exp2];
+		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 
 	/**
