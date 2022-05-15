@@ -255,10 +255,10 @@ export class UndefinedIdentifierError extends IdentifierError {
  * Error that is thrown when an identifier is used that is unknown to the program.
  * @since 0.6.0
  */
-export class UnknownIdentifier extends IdentifierError {
+export class UnknownIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown identifier '${identifier}'.`);
-		this.name = "UnknownIdentifier";
+		this.name = "UnknownIdentifierError";
 	}
 }
 
@@ -269,7 +269,7 @@ export class UnknownIdentifier extends IdentifierError {
 export class UnknownVariableIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown variable identifier '${identifier}'.`);
-		console.warn("'UnknownVariableIdentifier' is deprecated, replace with 'UnknownIdentifier'");
+		console.warn("'UnknownVariableIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
 	}
 }
 
@@ -280,7 +280,7 @@ export class UnknownVariableIdentifierError extends IdentifierError {
 export class UnknownFunctionIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown function identifier '${identifier}'.`);
-		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifier'");
+		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
 	}
 }
 
@@ -339,26 +339,54 @@ export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError 
  * Represents all errors in the mismatching type group.
  * @since 0.3.0
  */
-export class MismatchedTypesErrors extends KipperError {
+export class InvalidTypeError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
-		this.name = "InvalidOverwriteError";
+		this.name = "InvalidTypeError";
+	}
+}
+
+export class InvalidReturnTypeError extends InvalidTypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be returned.`);
+		this.name = "InvalidReturnTypeError";
 	}
 }
 
 /**
- * Invalid argument type that is not assignable/usable on the parameter.
+ * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class InvalidArgumentTypeError extends MismatchedTypesErrors {
-	constructor(argIdentifier: string, expectedType: string, receivedType: string) {
+export class InvalidArgumentTypeError extends InvalidTypeError {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
 		super(
-			`Argument of type '${receivedType}' is not assignable to parameter '${argIdentifier}' of type '${expectedType}'.`,
+			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
 		);
 	}
 }
 
 /**
- * This error is thrown whenever a variable type is used that is unknown the kipper language.
+ * Generic error with arguments of a function call.
+ * @since 0.6.0
+ */
+export class ArgumentError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "ArgumentError";
+	}
+}
+
+/**
+ * Error that is thrown when an invalid amount of arguments is passed to a function.
+ * @since 0.6.0
+ */
+export class InvalidAmountOfArgumentsError extends ArgumentError {
+	constructor(func: string, expected: number, received: number) {
+		super(`Expected ${expected} arguments for function '${func}', received ${received}.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a variable type is used that is unknown the kipper language.
  */
 export class UnknownTypeError extends KipperError {
 	constructor(type: string) {
@@ -367,7 +395,7 @@ export class UnknownTypeError extends KipperError {
 }
 
 /**
- * This error is thrown whenever an identifier is registered that interferes with a built-in function or variable.
+ * Error that is thrown whenever an identifier is registered that interferes with a built-in function or variable.
  * No double definitions or overwrites of global built-in definitions allowed!
  */
 export class BuiltInOverwriteError extends KipperError {
@@ -377,7 +405,7 @@ export class BuiltInOverwriteError extends KipperError {
 }
 
 /**
- * This error is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
+ * Error that is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
  * compilation is started without the required semantic data.
  */
 export class UnableToDetermineMetadataError extends KipperInternalError {
@@ -387,7 +415,7 @@ export class UnableToDetermineMetadataError extends KipperInternalError {
 }
 
 /**
- * This error is thrown whenever the semantics of a token is undefined.
+ * Error that is thrown whenever the {@link CompilableParseToken.semanticData} field of a token is undefined.
  * @since 0.6.0
  */
 export class UndefinedSemanticsError extends KipperInternalError {
