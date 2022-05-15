@@ -10,6 +10,15 @@ import type { CompoundStatement } from "./tokens";
 import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
 
 /**
+ * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
+ * be applied.
+ * @since 0.6.0
+ */
+// @ts-ignore
+// eslint-disable-next-line no-undef
+export const isBrowser = typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
+
+/**
  * Function type in Kipper.
  * @since 0.6.0
  */
@@ -69,12 +78,7 @@ export type KipperListType<ValueType extends KipperType> = "list";
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType =
-  | KipperVoidType
-  | KipperNumType
-  | KipperStrType
-  | KipperCharType
-  | KipperBoolType;
+export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperCharType | KipperBoolType;
 
 /**
  * All primitive types inside Kipper.
@@ -85,10 +89,7 @@ export const kipperPrimitiveTypes = ["void", "num", "str", "char", "bool"];
 /**
  * All available variable types inside Kipper.
  */
-export type KipperType =
-	| KipperFuncType
-	| KipperPrimitiveType
-	| KipperListType<any>;
+export type KipperType = KipperFuncType | KipperPrimitiveType | KipperListType<any>;
 
 /**
  * All available variable types inside Kipper.
