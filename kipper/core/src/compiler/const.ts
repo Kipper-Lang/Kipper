@@ -66,21 +66,46 @@ export type KipperBoolType = "bool";
 export type KipperListType<ValueType extends KipperType> = "list";
 
 /**
+ * All primitive types inside Kipper.
+ * @since 0.6.0
+ */
+export type KipperPrimitiveType =
+  | KipperVoidType
+  | KipperNumType
+  | KipperStrType
+  | KipperCharType
+  | KipperBoolType;
+
+/**
+ * All primitive types inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperPrimitiveTypes = ["void", "num", "str", "char", "bool"];
+
+/**
  * All available variable types inside Kipper.
  */
 export type KipperType =
 	| KipperFuncType
-	| KipperVoidType
-	| KipperNumType
-	| KipperStrType
-	| KipperCharType
-	| KipperBoolType
+	| KipperPrimitiveType
 	| KipperListType<any>;
 
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = ["void", "num", "str", "char", "bool", "list"];
+export const kipperTypes: Array<string> = ["func", ...kipperPrimitiveTypes, "list"];
+
+/**
+ * Types that may be returned by a function.
+ * @since 0.6.0
+ */
+export type KipperReturnType = KipperPrimitiveType | KipperListType<any>;
+
+/**
+ * Types that may be returned by a function.
+ * @since 0.6.0
+ */
+export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"];
 
 /**
  * All available storage types inside Kipper.
