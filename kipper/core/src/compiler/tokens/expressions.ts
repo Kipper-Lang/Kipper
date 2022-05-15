@@ -136,19 +136,23 @@ export function getExpressionInstance(
  */
 export interface ExpressionSemantics {
 	/**
-	 * The value type that this expression evaluates to. This is used to properly show the return type of expressions
-	 * that do not explicitly show their type, like {@link FunctionCallPostfixExpression function call expressions}.
+	 * The value type that this expression evaluates to. This is used to properly represent the return type of
+	 * expressions that do not explicitly show their type, like
+	 * {@link FunctionCallPostfixExpression function call expressions}. The evaluated types of these
+	 * {@link Expression expressions} depend on their {@link Declaration declarations}, unlike
+	 * {@link NumberPrimaryExpression number expressions} which always are of type {@link KipperNumType}.
 	 *
-	 * This is an important field, as its essential for type checking in arithmetic expressions and making sure arguments
-	 * have matching types.
+	 * This is an important field, as its essential for any form type checking.
 	 * @since 0.6.0
 	 */
 	evaluatedType: KipperType;
 }
 
 /**
- * Expression class, which represents an expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Expression class, which represents an expression in the Kipper language. Expressions are the fundamental logic
+ * of the Kipper language and will {@link ExpressionSemantics.evaluatedType evaluate to a specific type} that can be
+ * either used in another expression or discarded.
+ * @abstract
  * @since 0.1.0
  */
 export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableParseToken<Semantics> {
@@ -414,8 +418,7 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * String class, which represents a string expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * String class, which represents a string expression in the Kipper language.
  * @since 0.1.0
  */
 export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
@@ -468,8 +471,7 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
 }
 
 /**
- * Identifier expression class, which represents an identifier in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Identifier expression class, which represents an identifier in the Kipper language.
  * @since 0.1.0
  */
 export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
@@ -538,8 +540,7 @@ export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * F-String class, which represents an f-string expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * F-String class, which represents an f-string expression in the Kipper language.
  * @since 0.1.0
  */
 export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics> {
@@ -765,8 +766,7 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
 }
 
 /**
- * Function call class, which represents a function call expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Function call class, which represents a function call expression in the Kipper language.
  * @since 0.1.0
  * @example
  * call print("Hello world!")
@@ -799,7 +799,8 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 			function: this.programCtx.assert(this).getExistingFunction(identifierSemantics.identifier),
 		};
 
-		// TODO! Type checking
+		// Verify that the argument are valid.
+		this.programCtx.assert(this).validFunctionCallArguments(this.semanticData.function, this.semanticData.args);
 	}
 
 	/**
@@ -935,8 +936,7 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Convert expression class, which represents a conversion expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Convert expression class, which represents a conversion expression in the Kipper language.
  * @since 0.1.0
  * @example
  * "4" as num // 4
@@ -1110,8 +1110,7 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 }
 
 /**
- * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Additive expression class, which represents an additive expression in the Kipper language.
  * @since 0.1.0
  * @example
  * 4 + 4 // 8
@@ -1172,8 +1171,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 export interface RelationalExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Relational expression class, which represents a relational expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Relational expression class, which represents a relational expression in the Kipper language.
  * @since 0.1.0
  * @example
  * 19 > 11 // true
@@ -1352,8 +1350,7 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Logical-Or expression class, which represents a logical-or expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Logical-Or expression class, which represents a logical-or expression in the Kipper language.
  * @since 0.1.0
  * @example
  * false || false // false

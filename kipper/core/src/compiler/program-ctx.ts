@@ -12,9 +12,11 @@ import { KipperParseStream } from "./parse-stream";
 import { KipperFileListener } from "./listener";
 import {
 	BuiltInFunction,
+	BuiltInFunctionArgument,
 	KipperArithmeticOperator,
 	KipperFunction,
 	KipperRef,
+	kipperReturnTypes,
 	KipperType,
 	kipperTypes,
 	ScopeDeclaration,
@@ -27,6 +29,7 @@ import {
 	CompilableParseToken,
 	CompoundStatement,
 	Expression,
+	ExpressionSemantics,
 	FunctionDeclaration,
 	ParameterDeclaration,
 	RootFileParseToken,
@@ -37,8 +40,10 @@ import {
 	FunctionDefinitionAlreadyExistsError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByVariableError,
+	InvalidAmountOfArgumentsError,
 	InvalidArgumentTypeError,
 	InvalidGlobalError,
+	InvalidReturnTypeError,
 	KipperError,
 	KipperNotImplementedError,
 	UndefinedIdentifierError,
@@ -263,11 +268,11 @@ export class CompileAssert {
 	 * @param arg The parameter that the value was passed to.
 	 * @param receivedType The type that was received.
 	 * @example
-	 * call print("x"); // <-- Types must match
+	 * call print("x"); // <-- Parameter type 'str' must match type of argument "x"
 	 * @since 0.3.0
 	 */
-	public argumentTypesMatch(arg: ParameterDeclaration, receivedType: KipperType): void {
-		const semanticData = arg.ensureSemanticDataExists();
+	public argumentTypesMatch(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
+		const semanticData = arg instanceof ParameterDeclaration ? arg.ensureSemanticDataExists() : arg;
 
 		if (semanticData.type !== receivedType) {
 			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
@@ -314,6 +319,35 @@ export class CompileAssert {
 		if (identifierAlreadyExists || globalAlreadyExists) {
 			throw this.assertError(new InvalidGlobalError(identifier));
 		}
+	}
+
+	/**
+	 * Asserts that the argument type is valid.
+	 * @param type
+	 */
+	public validReturnType(type: KipperType): void {
+		// If the type is not in the array of valid return types, throw an error
+		if (!kipperReturnTypes.find((t) => t === type)) {
+			throw this.assertError(new InvalidReturnTypeError(type));
+		}
+	}
+
+	/**
+	 * Asserts that the passed function arguments are valid.
+	 * @param func The function that is called.
+	 * @param args The arguments for the call expression.
+	 * @since 0.6.0
+	 */
+	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
+		if (func.args.length != args.length) {
+			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
+		}
+
+		// Iterate through both arrays at the same type to verify each type is valid
+		args.forEach((arg: Expression<ExpressionSemantics>, index) => {
+			const semanticData = arg.ensureSemanticDataExists();
+			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
+		});
 	}
 
 	/**
