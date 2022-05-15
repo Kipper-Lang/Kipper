@@ -5,6 +5,15 @@
     "rootDir": ".",
     "noImplicitAny": false
   },
+  "files": [
+    "../kipper/**/*.ts",
+    "../kipper/core/src/**/*.ts",
+    "../kipper/cli/src/**/*.ts",
+    "../module/**/*.ts"
+  ],
+  "ts-node": {
+    "files": true
+  },
   "references": [
     {"path": "../kipper"},
     {"path": "../kipper/core"},
