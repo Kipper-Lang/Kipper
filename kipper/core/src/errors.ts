@@ -346,10 +346,26 @@ export class InvalidTypeError extends KipperError {
 	}
 }
 
+/**
+ * Error that is thrown whenever a return type is used that may not be returned.
+ * @since 0.6.0
+ */
 export class InvalidReturnTypeError extends InvalidTypeError {
 	constructor(type: string) {
 		super(`Type '${type}' can not be returned.`);
 		this.name = "InvalidReturnTypeError";
+	}
+}
+
+/**
+ * Error that is thrown whenever an invalid arithmetic operation is used, where the types are conflicting or can not
+ * interact with one another.
+ * @since 0.6.0
+ */
+export class InvalidArithmeticOperationError extends InvalidTypeError {
+	constructor(firstType: string, secondType: string) {
+		super(`Invalid arithmetic operation between types '${firstType}' and ${secondType}.`);
+		this.name = "InvalidArithmeticOperationError";
 	}
 }
 
