@@ -25,12 +25,26 @@ export const isBrowser = typeof window !== "undefined" && {}.toString.call(windo
 export type KipperFuncType = "func";
 
 /**
+ * Function type in Kipper.
+ * @since 0.6.0
+ */
+export const kipperFuncType: KipperFuncType = "func";
+
+/**
  * Void type in Kipper.
  * @since 0.5.0
  * @example
  * void
  */
 export type KipperVoidType = "void";
+
+/**
+ * Void type in Kipper.
+ * @since 0.5.0
+ * @example
+ * void
+ */
+export const kipperVoidType: KipperVoidType = "void";
 
 /**
  * Numeric type in Kipper.
@@ -41,12 +55,28 @@ export type KipperVoidType = "void";
 export type KipperNumType = "num";
 
 /**
+ * Numeric type in Kipper.
+ * @since 0.5.0
+ * @example
+ * num
+ */
+export const kipperNumType: KipperNumType = "num";
+
+/**
  * String type in Kipper.
  * @since 0.5.0
  * @example
  * str
  */
 export type KipperStrType = "str";
+
+/**
+ * String type in Kipper.
+ * @since 0.5.0
+ * @example
+ * str
+ */
+export const kipperStrType: KipperStrType = "str";
 
 /**
  * Char type in Kipper.
@@ -57,12 +87,28 @@ export type KipperStrType = "str";
 export type KipperCharType = "char";
 
 /**
+ * Char type in Kipper.
+ * @since 0.5.0
+ * @example
+ * char
+ */
+export const kipperCharType: KipperCharType = "char";
+
+/**
  * Boolean type in Kipper.
  * @since 0.5.0
  * @example
  * bool
  */
 export type KipperBoolType = "bool";
+
+/**
+ * Boolean type in Kipper.
+ * @since 0.5.0
+ * @example
+ * bool
+ */
+export const kipperBoolType: KipperBoolType = "bool";
 
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
@@ -75,6 +121,27 @@ export type KipperBoolType = "bool";
 export type KipperListType<ValueType extends KipperType> = "list";
 
 /**
+ * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
+ * type checking generic type, it will not change the type itself.
+ * @since 0.5.0
+ * @example
+ * list<T>
+ */
+export const kipperListType: KipperListType<any> = "list";
+
+/**
+ * String-like types that include both char and string.
+ * @since 0.6.0
+ */
+export type KipperStrLikeTypes = KipperStrType | KipperCharType;
+
+/**
+ * String-like types that include both char and string.
+ * @since 0.6.0
+ */
+export const kipperStrLikeTypes: Array<KipperStrType | KipperCharType> = [kipperStrType, kipperCharType];
+
+/**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
@@ -84,7 +151,7 @@ export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export const kipperPrimitiveTypes = ["void", "num", "str", "char", "bool"];
+export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperCharType, kipperBoolType];
 
 /**
  * All available variable types inside Kipper.
@@ -94,7 +161,7 @@ export type KipperType = KipperFuncType | KipperPrimitiveType | KipperListType<a
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = ["func", ...kipperPrimitiveTypes, "list"];
+export const kipperTypes: Array<string> = [kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
 
 /**
  * Types that may be returned by a function.
@@ -132,16 +199,40 @@ export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
 export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
 
 /**
- * All available additive operations inside Kipper.
+ * The plus operator.
  * @since 0.6.0
  */
-export type KipperAdditiveOperator = "-" | "+";
+export type KipperPlusOperator = "+";
+
+/**
+ * The plus operator.
+ * @since 0.6.0
+ */
+export const kipperPlusOperator: KipperPlusOperator = "+";
+
+/**
+ * The minus operator.
+ * @since 0.6.0
+ */
+export type KipperMinusOperator = "-";
+
+/**
+ * The minus operator.
+ * @since 0.6.0
+ */
+export const kipperMinusOperator: KipperMinusOperator = "-";
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperAdditiveOperators = ["-", "+"];
+export type KipperAdditiveOperator = KipperMinusOperator | KipperPlusOperator;
+
+/**
+ * All available additive operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperAdditiveOperators = [kipperMinusOperator, kipperPlusOperator];
 
 /**
  * All available arithmetic operations inside Kipper.
