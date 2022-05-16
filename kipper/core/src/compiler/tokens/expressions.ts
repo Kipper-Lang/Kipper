@@ -1072,6 +1072,10 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			exp2: this.children[1], // Second expression
 			operator: <KipperMultiplicativeOperator>operator,
 		};
+
+		this.programCtx
+			.assert(this)
+			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1150,6 +1154,10 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			exp2: this.children[1], // Second expression
 			operator: <KipperAdditiveOperator>operator,
 		};
+
+		this.programCtx
+			.assert(this)
+			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
