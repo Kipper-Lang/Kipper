@@ -253,10 +253,30 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
  * @since 0.3.0
  */
 export interface VariableDeclarationSemantics extends SemanticData {
+	/**
+	 * The identifier of this variable.
+	 * @since 0.5.0
+	 */
 	identifier: string;
+	/**
+	 * The storage type option for this variable.
+	 * @since 0.5.0
+	 */
 	storageType: KipperStorageType;
+	/**
+	 * The type of the value.
+	 * @since 0.5.0
+	 */
 	valueType: KipperType;
+	/**
+	 * If this is true then the variable has a defined value.
+	 * @since 0.5.0
+	 */
 	isDefined: boolean;
+	/**
+	 * The scope of this variable.
+	 * @since 0.5.0
+	 */
 	scope: KipperScope;
 }
 
