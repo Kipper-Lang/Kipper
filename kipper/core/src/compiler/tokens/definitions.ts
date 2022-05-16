@@ -17,8 +17,7 @@ import {
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../parser";
-import { KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
-import { CompoundStatement } from "./statements";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
@@ -58,13 +57,16 @@ export interface DeclarationSemantics {
 }
 
 /**
- * Base Declaration class that represents a value or function declaration or definition in Kipper and is compilable
- * using {@link translateCtxAndChildren}.
+ * Base Declaration class that represents a value or function declaration or definition in Kipper.
+ *
+ * Any declarations in Kipper will be registered in a {@link KipperScope} or be associated with another parent
+ * declaration, like {@link ParameterDeclaration parameter declarations} in
+ * {@link FunctionDeclaration function declarations}.
  * @since 0.1.0
  */
 export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -115,7 +117,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  */
 export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -161,7 +163,7 @@ export interface FunctionDeclarationSemantics {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: KipperType;
+	returnType: KipperReturnType;
 	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
@@ -184,7 +186,7 @@ export interface FunctionDeclarationSemantics {
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -223,11 +225,14 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			throw new UnableToDetermineMetadataError();
 		}
 
+		const type: KipperType = <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval);
+		this.programCtx.assert(this).validReturnType(type);
+
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
 			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
-			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
+			returnType: <KipperReturnType>type,
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 
@@ -248,11 +253,31 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
  * @since 0.3.0
  */
 export interface VariableDeclarationSemantics extends SemanticData {
+	/**
+	 * The identifier of this variable.
+	 * @since 0.5.0
+	 */
 	identifier: string;
+	/**
+	 * The storage type option for this variable.
+	 * @since 0.5.0
+	 */
 	storageType: KipperStorageType;
+	/**
+	 * The type of the value.
+	 * @since 0.5.0
+	 */
 	valueType: KipperType;
+	/**
+	 * If this is true then the variable has a defined value.
+	 * @since 0.5.0
+	 */
 	isDefined: boolean;
-	scope: KipperProgramContext | CompoundStatement;
+	/**
+	 * The scope of this variable.
+	 * @since 0.5.0
+	 */
+	scope: KipperScope;
 }
 
 /**
@@ -264,7 +289,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */

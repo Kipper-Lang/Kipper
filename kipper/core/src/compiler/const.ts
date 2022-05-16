@@ -5,6 +5,31 @@
  * @since 0.3.0
  */
 
+import type { KipperProgramContext } from "./program-ctx";
+import type { CompoundStatement } from "./tokens";
+import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
+
+/**
+ * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
+ * be applied.
+ * @since 0.6.0
+ */
+// @ts-ignore
+// eslint-disable-next-line no-undef
+export const isBrowser = typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
+
+/**
+ * Function type in Kipper.
+ * @since 0.6.0
+ */
+export type KipperFuncType = "func";
+
+/**
+ * Function type in Kipper.
+ * @since 0.6.0
+ */
+export const kipperFuncType: KipperFuncType = "func";
+
 /**
  * Void type in Kipper.
  * @since 0.5.0
@@ -12,6 +37,15 @@
  * void
  */
 export type KipperVoidType = "void";
+
+/**
+ * Void type in Kipper.
+ * @since 0.5.0
+ * @example
+ * void
+ */
+export const kipperVoidType: KipperVoidType = "void";
+
 /**
  * Numeric type in Kipper.
  * @since 0.5.0
@@ -19,6 +53,15 @@ export type KipperVoidType = "void";
  * num
  */
 export type KipperNumType = "num";
+
+/**
+ * Numeric type in Kipper.
+ * @since 0.5.0
+ * @example
+ * num
+ */
+export const kipperNumType: KipperNumType = "num";
+
 /**
  * String type in Kipper.
  * @since 0.5.0
@@ -26,6 +69,15 @@ export type KipperNumType = "num";
  * str
  */
 export type KipperStrType = "str";
+
+/**
+ * String type in Kipper.
+ * @since 0.5.0
+ * @example
+ * str
+ */
+export const kipperStrType: KipperStrType = "str";
+
 /**
  * Char type in Kipper.
  * @since 0.5.0
@@ -33,6 +85,15 @@ export type KipperStrType = "str";
  * char
  */
 export type KipperCharType = "char";
+
+/**
+ * Char type in Kipper.
+ * @since 0.5.0
+ * @example
+ * char
+ */
+export const kipperCharType: KipperCharType = "char";
+
 /**
  * Boolean type in Kipper.
  * @since 0.5.0
@@ -40,6 +101,15 @@ export type KipperCharType = "char";
  * bool
  */
 export type KipperBoolType = "bool";
+
+/**
+ * Boolean type in Kipper.
+ * @since 0.5.0
+ * @example
+ * bool
+ */
+export const kipperBoolType: KipperBoolType = "bool";
+
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
  * type checking generic type, it will not change the type itself.
@@ -51,20 +121,59 @@ export type KipperBoolType = "bool";
 export type KipperListType<ValueType extends KipperType> = "list";
 
 /**
- * All available variable types inside Kipper.
+ * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
+ * type checking generic type, it will not change the type itself.
+ * @since 0.5.0
+ * @example
+ * list<T>
  */
-export type KipperType =
-	| KipperVoidType
-	| KipperNumType
-	| KipperStrType
-	| KipperCharType
-	| KipperBoolType
-	| KipperListType<any>;
+export const kipperListType: KipperListType<any> = "list";
+
+/**
+ * String-like types that include both char and string.
+ * @since 0.6.0
+ */
+export type KipperStrLikeTypes = KipperStrType | KipperCharType;
+
+/**
+ * String-like types that include both char and string.
+ * @since 0.6.0
+ */
+export const kipperStrLikeTypes: Array<KipperStrType | KipperCharType> = [kipperStrType, kipperCharType];
+
+/**
+ * All primitive types inside Kipper.
+ * @since 0.6.0
+ */
+export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperCharType | KipperBoolType;
+
+/**
+ * All primitive types inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperCharType, kipperBoolType];
 
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = ["void", "num", "str", "char", "bool", "list"];
+export type KipperType = KipperFuncType | KipperPrimitiveType | KipperListType<any>;
+
+/**
+ * All available variable types inside Kipper.
+ */
+export const kipperTypes: Array<string> = [kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
+
+/**
+ * Types that may be returned by a function.
+ * @since 0.6.0
+ */
+export type KipperReturnType = KipperPrimitiveType | KipperListType<any>;
+
+/**
+ * Types that may be returned by a function.
+ * @since 0.6.0
+ */
+export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"];
 
 /**
  * All available storage types inside Kipper.
@@ -90,16 +199,40 @@ export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
 export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
 
 /**
- * All available additive operations inside Kipper.
+ * The plus operator.
  * @since 0.6.0
  */
-export type KipperAdditiveOperator = "-" | "+";
+export type KipperPlusOperator = "+";
+
+/**
+ * The plus operator.
+ * @since 0.6.0
+ */
+export const kipperPlusOperator: KipperPlusOperator = "+";
+
+/**
+ * The minus operator.
+ * @since 0.6.0
+ */
+export type KipperMinusOperator = "-";
+
+/**
+ * The minus operator.
+ * @since 0.6.0
+ */
+export const kipperMinusOperator: KipperMinusOperator = "-";
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperAdditiveOperators = ["-", "+"];
+export type KipperAdditiveOperator = KipperMinusOperator | KipperPlusOperator;
+
+/**
+ * All available additive operations inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperAdditiveOperators = [kipperMinusOperator, kipperPlusOperator];
 
 /**
  * All available arithmetic operations inside Kipper.
@@ -143,3 +276,26 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
  * @since 0.5.0
  */
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
+
+/**
+ * Represents a scope for a {@link CompilableParseToken}.
+ * @since 0.6.0
+ */
+export type KipperScope = KipperProgramContext | CompoundStatement;
+
+/**
+ * Represents a Kipper function that can be either declared or defined.
+ * @since 0.6.0
+ */
+export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
+
+/**
+ * Represents a Kipper variable that can be either declared or defined.
+ */
+export type KipperVariable = ScopeVariableDeclaration;
+
+/**
+ * Represents a reference that can be used as an identifier.
+ * @since 0.6.0
+ */
+export type KipperRef = KipperFunction | KipperVariable;

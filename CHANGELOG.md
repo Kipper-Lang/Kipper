@@ -11,22 +11,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implemented TypeScript translation for constant numeric values (`NumberPrimaryExpression`).
 - Implemented TypeScript translation for arithmetic expressions: `MultiplicativeExpression` and `AdditiveExpression`.
-- New function `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
-  error in case that the children tokens are undefined.
-- New types `KipperMultiplicativeOperator` and `KipperAdditiveOperator`.
-- New constant variables `kipperStorageTypes`, `kipperMultiplicativeOperators`, `kipperAdditiveOperators`,
-  `kipperArithmeticOperators` and `kipperArithmeticAssignOperators`.
-- New function `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
-- New function `getParseTreeSource`, which fetches the source code for a parse tree.
-- New error `UndefinedSemanticsError`, which specifically is thrown whenever the semantics are undefined.
+- New base interface `ExpressionSemantics`, which is the base for all expression semantics.
 - New interface `ArithmeticExpressionSemantics` which is used as a parent for `MultiplicativeExpressionSemantics` and
   `AdditiveExpressionSemantics`.
+- Field `args` in `FunctionCallPostfixExpressionSemantics`, which contains the `Expression` instances representing
+  the arguments of a function call.
+- New functions:
+  - `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
+  - `getParseTreeSource`, which fetches the source code for a parse tree.
+  - `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
+    error in case that the children tokens are undefined.
+  - `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling)
+  - `KipperProgramContext.translate`, which translates a processed parse tree.
+  - `CompileAssert.getExistingVariable` and `CompileAssert.getExistingReference` for fetching reference variables based
+    on an identifier.
+  - `CompoundStatement.getLocalVariable()` and `CompoundStatement.getVariableRecursively()` for fetching
+    a variable based on an identifier inside a `CompoundStatement`/`KipperScope`.
+- New types:
+  - `KipperReturnType`, which represents valid types that may be returned from a function.
+  - `KipperPrimitiveType`, which represents primitive types in Kipper.
+  - `KipperMultiplicativeOperator`, which represents multiplicative operators (`*`, `/`, `**` and `%`).
+  - `KipperAdditiveOperator`, which represents additive operators (`+` and `-`).
+  - `KipperPlusOperator`, which represents the Kipper plus operator.
+  - `KipperMinusOperator`, which represents the Kipper minus operator.
+  - `KipperStrLikeTypes`, which represents string-like Kipper types, like `char` and `str`.
+- New errors:
+  - `UndefinedSemanticsError`, which specifically is thrown whenever the semantics of a token are undefined.
+  - `UndefinedIdentifierError`, which is thrown when an identifier is referenced that does not exist.
+  - `ArgumentError`, which is thrown whenever there is an error related to invalid arguments inside a function call.
+  - `InvalidReturnTypeError`, which is thrown whenever an invalid type is set as return type of a function.
+  - `InvalidAmountOfArgumentsError`, which is thrown whenever an invalid amount of arguments is passed to a function.
+  - `InvalidArithmeticOperationError`, which is thrown whenever an invalid arithmetic operation is performed.
+  - `KipperNotImplementedError`, which is thrown when a feature is used that is not yet implemented in Kipper.
+- New constants:
+  - `defaultWebBuiltIns` and `defaultNodeBuiltIns`, which provide the default built-in functions for Kipper.
+    Kipper will attempt from now on to detect whether the environment is a browser and use `defaultWebBuiltIns` in
+    that case and otherwise default to `defaultNodeBuiltIns`.
+  - `kipperStorageTypes`, which represents all valid storage types in Kipper.
+  - `kipperMultiplicativeOperators`, which represents all valid multiplicative operators in Kipper.
+  - `kipperAdditiveOperators`, which represents all valid additive operators in Kipper.
+  - `kipperArithmeticOperators`, which combines both `kipperAdditiveOperators` and `kipperMultiplicativeOperators`.
+  - `kipperVoidType`, which represents the Kipper void type.
+  - `kipperFuncType`, which represents the Kipper func type.
+  - `kipperBoolType`, which represents the Kipper bool type.
+  - `kipperNumType`, which represents the Kipper num type.
+  - `kipperCharType`, which represents the Kipper char type.
+  - `kipperStrType`, which represents the Kipper str type.
+  - `kipperPlusOperator`, which represents the Kipper plus operator.
+  - `kipperMinusOperator`, which represents the Kipper minus operator.
+  - `kipperStrLikeTypes`, which represents string-like Kipper types, like `char` and `str`.
 
 ### Changed
 
-- Renamed `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
-  fetches the code for a single `Token` instance.
-- Renamed `CompilableParseToken.antlrCtx` to `antlrRuleCtx`.
+- Renamed:
+  - `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
+    fetches the code for a single `Token` instance.
+  - `CompilableParseToken.antlrCtx` to `antlrRuleCtx`.
+  - `functionIdentifierNotUsed` to `functionIdentifierNotDeclared`.
+  - `variableIdentifierNotUsed` to `variableIdentifierNotDeclared`.
+  - Field `name` to `identifier` in interface `BuiltInFunctionArgument`.
+- Deprecated the following items (Should be removed in `0.8.0`):
+  - `variableIsDefined`
+  - `functionIsDefined`
+  - `UnknownVariableIdentifierError`
+  - `UnknownFunctionIdentifierError`
+
+### Removed
+
+- Invalid expression class `ArgumentExpressionListExpression` and its abstract translation function in
+  `KipperTargetCodeGenerator`.
+- Unneeded function `RootFileParseToken.compileCtx`.
 
 ## [0.5.0] - 2022-05-11
 

@@ -6,7 +6,6 @@
  */
 import {
 	type AdditiveExpression,
-	type ArgumentExpressionListExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
 	type CastOrConvertExpression,
@@ -66,38 +65,47 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link CompoundStatement} into a specific language.
 	 */
 	public abstract compoundStatement: TargetTokenCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link SelectionStatement} into a specific language.
 	 */
 	public abstract selectionStatement: TargetTokenCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link ExpressionStatement} into a specific language.
 	 */
 	public abstract expressionStatement: TargetTokenCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link IterationStatement} into a specific language.
 	 */
 	public abstract iterationStatement: TargetTokenCodeGenerator<IterationStatement, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
 	 */
 	public abstract jumpStatement: TargetTokenCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link ParameterDeclaration} into a specific language.
 	 */
 	public abstract parameterDeclaration: TargetTokenCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link FunctionDeclaration} into a specific language.
 	 */
 	public abstract functionDeclaration: TargetTokenCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract variableDeclaration: TargetTokenCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>>;
+
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.
 	 */
 	public abstract numberPrimaryExpression: TargetTokenCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link CharacterPrimaryExpression} into a specific language.
 	 */
@@ -105,10 +113,12 @@ export abstract class KipperTargetCodeGenerator {
 		CharacterPrimaryExpression,
 		TranslatedExpression
 	>;
+
 	/**
 	 * Translates a {@link ListPrimaryExpression} into a specific language.
 	 */
 	public abstract listPrimaryExpression: TargetTokenCodeGenerator<ListPrimaryExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.
 	 */
@@ -116,22 +126,27 @@ export abstract class KipperTargetCodeGenerator {
 		IdentifierPrimaryExpression,
 		TranslatedExpression
 	>;
+
 	/**
 	 * Translates a {@link StringPrimaryExpression} into a specific language.
 	 */
 	public abstract stringPrimaryExpression: TargetTokenCodeGenerator<StringPrimaryExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link FStringPrimaryExpression} into a specific language.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.
 	 */
 	public abstract tangledPrimaryExpression: TargetTokenCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link ArraySpecifierExpression} into a specific language.
 	 */
 	public abstract arraySpecifierExpression: TargetTokenCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link IncrementOrDecrementExpression} into a specific language.
 	 */
@@ -139,6 +154,7 @@ export abstract class KipperTargetCodeGenerator {
 		IncrementOrDecrementExpression,
 		TranslatedExpression
 	>;
+
 	/**
 	 * Translates a {@link FunctionCallPostfixExpression} into a specific language.
 	 */
@@ -146,13 +162,7 @@ export abstract class KipperTargetCodeGenerator {
 		FunctionCallPostfixExpression,
 		TranslatedExpression
 	>;
-	/**
-	 * Translates a {@link ArgumentExpressionListExpression} into a specific language.
-	 */
-	public abstract argumentExpressionList: TargetTokenCodeGenerator<
-		ArgumentExpressionListExpression,
-		TranslatedExpression
-	>;
+
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.
 	 */
@@ -160,6 +170,7 @@ export abstract class KipperTargetCodeGenerator {
 		IncrementOrDecrementUnaryExpression,
 		TranslatedExpression
 	>;
+
 	/**
 	 * Translates a {@link OperatorModifiedUnaryExpression} into a specific language.
 	 */
@@ -167,38 +178,47 @@ export abstract class KipperTargetCodeGenerator {
 		OperatorModifiedUnaryExpression,
 		TranslatedExpression
 	>;
+
 	/**
 	 * Translates a {@link CastOrConvertExpression} into a specific language.
 	 */
 	public abstract castOrConvertExpression: TargetTokenCodeGenerator<CastOrConvertExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link MultiplicativeExpression} into a specific language.
 	 */
 	public abstract multiplicativeExpression: TargetTokenCodeGenerator<MultiplicativeExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link AdditiveExpression} into a specific language.
 	 */
 	public abstract additiveExpression: TargetTokenCodeGenerator<AdditiveExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link RelationalExpression} into a specific language.
 	 */
 	public abstract relationalExpression: TargetTokenCodeGenerator<RelationalExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link EqualityExpression} into a specific language.
 	 */
 	public abstract equalityExpression: TargetTokenCodeGenerator<EqualityExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link LogicalAndExpression} into a specific language.
 	 */
 	public abstract logicalAndExpression: TargetTokenCodeGenerator<LogicalAndExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link LogicalOrExpression} into a specific language.
 	 */
 	public abstract logicalOrExpression: TargetTokenCodeGenerator<LogicalOrExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link ConditionalExpression} into a specific language.
 	 */
 	public abstract conditionalExpression: TargetTokenCodeGenerator<ConditionalExpression, TranslatedExpression>;
+
 	/**
 	 * Translates a {@link AssignmentExpression} into a specific language.
 	 */

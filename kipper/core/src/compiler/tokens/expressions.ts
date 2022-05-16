@@ -7,7 +7,6 @@
 import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
-	ArgumentExpressionListContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
 	CastOrConvertExpressionContext,
@@ -30,24 +29,25 @@ import {
 	TangledPrimaryExpressionContext,
 } from "../parser";
 import {
-	BuiltInFunction,
 	KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	KipperArithmeticOperator,
 	KipperCharType,
+	KipperFunction,
 	KipperListType,
 	KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNumType,
 	KipperStrType,
 	KipperType,
-	ScopeFunctionDeclaration,
+	ScopeVariableDeclaration,
 	TranslatedExpression,
 } from "../logic";
-import { UnableToDetermineMetadataError } from "../../errors";
+import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../errors";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
+import { CompoundStatement } from "./statements";
 
 /**
  * Every antlr4 expression ctx type
@@ -73,8 +73,7 @@ export type antlrExpressionCtxType =
 	| LogicalAndExpressionContext
 	| LogicalOrExpressionContext
 	| ConditionalExpressionContext
-	| AssignmentExpressionContext
-	| ArgumentExpressionListContext;
+	| AssignmentExpressionContext;
 
 /**
  * Fetches the handler for the specified {@link antlrExpressionCtxType}.
@@ -105,8 +104,6 @@ export function getExpressionInstance(
 		return new IncrementOrDecrementExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof FunctionCallPostfixExpressionContext) {
 		return new FunctionCallPostfixExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof ArgumentExpressionListContext) {
-		return new ArgumentExpressionListExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
 		return new IncrementOrDecrementUnaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof OperatorModifiedUnaryExpressionContext) {
@@ -134,13 +131,33 @@ export function getExpressionInstance(
 }
 
 /**
- * Expression class, which represents an expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Semantics for any expression.
+ * @since 0.6.0
+ */
+export interface ExpressionSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the return type of
+	 * expressions that do not explicitly show their type, like
+	 * {@link FunctionCallPostfixExpression function call expressions}. The evaluated types of these
+	 * {@link Expression expressions} depend on their {@link Declaration declarations}, unlike
+	 * {@link NumberPrimaryExpression number expressions} which always are of type {@link KipperNumType}.
+	 *
+	 * This is an important field, as its essential for any form type checking.
+	 * @since 0.6.0
+	 */
+	evaluatedType: KipperType;
+}
+
+/**
+ * Expression class, which represents an expression in the Kipper language. Expressions are the fundamental logic
+ * of the Kipper language and will {@link ExpressionSemantics.evaluatedType evaluate to a specific type} that can be
+ * either used in another expression or discarded.
+ * @abstract
  * @since 0.1.0
  */
-export abstract class Expression<Semantics> extends CompilableParseToken<Semantics> {
+export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -188,12 +205,12 @@ export abstract class Expression<Semantics> extends CompilableParseToken<Semanti
  * Semantics for {@link ConstantExpression}.
  * @since 0.5.0
  */
-export interface ConstantExpressionSemantics {
+export interface ConstantExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type of the constant expression.
-	 * @since 0.5.0
+	 * @since 0.6.0
 	 */
-	type: KipperType;
+	evaluatedType: KipperType;
 	/**
 	 * The value of the constant expression. This is usually either a {@link String} or {@link Number}.
 	 * @since 0.5.0
@@ -211,12 +228,12 @@ export abstract class ConstantExpression<Semantics extends ConstantExpressionSem
  * Semantics for {@link NumberPrimaryExpression}.
  * @since 0.5.0
  */
-export interface NumberPrimaryExpressionSemantics {
+export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type of the constant expression.
-	 * @since 0.5.0
+	 * @since 0.6.0
 	 */
-	type: KipperNumType;
+	evaluatedType: KipperNumType;
 	/**
 	 * The value of the constant number expression. We don't bother converting this to a number, since it's an unnecessary
 	 * conversion.
@@ -232,7 +249,7 @@ export interface NumberPrimaryExpressionSemantics {
  */
 export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -250,7 +267,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: this.sourceCode,
-			type: "num",
+			evaluatedType: "num",
 		};
 	}
 
@@ -271,12 +288,12 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
  * Semantics for {@link CharacterPrimaryExpression}.
  * @since 0.5.0
  */
-export interface CharacterPrimaryExpressionSemantics {
+export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type of the constant character expression.
 	 * @since 0.5.0
 	 */
-	type: KipperCharType;
+	evaluatedType: KipperCharType;
 	/**
 	 * The value of the constant character expression.
 	 * @since 0.5.0
@@ -290,7 +307,7 @@ export interface CharacterPrimaryExpressionSemantics {
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -308,7 +325,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
-			type: "char",
+			evaluatedType: "char",
 		};
 	}
 
@@ -329,12 +346,12 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
  * Semantics for {@link ListPrimaryExpression}.
  * @since 0.5.0
  */
-export interface ListPrimaryExpressionSemantics {
+export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type of the constant list expression.
 	 * @since 0.5.0
 	 */
-	type: KipperListType<KipperType>;
+	evaluatedType: KipperListType<KipperType>;
 	/**
 	 * The value of the constant list expression.
 	 * @since 0.5.0
@@ -348,7 +365,7 @@ export interface ListPrimaryExpressionSemantics {
  */
 export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -365,7 +382,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			type: "list",
+			evaluatedType: "list",
 			value: [], // TODO! Implement list data fetching.
 		};
 	}
@@ -387,12 +404,12 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
  * Semantics for {@link StringPrimaryExpression}.
  * @since 0.5.0
  */
-export interface StringPrimaryExpressionSemantics {
+export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type of the constant string expression.
 	 * @since 0.5.0
 	 */
-	type: KipperStrType;
+	evaluatedType: KipperStrType;
 	/**
 	 * The value of the constant string expression.
 	 * @since 0.5.0
@@ -401,13 +418,12 @@ export interface StringPrimaryExpressionSemantics {
 }
 
 /**
- * String class, which represents a string expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * String class, which represents a string expression in the Kipper language.
  * @since 0.1.0
  */
 export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -424,7 +440,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			type: "str",
+			evaluatedType: "str",
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
 		};
 	}
@@ -446,7 +462,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
  * Semantics for {@link IdentifierPrimaryExpression}.
  * @since 0.5.0
  */
-export interface IdentifierPrimaryExpressionSemantics {
+export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The constant identifier.
 	 * @since 0.5.0
@@ -455,13 +471,12 @@ export interface IdentifierPrimaryExpressionSemantics {
 }
 
 /**
- * Identifier expression class, which represents an identifier in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Identifier expression class, which represents an identifier in the Kipper language.
  * @since 0.1.0
  */
 export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -477,8 +492,24 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const identifier = this.sourceCode;
+
+		// Make sure the referenced variable even exists!
+		const ref = this.programCtx
+			.assert(this)
+			.getExistingReference(identifier, this.scope instanceof CompoundStatement ? this.scope : undefined);
+
+		// Evaluate the type by attempting to fetch it from the global
+		const evaluateType: () => KipperType = () => {
+			if (ref instanceof ScopeVariableDeclaration) {
+				return ref.type;
+			} else {
+				return "func";
+			}
+		};
 		this.semanticData = {
-			identifier: this.sourceCode,
+			evaluatedType: evaluateType(),
+			identifier: identifier,
 		};
 	}
 
@@ -499,7 +530,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
  * Semantics for {@link FStringPrimaryExpression}.
  * @since 0.5.0
  */
-export interface FStringPrimaryExpressionSemantics {
+export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * Returns the items of the f-strings, where each item represents one section of a string. The section may either be
 	 * a {@link String constant string} or {@link Expression evaluable runtime expression}.
@@ -509,13 +540,12 @@ export interface FStringPrimaryExpressionSemantics {
 }
 
 /**
- * F-String class, which represents an f-string expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * F-String class, which represents an f-string expression in the Kipper language.
  * @since 0.1.0
  */
 export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -534,6 +564,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
+			evaluatedType: "str",
 			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
 		};
 	}
@@ -555,7 +586,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
  * Semantics for {@link TangledPrimaryExpression}.
  * @since 0.5.0
  */
-export interface TangledPrimaryExpressionSemantics {}
+export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Tangled expression class, which represents a tangled expression in the Kipper language and is compilable
@@ -564,7 +595,7 @@ export interface TangledPrimaryExpressionSemantics {}
  */
 export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -580,7 +611,14 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Tangled Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -600,7 +638,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
  * Semantics for {@link IncrementOrDecrementExpression}.
  * @since 0.5.0
  */
-export interface IncrementOrDecrementExpressionSemantics {}
+export interface IncrementOrDecrementExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Increment or Decrement expression,  which represents a left-side -- or ++ expression in the Kipper language.
@@ -611,7 +649,7 @@ export interface IncrementOrDecrementExpressionSemantics {}
  */
 export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrementExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -627,7 +665,16 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
+			);
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -647,7 +694,7 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
  * Semantics for {@link ArraySpecifierExpression}.
  * @since 0.5.0
  */
-export interface ArraySpecifierExpressionSemantics {}
+export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Array Specifier expression, which accesses a list/array based on its index.
@@ -657,7 +704,7 @@ export interface ArraySpecifierExpressionSemantics {}
  */
 export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -673,7 +720,14 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -693,7 +747,7 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
  * Semantics for {@link FunctionCallPostfixExpression}.
  * @since 0.5.0
  */
-export interface FunctionCallPostfixExpressionSemantics {
+export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The identifier of the function that is called.
 	 * @since 0.5.0
@@ -703,19 +757,23 @@ export interface FunctionCallPostfixExpressionSemantics {
 	 * The function that is called.
 	 * @since 0.5.0
 	 */
-	function: BuiltInFunction | ScopeFunctionDeclaration;
+	function: KipperFunction;
+	/**
+	 * The arguments that were passed to this function.
+	 * @since 0.6.0
+	 */
+	args: Array<Expression<any>>;
 }
 
 /**
- * Function call class, which represents a function call expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Function call class, which represents a function call expression in the Kipper language.
  * @since 0.1.0
  * @example
  * call print("Hello world!")
  */
 export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfixExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -734,10 +792,15 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 		// Get the identifier of the function that is called
 		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].ensureSemanticDataExists();
 		this.semanticData = {
+			evaluatedType: "void",
 			identifier: identifierSemantics.identifier,
+			args: this.children.slice(1, this.children.length), // Every item from index 0 to the end is an argument
 			// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
 			function: this.programCtx.assert(this).getExistingFunction(identifierSemantics.identifier),
 		};
+
+		// Verify that the argument are valid.
+		this.programCtx.assert(this).validFunctionCallArguments(this.semanticData.function, this.semanticData.args);
 	}
 
 	/**
@@ -754,56 +817,10 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 }
 
 /**
- * Semantics for {@link ArgumentExpressionListExpression}.
- * @since 0.5.0
- */
-export interface ArgumentExpressionListExpressionSemantics {}
-
-/**
- * Argument expression list used inside a function call.
- * @since 0.2.0
- * @example
- * call func( "1", "2", "3" ); // "1", "2", "3" -> ArgumentExpressionList
- */
-export class ArgumentExpressionListExpression extends Expression<ArgumentExpressionListExpressionSemantics> {
-	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: ArgumentExpressionListContext;
-
-	constructor(antlrCtx: ArgumentExpressionListContext, parent: CompilableParseToken<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
-	}
-
-	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ArgumentExpressionListContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArgumentExpressionListExpression> =
-		this.semanticAnalyser.argumentExpressionList;
-	targetCodeGenerator: TargetTokenCodeGenerator<ArgumentExpressionListExpression, TranslatedExpression> =
-		this.codeGenerator.argumentExpressionList;
-}
-
-/**
  * Semantics for {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
-export interface IncrementOrDecrementUnaryExpressionSemantics {}
+export interface IncrementOrDecrementUnaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression in the Kipper language.
@@ -814,7 +831,7 @@ export interface IncrementOrDecrementUnaryExpressionSemantics {}
  */
 export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -830,7 +847,16 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
+			);
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -850,7 +876,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
  * Semantics for {@link OperatorModifiedUnaryExpression}.
  * @since 0.5.0
  */
-export interface OperatorModifiedUnaryExpressionSemantics {}
+export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Operator modified unary expression class, which represents a signed (+/-) unary expression in the Kipper language
@@ -862,7 +888,7 @@ export interface OperatorModifiedUnaryExpressionSemantics {}
  */
 export class OperatorModifiedUnaryExpression extends Expression<OperatorModifiedUnaryExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -878,7 +904,16 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Operator Modified Expression have not been implemented yet."),
+			);
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -898,11 +933,10 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
  * Semantics for {@link CastOrConvertExpression}.
  * @since 0.5.0
  */
-export interface CastOrConvertExpressionSemantics {}
+export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Convert expression class, which represents a conversion expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Convert expression class, which represents a conversion expression in the Kipper language.
  * @since 0.1.0
  * @example
  * "4" as num // 4
@@ -910,7 +944,7 @@ export interface CastOrConvertExpressionSemantics {}
  */
 export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -926,7 +960,14 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Type Conversions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -946,7 +987,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
  * Semantics for the Arithmetic expressions: {@link MultiplicativeExpression} and {@link AdditiveExpression}.
  * @since 0.6.0
  */
-export interface ArithmeticExpressionSemantics {
+export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The first expression. The left side of the expression.
 	 * @since 0.6.0
@@ -997,7 +1038,7 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
  */
 export class MultiplicativeExpression extends Expression<MultiplicativeExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1022,14 +1063,19 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		})?.text;
 
 		if (!operator) {
-			throw new UnableToDetermineMetadataError();
+			new UnableToDetermineMetadataError();
 		}
 
 		this.semanticData = {
+			evaluatedType: "num",
 			exp1: this.children[0], // First expression
 			exp2: this.children[1], // Second expression
 			operator: <KipperMultiplicativeOperator>operator,
 		};
+
+		this.programCtx
+			.assert(this)
+			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1068,8 +1114,7 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 }
 
 /**
- * Additive expression class, which represents an additive expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Additive expression class, which represents an additive expression in the Kipper language.
  * @since 0.1.0
  * @example
  * 4 + 4 // 8
@@ -1077,7 +1122,7 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
  */
 export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1100,14 +1145,19 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		})?.text;
 
 		if (!operator) {
-			throw new UnableToDetermineMetadataError();
+			new UnableToDetermineMetadataError();
 		}
 
 		this.semanticData = {
+			evaluatedType: "num",
 			exp1: this.children[0], // First expression
 			exp2: this.children[1], // Second expression
 			operator: <KipperAdditiveOperator>operator,
 		};
+
+		this.programCtx
+			.assert(this)
+			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1126,11 +1176,10 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
  * Semantics for {@link RelationalExpression}.
  * @since 0.5.0
  */
-export interface RelationalExpressionSemantics {}
+export interface RelationalExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Relational expression class, which represents a relational expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Relational expression class, which represents a relational expression in the Kipper language.
  * @since 0.1.0
  * @example
  * 19 > 11 // true
@@ -1146,7 +1195,7 @@ export interface RelationalExpressionSemantics {}
  */
 export class RelationalExpression extends Expression<RelationalExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1162,7 +1211,16 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Logical Relational Expressions have not been implemented yet."),
+			);
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -1182,7 +1240,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
  * Semantics for {@link EqualityExpressionSemantics}.
  * @since 0.5.0
  */
-export interface EqualityExpressionSemantics {}
+export interface EqualityExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Equality expression class, which represents an equality check expression in the Kipper language and is compilable
@@ -1196,7 +1254,7 @@ export interface EqualityExpressionSemantics {}
  */
 export class EqualityExpression extends Expression<EqualityExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1212,7 +1270,16 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Logical Equality Expressions have not been implemented yet."),
+			);
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -1231,7 +1298,7 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
  * Semantics for {@link LogicalAndExpression}.
  * @since 0.5.0
  */
-export interface LogicalAndExpressionSemantics {}
+export interface LogicalAndExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Logical-And expression class, which represents a logical-and expression in the Kipper language and is compilable
@@ -1245,7 +1312,7 @@ export interface LogicalAndExpressionSemantics {}
  */
 export class LogicalAndExpression extends Expression<LogicalAndExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1261,7 +1328,14 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Logical And Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -1281,11 +1355,10 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
  * Semantics for {@link LogicalOrExpression}.
  * @since 0.5.0
  */
-export interface LogicalOrExpressionSemantics {}
+export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Logical-Or expression class, which represents a logical-or expression in the Kipper language and is compilable using
- * {@link translateCtxAndChildren}.
+ * Logical-Or expression class, which represents a logical-or expression in the Kipper language.
  * @since 0.1.0
  * @example
  * false || false // false
@@ -1295,7 +1368,7 @@ export interface LogicalOrExpressionSemantics {}
  */
 export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1311,7 +1384,14 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Logical Or Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -1330,7 +1410,7 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
  * Semantics for {@link ConditionalExpression}.
  * @since 0.5.0
  */
-export interface ConditionalExpressionSemantics {}
+export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Conditional expression class, which represents a conditional expression in the Kipper language and is compilable
@@ -1342,7 +1422,7 @@ export interface ConditionalExpressionSemantics {}
  */
 export class ConditionalExpression extends Expression<ConditionalExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1358,7 +1438,14 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**
@@ -1378,7 +1465,7 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
  * Semantics for {@link AssignmentExpression}.
  * @since 0.5.0
  */
-export interface AssignmentExpressionSemantics {}
+export interface AssignmentExpressionSemantics extends ExpressionSemantics {}
 
 /**
  * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
@@ -1389,7 +1476,7 @@ export interface AssignmentExpressionSemantics {}
  */
 export class AssignmentExpression extends Expression<AssignmentExpressionSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
@@ -1405,7 +1492,14 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.assert(this)
+			.notImplementedError(new KipperNotImplementedError("Assignment Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
+		this.semanticData = {
+			evaluatedType: "void",
+		};
 	}
 
 	/**

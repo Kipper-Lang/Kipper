@@ -4,7 +4,7 @@ import {
 	CompilableParseToken,
 	CompoundStatement,
 	eligibleParentToken,
-	KipperProgramContext,
+	KipperScope,
 	RootFileParseToken,
 } from "./compiler";
 import { ParseTree } from "antlr4ts/tree";
@@ -67,7 +67,7 @@ export function getParseTreeSource(inputStream: CharStream, parseTree: ParseTree
  * @param ctx The token ctx.
  * @since 0.4.0
  */
-export function determineScope(ctx: CompilableParseToken<any>): KipperProgramContext | CompoundStatement {
+export function determineScope(ctx: CompilableParseToken<any>): KipperScope {
 	// Determine type by going up the parent structure, until a compound statement is hit or the root file parse
 	// token, which represents the entire programCtx.
 	let parent: eligibleParentToken = ctx.parent;

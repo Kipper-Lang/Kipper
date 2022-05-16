@@ -71,7 +71,7 @@ export class KipperLogger {
 	public static numLevels: typeof LogLevel = LogLevel;
 
 	/**
-	 * The private '_emitHandler' that actually stores the variable data,
+	 * The private field '_emitHandler' that actually stores the variable data,
 	 * which is returned inside the {@link this.emitHandler}.
 	 * @private
 	 */
