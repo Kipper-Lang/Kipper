@@ -32,12 +32,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperPrimitiveType`, which represents primitive types in Kipper.
   - `KipperMultiplicativeOperator`, which represents multiplicative operators (`*`, `/`, `**` and `%`).
   - `KipperAdditiveOperator`, which represents additive operators (`+` and `-`).
+  - `KipperPlusOperator`, which represents the Kipper plus operator.
+  - `KipperMinusOperator`, which represents the Kipper minus operator.
+  - `KipperStrLikeTypes`, which represents string-like Kipper types, like `char` and `str`.
 - New errors:
   - `UndefinedSemanticsError`, which specifically is thrown whenever the semantics of a token are undefined.
   - `UndefinedIdentifierError`, which is thrown when an identifier is referenced that does not exist.
   - `ArgumentError`, which is thrown whenever there is an error related to invalid arguments inside a function call.
   - `InvalidReturnTypeError`, which is thrown whenever an invalid type is set as return type of a function.
   - `InvalidAmountOfArgumentsError`, which is thrown whenever an invalid amount of arguments is passed to a function.
+  - `InvalidArithmeticOperationError`, which is thrown whenever an invalid arithmetic operation is performed.
   - `KipperNotImplementedError`, which is thrown when a feature is used that is not yet implemented in Kipper.
 - New constants:
   - `defaultWebBuiltIns` and `defaultNodeBuiltIns`, which provide the default built-in functions for Kipper.
@@ -47,6 +51,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `kipperMultiplicativeOperators`, which represents all valid multiplicative operators in Kipper.
   - `kipperAdditiveOperators`, which represents all valid additive operators in Kipper.
   - `kipperArithmeticOperators`, which combines both `kipperAdditiveOperators` and `kipperMultiplicativeOperators`.
+  - `kipperVoidType`, which represents the Kipper void type.
+  - `kipperFuncType`, which represents the Kipper func type.
+  - `kipperBoolType`, which represents the Kipper bool type.
+  - `kipperNumType`, which represents the Kipper num type.
+  - `kipperCharType`, which represents the Kipper char type.
+  - `kipperStrType`, which represents the Kipper str type.
+  - `kipperPlusOperator`, which represents the Kipper plus operator.
+  - `kipperMinusOperator`, which represents the Kipper minus operator.
+  - `kipperStrLikeTypes`, which represents string-like Kipper types, like `char` and `str`.
 
 ### Changed
 
