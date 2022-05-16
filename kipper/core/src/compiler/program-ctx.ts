@@ -15,8 +15,10 @@ import {
 	BuiltInFunctionArgument,
 	KipperArithmeticOperator,
 	KipperFunction,
+	kipperPlusOperator,
 	KipperRef,
 	kipperReturnTypes,
+	kipperStrLikeTypes,
 	KipperType,
 	kipperTypes,
 	ScopeDeclaration,
@@ -42,6 +44,7 @@ import {
 	IdentifierAlreadyUsedByVariableError,
 	InvalidAmountOfArgumentsError,
 	InvalidArgumentTypeError,
+	InvalidArithmeticOperationError,
 	InvalidGlobalError,
 	InvalidReturnTypeError,
 	KipperError,
@@ -291,9 +294,21 @@ export class CompileAssert {
 	 * @param exp1 The first expression.
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
-	 * @todo Implement arithmetic checks!
 	 */
-	private arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {}
+	public arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {
+		const exp1Type = exp1.semanticData.evaluatedType;
+		const exp2Type = exp2.semanticData.evaluatedType;
+		if (exp1Type !== exp2Type) {
+			// String-like types can use '+' to concat strings
+			const typeCheck = (t: KipperType) => t === exp1Type;
+			if (op === kipperPlusOperator && kipperStrLikeTypes.find(typeCheck) && kipperStrLikeTypes.find(typeCheck)) {
+				return;
+			}
+
+			// If types are not matching, and they are not of string-like types, throw an error
+			throw this.assertError(new InvalidArithmeticOperationError(exp1Type, exp2Type));
+		}
+	}
 
 	/**
 	 * Asserts that the passed identifier does not exist as a built-in global.
