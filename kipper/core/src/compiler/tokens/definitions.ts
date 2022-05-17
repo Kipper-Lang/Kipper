@@ -23,6 +23,8 @@ import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { Expression } from "./expressions";
+import { ParseTree } from "antlr4ts/tree";
 
 /**
  * Every antlr4 definition ctx type
@@ -278,6 +280,11 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * @since 0.5.0
 	 */
 	scope: KipperScope;
+	/**
+	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
+	 * @since 0.7.0
+	 */
+	value: Expression<any> | undefined;
 }
 
 /**
@@ -295,9 +302,12 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
+	protected override _children: Array<Expression<any>>;
+
 	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
+		this._children = [];
 	}
 
 	/**
@@ -307,26 +317,34 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return this._antlrRuleCtx;
 	}
 
+	public get children(): Array<Expression<any>> {
+		return this._children;
+	}
+
 	/**
 	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children: Array<ParseTree> = this.ensureTokenChildrenExist();
 
 		// Determine the ctx instances
-		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
+		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
 			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
-		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
+		const initDeclaratorCtx = <InitDeclaratorContext | undefined>(
 			children.find((val) => val instanceof InitDeclaratorContext)
 		);
-		let declaratorCtx = <DeclaratorContext | undefined>(
+		const declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
 		);
-		let typeSpecifier = <SingleItemTypeSpecifierContext | undefined>(
+		const typeSpecifier = <SingleItemTypeSpecifierContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
+
+		// There will always be only one child, which is the expression assigned.
+		// If this child is missing, then this declaration does not contain a definition.
+		const assignValue: Expression<any> | undefined = this.children[0];
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
@@ -334,11 +352,12 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 
 		this.semanticData = {
-			isDefined: initDeclaratorCtx?.children?.find((val) => val instanceof InitializerContext) !== undefined,
+			isDefined: Boolean(assignValue),
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
 			storageType: <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval),
 			valueType: <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval),
-			scope: determineScope(this),
+			scope: determineScope(this), // Determine the scope of this variable.
+			value: assignValue,
 		};
 
 		// Assert that the variable type exists
