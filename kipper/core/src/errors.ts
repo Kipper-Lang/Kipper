@@ -381,6 +381,16 @@ export class InvalidArgumentTypeError extends InvalidTypeError {
 }
 
 /**
+ * Error that is thrown whenever an assignment expression is invalid.
+ * @since 0.7.0
+ */
+export class InvalidAssignmentError extends KipperError {
+  constructor(msg: string) {
+    super(msg);
+  }
+}
+
+/**
  * Generic error with arguments of a function call.
  * @since 0.6.0
  */
