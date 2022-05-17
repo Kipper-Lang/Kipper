@@ -1,8 +1,8 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@kipper/cli': workspace:*
-  '@kipper/core': workspace:*
+  '@kipper/cli': workspace:~
+  '@kipper/core': workspace:~
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
   '@oclif/test': 2.1.0
