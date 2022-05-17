@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Implemented code generation for declarations, definitions and value assignments.
+- New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned at declaration.
+  This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
+- New functions:
+  - `CompileAssert.validAssignment`, which asserts that a specific assignment is valid.
+- New errors:
+  - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
+
 ## [0.6.1] - 2022-05-17
 
 ### Added
