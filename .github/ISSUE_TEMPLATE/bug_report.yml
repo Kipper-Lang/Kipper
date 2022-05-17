@@ -51,8 +51,8 @@ body:
     attributes:
       label: Environment
       description: |
-        examples:
-          - **Kipper**: 0.3.0
+        Examples:
+          - **Kipper**: 0.6.0
           - **Operating System **: Ubuntu 20.04
       value: |
         - Kipper:
