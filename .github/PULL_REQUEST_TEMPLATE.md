@@ -12,6 +12,7 @@
 <!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
 
 ## Summary
+
 <!-- Explain the reason for this pr, changes and solution briefly. -->
 
 ... <!-- Summary -->
@@ -19,6 +20,7 @@
 Closes # <!-- Remove this if this is not a bug fix PR -->
 
 ## Changes
+
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, explain what fixed the issue. -->
 
 - I fixed ...
@@ -28,6 +30,7 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 <!-- Remove example text! -->
 
 ## Does this PR create new warnings?
+
 <!-- Add any new warnings or possible issues that could occur with this PR. -->
 
 - Eslint reported ...
@@ -36,21 +39,25 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 <!-- Remove example text! -->
 
 ## Changelog
+
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
 
 <!-- ### Added -->
-<!-- ### Changed --> 
+<!-- ### Changed -->
 <!-- ### Removed -->
 
 <!-- Default: -->
+
 None.
 
 <!-- Remove any header with no item. -->
 
 ## Linked other issues or PRs
+
 <!-- Include other issues and PRs that are related to this if any exist. -->
 
 <!-- Use this format: - [ ] #ISSUE_OR_PR -->
 
 <!-- Default: -->
+
 No linked issues.

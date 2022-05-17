@@ -32,7 +32,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.5.0 win32-x64 node-v16.13.0
+@kipper/cli/0.6.0 linux-x64 node-v16.15.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -65,7 +65,7 @@ OPTIONS
   --encoding=encoding  [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile FILE`
 
@@ -85,7 +85,7 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -96,13 +96,13 @@ USAGE
   $ kipper help [COMMAND]
 
 ARGUMENTS
-  COMMAND  command to show help for
+  COMMAND  Command to show help for.
 
 OPTIONS
-  --all  see all commands in CLI
+  -n, --nested-commands  Include all nested commands in the output.
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run FILE`
 
@@ -122,7 +122,7 @@ OPTIONS
                          does not exist, it will be created.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/run.ts)_
 
 ## `kipper update [CHANNEL]`
 
@@ -145,7 +145,7 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/update.ts)_
+_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/update.ts)_
 
 ## `kipper version`
 
@@ -156,7 +156,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.5.0/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.6.0/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Copyright and License

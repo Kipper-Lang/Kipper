@@ -33,6 +33,6 @@ jobs:
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
-          message: 'Added coverage report'
-          add: './README.md'
+          message: "Added coverage report"
+          add: "./README.md"
           default_author: github_actions

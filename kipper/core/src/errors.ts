@@ -9,7 +9,7 @@ import { InputMismatchException, LexerNoViableAltException, NoViableAltException
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
-import { getTokenSource } from "./utils";
+import { getParseRuleSource } from "./utils";
 
 /**
  * The core error for the Kipper module.
@@ -111,18 +111,28 @@ export class KipperError extends Error {
 	public get tokenSrc(): string | undefined {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
-		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getTokenSource(this.antlrCtx) : undefined);
+		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
 	}
 }
 
 /**
- * Internal error for Kipper.
+ * Internal error for Kipper. This error should always be printed with its stack.
  * @since 0.3.0
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`Internal error: ${msg} - Report this bug to the developer with the traceback!`);
+		super(`Internal error: ${msg} - Report this bug to the developer using the traceback!`);
 		this.name = this.constructor.name;
+	}
+}
+
+/**
+ * An error that is raised whenever a feature is used that has not been implemented yet.
+ * @since 0.6.0
+ */
+export class KipperNotImplementedError extends KipperError {
+	constructor(msg: string) {
+		super(`${msg} Update Kipper or watch out for future updates.`);
 	}
 }
 
@@ -232,20 +242,45 @@ export abstract class IdentifierError extends KipperError {
 }
 
 /**
- * Error that is thrown when a variable definition is used, but it is unknown to the program.
+ * Error that is thrown when a variable is used that is only declared and has no value set.
  */
-export class UnknownVariableIdentifier extends IdentifierError {
+export class UndefinedIdentifierError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`Identifier '${identifier}' has been declared, but not defined.`);
+		this.name = "UndefinedIdentifierError";
+	}
+}
+
+/**
+ * Error that is thrown when an identifier is used that is unknown to the program.
+ * @since 0.6.0
+ */
+export class UnknownIdentifierError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`Unknown identifier '${identifier}'.`);
+		this.name = "UnknownIdentifierError";
+	}
+}
+
+/**
+ * Error that is thrown when a variable definition is used, but it is unknown to the program.
+ * @deprecated
+ */
+export class UnknownVariableIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown variable identifier '${identifier}'.`);
+		console.warn("'UnknownVariableIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
 	}
 }
 
 /**
  * Error that is thrown when a function definition is used, but it is unknown to the program.
+ * @deprecated
  */
 export class UnknownFunctionIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown function identifier '${identifier}'.`);
+		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
 	}
 }
 
@@ -304,26 +339,70 @@ export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError 
  * Represents all errors in the mismatching type group.
  * @since 0.3.0
  */
-export class MismatchedTypesErrors extends KipperError {
+export class InvalidTypeError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
-		this.name = "InvalidOverwriteError";
+		this.name = "InvalidTypeError";
 	}
 }
 
 /**
- * Invalid argument type that is not assignable/usable on the parameter.
+ * Error that is thrown whenever a return type is used that may not be returned.
+ * @since 0.6.0
  */
-export class InvalidArgumentTypeError extends MismatchedTypesErrors {
-	constructor(argIdentifier: string, expectedType: string, receivedType: string) {
+export class InvalidReturnTypeError extends InvalidTypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be returned.`);
+		this.name = "InvalidReturnTypeError";
+	}
+}
+
+/**
+ * Error that is thrown whenever an invalid arithmetic operation is used, where the types are conflicting or can not
+ * interact with one another.
+ * @since 0.6.0
+ */
+export class InvalidArithmeticOperationError extends InvalidTypeError {
+	constructor(firstType: string, secondType: string) {
+		super(`Invalid arithmetic operation between types '${firstType}' and ${secondType}.`);
+		this.name = "InvalidArithmeticOperationError";
+	}
+}
+
+/**
+ * Error that is thrown whenever an argument is not assignable to the parameter's type.
+ */
+export class InvalidArgumentTypeError extends InvalidTypeError {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
 		super(
-			`Argument of type '${receivedType}' is not assignable to parameter '${argIdentifier}' of type '${expectedType}'.`,
+			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
 		);
 	}
 }
 
 /**
- * This error is raised when a variable type is used that is unknown the kipper language.
+ * Generic error with arguments of a function call.
+ * @since 0.6.0
+ */
+export class ArgumentError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "ArgumentError";
+	}
+}
+
+/**
+ * Error that is thrown when an invalid amount of arguments is passed to a function.
+ * @since 0.6.0
+ */
+export class InvalidAmountOfArgumentsError extends ArgumentError {
+	constructor(func: string, expected: number, received: number) {
+		super(`Expected ${expected} arguments for function '${func}', received ${received}.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a variable type is used that is unknown the kipper language.
  */
 export class UnknownTypeError extends KipperError {
 	constructor(type: string) {
@@ -332,7 +411,7 @@ export class UnknownTypeError extends KipperError {
 }
 
 /**
- * Error that is thrown when an identifier is registered that interferes with a built-in function or variable.
+ * Error that is thrown whenever an identifier is registered that interferes with a built-in function or variable.
  * No double definitions or overwrites of global built-in definitions allowed!
  */
 export class BuiltInOverwriteError extends KipperError {
@@ -342,11 +421,21 @@ export class BuiltInOverwriteError extends KipperError {
 }
 
 /**
- * This error is raised whenever a token is unable to fetch its metadata from the antlr4 context instances or a
+ * Error that is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
  * compilation is started without the required semantic data.
  */
 export class UnableToDetermineMetadataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
+		super(`Failed to determine metadata for one or more tokens.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever the {@link CompilableParseToken.semanticData} field of a token is undefined.
+ * @since 0.6.0
+ */
+export class UndefinedSemanticsError extends KipperInternalError {
+	constructor() {
+		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
 	}
 }

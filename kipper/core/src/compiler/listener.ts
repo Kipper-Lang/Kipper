@@ -14,7 +14,6 @@ import {
 	ActualLogicalOrExpressionContext,
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
-	ArgumentExpressionListContext,
 	ArraySpecifierContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentOperatorContext,
@@ -85,14 +84,14 @@ const passOnHandler = undefined;
  */
 export class KipperFileListener implements KipperListener {
 	/**
-	 * The private '_programCtx' that actually stores the variable data,
+	 * The private field '_programCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.programCtx}.
 	 * @private
 	 */
 	private readonly _programCtx: KipperProgramContext;
 
 	/**
-	 * The private '_itemBuffer' that actually stores the variable data,
+	 * The private field '_itemBuffer' that actually stores the variable data,
 	 * which is returned inside the {@link this.itemBuffer}.
 	 * @private
 	 */
@@ -551,28 +550,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitFunctionCallPostfixExpression(ctx: FunctionCallPostfixExpressionContext): void {
-		this.handleExitingExpressionCtx();
-	}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.argumentExpressionList`.
-	 *
-	 * This is a list of arguments for a 'functionCallExpression', which calls a function with the arguments listed in
-	 * the {@link ctx} instance.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	public enterArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
-		this.handleIncomingExpressionCtx(ctx);
-	}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
-	 *
-	 * This is a list of arguments for a 'functionCallExpression', which calls a function with the arguments listed in
-	 * the {@link ctx} instance.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	public exitArgumentExpressionList(ctx: ArgumentExpressionListContext): void {
 		this.handleExitingExpressionCtx();
 	}
 

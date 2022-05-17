@@ -5,18 +5,19 @@
  * @since 0.1.0
  */
 
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { KipperParser } from "../parser";
-import { TokenStream } from "antlr4ts/TokenStream";
+import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
+import { determineScope, getParseRuleSource } from "../../utils";
+import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import type { KipperParser } from "../parser";
+import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { getTokenSource } from "../../utils";
-import { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
-import { KipperCompileTarget } from "../target";
-import { Declaration } from "./definitions";
-import { Statement } from "./statements";
-import { TranslatedCodeLine } from "../logic";
+import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
+import type { KipperCompileTarget } from "../target";
+import type { Declaration } from "./definitions";
+import type { Statement } from "./statements";
+import type { KipperScope, TranslatedCodeLine } from "../logic";
+import type { ParseTree } from "antlr4ts/tree";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
 export type eligibleChildToken = CompilableParseToken<any>;
@@ -33,30 +34,32 @@ export type SemanticData = Record<string, any>;
  */
 export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected readonly _antlrCtx: ParserRuleContext;
+	protected readonly _antlrRuleCtx: ParserRuleContext;
 
 	/**
-	 * The private '_children' that actually stores the variable data,
+	 * The private field '_children' that actually stores the variable data,
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
 	protected readonly _children: Array<eligibleChildToken>;
 
 	/**
-	 * The private '_parent' that actually stores the variable data,
+	 * The private field '_parent' that actually stores the variable data,
 	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected readonly _parent: eligibleParentToken;
 
+	protected _scope: KipperScope | undefined;
+
 	protected _semanticData: Semantics | undefined;
 
 	protected constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._parent = parent;
 		this._children = [];
 	}
@@ -79,9 +82,10 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this parse token.
+	 * @since 0.6.0
 	 */
-	public get antlrCtx(): ParserRuleContext {
-		return this._antlrCtx;
+	public get antlrRuleCtx(): ParserRuleContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -99,11 +103,11 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
 	 */
 	public get sourceCode(): string {
-		return getTokenSource(this.antlrCtx);
+		return getParseRuleSource(this.antlrRuleCtx);
 	}
 
 	/**
-	 * The parser that parsed the {@link antlrCtx}
+	 * The parser that parsed the {@link antlrRuleCtx}
 	 */
 	public get parser(): KipperParser {
 		return this.programCtx.parser;
@@ -149,6 +153,16 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
+	 * The {@link scope} of this token. Dynamically fetched using {@link determineScope}.
+	 * @since 0.6.0
+	 */
+	public get scope(): KipperScope {
+		// Uses caching to speed up accessing this field multiple times
+		this._scope = this._scope ?? determineScope(this);
+		return <KipperScope>this._scope;
+	}
+
+	/**
 	 * The target-specific semantic analyser, which will perform semantic analysis
 	 * specific for the {@link this.target target language}.
 	 * @since 0.5.0
@@ -171,12 +185,22 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
+	 * Ensures that the token children of this item exist.
+	 * @since 0.6.0
+	 */
+	public ensureTokenChildrenExist(): ParseTree[] {
+		if (this.antlrRuleCtx.children === undefined) {
+			throw new UnableToDetermineMetadataError();
+		}
+		return this.antlrRuleCtx.children;
+	}
+
+	/**
 	 * Ensures the semantic data of this item exists. This is always checked whenever a compilation is started.
-	 * @protected
 	 */
 	public ensureSemanticDataExists(): Semantics {
 		if (this.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
+			throw new UndefinedSemanticsError();
 		}
 		return this.semanticData;
 	}
@@ -243,14 +267,14 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
  */
 export class RootFileParseToken {
 	/**
-	 * The private '_parent' that actually stores the variable data,
+	 * The private field '_parent' that actually stores the variable data,
 	 * which is returned inside the {@link this.parent}.
 	 * @private
 	 */
 	protected _programCtx: KipperProgramContext;
 
 	/**
-	 * The private '_children' that actually stores the variable data,
+	 * The private field '_children' that actually stores the variable data,
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
@@ -305,23 +329,12 @@ export class RootFileParseToken {
 	 * @since 0.5.0
 	 * @protected
 	 */
-	protected async translate(): Promise<Array<TranslatedCodeLine>> {
+	public async translate(): Promise<Array<TranslatedCodeLine>> {
 		let genCode: Array<TranslatedCodeLine> = [];
 		for (let child of this.children) {
 			const code = await child.translateCtxAndChildren();
 			genCode = genCode.concat(code);
 		}
 		return genCode;
-	}
-
-	/**
-	 * Analysis the code and generates the typescript code for this item, and its children. This will log all warnings
-	 * using {@link programCtx.logger} and throw errors if encountered.
-	 *
-	 * Every item in the array represents a single line of code.
-	 */
-	public async compileCtx(): Promise<Array<TranslatedCodeLine>> {
-		await this.semanticAnalysis();
-		return await this.translate();
 	}
 }

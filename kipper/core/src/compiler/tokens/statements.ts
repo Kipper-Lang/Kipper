@@ -19,11 +19,9 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../parser";
-import { ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
+import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { KipperProgramContext } from "../program-ctx";
 import { determineScope } from "../../utils";
 import { TargetTokenCodeGenerator } from "../code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
@@ -65,15 +63,15 @@ export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: el
  */
 export abstract class Statement<Semantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: antlrStatementCtxType;
+	protected override readonly _antlrRuleCtx: antlrStatementCtxType;
 
 	protected constructor(antlrCtx: antlrStatementCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -82,8 +80,8 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): antlrStatementCtxType {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): antlrStatementCtxType {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -102,13 +100,13 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
  * Compound statement class, which represents a compound statement containing other items in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  */
-export class CompoundStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: CompoundStatementContext;
+	protected override readonly _antlrRuleCtx: CompoundStatementContext;
 
 	protected readonly _children: Array<Statement<any>>;
 
@@ -116,7 +114,7 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 
 	constructor(antlrCtx: CompoundStatementContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._localScope = [];
 		this._children = [];
 	}
@@ -131,8 +129,8 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): CompoundStatementContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): CompoundStatementContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -146,13 +144,38 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
 	 * Adds a new local variable to this scope.
 	 * @param token The {@link VariableDeclaration} token.
 	 */
-	public addNewLocalVariable(token: VariableDeclaration) {
-		if (token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		}
+	public addNewLocalVariable(token: VariableDeclaration): void {
+		const semanticData = token.ensureSemanticDataExists();
 
-		this.programCtx.assert(token).variableIdentifierNotDefined(token.semanticData.identifier, this);
+		// Make sure the identifier is available
+		this.programCtx.assert(token).variableIdentifierNotDeclared(semanticData.identifier, this);
+
+		// Add new declaration or definition
 		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
+	}
+
+	/**
+	 * Tries to fetch the passed identifier in the current scope.
+	 * @since 0.6.0
+	 */
+	public getLocalVariable(identifier: string): ScopeVariableDeclaration | undefined {
+		return this.localScope.find((val) => val.identifier === identifier);
+	}
+
+	/**
+	 * Tries to fetch the passed identifier in the current scope and all parent scopes recursively.
+	 * @since 0.6.0
+	 */
+	public getVariableRecursively(identifier: string): ScopeVariableDeclaration | undefined {
+		const localVar = this.getLocalVariable(identifier);
+		if (!localVar) {
+			if (this.scope instanceof CompoundStatement) {
+				return this.scope.getVariableRecursively(identifier);
+			} else {
+				return this.scope.getGlobalVariable(identifier);
+			}
+		}
+		return localVar;
 	}
 
 	/**
@@ -174,19 +197,19 @@ export class CompoundStatement extends Statement<{ scope: KipperProgramContext |
  * Selection statement class, which represents a selection statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class SelectionStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: SelectionStatementContext;
+	protected override readonly _antlrRuleCtx: SelectionStatementContext;
 
 	protected readonly _children: Array<Statement<any>>;
 
 	constructor(antlrCtx: SelectionStatementContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 	}
 
@@ -200,8 +223,8 @@ export class SelectionStatement extends Statement<{ scope: KipperProgramContext 
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): SelectionStatementContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): SelectionStatementContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -222,19 +245,19 @@ export class SelectionStatement extends Statement<{ scope: KipperProgramContext 
 /**
  * Expression statement class, which represents a statement made up of an expression in the Kipper language.
  */
-export class ExpressionStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ExpressionStatementContext;
+	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
 
 	protected readonly _children: Array<Expression<any>>;
 
 	constructor(antlrCtx: ExpressionStatementContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 	}
 
@@ -248,8 +271,8 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): ExpressionStatementContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ExpressionStatementContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -271,19 +294,19 @@ export class ExpressionStatement extends Statement<{ scope: KipperProgramContext
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class IterationStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: IterationStatementContext;
+	protected override readonly _antlrRuleCtx: IterationStatementContext;
 
 	protected readonly _children: Array<eligibleChildToken>;
 
 	constructor(antlrCtx: IterationStatementContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 	}
 
@@ -297,8 +320,8 @@ export class IterationStatement extends Statement<{ scope: KipperProgramContext 
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): IterationStatementContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): IterationStatementContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -320,19 +343,19 @@ export class IterationStatement extends Statement<{ scope: KipperProgramContext 
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<{ scope: KipperProgramContext | CompoundStatement }> {
+export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: JumpStatementContext;
+	protected override readonly _antlrRuleCtx: JumpStatementContext;
 
 	protected readonly _children: Array<Expression<any>>;
 
 	constructor(antlrCtx: JumpStatementContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 	}
 
@@ -346,8 +369,8 @@ export class JumpStatement extends Statement<{ scope: KipperProgramContext | Com
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrCtx(): JumpStatementContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): JumpStatementContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**

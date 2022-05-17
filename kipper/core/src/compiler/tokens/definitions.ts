@@ -17,8 +17,7 @@ import {
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../parser";
-import { KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
-import { CompoundStatement } from "./statements";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
 import { KipperProgramContext } from "../program-ctx";
 import { UnableToDetermineMetadataError } from "../../errors";
 import { determineScope } from "../../utils";
@@ -58,21 +57,24 @@ export interface DeclarationSemantics {
 }
 
 /**
- * Base Declaration class that represents a value or function declaration or definition in Kipper and is compilable
- * using {@link translateCtxAndChildren}.
+ * Base Declaration class that represents a value or function declaration or definition in Kipper.
+ *
+ * Any declarations in Kipper will be registered in a {@link KipperScope} or be associated with another parent
+ * declaration, like {@link ParameterDeclaration parameter declarations} in
+ * {@link FunctionDeclaration function declarations}.
  * @since 0.1.0
  */
 export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: antlrDefinitionCtxType;
+	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
 	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -81,8 +83,8 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): antlrDefinitionCtxType {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): antlrDefinitionCtxType {
+		return this._antlrRuleCtx;
 	}
 
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
@@ -115,22 +117,22 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  */
 export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: ParameterDeclarationContext;
+	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
 	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): ParameterDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): ParameterDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -161,7 +163,7 @@ export interface FunctionDeclarationSemantics {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: KipperType;
+	returnType: KipperReturnType;
 	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
@@ -184,22 +186,22 @@ export interface FunctionDeclarationSemantics {
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: FunctionDeclarationContext;
+	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
 	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): FunctionDeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): FunctionDeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -207,27 +209,30 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const children = this.ensureTokenChildrenExist();
+
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof DeclaratorContext)
-		);
+		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof ParameterTypeListContext)
+			children.find((val) => val instanceof ParameterTypeListContext)
 		);
 		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !declaratorCtx || !returnTypeCtx) {
+		// Throw an error if children are incomplete
+		if (!declaratorCtx || !returnTypeCtx) {
 			throw new UnableToDetermineMetadataError();
 		}
 
+		const type: KipperType = <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval);
+		this.programCtx.assert(this).validReturnType(type);
+
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
-			isDefined: this.antlrCtx.children?.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
-			returnType: <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval),
+			returnType: <KipperReturnType>type,
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 
@@ -248,11 +253,31 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
  * @since 0.3.0
  */
 export interface VariableDeclarationSemantics extends SemanticData {
+	/**
+	 * The identifier of this variable.
+	 * @since 0.5.0
+	 */
 	identifier: string;
+	/**
+	 * The storage type option for this variable.
+	 * @since 0.5.0
+	 */
 	storageType: KipperStorageType;
+	/**
+	 * The type of the value.
+	 * @since 0.5.0
+	 */
 	valueType: KipperType;
+	/**
+	 * If this is true then the variable has a defined value.
+	 * @since 0.5.0
+	 */
 	isDefined: boolean;
-	scope: KipperProgramContext | CompoundStatement;
+	/**
+	 * The scope of this variable.
+	 * @since 0.5.0
+	 */
+	scope: KipperScope;
 }
 
 /**
@@ -264,22 +289,22 @@ export interface VariableDeclarationSemantics extends SemanticData {
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
 	/**
-	 * The private '_antlrCtx' that actually stores the variable data,
+	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrCtx: DeclarationContext;
+	protected override readonly _antlrRuleCtx: DeclarationContext;
 
 	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
 		super(antlrCtx, parent);
-		this._antlrCtx = antlrCtx;
+		this._antlrRuleCtx = antlrCtx;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrCtx(): DeclarationContext {
-		return this._antlrCtx;
+	public override get antlrRuleCtx(): DeclarationContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -287,12 +312,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const children = this.ensureTokenChildrenExist();
+
 		// Determine the ctx instances
 		let storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof StorageTypeSpecifierContext)
+			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		let initDeclaratorCtx = <InitDeclaratorContext | undefined>(
-			this.antlrCtx.children?.find((val) => val instanceof InitDeclaratorContext)
+			children.find((val) => val instanceof InitDeclaratorContext)
 		);
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
@@ -301,8 +328,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
 		);
 
-		// Throw an error if no children or not enough children are present - This should never happen
-		if (!this.antlrCtx.children || !storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
+		// Throw an error if children are incomplete
+		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
 

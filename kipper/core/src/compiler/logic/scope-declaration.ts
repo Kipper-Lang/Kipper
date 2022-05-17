@@ -4,9 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperStorageType, KipperType } from "../const";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "../const";
 import {
-	CompoundStatement,
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
@@ -15,10 +14,9 @@ import {
 	VariableDeclarationSemantics,
 } from "../tokens";
 import type { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
 
 /**
- * Abstract class as a parent for {@link ScopeDeclaration} and {@link Scope}.
+ * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
@@ -48,11 +46,8 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-		if (_token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		} else {
-			this.semanticData = _token.semanticData;
-		}
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**
@@ -86,7 +81,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	/**
 	 * Returns the scope associated with this {@link ScopeDeclaration}.
 	 */
-	public get scope(): KipperProgramContext | CompoundStatement {
+	public get scope(): KipperScope {
 		return this.semanticData.scope;
 	}
 
@@ -111,11 +106,8 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	) {
 		super();
 
-		if (_token.semanticData === undefined) {
-			throw new UnableToDetermineMetadataError();
-		} else {
-			this.semanticData = _token.semanticData;
-		}
+		// Ensure the token is valid
+		this.semanticData = _token.ensureSemanticDataExists();
 	}
 
 	/**
@@ -126,21 +118,24 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The identifier of this entry.
+	 * The identifier of this function.
 	 */
 	public get identifier(): string {
 		return this.semanticData.identifier;
 	}
 
 	/**
-	 * The function return type.
+	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): KipperType {
+	public get returnType(): KipperReturnType {
 		return this.semanticData.returnType;
 	}
 
 	/**
-	 * The storage type of this scope entry.
+	 * The args that are accepted inside this function. These are represented using {@link ParameterDeclaration}.
+	 *
+	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
+	 * array maps to the first argument inside the function.
 	 */
 	public get args(): Array<ParameterDeclaration> {
 		return this.semanticData.args;

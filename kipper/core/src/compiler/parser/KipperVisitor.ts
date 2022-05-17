@@ -1,6 +1,5 @@
 // Generated from ./Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
-
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
@@ -92,7 +91,6 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
-
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -764,4 +762,3 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 */
 	visitJumpStatement?: (ctx: JumpStatementContext) => Result;
 }
-
