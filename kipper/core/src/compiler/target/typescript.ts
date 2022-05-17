@@ -38,8 +38,22 @@ import {
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
 } from "../tokens";
-import { ScopeFunctionDeclaration, TranslatedCodeLine, TranslatedCodeToken, TranslatedExpression } from "../logic";
+import {
+	kipperBoolType,
+	kipperCharType,
+	kipperFuncType,
+	kipperListType,
+	kipperNumType,
+	kipperStrType,
+	KipperType,
+	kipperVoidType,
+	ScopeFunctionDeclaration,
+	TranslatedCodeLine,
+	TranslatedCodeToken,
+	TranslatedExpression,
+} from "../logic";
 import { ArgumentExpressionListContext } from "../parser";
+import { KipperNotImplementedError } from "../../errors";
 
 export class TypeScriptTarget extends KipperCompileTarget {
 	constructor(
@@ -284,7 +298,25 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into the typescript language.
 	 */
 	variableDeclaration = async (token: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = token.ensureSemanticDataExists();
+
+		const storage = semanticData.storageType === "const" ? "const" : "let";
+		const tsType = await this.getTypeScriptType(semanticData.valueType);
+		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
+
+		// Only add ' = EXP' if assignValue is defined
+		return [
+			[
+				storage,
+				" ",
+				semanticData.identifier,
+				":",
+				" ",
+				tsType,
+				...(assign.length > 0 ? [" ", "=", " ", ...assign] : []),
+				";",
+			],
+		];
 	};
 
 	/**
@@ -473,6 +505,12 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the typescript language.
 	 */
 	assignmentExpression = async (token: AssignmentExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = token.ensureSemanticDataExists();
+
+		const identifier = semanticData.identifier;
+		const assignValue = await semanticData.value.translateCtxAndChildren();
+
+		// Only add ' = EXP' if assignValue is defined
+		return [identifier, " ", "=", " ", ...assignValue];
 	};
 }
