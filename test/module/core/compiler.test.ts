@@ -23,6 +23,7 @@ const singleFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-fil
 const multiFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-files/multi-function-definition.kip`);
 const variableDeclarationFile = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
 const arithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/arithmetics.kip`);
+const assignFile = path.resolve(`${__dirname}/../../kipper-files/assign.kip`);
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -136,6 +137,16 @@ describe("KipperCompiler", () => {
 		describe("programs", () => {
 			const compiler = new KipperCompiler();
 
+			it("Sample program", async () => {
+				const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.builtInGlobals.length === 1, "Expected a single global function");
+			});
+
 			it("Single Function call", async () => {
 				const fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
@@ -235,6 +246,75 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.write().includes(fileContent), "Expected compiled code to not change");
+			});
+
+			it("Assign", async () => {
+				const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+			});
+
+			describe("Declaration", () => {
+				it("var", async () => {
+					const stream = new KipperParseStream("var x: num;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number;"), "Expected different TypeScript code");
+				});
+
+				it("const", async () => {
+					const stream = new KipperParseStream("const x: num;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("const x: number;"), "Expected different TypeScript code");
+				});
+			});
+
+			describe("Definition", () => {
+				it("var", async () => {
+					const stream = new KipperParseStream("var x: num = 4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+				});
+
+				it("const", async () => {
+					const stream = new KipperParseStream("const x: num = 4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("const x: number = 4;"), "Expected different TypeScript code");
+				});
+			});
+
+			describe("Assignment", () => {
+				it("num", async () => {
+					const stream = new KipperParseStream("var x: num = 4;\nx = 5;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;\nx = 5;"), "Expected different TypeScript code");
+				});
+
+				it("str", async () => {
+					const stream = new KipperParseStream('var x: str = 4;\nx = "5";');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes('let x: string = 4;\nx = "5";'), "Expected different TypeScript code");
+				});
 			});
 		});
 
@@ -751,6 +831,44 @@ describe("KipperCompiler", () => {
 								}
 							});
 						});
+					});
+				});
+
+				describe("InvalidAssignmentError", () => {
+					describe("Error", () => {
+						it("NumberConstant", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream("5 = 5;"));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
+								assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAssignmentError'");
+						});
+
+						it("StringConstant", async () => {
+							try {
+								await new KipperCompiler().compile(new KipperParseStream('"4" = "4";'));
+							} catch (e) {
+								assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
+								assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
+								assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+								assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+								assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+								assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+								return;
+							}
+							assert(false, "Expected 'InvalidAssignmentError'");
+						});
+					});
+
+					describe("NoError", () => {
+						it("", () => {});
 					});
 				});
 			});
