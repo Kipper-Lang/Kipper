@@ -384,7 +384,6 @@ packages:
 
   /ansicolors/0.3.2:
     resolution: { integrity: sha1-ZlWX3oap/+Oqm/vmyuXG6kJrSXk= }
-
   /antlr4ts/0.5.0-alpha.4:
     resolution:
       { integrity: sha512-WPQDt1B74OfPv/IMS2ekXAKkTZIHl88uMetg6q3OTqgFxZ/dxDXI0EWLyZid/1Pe6hTftyg5N7gel5wNAGxXyQ== }
@@ -1249,7 +1248,7 @@ packages:
       { integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA== }
     hasBin: true
     dependencies:
-      glob: 7.2.0
+      glob: 7.2.3
     dev: false
 
   /run-async/2.4.1:
