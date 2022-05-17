@@ -329,7 +329,7 @@ packages:
       domain-browser: 1.2.0
       duplexer2: 0.1.4
       events: 3.3.0
-      glob: 7.2.0
+      glob: 7.2.3
       has: 1.0.3
       htmlescape: 1.1.1
       https-browserify: 1.0.0
@@ -685,7 +685,7 @@ packages:
     dependencies:
       to-regex-range: 5.0.1
     dev: true
-
+    
   /foreach/2.0.6:
     resolution:
       { integrity: sha512-k6GAGDyqLe9JaebCsFCoudPPWfihKu8pylYXRlqP1J7ms39iPoTtk2fviNglIeQEwdh0bQeKJ01ZPyuyQvKzwg== }
@@ -1027,15 +1027,14 @@ packages:
       has-symbols: 1.0.3
     dev: true
 
-  /is-typed-array/1.1.8:
-    resolution:
-      { integrity: sha512-HqH41TNZq2fgtGT8WHVFVJhBVGuY3AnP3Q36K8JKXUxSxRgk/d+7NjmwG2vo2mYmXK8UYZKu0qH8bVP5gEisjA== }
-    engines: { node: ">= 0.4" }
+  /is-typed-array/1.1.9:
+    resolution: {integrity: sha512-kfrlnTTn8pZkfpJMUgYD7YZ3qzeJgWUn8XfVYBARc4wnmNOmLbmuuaAs3q5fvB0UJOn6yHAKaGTPM7d6ezoD/A==}
+    engines: {node: '>= 0.4'}
     dependencies:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
       es-abstract: 1.20.0
-      foreach: 2.0.6
+      for-each: 0.3.3
       has-tostringtag: 1.0.0
     dev: true
 
@@ -1728,9 +1727,9 @@ packages:
       inherits: 2.0.4
       is-arguments: 1.1.1
       is-generator-function: 1.0.10
-      is-typed-array: 1.1.8
+      is-typed-array: 1.1.9
       safe-buffer: 5.2.1
-      which-typed-array: 1.1.7
+      which-typed-array: 1.1.8
     dev: true
 
   /uuid/8.3.2:
@@ -1775,17 +1774,16 @@ packages:
       is-symbol: 1.0.4
     dev: true
 
-  /which-typed-array/1.1.7:
-    resolution:
-      { integrity: sha512-vjxaB4nfDqwKI0ws7wZpxIlde1XrLX5uB0ZjpfshgmapJMD7jJWhZI+yToJTqaFByF0eNBcYxbjmCzoRP7CfEw== }
-    engines: { node: ">= 0.4" }
+  /which-typed-array/1.1.8:
+    resolution: {integrity: sha512-Jn4e5PItbcAHyLoRDwvPj1ypu27DJbtdYXUa5zsinrUx77Uvfb0cXwwnGMTn7cjUfhhqgVQnVJCwF+7cgU7tpw==}
+    engines: {node: '>= 0.4'}
     dependencies:
       available-typed-arrays: 1.0.5
       call-bind: 1.0.2
       es-abstract: 1.20.0
-      foreach: 2.0.6
+      for-each: 0.3.3
       has-tostringtag: 1.0.0
-      is-typed-array: 1.1.8
+      is-typed-array: 1.1.9
     dev: true
 
   /wrappy/1.0.2:
