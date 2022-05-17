@@ -63,25 +63,56 @@ describe("KipperCompiler", () => {
 	});
 
 	describe("syntaxAnalyse", () => {
-		it("Syntax analyse valid code without error", async () => {
-			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-			let compiler = new KipperCompiler();
-			const stream = new KipperParseStream(fileContent);
-
-			await compiler.syntaxAnalyse(stream);
+		let compiler = new KipperCompiler();
+		describe("Error", () => {
+			it("Invalid file", async () => {
+				const fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				try {
+					await compiler.syntaxAnalyse(stream);
+					assert(false, "Expected an error");
+				} catch (e) {
+					assert(e instanceof KipperSyntaxError, "Expected a valid KipperSyntaxError instance");
+				}
+			});
 		});
 
-		it("Syntax analyse invalid code with expected error", async () => {
-			const fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
-			let compiler = new KipperCompiler();
-			const stream = new KipperParseStream(fileContent);
-
-			try {
+		describe("NoError", () => {
+			it("Main file", async () => {
+				const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
-				assert(false, "Expected an error");
-			} catch (e) {
-				assert(e instanceof KipperSyntaxError, "Expected a valid KipperSyntaxError instance");
-			}
+			});
+
+			it("Nested scopes", async () => {
+				const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Single Function definition", async () => {
+				const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Multi Function definition", async () => {
+				const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Variable Declaration", async () => {
+				const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Arithmetics", async () => {
+				const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
 		});
 	});
 
@@ -195,6 +226,7 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 			});
+
 			it("Arithmetics", async () => {
 				const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
