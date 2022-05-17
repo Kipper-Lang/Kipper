@@ -1465,11 +1465,24 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
  * Semantics for {@link AssignmentExpression}.
  * @since 0.5.0
  */
-export interface AssignmentExpressionSemantics extends ExpressionSemantics {}
+export interface AssignmentExpressionSemantics extends ExpressionSemantics {
+  /**
+   * The identifier that is assigned to.
+   * @since 0.7.0
+   */
+  identifier: string;
+  /**
+   * The assigned value to this variable.
+   * @since 0.7.0
+   */
+  value: Expression<any>;
+}
 
 /**
  * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}. This class only represents assigning a value, but not declaring it!
+ *
+ * This expression will evaluate to the value that was assigned to the identifier.
  * @since 0.1.0
  * @example
  * x = 4
@@ -1492,13 +1505,26 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.assert(this)
-			.notImplementedError(new KipperNotImplementedError("Assignment Expressions have not been implemented yet."));
+    // There will always be only two children, which are the identifier and expression assigned.
+    const identifier: IdentifierPrimaryExpression = (() => {
+      const exp = this.children[0];
+      this.programCtx.assert(this).validAssignment(exp);
+      return <IdentifierPrimaryExpression>exp;
+    })();
+    const assignValue: Expression<any> = this.children[1];
 
-		// eslint-disable-next-line no-unreachable
+    // Throw an error if the children are incomplete
+    if (!assignValue) {
+      throw new UnableToDetermineMetadataError();
+    }
+
+    // Get the semantics / the evaluated type of this expression
+    const valueSemantics = assignValue.ensureSemanticDataExists();
+    const identifierSemantics = identifier.ensureSemanticDataExists();
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: valueSemantics.evaluatedType,
+      value: assignValue,
+      identifier: identifierSemantics.identifier
 		};
 	}
 
