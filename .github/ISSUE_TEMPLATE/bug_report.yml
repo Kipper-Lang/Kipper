@@ -53,9 +53,11 @@ body:
       description: |
         Examples:
           - **Kipper**: 0.6.0
-          - **Operating System **: Ubuntu 20.04
+          - **Environment**: Firefox Nightly 102.0a1
+          - **Operating System**: Ubuntu 20.04
       value: |
-        - Kipper:
-        - Operating System (+ Version):
+        - Kipper: x.x.x
+        - Environment: Node.js/Browser x.x.x
+        - Operating System: OS x.x.x
     validations:
       required: false
