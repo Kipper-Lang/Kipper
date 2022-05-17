@@ -1466,16 +1466,16 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
  * @since 0.5.0
  */
 export interface AssignmentExpressionSemantics extends ExpressionSemantics {
-  /**
-   * The identifier that is assigned to.
-   * @since 0.7.0
-   */
-  identifier: string;
-  /**
-   * The assigned value to this variable.
-   * @since 0.7.0
-   */
-  value: Expression<any>;
+	/**
+	 * The identifier that is assigned to.
+	 * @since 0.7.0
+	 */
+	identifier: string;
+	/**
+	 * The assigned value to this variable.
+	 * @since 0.7.0
+	 */
+	value: Expression<any>;
 }
 
 /**
@@ -1505,26 +1505,26 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-    // There will always be only two children, which are the identifier and expression assigned.
-    const identifier: IdentifierPrimaryExpression = (() => {
-      const exp = this.children[0];
-      this.programCtx.assert(this).validAssignment(exp);
-      return <IdentifierPrimaryExpression>exp;
-    })();
-    const assignValue: Expression<any> = this.children[1];
+		// There will always be only two children, which are the identifier and expression assigned.
+		const identifier: IdentifierPrimaryExpression = (() => {
+			const exp = this.children[0];
+			this.programCtx.assert(this).validAssignment(exp);
+			return <IdentifierPrimaryExpression>exp;
+		})();
+		const assignValue: Expression<any> = this.children[1];
 
-    // Throw an error if the children are incomplete
-    if (!assignValue) {
-      throw new UnableToDetermineMetadataError();
-    }
+		// Throw an error if the children are incomplete
+		if (!assignValue) {
+			throw new UnableToDetermineMetadataError();
+		}
 
-    // Get the semantics / the evaluated type of this expression
-    const valueSemantics = assignValue.ensureSemanticDataExists();
-    const identifierSemantics = identifier.ensureSemanticDataExists();
+		// Get the semantics / the evaluated type of this expression
+		const valueSemantics = assignValue.ensureSemanticDataExists();
+		const identifierSemantics = identifier.ensureSemanticDataExists();
 		this.semanticData = {
 			evaluatedType: valueSemantics.evaluatedType,
-      value: assignValue,
-      identifier: identifierSemantics.identifier
+			value: assignValue,
+			identifier: identifierSemantics.identifier,
 		};
 	}
 

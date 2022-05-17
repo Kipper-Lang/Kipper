@@ -28,34 +28,36 @@ import {
 } from "./logic";
 import { KipperLogger, LogLevel } from "../logger";
 import {
-  CompilableParseToken,
-  CompoundStatement,
-  Expression,
-  ExpressionSemantics,
-  FunctionDeclaration, IdentifierPrimaryExpression,
-  ParameterDeclaration,
-  RootFileParseToken,
-  VariableDeclaration
+	CompilableParseToken,
+	CompoundStatement,
+	Expression,
+	ExpressionSemantics,
+	FunctionDeclaration,
+	IdentifierPrimaryExpression,
+	ParameterDeclaration,
+	RootFileParseToken,
+	VariableDeclaration,
 } from "./tokens";
 import {
-  BuiltInOverwriteError,
-  FunctionDefinitionAlreadyExistsError,
-  IdentifierAlreadyUsedByFunctionError,
-  IdentifierAlreadyUsedByVariableError,
-  InvalidAmountOfArgumentsError,
-  InvalidArgumentTypeError,
-  InvalidArithmeticOperationError, InvalidAssignmentError,
-  InvalidGlobalError,
-  InvalidReturnTypeError,
-  KipperError,
-  KipperNotImplementedError,
-  UndefinedIdentifierError,
-  UndefinedSemanticsError,
-  UnknownFunctionIdentifierError,
-  UnknownIdentifierError,
-  UnknownTypeError,
-  UnknownVariableIdentifierError,
-  VariableDefinitionAlreadyExistsError
+	BuiltInOverwriteError,
+	FunctionDefinitionAlreadyExistsError,
+	IdentifierAlreadyUsedByFunctionError,
+	IdentifierAlreadyUsedByVariableError,
+	InvalidAmountOfArgumentsError,
+	InvalidArgumentTypeError,
+	InvalidArithmeticOperationError,
+	InvalidAssignmentError,
+	InvalidGlobalError,
+	InvalidReturnTypeError,
+	KipperError,
+	KipperNotImplementedError,
+	UndefinedIdentifierError,
+	UndefinedSemanticsError,
+	UnknownFunctionIdentifierError,
+	UnknownIdentifierError,
+	UnknownTypeError,
+	UnknownVariableIdentifierError,
+	VariableDefinitionAlreadyExistsError,
 } from "../errors";
 import { KipperCompileTarget } from "./target";
 
@@ -347,18 +349,18 @@ export class CompileAssert {
 		}
 	}
 
-  /**
-   * Asserts that the passed expression is valid.
-   * @param leftExp The left-hand side of the assignment.
-   * @since 0.7.0
-   */
-  public validAssignment(leftExp: Expression<any>): void {
-    if (!(leftExp instanceof IdentifierPrimaryExpression)) {
-      throw this.assertError(new InvalidAssignmentError(
-        "The left-hand side of an expression must be an identifier or a property access."
-        ));
-    }
-  }
+	/**
+	 * Asserts that the passed expression is valid.
+	 * @param leftExp The left-hand side of the assignment.
+	 * @since 0.7.0
+	 */
+	public validAssignment(leftExp: Expression<any>): void {
+		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
+			throw this.assertError(
+				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
+			);
+		}
+	}
 
 	/**
 	 * Asserts that the passed function arguments are valid.

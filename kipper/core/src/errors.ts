@@ -385,9 +385,9 @@ export class InvalidArgumentTypeError extends InvalidTypeError {
  * @since 0.7.0
  */
 export class InvalidAssignmentError extends KipperError {
-  constructor(msg: string) {
-    super(msg);
-  }
+	constructor(msg: string) {
+		super(msg);
+	}
 }
 
 /**
