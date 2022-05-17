@@ -1,6 +1,6 @@
 {
   "name": "@kipper/cli",
-  "description": "The Kipper Command Line Interface (CLI) to interact with the Kipper compiler!",
+  "description": "The Kipper Command Line Interface (CLI) to interact with the Kipper compiler.",
   "version": "0.6.1",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
