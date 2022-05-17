@@ -364,7 +364,7 @@ export class InvalidReturnTypeError extends InvalidTypeError {
  */
 export class InvalidArithmeticOperationError extends InvalidTypeError {
 	constructor(firstType: string, secondType: string) {
-		super(`Invalid arithmetic operation between types '${firstType}' and ${secondType}.`);
+		super(`Invalid arithmetic operation between types '${firstType}' and '${secondType}'.`);
 		this.name = "InvalidArithmeticOperationError";
 	}
 }
