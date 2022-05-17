@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Implemented code generation for declarations, definitions and value assignments.
+- Implemented semantic analysis for `AssignmentExpression` and `VariableDeclaration`.
 - New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned at declaration.
   This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
 - New functions:
