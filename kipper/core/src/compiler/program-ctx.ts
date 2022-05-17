@@ -28,34 +28,34 @@ import {
 } from "./logic";
 import { KipperLogger, LogLevel } from "../logger";
 import {
-	CompilableParseToken,
-	CompoundStatement,
-	Expression,
-	ExpressionSemantics,
-	FunctionDeclaration,
-	ParameterDeclaration,
-	RootFileParseToken,
-	VariableDeclaration,
+  CompilableParseToken,
+  CompoundStatement,
+  Expression,
+  ExpressionSemantics,
+  FunctionDeclaration, IdentifierPrimaryExpression,
+  ParameterDeclaration,
+  RootFileParseToken,
+  VariableDeclaration
 } from "./tokens";
 import {
-	BuiltInOverwriteError,
-	FunctionDefinitionAlreadyExistsError,
-	IdentifierAlreadyUsedByFunctionError,
-	IdentifierAlreadyUsedByVariableError,
-	InvalidAmountOfArgumentsError,
-	InvalidArgumentTypeError,
-	InvalidArithmeticOperationError,
-	InvalidGlobalError,
-	InvalidReturnTypeError,
-	KipperError,
-	KipperNotImplementedError,
-	UndefinedIdentifierError,
-	UndefinedSemanticsError,
-	UnknownFunctionIdentifierError,
-	UnknownIdentifierError,
-	UnknownTypeError,
-	UnknownVariableIdentifierError,
-	VariableDefinitionAlreadyExistsError,
+  BuiltInOverwriteError,
+  FunctionDefinitionAlreadyExistsError,
+  IdentifierAlreadyUsedByFunctionError,
+  IdentifierAlreadyUsedByVariableError,
+  InvalidAmountOfArgumentsError,
+  InvalidArgumentTypeError,
+  InvalidArithmeticOperationError, InvalidAssignmentError,
+  InvalidGlobalError,
+  InvalidReturnTypeError,
+  KipperError,
+  KipperNotImplementedError,
+  UndefinedIdentifierError,
+  UndefinedSemanticsError,
+  UnknownFunctionIdentifierError,
+  UnknownIdentifierError,
+  UnknownTypeError,
+  UnknownVariableIdentifierError,
+  VariableDefinitionAlreadyExistsError
 } from "../errors";
 import { KipperCompileTarget } from "./target";
 
@@ -347,6 +347,19 @@ export class CompileAssert {
 		}
 	}
 
+  /**
+   * Asserts that the passed expression is valid.
+   * @param leftExp The left-hand side of the assignment.
+   * @since 0.7.0
+   */
+  public validAssignment(leftExp: Expression<any>): void {
+    if (!(leftExp instanceof IdentifierPrimaryExpression)) {
+      throw this.assertError(new InvalidAssignmentError(
+        "The left-hand side of an expression must be an identifier or a property access."
+        ));
+    }
+  }
+
 	/**
 	 * Asserts that the passed function arguments are valid.
 	 * @param func The function that is called.
@@ -372,7 +385,8 @@ export class CompileAssert {
 	 * of the {@link KipperProgramContext program}.
 	 */
 	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
-		const ref = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+		const ref =
+			(scope ? scope.getVariableRecursively(identifier) : undefined) ?? this.programCtx.getGlobalIdentifier(identifier);
 		if (ref === undefined) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
