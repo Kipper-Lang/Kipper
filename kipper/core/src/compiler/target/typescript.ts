@@ -199,6 +199,31 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 
 export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
+	 * Fetches the typescript equivalent for a {@link KipperType}.
+	 * @param kipperType The type to get the equivalent for.
+	 * @since 0.7.0
+	 */
+	async getTypeScriptType(kipperType: KipperType): Promise<string> {
+		switch (kipperType) {
+			case kipperVoidType:
+				return "void";
+			case kipperFuncType:
+				throw new KipperNotImplementedError(
+					"Lambda functions have not been implemented for TypeScript translation yet.",
+				);
+			case kipperBoolType:
+				return "boolean";
+			case kipperCharType:
+			case kipperStrType:
+				return "string";
+			case kipperNumType:
+				return "number";
+			case kipperListType:
+				throw new KipperNotImplementedError("Kipper lists have not been implemented for TypeScript translation yet.");
+		}
+	}
+
+	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
 	compoundStatement = async (token: CompoundStatement): Promise<Array<TranslatedCodeLine>> => {
