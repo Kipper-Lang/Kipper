@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `@types/node` as a dependency for `@kipper/cli`.
+- `@types/node` as a dependency for `@kipper/cli`.
+
+### Changed
+
 - Updated locale dependency requirements for kipper packages to `~` (Accepting patches, but not
   new features). E.g. `@kipper/cli` requires `"@kipper/core": "~0.6"`
 
