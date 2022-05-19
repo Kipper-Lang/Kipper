@@ -1,4 +1,4 @@
-name-template: "Development Release v$RESOLVED_VERSION"
+name-template: "Kipper v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 tag-prefix: "v"
 categories:
