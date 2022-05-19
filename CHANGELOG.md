@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors:
   - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
 
+### Changed
+
+- Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused errors to be not thrown
+  when using arithmetic expression using strings in combination with other incomplete types. 
+
 ## [0.6.1] - 2022-05-17
 
 ### Added
