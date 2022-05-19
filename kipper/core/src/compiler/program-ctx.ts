@@ -297,13 +297,20 @@ export class CompileAssert {
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
 	 */
-	public arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {
-		const exp1Type = exp1.semanticData.evaluatedType;
-		const exp2Type = exp2.semanticData.evaluatedType;
+	public arithmeticExpressionValid(
+		exp1: Expression<ExpressionSemantics>,
+		exp2: Expression<ExpressionSemantics>,
+		op: KipperArithmeticOperator,
+	): void {
+		const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
+		const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
 		if (exp1Type !== exp2Type) {
 			// String-like types can use '+' to concat strings
-			const typeCheck = (t: KipperType) => t === exp1Type;
-			if (op === kipperPlusOperator && kipperStrLikeTypes.find(typeCheck) && kipperStrLikeTypes.find(typeCheck)) {
+			if (
+				op === kipperPlusOperator &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
+			) {
 				return;
 			}
 
