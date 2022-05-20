@@ -11,7 +11,6 @@ import {
 	DeclaratorContext,
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
-	InitializerContext,
 	ParameterDeclarationContext,
 	ParameterTypeListContext,
 	SingleItemTypeSpecifierContext,
