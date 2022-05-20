@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#100](https://github.com/Luna-Klatzer/Kipper/issues/100). (Available for `kipper analyse`, `kipper compile` and
   `kipper run`).
 - Implemented single char flags as explained in [#109](https://github.com/Luna-Klatzer/Kipper/issues/109).
+- Tracebacks for non-compiler errors that occur during runtime in `@kipper/cli`.
 - New functions:
   - `CompileAssert.validAssignment`, which asserts that a specific assignment is valid.
 - New errors:
@@ -32,7 +33,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with the Antlr4 Parser and Lexer.
 - Fixed NULL character issue when writing generated code onto files using the `utf16le` encoding. From now on a buffer
   will be created using the proper encoding (also for `ascii` and `utf8`) that should be properly writable to a file.
-- Removed unnecessary traceback when encountering Kipper runtime errors as explained in
+
+### Removed
+
+- Unnecessary traceback when encountering Kipper runtime errors as explained in
   [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
 
 ## [0.6.1] - 2022-05-17
