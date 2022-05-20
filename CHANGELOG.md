@@ -30,6 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when using arithmetic expression using strings in combination with other incomplete types.
 - Fixed issues with non-printable unicode characters in the Kipper CLI when reading UTF-16 files, which caused errors
   with the Antlr4 Parser and Lexer.
+- Fixed NULL character issue when writing generated code onto files using the `utf16le` encoding. From now on a buffer
+  will be created using the proper encoding (also for `ascii` and `utf8`) that should be properly writable to a file.
 
 ## [0.6.1] - 2022-05-17
 
