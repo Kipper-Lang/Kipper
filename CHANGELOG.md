@@ -9,14 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented code generation for declarations, definitions and value assignments.
+- Implemented code generation for declarations, definitions and value assignments as explained in
+  [#26](https://github.com/Luna-Klatzer/Kipper/issues/26).
 - Implemented semantic analysis for `AssignmentExpression` and `VariableDeclaration`.
 - New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned at declaration.
   This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
+- New `@kipper/cli` flag `--stringCode`, which can be used as a replacement for the argument `file` as explained in
+  [#100](https://github.com/Luna-Klatzer/Kipper/issues/100). (Available for `kipper analyse`, `kipper compile` and
+  `kipper run`).
 - New functions:
   - `CompileAssert.validAssignment`, which asserts that a specific assignment is valid.
 - New errors:
   - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
+  - `KipperInvalidInputError`, which is thrown when passing invalid input to the Kipper cli.
 
 ### Changed
 
