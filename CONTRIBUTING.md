@@ -11,6 +11,7 @@
     - [`@kipper/core` package](#kippercore-package)
     - [`@kipper/cli` package](#kippercli-package)
   - [Kipper compilation targets](#kipper-compilation-targets)
+  - [Configuring the compiler](#configuring-the-compiler)
   - [How to add new compiler functionality](#how-to-add-new-compiler-functionality)
     - [Add or update semantics](#add-or-update-semantics)
       - [Updating target specific semantic checks](#updating-target-specific-semantic-checks)
@@ -110,6 +111,15 @@ targets, like native JavaScript or AssemblyScript to allow more diverse targets 
 For the moment though, the only target is TypeScript, which is defined in the file `/compiler/target/typescript` of 
 `@kipper/core`. This target also is the default target that will be used for every compilation, unless another target 
 is specified in `CompileConfig`.
+
+## Configuring the compiler
+
+The Kipper compiler uses a configuration interface `CompileConfig` to configure the compilation of a program. This 
+interface can be passed as an argument to `KipperCompiler.compile()`, where it will be put into a 
+`CompilerEvaluatedOptions` that merges both the default configuration with the user defined configuration.
+
+*Currently, configuring `KipperCompiler.syntaxAnalyse()` is not supported, as it does not yet support semantic analysis.
+This should be implemented in future releases.*
 
 ## How to add new compiler functionality
 
