@@ -17,7 +17,9 @@
 		"quotes": 0,
 		"semi": 2,
 		"no-dupe-class-members": 0,
-		"@typescript-eslint/no-dupe-class-members": 2
+		"@typescript-eslint/no-dupe-class-members": 2,
+    "no-misleading-character-class": 0,
+    "no-control-regex": 0
 	},
 	"env": {
 		"node": true,
