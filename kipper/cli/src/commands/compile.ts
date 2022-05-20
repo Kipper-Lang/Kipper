@@ -34,13 +34,13 @@ export default class Compile extends Command {
 			parse: verifyEncoding,
 		}),
 		outputDir: flags.string({
-      char: "o",
+			char: "o",
 			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
 		stringCode: flags.string({
-      char: "s",
+			char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' argument.",
 		}),
 	};

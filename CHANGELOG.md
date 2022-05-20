@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused errors to be not thrown
   when using arithmetic expression using strings in combination with other incomplete types.
-- Fixed issues with non-printable unicode characters in the Kipper CLI when reading UTF-16 files, which caused errors 
+- Fixed issues with non-printable unicode characters in the Kipper CLI when reading UTF-16 files, which caused errors
   with the Antlr4 Parser and Lexer.
 
 ## [0.6.1] - 2022-05-17
