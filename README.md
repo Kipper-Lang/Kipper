@@ -81,8 +81,7 @@ This also enables the usage of files, which can be read and compiled to TypeScri
 having to do anything yourself. This also allows the input of data over the console and file-interactions,
 which are not supported inside a browser.
 
-For more info go to the CLI repository [here](https://github.con/Luna-Klatzer/Kipper-CLI) or visit the npm page
-[here](https://www.npmjs.com/package/@kipper/cli).
+For more info go to the [`@kipper/cli` README.md](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
 
 ### Locally in your own code as a package
 
