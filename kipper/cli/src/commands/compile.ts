@@ -5,9 +5,9 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { ArgumentError, KipperCompiler, KipperParseStream } from "@kipper/core";
+import { KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
-import { defaultCliEmitHandler } from "../logger";
+import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
 import { KipperInvalidInputError } from "../errors";
@@ -64,19 +64,29 @@ export default class Compile extends Command {
 		const startTime: number = new Date().getTime();
 
 		// Compile the file
-		const result = await compiler.compile(
-			new KipperParseStream(
-				file.stringContent,
-				file.name,
-				file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-				file.charStream,
-			),
-		);
+		let result: KipperCompileResult;
+		try {
+			// Run the file
+			result = await compiler.compile(
+				new KipperParseStream(
+					file.stringContent,
+					file.name,
+					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+					file.charStream,
+				),
+			);
 
-		await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
+			await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
 
-		// Finished!
-		const duration: number = (new Date().getTime() - startTime) / 1000;
-		await logger.info(`Finished code compilation in ${duration}s.`);
+			// Finished!
+			const duration: number = (new Date().getTime() - startTime) / 1000;
+			await logger.info(`Finished code compilation in ${duration}s.`);
+		} catch (e) {
+			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
+			// output of the error and traceback.
+			if (!(e instanceof KipperError)) {
+				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+			}
+		}
 	}
 }
