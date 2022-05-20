@@ -54,7 +54,7 @@ None.
 
 ## Linked other issues or PRs
 
-<!-- Include other issues and PRs that are related to this if any exist. -->
+<!-- Include other issues and PRs related to this if any exist. -->
 
 <!-- Use this format: - [ ] #ISSUE_OR_PR -->
 
