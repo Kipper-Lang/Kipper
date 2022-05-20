@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CompileAssert.validAssignment`, which asserts that a specific assignment is valid.
 - New errors:
   - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
+  - `KipperInvalidInputError`, which is thrown when passing invalid input to the Kipper cli.
 
 ### Changed
 
