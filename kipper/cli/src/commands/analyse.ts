@@ -27,6 +27,7 @@ export default class Analyse extends Command {
 
 	static flags = {
 		encoding: flags.string({
+      char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
