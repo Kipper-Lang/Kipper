@@ -34,7 +34,20 @@ export async function writeCompilationResult(
 			await fs.mkdir(buildPath);
 		}
 
-		await fs.writeFile(outPath, result.write(), { encoding: encoding });
+    // Write the output code
+    const code = result.write();
+
+    // Create a buffer with the proper encoding that can be written to a file
+    let buffer: Buffer;
+    if (encoding === 'utf16le') {
+      buffer = Buffer.from(`\ufeff${code}`, 'utf16le');
+    } else if (encoding === 'utf8') {
+      buffer = Buffer.from(code, 'utf8');
+    } else {
+      buffer = Buffer.from(code, 'ascii');
+    }
+
+		await fs.writeFile(outPath, buffer, { encoding: encoding });
 	} catch (e) {
 		throw new KipperFileWriteError(outPath);
 	}
