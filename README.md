@@ -115,6 +115,13 @@ fs.readFile(path, "utf8" as BufferEncoding).then((fileContent: string) => {
 });
 ```
 
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub 
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
 ## Copyright and License
 
 ![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
