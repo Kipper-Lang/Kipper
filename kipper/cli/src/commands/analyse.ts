@@ -5,10 +5,10 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperParseStream } from "@kipper/core";
+import { KipperCompiler, KipperError, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { defaultCliEmitHandler } from "../logger";
+import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperInvalidInputError } from "../errors";
 
 export default class Analyse extends Command {
@@ -56,18 +56,26 @@ export default class Analyse extends Command {
 		// Start timer for processing
 		const startTime: number = new Date().getTime();
 
-		// Compile the file
-		await compiler.syntaxAnalyse(
-			new KipperParseStream(
-				file.stringContent,
-				file.name,
-				file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-				file.charStream,
-			),
-		);
+		// Analyse the file
+		try {
+			await compiler.syntaxAnalyse(
+				new KipperParseStream(
+					file.stringContent,
+					file.name,
+					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+					file.charStream,
+				),
+			);
 
-		// Finished!
-		const duration: number = (new Date().getTime() - startTime) / 1000;
-		await logger.info(`Finished code analysis in ${duration}s.`);
+			// Finished!
+			const duration: number = (new Date().getTime() - startTime) / 1000;
+			await logger.info(`Finished code analysis in ${duration}s.`);
+		} catch (e) {
+			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
+			// output of the error and traceback.
+			if (!(e instanceof KipperError)) {
+				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+			}
+		}
 	}
 }

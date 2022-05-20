@@ -7,7 +7,7 @@
 import { Command, flags } from "@oclif/command";
 import { KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
-import { defaultCliEmitHandler } from "../logger";
+import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
@@ -81,30 +81,29 @@ export default class Run extends Command {
 			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
 		}
 
-    let result: KipperCompileResult;
-    try {
-      // Run the file
-      result = await compiler.compile(
-        new KipperParseStream(
-          file.stringContent,
-          file.name,
-          file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-          file.charStream,
-        ),
-      );
-    } catch (e) {
-      // In case the error is of type KipperError, exit the program, as the logger should have already handled the
-      // output of the error and traceback.
-      if (e instanceof KipperError) {
-        process.exit(1);
-      }
-      throw e;
-    }
+		let result: KipperCompileResult;
+		try {
+			// Run the file
+			result = await compiler.compile(
+				new KipperParseStream(
+					file.stringContent,
+					file.name,
+					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+					file.charStream,
+				),
+			);
 
-		await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
+			await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
 
-		// Execute the program
-		const jsProgram = ts.transpileModule(result.write(), { compilerOptions: { module: ts.ModuleKind.CommonJS } });
-		executeKipperProgram(jsProgram.outputText);
+			// Execute the program
+			const jsProgram = ts.transpileModule(result.write(), { compilerOptions: { module: ts.ModuleKind.CommonJS } });
+			executeKipperProgram(jsProgram.outputText);
+		} catch (e) {
+			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
+			// output of the error and traceback.
+			if (!(e instanceof KipperError)) {
+				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+			}
+		}
 	}
 }
