@@ -28,16 +28,19 @@ export default class Compile extends Command {
 
 	static flags = {
 		encoding: flags.string({
+			char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
 		outputDir: flags.string({
+      char: "o",
 			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
 		stringCode: flags.string({
+      char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' argument.",
 		}),
 	};
