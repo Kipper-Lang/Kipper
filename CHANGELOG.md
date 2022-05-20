@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New `@kipper/cli` flag `--stringCode`, which can be used as a replacement for the argument `file` as explained in
   [#100](https://github.com/Luna-Klatzer/Kipper/issues/100). (Available for `kipper analyse`, `kipper compile` and
   `kipper run`).
+- Implemented single char flags as explained in [#109](https://github.com/Luna-Klatzer/Kipper/issues/109).
 - New functions:
   - `CompileAssert.validAssignment`, which asserts that a specific assignment is valid.
 - New errors:
@@ -27,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused errors to be not thrown
   when using arithmetic expression using strings in combination with other incomplete types.
+- Fixed issues with non-printable unicode characters in the Kipper CLI when reading UTF-16 files, which caused errors 
+  with the Antlr4 Parser and Lexer.
 
 ## [0.6.1] - 2022-05-17
 
