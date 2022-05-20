@@ -32,6 +32,7 @@ export default class Analyse extends Command {
 			parse: verifyEncoding,
 		}),
 		stringCode: flags.string({
+			char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
 		}),
 	};
