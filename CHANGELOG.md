@@ -15,12 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented support for identifiers references, which means variables can now be used in the following contexts:
   - As a function call argument: `call print(identifier)`
   - As a value in an arithmetic expression: `identifier + identifier` or `identifier + 5`
-- Implemented CLI flag `-s/--stringCode`, which can be used as a replacement for the argument `file`. 
-  ([#100](https://github.com/Luna-Klatzer/Kipper/issues/100)). This flag is available for `kipper analyse`, 
+- Implemented CLI flag `-s/--stringCode`, which can be used as a replacement for the argument `file`.
+  ([#100](https://github.com/Luna-Klatzer/Kipper/issues/100)). This flag is available for `kipper analyse`,
   `kipper compile` and `kipper run`)
 - Implemented single char flags for the CLI ([#109](https://github.com/Luna-Klatzer/Kipper/issues/109)).
 - Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
-- New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition. 
+- New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
   This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
 - New function `CompileAssert.validAssignment()`, which asserts that an assignment expression is valid.
 - New errors:
@@ -31,14 +31,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
   type of string additive expressions causing invalid type errors when used with other expressions.
-- Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and 
+- Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and
   Lexer, when reading files using the `utf16le` encoding.
-- Fixed NULL character issue [#114](https://github.com/Luna-Klatzer/Kipper/pull/114) when writing TypeScript code onto 
-  files using the `utf16le` encoding. From now on a buffer will be created using the proper encoding (also for 
+- Fixed NULL character issue [#114](https://github.com/Luna-Klatzer/Kipper/pull/114) when writing TypeScript code onto
+  files using the `utf16le` encoding. From now on a buffer will be created using the proper encoding (also for
   `ascii` and `utf8`) that should be properly writable to a file.
 - Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic
   expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
-- Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the 
+- Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the
   return type of string expressions.
 
 ### Removed
@@ -75,7 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     error in case that the children tokens are undefined.
   - `KipperProgramContext.semanticAnalysis()` (which allows for semantic analysis without compiling)
   - `KipperProgramContext.translate()`, which translates a processed parse tree.
-  - `CompileAssert.getExistingVariable()` and `CompileAssert.getExistingReference()` for fetching reference variables 
+  - `CompileAssert.getExistingVariable()` and `CompileAssert.getExistingReference()` for fetching reference variables
     based on an identifier.
   - `CompoundStatement.getLocalVariable()` and `CompoundStatement.getVariableRecursively()` for fetching
     a variable based on an identifier inside a `CompoundStatement`/`KipperScope`.
