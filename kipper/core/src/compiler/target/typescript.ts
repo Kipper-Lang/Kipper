@@ -52,7 +52,6 @@ import {
 	TranslatedCodeToken,
 	TranslatedExpression,
 } from "../logic";
-import { ArgumentExpressionListContext } from "../parser";
 import { KipperNotImplementedError } from "../../errors";
 
 export class TypeScriptTarget extends KipperCompileTarget {
