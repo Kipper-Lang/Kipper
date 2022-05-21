@@ -364,7 +364,7 @@ export class InvalidReturnTypeError extends InvalidTypeError {
  */
 export class InvalidArithmeticOperationError extends InvalidTypeError {
 	constructor(firstType: string, secondType: string) {
-		super(`Invalid arithmetic operation between types '${firstType}' and ${secondType}.`);
+		super(`Invalid arithmetic operation between types '${firstType}' and '${secondType}'.`);
 		this.name = "InvalidArithmeticOperationError";
 	}
 }
@@ -377,6 +377,16 @@ export class InvalidArgumentTypeError extends InvalidTypeError {
 		super(
 			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
 		);
+	}
+}
+
+/**
+ * Error that is thrown whenever an assignment expression is invalid.
+ * @since 0.7.0
+ */
+export class InvalidAssignmentError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
 	}
 }
 

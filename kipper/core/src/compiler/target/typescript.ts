@@ -38,8 +38,21 @@ import {
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
 } from "../tokens";
-import { ScopeFunctionDeclaration, TranslatedCodeLine, TranslatedCodeToken, TranslatedExpression } from "../logic";
-import { ArgumentExpressionListContext } from "../parser";
+import {
+	kipperBoolType,
+	kipperCharType,
+	kipperFuncType,
+	kipperListType,
+	kipperNumType,
+	kipperStrType,
+	KipperType,
+	kipperVoidType,
+	ScopeFunctionDeclaration,
+	TranslatedCodeLine,
+	TranslatedCodeToken,
+	TranslatedExpression,
+} from "../logic";
+import { KipperNotImplementedError } from "../../errors";
 
 export class TypeScriptTarget extends KipperCompileTarget {
 	constructor(
@@ -199,6 +212,31 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 
 export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
+	 * Fetches the typescript equivalent for a {@link KipperType}.
+	 * @param kipperType The type to get the equivalent for.
+	 * @since 0.7.0
+	 */
+	async getTypeScriptType(kipperType: KipperType): Promise<string> {
+		switch (kipperType) {
+			case kipperVoidType:
+				return "void";
+			case kipperFuncType:
+				throw new KipperNotImplementedError(
+					"Lambda functions have not been implemented for TypeScript translation yet.",
+				);
+			case kipperBoolType:
+				return "boolean";
+			case kipperCharType:
+			case kipperStrType:
+				return "string";
+			case kipperNumType:
+				return "number";
+			case kipperListType:
+				throw new KipperNotImplementedError("Kipper lists have not been implemented for TypeScript translation yet.");
+		}
+	}
+
+	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
 	compoundStatement = async (token: CompoundStatement): Promise<Array<TranslatedCodeLine>> => {
@@ -259,7 +297,25 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into the typescript language.
 	 */
 	variableDeclaration = async (token: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = token.ensureSemanticDataExists();
+
+		const storage = semanticData.storageType === "const" ? "const" : "let";
+		const tsType = await this.getTypeScriptType(semanticData.valueType);
+		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
+
+		// Only add ' = EXP' if assignValue is defined
+		return [
+			[
+				storage,
+				" ",
+				semanticData.identifier,
+				":",
+				" ",
+				tsType,
+				...(assign.length > 0 ? [" ", "=", " ", ...assign] : []),
+				";",
+			],
+		];
 	};
 
 	/**
@@ -448,6 +504,12 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the typescript language.
 	 */
 	assignmentExpression = async (token: AssignmentExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = token.ensureSemanticDataExists();
+
+		const identifier = semanticData.identifier;
+		const assignValue = await semanticData.value.translateCtxAndChildren();
+
+		// Only add ' = EXP' if assignValue is defined
+		return [identifier, " ", "=", " ", ...assignValue];
 	};
 }

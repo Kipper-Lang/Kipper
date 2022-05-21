@@ -31,7 +31,7 @@ export const defaultCliLogger: Logger = new Logger(defaultKipperLoggerConfig);
 export function defaultCliEmitHandler(level: LogLevel, msg: string): ILogObject {
 	switch (level) {
 		case LogLevel.FATAL:
-			return defaultCliLogger.trace(msg);
+			return defaultCliLogger.fatal(msg);
 		case LogLevel.ERROR:
 			return defaultCliLogger.error(msg);
 		case LogLevel.WARN:

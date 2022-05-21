@@ -32,12 +32,14 @@ import {
 	KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	KipperArithmeticOperator,
+	kipperCharType,
 	KipperCharType,
 	KipperFunction,
 	KipperListType,
 	KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNumType,
+	kipperStrType,
 	KipperStrType,
 	KipperType,
 	ScopeVariableDeclaration,
@@ -1056,26 +1058,31 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.ensureTokenChildrenExist();
 
-		const operator = children.find((token) => {
-			return (
-				token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
-			);
-		})?.text;
+		const operator = <KipperMultiplicativeOperator | undefined>children
+			.find((token) => {
+				return (
+					token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
+				);
+			})
+			?.text.trim();
 
+		// Failed to evaluate the operator
 		if (!operator) {
-			new UnableToDetermineMetadataError();
+			throw new UnableToDetermineMetadataError();
 		}
+
+		const exp1 = this.children[0];
+		const exp2 = this.children[1];
+
+		// Assert that the arithmetic expression is valid
+		this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
 			exp1: this.children[0], // First expression
 			exp2: this.children[1], // Second expression
-			operator: <KipperMultiplicativeOperator>operator,
+			operator: operator,
 		};
-
-		this.programCtx
-			.assert(this)
-			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1140,24 +1147,44 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.ensureTokenChildrenExist();
 
-		const operator = children.find((token) => {
-			return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
-		})?.text;
+		const operator = <KipperAdditiveOperator | undefined>children
+			.find((token) => {
+				return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
+			})
+			?.text.trim();
 
+		// Failed to evaluate the operator
 		if (!operator) {
-			new UnableToDetermineMetadataError();
+			throw new UnableToDetermineMetadataError();
 		}
 
+		const exp1 = this.children[0];
+		const exp2 = this.children[1];
+
+		// Assert that the arithmetic expression is valid
+		this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
+
+		const evaluateType: () => KipperType = () => {
+			const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
+			const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+			if (exp1Type === exp2Type) {
+				return exp1.semanticData.evaluatedType;
+			} else if (
+				(exp1Type === kipperCharType && exp2Type === kipperStrType) ||
+				(exp1Type === kipperStrType && exp2Type === kipperCharType)
+			) {
+				return kipperStrType;
+			} else {
+				// This should never happen
+				throw new UnableToDetermineMetadataError();
+			}
+		};
 		this.semanticData = {
-			evaluatedType: "num",
-			exp1: this.children[0], // First expression
-			exp2: this.children[1], // Second expression
+			evaluatedType: evaluateType(),
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
 			operator: <KipperAdditiveOperator>operator,
 		};
-
-		this.programCtx
-			.assert(this)
-			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1465,11 +1492,24 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
  * Semantics for {@link AssignmentExpression}.
  * @since 0.5.0
  */
-export interface AssignmentExpressionSemantics extends ExpressionSemantics {}
+export interface AssignmentExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The identifier that is assigned to.
+	 * @since 0.7.0
+	 */
+	identifier: string;
+	/**
+	 * The assigned value to this variable.
+	 * @since 0.7.0
+	 */
+	value: Expression<any>;
+}
 
 /**
  * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}. This class only represents assigning a value, but not declaring it!
+ *
+ * This expression will evaluate to the value that was assigned to the identifier.
  * @since 0.1.0
  * @example
  * x = 4
@@ -1492,13 +1532,26 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.assert(this)
-			.notImplementedError(new KipperNotImplementedError("Assignment Expressions have not been implemented yet."));
+		// There will always be only two children, which are the identifier and expression assigned.
+		const identifier: IdentifierPrimaryExpression = (() => {
+			const exp = this.children[0];
+			this.programCtx.assert(this).validAssignment(exp);
+			return <IdentifierPrimaryExpression>exp;
+		})();
+		const assignValue: Expression<any> = this.children[1];
 
-		// eslint-disable-next-line no-unreachable
+		// Throw an error if the children are incomplete
+		if (!assignValue) {
+			throw new UnableToDetermineMetadataError();
+		}
+
+		// Get the semantics / the evaluated type of this expression
+		const valueSemantics = assignValue.ensureSemanticDataExists();
+		const identifierSemantics = identifier.ensureSemanticDataExists();
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: valueSemantics.evaluatedType,
+			value: assignValue,
+			identifier: identifierSemantics.identifier,
 		};
 	}
 

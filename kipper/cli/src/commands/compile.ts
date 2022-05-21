@@ -5,11 +5,12 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperParseStream } from "@kipper/core";
+import { KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
-import { defaultCliEmitHandler } from "../logger";
+import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
+import { KipperInvalidInputError } from "../errors";
 
 export default class Compile extends Command {
 	static description = "Compiles a Kipper program.";
@@ -20,19 +21,27 @@ export default class Compile extends Command {
 	static args = [
 		{
 			name: "file",
-			required: true,
+			required: false,
 			description: "The file that should be compiled.",
 		},
 	];
 
 	static flags = {
 		encoding: flags.string({
+			char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
+			parse: verifyEncoding,
 		}),
 		outputDir: flags.string({
+			char: "o",
 			default: "build",
-			description: `The build directory where the compiled files should be placed. If the path does not exist, it will be created.`,
+			description:
+				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
+		}),
+		stringCode: flags.string({
+			char: "s",
+			description: "The content of a Kipper file that can be passed as a replacement for the 'file' argument.",
 		}),
 	};
 
@@ -41,22 +50,43 @@ export default class Compile extends Command {
 		const logger = new KipperLogger(defaultCliEmitHandler);
 		const compiler = new KipperCompiler(logger);
 
-		// Ensure the encoding is valid
-		verifyEncoding(flags.encoding);
+		// Fetch the file
+		let file: KipperParseFile | KipperParseStream;
+		if (args.file) {
+			file = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
+		} else if (flags.stringCode) {
+			file = await new KipperParseStream(flags.stringCode);
+		} else {
+			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
+		}
 
 		// Start timer for processing
 		const startTime: number = new Date().getTime();
 
-		// Analyse the file
-		const file: KipperParseFile = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
-		const result = await compiler.compile(
-			new KipperParseStream(file.stringContent, file.name, file.absolutePath, file.charStream),
-		);
+		// Compile the file
+		let result: KipperCompileResult;
+		try {
+			// Run the file
+			result = await compiler.compile(
+				new KipperParseStream(
+					file.stringContent,
+					file.name,
+					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+					file.charStream,
+				),
+			);
 
-		await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
+			await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
 
-		// Finished!
-		const duration: number = (new Date().getTime() - startTime) / 1000;
-		await logger.info(`Finished code compilation in ${duration}s.`);
+			// Finished!
+			const duration: number = (new Date().getTime() - startTime) / 1000;
+			await logger.info(`Finished code compilation in ${duration}s.`);
+		} catch (e) {
+			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
+			// output of the error and traceback.
+			if (!(e instanceof KipperError)) {
+				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+			}
+		}
 	}
 }

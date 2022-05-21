@@ -33,6 +33,7 @@ import {
 	Expression,
 	ExpressionSemantics,
 	FunctionDeclaration,
+	IdentifierPrimaryExpression,
 	ParameterDeclaration,
 	RootFileParseToken,
 	VariableDeclaration,
@@ -45,6 +46,7 @@ import {
 	InvalidAmountOfArgumentsError,
 	InvalidArgumentTypeError,
 	InvalidArithmeticOperationError,
+	InvalidAssignmentError,
 	InvalidGlobalError,
 	InvalidReturnTypeError,
 	KipperError,
@@ -295,13 +297,20 @@ export class CompileAssert {
 	 * @param exp2 The second expression.
 	 * @param op The arithmetic operation that is performed.
 	 */
-	public arithmeticExpressionValid(exp1: Expression<any>, exp2: Expression<any>, op: KipperArithmeticOperator): void {
-		const exp1Type = exp1.semanticData.evaluatedType;
-		const exp2Type = exp2.semanticData.evaluatedType;
+	public arithmeticExpressionValid(
+		exp1: Expression<ExpressionSemantics>,
+		exp2: Expression<ExpressionSemantics>,
+		op: KipperArithmeticOperator,
+	): void {
+		const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
+		const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
 		if (exp1Type !== exp2Type) {
 			// String-like types can use '+' to concat strings
-			const typeCheck = (t: KipperType) => t === exp1Type;
-			if (op === kipperPlusOperator && kipperStrLikeTypes.find(typeCheck) && kipperStrLikeTypes.find(typeCheck)) {
+			if (
+				op === kipperPlusOperator &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
+			) {
 				return;
 			}
 
@@ -348,6 +357,19 @@ export class CompileAssert {
 	}
 
 	/**
+	 * Asserts that the passed expression is valid.
+	 * @param leftExp The left-hand side of the assignment.
+	 * @since 0.7.0
+	 */
+	public validAssignment(leftExp: Expression<any>): void {
+		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
+			throw this.assertError(
+				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
+			);
+		}
+	}
+
+	/**
 	 * Asserts that the passed function arguments are valid.
 	 * @param func The function that is called.
 	 * @param args The arguments for the call expression.
@@ -372,7 +394,8 @@ export class CompileAssert {
 	 * of the {@link KipperProgramContext program}.
 	 */
 	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
-		const ref = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+		const ref =
+			(scope ? scope.getVariableRecursively(identifier) : undefined) ?? this.programCtx.getGlobalIdentifier(identifier);
 		if (ref === undefined) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {

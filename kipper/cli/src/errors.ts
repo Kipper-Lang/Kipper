@@ -47,3 +47,13 @@ export class KipperFileWriteError extends KipperCLIError {
 		super(`Failed to write file '${filePath}'.`);
 	}
 }
+
+/**
+ * Represents an error that is thrown whenever invalid input is passed to the cli.
+ * @since 0.7.0
+ */
+export class KipperInvalidInputError extends KipperCLIError {
+	constructor(err: string) {
+		super(err);
+	}
+}
