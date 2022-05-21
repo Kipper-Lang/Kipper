@@ -9,36 +9,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented code generation for declarations, definitions and value assignments as explained in
-  [#26](https://github.com/Luna-Klatzer/Kipper/issues/26).
+- Implemented code generation for declarations, definitions and variable assignments
+  ([#26](https://github.com/Luna-Klatzer/Kipper/issues/26)).
 - Implemented semantic analysis for `AssignmentExpression` and `VariableDeclaration`.
 - Implemented support for identifiers references, which means variables can now be used in the following contexts:
   - As a function call argument: `call print(identifier)`
   - As a value in an arithmetic expression: `identifier + identifier` or `identifier + 5`
-- Implemented `@kipper/cli` flag `--stringCode`, which can be used as a replacement for the argument `file` as 
-  explained in [#100](https://github.com/Luna-Klatzer/Kipper/issues/100). (Available for `kipper analyse`, `kipper 
-  compile` and `kipper run`).
+- Implemented CLI flag `-s/--stringCode`, which can be used as a replacement for the argument `file`. 
+  ([#100](https://github.com/Luna-Klatzer/Kipper/issues/100)). This flag is available for `kipper analyse`, 
+  `kipper compile` and `kipper run`)
 - Implemented single char flags for the CLI ([#109](https://github.com/Luna-Klatzer/Kipper/issues/109)).
-- Tracebacks for non-compiler errors that occur during runtime in `@kipper/cli`.
-- New field:
-  - `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
-    This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
-- New functions:
-  - `CompileAssert.validAssignment`, which asserts that an assignment expression is valid.
+- Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
+- New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition. 
+  This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
+- New function `CompileAssert.validAssignment()`, which asserts that an assignment expression is valid.
 - New errors:
   - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
   - `KipperInvalidInputError`, which is thrown when passing invalid input to the Kipper cli.
 
 ### Changed
 
-- Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused errors to be not thrown
-  when using arithmetic expression using strings in combination with other incomplete types.
-- Fixed issues with non-printable unicode characters in the Kipper CLI when reading UTF-16 files, which caused errors
-  with the Antlr4 Parser and Lexer.
-- Fixed NULL character issue when writing generated code onto files using the `utf16le` encoding. From now on a buffer
+- Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
+  type of string additive expressions causing invalid type errors when used with other expressions.
+- Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and 
+  Lexer, when reading files using the `utf16le` encoding.
+- Fixed NULL character issue when writing TypeScript code onto files using the `utf16le` encoding. From now on a buffer
   will be created using the proper encoding (also for `ascii` and `utf8`) that should be properly writable to a file.
 - Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic
-  expressions with the same operator (`N + N + N`) resulting in invalid generated code.
+  expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
 - Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the 
   return type of string expressions.
 
@@ -70,14 +68,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Field `args` in `FunctionCallPostfixExpressionSemantics`, which contains the `Expression` instances representing
   the arguments of a function call.
 - New functions:
-  - `getTokenIntervalSource`, which fetches the source code for an interval of two `Token` instances.
-  - `getParseTreeSource`, which fetches the source code for a parse tree.
-  - `CompilableParseToken.ensureTokenChildrenExist`, which throws an `UnableToDetermineMetadataError`
+  - `getTokenIntervalSource()`, which fetches the source code for an interval of two `Token` instances.
+  - `getParseTreeSource()`, which fetches the source code for a parse tree.
+  - `CompilableParseToken.ensureTokenChildrenExist()`, which throws an `UnableToDetermineMetadataError`
     error in case that the children tokens are undefined.
-  - `KipperProgramContext.semanticAnalysis` (which allows for semantic analysis without compiling)
-  - `KipperProgramContext.translate`, which translates a processed parse tree.
-  - `CompileAssert.getExistingVariable` and `CompileAssert.getExistingReference` for fetching reference variables based
-    on an identifier.
+  - `KipperProgramContext.semanticAnalysis()` (which allows for semantic analysis without compiling)
+  - `KipperProgramContext.translate()`, which translates a processed parse tree.
+  - `CompileAssert.getExistingVariable()` and `CompileAssert.getExistingReference()` for fetching reference variables 
+    based on an identifier.
   - `CompoundStatement.getLocalVariable()` and `CompoundStatement.getVariableRecursively()` for fetching
     a variable based on an identifier inside a `CompoundStatement`/`KipperScope`.
 - New types:
