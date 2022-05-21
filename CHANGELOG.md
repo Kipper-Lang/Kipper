@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with the Antlr4 Parser and Lexer.
 - Fixed NULL character issue when writing generated code onto files using the `utf16le` encoding. From now on a buffer
   will be created using the proper encoding (also for `ascii` and `utf8`) that should be properly writable to a file.
+- Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic 
+  expressions with the same operator (`N + N + N`) resulting in invalid generated code. 
 
 ### Removed
 
