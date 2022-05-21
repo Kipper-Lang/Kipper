@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   type of string additive expressions causing invalid type errors when used with other expressions.
 - Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and 
   Lexer, when reading files using the `utf16le` encoding.
-- Fixed NULL character issue ([#114](https://github.com/Luna-Klatzer/Kipper/pull/114)) when writing TypeScript code onto 
+- Fixed NULL character issue [#114](https://github.com/Luna-Klatzer/Kipper/pull/114) when writing TypeScript code onto 
   files using the `utf16le` encoding. From now on a buffer will be created using the proper encoding (also for 
   `ascii` and `utf8`) that should be properly writable to a file.
 - Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic
