@@ -32,12 +32,14 @@ import {
 	KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	KipperArithmeticOperator,
+	kipperCharType,
 	KipperCharType,
 	KipperFunction,
 	KipperListType,
 	KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNumType,
+	kipperStrType,
 	KipperStrType,
 	KipperType,
 	ScopeVariableDeclaration,
@@ -1056,26 +1058,29 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.ensureTokenChildrenExist();
 
-		const operator = children.find((token) => {
+		const operator = <KipperMultiplicativeOperator | undefined>children.find((token) => {
 			return (
 				token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
 			);
-		})?.text;
+		})?.text.trim();
 
+    // Failed to evaluate the operator
 		if (!operator) {
-			new UnableToDetermineMetadataError();
+			throw new UnableToDetermineMetadataError();
 		}
+
+    const exp1 = this.children[0];
+    const exp2 = this.children[1];
+
+    // Assert that the arithmetic expression is valid
+    this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
 			exp1: this.children[0], // First expression
 			exp2: this.children[1], // Second expression
-			operator: <KipperMultiplicativeOperator>operator,
+			operator: operator,
 		};
-
-		this.programCtx
-			.assert(this)
-			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
@@ -1140,24 +1145,44 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.ensureTokenChildrenExist();
 
-		const operator = children.find((token) => {
-			return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
-		})?.text;
+		const operator = <KipperAdditiveOperator | undefined>children
+			.find((token) => {
+				return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
+			})
+			?.text.trim();
 
+		// Failed to evaluate the operator
 		if (!operator) {
-			new UnableToDetermineMetadataError();
+			throw new UnableToDetermineMetadataError();
 		}
 
+		const exp1 = this.children[0];
+		const exp2 = this.children[1];
+
+		// Assert that the arithmetic expression is valid
+		this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
+
+		const evaluateType: () => KipperType = () => {
+			const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
+			const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+			if (exp1Type === exp2Type) {
+				return exp1.semanticData.evaluatedType;
+			} else if (
+				(exp1Type === kipperCharType && exp2Type === kipperStrType) ||
+				(exp1Type === kipperStrType && exp2Type === kipperCharType)
+			) {
+				return kipperStrType;
+			} else {
+				// This should never happen
+				throw new UnableToDetermineMetadataError();
+			}
+		};
 		this.semanticData = {
-			evaluatedType: "num",
-			exp1: this.children[0], // First expression
-			exp2: this.children[1], // Second expression
+			evaluatedType: evaluateType(),
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
 			operator: <KipperAdditiveOperator>operator,
 		};
-
-		this.programCtx
-			.assert(this)
-			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**

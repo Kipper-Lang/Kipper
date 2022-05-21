@@ -39,14 +39,11 @@ import {
 import { TranslatedCodeLine, TranslatedExpression } from "./logic";
 
 /**
- * Represents a function that generates code into a
- * {@link KipperCompileTarget specific language} for a
- * {@link CompilableParseToken}.
+ * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a
+ * {@link KipperCompileTarget specific language}.
  *
- * The return may only be of type {@link Array string[]} or {@link Array string[][] }. The first
- * option represents the return of multiple tokens, like in a {@link Expression}. The second options represents
- * multiple lines of tokens, where each sub-array represents a single line. This is primarily used for
- * {@link Declaration declarations} and {@link Statement statements}.
+ * The return may only be of type {@link TranslatedExpression}, {@link TranslatedCodeLine} and
+ * {@link TranslatedCodeLine Array<TranslatedCodeLine>}.
  * @since 0.5.0
  */
 // eslint-disable-next-line no-unused-vars

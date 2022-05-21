@@ -101,9 +101,11 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 
 	/**
 	 * The Kipper source code that was used to generate this {@link CompilableParseToken}.
+	 *
+	 * Any left-over whitespaces will be removed using trim().
 	 */
 	public get sourceCode(): string {
-		return getParseRuleSource(this.antlrRuleCtx);
+		return getParseRuleSource(this.antlrRuleCtx).trim();
 	}
 
 	/**

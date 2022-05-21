@@ -24,6 +24,8 @@ const multiFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-file
 const variableDeclarationFile = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
 const arithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/arithmetics.kip`);
 const assignFile = path.resolve(`${__dirname}/../../kipper-files/assign.kip`);
+const addedHelloWorld = path.resolve(`${__dirname}/../../kipper-files/added-hello-world.kip`);
+const assignmentArithmetics = path.resolve(`${__dirname}/../../kipper-files/assignment-arithmetics.kip`);
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -238,15 +240,69 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 			});
 
-			it("Arithmetics", async () => {
-				const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+      describe("Arithmetics", () => {
+        it("Expression statements", async () => {
+          const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
+          const stream = new KipperParseStream(fileContent);
+          const instance: KipperCompileResult = await compiler.compile(stream);
 
-				assert(instance.programCtx);
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.write().includes(fileContent), "Expected compiled code to not change");
-			});
+          assert(instance.programCtx);
+          assert(instance.programCtx.stream === stream, "Expected matching streams");
+          assert(instance.write().includes(fileContent), "Expected compiled code to not change");
+        });
+
+        it("Function call argument", async () => {
+          const fileContent = (await fs.readFile(addedHelloWorld, "utf8" as BufferEncoding)).toString();
+          const stream = new KipperParseStream(fileContent);
+          const instance: KipperCompileResult = await compiler.compile(stream);
+
+          assert(instance.programCtx);
+          assert(instance.programCtx.stream === stream, "Expected matching streams");
+          assert(instance.programCtx.globalScope.length === 0, "Expected no definitions");
+
+          // Compile the program to JavaScript and evaluate it
+          const jsCode = ts.transpile(instance.write());
+
+          // Overwrite built-in to access output
+          const prevLog = console.log;
+          console.log = (message: string) => {
+            // Assert that the output is "Hello world!"
+            assert(message === "Hello world!");
+          };
+
+          // Evaluate expression
+          eval(jsCode);
+
+          // Restore old console.log
+          console.log = prevLog;
+        });
+
+        it("Variable assignment", async () => {
+          const fileContent = (await fs.readFile(assignmentArithmetics, "utf8" as BufferEncoding)).toString();
+          const stream = new KipperParseStream(fileContent);
+          const instance: KipperCompileResult = await compiler.compile(stream);
+
+          assert(instance.programCtx);
+          assert(instance.programCtx.stream === stream, "Expected matching streams");
+          assert(instance.programCtx.globalScope.length === 1, "Expected no definitions");
+
+          // Compile the program to JavaScript and evaluate it
+          const jsCode = ts.transpile(instance.write());
+
+          // Overwrite built-in to access output
+          const prevLog = console.log;
+          console.log = (message: string) => {
+            // Assert that the output is "Hello world!"
+            assert(message === "45678");
+          };
+
+          // Evaluate expression
+          eval(jsCode);
+
+          // Restore old console.log
+          console.log = prevLog;
+        });
+      });
 
 			it("Assign", async () => {
 				const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();

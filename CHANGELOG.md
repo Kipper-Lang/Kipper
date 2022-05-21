@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented code generation for declarations, definitions and value assignments as explained in
   [#26](https://github.com/Luna-Klatzer/Kipper/issues/26).
 - Implemented semantic analysis for `AssignmentExpression` and `VariableDeclaration`.
+- Implemented support for identifiers references, which means variables can now be used in the following contexts:
+  - As a function call argument: `call print(identifier)`
+  - As a value in an arithmetic expression: `identifier + identifier` or `identifier + 5`
 - New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned at declaration.
   This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
 - New `@kipper/cli` flag `--stringCode`, which can be used as a replacement for the argument `file` as explained in
@@ -33,8 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with the Antlr4 Parser and Lexer.
 - Fixed NULL character issue when writing generated code onto files using the `utf16le` encoding. From now on a buffer
   will be created using the proper encoding (also for `ascii` and `utf8`) that should be properly writable to a file.
-- Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic 
-  expressions with the same operator (`N + N + N`) resulting in invalid generated code. 
+- Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic
+  expressions with the same operator (`N + N + N`) resulting in invalid generated code.
+- Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the 
+  return type of string expressions.
 
 ### Removed
 
