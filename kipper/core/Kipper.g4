@@ -76,37 +76,37 @@ castOrConvertExpression
 
 multiplicativeExpression
     :   castOrConvertExpression # passOnMultiplicativeExpression
-    |   castOrConvertExpression WS* (('*'|'/'|'%'|'**') WS* castOrConvertExpression WS*)* # actualMultiplicativeExpression
+    |   multiplicativeExpression WS* ('*'|'/'|'%'|'**') WS* castOrConvertExpression WS* # actualMultiplicativeExpression
     ;
 
 additiveExpression
     :   multiplicativeExpression # passOnAdditiveExpression
-    |   multiplicativeExpression WS* (('+'|'-') WS* multiplicativeExpression WS*)* # actualAdditiveExpression
+    |   additiveExpression WS* ('+'|'-') WS* multiplicativeExpression WS* # actualAdditiveExpression
     ;
 
 relationalExpression
     :   additiveExpression # passOnRelationalExpression
-    |   additiveExpression WS* (('<'|'>'|'<='|'>=') WS* additiveExpression WS*)* # actualRelationalExpression
+    |   relationalExpression WS* ('<'|'>'|'<='|'>=') WS* additiveExpression WS* # actualRelationalExpression
     ;
 
 equalityExpression
     :   relationalExpression # passOnEqualityExpression
-    |   relationalExpression WS* (('=='| '!=') WS* relationalExpression WS*)* # actualEqualityExpression
+    |   equalityExpression WS* ('=='| '!=') WS* relationalExpression WS* # actualEqualityExpression
     ;
 
 logicalAndExpression
     :   equalityExpression # passOnLogicalAndExpression
-    |   equalityExpression WS* ('&&' WS* equalityExpression WS*)* # actualLogicalAndExpression
+    |   logicalAndExpression WS* '&&' WS* equalityExpression WS* # actualLogicalAndExpression
     ;
 
 logicalOrExpression
     :   logicalAndExpression # passOnLogicalOrExpression
-    |   logicalAndExpression WS* ( '||' WS* logicalAndExpression WS*)* # actualLogicalOrExpression
+    |   logicalOrExpression WS* '||' WS* logicalAndExpression WS* # actualLogicalOrExpression
     ;
 
 conditionalExpression
     :   logicalOrExpression # passOnConditionalExpression
-    |   logicalOrExpression WS* '?' WS* expression WS* ':' WS* conditionalExpression WS* # actualConditionalExpression
+    |   logicalOrExpression WS* '?' WS* conditionalExpression WS* ':' WS* conditionalExpression WS* # actualConditionalExpression
     ;
 
 assignmentExpression
