@@ -21,7 +21,7 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 
 ## Changes
 
-<!-- Please explain the changes in this PR and their influence. If this fixes an issue, explain what fixed the issue. -->
+<!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
 
 - I fixed ...
 - I replaced ...
@@ -54,7 +54,7 @@ None.
 
 ## Linked other issues or PRs
 
-<!-- Include other issues and PRs that are related to this if any exist. -->
+<!-- Include other issues and PRs related to this if any exist. -->
 
 <!-- Use this format: - [ ] #ISSUE_OR_PR -->
 

@@ -47,7 +47,6 @@ projects that recreate the situation that the bug was encountered in.
 
 In case you are creating a bug issue, it is also important to provide steps on how to reproduce the issue and info
 about your environment. The [bug issue template](https://github.com/Luna-Klatzer/Kipper/issues/new/choose) will help you
-with that.
 
 ### Feature issue
 
@@ -220,7 +219,6 @@ module/
 
 - cli/
 - core/
-```
 
 Please add tests for a package to the correlating test folder e.g. make sure CLI tests are in `/cli/` and core tests in
 `/core/`.
