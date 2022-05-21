@@ -45,7 +45,7 @@ describe("Parse-Tokens", () => {
 
 				let parenToken = new RootFileParseToken(programCtx);
 				let token = new ExampleToken(programCtx.antlrParseTree, parenToken);
-				assert(token.sourceCode === fileContent, "Source code and fileContent must match!");
+				assert(token.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
 				assert(token.programCtx === programCtx, "Expected 'programCtx' to match");
 				assert(token.parent === parenToken, "Expected 'parent' to match");
 				assert(token.parent.programCtx === programCtx, "Expected 'parent' to match");
