@@ -1058,26 +1058,29 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.ensureTokenChildrenExist();
 
-		const operator = children.find((token) => {
+		const operator = <KipperMultiplicativeOperator | undefined>children.find((token) => {
 			return (
 				token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
 			);
-		})?.text;
+		})?.text.trim();
 
+    // Failed to evaluate the operator
 		if (!operator) {
-			new UnableToDetermineMetadataError();
+			throw new UnableToDetermineMetadataError();
 		}
+
+    const exp1 = this.children[0];
+    const exp2 = this.children[1];
+
+    // Assert that the arithmetic expression is valid
+    this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
 			exp1: this.children[0], // First expression
 			exp2: this.children[1], // Second expression
-			operator: <KipperMultiplicativeOperator>operator,
+			operator: operator,
 		};
-
-		this.programCtx
-			.assert(this)
-			.arithmeticExpressionValid(this.semanticData.exp1, this.semanticData.exp2, this.semanticData.operator);
 	}
 
 	/**
