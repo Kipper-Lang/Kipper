@@ -34,7 +34,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.7.0-rc.0 win32-x64 node-v16.15.0
+@kipper/cli/0.7.0 win32-x64 node-v16.15.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
