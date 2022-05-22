@@ -1,12 +1,12 @@
 /**
- * Defines the TypeScript target for the Kipper language.
+ * Defines the TypeScript translation for the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
-import { KipperCompileTarget } from "./compile-target";
-import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
-import { KipperTargetCodeGenerator } from "../code-generator";
+import { KipperCompileTarget } from "../compile-target";
+import { KipperTargetSemanticAnalyser } from "../semantics/semantic-analyser";
+import { KipperTargetCodeGenerator } from "../translation/code-generator";
 import {
 	type AdditiveExpression,
 	type ArraySpecifierExpression,
@@ -37,7 +37,7 @@ import {
 	type StringPrimaryExpression,
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
-} from "../tokens";
+} from "../semantics/tokens";
 import {
 	kipperBoolType,
 	kipperCharType,
@@ -51,7 +51,7 @@ import {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
-} from "../logic";
+} from "../lib";
 import { KipperNotImplementedError } from "../../errors";
 
 export class TypeScriptTarget extends KipperCompileTarget {
@@ -403,7 +403,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const tokenChildren = token.ensureTokenChildrenExist();
 		const func = token.programCtx.assert(token).getExistingFunction(semanticData.identifier);
 
-		// Add builtin identifier prefix '_kipperGlobal_'
+		// Add lib identifier prefix '_kipperGlobal_'
 		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
 
 		// Compile the arguments

@@ -46,147 +46,147 @@ export type TargetTokenSemanticAnalyser<T extends CompilableParseToken<any>> = (
  */
 export abstract class KipperTargetSemanticAnalyser {
 	/**
-	 * Performs target-specific semantic analysis for {@link CompoundStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
 	public abstract compoundStatement: TargetTokenSemanticAnalyser<CompoundStatement>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link SelectionStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link SelectionStatement} instances.
 	 */
 	public abstract selectionStatement: TargetTokenSemanticAnalyser<SelectionStatement>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link ExpressionStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link ExpressionStatement} instances.
 	 */
 	public abstract expressionStatement: TargetTokenSemanticAnalyser<ExpressionStatement>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link IterationStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link IterationStatement} instances.
 	 */
 	public abstract iterationStatement: TargetTokenSemanticAnalyser<IterationStatement>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link JumpStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
 	 */
 	public abstract jumpStatement: TargetTokenSemanticAnalyser<JumpStatement>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link ParameterDeclaration} instances.
+	 * Performs translation-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
 	public abstract parameterDeclaration: TargetTokenSemanticAnalyser<ParameterDeclaration>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link FunctionDeclaration} instances.
+	 * Performs translation-specific semantic analysis for {@link FunctionDeclaration} instances.
 	 */
 	public abstract functionDeclaration: TargetTokenSemanticAnalyser<FunctionDeclaration>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link VariableDeclaration} instances.
+	 * Performs translation-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	public abstract variableDeclaration: TargetTokenSemanticAnalyser<VariableDeclaration>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link NumberPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
 	public abstract numberPrimaryExpression: TargetTokenSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
 	 */
 	public abstract characterPrimaryExpression: TargetTokenSemanticAnalyser<CharacterPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link ListPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ListPrimaryExpression} instances.
 	 */
 	public abstract listPrimaryExpression: TargetTokenSemanticAnalyser<ListPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
 	public abstract identifierPrimaryExpression: TargetTokenSemanticAnalyser<IdentifierPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link StringPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link StringPrimaryExpression} instances.
 	 */
 	public abstract stringPrimaryExpression: TargetTokenSemanticAnalyser<StringPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link FStringPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenSemanticAnalyser<FStringPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link TangledPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
 	public abstract tangledPrimaryExpression: TargetTokenSemanticAnalyser<TangledPrimaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link ArraySpecifierExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ArraySpecifierExpression} instances.
 	 */
 	public abstract arraySpecifierExpression: TargetTokenSemanticAnalyser<ArraySpecifierExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
 	 */
 	public abstract incrementOrDecrementExpression: TargetTokenSemanticAnalyser<IncrementOrDecrementExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
 	 */
 	public abstract functionCallPostfixExpression: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
 	 */
 	public abstract incrementOrDecrementUnaryExpression: TargetTokenSemanticAnalyser<IncrementOrDecrementUnaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
 	 */
 	public abstract operatorModifiedUnaryExpression: TargetTokenSemanticAnalyser<OperatorModifiedUnaryExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link CastOrConvertExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link CastOrConvertExpression} instances.
 	 */
 	public abstract castOrConvertExpression: TargetTokenSemanticAnalyser<CastOrConvertExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link MultiplicativeExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link MultiplicativeExpression} instances.
 	 */
 	public abstract multiplicativeExpression: TargetTokenSemanticAnalyser<MultiplicativeExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link AdditiveExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link AdditiveExpression} instances.
 	 */
 	public abstract additiveExpression: TargetTokenSemanticAnalyser<AdditiveExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link RelationalExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link RelationalExpression} instances.
 	 */
 	public abstract relationalExpression: TargetTokenSemanticAnalyser<RelationalExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link EqualityExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
 	public abstract equalityExpression: TargetTokenSemanticAnalyser<EqualityExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link LogicalAndExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link LogicalAndExpression} instances.
 	 */
 	public abstract logicalAndExpression: TargetTokenSemanticAnalyser<LogicalAndExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link LogicalOrExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link LogicalOrExpression} instances.
 	 */
 	public abstract logicalOrExpression: TargetTokenSemanticAnalyser<LogicalOrExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link ConditionalExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ConditionalExpression} instances.
 	 */
 	public abstract conditionalExpression: TargetTokenSemanticAnalyser<ConditionalExpression>;
 
 	/**
-	 * Performs target-specific semantic analysis for {@link AssignmentExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression: TargetTokenSemanticAnalyser<AssignmentExpression>;
 }

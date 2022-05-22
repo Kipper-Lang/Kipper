@@ -27,7 +27,7 @@ import {
 	RelationalExpressionContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
-} from "../parser";
+} from "../../parser";
 import {
 	KipperAdditiveOperator,
 	kipperAdditiveOperators,
@@ -44,9 +44,9 @@ import {
 	KipperType,
 	ScopeVariableDeclaration,
 	TranslatedExpression,
-} from "../logic";
-import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../errors";
-import { TargetTokenCodeGenerator } from "../code-generator";
+} from "../../lib";
+import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
+import { TargetTokenCodeGenerator } from "../../translation/code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
 import { CompoundStatement } from "./statements";

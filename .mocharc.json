@@ -6,9 +6,12 @@
   "reporter": "spec",
   "require": "ts-node/register",
   "extensions": ["ts", "tsx"],
+  "spec": [
+    "**/*.test.ts"
+  ],
   "watch-files": [
-    "test/**/*",
-    "kipper/cli/src/**/*",
-    "kipper/core/src/**/*"
+    "test/**/*.ts",
+    "kipper/cli/src/**/*.ts",
+    "kipper/core/src/**/*.ts"
   ]
 }

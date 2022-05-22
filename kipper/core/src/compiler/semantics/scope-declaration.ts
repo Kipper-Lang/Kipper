@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "../const";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "./const";
 import {
 	Declaration,
 	FunctionDeclaration,
@@ -12,7 +12,7 @@ import {
 	ParameterDeclaration,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
-} from "../tokens";
+} from "./tokens";
 import type { KipperProgramContext } from "../program-ctx";
 
 /**
