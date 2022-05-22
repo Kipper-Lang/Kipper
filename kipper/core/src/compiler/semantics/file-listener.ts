@@ -1,5 +1,5 @@
 /**
- * Antlr4 listener for walking through a parser tree and processing its content
+ * Antlr4 listener for walking through a parser tree and processing its content.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
