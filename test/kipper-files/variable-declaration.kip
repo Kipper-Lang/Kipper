@@ -1,7 +1,7 @@
 /* Variable declaration */
 var name: str;
 
-/* Variable definition */
-var name: str = "4";
+/* Variable assignment */
+name = "4";
 
 call print(name);
