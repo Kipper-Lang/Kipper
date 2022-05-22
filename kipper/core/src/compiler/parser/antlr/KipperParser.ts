@@ -2524,7 +2524,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 586;
-						this.unaryExpression();
+						this.primaryExpression();
 						this.state = 590;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
@@ -5253,7 +5253,7 @@ export class KipperParser extends Parser {
 		"\x03\x02\x02\x02\u0246\u0244\x03\x02\x02\x02\u0246\u0247\x03\x02\x02\x02" +
 		"\u0247\u024A\x03\x02\x02\x02\u0248\u0246\x03\x02\x02\x02\u0249\u0225\x03" +
 		"\x02\x02\x02\u0249\u0226\x03\x02\x02\x02\u024A+\x03\x02\x02\x02\u024B" +
-		"\u025D\x05*\x16\x02\u024C\u0250\x05\x16\f\x02\u024D\u024F\x07A\x02\x02" +
+		"\u025D\x05*\x16\x02\u024C\u0250\x05\f\x07\x02\u024D\u024F\x07A\x02\x02" +
 		"\u024E\u024D\x03\x02\x02\x02\u024F\u0252\x03\x02\x02\x02\u0250\u024E\x03" +
 		"\x02\x02\x02\u0250\u0251\x03\x02\x02\x02\u0251\u0253\x03\x02\x02\x02\u0252" +
 		"\u0250\x03\x02\x02\x02\u0253\u0257\x05.\x18\x02\u0254\u0256\x07A\x02\x02" +
@@ -7336,8 +7336,8 @@ export class PassOnAssignmentExpressionContext extends AssignmentExpressionConte
 	}
 }
 export class ActualAssignmentExpressionContext extends AssignmentExpressionContext {
-	public unaryExpression(): UnaryExpressionContext {
-		return this.getRuleContext(0, UnaryExpressionContext);
+	public primaryExpression(): PrimaryExpressionContext {
+		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
 	public assignmentOperator(): AssignmentOperatorContext {
 		return this.getRuleContext(0, AssignmentOperatorContext);
