@@ -401,7 +401,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Get the function and semantic data
 		const semanticData = token.ensureSemanticDataExists();
 		const tokenChildren = token.ensureTokenChildrenExist();
-		const func = token.programCtx.assert(token).getExistingFunction(semanticData.identifier);
+		const func = token.programCtx.semanticCheck(token).getExistingFunction(semanticData.identifier);
 
 		// Add lib identifier prefix '_kipperGlobal_'
 		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
@@ -506,7 +506,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	assignmentExpression = async (token: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = token.ensureSemanticDataExists();
 
-		const identifier = semanticData.identifier;
+		const identifier = semanticData.identifier.ensureSemanticDataExists().identifier;
 		const assignValue = await semanticData.value.translateCtxAndChildren();
 
 		// Only add ' = EXP' if assignValue is defined

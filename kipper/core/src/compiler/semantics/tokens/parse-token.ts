@@ -12,7 +12,7 @@ import type { KipperParser } from "../../parser";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../../translation/code-generator";
+import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../../translation";
 import type { KipperCompileTarget } from "../../compile-target";
 import type { Declaration } from "./definitions";
 import type { Statement } from "./statements";
@@ -233,6 +233,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 
 		// Finally, check if the entire token is semantically valid
 		await this.primarySemanticAnalysis();
+		await this.semanticTypeChecking();
 		await this.targetSemanticAnalysis(this);
 	}
 
@@ -242,7 +243,14 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	 * @since 0.5.0
 	 * @abstract
 	 */
-	protected abstract primarySemanticAnalysis(): Promise<void>;
+	public abstract primarySemanticAnalysis(): Promise<void>;
+
+	/**
+	 * Performs type checking for this token and asserts that the types are valid.
+	 * @since 0.7.0
+	 * @throws TypeError When a type mismatch or invalid usage is encountered.
+	 */
+	public abstract semanticTypeChecking(): Promise<void>;
 
 	/**
 	 * Semantic analysis for the code inside the parse token that is specific
