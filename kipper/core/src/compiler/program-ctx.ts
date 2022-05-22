@@ -333,11 +333,11 @@ export class KipperProgramContext {
 		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Running the semantic analysis
-		this.logger.info(`Running the semantic analysis for '${this.stream.name}'.`);
+		this.logger.info(`Analysing '${this.stream.name}'.`);
 		await this.semanticAnalysis();
 
 		// Translating the context instances and children
-		this.logger.info(`Translating code to '${this.target.targetName}' for '${this.stream.name}'.`);
+		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
 		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
 		this.logger.debug(
