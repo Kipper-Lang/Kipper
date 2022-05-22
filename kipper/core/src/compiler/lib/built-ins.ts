@@ -7,7 +7,7 @@
  * @since 0.1.0
  */
 
-import { KipperType } from "../semantics/const";
+import { KipperType } from "../semantics";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
