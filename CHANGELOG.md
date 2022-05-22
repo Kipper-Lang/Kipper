@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `kipper compile` and `kipper run`)
 - Implemented single char flags for the CLI ([#109](https://github.com/Luna-Klatzer/Kipper/issues/109)).
 - Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
-- New fields
+- New fields:
   - `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
     This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
 - New functions:
