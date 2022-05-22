@@ -439,8 +439,9 @@ export class KipperProgramContext {
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
 		if (token instanceof VariableDeclaration) {
+			// May not redeclare a variable
 			this.semanticCheck(token).functionIdentifierNotDeclared(identifier);
-			this.semanticCheck(token).variableIdentifierNotDefined(identifier);
+			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
 		} else {
 			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
 			this.semanticCheck(token).functionIdentifierNotDefined(identifier);
