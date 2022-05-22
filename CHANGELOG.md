@@ -73,8 +73,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
 - Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4. (Only identifiers
   may be used.)
-- Option to redeclare variables. From on a variable declaration can only be done once and afterwards the variable may 
-  only be overwritten or modified, but not re-declared. This should help make Kipper have a similar behaviour to 
+- Option to redeclare variables. From on a variable declaration can only be done once and afterwards the variable may
+  only be overwritten or modified, but not re-declared. This should help make Kipper have a similar behaviour to
   TypeScript.
 
 ## [0.6.1] - 2022-05-17
