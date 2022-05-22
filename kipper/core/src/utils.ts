@@ -1,5 +1,7 @@
 import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext, Token } from "antlr4ts";
+import { ParseTree } from "antlr4ts/tree";
+import { CharStream } from "antlr4ts/CharStream";
 import {
 	CompilableParseToken,
 	CompoundStatement,
@@ -7,8 +9,6 @@ import {
 	KipperScope,
 	RootFileParseToken,
 } from "./compiler";
-import { ParseTree } from "antlr4ts/tree";
-import { CharStream } from "antlr4ts/CharStream";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.

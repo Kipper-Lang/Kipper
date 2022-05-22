@@ -40,6 +40,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
 - Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the
   return type of string expressions.
+- Updated `compiler` folder structure of the core package:
+  - `compiler/parser` from now on contains everything parser and lexer-related.
+  - `compiler/parser/antlr` from now on contains the Antlr4 generated parser and lexer files.
+  - `compiler/semantics` from now on contains everything semantics related, such as the file listener, the Kipper
+    tokens, logical constants etc.
+  - `compiler/translation` from now on contains the classes and tools used for translating Kipper code into another
+    language.
+  - `compiler/targets` from now on contains the existing targets for Kipper, such as `typescript`.
+  - `compiler/lib` from now on contains the standard library and built-ins for Kipper.
+  - `compiler/lib/import` from now on contains the default importable libraries for Kipper.
 
 ### Removed
 

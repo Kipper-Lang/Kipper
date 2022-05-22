@@ -8,8 +8,8 @@
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
-import { KipperParseStream } from "./parse-stream";
-import { KipperFileListener } from "./listener";
+import { KipperParseStream } from "./parser";
+import { KipperFileListener } from "./semantics";
 import {
 	BuiltInFunction,
 	BuiltInFunctionArgument,
@@ -25,7 +25,7 @@ import {
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 	TranslatedCodeLine,
-} from "./logic";
+} from "./lib";
 import { KipperLogger, LogLevel } from "../logger";
 import {
 	CompilableParseToken,
@@ -37,7 +37,7 @@ import {
 	ParameterDeclaration,
 	RootFileParseToken,
 	VariableDeclaration,
-} from "./tokens";
+} from "./semantics";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
@@ -59,7 +59,7 @@ import {
 	UnknownVariableIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 } from "../errors";
-import { KipperCompileTarget } from "./target";
+import { KipperCompileTarget } from "./compile-target";
 
 /**
  * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
@@ -494,10 +494,10 @@ export class KipperProgramContext {
 	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 	/**
-	 * Represents the compilation target for the program. This contains the
+	 * Represents the compilation translation for the program. This contains the
 	 * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
-	 * specific for the target, and {@link KipperTargetCodeGenerator}, which
-	 * translates the Kipper code into a target language.
+	 * specific for the translation, and {@link KipperTargetCodeGenerator}, which
+	 * translates the Kipper code into a translation language.
 	 */
 	public readonly target: KipperCompileTarget;
 

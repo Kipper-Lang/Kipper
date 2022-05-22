@@ -30,6 +30,6 @@
 		"BufferEncoding": true
 	},
   "ignorePatterns": [
-    "parser/*.ts"
+    "parser/antlr/*.ts"
   ]
 }

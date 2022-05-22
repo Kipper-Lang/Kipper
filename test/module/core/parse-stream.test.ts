@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { KipperParseStream } from "@kipper/core";
 import * as path from "path";
+import { KipperParseStream } from "@kipper/core/lib/compiler/parser";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 

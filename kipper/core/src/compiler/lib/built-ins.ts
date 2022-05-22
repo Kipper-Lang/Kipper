@@ -7,7 +7,7 @@
  * @since 0.1.0
  */
 
-import { KipperType } from "../const";
+import { KipperType } from "../semantics/const";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -81,29 +81,21 @@ export interface BuiltInFunction {
 }
 
 /**
- * The code for the global print function that works inside the Web-Browser and Node.js.
- * @since 0.1.0
+ * Contains all the built-in functions in Kipper that are available per default in every program.
+ *
+ * This contains *every* builtin
+ * @since 0.7.0
  */
-export const builtinPrint: BuiltInFunction = {
-	identifier: "print",
-	args: [
-		{
-			identifier: "msg",
-			type: "str",
-		},
-	],
-	handler: ["function _kipperGlobal_print(printText: string): void { console.log(printText); }"],
-	returnType: "void",
+export const builtIns: Record<string, BuiltInFunction> = {
+  print: {
+    identifier: "print",
+    args: [
+      {
+        identifier: "msg",
+        type: "str",
+      },
+    ],
+    handler: ["function _kipperGlobal_print(msg: string): void { console.log(msg); }"],
+    returnType: "void",
+  }
 };
-
-/**
- * The default built-in functions that are supported in the browser.
- * @since 0.6.0
- */
-export const defaultWebBuiltIns: Array<BuiltInFunction> = [builtinPrint];
-
-/**
- * The default built-in functions that are supported in Node.js
- * @since 0.6.0
- */
-export const defaultNodeBuiltIns: Array<BuiltInFunction> = [builtinPrint];

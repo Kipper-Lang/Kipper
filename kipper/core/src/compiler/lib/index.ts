@@ -6,5 +6,5 @@
  */
 
 export * from "./built-ins";
-export * from "./scope-declaration";
-export * from "../const";
+export * from "../semantics/scope-declaration";
+export * from "../semantics/const";
