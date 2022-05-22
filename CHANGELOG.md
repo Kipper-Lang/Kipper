@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.7.0] - 2022-05-22
 
 ### Added
 
@@ -38,7 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated logger messages.
+- Optimised Kipper parsing and lexing process by updating the parsing behaviour in Kipper.g4. Kipper should handle
+  standard expressions a lot faster from no on.
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
   type of string additive expressions causing invalid type errors when used with other expressions.
 - Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
 - Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the
   return type of string expressions.
+- Updated logger messages.
 - Updated `compiler` folder structure of the core package:
   - `compiler/parser` from now on contains everything parser and lexer-related.
   - `compiler/parser/antlr` from now on contains the Antlr4 generated parser and lexer files.
@@ -71,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
 - Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4. (Only identifiers
   may be used.)
+- Option to redeclare variables. From on a variable declaration can only be done once and afterwards the variable may
+  only be overwritten or modified, but not re-declared. This should help make Kipper have a similar behaviour to
+  TypeScript.
 
 ## [0.6.1] - 2022-05-17
 
@@ -457,7 +462,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.5.1...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.7.0..HEAD
+[0.7.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.6.1...v0.7.0
 [0.6.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.4.0...v0.5.0
