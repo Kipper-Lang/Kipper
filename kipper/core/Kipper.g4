@@ -111,7 +111,7 @@ conditionalExpression
 
 assignmentExpression
     :   conditionalExpression # passOnAssignmentExpression
-    |   unaryExpression WS* assignmentOperator WS* assignmentExpression # actualAssignmentExpression
+    |   primaryExpression WS* assignmentOperator WS* assignmentExpression # actualAssignmentExpression
     ;
 
 assignmentOperator

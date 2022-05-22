@@ -1,15 +1,15 @@
 /**
- * Compilation target class specifying how a Kipper parse tree shall be translated into a specific language.
+ * Compilation translation class specifying how a Kipper parse tree shall be translated into a specific language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
 
-import { KipperTargetCodeGenerator } from "../code-generator";
-import { KipperTargetSemanticAnalyser } from "../semantic-analyser";
+import { KipperTargetCodeGenerator } from "./translation/code-generator";
+import { KipperTargetSemanticAnalyser } from "./semantics/semantic-analyser";
 
 /**
- * Represents a Kipper compilation target defining how a Kipper parse tree shall
+ * Represents a Kipper compilation translation defining how a Kipper parse tree shall
  * be translated into a specific language.
  * @since 0.5.0
  */

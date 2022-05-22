@@ -15,15 +15,16 @@ import {
 	ParameterTypeListContext,
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
-} from "../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
-import { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { determineScope } from "../../utils";
-import { TargetTokenCodeGenerator } from "../code-generator";
+} from "../../parser";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../../lib";
+import { KipperProgramContext } from "../../program-ctx";
+import { UnableToDetermineMetadataError } from "../../../errors";
+import { determineScope } from "../../../utils";
+import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { Expression } from "./expressions";
 import { ParseTree } from "antlr4ts/tree";
+import { ScopeVariableDeclaration } from "../scope-declaration";
 
 /**
  * Every antlr4 definition ctx type
@@ -137,10 +138,19 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -206,7 +216,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -226,22 +236,31 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			throw new UnableToDetermineMetadataError();
 		}
 
+		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const type: KipperType = <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval);
-		this.programCtx.assert(this).validReturnType(type);
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
 			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
-			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
+			identifier: identifier,
 			returnType: <KipperReturnType>type,
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 
-		// Assert that the variable type exists
-		this.programCtx.assert(this).typeExists(this.semanticData.returnType);
-
 		// Add function definition to the global scope
-		this.programCtx.addNewGlobalScopeEntry(this);
+		await this.programCtx.addGlobalVariable(this, identifier);
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
+		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionDeclaration> = this.semanticAnalyser.functionDeclaration;
@@ -321,7 +340,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -350,23 +369,48 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			throw new UnableToDetermineMetadataError();
 		}
 
+		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
+		const isDefined = Boolean(assignValue);
+		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
+		const valueType = <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval);
+		const scope = determineScope(this);
+
 		this.semanticData = {
-			isDefined: Boolean(assignValue),
-			identifier: this.tokenStream.getText(declaratorCtx.sourceInterval),
-			storageType: <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval),
-			valueType: <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval),
-			scope: determineScope(this), // Determine the scope of this variable.
+			isDefined: isDefined,
+			identifier: identifier,
+			storageType: storageType,
+			valueType: valueType,
+			scope: scope,
 			value: assignValue,
 		};
 
-		// Assert that the variable type exists
-		this.programCtx.assert(this).typeExists(this.semanticData.valueType);
-
-		// Load variable into global scope, if the assigned scope is of type {@link KipperProgramContext}
-		if (this.semanticData.scope instanceof KipperProgramContext) {
-			this.semanticData.scope.addNewGlobalScopeEntry(this);
+		// Load variable into a scope
+		if (scope instanceof KipperProgramContext) {
+			await scope.addGlobalVariable(this, identifier);
 		} else {
-			this.semanticData.scope.addNewLocalVariable(this);
+			await scope.addLocalVariable(this, identifier);
+		}
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		// Check whether the type of the variable even exists
+		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+
+		// If the variable is defined, check whether the assignment is valid
+		if (semanticData.value) {
+			const scopeEntry = <ScopeVariableDeclaration>(
+				(semanticData.scope instanceof KipperProgramContext
+					? semanticData.scope.getGlobalVariable(semanticData.identifier)
+					: semanticData.scope.getLocalVariable(semanticData.identifier))
+			);
+			this.programCtx.typeCheck(this).validVariableDefinition(scopeEntry, semanticData.value);
 		}
 	}
 

@@ -82,7 +82,7 @@
     "tslint": "eslint ./test/ --ext .ts --config ./.eslintrc && pnpm run -r tslint",
     "tslint:fix": "eslint ./test/ --ext .ts --config ./.eslintrc --fix && pnpm run -r tslint:fix",
     "browserify": "pnpm --filter \"@kipper/core\" run browserify",
-    "start": "pnpm --filter \"@kipper/cli\" run start",
+    "start": "node ./kipper/cli/bin/run",
     "bump": "run-script-os",
     "bump:linux:macos:default": "./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1"

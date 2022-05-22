@@ -7,431 +7,27 @@
 
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
-import { CompilationUnitContext, KipperLexer, KipperParser } from "./parser";
-import { KipperParseStream } from "./parse-stream";
-import { KipperFileListener } from "./listener";
+import { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import {
+	CompilableParseToken,
+	FunctionDeclaration,
+	KipperFileListener,
+	RootFileParseToken,
+	ScopeDeclaration,
+	VariableDeclaration,
+} from "./semantics";
 import {
 	BuiltInFunction,
-	BuiltInFunctionArgument,
-	KipperArithmeticOperator,
 	KipperFunction,
-	kipperPlusOperator,
-	KipperRef,
-	kipperReturnTypes,
-	kipperStrLikeTypes,
-	KipperType,
-	kipperTypes,
-	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 	TranslatedCodeLine,
-} from "./logic";
-import { KipperLogger, LogLevel } from "../logger";
-import {
-	CompilableParseToken,
-	CompoundStatement,
-	Expression,
-	ExpressionSemantics,
-	FunctionDeclaration,
-	IdentifierPrimaryExpression,
-	ParameterDeclaration,
-	RootFileParseToken,
-	VariableDeclaration,
-} from "./tokens";
-import {
-	BuiltInOverwriteError,
-	FunctionDefinitionAlreadyExistsError,
-	IdentifierAlreadyUsedByFunctionError,
-	IdentifierAlreadyUsedByVariableError,
-	InvalidAmountOfArgumentsError,
-	InvalidArgumentTypeError,
-	InvalidArithmeticOperationError,
-	InvalidAssignmentError,
-	InvalidGlobalError,
-	InvalidReturnTypeError,
-	KipperError,
-	KipperNotImplementedError,
-	UndefinedIdentifierError,
-	UndefinedSemanticsError,
-	UnknownFunctionIdentifierError,
-	UnknownIdentifierError,
-	UnknownTypeError,
-	UnknownVariableIdentifierError,
-	VariableDefinitionAlreadyExistsError,
-} from "../errors";
-import { KipperCompileTarget } from "./target";
-
-/**
- * CompileAssert namespace containing tools for validating certain compile-required truths, which, if false, will
- * trigger corresponding errors.
- * @since 0.2.0
- */
-export class CompileAssert {
-	public readonly programCtx: KipperProgramContext;
-
-	private line: number | undefined;
-
-	private col: number | undefined;
-
-	private ctx: CompilableParseToken<any> | undefined;
-
-	constructor(programCtx: KipperProgramContext) {
-		this.programCtx = programCtx;
-	}
-
-	/**
-	 * Sets the traceback related line and column info.
-	 * @param ctx The token context.
-	 * @param line The line that is being processed at the moment.
-	 * @param col The column that is being processed at the moment.
-	 * @since 0.3.0
-	 */
-	public setTracebackData(ctx?: CompilableParseToken<any>, line?: number, col?: number): void {
-		this.line = line;
-		this.col = col;
-		this.ctx = ctx;
-	}
-
-	/**
-	 * Updates the error and adds the proper traceback data, and returns it.
-	 *
-	 * This function also automatically logs the error.
-	 * @param error The error to update.
-	 * @returns The Kipper error.
-	 */
-	private assertError(error: KipperError): KipperError {
-		// Update error metadata
-		error.setMetadata({
-			location: { line: this.line ?? 1, col: this.col ?? 1 },
-			filePath: this.programCtx.filePath,
-			tokenSrc: undefined,
-		});
-		error.antlrCtx = this.ctx?.antlrRuleCtx;
-
-		// Log the error
-		this.programCtx.logger.reportError(LogLevel.ERROR, error);
-
-		return error;
-	}
-
-	/**
-	 * Modifies the metadata for a {@link KipperNotImplementedError}
-	 * @param error The {@link KipperNotImplementedError} instance.
-	 * @since 0.6.0
-	 */
-	public notImplementedError(error: KipperNotImplementedError): KipperNotImplementedError {
-		return this.assertError(error);
-	}
-
-	/**
-	 * Asserts that the passed type identifier exists.
-	 * @param type The type to check.
-	 * @since 0.5.0
-	 */
-	public typeExists(type: string): void {
-		if (kipperTypes.find((val) => val === type) === undefined) {
-			throw this.assertError(new UnknownTypeError(type));
-		}
-	}
-
-	/**
-	 * Checks whether an identifier is declared. If the variable is defined it will also pass.
-	 * @param identifier The identifier to check for.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 * @since 0.6.0
-	 */
-	public identifierIsDeclared(identifier: string, scope?: CompoundStatement): void {
-		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
-		if (!val) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		}
-
-		const isBuiltinDeclared = "handler" in val; // BuiltInFunction 'handler' property -> always declared/defined
-		const isDeclarationDeclared = val instanceof ScopeDeclaration; // User-defined -> always declared, sometimes defined
-		if (!isBuiltinDeclared && !isDeclarationDeclared) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Checks whether an identifier is defined. If the variable is declared it will also fail!
-	 * @param identifier The identifier to check for.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 * @since 0.6.0
-	 */
-	public identifierIsDefined(identifier: string, scope?: CompoundStatement): void {
-		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
-		if (!val) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		}
-
-		const isBuiltinDefined = "handler" in val; // BuiltInFunction 'handler' property -> always defined
-		const isDeclarationDefined = val instanceof ScopeDeclaration && val.isDefined; // User-defined -> may be defined
-		if (!isBuiltinDefined && !isDeclarationDefined) {
-			throw this.assertError(new UndefinedIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the function.
-	 * @deprecated
-	 */
-	public functionIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.functionIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalFunction(identifier)) {
-			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the variable.
-	 * @deprecated
-	 */
-	public variableIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.variableIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalVariable(identifier)) {
-			throw this.assertError(new UnknownVariableIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed function identifier has not been declared yet.
-	 * @param identifier The identifier of the function.
-	 */
-	public functionIdentifierNotDeclared(identifier: string): void {
-		if (this.programCtx.getGlobalFunction(identifier)) {
-			throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier has not been declared yet.
-	 * @param identifier The identifier of the variable.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 */
-	public variableIdentifierNotDeclared(identifier: string, scope?: CompoundStatement): void {
-		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
-
-		// Always check in the global scope
-		if (this.programCtx.globalScope.find(check)) {
-			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
-		}
-
-		// Also check in the local scope if it was passed
-		if (scope !== undefined && scope?.localScope.find(check)) {
-			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier has not been defined yet.
-	 * @param identifier The identifier to check for in the global scope.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 */
-	public variableIdentifierNotDefined(identifier: string, scope?: CompoundStatement): void {
-		const check = (v: { identifier: string }) => {
-			// Return true only if the identifier match and the variable is DEFINED
-			return v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined;
-		};
-
-		// Always check in the global scope
-		if (this.programCtx.globalScope.find(check)) {
-			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
-		}
-
-		// Also check in the local scope if it was passed
-		if (scope !== undefined && scope?.localScope.find(check)) {
-			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier has not been defined yet.
-	 * @param identifier The identifier to check for in the global scope.
-	 */
-	public functionIdentifierNotDefined(identifier: string): void {
-		// Always check in the global scope
-		const check = (v: { identifier: string }) => {
-			// Return true only if the identifier match and the function is DEFINED
-			return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
-		};
-
-		if (this.programCtx.globalScope.find(check)) {
-			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
-		}
-	}
-
-	/**
-	 * Checks whether the argument type matches the type of the argument value passed.
-	 *
-	 * @param arg The parameter that the value was passed to.
-	 * @param receivedType The type that was received.
-	 * @example
-	 * call print("x"); // <-- Parameter type 'str' must match type of argument "x"
-	 * @since 0.3.0
-	 */
-	public argumentTypesMatch(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
-		const semanticData = arg instanceof ParameterDeclaration ? arg.ensureSemanticDataExists() : arg;
-
-		if (semanticData.type !== receivedType) {
-			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
-		}
-	}
-
-	/**
-	 * Asserts that the assignment of the expression to the variable is valid.
-	 * @todo Implement assignment checks!
-	 */
-	// eslint-disable-next-line no-unused-vars
-	private assignmentValid(assignVar: ScopeVariableDeclaration, exp: Expression<any>): void {}
-
-	/**
-	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param exp1 The first expression.
-	 * @param exp2 The second expression.
-	 * @param op The arithmetic operation that is performed.
-	 */
-	public arithmeticExpressionValid(
-		exp1: Expression<ExpressionSemantics>,
-		exp2: Expression<ExpressionSemantics>,
-		op: KipperArithmeticOperator,
-	): void {
-		const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
-		const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
-		if (exp1Type !== exp2Type) {
-			// String-like types can use '+' to concat strings
-			if (
-				op === kipperPlusOperator &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
-			) {
-				return;
-			}
-
-			// If types are not matching, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationError(exp1Type, exp2Type));
-		}
-	}
-
-	/**
-	 * Asserts that the passed identifier does not exist as a built-in global.
-	 * @param identifier The identifier to check.
-	 */
-	public builtInNotDefined(identifier: string): void {
-		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
-			throw this.assertError(new BuiltInOverwriteError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that a new global with the passed identifier may be created.
-	 * @param identifier The identifier to check.
-	 */
-	public globalCanBeRegistered(identifier: string): void {
-		let identifierAlreadyExists: boolean =
-			this.programCtx.globalScope.find((val) => val.identifier == identifier) !== undefined;
-		let globalAlreadyExists: boolean =
-			this.programCtx.builtInGlobals.find((val) => val.identifier == identifier) !== undefined;
-
-		// If the identifier is already used or the global already exists, throw an error
-		if (identifierAlreadyExists || globalAlreadyExists) {
-			throw this.assertError(new InvalidGlobalError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the argument type is valid.
-	 * @param type
-	 */
-	public validReturnType(type: KipperType): void {
-		// If the type is not in the array of valid return types, throw an error
-		if (!kipperReturnTypes.find((t) => t === type)) {
-			throw this.assertError(new InvalidReturnTypeError(type));
-		}
-	}
-
-	/**
-	 * Asserts that the passed expression is valid.
-	 * @param leftExp The left-hand side of the assignment.
-	 * @since 0.7.0
-	 */
-	public validAssignment(leftExp: Expression<any>): void {
-		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
-			throw this.assertError(
-				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
-			);
-		}
-	}
-
-	/**
-	 * Asserts that the passed function arguments are valid.
-	 * @param func The function that is called.
-	 * @param args The arguments for the call expression.
-	 * @since 0.6.0
-	 */
-	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
-		if (func.args.length != args.length) {
-			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
-		}
-
-		// Iterate through both arrays at the same type to verify each type is valid
-		args.forEach((arg: Expression<ExpressionSemantics>, index) => {
-			const semanticData = arg.ensureSemanticDataExists();
-			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
-		});
-	}
-
-	/**
-	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
-	 * @param identifier The identifier to fetch.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 */
-	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
-		const ref =
-			(scope ? scope.getVariableRecursively(identifier) : undefined) ?? this.programCtx.getGlobalIdentifier(identifier);
-		if (ref === undefined) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		} else {
-			return ref;
-		}
-	}
-
-	/**
-	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
-	 * @param identifier The identifier to fetch.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
-	 */
-	public getExistingVariable(identifier: string, scope?: CompoundStatement): ScopeVariableDeclaration {
-		const variable = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalVariable(identifier);
-		if (variable === undefined) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		} else {
-			return variable;
-		}
-	}
-
-	/**
-	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
-	 * @param identifier The identifier to fetch.
-	 * @since 0.5.0
-	 */
-	public getExistingFunction(identifier: string): KipperFunction {
-		const func = this.programCtx.getGlobalFunction(identifier);
-		if (func === undefined) {
-			throw this.assertError(new UnknownIdentifierError(identifier));
-		} else {
-			return func;
-		}
-	}
-}
+} from "./lib";
+import { KipperLogger } from "../logger";
+import { UndefinedSemanticsError } from "../errors";
+import { KipperCompileTarget } from "./compile-target";
+import { KipperSemanticChecker } from "./semantics/semantic-checker";
+import { KipperTypeChecker } from "./semantics/type-checker";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -494,10 +90,10 @@ export class KipperProgramContext {
 	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 	/**
-	 * Represents the compilation target for the program. This contains the
+	 * Represents the compilation translation for the program. This contains the
 	 * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
-	 * specific for the target, and {@link KipperTargetCodeGenerator}, which
-	 * translates the Kipper code into a target language.
+	 * specific for the translation, and {@link KipperTargetCodeGenerator}, which
+	 * translates the Kipper code into a translation language.
 	 */
 	public readonly target: KipperCompileTarget;
 
@@ -508,11 +104,18 @@ export class KipperProgramContext {
 	public logger: KipperLogger;
 
 	/**
-	 * The asserter that is used to validate compiler-required truths, which, if false, will trigger corresponding errors.
-	 * @public
-	 * @since 0.2.0
+	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
+	 * invalid use of tokens is detected.
+	 * @since 0.7.0
 	 */
-	private readonly _assert: CompileAssert;
+	private readonly _semanticChecker: KipperSemanticChecker;
+
+	/**
+	 * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an invalid
+	 * use of types and identifiers is detected.
+	 * @since 0.7.0
+	 */
+	private readonly _typeChecker: KipperTypeChecker;
 
 	constructor(
 		stream: KipperParseStream,
@@ -524,7 +127,8 @@ export class KipperProgramContext {
 	) {
 		this.logger = logger;
 		this.target = target;
-		this._assert = new CompileAssert(this);
+		this._semanticChecker = new KipperSemanticChecker(this);
+		this._typeChecker = new KipperTypeChecker(this);
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this._parser = parser;
@@ -537,13 +141,29 @@ export class KipperProgramContext {
 	/**
 	 * Asserts a certain truth.
 	 * @param ctx The token context item.
-	 * @returns The default asserter that has the line and col arguments set as traceback info in case an exception
-	 * is encountered.
+	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
+	 * may be used to check semantic integrity and cohesion.
 	 */
-	public assert(ctx: CompilableParseToken<any> | undefined): CompileAssert {
+	public semanticCheck(ctx: CompilableParseToken<any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
-		this._assert.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
-		return this._assert;
+		this._semanticChecker.setTracebackData(
+			ctx,
+			ctx?.antlrRuleCtx.start.line,
+			ctx?.antlrRuleCtx.start.charPositionInLine,
+		);
+		return this._semanticChecker;
+	}
+
+	/**
+	 * Performs a type check on {@link CompilableParseToken the ctx argument}.
+	 * @param ctx The token context item.
+	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
+	 * to check certain types.
+	 */
+	public typeCheck(ctx: CompilableParseToken<any> | undefined): KipperTypeChecker {
+		// Set the active traceback data on the item
+		this._typeChecker.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
+		return this._typeChecker;
 	}
 
 	/**
@@ -656,7 +276,7 @@ export class KipperProgramContext {
 		// Make sure the global is valid and doesn't interfere with other identifiers
 		for (let g of newGlobals) {
 			// Use line 1 and col 1, as this is a pre-processing error.
-			this.assert(undefined).globalCanBeRegistered(g.identifier);
+			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
 		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
@@ -713,11 +333,11 @@ export class KipperProgramContext {
 		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
 
 		// Running the semantic analysis
-		this.logger.info(`Running the semantic analysis for '${this.stream.name}'.`);
+		this.logger.info(`Analysing '${this.stream.name}'.`);
 		await this.semanticAnalysis();
 
 		// Translating the context instances and children
-		this.logger.info(`Translating code to '${this.target.targetName}' for '${this.stream.name}'.`);
+		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
 		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
 		this.logger.debug(
@@ -796,7 +416,7 @@ export class KipperProgramContext {
 
 	/**
 	 * Tries to fetch a global variable from the {@link this.globalScope} based on the passed {@link identifier}.
-	 * @param identifier The identifier of the variable
+	 * @param identifier The identifier of the variable.
 	 */
 	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
 		// Casting the type, as the return type will always be either ScopeDeclaration or undefined
@@ -809,22 +429,26 @@ export class KipperProgramContext {
 	/**
 	 * Adds a new declaration entry to the global scope.
 	 * @param token The token that should be added.
+	 * @param identifier The identifier of the global variable.
 	 */
-	public addNewGlobalScopeEntry(token: VariableDeclaration | FunctionDeclaration): void {
-		const semanticData = token.ensureSemanticDataExists();
-		this.assert(token).builtInNotDefined(semanticData.identifier);
+	public async addGlobalVariable(
+		token: VariableDeclaration | FunctionDeclaration,
+		identifier: string,
+	): Promise<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
+		this.semanticCheck(token).builtInNotDefined(identifier);
 
 		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
 		if (token instanceof VariableDeclaration) {
-			this.assert(token).functionIdentifierNotDeclared(semanticData.identifier);
-			this.assert(token).variableIdentifierNotDefined(semanticData.identifier);
+			this.semanticCheck(token).functionIdentifierNotDeclared(identifier);
+			this.semanticCheck(token).variableIdentifierNotDefined(identifier);
 		} else {
-			this.assert(token).variableIdentifierNotDeclared(semanticData.identifier);
-			this.assert(token).functionIdentifierNotDefined(semanticData.identifier);
+			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
+			this.semanticCheck(token).functionIdentifierNotDefined(identifier);
 		}
 
-		this._globalScope = this._globalScope.concat(
-			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token),
-		);
+		const declaration =
+			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token);
+		this._globalScope = this._globalScope.concat(declaration);
+		return declaration;
 	}
 }
