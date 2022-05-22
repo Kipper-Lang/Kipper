@@ -38,7 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated logger messages.
+- Optimised Kipper parsing and lexing process by updating the parsing behaviour in Kipper.g4. Kipper should handle
+  standard expressions a lot faster from no on.
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
   type of string additive expressions causing invalid type errors when used with other expressions.
 - Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and
@@ -50,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
 - Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the
   return type of string expressions.
+- Updated logger messages.
 - Updated `compiler` folder structure of the core package:
   - `compiler/parser` from now on contains everything parser and lexer-related.
   - `compiler/parser/antlr` from now on contains the Antlr4 generated parser and lexer files.
@@ -71,6 +73,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
 - Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4. (Only identifiers
   may be used.)
+- Option to redeclare variables. From on a variable declaration can only be done once and afterwards the variable may 
+  only be overwritten or modified, but not re-declared. This should help make Kipper have a similar behaviour to 
+  TypeScript.
 
 ## [0.6.1] - 2022-05-17
 
