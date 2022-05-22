@@ -22,8 +22,8 @@ describe("Parse-Tokens", () => {
 			}
 
 			primarySemanticAnalysis(): Promise<void> {
-        return Promise.resolve(undefined);
-      }
+				return Promise.resolve(undefined);
+			}
 
 			targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleToken> = async (T: ExampleToken) => {
 				return;
@@ -33,9 +33,9 @@ describe("Parse-Tokens", () => {
 				return <TranslatedCodeLine>[];
 			};
 
-      semanticTypeChecking(): Promise<void> {
-        return Promise.resolve(undefined);
-      }
+			semanticTypeChecking(): Promise<void> {
+				return Promise.resolve(undefined);
+			}
 		}
 
 		describe("sourceCode", () => {
