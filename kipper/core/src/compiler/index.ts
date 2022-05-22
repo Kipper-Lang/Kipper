@@ -5,17 +5,15 @@
  * @since 0.0.1
  */
 
-export * as tokens from "./tokens";
-export * as logic from "./logic";
-export * as target from "./target";
+export * as lib from "./lib";
 export * as parser from "./parser";
-export * from "./tokens";
-export * from "./logic";
+export * as semantics from "./semantics";
+export * as translation from "./translation";
+export * from "./lib";
+export * from "./parser";
+export * from "./semantics";
+export * from "./translation";
 export * from "./antlr-error-listener";
-export * from "./parse-stream";
-export * from "./listener";
 export * from "./program-ctx";
+export * from "./compile-target";
 export * from "./compiler";
-export * from "./semantic-analyser";
-export * from "./code-generator";
-export * from "./const";

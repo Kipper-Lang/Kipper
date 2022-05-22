@@ -5,18 +5,18 @@
  * @since 0.1.0
  */
 
-import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
-import { determineScope, getParseRuleSource } from "../../utils";
+import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../../errors";
+import { determineScope, getParseRuleSource } from "../../../utils";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import type { KipperParser } from "../parser";
+import type { KipperParser } from "../../parser";
 import type { TokenStream } from "antlr4ts/TokenStream";
-import type { KipperProgramContext } from "../program-ctx";
+import type { KipperProgramContext } from "../../program-ctx";
 import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../code-generator";
-import type { KipperCompileTarget } from "../target";
+import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../../translation/code-generator";
+import type { KipperCompileTarget } from "../../compile-target";
 import type { Declaration } from "./definitions";
 import type { Statement } from "./statements";
-import type { KipperScope, TranslatedCodeLine } from "../logic";
+import type { KipperScope, TranslatedCodeLine } from "../const";
 import type { ParseTree } from "antlr4ts/tree";
 
 export type eligibleParentToken = CompilableParseToken<any> | RootFileParseToken;
@@ -138,7 +138,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * The compilation target for this specific token.
+	 * The compilation translation for this specific token.
 	 * @since 0.5.0
 	 */
 	public get target(): KipperCompileTarget {
@@ -147,7 +147,7 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 
 	/**
 	 * The code generator, which will generate the code for this specific token
-	 * into the {@link this.target target language}.
+	 * into the {@link this.translation translation language}.
 	 * @since 0.5.0
 	 */
 	public get codeGenerator(): KipperTargetCodeGenerator {
@@ -165,8 +165,8 @@ export abstract class CompilableParseToken<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * The target-specific semantic analyser, which will perform semantic analysis
-	 * specific for the {@link this.target target language}.
+	 * The translation-specific semantic analyser, which will perform semantic analysis
+	 * specific for the {@link this.translation translation language}.
 	 * @since 0.5.0
 	 */
 	public get semanticAnalyser(): KipperTargetSemanticAnalyser {
@@ -315,7 +315,7 @@ export class RootFileParseToken {
 	/**
 	 * Semantically analyses the children tokens of this
 	 * {@link RootFileParseToken instance} and performs additional
-	 * {@link CompilableParseToken.targetSemanticAnalysis target specific analysis}.
+	 * {@link CompilableParseToken.targetSemanticAnalysis translation specific analysis}.
 	 * @since 0.5.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
@@ -327,7 +327,7 @@ export class RootFileParseToken {
 
 	/**
 	 * Translates the children tokens of this {@link RootFileParseToken instance}
-	 * into the specific {@link this.programCtx.target target}.
+	 * into the specific {@link this.programCtx.translation translation}.
 	 * @since 0.5.0
 	 * @protected
 	 */

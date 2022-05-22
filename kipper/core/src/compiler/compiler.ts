@@ -8,11 +8,11 @@ import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "./antlr-error-listener";
 import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
-import { KipperParseStream } from "./parse-stream";
+import { KipperParseStream } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, defaultNodeBuiltIns, defaultWebBuiltIns, isBrowser } from "./logic";
-import { KipperCompileTarget } from "./target";
-import { TypeScriptTarget } from "./target/typescript";
+import { BuiltInFunction, builtIns, isBrowser } from "./lib";
+import { KipperCompileTarget } from "./compile-target";
+import { TypeScriptTarget } from "./targets/typescript";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
@@ -36,7 +36,7 @@ export interface CompileConfig {
 	 */
 	fileName?: string;
 	/**
-	 * The target languages for the compilation.
+	 * The translation languages for the compilation.
 	 * @since 0.5.0
 	 */
 	target?: KipperCompileTarget;
@@ -62,7 +62,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		globals: isBrowser ? defaultWebBuiltIns : defaultNodeBuiltIns, // Assume node if it's not a browser
+		globals: builtIns, // Assume node if it's not a browser
 		extendGlobals: [],
 		fileName: "anonymous-script",
 		target: new TypeScriptTarget(),
@@ -87,7 +87,7 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		this.userOptions = options;
 
 		// Write all items
-		this.globals = options.globals ?? CompilerEvaluatedOptions.defaults.globals;
+		this.globals = options.globals ?? Object.values(CompilerEvaluatedOptions.defaults.globals);
 		this.extendGlobals = options.extendGlobals ?? CompilerEvaluatedOptions.defaults.extendGlobals;
 		this.fileName = options.fileName ?? CompilerEvaluatedOptions.defaults.fileName;
 		this.target = options.target ?? CompilerEvaluatedOptions.defaults.target;
@@ -198,7 +198,7 @@ export class KipperCompiler {
 	 * async processing.
 	 * @param parseStream The {@link KipperParseStream} instance that contains the required string
 	 * content.
-	 * @param target The {@link KipperCompileTarget} which specifies the compilation target for the
+	 * @param target The {@link KipperCompileTarget} which specifies the compilation translation for the
 	 * language. Per default this is {@link TypeScriptTarget}.
 	 * @returns The generated and parsed {@link CompilationUnitContext}.
 	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
@@ -274,7 +274,7 @@ export class KipperCompiler {
 				fileCtx.registerGlobals(globals);
 			}
 			this.logger.debug(
-				`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the Kipper program '${
+				`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the program '${
 					inStream.name
 				}'.`,
 			);

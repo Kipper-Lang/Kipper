@@ -35,8 +35,8 @@ import {
 	type StringPrimaryExpression,
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
-} from "./tokens";
-import { TranslatedCodeLine, TranslatedExpression } from "./logic";
+} from "../semantics/tokens";
+import { TranslatedCodeLine, TranslatedExpression } from "../lib";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a

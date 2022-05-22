@@ -5,9 +5,9 @@
  * @since 0.3.0
  */
 
-import type { KipperProgramContext } from "./program-ctx";
+import type { KipperProgramContext } from "../program-ctx";
 import type { CompoundStatement } from "./tokens";
-import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./logic";
+import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../lib";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should

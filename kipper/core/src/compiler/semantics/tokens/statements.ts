@@ -18,12 +18,12 @@ import {
 	IterationStatementContext,
 	JumpStatementContext,
 	SelectionStatementContext,
-} from "../parser";
-import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../logic";
+} from "../../parser";
+import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../../lib";
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
-import { determineScope } from "../../utils";
-import { TargetTokenCodeGenerator } from "../code-generator";
+import { determineScope } from "../../../utils";
+import { TargetTokenCodeGenerator } from "../../translation/code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**

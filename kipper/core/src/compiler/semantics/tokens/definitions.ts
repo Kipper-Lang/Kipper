@@ -15,12 +15,12 @@ import {
 	ParameterTypeListContext,
 	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
-} from "../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../logic";
-import { KipperProgramContext } from "../program-ctx";
-import { UnableToDetermineMetadataError } from "../../errors";
-import { determineScope } from "../../utils";
-import { TargetTokenCodeGenerator } from "../code-generator";
+} from "../../parser";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../../lib";
+import { KipperProgramContext } from "../../program-ctx";
+import { UnableToDetermineMetadataError } from "../../../errors";
+import { determineScope } from "../../../utils";
+import { TargetTokenCodeGenerator } from "../../translation/code-generator";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { Expression } from "./expressions";
 import { ParseTree } from "antlr4ts/tree";

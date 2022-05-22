@@ -9,7 +9,7 @@ import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperSyntaxError } from "../errors";
-import { KipperParseStream } from "./parse-stream";
+import { KipperParseStream } from "./parser/parse-stream";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
 import { getNaturalOrZero } from "../utils";
