@@ -364,12 +364,12 @@ describe("KipperCompiler", () => {
 				});
 
 				it("str", async () => {
-					const stream = new KipperParseStream('var x: str = 4;\nx = "5";');
+					const stream = new KipperParseStream('var x: str = "4";\nx = "5";');
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes('let x: string = 4;\nx = "5";'), "Expected different TypeScript code");
+					assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Expected different TypeScript code");
 				});
 			});
 		});
@@ -973,15 +973,7 @@ describe("KipperCompiler", () => {
 						describe("+", () => {
 							it("str", async () => {
 								try {
-									await new KipperCompiler().compile(new KipperParseStream('"3" + "3";'));
-								} catch (e) {
-									assert(false, "Expected no 'InvalidArithmeticOperationError'");
-								}
-							});
-
-							it("char", async () => {
-								try {
-									await new KipperCompiler().compile(new KipperParseStream('"3" + "3";'));
+									await new KipperCompiler().compile('"3" + "3";');
 								} catch (e) {
 									assert(false, "Expected no 'InvalidArithmeticOperationError'");
 								}
@@ -989,7 +981,7 @@ describe("KipperCompiler", () => {
 
 							it("num", async () => {
 								try {
-									await new KipperCompiler().compile(new KipperParseStream("3 + 3;"));
+									await new KipperCompiler().compile("3 + 3;");
 								} catch (e) {
 									assert(false, "Expected no 'InvalidArithmeticOperationError'");
 								}
@@ -1002,7 +994,7 @@ describe("KipperCompiler", () => {
 					describe("Error", () => {
 						it("NumberConstant", async () => {
 							try {
-								await new KipperCompiler().compile(new KipperParseStream("5 = 5;"));
+								await new KipperCompiler().compile("5 = 5;");
 							} catch (e) {
 								assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
 								assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
@@ -1017,7 +1009,7 @@ describe("KipperCompiler", () => {
 
 						it("StringConstant", async () => {
 							try {
-								await new KipperCompiler().compile(new KipperParseStream('"4" = "4";'));
+								await new KipperCompiler().compile('"4" = "4";');
 							} catch (e) {
 								assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
 								assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
@@ -1032,7 +1024,99 @@ describe("KipperCompiler", () => {
 					});
 
 					describe("NoError", () => {
-						it("", () => {});
+						it("identifier", async () => {
+							try {
+								await new KipperCompiler().compile("var x: num = 0; x = 3 + 3;");
+							} catch (e) {
+								assert(false, "Expected no 'InvalidArithmeticOperationError'");
+							}
+						});
+					});
+				});
+
+				describe("TypeError", () => {
+					describe("Error", () => {
+						describe("Definition", () => {
+							it("num = str", async () => {
+								try {
+									await new KipperCompiler().compile(new KipperParseStream('var x: num = "5";'));
+								} catch (e) {
+									assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+									assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+									assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+									assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+									return;
+								}
+								assert(false, "Expected 'TypeError'");
+							});
+
+							it("str = num", async () => {
+								try {
+									await new KipperCompiler().compile(new KipperParseStream("var x: str = 5;"));
+								} catch (e) {
+									assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+									assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+									assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+									assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+									return;
+								}
+								assert(false, "Expected 'TypeError'");
+							});
+						});
+
+						describe("Assignment", () => {
+							it("num = str", async () => {
+								try {
+									await new KipperCompiler().compile(new KipperParseStream('var x: num; x = "5";'));
+								} catch (e) {
+									assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+									assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+									assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+									assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+									return;
+								}
+								assert(false, "Expected 'TypeError'");
+							});
+
+							it("str = num", async () => {
+								try {
+									await new KipperCompiler().compile(new KipperParseStream("var x: str; x = 5;"));
+								} catch (e) {
+									assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).name === "TypeError", "Expected proper error");
+									assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+									assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+									assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+									assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+									return;
+								}
+								assert(false, "Expected 'TypeError'");
+							});
+						});
+					});
+
+					describe("NoError", () => {
+						it("str = str", async () => {
+							try {
+								await new KipperCompiler().compile('var x: str = "3";');
+							} catch (e) {
+								assert(false, "Expected no 'InvalidArithmeticOperationError'");
+							}
+						});
+
+						it("num = num", async () => {
+							try {
+								await new KipperCompiler().compile("var x: num = 3;");
+							} catch (e) {
+								assert(false, "Expected no 'InvalidArithmeticOperationError'");
+							}
+						});
 					});
 				});
 			});

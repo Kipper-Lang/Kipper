@@ -23,7 +23,7 @@ import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../..
 import { VariableDeclaration } from "./definitions";
 import { Expression } from "./expressions";
 import { determineScope } from "../../../utils";
-import { TargetTokenCodeGenerator } from "../../translation/code-generator";
+import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
@@ -143,15 +143,16 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * Adds a new local variable to this scope.
 	 * @param token The {@link VariableDeclaration} token.
+	 * @param identifier The identifier of the local variable.
 	 */
-	public addNewLocalVariable(token: VariableDeclaration): void {
-		const semanticData = token.ensureSemanticDataExists();
-
+	public async addLocalVariable(token: VariableDeclaration, identifier: string): Promise<ScopeVariableDeclaration> {
 		// Make sure the identifier is available
-		this.programCtx.assert(token).variableIdentifierNotDeclared(semanticData.identifier, this);
+		this.programCtx.semanticCheck(token).variableIdentifierNotDeclared(identifier, this);
 
 		// Add new declaration or definition
-		this._localScope = this._localScope.concat(new ScopeVariableDeclaration(token));
+		const declaration = new ScopeVariableDeclaration(token);
+		this._localScope = this._localScope.concat(declaration);
+		return declaration;
 	}
 
 	/**
@@ -179,13 +180,22 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
@@ -228,13 +238,22 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SelectionStatement> = this.semanticAnalyser.selectionStatement;
@@ -276,13 +295,22 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExpressionStatement> = this.semanticAnalyser.expressionStatement;
@@ -325,13 +353,22 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
@@ -374,13 +411,22 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			scope: determineScope(this),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetTokenSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;

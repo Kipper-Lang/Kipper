@@ -337,12 +337,12 @@ export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError 
 
 /**
  * Represents all errors in the mismatching type group.
- * @since 0.3.0
+ * @since 0.7.0
  */
-export class InvalidTypeError extends KipperError {
+export class TypeError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
-		this.name = "InvalidTypeError";
+		this.name = "TypeError";
 	}
 }
 
@@ -350,7 +350,7 @@ export class InvalidTypeError extends KipperError {
  * Error that is thrown whenever a return type is used that may not be returned.
  * @since 0.6.0
  */
-export class InvalidReturnTypeError extends InvalidTypeError {
+export class InvalidReturnTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Type '${type}' can not be returned.`);
 		this.name = "InvalidReturnTypeError";
@@ -362,7 +362,7 @@ export class InvalidReturnTypeError extends InvalidTypeError {
  * interact with one another.
  * @since 0.6.0
  */
-export class InvalidArithmeticOperationError extends InvalidTypeError {
+export class InvalidArithmeticOperationError extends TypeError {
 	constructor(firstType: string, secondType: string) {
 		super(`Invalid arithmetic operation between types '${firstType}' and '${secondType}'.`);
 		this.name = "InvalidArithmeticOperationError";
@@ -372,7 +372,7 @@ export class InvalidArithmeticOperationError extends InvalidTypeError {
 /**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class InvalidArgumentTypeError extends InvalidTypeError {
+export class InvalidArgumentTypeError extends TypeError {
 	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
 		super(
 			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,

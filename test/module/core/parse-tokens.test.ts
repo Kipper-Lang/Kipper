@@ -21,7 +21,9 @@ describe("Parse-Tokens", () => {
 				super(antlrCtx, parent);
 			}
 
-			public async primarySemanticAnalysis(): Promise<void> {}
+			primarySemanticAnalysis(): Promise<void> {
+				return Promise.resolve(undefined);
+			}
 
 			targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleToken> = async (T: ExampleToken) => {
 				return;
@@ -30,6 +32,10 @@ describe("Parse-Tokens", () => {
 			targetCodeGenerator: TargetTokenCodeGenerator<ExampleToken, TranslatedCodeLine> = async (T: ExampleToken) => {
 				return <TranslatedCodeLine>[];
 			};
+
+			semanticTypeChecking(): Promise<void> {
+				return Promise.resolve(undefined);
+			}
 		}
 
 		describe("sourceCode", () => {

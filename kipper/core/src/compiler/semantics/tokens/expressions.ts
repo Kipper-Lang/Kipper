@@ -46,7 +46,7 @@ import {
 	TranslatedExpression,
 } from "../../lib";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
-import { TargetTokenCodeGenerator } from "../../translation/code-generator";
+import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
 import { CompoundStatement } from "./statements";
@@ -263,7 +263,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -271,6 +271,15 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 			value: this.sourceCode,
 			evaluatedType: "num",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -321,7 +330,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -329,6 +338,15 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
 			evaluatedType: "char",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -379,7 +397,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -387,6 +405,15 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 			evaluatedType: "list",
 			value: [], // TODO! Implement list data fetching.
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -437,7 +464,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -445,6 +472,15 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 			evaluatedType: "str",
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -490,7 +526,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -498,7 +534,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 
 		// Make sure the referenced variable even exists!
 		const ref = this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.getExistingReference(identifier, this.scope instanceof CompoundStatement ? this.scope : undefined);
 
 		// Evaluate the type by attempting to fetch it from the global
@@ -513,6 +549,15 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 			evaluatedType: evaluateType(),
 			identifier: identifier,
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -561,7 +606,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -569,6 +614,15 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 			evaluatedType: "str",
 			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -609,18 +663,27 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Tangled Expressions have not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -663,12 +726,12 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(
 				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
 			);
@@ -677,6 +740,15 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -718,18 +790,27 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -787,22 +868,40 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
 		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].ensureSemanticDataExists();
+
+		// Fetching the called function and its semantic data
+		const calledFunc = this.programCtx.semanticCheck(this).getExistingFunction(identifierSemantics.identifier);
+
+		// Every item from index 1 to the end is an argument (First child is the identifier).
+		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
+		const args = this.children.slice(1, this.children.length);
+
+		// Ensure the arguments provided are valid
+		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
+
 		this.semanticData = {
 			evaluatedType: "void",
-			identifier: identifierSemantics.identifier,
-			args: this.children.slice(1, this.children.length), // Every item from index 0 to the end is an argument
-			// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
-			function: this.programCtx.assert(this).getExistingFunction(identifierSemantics.identifier),
+			identifier: calledFunc.identifier,
+			args: args,
+			function: calledFunc,
 		};
+	}
 
-		// Verify that the argument are valid.
-		this.programCtx.assert(this).validFunctionCallArguments(this.semanticData.function, this.semanticData.args);
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.function, semanticData.args);
 	}
 
 	/**
@@ -845,12 +944,12 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(
 				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
 			);
@@ -859,6 +958,15 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -902,12 +1010,12 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(
 				new KipperNotImplementedError("Operator Modified Expression have not been implemented yet."),
 			);
@@ -916,6 +1024,15 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -958,18 +1075,27 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Type Conversions have not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1052,7 +1178,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -1075,7 +1201,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
-		this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
+		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
@@ -1083,6 +1209,15 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			exp2: this.children[1], // Second expression
 			operator: operator,
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1141,7 +1276,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -1162,7 +1297,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
-		this.programCtx.assert(this).arithmeticExpressionValid(exp1, exp2, operator);
+		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		const evaluateType: () => KipperType = () => {
 			const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
@@ -1185,6 +1320,15 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			exp2: exp2, // Second expression
 			operator: <KipperAdditiveOperator>operator,
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1234,12 +1378,12 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(
 				new KipperNotImplementedError("Logical Relational Expressions have not been implemented yet."),
 			);
@@ -1248,6 +1392,15 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1293,12 +1446,12 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(
 				new KipperNotImplementedError("Logical Equality Expressions have not been implemented yet."),
 			);
@@ -1307,6 +1460,15 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1351,18 +1513,27 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Logical And Expressions have not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1407,18 +1578,27 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Logical Or Expressions have not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1461,18 +1641,27 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
-			.assert(this)
+			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
 
 		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "void",
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1494,10 +1683,10 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
  */
 export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The identifier that is assigned to.
+	 * The identifier expression that is being assigned to.
 	 * @since 0.7.0
 	 */
-	identifier: string;
+	identifier: IdentifierPrimaryExpression;
 	/**
 	 * The assigned value to this variable.
 	 * @since 0.7.0
@@ -1528,14 +1717,15 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	}
 
 	/**
-	 * Semantic analysis for the code inside this parse token. This will log all warnings using {@link programCtx.logger}
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// There will always be only two children, which are the identifier and expression assigned.
 		const identifier: IdentifierPrimaryExpression = (() => {
 			const exp = this.children[0];
-			this.programCtx.assert(this).validAssignment(exp);
+			// Ensure the left-hand side of the expression is an identifier
+			this.programCtx.semanticCheck(this).validAssignment(exp);
 			return <IdentifierPrimaryExpression>exp;
 		})();
 		const assignValue: Expression<any> = this.children[1];
@@ -1547,12 +1737,22 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 
 		// Get the semantics / the evaluated type of this expression
 		const valueSemantics = assignValue.ensureSemanticDataExists();
-		const identifierSemantics = identifier.ensureSemanticDataExists();
 		this.semanticData = {
 			evaluatedType: valueSemantics.evaluatedType,
 			value: assignValue,
-			identifier: identifierSemantics.identifier,
+			identifier: identifier,
 		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).validAssignment(semanticData.identifier, semanticData.value);
 	}
 
 	/**

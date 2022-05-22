@@ -1,9 +1,10 @@
 var y: num = 4;
 var x: num = 4;
-const z: num = 3333;
+const z: num = 3333 + x + y;
 
 def func() -> num {
     var localX: str = "string";
+    var localY: str = localX + localX;
 
-    call print(localX);
+    call print(localY);
 }

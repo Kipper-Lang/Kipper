@@ -20,15 +20,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `kipper compile` and `kipper run`)
 - Implemented single char flags for the CLI ([#109](https://github.com/Luna-Klatzer/Kipper/issues/109)).
 - Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
-- New field `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
-  This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
-- New function `CompileAssert.validAssignment()`, which asserts that an assignment expression is valid.
+- New fields:
+  - `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
+    This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
+- New functions:
+  - `CompileAssert.validAssignment()`, which asserts that an assignment expression is valid.
+  - `abstract CompilableParseToken.semanticTypeChecking()`, which must be implemented by every child and should serve
+    as a separate semantic type checking step outside of `primarySemanticAnalysis()`.
+- New classes:
+  - `KipperAsserter`, which is an abstract base class that represents a class that can be used to assert certain truths
+    and handle/throw compile errors.
+  - `KipperTypeChecker` and `KipperSemanticChecker`, which perform specialised semantic checking and verify logical
+    integrity and cohesion. These two classes replace `CompileAssert`.
 - New errors:
   - `InvalidAssignmentError`, which is thrown when an invalid assignment is used.
   - `KipperInvalidInputError`, which is thrown when passing invalid input to the Kipper cli.
 
 ### Changed
 
+- Updated logger messages.
 - Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
   type of string additive expressions causing invalid type errors when used with other expressions.
 - Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and
@@ -50,11 +60,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `compiler/targets` from now on contains the existing targets for Kipper, such as `typescript`.
   - `compiler/lib` from now on contains the standard library and built-ins for Kipper.
   - `compiler/lib/import` from now on contains the default importable libraries for Kipper.
+- Renamed:
+  - Error `InvalidTypeError` to `TypeError`.
+  - Function `KipperProgramContext.addNewGlobalScopeEntry` to `addGlobalVariable()`.
+  - Function `CompoundStatement.addNewLocalVariable` to `addLocalVariable()`.
 
 ### Removed
 
 - Unnecessary traceback when encountering Kipper runtime errors as explained in
   [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
+- Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4. (Only identifiers
+  may be used.)
 
 ## [0.6.1] - 2022-05-17
 
