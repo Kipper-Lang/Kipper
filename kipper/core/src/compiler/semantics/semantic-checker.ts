@@ -9,9 +9,7 @@ import {
 	InvalidGlobalError,
 	KipperNotImplementedError,
 	UndefinedIdentifierError,
-	UnknownFunctionIdentifierError,
 	UnknownIdentifierError,
-	UnknownVariableIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
 } from "../../errors";
@@ -83,30 +81,6 @@ export class KipperSemanticChecker extends KipperAsserter {
 		const isDeclarationDefined = val instanceof ScopeDeclaration && val.isDefined; // User-defined -> may be defined
 		if (!isBuiltinDefined && !isDeclarationDefined) {
 			throw this.assertError(new UndefinedIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the function.
-	 * @deprecated
-	 */
-	public functionIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.functionIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalFunction(identifier)) {
-			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the variable.
-	 * @deprecated
-	 */
-	public variableIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.variableIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalVariable(identifier)) {
-			throw this.assertError(new UnknownVariableIdentifierError(identifier));
 		}
 	}
 

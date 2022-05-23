@@ -263,28 +263,6 @@ export class UnknownIdentifierError extends IdentifierError {
 }
 
 /**
- * Error that is thrown when a variable definition is used, but it is unknown to the program.
- * @deprecated
- */
-export class UnknownVariableIdentifierError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Unknown variable identifier '${identifier}'.`);
-		console.warn("'UnknownVariableIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
-	}
-}
-
-/**
- * Error that is thrown when a function definition is used, but it is unknown to the program.
- * @deprecated
- */
-export class UnknownFunctionIdentifierError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Unknown function identifier '${identifier}'.`);
-		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
-	}
-}
-
-/**
  * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
  * a variable definition or declaration.
  */
