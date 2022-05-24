@@ -28,7 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   should from now on be the folder, where all the targets that are natively supported by Kipper should be located.
 - Moved all typescript-related target files to `kipper/core/src/targets/typescript` and split up the classes into
   their own files.
-- Updated built-in code generation behaviour
+- Updated built-in code generation behaviour in `KipperProgramContext.generateRequirements()`. This function will try
+  to generate the dependencies for each built-in using its `KipperTargetBuiltInGenerator`.
 - Renamed `builtIns` to `kipperRuntimeBuiltIns`.
 
 ### Removed
@@ -41,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
 - Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like 
-  for example `print`) anymore 
+  for example `print`) anymore.
 
 ## [0.7.0] - 2022-05-22
 
