@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   should from now on be the folder, where all the targets that are natively supported by Kipper should be located.
 - Moved all typescript-related target files to `kipper/core/src/targets/typescript` and split up the classes into
   their own files.
+- Updated built-in code generation behaviour
 - Renamed `builtIns` to `kipperRuntimeBuiltIns`.
 
 ### Removed
