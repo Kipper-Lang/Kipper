@@ -147,10 +147,11 @@ initDeclarator
     :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
     ;
 
+// TODO! Implement the following type specifiers as expressions
 typeSpecifier
-    :   Identifier # singleItemTypeSpecifier // for single items, like 'num'
-    |   Identifier '<' WS* Identifier WS* '>' # multiItemTypeSpecifier // for lists
-    |   'typeof' WS* '(' Identifier ')' # typeofTypeSpecifier // typeof another variable
+    :   Identifier # defaultTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
+    |   'typeof' WS* '('  WS* Identifier  WS* ')' # typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
