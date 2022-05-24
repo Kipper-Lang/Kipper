@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This function should also allow the use of built-in variables in the future and also provide a basis for dynamic
   dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
   built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
+- New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 
 ### Changed
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   should from now on be the folder, where all the targets that are natively supported by Kipper should be located.
 - Moved all typescript-related target files to `kipper/core/src/targets/typescript` and split up the classes into
   their own files.
+- Renamed `builtIns` to `kipperRuntimeBuiltIns`.
 
 ### Removed
 
@@ -37,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `UnknownVariableIdentifierError`
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
+- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like 
+  for example `print`) anymore 
 
 ## [0.7.0] - 2022-05-22
 
