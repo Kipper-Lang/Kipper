@@ -9,6 +9,7 @@ import {
 	AdditiveExpressionContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
+	BoolPrimaryExpressionContext,
 	CastOrConvertExpressionContext,
 	CharacterPrimaryExpressionContext,
 	ConditionalExpressionContext,
@@ -32,6 +33,7 @@ import {
 	KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	KipperArithmeticOperator,
+	KipperBoolTypeLiterals,
 	kipperCharType,
 	KipperCharType,
 	KipperFunction,
@@ -59,6 +61,7 @@ export type antlrExpressionCtxType =
 	| CharacterPrimaryExpressionContext
 	| ListPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
+	| BoolPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
 	| TangledPrimaryExpressionContext
@@ -126,6 +129,8 @@ export function getExpressionInstance(
 		return new LogicalOrExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof ConditionalExpressionContext) {
 		return new ConditionalExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof BoolPrimaryExpressionContext) {
+		return new BoolPrimaryExpression(antlrCtx, parent);
 	} else {
 		// Last remaining possible type {@link AssignmentExpression}
 		return new AssignmentExpression(antlrCtx, parent);
@@ -279,7 +284,8 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -346,7 +352,8 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -480,7 +487,8 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -510,6 +518,12 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
 
 /**
  * Identifier expression class, which represents an identifier in the Kipper language.
+ *
+ * This is only used for identifier references used inside other expressions as its own expression. Therefore, variable
+ * declarations or definition do not use this class and have their own implementation for identifier handling.
+ * @example
+ * var x: str = "5"; // 'x' is a declarator identifier and is not an identifier reference
+ * call print(x); // 'print' and 'x' are identifier references
  * @since 0.1.0
  */
 export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
@@ -557,7 +571,8 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -571,6 +586,69 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		this.semanticAnalyser.identifierPrimaryExpression;
 	targetCodeGenerator: TargetTokenCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.identifierPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link BoolPrimaryExpression}.
+ * @since 0.8.0
+ */
+export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The value of this boolean constant expression.
+	 * @since 0.8.0
+	 */
+	value: KipperBoolTypeLiterals;
+}
+
+/**
+ * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
+ * @since 0.8.0
+ */
+export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSemantics> {
+	/**
+	 * The private field '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
+
+	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
+		this._antlrRuleCtx = antlrCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			evaluatedType: "bool",
+			value: <KipperBoolTypeLiterals>this.sourceCode,
+		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public semanticTypeChecking(): Promise<void> {
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): BoolPrimaryExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<BoolPrimaryExpression> =
+		this.semanticAnalyser.boolPrimaryExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.boolPrimaryExpression;
 }
 
 /**

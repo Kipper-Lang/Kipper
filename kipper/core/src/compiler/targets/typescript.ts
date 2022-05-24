@@ -11,6 +11,7 @@ import {
 	type AdditiveExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
+	type BoolPrimaryExpression,
 	type CastOrConvertExpression,
 	type CharacterPrimaryExpression,
 	type CompoundStatement,
@@ -40,6 +41,7 @@ import {
 } from "../semantics/tokens";
 import {
 	kipperBoolType,
+	KipperBoolTypeLiterals,
 	kipperCharType,
 	kipperFuncType,
 	kipperListType,
@@ -133,6 +135,11 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
 	fStringPrimaryExpression = async (token: FStringPrimaryExpression) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BoolPrimaryExpression} instances.
+	 */
+	boolPrimaryExpression = async (token: BoolPrimaryExpression) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link TangledPrimaryExpression} instances.
@@ -366,6 +373,13 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
+	};
+
+	/**
+	 * Translates a {@link BoolPrimaryExpression} into the typescript language.
+	 */
+	boolPrimaryExpression = async (token: BoolPrimaryExpression): Promise<TranslatedExpression> => {
+		return [token.ensureSemanticDataExists().value];
 	};
 
 	/**

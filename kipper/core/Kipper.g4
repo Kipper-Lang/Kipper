@@ -34,6 +34,7 @@ primaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
     |   CharacterConstant #characterPrimaryExpression
     |   listConstant #listPrimaryExpression
+    |   ('true' | 'false') #boolPrimaryExpression
     ;
 
 listConstant
@@ -147,10 +148,11 @@ initDeclarator
     :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
     ;
 
+// TODO! Implement the following type specifiers as expressions
 typeSpecifier
-    :   Identifier # singleItemTypeSpecifier // for single items, like 'num'
-    |   Identifier '<' WS* Identifier WS* '>' # multiItemTypeSpecifier // for lists
-    |   'typeof' WS* '(' Identifier ')' # typeofTypeSpecifier // typeof another variable
+    :   Identifier # defaultTypeSpecifier // for single items, like 'num'
+    |   Identifier '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
+    |   'typeof' WS* '('  WS* Identifier  WS* ')' # typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
@@ -168,7 +170,7 @@ nestedParenthesesBlock
     ;
 
 parameterTypeList
-    :   parameterList WS* (',' WS* '...' WS*)?
+    :   parameterList WS* (',' WS* '...' Identifier WS*)? /* Kipper should allow for a sequence of arguments */
     ;
 
 parameterList
@@ -251,6 +253,9 @@ Var : 'var';
 // conversion
 As : 'as';
 
+// spread operator
+Spread : '...';
+
 // switch
 Switch : 'switch';
 Case : 'case';
@@ -280,6 +285,10 @@ Enum : 'enum';
 DefFunc: 'def';
 Return : 'return';
 CallFunc : 'call';
+
+// boolean constants
+True: 'true';
+False: 'false';
 
 // struct specifier - not implemented in core lang
 Struct : 'struct';
