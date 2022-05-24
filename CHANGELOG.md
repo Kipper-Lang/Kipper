@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Updated error traceback generation algorithm to be more concise and useful. The algorithm will try from now on to mark
+  the origin of the error in the source line, instead of only returning the characters causing the error.
+
 ### Removed
 
 - Removed the following deprecated errors and functions:
