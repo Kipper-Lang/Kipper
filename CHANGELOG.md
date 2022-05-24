@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New boolean constants `true` and `false`, which automatically evaluate to the type `bool` and can be used in
+  expressions. (`true` and `false` are now reserved identifiers, which can never be overwritten and any attempts to do
+  so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
+  target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
+  translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
+
+### Changed
+
 - Updated error traceback generation algorithm to be more concise and useful. The algorithm will try from now on to mark
   the origin of the error in the source line, instead of only returning the characters causing the error.
 
