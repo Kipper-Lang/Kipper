@@ -169,7 +169,7 @@ nestedParenthesesBlock
     ;
 
 parameterTypeList
-    :   parameterList WS* (',' WS* '...' WS*)?
+    :   parameterList WS* (',' WS* '...' Identifier WS*)? /* Kipper should allow for a sequence of arguments */
     ;
 
 parameterList
@@ -251,6 +251,9 @@ Var : 'var';
 
 // conversion
 As : 'as';
+
+// spread operator
+Spread : '...';
 
 // switch
 Switch : 'switch';
