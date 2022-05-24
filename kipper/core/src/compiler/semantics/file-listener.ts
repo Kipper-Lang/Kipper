@@ -40,14 +40,14 @@ import {
 	KipperListener,
 	ListConstantContext,
 	ListPrimaryExpressionContext,
-	MultiItemTypeSpecifierContext,
+	DefaultTypeSpecifierContext,
 	NestedParenthesesBlockContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
 	ParameterListContext,
 	ParameterTypeListContext,
-	SingleItemTypeSpecifierContext,
+	GenericTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	SwitchLabeledStatementContext,
@@ -55,6 +55,7 @@ import {
 	TypeofTypeSpecifierContext,
 	TypeSpecifierContext,
 	UnaryOperatorContext,
+	BoolPrimaryExpressionContext,
 } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
@@ -449,6 +450,24 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree
 	 */
 	public exitListPrimaryExpression(ctx: ListPrimaryExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	public enterBoolPrimaryExpression(ctx: BoolPrimaryExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree
+	 */
+	public exitBoolPrimaryExpression(ctx: BoolPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
@@ -1410,32 +1429,32 @@ export class KipperFileListener implements KipperListener {
 	public exitInitDeclarator(ctx: InitDeclaratorContext): void {}
 
 	/**
-	 * Enter a parse tree produced by the `singleItemTypeSpecifier`
+	 * Enter a parse tree produced by the `defaultTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {}
+	public enterDefaultTypeSpecifier(ctx: DefaultTypeSpecifierContext): void {}
 
 	/**
-	 * Exit a parse tree produced by the `singleItemTypeSpecifier`
+	 * Exit a parse tree produced by the `defaultTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitSingleItemTypeSpecifier(ctx: SingleItemTypeSpecifierContext): void {}
+	public exitDefaultTypeSpecifier(ctx: DefaultTypeSpecifierContext): void {}
 
 	/**
-	 * Enter a parse tree produced by the `multiItemTypeSpecifier`
+	 * Enter a parse tree produced by the `genericTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {}
+	public enterGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {}
 
 	/**
-	 * Exit a parse tree produced by the `multiItemTypeSpecifier`
+	 * Exit a parse tree produced by the `genericTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitMultiItemTypeSpecifier(ctx: MultiItemTypeSpecifierContext): void {}
+	public exitGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {}
 
 	/**
 	 * Enter a parse tree produced by the `typeofTypeSpecifier`

@@ -8,6 +8,7 @@ import {
 	type AdditiveExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
+	BoolPrimaryExpression,
 	type CastOrConvertExpression,
 	type CharacterPrimaryExpression,
 	type CompilableParseToken,
@@ -37,6 +38,7 @@ import {
 	type VariableDeclaration,
 } from "../semantics/tokens";
 import { TranslatedCodeLine, TranslatedExpression } from "../lib";
+import { TargetTokenSemanticAnalyser } from "../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a
@@ -133,6 +135,11 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link FStringPrimaryExpression} into a specific language.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link BoolPrimaryExpression} into a specific language.
+	 */
+	public abstract boolPrimaryExpression: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.

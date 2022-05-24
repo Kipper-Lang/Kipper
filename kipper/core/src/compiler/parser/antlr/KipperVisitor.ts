@@ -1,6 +1,5 @@
 // Generated from ./Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
-
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
@@ -33,7 +32,7 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
-import { BoolPrimaryExpresionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { DefaultTypeSpecifierContext } from "./KipperParser";
@@ -93,7 +92,6 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
-
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -344,12 +342,12 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `boolPrimaryExpresion`
+	 * Visit a parse tree produced by the `boolPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitBoolPrimaryExpresion?: (ctx: BoolPrimaryExpresionContext) => Result;
+	visitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
@@ -773,4 +771,3 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 */
 	visitJumpStatement?: (ctx: JumpStatementContext) => Result;
 }
-

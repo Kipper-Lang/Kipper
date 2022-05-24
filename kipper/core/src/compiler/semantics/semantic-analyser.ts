@@ -2,6 +2,7 @@ import {
 	type AdditiveExpression,
 	type ArraySpecifierExpression,
 	type AssignmentExpression,
+	BoolPrimaryExpression,
 	type CastOrConvertExpression,
 	type CharacterPrimaryExpression,
 	CompilableParseToken,
@@ -114,6 +115,11 @@ export abstract class KipperTargetSemanticAnalyser {
 	 * Performs translation-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenSemanticAnalyser<FStringPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BoolPrimaryExpression} instances.
+	 */
+	public abstract boolPrimaryExpression: TargetTokenSemanticAnalyser<BoolPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.

@@ -1,6 +1,5 @@
 // Generated from ./Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
-
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
@@ -33,7 +32,7 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
-import { BoolPrimaryExpresionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { DefaultTypeSpecifierContext } from "./KipperParser";
@@ -93,7 +92,6 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
-
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -491,17 +489,17 @@ export interface KipperListener extends ParseTreeListener {
 	exitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `boolPrimaryExpresion`
+	 * Enter a parse tree produced by the `boolPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterBoolPrimaryExpresion?: (ctx: BoolPrimaryExpresionContext) => void;
+	enterBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by the `boolPrimaryExpresion`
+	 * Exit a parse tree produced by the `boolPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitBoolPrimaryExpresion?: (ctx: BoolPrimaryExpresionContext) => void;
+	exitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
@@ -536,7 +534,7 @@ export interface KipperListener extends ParseTreeListener {
 	 */
 	enterDefaultTypeSpecifier?: (ctx: DefaultTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by the `defaultTypeSpecifier`
+	 * Exit a parse tree produced by the `defaultTypeSpeciffier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
@@ -1170,4 +1168,3 @@ export interface KipperListener extends ParseTreeListener {
 	 */
 	exitJumpStatement?: (ctx: JumpStatementContext) => void;
 }
-

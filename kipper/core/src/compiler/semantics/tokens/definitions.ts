@@ -13,7 +13,7 @@ import {
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
 	ParameterTypeListContext,
-	SingleItemTypeSpecifierContext,
+	DefaultTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
 import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../../lib";
@@ -227,8 +227,8 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		let paramListCtx = <ParameterTypeListContext | undefined>(
 			children.find((val) => val instanceof ParameterTypeListContext)
 		);
-		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
+		let returnTypeCtx = <DefaultTypeSpecifierContext | undefined>(
+			children.find((val) => val instanceof DefaultTypeSpecifierContext)
 		);
 
 		// Throw an error if children are incomplete
@@ -356,8 +356,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
 		);
-		const typeSpecifier = <SingleItemTypeSpecifierContext | undefined>(
-			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
+		const typeSpecifier = <DefaultTypeSpecifierContext | undefined>(
+			initDeclaratorCtx?.children?.find((val) => val instanceof DefaultTypeSpecifierContext)
 		);
 
 		// There will always be only one child, which is the expression assigned.

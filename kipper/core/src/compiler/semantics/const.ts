@@ -103,6 +103,14 @@ export const kipperCharType: KipperCharType = "char";
 export type KipperBoolType = "bool";
 
 /**
+ * Literal names for a Kipper boolean.
+ * @since 0.8.0
+ * @example
+ * var x: bool = true;
+ */
+export type KipperBoolTypeLiterals = "true" | "false";
+
+/**
  * Boolean type in Kipper.
  * @since 0.5.0
  * @example
