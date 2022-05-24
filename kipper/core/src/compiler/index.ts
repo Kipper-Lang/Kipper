@@ -8,7 +8,7 @@
 export * as parser from "./parser";
 export * as semantics from "./semantics";
 export * as translation from "./translation";
-export * from "./built-ins";
+export * from "./runtime-built-ins";
 export * from "./parser";
 export * from "./semantics";
 export * from "./translation";

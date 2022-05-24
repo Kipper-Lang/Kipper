@@ -19,12 +19,13 @@ import {
 	ScopeVariableDeclaration,
 	TranslatedCodeLine,
 } from "./semantics";
-import { BuiltInFunction } from "./built-ins";
+import { BuiltInFunction } from "./runtime-built-ins";
 import { KipperLogger } from "../logger";
 import { UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics/semantic-checker";
 import { KipperTypeChecker } from "./semantics";
+import { KipperTargetBuiltInGenerator } from "./translation";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -378,11 +379,11 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private async generateRequirements(): Promise<Array<Array<string>>> {
-		let code: Array<Array<string>> = [];
+		let code: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the global functions
-		for (let global of this._builtInGlobals) {
-			code = [...code, global.handler];
+		for (let globalSpec of this._builtInGlobals) {
+			code = [...code, ...(await this.target.builtInGenerator.getHandlerFunction(globalSpec.identifier)(globalSpec))];
 		}
 		return code;
 	}
