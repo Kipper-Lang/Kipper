@@ -185,7 +185,7 @@ semantics!
 
 #### Type checking
 
-As Kipper is a statically and strongly typed language, types must be checked at compile time to 
+As Kipper is a statically and strongly typed language, types must be checked at compile time to
 ensure the program can execute without issues.
 
 Kipper handles type checking for a single `CompilableParseToken` in its `semanticTypeChecking`
@@ -216,9 +216,9 @@ To also handle proper tracebacks, any assertion is done using either:
 - `KipperProgramContext.typeCheck` or
 - `KipperProgramContext.semanticCheck`
 
-which handle the tracebacks by requiring the token being checked as an argument and returning 
+which handle the tracebacks by requiring the token being checked as an argument and returning
 an `KipperSemanticChecker` or `KipperTypeChecker` instance with the proper metadata already set.
-This means in case that an assertion fails, these classes will handle the error themselves and 
+This means in case that an assertion fails, these classes will handle the error themselves and
 create a `KipperError` using the token's metadata.
 
 For example (Code snippet from the class `FunctionDeclaration`):
@@ -253,6 +253,7 @@ Tests are written using mocha and chai, so you can easily add new tests in exist
 
 - To add a new test file, create a new file with the file ending `test.ts`.
 - To add a new test namespace, call the `describe` function and pass as argument a new unique name:
+
   ```ts
   describe(name, () => {
   	// Add tests here

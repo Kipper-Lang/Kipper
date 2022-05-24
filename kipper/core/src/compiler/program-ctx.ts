@@ -13,7 +13,6 @@ import {
 	FunctionDeclaration,
 	KipperFileListener,
 	RootFileParseToken,
-	ScopeDeclaration,
 	VariableDeclaration,
 } from "./semantics";
 import {
