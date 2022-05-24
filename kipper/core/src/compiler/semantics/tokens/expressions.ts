@@ -44,9 +44,9 @@ import {
 	kipperStrType,
 	KipperStrType,
 	KipperType,
-	ScopeVariableDeclaration,
 	TranslatedExpression,
-} from "../../lib";
+} from "../const";
+import { ScopeVariableDeclaration } from "../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";

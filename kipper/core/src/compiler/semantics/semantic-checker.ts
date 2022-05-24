@@ -1,3 +1,11 @@
+/**
+ * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
+ * invalid use of tokens is detected.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.7.0
+ */
+
 import { CompoundStatement, Expression, ExpressionSemantics, IdentifierPrimaryExpression } from "./tokens";
 import {
 	BuiltInOverwriteError,
@@ -261,7 +269,7 @@ export class KipperSemanticChecker extends KipperAsserter {
 	}
 
 	/**
-	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownIdentifierError}.
 	 * @param identifier The identifier to fetch.
 	 * @since 0.7.0
 	 */

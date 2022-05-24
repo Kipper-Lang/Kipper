@@ -1,12 +1,12 @@
 /**
- * Defines the TypeScript translation for the Kipper language.
+ * Defines the TypeScript translation target for the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
 import { KipperCompileTarget } from "../compile-target";
-import { KipperTargetSemanticAnalyser } from "../semantics/semantic-analyser";
-import { KipperTargetCodeGenerator } from "../translation/code-generator";
+import { KipperTargetSemanticAnalyser } from "../semantics";
+import { KipperTargetCodeGenerator } from "../translation";
 import {
 	type AdditiveExpression,
 	type ArraySpecifierExpression,
@@ -38,10 +38,9 @@ import {
 	type StringPrimaryExpression,
 	type TangledPrimaryExpression,
 	type VariableDeclaration,
-} from "../semantics/tokens";
+} from "../semantics";
 import {
 	kipperBoolType,
-	KipperBoolTypeLiterals,
 	kipperCharType,
 	kipperFuncType,
 	kipperListType,
@@ -53,7 +52,7 @@ import {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
-} from "../lib";
+} from "../semantics";
 import { KipperNotImplementedError } from "../../errors";
 
 export class TypeScriptTarget extends KipperCompileTarget {

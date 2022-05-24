@@ -19,12 +19,13 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../../parser";
-import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../../lib";
-import { VariableDeclaration } from "./definitions";
-import { Expression } from "./expressions";
 import { determineScope } from "../../../utils";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { ScopeVariableDeclaration } from "../scope-declaration";
+import type { KipperScope, TranslatedCodeLine } from "../const";
+import type { VariableDeclaration } from "./definitions";
+import type { Expression } from "./expressions";
+import type { TargetTokenCodeGenerator } from "../../translation";
+import type { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Every antlr4 statement ctx type

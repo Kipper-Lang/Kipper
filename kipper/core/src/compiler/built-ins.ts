@@ -1,13 +1,11 @@
 /**
- * Built-In Function implementation, which will convert a built-in function call to a proper TypeScript code snippet.
- * This means it will insert code rather than actually call it, to reduce overhead, and remove any dependencies when
- * running Kipper itself.
+ * Built-Ins file, which provides the blueprints for the Kipper built-in functions and variables.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 
-import { KipperType } from "../semantics";
+import { KipperType } from "./semantics";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -87,15 +85,15 @@ export interface BuiltInFunction {
  * @since 0.7.0
  */
 export const builtIns: Record<string, BuiltInFunction> = {
-  print: {
-    identifier: "print",
-    args: [
-      {
-        identifier: "msg",
-        type: "str",
-      },
-    ],
-    handler: ["function _kipperGlobal_print(msg: string): void { console.log(msg); }"],
-    returnType: "void",
-  }
+	print: {
+		identifier: "print",
+		args: [
+			{
+				identifier: "msg",
+				type: "str",
+			},
+		],
+		handler: ["function _kipperGlobal_print(msg: string): void { console.log(msg); }"],
+		returnType: "void",
+	},
 };

@@ -7,7 +7,8 @@
 
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompoundStatement } from "./tokens";
-import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../lib";
+import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import type { BuiltInFunction } from "../built-ins";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should

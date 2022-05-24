@@ -14,19 +14,17 @@ import {
 	KipperFileListener,
 	RootFileParseToken,
 	VariableDeclaration,
-} from "./semantics";
-import {
-	BuiltInFunction,
 	KipperFunction,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 	TranslatedCodeLine,
-} from "./lib";
+} from "./semantics";
+import { BuiltInFunction } from "./built-ins";
 import { KipperLogger } from "../logger";
 import { UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics/semantic-checker";
-import { KipperTypeChecker } from "./semantics/type-checker";
+import { KipperTypeChecker } from "./semantics";
 
 /**
  * The program context class used to represent a program for a compilation.

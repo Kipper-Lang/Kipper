@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, builtIns, isBrowser } from "./lib";
+import { BuiltInFunction, builtIns } from "./built-ins";
 import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "./targets/typescript";
 

@@ -1,7 +1,6 @@
 /**
- * Targets for the Kipper language.
- * @since 0.5.0
+ * Translation tools for the Kipper language.
+ * @since 0.7.0
  */
 
-export * as typescript from "../targets/typescript";
 export * from "./code-generator";

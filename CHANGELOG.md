@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Module `kipper/core/compiler/lib`, as the built-ins shall from now on be handled by each individual target instead
+  of the whole Kipper package to allow an implementation per target.
 - Removed the following deprecated errors and functions:
   - `UnknownFunctionIdentifierError`
   - `UnknownVariableIdentifierError`

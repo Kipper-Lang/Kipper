@@ -5,11 +5,10 @@
  * @since 0.0.1
  */
 
-export * as lib from "./lib";
 export * as parser from "./parser";
 export * as semantics from "./semantics";
 export * as translation from "./translation";
-export * from "./lib";
+export * from "./built-ins";
 export * from "./parser";
 export * from "./semantics";
 export * from "./translation";

@@ -16,7 +16,7 @@ import {
 	DefaultTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../../lib";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
