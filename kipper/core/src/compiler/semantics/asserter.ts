@@ -9,6 +9,7 @@ import { KipperProgramContext } from "../program-ctx";
 import { CompilableParseToken } from "./tokens";
 import { KipperError } from "../../errors";
 import { LogLevel } from "../../logger";
+import { getParseRuleSource } from "../../utils";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
@@ -51,9 +52,10 @@ export abstract class KipperAsserter {
 	protected assertError(error: KipperError): KipperError {
 		// Update error metadata
 		error.setMetadata({
-			location: { line: this.line ?? 1, col: this.col ?? 1 },
+			location: { line: this.line ?? 1, col: this.col ?? 0 },
 			filePath: this.programCtx.filePath,
-			tokenSrc: undefined,
+			tokenSrc: this.ctx ? getParseRuleSource(this.ctx.antlrRuleCtx) : undefined,
+			streamSrc: this.programCtx.stream,
 		});
 		error.antlrCtx = this.ctx?.antlrRuleCtx;
 

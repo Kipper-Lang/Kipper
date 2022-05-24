@@ -9,10 +9,9 @@ import { RecognitionException } from "antlr4ts/RecognitionException";
 import { Recognizer } from "antlr4ts/Recognizer";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperSyntaxError } from "../errors";
-import { KipperParseStream } from "./parser/parse-stream";
+import { KipperParseStream } from "./parser";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
-import { getNaturalOrZero } from "../utils";
 
 /**
  * The Error Handler for the Kipper implementation of {@link ANTLRErrorListener}
@@ -36,20 +35,8 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 	 * @since 0.4.0
 	 */
 	protected getSourceCode(symbol: CommonToken): string | undefined {
-		const col: number = symbol.charPositionInLine;
-
 		// Determine start and stop
-		let start: number = (() => {
-			// Try to get as much of the original line as possible
-			// First try to get the line by doing:
-			//   symbol.stopIndex - charPositionInLine
-			let calcStart = symbol.stopIndex - col;
-
-			// Avoid negative values
-			let start = getNaturalOrZero(calcStart);
-			if (symbol.startIndex < start) start = symbol.startIndex;
-			return start;
-		})();
+		let start = symbol.startIndex;
 		let stop = symbol.stopIndex;
 
 		// Get the source line
@@ -93,7 +80,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 		 */
 		let src: string = (() => {
 			let src = offendingSymbol instanceof CommonToken ? this.getSourceCode(offendingSymbol) : undefined;
-			if (src === undefined) return this.getLineOfCode(line);
+			if (!src) return this.getLineOfCode(line);
 			else return src;
 		})();
 
@@ -102,6 +89,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 		err.setMetadata({
 			location: { line: line, col: charPositionInLine },
 			filePath: this.parseStream.filePath,
+			streamSrc: this.parseStream,
 			tokenSrc: src, // Explicitly set the tokenSrc, since syntax errors should be handled differently than
 			// compilation errors.
 		});
