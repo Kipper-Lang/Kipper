@@ -8,7 +8,7 @@
     "@kipper/cli": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
-    "typescript": "~4.6.4"
+    "typescript": "~4.7.0"
   },
   "devDependencies": {
     "uuid": "8.3.2",
