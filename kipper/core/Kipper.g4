@@ -34,6 +34,7 @@ primaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
     |   CharacterConstant #characterPrimaryExpression
     |   listConstant #listPrimaryExpression
+    |   ('true' | 'false') #boolPrimaryExpression
     ;
 
 listConstant
@@ -284,6 +285,10 @@ Enum : 'enum';
 DefFunc: 'def';
 Return : 'return';
 CallFunc : 'call';
+
+// boolean constants
+True: 'true';
+False: 'false';
 
 // struct specifier - not implemented in core lang
 Struct : 'struct';

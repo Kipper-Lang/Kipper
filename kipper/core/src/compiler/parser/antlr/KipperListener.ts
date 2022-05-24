@@ -1,5 +1,6 @@
 // Generated from ./Kipper.g4 by ANTLR 4.9.0-SNAPSHOT
 
+
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
@@ -32,10 +33,11 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
+import { BoolPrimaryExpresionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
-import { SingleItemTypeSpecifierContext } from "./KipperParser";
-import { MultiItemTypeSpecifierContext } from "./KipperParser";
+import { DefaultTypeSpecifierContext } from "./KipperParser";
+import { GenericTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
@@ -91,6 +93,7 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -488,6 +491,19 @@ export interface KipperListener extends ParseTreeListener {
 	exitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `boolPrimaryExpresion`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBoolPrimaryExpresion?: (ctx: BoolPrimaryExpresionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `boolPrimaryExpresion`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBoolPrimaryExpresion?: (ctx: BoolPrimaryExpresionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -514,30 +530,30 @@ export interface KipperListener extends ParseTreeListener {
 	exitActualConditionalExpression?: (ctx: ActualConditionalExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `singleItemTypeSpecifier`
+	 * Enter a parse tree produced by the `defaultTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	enterSingleItemTypeSpecifier?: (ctx: SingleItemTypeSpecifierContext) => void;
+	enterDefaultTypeSpecifier?: (ctx: DefaultTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by the `singleItemTypeSpecifier`
+	 * Exit a parse tree produced by the `defaultTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	exitSingleItemTypeSpecifier?: (ctx: SingleItemTypeSpecifierContext) => void;
+	exitDefaultTypeSpecifier?: (ctx: DefaultTypeSpecifierContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `multiItemTypeSpecifier`
+	 * Enter a parse tree produced by the `genericTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	enterMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => void;
+	enterGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by the `multiItemTypeSpecifier`
+	 * Exit a parse tree produced by the `genericTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	exitMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => void;
+	exitGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `typeofTypeSpecifier`
@@ -1154,3 +1170,4 @@ export interface KipperListener extends ParseTreeListener {
 	 */
 	exitJumpStatement?: (ctx: JumpStatementContext) => void;
 }
+
