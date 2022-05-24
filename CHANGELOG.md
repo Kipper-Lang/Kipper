@@ -14,16 +14,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
   target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
   translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
+- Implemented new class `KipperTargetBuiltInGenerator`, which updates the behaviour for generating built-in functions.
+  This function should also allow the use of built-in variables in the future and also provide a basis for dynamic
+  dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
+  built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
 
 ### Changed
 
 - Updated error traceback generation algorithm to be more concise and useful. The algorithm will try from now on to mark
   the origin of the error in the source line, instead of only returning the characters causing the error.
+- Updated folder structure of built-in targets, by moving all target-related files to `kipper/core/src/targets`. This
+  should from now on be the folder, where all the targets that are natively supported by Kipper should be located.
+- Moved all typescript-related target files to `kipper/core/src/targets/typescript` and split up the classes into
+  their own files.
 
 ### Removed
 
 - Module `kipper/core/compiler/lib`, as the built-ins shall from now on be handled by each individual target instead
-  of the whole Kipper package to allow an implementation per target.
+  of the whole Kipper package to allow a unique specific implementation per target.
 - Removed the following deprecated errors and functions:
   - `UnknownFunctionIdentifierError`
   - `UnknownVariableIdentifierError`
