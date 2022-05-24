@@ -25,7 +25,6 @@ import { UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics/semantic-checker";
 import { KipperTypeChecker } from "./semantics";
-import { KipperTargetBuiltInGenerator } from "./translation";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -375,7 +374,10 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Generates the required code for the execution of this kipper program
+	 * Generates the required code for the execution of this Kipper program.
+   *
+   * This primarily includes the Kipper built-ins, which require
+   * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
 	 * @private
 	 */
 	private async generateRequirements(): Promise<Array<Array<string>>> {
