@@ -68,8 +68,8 @@ describe("Kipper errors", () => {
 				);
 
 				// Duplicate identifier
-				programCtx.registerGlobals({ identifier: "i", args: [], handler: [""], returnType: "void" });
-				programCtx.registerGlobals({ identifier: "i", args: [], handler: [""], returnType: "void" });
+				programCtx.registerGlobals({ identifier: "i", args: [], returnType: "void" });
+				programCtx.registerGlobals({ identifier: "i", args: [], returnType: "void" });
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
 				assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
@@ -90,7 +90,7 @@ describe("Kipper errors", () => {
 				);
 
 				// Register new global
-				programCtx.registerGlobals({ identifier: "i", args: [], handler: [""], returnType: "void" });
+				programCtx.registerGlobals({ identifier: "i", args: [], returnType: "void" });
 				await programCtx.compileProgram();
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
