@@ -183,6 +183,18 @@ function `CompilableParseToken.primarySemanticAnalysis()` should be updated and 
 checking semantic data and performing semantic analysis anywhere outside those functions and the target specific
 semantics!
 
+#### Type checking
+
+As Kipper is a statically and strongly typed language, types must be checked at compile time to 
+ensure the program can execute without issues.
+
+Kipper handles type checking for a single `CompilableParseToken` in its `semanticTypeChecking`
+function, which is called after the general semantic analysis function. There all possible type issues
+should be checked for to avoid issues during code generation or execution.
+
+To assert types and throw proper errors, you can easily do that using the `KipperTypeChecker`, which is
+explained more in-depth [here](#throwing-semantic-errors).
+
 #### Updating target specific semantic checks
 
 In case that a target (targets are for example TypeScript) has specific semantic logic that must be upheld, a
@@ -196,13 +208,24 @@ For example `KipperTargetSemanticAnalyser.compoundStatement`, which handles the 
 #### Throwing semantic errors
 
 Throwing errors in Kipper is handled similarly to how mocha tests works. A truth is asserted to be true
-and if it turns out to be false an error is thrown. This behaviour is handled using the `CompileAssert` class
-and `KipperProgramContext.assert()` function, which pre-define certain checks that can be done.
+and if it turns out to be false an error is thrown. This behaviour is handled using the classes `KipperSemanticChecker`
+and `KipperTypeChecker`, which pre-define certain assertions that can be performed to validate code.
+
+To also handle proper tracebacks, any assertion is done using either:
+
+- `KipperProgramContext.typeCheck` or
+- `KipperProgramContext.semanticCheck`
+
+which handle the tracebacks by requiring the token being checked as an argument and returning 
+an `KipperSemanticChecker` or `KipperTypeChecker` instance with the proper metadata already set.
+This means in case that an assertion fails, these classes will handle the error themselves and 
+create a `KipperError` using the token's metadata.
 
 For example (Code snippet from the class `FunctionDeclaration`):
 
 ```
-this.programCtx.assert(this).typeExists(this.semanticData.returnType);
+// 'this' is the token class - This may be used in an 'CompilableParseToken'
+this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 ```
 
 ### Add or update token translation
@@ -214,11 +237,12 @@ If you want to make sure your new changes or new functionality works, you will h
 
 These tests are categorised into sub-folders per package in the following scheme:
 
-````markdown
+```markdown
 module/
 
 - cli/
 - core/
+```
 
 Please add tests for a package to the correlating test folder e.g. make sure CLI tests are in `/cli/` and core tests in
 `/core/`.
@@ -234,7 +258,6 @@ Tests are written using mocha and chai, so you can easily add new tests in exist
   	// Add tests here
   });
   ```
-````
 
 - To add a single test, call `it` inside a `describe` lambda function with a new unique test name:
   ```ts
