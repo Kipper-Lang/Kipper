@@ -41,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `UnknownVariableIdentifierError`
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
-- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like 
+- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
   for example `print`) anymore.
 
 ## [0.7.0] - 2022-05-22

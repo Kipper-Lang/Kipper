@@ -375,9 +375,9 @@ export class KipperProgramContext {
 
 	/**
 	 * Generates the required code for the execution of this Kipper program.
-   *
-   * This primarily includes the Kipper built-ins, which require
-   * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
+	 *
+	 * This primarily includes the Kipper built-ins, which require
+	 * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
 	 * @private
 	 */
 	private async generateRequirements(): Promise<Array<Array<string>>> {
