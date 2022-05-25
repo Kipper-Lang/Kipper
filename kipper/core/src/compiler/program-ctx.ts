@@ -384,8 +384,13 @@ export class KipperProgramContext {
 		let code: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the global functions
-		for (let globalSpec of this._builtInGlobals) {
-			code = [...code, ...(await this.target.builtInGenerator.getHandlerFunction(globalSpec.identifier)(globalSpec))];
+		for (let builtInSpec of this._builtInGlobals) {
+      // Fetch the function for handling this built-in
+			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
+				this.target.builtInGenerator,
+				builtInSpec.identifier,
+			);
+			code = [...code, ...(await func(builtInSpec))];
 		}
 		return code;
 	}
