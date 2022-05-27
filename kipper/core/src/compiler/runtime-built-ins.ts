@@ -54,26 +54,8 @@ export interface BuiltInFunction {
 	 */
 	args: Array<BuiltInFunctionArgument>;
 	/**
-	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
-	 * implementation for the function identifier, prefixed by `'_kipperGlobal_'`.
-	 *
-	 * @example
-	 *  // Example of a string that may be passed
-	 *  const yourFunction: Function = {
-	 *    identifier: "print",
-	 *    args: [{
-	 *      type: "str" as KipperType
-	 *    }],
-	 *    handler: `function _kipperGlobal_print(arg1: string): void {
-	 *      console.log(arg1);
-	 *      return;
-	 *    }
-	 *    `
-	 *  };
-	 */
-	handler: Array<string>;
-	/**
-	 * The expected return of the function. If the return type is "void", then the function will not return anything.
+	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
+	 * return anything.
 	 */
 	returnType: KipperType;
 }
@@ -81,10 +63,10 @@ export interface BuiltInFunction {
 /**
  * Contains all the built-in functions in Kipper that are available per default in every program.
  *
- * This contains *every* builtin
+ * This contains *every* builtin that also must be implemented by every target in the {@link }
  * @since 0.7.0
  */
-export const builtIns: Record<string, BuiltInFunction> = {
+export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
 	print: {
 		identifier: "print",
 		args: [
@@ -93,7 +75,6 @@ export const builtIns: Record<string, BuiltInFunction> = {
 				type: "str",
 			},
 		],
-		handler: ["function _kipperGlobal_print(msg: string): void { console.log(msg); }"],
 		returnType: "void",
 	},
 };

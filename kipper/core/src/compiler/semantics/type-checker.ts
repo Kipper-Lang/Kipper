@@ -11,7 +11,7 @@ import { Expression, ExpressionSemantics, ParameterDeclaration } from "./tokens"
 import { KipperFunction, kipperReturnTypes, KipperType, kipperTypes } from "./const";
 import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../errors";
 import { ScopeVariableDeclaration } from "./scope-declaration";
-import type { BuiltInFunctionArgument } from "../built-ins";
+import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../program-ctx";
 
 /**

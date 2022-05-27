@@ -4,3 +4,4 @@
  */
 
 export * from "./code-generator";
+export * from "./built-ins-generator";
