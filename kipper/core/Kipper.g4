@@ -150,7 +150,7 @@ initDeclarator
 
 // TODO! Implement the following type specifiers as expressions
 typeSpecifier
-    :   Identifier # defaultTypeSpecifier // for single items, like 'num'
+    :   Identifier # singleTypeSpecifier // for single items, like 'num'
     |   Identifier '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
     |   'typeof' WS* '('  WS* Identifier  WS* ')' # typeofTypeSpecifier // typeof another variable
     ;

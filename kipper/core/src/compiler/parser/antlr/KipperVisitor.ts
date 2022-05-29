@@ -35,7 +35,7 @@ import { ListPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
-import { DefaultTypeSpecifierContext } from "./KipperParser";
+import { SingleTypeSpecifierContext } from "./KipperParser";
 import { GenericTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
@@ -366,12 +366,12 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitActualConditionalExpression?: (ctx: ActualConditionalExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `defaultTypeSpecifier`
+	 * Visit a parse tree produced by the `singleTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDefaultTypeSpecifier?: (ctx: DefaultTypeSpecifierContext) => Result;
+	visitSingleTypeSpecifier?: (ctx: SingleTypeSpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `genericTypeSpecifier`
