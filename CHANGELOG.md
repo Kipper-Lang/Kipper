@@ -19,6 +19,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
   built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
+- New expression classes:
+  - `SingleTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
+  - `GenericTypeSpecifierExpression`, which represents a generic type constant, such as `type<T>`. (Functionality not
+    implemented yet! Planned for v0.12)
+  - `TypeofTypeSpecifierExpression`, which represents a dynamically evaluated type, such as `typeof("string")`.
+    (Functionality not implemented yet! Planned for v0.11)
+- New Kipper meta type `type` in `compiler/semantics/const`, which represents the type of a type.
 
 ### Changed
 
