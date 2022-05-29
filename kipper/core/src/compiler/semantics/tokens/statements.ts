@@ -191,7 +191,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -249,7 +249,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -306,7 +306,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -364,7 +364,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -422,7 +422,7 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
