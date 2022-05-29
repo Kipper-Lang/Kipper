@@ -18,6 +18,7 @@ import {
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
@@ -34,11 +35,14 @@ import {
 	RelationalExpression,
 	ScopeFunctionDeclaration,
 	SelectionStatement,
+	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
+	TargetTokenCodeGenerator,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
@@ -162,6 +166,27 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = token.ensureSemanticDataExists();
 
 		return [semanticData.identifier];
+	};
+
+	/**
+	 * Translates a {@link SingleTypeSpecifierExpression} into the typescript language.
+	 */
+	singleTypeSpecifierExpression = async (token: SingleTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link GenericTypeSpecifierExpression} into the typescript language.
+	 */
+	genericTypeSpecifierExpression = async (token: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link TypeofTypeSpecifierExpression} into the typescript language.
+	 */
+	typeofTypeSpecifierExpression = async (token: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
 	};
 
 	/**
