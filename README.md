@@ -10,8 +10,8 @@
 
 The full module for Kipper, which contains the core language, compiler and command line interface (CLI).
 
-Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python! 🦊
+Kipper is a simple strongly and statically typed programming language, which is designed to allow for
+straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
 
 ## Child Packages
 
