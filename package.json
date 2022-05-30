@@ -33,7 +33,7 @@
     "@types/node": "17.0.35",
     "@types/chai": "4.3.0",
     "@typescript-eslint/parser": "5.26.0",
-    "@typescript-eslint/eslint-plugin": "5.26.0",
+    "@typescript-eslint/eslint-plugin": "5.27.0",
     "json-parse-even-better-errors": "2.3.1",
     "run-script-os": "1.1.6",
     "coverage-badge-creator": "1.0.11",
