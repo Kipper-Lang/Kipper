@@ -13,6 +13,15 @@ The full module for Kipper, which contains the core language, compiler and comma
 Kipper is a simple strongly and statically typed programming language, which is designed to allow for
 straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
 
+## Goals
+
+- Full type safety to ensure errors occur on compile time, not runtime.
+- Runtime types and type checking, which allow variable types to be checked during runtime, if
+  their type can not be evaluated during compile time. For example when using `JSON.parse()`.
+- Runtime errors for invalid operations. No hidden errors like in JavaScript.
+- Null safety, by enforcing non-null types unless explicitly allowed.
+- Full translation and integration with TypeScript.
+
 ## Child Packages
 
 These are the child packages that are shipped with this bundle of Kipper:
