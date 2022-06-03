@@ -1,0 +1,22 @@
+const numList: list<num> = [1, 2, 3, 4];
+
+/**
+ * Calculates the sum of all items stored inside 'arr'.
+ * @param arr The array containing the numbers.
+ */
+def getSumOf(arr: list<num>) -> num {
+  var sum: num = 0;
+  for (var i: num = 0; i < call len(arr); i++) {
+    sum += arr[i];
+  }
+  return sum;
+}
+
+call print(f"List: {numList}");
+
+/* Calculating the sum of the items in the list */
+var result: num = call getSumOf(numList);
+call print(f"Result: {result as str}");
+
+/* Exiting the program */
+call exit(0);
