@@ -37,7 +37,7 @@ template: |
 
   $CHANGES
 
-  ## Full Changelog
+  ## Full Details
 
   **Detailed Changelog**: [`CHANGELOG.md`](https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md)
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION

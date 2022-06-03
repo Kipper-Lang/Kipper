@@ -12,13 +12,10 @@ The following versions are supported and will get bug-fixes and security updates
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.7.x   | :heavy_check_mark: |
 | 0.6.x   | :heavy_check_mark: |
-| 0.5.x   | :x:                |
-| 0.4.x   | :x:                |
-| 0.3.x   | :x:                |
-| 0.2.x   | :x:                |
-| 0.1.x   | :x:                |
-| 0.0.x   | :x:                |
+| <0.6.x  | :x:                |
+
 
 ### NPM Deprecation
 

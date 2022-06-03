@@ -8,7 +8,7 @@
     "@kipper/cli": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
-    "typescript": "~4.6.4"
+    "typescript": "~4.7.0"
   },
   "devDependencies": {
     "uuid": "8.3.2",
@@ -32,8 +32,8 @@
     "@types/mocha": "9.1.1",
     "@types/node": "17.0.35",
     "@types/chai": "4.3.0",
-    "@typescript-eslint/parser": "5.25.0",
-    "@typescript-eslint/eslint-plugin": "5.25.0",
+    "@typescript-eslint/parser": "5.27.0",
+    "@typescript-eslint/eslint-plugin": "5.27.0",
     "json-parse-even-better-errors": "2.3.1",
     "run-script-os": "1.1.6",
     "coverage-badge-creator": "1.0.11",
