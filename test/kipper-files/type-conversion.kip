@@ -1,2 +1,7 @@
-5 as str;
-"5" as num;
+var x: str = 5 as str;
+var y: num = "5" as num;
+var z: bool = true as bool;
+
+call print(x as str);
+call print(y as str);
+call print(z as str);

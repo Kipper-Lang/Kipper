@@ -10,6 +10,7 @@ import {
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
+import { getTypeScriptBuiltInIdentifier } from "@kipper/core/lib/targets/typescript/tools";
 
 // Test files
 const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -352,7 +353,14 @@ describe("KipperCompiler", () => {
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
 				assert(instance.programCtx);
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.internals);
+
+				const code = instance.write();
+				assert(code);
+				assert(code.includes(getTypeScriptBuiltInIdentifier("strToNum")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("boolToStr")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("boolToNum")));
 			});
 		});
 

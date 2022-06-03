@@ -891,5 +891,133 @@ describe("Kipper errors", () => {
 				});
 			});
 		});
+
+		describe("InvalidConversionError", () => {
+			describe("Error", () => {
+				it("str as func", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream('"5" as func;'));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+
+				it("num as func", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream("5 as func;"));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+
+				it("bool as func", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream("true as func;"));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+
+				it("func as str", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream("print as str;"));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+
+				it("func as num", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream("print as bool;"));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+
+				it("func as bool", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream("print as bool;"));
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidConversionError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidConversionError'");
+				});
+			});
+
+			describe("NoError", () => {
+				it("num as str", async () => {
+					try {
+						await new KipperCompiler().compile("5 as str;");
+					} catch (e) {
+						assert(false, "Expected no 'InvalidConversionError'");
+					}
+				});
+
+				it("str as num", async () => {
+					try {
+						await new KipperCompiler().compile('"5" as num;');
+					} catch (e) {
+						assert(false, "Expected no 'InvalidConversionError'");
+					}
+				});
+
+				it("bool as str", async () => {
+					try {
+						await new KipperCompiler().compile("true as str;");
+					} catch (e) {
+						assert(false, "Expected no 'InvalidConversionError'");
+					}
+				});
+
+				it("bool as num", async () => {
+					try {
+						await new KipperCompiler().compile("true as num;");
+					} catch (e) {
+						assert(false, "Expected no 'InvalidConversionError'");
+					}
+				});
+			});
+		});
 	});
 });
