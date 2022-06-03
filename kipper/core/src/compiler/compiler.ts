@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, kipperRuntimeBuiltIns } from "./runtime-built-ins";
+import { BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
 import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
 
@@ -231,7 +231,15 @@ export class KipperCompiler {
 		return (() => {
 			let result = parser.compilationUnit();
 			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'.`);
-			return new KipperProgramContext(parseStream, result, parser, lexer, this.logger, target);
+			return new KipperProgramContext(
+				parseStream,
+				result,
+				parser,
+				lexer,
+				this.logger,
+				target,
+				Object.values(kipperInternalBuiltIns),
+			);
 		})();
 	}
 
