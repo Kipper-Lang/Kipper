@@ -4,7 +4,6 @@
  */
 import { TranslatedCodeLine } from "../semantics";
 import { BuiltInFunction } from "../runtime-built-ins";
-import { Array2DHashMap } from "antlr4ts/misc";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.

@@ -23,7 +23,7 @@ Proper documentation for the Kipper language is available [here](https://wmc-ahi
 To use Kipper you have three options:
 
 - Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js) file, which bundles the entire compiler
-	for your browser.
+  for your browser.
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
 - Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.
 
@@ -73,13 +73,13 @@ kipper, without depending on a browser.
 For example:
 
 - Compiling a Kipper program:
-	```bash
-	kipper compile file.kip
-	```
+  ```bash
+  kipper compile file.kip
+  ```
 - Executing a Kipper program using Node.js:
-	```bash
-	kipper run file.kip
-	```
+  ```bash
+  kipper run file.kip
+  ```
 
 This also enables the usage of Kipper files with the `.kip` extension, which can be read and compiled to TypeScript,
 without having to configure anything yourself. This also allows the input of data over the

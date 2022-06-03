@@ -39,7 +39,6 @@ import {
 	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
-	TargetTokenCodeGenerator,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
