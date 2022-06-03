@@ -405,6 +405,16 @@ export class InvalidArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a conversion is used that is not supported.
+ * @since 0.8.0
+ */
+export class InvalidConversionError extends TypeError {
+	constructor(originalType: string, destType: string) {
+		super(`Type conversion from '${originalType}' to '${destType}' is not allowed.`);
+	}
+}
+
+/**
  * Error that is thrown whenever an assignment expression is invalid.
  * @since 0.7.0
  */
