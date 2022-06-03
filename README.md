@@ -98,13 +98,13 @@ For example:
   ```bash
   kipper compile file.kip
   ```
-- Executing a Kipper program using Node.js: 
+- Executing a Kipper program using Node.js:
   ```bash
   kipper run file.kip
   ```
 
-This also enables the usage of Kipper files with the `.kip` extension, which can be read and compiled to TypeScript, 
-without having to configure anything yourself. This also allows the input of data over the 
+This also enables the usage of Kipper files with the `.kip` extension, which can be read and compiled to TypeScript,
+without having to configure anything yourself. This also allows the input of data over the
 console and file-interactions, which are not supported inside a browser.
 
 For more info go to the [`@kipper/cli` README](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
@@ -119,7 +119,7 @@ Simple example of using kipper using Node.js:
 ```ts
 import * as ts from "typescript";
 import { promises as fs } from "fs";
-import * as Kipper  from "@kipper/core";
+import * as Kipper from "@kipper/core";
 
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
@@ -130,7 +130,9 @@ fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => 
 	const compiler = new Kipper.KipperCompiler(logger);
 
 	// Compile the code string or stream
-	let result = await compiler.compile(fileContent, { /* Config */ });
+	let result = await compiler.compile(fileContent, {
+		/* Config */
+	});
 	let tsCode = result.write();
 
 	// Compiling down to JS using the typescript node module
