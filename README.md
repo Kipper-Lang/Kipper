@@ -26,7 +26,7 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 
 ![](./img/carbon-code-sample.png)
 
-*Kipper is still in an early development phase, as such not all features shown are implemented yet.*
+_Kipper is still in an early development phase, as such not all features shown are implemented yet._
 
 ## Child Packages
 
