@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     Kipper.
 - New errors:
   - `InvalidConversionError`, which is thrown whenever an invalid or unimplemented conversion is used in a Kipper
-    program.  
+    program.
 - New types and constants:
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
