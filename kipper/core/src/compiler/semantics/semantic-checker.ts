@@ -1,3 +1,11 @@
+/**
+ * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
+ * invalid use of tokens is detected.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.7.0
+ */
+
 import { CompoundStatement, Expression, ExpressionSemantics, IdentifierPrimaryExpression } from "./tokens";
 import {
 	BuiltInOverwriteError,
@@ -9,11 +17,10 @@ import {
 	InvalidGlobalError,
 	KipperNotImplementedError,
 	UndefinedIdentifierError,
-	UnknownFunctionIdentifierError,
 	UnknownIdentifierError,
-	UnknownVariableIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
+	InvalidConversionError,
 } from "../../errors";
 import {
 	KipperArithmeticOperator,
@@ -21,6 +28,7 @@ import {
 	kipperPlusOperator,
 	KipperRef,
 	kipperStrLikeTypes,
+	kipperSupportedConversions,
 	KipperType,
 } from "./const";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
@@ -83,30 +91,6 @@ export class KipperSemanticChecker extends KipperAsserter {
 		const isDeclarationDefined = val instanceof ScopeDeclaration && val.isDefined; // User-defined -> may be defined
 		if (!isBuiltinDefined && !isDeclarationDefined) {
 			throw this.assertError(new UndefinedIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the function.
-	 * @deprecated
-	 */
-	public functionIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.functionIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalFunction(identifier)) {
-			throw this.assertError(new UnknownFunctionIdentifierError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed variable identifier is defined.
-	 * @param identifier The identifier of the variable.
-	 * @deprecated
-	 */
-	public variableIsDefined(identifier: string): void {
-		console.warn("'CompileAssert.variableIsDefined' is deprecated, replace with 'identifierIsDefined'");
-		if (!this.programCtx.getGlobalVariable(identifier)) {
-			throw this.assertError(new UnknownVariableIdentifierError(identifier));
 		}
 	}
 
@@ -287,7 +271,7 @@ export class KipperSemanticChecker extends KipperAsserter {
 	}
 
 	/**
-	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownFunctionIdentifierError}.
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownIdentifierError}.
 	 * @param identifier The identifier to fetch.
 	 * @since 0.7.0
 	 */
@@ -309,6 +293,25 @@ export class KipperSemanticChecker extends KipperAsserter {
 	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
 		if (func.args.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
+		}
+	}
+
+	/**
+	 * Asserts that the type conversion for the {@link exp} is valid.
+	 * @param exp The expression to convert.
+	 * @param type The type to convert to.
+	 * @since 0.8.0
+	 */
+	public validConversion(exp: Expression<any>, type: KipperType): void {
+		const originalType: KipperType = exp.ensureSemanticDataExists().evaluatedType;
+
+		const viableConversion = (() => {
+			// Check whether a supported pair of types exist.
+			return kipperSupportedConversions.find((types) => types[0] === originalType && types[1] === type) !== undefined;
+		})();
+		// In case that the type are not the same and no conversion is possible, throw an error!
+		if (!(originalType === type) && !viableConversion) {
+			throw this.assertError(new InvalidConversionError(originalType, type));
 		}
 	}
 }

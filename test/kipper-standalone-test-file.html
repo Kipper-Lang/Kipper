@@ -37,7 +37,7 @@
 
 		<!-- Tests here-->
 		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-		<script type="module" src="../kipper/core/kipper-standalone.js"></script>
+		<script type="module" src="../kipper/core/kipper-standalone.min.js"></script>
 		<script type="module">
 			const logger = new Kipper.KipperLogger((level, msg) => {
 				console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
@@ -47,7 +47,7 @@
 
 			// Compile the code to Typescript
 			// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-			const result = (await compiler.compile(`call print("Hello world!");`)).write();
+			const result = (await compiler.compile(`call print("Hello world!");`, {})).write();
 
 			// Transpile the TS code into JS
 			const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });

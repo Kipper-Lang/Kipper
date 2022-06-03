@@ -7,7 +7,8 @@
 
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompoundStatement } from "./tokens";
-import type { BuiltInFunction, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../lib";
+import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import type { BuiltInFunction } from "../runtime-built-ins";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -103,6 +104,14 @@ export const kipperCharType: KipperCharType = "char";
 export type KipperBoolType = "bool";
 
 /**
+ * Literal names for a Kipper boolean.
+ * @since 0.8.0
+ * @example
+ * var x: bool = true;
+ */
+export type KipperBoolTypeLiterals = "true" | "false";
+
+/**
  * Boolean type in Kipper.
  * @since 0.5.0
  * @example
@@ -130,6 +139,20 @@ export type KipperListType<ValueType extends KipperType> = "list";
 export const kipperListType: KipperListType<any> = "list";
 
 /**
+ * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
+ * type.
+ * @since 0.8.0
+ */
+export type KipperMetaType = "type";
+
+/**
+ * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
+ * type.
+ * @since 0.8.0
+ */
+export const kipperMetaType: KipperMetaType = "type";
+
+/**
  * String-like types that include both char and string.
  * @since 0.6.0
  */
@@ -139,7 +162,7 @@ export type KipperStrLikeTypes = KipperStrType | KipperCharType;
  * String-like types that include both char and string.
  * @since 0.6.0
  */
-export const kipperStrLikeTypes: Array<KipperStrType | KipperCharType> = [kipperStrType, kipperCharType];
+export const kipperStrLikeTypes: Array<KipperStrLikeTypes> = [kipperStrType, kipperCharType];
 
 /**
  * All primitive types inside Kipper.
@@ -156,12 +179,12 @@ export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrTyp
 /**
  * All available variable types inside Kipper.
  */
-export type KipperType = KipperFuncType | KipperPrimitiveType | KipperListType<any>;
+export type KipperType = KipperMetaType | KipperFuncType | KipperPrimitiveType | KipperListType<any>;
 
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = [kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
+export const kipperTypes: Array<string> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
 
 /**
  * Types that may be returned by a function.
@@ -174,6 +197,20 @@ export type KipperReturnType = KipperPrimitiveType | KipperListType<any>;
  * @since 0.6.0
  */
 export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"];
+
+/**
+ * List of all supported variable type conversions that can be performed in a Kipper program.
+ *
+ * For each translation, there will have to be a corresponding {@link KipperTargetBuiltInGenerator generator function},
+ * which generates for each conversion the translator function in the specific target.
+ * @since 0.8.0
+ */
+export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
+	["num", "str"],
+	["str", "num"],
+	["bool", "str"],
+	["bool", "num"],
+];
 
 /**
  * All available storage types inside Kipper.

@@ -1,34 +1,38 @@
-import {
-	type AdditiveExpression,
-	type ArraySpecifierExpression,
-	type AssignmentExpression,
-	type CastOrConvertExpression,
-	type CharacterPrimaryExpression,
+import type {
+	AdditiveExpression,
+	ArraySpecifierExpression,
+	AssignmentExpression,
+	BoolPrimaryExpression,
+	CastOrConvertExpression,
+	CharacterPrimaryExpression,
 	CompilableParseToken,
-	type CompoundStatement,
-	type ConditionalExpression,
-	type EqualityExpression,
-	type ExpressionStatement,
-	type FStringPrimaryExpression,
-	type FunctionCallPostfixExpression,
-	type FunctionDeclaration,
-	type IdentifierPrimaryExpression,
-	type IncrementOrDecrementExpression,
-	type IncrementOrDecrementUnaryExpression,
-	type IterationStatement,
-	type JumpStatement,
-	type ListPrimaryExpression,
-	type LogicalAndExpression,
-	type LogicalOrExpression,
-	type MultiplicativeExpression,
-	type NumberPrimaryExpression,
-	type OperatorModifiedUnaryExpression,
-	type ParameterDeclaration,
-	type RelationalExpression,
-	type SelectionStatement,
-	type StringPrimaryExpression,
-	type TangledPrimaryExpression,
-	type VariableDeclaration,
+	CompoundStatement,
+	ConditionalExpression,
+	EqualityExpression,
+	ExpressionStatement,
+	FStringPrimaryExpression,
+	FunctionCallPostfixExpression,
+	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
+	IdentifierPrimaryExpression,
+	IncrementOrDecrementExpression,
+	IncrementOrDecrementUnaryExpression,
+	IterationStatement,
+	JumpStatement,
+	ListPrimaryExpression,
+	LogicalAndExpression,
+	LogicalOrExpression,
+	MultiplicativeExpression,
+	NumberPrimaryExpression,
+	OperatorModifiedUnaryExpression,
+	ParameterDeclaration,
+	RelationalExpression,
+	SelectionStatement,
+	SingleTypeSpecifierExpression,
+	StringPrimaryExpression,
+	TangledPrimaryExpression,
+	TypeofTypeSpecifierExpression,
+	VariableDeclaration,
 } from "./tokens";
 
 /**
@@ -114,6 +118,26 @@ export abstract class KipperTargetSemanticAnalyser {
 	 * Performs translation-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenSemanticAnalyser<FStringPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BoolPrimaryExpression} instances.
+	 */
+	public abstract boolPrimaryExpression: TargetTokenSemanticAnalyser<BoolPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 */
+	public abstract singleTypeSpecifierExpression: TargetTokenSemanticAnalyser<SingleTypeSpecifierExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.
+	 */
+	public abstract genericTypeSpecifierExpression: TargetTokenSemanticAnalyser<GenericTypeSpecifierExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
+	 */
+	public abstract typeofTypeSpecifierExpression: TargetTokenSemanticAnalyser<TypeofTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.

@@ -4,39 +4,46 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
+import type {
+	AdditiveExpression,
+	ArraySpecifierExpression,
+	AssignmentExpression,
+	BoolPrimaryExpression,
+	CastOrConvertExpression,
+	CharacterPrimaryExpression,
+	CompilableParseToken,
+	CompoundStatement,
+	ConditionalExpression,
+	EqualityExpression,
+	ExpressionStatement,
+	FStringPrimaryExpression,
+	FunctionCallPostfixExpression,
+	FunctionDeclaration,
+	IdentifierPrimaryExpression,
+	IncrementOrDecrementExpression,
+	IncrementOrDecrementUnaryExpression,
+	IterationStatement,
+	JumpStatement,
+	ListPrimaryExpression,
+	LogicalAndExpression,
+	LogicalOrExpression,
+	MultiplicativeExpression,
+	NumberPrimaryExpression,
+	OperatorModifiedUnaryExpression,
+	ParameterDeclaration,
+	RelationalExpression,
+	SelectionStatement,
+	StringPrimaryExpression,
+	TangledPrimaryExpression,
+	VariableDeclaration,
+	TranslatedCodeLine,
+	TranslatedExpression,
+} from "../semantics";
 import {
-	type AdditiveExpression,
-	type ArraySpecifierExpression,
-	type AssignmentExpression,
-	type CastOrConvertExpression,
-	type CharacterPrimaryExpression,
-	type CompilableParseToken,
-	type CompoundStatement,
-	type ConditionalExpression,
-	type EqualityExpression,
-	type ExpressionStatement,
-	type FStringPrimaryExpression,
-	type FunctionCallPostfixExpression,
-	type FunctionDeclaration,
-	type IdentifierPrimaryExpression,
-	type IncrementOrDecrementExpression,
-	type IncrementOrDecrementUnaryExpression,
-	type IterationStatement,
-	type JumpStatement,
-	type ListPrimaryExpression,
-	type LogicalAndExpression,
-	type LogicalOrExpression,
-	type MultiplicativeExpression,
-	type NumberPrimaryExpression,
-	type OperatorModifiedUnaryExpression,
-	type ParameterDeclaration,
-	type RelationalExpression,
-	type SelectionStatement,
-	type StringPrimaryExpression,
-	type TangledPrimaryExpression,
-	type VariableDeclaration,
-} from "../semantics/tokens";
-import { TranslatedCodeLine, TranslatedExpression } from "../lib";
+	GenericTypeSpecifierExpression,
+	SingleTypeSpecifierExpression,
+	TypeofTypeSpecifierExpression,
+} from "../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a
@@ -133,6 +140,35 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link FStringPrimaryExpression} into a specific language.
 	 */
 	public abstract fStringPrimaryExpression: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link BoolPrimaryExpression} into a specific language.
+	 */
+	public abstract boolPrimaryExpression: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link SingleTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract singleTypeSpecifierExpression: TargetTokenCodeGenerator<
+		SingleTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link GenericTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract genericTypeSpecifierExpression: TargetTokenCodeGenerator<
+		GenericTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link TypeofTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract typeofTypeSpecifierExpression: TargetTokenCodeGenerator<
+		TypeofTypeSpecifierExpression,
+		TranslatedExpression
+	>;
 
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.

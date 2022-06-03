@@ -5,11 +5,17 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import { InputMismatchException, LexerNoViableAltException, NoViableAltException, ParserRuleContext } from "antlr4ts";
-import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { RecognitionException } from "antlr4ts/RecognitionException";
-import { Recognizer } from "antlr4ts/Recognizer";
+import type {
+	InputMismatchException,
+	LexerNoViableAltException,
+	NoViableAltException,
+	ParserRuleContext,
+} from "antlr4ts";
+import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
+import type { RecognitionException } from "antlr4ts/RecognitionException";
+import type { Recognizer } from "antlr4ts/Recognizer";
 import { getParseRuleSource } from "./utils";
+import { KipperParseStream } from "./compiler";
 
 /**
  * The core error for the Kipper module.
@@ -36,6 +42,11 @@ export class KipperError extends Error {
 		 * @since 0.4.0
 		 */
 		tokenSrc: string | undefined;
+		/**
+		 * The original stream/code of the program.
+		 * @since 0.8.0
+		 */
+		streamSrc: KipperParseStream | undefined;
 	};
 
 	/**
@@ -47,7 +58,12 @@ export class KipperError extends Error {
 	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
-		this.tracebackData = { location: { line: undefined, col: undefined }, filePath: undefined, tokenSrc: undefined };
+		this.tracebackData = {
+			location: { line: undefined, col: undefined },
+			filePath: undefined,
+			tokenSrc: undefined,
+			streamSrc: undefined,
+		};
 		this.antlrCtx = token;
 	}
 
@@ -60,6 +76,7 @@ export class KipperError extends Error {
 		location: { line: number | undefined; col: number | undefined };
 		filePath: string | undefined;
 		tokenSrc: string | undefined;
+		streamSrc: KipperParseStream | undefined;
 	}) {
 		this.tracebackData = traceback;
 	}
@@ -70,12 +87,41 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
+		const tokenSrc = (() => {
+			if (
+				this.tracebackData.location?.line !== undefined &&
+				this.tracebackData.location?.col !== undefined &&
+				this.tracebackData.streamSrc !== undefined &&
+				this.tracebackData.tokenSrc !== undefined
+			) {
+				const srcLine = this.tracebackData.streamSrc.lines[this.tracebackData.location.line - 1];
+				let startOfError = this.tracebackData.location.col;
+
+				// In case the error is at the exact end of the line, mark the whole line as the error origin
+				if (startOfError === this.tracebackData.tokenSrc.length) {
+					startOfError = 0;
+				}
+
+				let endOfError = startOfError + this.tracebackData.tokenSrc.length;
+
+				// Generate underline
+				const underline: string = Array.from(srcLine)
+					.map((_, i) => (i >= startOfError && i < endOfError ? "^" : " "))
+					.join("");
+
+				return `${srcLine}\n    ${underline}`;
+			} else {
+				return (
+					(this.tokenSrc ? `${this.tokenSrc}\n` : "") + (this.tokenSrc ? "    " + "^".repeat(this.tokenSrc.length) : "")
+				);
+			}
+		})();
+
 		return (
 			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
-			`${this.tokenSrc ? "    " + this.tokenSrc + "\n" : ""}` +
-			`${this.tokenSrc ? "    " + "^".repeat(this.tokenSrc.length) + "\n" : ""}` +
+			`${tokenSrc ? `    ${tokenSrc}\n` : ""}` +
 			`${this.name}: ${this.message}`
 		);
 	}
@@ -263,28 +309,6 @@ export class UnknownIdentifierError extends IdentifierError {
 }
 
 /**
- * Error that is thrown when a variable definition is used, but it is unknown to the program.
- * @deprecated
- */
-export class UnknownVariableIdentifierError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Unknown variable identifier '${identifier}'.`);
-		console.warn("'UnknownVariableIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
-	}
-}
-
-/**
- * Error that is thrown when a function definition is used, but it is unknown to the program.
- * @deprecated
- */
-export class UnknownFunctionIdentifierError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Unknown function identifier '${identifier}'.`);
-		console.warn("'UnknownFunctionIdentifierError' is deprecated, replace with 'UnknownIdentifierError'");
-	}
-}
-
-/**
  * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
  * a variable definition or declaration.
  */
@@ -377,6 +401,16 @@ export class InvalidArgumentTypeError extends TypeError {
 		super(
 			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
 		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a conversion is used that is not supported.
+ * @since 0.8.0
+ */
+export class InvalidConversionError extends TypeError {
+	constructor(originalType: string, destType: string) {
+		super(`Type conversion from '${originalType}' to '${destType}' is not allowed.`);
 	}
 }
 

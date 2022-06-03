@@ -1,241 +1,58 @@
 /**
- * Defines the TypeScript translation for the Kipper language.
+ * The TypeScript target-specific code generator for translating Kipper into TypeScript.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.5.0
+ * @since 0.8.0
  */
-import { KipperCompileTarget } from "../compile-target";
-import { KipperTargetSemanticAnalyser } from "../semantics/semantic-analyser";
-import { KipperTargetCodeGenerator } from "../translation/code-generator";
 import {
-	type AdditiveExpression,
-	type ArraySpecifierExpression,
-	type AssignmentExpression,
-	type CastOrConvertExpression,
-	type CharacterPrimaryExpression,
-	type CompoundStatement,
-	type ConditionalExpression,
-	type EqualityExpression,
-	type ExpressionStatement,
-	type FStringPrimaryExpression,
-	type FunctionCallPostfixExpression,
-	type FunctionDeclaration,
-	type IdentifierPrimaryExpression,
-	type IncrementOrDecrementExpression,
-	type IncrementOrDecrementUnaryExpression,
-	type IterationStatement,
-	type JumpStatement,
-	type ListPrimaryExpression,
-	type LogicalAndExpression,
-	type LogicalOrExpression,
-	type MultiplicativeExpression,
-	type NumberPrimaryExpression,
-	type OperatorModifiedUnaryExpression,
-	type ParameterDeclaration,
-	type RelationalExpression,
-	type SelectionStatement,
-	type StringPrimaryExpression,
-	type TangledPrimaryExpression,
-	type VariableDeclaration,
-} from "../semantics/tokens";
-import {
-	kipperBoolType,
-	kipperCharType,
-	kipperFuncType,
-	kipperListType,
-	kipperNumType,
-	kipperStrType,
+	AdditiveExpression,
+	ArraySpecifierExpression,
+	AssignmentExpression,
+	BoolPrimaryExpression,
+	CastOrConvertExpression,
+	CharacterPrimaryExpression,
+	CompoundStatement,
+	ConditionalExpression,
+	EqualityExpression,
+	ExpressionStatement,
+	FStringPrimaryExpression,
+	FunctionCallPostfixExpression,
+	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
+	IdentifierPrimaryExpression,
+	IncrementOrDecrementExpression,
+	IncrementOrDecrementUnaryExpression,
+	IterationStatement,
+	JumpStatement,
+	KipperTargetCodeGenerator,
 	KipperType,
-	kipperVoidType,
+	ListPrimaryExpression,
+	LogicalAndExpression,
+	LogicalOrExpression,
+	MultiplicativeExpression,
+	NumberPrimaryExpression,
+	OperatorModifiedUnaryExpression,
+	ParameterDeclaration,
+	RelationalExpression,
 	ScopeFunctionDeclaration,
+	SelectionStatement,
+	SingleTypeSpecifierExpression,
+	StringPrimaryExpression,
+	TangledPrimaryExpression,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
-} from "../lib";
-import { KipperNotImplementedError } from "../../errors";
+	TypeofTypeSpecifierExpression,
+	VariableDeclaration,
+} from "../../compiler";
+import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
+import { getConversionFunctionIdentifier } from "../../utils";
 
-export class TypeScriptTarget extends KipperCompileTarget {
-	constructor(
-		semanticAnalyser: TypeScriptTargetSemanticAnalyser = new TypeScriptTargetSemanticAnalyser(),
-		codeGenerator: TypeScriptTargetCodeGenerator = new TypeScriptTargetCodeGenerator(),
-	) {
-		super("typescript", semanticAnalyser, codeGenerator);
-	}
-}
-
-export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
-	/**
-	 * Performs typescript-specific semantic analysis for {@link CompoundStatement} instances.
-	 */
-	compoundStatement = async (token: CompoundStatement) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link SelectionStatement} instances.
-	 */
-	selectionStatement = async (token: SelectionStatement) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ExpressionStatement} instances.
-	 */
-	expressionStatement = async (token: ExpressionStatement) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link IterationStatement} instances.
-	 */
-	iterationStatement = async (token: IterationStatement) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
-	 */
-	jumpStatement = async (token: JumpStatement) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
-	 */
-	parameterDeclaration = async (token: ParameterDeclaration) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link FunctionDeclaration} instances.
-	 */
-	functionDeclaration = async (token: FunctionDeclaration) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
-	 */
-	variableDeclaration = async (token: VariableDeclaration) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.
-	 */
-	numberPrimaryExpression = async (token: NumberPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
-	 */
-	characterPrimaryExpression = async (token: CharacterPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ListPrimaryExpression} instances.
-	 */
-	listPrimaryExpression = async (token: ListPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
-	 */
-	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link StringPrimaryExpression} instances.
-	 */
-	stringPrimaryExpression = async (token: StringPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link FStringPrimaryExpression} instances.
-	 */
-	fStringPrimaryExpression = async (token: FStringPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link TangledPrimaryExpression} instances.
-	 */
-	tangledPrimaryExpression = async (token: TangledPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ArraySpecifierExpression} instances.
-	 */
-	arraySpecifierExpression = async (token: ArraySpecifierExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
-	 */
-	incrementOrDecrementExpression = async (token: IncrementOrDecrementExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
-	 */
-	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
-	 */
-	incrementOrDecrementUnaryExpression = async (token: IncrementOrDecrementUnaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
-	 */
-	operatorModifiedUnaryExpression = async (token: OperatorModifiedUnaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link CastOrConvertExpression} instances.
-	 */
-	castOrConvertExpression = async (token: CastOrConvertExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link MultiplicativeExpression} instances.
-	 */
-	multiplicativeExpression = async (token: MultiplicativeExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link AdditiveExpression} instances.
-	 */
-	additiveExpression = async (token: AdditiveExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link RelationalExpression} instances.
-	 */
-	relationalExpression = async (token: RelationalExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link EqualityExpression} instances.
-	 */
-	equalityExpression = async (token: EqualityExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.
-	 */
-	logicalAndExpression = async (token: LogicalAndExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link LogicalOrExpression} instances.
-	 */
-	logicalOrExpression = async (token: LogicalOrExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ConditionalExpression} instances.
-	 */
-	conditionalExpression = async (token: ConditionalExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
-	 */
-	assignmentExpression = async (token: AssignmentExpression) => {};
-}
-
+/**
+ * The TypeScript target-specific code generator for translating Kipper into TypeScript.
+ * @since 0.8.0
+ */
 export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
-	/**
-	 * Fetches the typescript equivalent for a {@link KipperType}.
-	 * @param kipperType The type to get the equivalent for.
-	 * @since 0.7.0
-	 */
-	async getTypeScriptType(kipperType: KipperType): Promise<string> {
-		switch (kipperType) {
-			case kipperVoidType:
-				return "void";
-			case kipperFuncType:
-				throw new KipperNotImplementedError(
-					"Lambda functions have not been implemented for TypeScript translation yet.",
-				);
-			case kipperBoolType:
-				return "boolean";
-			case kipperCharType:
-			case kipperStrType:
-				return "string";
-			case kipperNumType:
-				return "number";
-			case kipperListType:
-				throw new KipperNotImplementedError("Kipper lists have not been implemented for TypeScript translation yet.");
-		}
-	}
-
 	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */
@@ -300,7 +117,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = token.ensureSemanticDataExists();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = await this.getTypeScriptType(semanticData.valueType);
+		const tsType = getTypeScriptType(semanticData.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
@@ -353,6 +170,27 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates a {@link SingleTypeSpecifierExpression} into the typescript language.
+	 */
+	singleTypeSpecifierExpression = async (token: SingleTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link GenericTypeSpecifierExpression} into the typescript language.
+	 */
+	genericTypeSpecifierExpression = async (token: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link TypeofTypeSpecifierExpression} into the typescript language.
+	 */
+	typeofTypeSpecifierExpression = async (token: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
 	 * Translates a {@link StringPrimaryExpression} into the typescript language.
 	 */
 	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<TranslatedExpression> => {
@@ -366,6 +204,13 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	fStringPrimaryExpression = async (token: FStringPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
+	};
+
+	/**
+	 * Translates a {@link BoolPrimaryExpression} into the typescript language.
+	 */
+	boolPrimaryExpression = async (token: BoolPrimaryExpression): Promise<TranslatedExpression> => {
+		return [token.ensureSemanticDataExists().value];
 	};
 
 	/**
@@ -400,13 +245,13 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
 		const semanticData = token.ensureSemanticDataExists();
-		const tokenChildren = token.ensureTokenChildrenExist();
 		const func = token.programCtx.semanticCheck(token).getExistingFunction(semanticData.identifier);
 
-		// Add lib identifier prefix '_kipperGlobal_'
-		const identifier = func instanceof ScopeFunctionDeclaration ? func.identifier : `_kipperGlobal_${func.identifier}`;
+		// Get the proper identifier for the function
+		const identifier =
+			func instanceof ScopeFunctionDeclaration ? func.identifier : getTypeScriptBuiltInIdentifier(func.identifier);
 
-		// Compile the arguments
+		// Generate the arguments
 		let args: Array<TranslatedCodeToken> = [];
 		for (const i of semanticData.args) {
 			// Generating the code for each expression and adding a whitespace for primitive formatting
@@ -438,7 +283,20 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
 	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<TranslatedExpression> => {
-		return [];
+		// Get the semantic data
+		const semanticData = token.ensureSemanticDataExists();
+
+		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
+		const originalType: KipperType = semanticData.exp.ensureSemanticDataExists().evaluatedType;
+		const destType: KipperType = semanticData.type;
+
+		if (originalType === destType) {
+			// If both types are the same we will only return the translated expression to avoid useless conversions.
+			return exp;
+		} else {
+			const func: string = getTypeScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			return [func, "(", ...exp, ")"];
+		}
 	};
 
 	/**

@@ -6,6 +6,8 @@
 
 export * from "./tokens";
 export * from "./const";
+export * from "./asserter";
 export * from "./file-listener";
 export * from "./scope-declaration";
-export * from "./semantic-analyser";
+export * from "./type-checker";
+export * from "./target-semantic-analyser";

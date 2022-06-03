@@ -9,7 +9,7 @@
 	"rules": {
 		"linebreak-style": ["error", "unix"],
 		"max-params": 0,
-		"no-unused-vars": 1,
+    "no-unused-vars": [1, { "vars": "local", "args": "none" }],
 		"no-warning-comments": 0,
 		"no-useless-catch": 1,
 		"comma-dangle": 0,

@@ -32,10 +32,11 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
-import { SingleItemTypeSpecifierContext } from "./KipperParser";
-import { MultiItemTypeSpecifierContext } from "./KipperParser";
+import { SingleTypeSpecifierContext } from "./KipperParser";
+import { GenericTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
@@ -341,6 +342,14 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -357,20 +366,20 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitActualConditionalExpression?: (ctx: ActualConditionalExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `singleItemTypeSpecifier`
+	 * Visit a parse tree produced by the `singleTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitSingleItemTypeSpecifier?: (ctx: SingleItemTypeSpecifierContext) => Result;
+	visitSingleTypeSpecifier?: (ctx: SingleTypeSpecifierContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `multiItemTypeSpecifier`
+	 * Visit a parse tree produced by the `genericTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => Result;
+	visitGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `typeofTypeSpecifier`

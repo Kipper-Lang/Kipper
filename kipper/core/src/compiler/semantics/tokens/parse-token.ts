@@ -11,7 +11,7 @@ import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import type { KipperParser } from "../../parser";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../../translation";
 import type { KipperCompileTarget } from "../../compile-target";
 import type { Declaration } from "./definitions";

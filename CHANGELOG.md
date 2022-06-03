@@ -7,13 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Type Conversion expressions, which allow for the conversion of types to other types using Kipper defined
+  conversion functions. The following conversions are implemented:
+  - `str` as `num`
+  - `num` as `str`
+  - `bool` as `str`
+  - `bool` as `num`
+- Boolean constant expressions `true` and `false`, which automatically evaluate to the type `bool` and can be used in
+  expressions. (`true` and `false` are now reserved identifiers, which can never be overwritten and any attempts to do
+  so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
+  target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
+  translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
+- New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
+- New classes and interfaces:
+  - `KipperTargetBuiltInGenerator`, which updates the behaviour for generating built-in functions.
+    This function should also allow the use of built-in variables in the future and also provide a basis for dynamic
+    dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
+    built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
+  - `SingleTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
+  - `GenericTypeSpecifierExpression`, which represents a generic type constant, such as `type<T>`. (Functionality not
+    implemented yet! Planned for v0.12)
+  - `TypeofTypeSpecifierExpression`, which represents a dynamically evaluated type, such as `typeof("string")`.
+    (Functionality not implemented yet! Planned for v0.11)
+  - `InternalFunction`, which represents an internal function for Kipper, which provides specific functionality for
+    keywords and other internal logic.
+- New functions:
+  - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
+    Kipper.
+- New errors:
+  - `InvalidConversionError`, which is thrown whenever an invalid or unimplemented conversion is used in a Kipper
+    program.
+- New types and constants:
+  - Kipper meta type `type`, which represents the type of a Kipper type.
+  - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
+    Kipper.
+
+### Changed
+
+- Updated error traceback generation algorithm to be more concise and useful. The algorithm will try from now on to mark
+  the origin of the error in the source line, instead of only returning the characters causing the error.
+- Updated folder structure of built-in targets, by moving all target-related files to `kipper/core/src/targets`. This
+  should from now on be the folder, where all the targets that are natively supported by Kipper should be located.
+- Moved all typescript-related target files to `kipper/core/src/targets/typescript` and split up the classes into
+  their own files.
+- Updated built-in code generation behaviour in `KipperProgramContext.generateRequirements()`. This function
+  generates the built-ins for a program using its `KipperTargetBuiltInGenerator`, which is specified in the
+  `KipperCompileTarget`.
+- Fixed bug in `@kipper/cli` which occurred when reading files causing line endings to be internally removed. This
+  resulted in CLI errors sometimes displaying an entire Kipper file as a single line of code, instead of displaying the
+  original code line alone.
+- Renamed:
+  - `builtIns` to `kipperRuntimeBuiltIns`.
+  - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
+
 ### Removed
 
+- Module `kipper/core/compiler/lib`, as the built-ins shall from now on be handled by each individual target instead
+  of the whole Kipper package to allow a unique specific implementation per target.
 - Removed the following deprecated errors and functions:
   - `UnknownFunctionIdentifierError`
   - `UnknownVariableIdentifierError`
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
+- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
+  for example `print`) anymore.
 
 ## [0.7.0] - 2022-05-22
 

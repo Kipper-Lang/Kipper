@@ -3,15 +3,30 @@
 # The Kipper programming language - `kipper`
 
 [![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
-![](https://img.shields.io/badge/Coverage-75%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-77%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
 The full module for Kipper, which contains the core language, compiler and command line interface (CLI).
 
-Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python! 🦊
+Kipper is a simple strongly and statically typed programming language, which is designed to allow for
+straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
+
+## Goals
+
+- Full type safety to ensure errors occur on compile time, not runtime.
+- Runtime types and type checking, which allow variable types to be checked during runtime, if
+  their type can not be evaluated during compile time. For example when using `JSON.parse()`.
+- Runtime errors for invalid operations. No hidden errors like in JavaScript.
+- Null safety, by enforcing non-null types unless explicitly allowed.
+- Full translation and integration with TypeScript.
+
+## Syntax Snippet
+
+![](img/carbon/carbon-code-snippet.png)
+
+_Kipper is still in an early development phase, as such not all features shown are implemented yet._
 
 ## Child Packages
 
@@ -77,11 +92,22 @@ Simple example of running your code in your browser using Kipper and Babel:
 This is to recommend way to use Kipper if you want to dive deeper into Kipper, as it allows you to locally use and run
 kipper, without depending on a browser.
 
-This also enables the usage of files, which can be read and compiled to TypeScript, and run using the CLI, without
-having to do anything yourself. This also allows the input of data over the console and file-interactions,
-which are not supported inside a browser.
+For example:
 
-For more info go to the [`@kipper/cli` README.md](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
+- Compiling a Kipper program:
+  ```bash
+  kipper compile file.kip
+  ```
+- Executing a Kipper program using Node.js:
+  ```bash
+  kipper run file.kip
+  ```
+
+This also enables the usage of Kipper files with the `.kip` extension, which can be read and compiled to TypeScript,
+without having to configure anything yourself. This also allows the input of data over the
+console and file-interactions, which are not supported inside a browser.
+
+For more info go to the [`@kipper/cli` README](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
 
 ### Locally in your own code as a package
 
@@ -93,21 +119,24 @@ Simple example of using kipper using Node.js:
 ```ts
 import * as ts from "typescript";
 import { promises as fs } from "fs";
-import { KipperCompiler } from "@kipper/core";
+import * as Kipper from "@kipper/core";
 
 const path = "INSERT_PATH";
-fs.readFile(path, "utf8" as BufferEncoding).then((fileContent: string) => {
+fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
 	// Define your own logger and compiler, which will handle the compilation
-	const yourLogger = new Kipper.KipperLogger((level, msg) => {
+	const logger = new Kipper.KipperLogger((level, msg) => {
 		console.log(`[${level}] ${msg}`);
 	});
-	const yourCompiler = new Kipper.KipperCompiler(yourLogger);
+	const compiler = new Kipper.KipperCompiler(logger);
 
 	// Compile the code string or stream
-	let code = yourCompiler.compile(fileContent).write();
+	let result = await compiler.compile(fileContent, {
+		/* Config */
+	});
+	let tsCode = result.write();
 
 	// Compiling down to JS using the typescript node module
-	let jsCode = ts.transpile(code);
+	let jsCode = ts.transpile(tsCode);
 
 	// Running the Kipper program
 	eval(jsCode);
