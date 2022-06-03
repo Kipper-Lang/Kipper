@@ -1,13 +1,11 @@
 /**
- * Built-In Function implementation, which will convert a built-in function call to a proper TypeScript code snippet.
- * This means it will insert code rather than actually call it, to reduce overhead, and remove any dependencies when
- * running Kipper itself.
+ * Built-Ins file, which provides the blueprints for the Kipper built-in functions and variables.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 
-import { KipperType } from "../semantics";
+import { KipperType } from "./semantics";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -56,26 +54,8 @@ export interface BuiltInFunction {
 	 */
 	args: Array<BuiltInFunctionArgument>;
 	/**
-	 * The TypeScript code that will be inserted at the beginning of the Kipper program. This should contain the
-	 * implementation for the function identifier, prefixed by `'_kipperGlobal_'`.
-	 *
-	 * @example
-	 *  // Example of a string that may be passed
-	 *  const yourFunction: Function = {
-	 *    identifier: "print",
-	 *    args: [{
-	 *      type: "str" as KipperType
-	 *    }],
-	 *    handler: `function _kipperGlobal_print(arg1: string): void {
-	 *      console.log(arg1);
-	 *      return;
-	 *    }
-	 *    `
-	 *  };
-	 */
-	handler: Array<string>;
-	/**
-	 * The expected return of the function. If the return type is "void", then the function will not return anything.
+	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
+	 * return anything.
 	 */
 	returnType: KipperType;
 }
@@ -83,19 +63,18 @@ export interface BuiltInFunction {
 /**
  * Contains all the built-in functions in Kipper that are available per default in every program.
  *
- * This contains *every* builtin
+ * This contains *every* builtin that also must be implemented by every target in the {@link }
  * @since 0.7.0
  */
-export const builtIns: Record<string, BuiltInFunction> = {
-  print: {
-    identifier: "print",
-    args: [
-      {
-        identifier: "msg",
-        type: "str",
-      },
-    ],
-    handler: ["function _kipperGlobal_print(msg: string): void { console.log(msg); }"],
-    returnType: "void",
-  }
+export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
+	print: {
+		identifier: "print",
+		args: [
+			{
+				identifier: "msg",
+				type: "str",
+			},
+		],
+		returnType: "void",
+	},
 };

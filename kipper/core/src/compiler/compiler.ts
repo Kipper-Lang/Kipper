@@ -10,9 +10,9 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, builtIns, isBrowser } from "./lib";
+import { BuiltInFunction, kipperRuntimeBuiltIns } from "./runtime-built-ins";
 import { KipperCompileTarget } from "./compile-target";
-import { TypeScriptTarget } from "./targets/typescript";
+import { TypeScriptTarget } from "../targets/typescript";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
@@ -62,10 +62,10 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		globals: builtIns, // Assume node if it's not a browser
+		globals: kipperRuntimeBuiltIns,
 		extendGlobals: [],
 		fileName: "anonymous-script",
-		target: new TypeScriptTarget(),
+		target: new TypeScriptTarget(), // Default target is TypeScript
 	};
 
 	/**

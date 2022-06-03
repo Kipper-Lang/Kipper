@@ -14,19 +14,17 @@ import {
 	KipperFileListener,
 	RootFileParseToken,
 	VariableDeclaration,
-} from "./semantics";
-import {
-	BuiltInFunction,
 	KipperFunction,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 	TranslatedCodeLine,
-} from "./lib";
+} from "./semantics";
+import { BuiltInFunction } from "./runtime-built-ins";
 import { KipperLogger } from "../logger";
 import { UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics/semantic-checker";
-import { KipperTypeChecker } from "./semantics/type-checker";
+import { KipperTypeChecker } from "./semantics";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -376,15 +374,23 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Generates the required code for the execution of this kipper program
+	 * Generates the required code for the execution of this Kipper program.
+	 *
+	 * This primarily includes the Kipper built-ins, which require
+	 * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
 	 * @private
 	 */
 	private async generateRequirements(): Promise<Array<Array<string>>> {
-		let code: Array<Array<string>> = [];
+		let code: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the global functions
-		for (let global of this._builtInGlobals) {
-			code = [...code, global.handler];
+		for (let builtInSpec of this._builtInGlobals) {
+			// Fetch the function for handling this built-in
+			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
+				this.target.builtInGenerator,
+				builtInSpec.identifier,
+			);
+			code = [...code, ...(await func(builtInSpec))];
 		}
 		return code;
 	}

@@ -15,7 +15,6 @@ import type { FailedPredicateException } from "antlr4ts/FailedPredicateException
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import { getParseRuleSource } from "./utils";
-import type { KipperProgramContext } from "./compiler";
 import { KipperParseStream } from "./compiler";
 
 /**

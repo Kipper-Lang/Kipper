@@ -19,12 +19,13 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../../parser";
-import { KipperScope, ScopeVariableDeclaration, TranslatedCodeLine } from "../../lib";
-import { VariableDeclaration } from "./definitions";
-import { Expression } from "./expressions";
 import { determineScope } from "../../../utils";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { ScopeVariableDeclaration } from "../scope-declaration";
+import type { KipperScope, TranslatedCodeLine } from "../const";
+import type { VariableDeclaration } from "./definitions";
+import type { Expression } from "./expressions";
+import type { TargetTokenCodeGenerator } from "../../translation";
+import type { TargetTokenSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Every antlr4 statement ctx type
@@ -190,7 +191,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -248,7 +249,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -305,7 +306,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -363,7 +364,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -421,7 +422,7 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */

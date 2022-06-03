@@ -3,10 +3,8 @@ import {
 	KipperCompiler,
 	KipperLogger,
 	KipperParseStream,
-	KipperProgramContext,
 	KipperSyntaxError,
 	LogLevel,
-	KipperError,
 	KipperCompileResult,
 } from "@kipper/core";
 import { promises as fs } from "fs";
@@ -24,8 +22,9 @@ const multiFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-file
 const variableDeclarationFile = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
 const arithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/arithmetics.kip`);
 const assignFile = path.resolve(`${__dirname}/../../kipper-files/assign.kip`);
-const addedHelloWorld = path.resolve(`${__dirname}/../../kipper-files/added-hello-world.kip`);
-const assignmentArithmetics = path.resolve(`${__dirname}/../../kipper-files/assignment-arithmetics.kip`);
+const addedHelloWorldFile = path.resolve(`${__dirname}/../../kipper-files/added-hello-world.kip`);
+const assignmentArithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/assignment-arithmetics.kip`);
+const boolFile = path.resolve(`${__dirname}/../../kipper-files/bool.kip`);
 const typeConversion = path.resolve(`${__dirname}/../../kipper-files/type-conversion.kip`);
 
 describe("KipperCompiler", () => {
@@ -119,7 +118,7 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Function call argument", async () => {
-				const fileContent = (await fs.readFile(addedHelloWorld, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
@@ -131,13 +130,13 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Variable assignment", async () => {
-				const fileContent = (await fs.readFile(assignmentArithmetics, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
 
 			it("Type conversion", async () => {
-				const fileContent = (await fs.readFile(assignmentArithmetics, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
@@ -277,7 +276,7 @@ describe("KipperCompiler", () => {
 				});
 
 				it("Function call argument", async () => {
-					const fileContent = (await fs.readFile(addedHelloWorld, "utf8" as BufferEncoding)).toString();
+					const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -303,7 +302,7 @@ describe("KipperCompiler", () => {
 				});
 
 				it("Variable assignment", async () => {
-					const fileContent = (await fs.readFile(assignmentArithmetics, "utf8" as BufferEncoding)).toString();
+					const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -331,6 +330,15 @@ describe("KipperCompiler", () => {
 
 			it("Assign", async () => {
 				const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+			});
+
+			it("Bool", async () => {
+				const fileContent = (await fs.readFile(boolFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 

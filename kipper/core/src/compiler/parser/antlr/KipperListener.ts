@@ -32,10 +32,11 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
-import { SingleItemTypeSpecifierContext } from "./KipperParser";
-import { MultiItemTypeSpecifierContext } from "./KipperParser";
+import { SingleTypeSpecifierContext } from "./KipperParser";
+import { GenericTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
@@ -488,6 +489,19 @@ export interface KipperListener extends ParseTreeListener {
 	exitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -514,30 +528,30 @@ export interface KipperListener extends ParseTreeListener {
 	exitActualConditionalExpression?: (ctx: ActualConditionalExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `singleItemTypeSpecifier`
+	 * Enter a parse tree produced by the `singleTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	enterSingleItemTypeSpecifier?: (ctx: SingleItemTypeSpecifierContext) => void;
+	enterSingleTypeSpecifier?: (ctx: SingleTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by the `singleItemTypeSpecifier`
+	 * Exit a parse tree produced by the `singleTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	exitSingleItemTypeSpecifier?: (ctx: SingleItemTypeSpecifierContext) => void;
+	exitSingleTypeSpecifier?: (ctx: SingleTypeSpecifierContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `multiItemTypeSpecifier`
+	 * Enter a parse tree produced by the `genericTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	enterMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => void;
+	enterGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by the `multiItemTypeSpecifier`
+	 * Exit a parse tree produced by the `genericTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	exitMultiItemTypeSpecifier?: (ctx: MultiItemTypeSpecifierContext) => void;
+	exitGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `typeofTypeSpecifier`

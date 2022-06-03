@@ -13,16 +13,15 @@ import {
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
 	ParameterTypeListContext,
-	SingleItemTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../../lib";
+import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
 import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
-import { Expression } from "./expressions";
+import { Expression, SingleTypeSpecifierExpression } from "./expressions";
 import { ParseTree } from "antlr4ts/tree";
 import { ScopeVariableDeclaration } from "../scope-declaration";
 
@@ -227,17 +226,18 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		let paramListCtx = <ParameterTypeListContext | undefined>(
 			children.find((val) => val instanceof ParameterTypeListContext)
 		);
-		let returnTypeCtx = <SingleItemTypeSpecifierContext | undefined>(
-			children.find((val) => val instanceof SingleItemTypeSpecifierContext)
-		);
+
+		// The type of this declaration, which should always be present, since the parser requires it during the parsing
+		// step.
+		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
 
 		// Throw an error if children are incomplete
-		if (!declaratorCtx || !returnTypeCtx) {
+		if (!declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: KipperType = <KipperType>this.tokenStream.getText(returnTypeCtx.sourceInterval);
+		const type: KipperType = typeSpecifier.ensureSemanticDataExists().type;
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
@@ -356,13 +356,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const declaratorCtx = <DeclaratorContext | undefined>(
 			initDeclaratorCtx?.children?.find((val) => val instanceof DeclaratorContext)
 		);
-		const typeSpecifier = <SingleItemTypeSpecifierContext | undefined>(
-			initDeclaratorCtx?.children?.find((val) => val instanceof SingleItemTypeSpecifierContext)
-		);
+
+		// The type of this declaration, which should always be present, since the parser requires it during the parsing
+		// step.
+		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
-		const assignValue: Expression<any> | undefined = this.children[0];
+		const assignValue: Expression<any> | undefined = this.children[1];
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
@@ -372,7 +373,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType = <KipperType>this.tokenStream.getText(typeSpecifier.sourceInterval);
+		const valueType = typeSpecifier.ensureSemanticDataExists().type;
 		const scope = determineScope(this);
 
 		this.semanticData = {

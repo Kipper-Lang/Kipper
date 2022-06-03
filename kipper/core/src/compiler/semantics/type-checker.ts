@@ -1,9 +1,18 @@
-import { KipperProgramContext } from "../program-ctx";
+/**
+ * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
+ * invalid use of types and identifiers is detected.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.7.0
+ */
+
 import { KipperAsserter } from "./asserter";
 import { Expression, ExpressionSemantics, ParameterDeclaration } from "./tokens";
-import { BuiltInFunctionArgument, KipperFunction, kipperReturnTypes, KipperType, kipperTypes } from "../lib";
+import { KipperFunction, kipperReturnTypes, KipperType, kipperTypes } from "./const";
 import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../errors";
 import { ScopeVariableDeclaration } from "./scope-declaration";
+import type { BuiltInFunctionArgument } from "../runtime-built-ins";
+import type { KipperProgramContext } from "../program-ctx";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
