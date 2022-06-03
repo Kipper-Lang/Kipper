@@ -25,6 +25,7 @@ import {
 	IterationStatement,
 	JumpStatement,
 	KipperTargetCodeGenerator,
+	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
@@ -46,6 +47,7 @@ import {
 	VariableDeclaration,
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
+import { getConversionFunctionIdentifier } from "../../utils";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper into TypeScript.
@@ -246,7 +248,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = token.ensureSemanticDataExists();
 		const func = token.programCtx.semanticCheck(token).getExistingFunction(semanticData.identifier);
 
-		// Add lib identifier prefix '_kipperGlobal_'
+		// Get the proper identifier for the function
 		const identifier =
 			func instanceof ScopeFunctionDeclaration ? func.identifier : getTypeScriptBuiltInIdentifier(func.identifier);
 
@@ -282,7 +284,20 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
 	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<TranslatedExpression> => {
-		return [];
+		// Get the semantic data
+		const semanticData = token.ensureSemanticDataExists();
+
+		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
+		const originalType: KipperType = semanticData.exp.ensureSemanticDataExists().evaluatedType;
+		const destType: KipperType = semanticData.type;
+
+		if (originalType === destType) {
+			// If both types are the same we will only return the translated expression to avoid useless conversions.
+			return exp;
+		} else {
+			const func: string = getTypeScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			return [func, "(", ...exp, ")"];
+		}
 	};
 
 	/**
