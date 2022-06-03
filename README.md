@@ -22,6 +22,12 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 - Null safety, by enforcing non-null types unless explicitly allowed.
 - Full translation and integration with TypeScript.
 
+## Syntax Snippet
+
+![](./img/carbon-code-sample.png)
+
+*Kipper is still in an early development phase, as such not all features shown are implemented yet.*
+
 ## Child Packages
 
 These are the child packages that are shipped with this bundle of Kipper:
