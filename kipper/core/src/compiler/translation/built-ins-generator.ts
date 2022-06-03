@@ -4,6 +4,7 @@
  */
 import { TranslatedCodeLine } from "../semantics";
 import { BuiltInFunction } from "../runtime-built-ins";
+import { Array2DHashMap } from "antlr4ts/misc";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.
@@ -17,7 +18,39 @@ import { BuiltInFunction } from "../runtime-built-ins";
  */
 export abstract class KipperTargetBuiltInGenerator {
 	/**
-	 * Print function which provides default IO output.
+	 * Conversion function which provides 'num' to 'str' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @since 0.8.0
+	 */
+	abstract numToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'str' to 'num' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @since 0.8.0
+	 */
+	abstract strToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @since 0.8.0
+	 */
+	abstract boolToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @since 0.8.0
+	 */
+	abstract boolToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Print function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0

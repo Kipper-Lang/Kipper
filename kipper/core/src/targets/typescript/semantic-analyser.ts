@@ -18,6 +18,7 @@ import {
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
@@ -33,8 +34,10 @@ import {
 	ParameterDeclaration,
 	RelationalExpression,
 	SelectionStatement,
+	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
+	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
 
@@ -102,6 +105,21 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
 	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 */
+	singleTypeSpecifierExpression = async (token: SingleTypeSpecifierExpression) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.
+	 */
+	genericTypeSpecifierExpression = async (token: GenericTypeSpecifierExpression) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
+	 */
+	typeofTypeSpecifierExpression = async (token: TypeofTypeSpecifierExpression) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link StringPrimaryExpression} instances.

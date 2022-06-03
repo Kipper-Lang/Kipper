@@ -16,6 +16,7 @@ import {
 	EqualityExpressionContext,
 	FStringPrimaryExpressionContext,
 	FunctionCallPostfixExpressionContext,
+	GenericTypeSpecifierContext,
 	IdentifierPrimaryExpressionContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
@@ -26,8 +27,10 @@ import {
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	RelationalExpressionContext,
+	SingleTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
+	TypeofTypeSpecifierContext,
 } from "../../parser";
 import {
 	KipperAdditiveOperator,
@@ -49,7 +52,7 @@ import {
 import { ScopeVariableDeclaration } from "../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
 import { CompoundStatement } from "./statements";
 
@@ -78,7 +81,10 @@ export type antlrExpressionCtxType =
 	| LogicalAndExpressionContext
 	| LogicalOrExpressionContext
 	| ConditionalExpressionContext
-	| AssignmentExpressionContext;
+	| AssignmentExpressionContext
+	| SingleTypeSpecifierContext
+	| GenericTypeSpecifierContext
+	| TypeofTypeSpecifierContext;
 
 /**
  * Fetches the handler for the specified {@link antlrExpressionCtxType}.
@@ -97,6 +103,12 @@ export function getExpressionInstance(
 		return new ListPrimaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof IdentifierPrimaryExpressionContext) {
 		return new IdentifierPrimaryExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof SingleTypeSpecifierContext) {
+		return new SingleTypeSpecifierExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof GenericTypeSpecifierContext) {
+		return new GenericTypeSpecifierExpression(antlrCtx, parent);
+	} else if (antlrCtx instanceof TypeofTypeSpecifierContext) {
+		return new TypeofTypeSpecifierExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof StringPrimaryExpressionContext) {
 		return new StringPrimaryExpression(antlrCtx, parent);
 	} else if (antlrCtx instanceof FStringPrimaryExpressionContext) {
@@ -279,7 +291,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -319,7 +331,7 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
 }
 
 /**
- * Character constant expression class, which represents an integer constant in the Kipper language.
+ * Character constant expression class, which represents a single character constant in the Kipper language.
  * @since 0.1.0
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
@@ -347,7 +359,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -415,7 +427,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -482,7 +494,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -566,7 +578,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -586,6 +598,196 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		this.semanticAnalyser.identifierPrimaryExpression;
 	targetCodeGenerator: TargetTokenCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.identifierPrimaryExpression;
+}
+
+/**
+ * Semantics for {@link SingleTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface SingleTypeSpecifierExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Default type specifier
+ * @since 0.8.0
+ */
+export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: SingleTypeSpecifierContext;
+
+	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
+		this._antlrRuleCtx = antlrCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			type: <KipperType>this.sourceCode,
+			evaluatedType: "type",
+		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): SingleTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SingleTypeSpecifierExpression> =
+		this.semanticAnalyser.singleTypeSpecifierExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.singleTypeSpecifierExpression;
+}
+
+/**
+ * Semantics for {@link GenericTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface GenericTypeSpecifierExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Default type specifier
+ * @since 0.8.0
+ */
+export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
+
+	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
+		this._antlrRuleCtx = antlrCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): GenericTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<GenericTypeSpecifierExpression> =
+		this.semanticAnalyser.genericTypeSpecifierExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.genericTypeSpecifierExpression;
+}
+
+/**
+ * Semantics for {@link TypeofTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface TypeofTypeSpecifierExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Default type specifier
+ * @since 0.8.0
+ */
+export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
+
+	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableParseToken<any>) {
+		super(antlrCtx, parent);
+		this._antlrRuleCtx = antlrCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): TypeofTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TypeofTypeSpecifierExpression> =
+		this.semanticAnalyser.typeofTypeSpecifierExpression;
+	targetCodeGenerator: TargetTokenCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.typeofTypeSpecifierExpression;
 }
 
 /**
@@ -629,7 +831,7 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -688,6 +890,11 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("F-String Expressions have not been implemented yet."));
+
+		// eslint-disable-next-line no-unreachable
 		this.semanticData = {
 			evaluatedType: "str",
 			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
@@ -695,7 +902,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -756,7 +963,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -821,7 +1028,7 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -883,7 +1090,7 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -972,7 +1179,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1039,7 +1246,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1105,7 +1312,7 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1130,7 +1337,18 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
  * Semantics for {@link CastOrConvertExpression}.
  * @since 0.5.0
  */
-export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {}
+export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The expression to convert.
+	 * @since 0.8.0
+	 */
+	exp: Expression<any>;
+	/**
+	 * The type the {@link exp} should be converted to.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
 
 /**
  * Convert expression class, which represents a conversion expression in the Kipper language.
@@ -1157,23 +1375,31 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Type Conversions have not been implemented yet."));
+		// Fetching the original exp and the type using the children
+		const exp: Expression<any> = this.children[0];
+		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).ensureSemanticDataExists().type;
 
-		// eslint-disable-next-line no-unreachable
+		// Ensure the children are fully present and not undefined
+		if (!exp || !type) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: type,
+			type: type,
+			exp: exp,
 		};
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
 	}
 
 	/**
@@ -1270,27 +1496,27 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			})
 			?.text.trim();
 
-		// Failed to evaluate the operator
-		if (!operator) {
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+
+		// Ensure the children are fully present and not undefined
+		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
-
-		const exp1 = this.children[0];
-		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
-			exp1: this.children[0], // First expression
-			exp2: this.children[1], // Second expression
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
 			operator: operator,
 		};
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1366,13 +1592,13 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			})
 			?.text.trim();
 
-		// Failed to evaluate the operator
-		if (!operator) {
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+
+		// Ensure the children are fully present and not undefined
+		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
-
-		const exp1 = this.children[0];
-		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
@@ -1396,12 +1622,12 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			evaluatedType: evaluateType(),
 			exp1: exp1, // First expression
 			exp2: exp2, // Second expression
-			operator: <KipperAdditiveOperator>operator,
+			operator: operator,
 		};
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1473,7 +1699,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1541,7 +1767,7 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1606,7 +1832,7 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1671,7 +1897,7 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1734,7 +1960,7 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1823,7 +2049,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	}
 
 	/**
-	 * Performs type checking for this Kipper token.This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */

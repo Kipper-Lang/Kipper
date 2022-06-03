@@ -13,6 +13,7 @@ import {
 	type FStringPrimaryExpression,
 	type FunctionCallPostfixExpression,
 	type FunctionDeclaration,
+	GenericTypeSpecifierExpression,
 	type IdentifierPrimaryExpression,
 	type IncrementOrDecrementExpression,
 	type IncrementOrDecrementUnaryExpression,
@@ -27,10 +28,14 @@ import {
 	type ParameterDeclaration,
 	type RelationalExpression,
 	type SelectionStatement,
+	SingleTypeSpecifierExpression,
 	type StringPrimaryExpression,
 	type TangledPrimaryExpression,
+	TypeofTypeSpecifierExpression,
 	type VariableDeclaration,
 } from "./tokens";
+import { TranslatedExpression } from "./const";
+import { TargetTokenCodeGenerator } from "../translation";
 
 /**
  * Represents a function that checks the semantics for a {@link CompoundStatement}.
@@ -120,6 +125,21 @@ export abstract class KipperTargetSemanticAnalyser {
 	 * Performs translation-specific semantic analysis for {@link BoolPrimaryExpression} instances.
 	 */
 	public abstract boolPrimaryExpression: TargetTokenSemanticAnalyser<BoolPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 */
+	public abstract singleTypeSpecifierExpression: TargetTokenSemanticAnalyser<SingleTypeSpecifierExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.
+	 */
+	public abstract genericTypeSpecifierExpression: TargetTokenSemanticAnalyser<GenericTypeSpecifierExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
+	 */
+	public abstract typeofTypeSpecifierExpression: TargetTokenSemanticAnalyser<TypeofTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.

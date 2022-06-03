@@ -39,6 +39,11 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 } from "../semantics";
+import {
+	GenericTypeSpecifierExpression,
+	SingleTypeSpecifierExpression,
+	TypeofTypeSpecifierExpression,
+} from "../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a
@@ -140,6 +145,30 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link BoolPrimaryExpression} into a specific language.
 	 */
 	public abstract boolPrimaryExpression: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link SingleTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract singleTypeSpecifierExpression: TargetTokenCodeGenerator<
+		SingleTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link GenericTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract genericTypeSpecifierExpression: TargetTokenCodeGenerator<
+		GenericTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link TypeofTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract typeofTypeSpecifierExpression: TargetTokenCodeGenerator<
+		TypeofTypeSpecifierExpression,
+		TranslatedExpression
+	>;
 
 	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.

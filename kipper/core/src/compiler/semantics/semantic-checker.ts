@@ -20,6 +20,7 @@ import {
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
+	InvalidConversionError,
 } from "../../errors";
 import {
 	KipperArithmeticOperator,
@@ -27,6 +28,7 @@ import {
 	kipperPlusOperator,
 	KipperRef,
 	kipperStrLikeTypes,
+	kipperSupportedConversions,
 	KipperType,
 } from "./const";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
@@ -291,6 +293,25 @@ export class KipperSemanticChecker extends KipperAsserter {
 	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
 		if (func.args.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
+		}
+	}
+
+	/**
+	 * Asserts that the type conversion for the {@link exp} is valid.
+	 * @param exp The expression to convert.
+	 * @param type The type to convert to.
+	 * @since 0.8.0
+	 */
+	public validConversion(exp: Expression<any>, type: KipperType): void {
+		const originalType: KipperType = exp.ensureSemanticDataExists().evaluatedType;
+
+		const viableConversion = (() => {
+			// Check whether a supported pair of types exist.
+			return kipperSupportedConversions.find((types) => types[0] === originalType && types[1] === type) !== undefined;
+		})();
+		// In case that the type are not the same and no conversion is possible, throw an error!
+		if (!(originalType === type) && !viableConversion) {
+			throw this.assertError(new InvalidConversionError(originalType, type));
 		}
 	}
 }

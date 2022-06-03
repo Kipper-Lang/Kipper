@@ -40,7 +40,6 @@ import {
 	KipperListener,
 	ListConstantContext,
 	ListPrimaryExpressionContext,
-	DefaultTypeSpecifierContext,
 	NestedParenthesesBlockContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
@@ -56,6 +55,7 @@ import {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 	BoolPrimaryExpressionContext,
+	SingleTypeSpecifierContext,
 } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
@@ -1429,46 +1429,58 @@ export class KipperFileListener implements KipperListener {
 	public exitInitDeclarator(ctx: InitDeclaratorContext): void {}
 
 	/**
-	 * Enter a parse tree produced by the `defaultTypeSpecifier`
+	 * Enter a parse tree produced by the `singleTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterDefaultTypeSpecifier(ctx: DefaultTypeSpecifierContext): void {}
+	public enterSingleTypeSpecifier(ctx: SingleTypeSpecifierContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
 
 	/**
-	 * Exit a parse tree produced by the `defaultTypeSpecifier`
+	 * Exit a parse tree produced by the `singleTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitDefaultTypeSpecifier(ctx: DefaultTypeSpecifierContext): void {}
+	public exitSingleTypeSpecifier(ctx: SingleTypeSpecifierContext): void {
+		this.handleExitingExpressionCtx();
+	}
 
 	/**
 	 * Enter a parse tree produced by the `genericTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {}
+	public enterGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
 
 	/**
 	 * Exit a parse tree produced by the `genericTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {}
+	public exitGenericTypeSpecifier(ctx: GenericTypeSpecifierContext): void {
+		this.handleExitingExpressionCtx();
+	}
 
 	/**
 	 * Enter a parse tree produced by the `typeofTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public enterTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {}
+	public enterTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
 
 	/**
 	 * Exit a parse tree produced by the `typeofTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
-	public exitTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {}
+	public exitTypeofTypeSpecifier(ctx: TypeofTypeSpecifierContext): void {
+		this.handleExitingExpressionCtx();
+	}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.

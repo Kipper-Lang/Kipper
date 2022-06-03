@@ -9,6 +9,7 @@ import {
 	kipperCharType,
 	kipperFuncType,
 	kipperListType,
+	kipperMetaType,
 	kipperNumType,
 	kipperStrType,
 	KipperType,
@@ -29,6 +30,8 @@ export function getTypeScriptType(kipperType: KipperType): string {
 			throw new KipperNotImplementedError("Lambda functions have not been implemented for TypeScript translation yet.");
 		case kipperBoolType:
 			return "boolean";
+		/* The Kipper meta type is basically just a runtime string, which contains the identifier for the type */
+		case kipperMetaType:
 		case kipperCharType:
 		case kipperStrType:
 			return "string";

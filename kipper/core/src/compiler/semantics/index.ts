@@ -10,4 +10,4 @@ export * from "./asserter";
 export * from "./file-listener";
 export * from "./scope-declaration";
 export * from "./type-checker";
-export * from "./semantic-analyser";
+export * from "./target-semantic-analyser";
