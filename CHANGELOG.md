@@ -56,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   generates the built-ins for a program using its `KipperTargetBuiltInGenerator`, which is specified in the
   `KipperCompileTarget`.
 - Fixed bug in `@kipper/cli` which occurred when reading files causing line endings to be internally removed. This
-  resulted in CLI errors sometimes displaying an entire Kipper file as a single line of code, instead of displaying the 
-	original code line alone.
+  resulted in CLI errors sometimes displaying an entire Kipper file as a single line of code, instead of displaying the
+  original code line alone.
 - Renamed:
   - `builtIns` to `kipperRuntimeBuiltIns`.
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
