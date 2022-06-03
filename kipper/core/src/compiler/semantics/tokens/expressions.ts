@@ -52,7 +52,7 @@ import {
 import { ScopeVariableDeclaration } from "../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
 import { CompoundStatement } from "./statements";
 
@@ -1375,13 +1375,20 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Type Conversions have not been implemented yet."));
+		// Fetching the original exp and the type using the children
+		const exp: Expression<any> = this.children[0];
+		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).ensureSemanticDataExists().type;
 
-		// this.semanticData = {
-		// 	evaluatedType: "void",
-		// };
+		// Ensure the children are fully present and not undefined
+		if (!exp || !type) {
+			throw new UnableToDetermineMetadataError();
+		}
+
+		this.semanticData = {
+			evaluatedType: type,
+			type: type,
+			exp: exp,
+		};
 	}
 
 	/**
@@ -1390,7 +1397,9 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.ensureSemanticDataExists();
+
+		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
 	}
 
 	/**
@@ -1487,21 +1496,21 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			})
 			?.text.trim();
 
-		// Failed to evaluate the operator
-		if (!operator) {
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+
+		// Ensure the children are fully present and not undefined
+		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
-
-		const exp1 = this.children[0];
-		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		this.semanticData = {
 			evaluatedType: "num",
-			exp1: this.children[0], // First expression
-			exp2: this.children[1], // Second expression
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
 			operator: operator,
 		};
 	}
@@ -1583,13 +1592,13 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			})
 			?.text.trim();
 
-		// Failed to evaluate the operator
-		if (!operator) {
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+
+		// Ensure the children are fully present and not undefined
+		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
-
-		const exp1 = this.children[0];
-		const exp2 = this.children[1];
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
@@ -1613,7 +1622,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			evaluatedType: evaluateType(),
 			exp1: exp1, // First expression
 			exp2: exp2, // Second expression
-			operator: <KipperAdditiveOperator>operator,
+			operator: operator,
 		};
 	}
 

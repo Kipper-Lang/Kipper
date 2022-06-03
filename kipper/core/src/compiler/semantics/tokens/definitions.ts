@@ -20,7 +20,7 @@ import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
 import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 import { Expression, SingleTypeSpecifierExpression } from "./expressions";
 import { ParseTree } from "antlr4ts/tree";
 import { ScopeVariableDeclaration } from "../scope-declaration";

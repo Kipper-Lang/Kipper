@@ -206,10 +206,10 @@ export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"
  * @since 0.8.0
  */
 export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
-  ["num", "str"],
-  ["str", "num"],
-  ["bool", "str"],
-  ["bool", "num"],
+	["num", "str"],
+	["str", "num"],
+	["bool", "str"],
+	["bool", "num"],
 ];
 
 /**

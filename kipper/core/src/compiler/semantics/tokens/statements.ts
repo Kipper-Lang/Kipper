@@ -25,7 +25,7 @@ import type { KipperScope, TranslatedCodeLine } from "../const";
 import type { VariableDeclaration } from "./definitions";
 import type { Expression } from "./expressions";
 import type { TargetTokenCodeGenerator } from "../../translation";
-import type { TargetTokenSemanticAnalyser } from "../semantic-analyser";
+import type { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 
 /**
  * Every antlr4 statement ctx type
