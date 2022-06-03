@@ -331,7 +331,7 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
 }
 
 /**
- * Character constant expression class, which represents an integer constant in the Kipper language.
+ * Character constant expression class, which represents a single character constant in the Kipper language.
  * @since 0.1.0
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {

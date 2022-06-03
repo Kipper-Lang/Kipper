@@ -25,7 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     implemented yet! Planned for v0.12)
   - `TypeofTypeSpecifierExpression`, which represents a dynamically evaluated type, such as `typeof("string")`.
     (Functionality not implemented yet! Planned for v0.11)
-- New Kipper meta type `type` in `compiler/semantics/const`, which represents the type of a type.
+- New constants in `compiler/semantics/const`:
+  - Kipper meta type `type`, which represents the type of a Kipper type.
+  - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in 
+    Kipper.
 
 ### Changed
 
