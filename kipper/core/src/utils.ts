@@ -2,13 +2,7 @@ import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext, Token } from "antlr4ts";
 import { ParseTree } from "antlr4ts/tree";
 import { CharStream } from "antlr4ts/CharStream";
-import {
-	CompilableParseToken,
-	CompoundStatement,
-	eligibleParentToken,
-	KipperScope,
-	RootFileParseToken,
-} from "./compiler";
+import { CompilableASTNode, CompoundStatement, compilableNodeParent, KipperScope, RootASTNode } from "./compiler";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
@@ -67,15 +61,15 @@ export function getParseTreeSource(inputStream: CharStream, parseTree: ParseTree
  * @param ctx The token ctx.
  * @since 0.4.0
  */
-export function determineScope(ctx: CompilableParseToken<any>): KipperScope {
+export function determineScope(ctx: CompilableASTNode<any>): KipperScope {
 	// Determine type by going up the parent structure, until a compound statement is hit or the root file parse
 	// token, which represents the entire programCtx.
-	let parent: eligibleParentToken = ctx.parent;
-	while (!(parent instanceof RootFileParseToken) && !(parent instanceof CompoundStatement)) {
+	let parent: compilableNodeParent = ctx.parent;
+	while (!(parent instanceof RootASTNode) && !(parent instanceof CompoundStatement)) {
 		parent = parent.parent;
 	}
 
-	if (parent instanceof RootFileParseToken) {
+	if (parent instanceof RootASTNode) {
 		return ctx.programCtx;
 	}
 	return parent;

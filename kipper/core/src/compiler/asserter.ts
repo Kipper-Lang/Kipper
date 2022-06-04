@@ -5,41 +5,23 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
-import { KipperProgramContext } from "../program-ctx";
-import { CompilableParseToken } from "./tokens";
-import { KipperError } from "../../errors";
-import { LogLevel } from "../../logger";
-import { getParseRuleSource } from "../../utils";
+import { KipperProgramContext } from "./program-ctx";
+import { KipperError } from "../errors";
+import { LogLevel } from "../logger";
+import { getParseRuleSource } from "../utils";
+import { KipperSemanticErrorHandler } from "./token-asserter";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
  * any form of misuse is found.
  * @since 0.7.0
  */
-export abstract class KipperAsserter {
+export abstract class KipperAsserter extends KipperSemanticErrorHandler {
 	public readonly programCtx: KipperProgramContext;
 
-	private line: number | undefined;
-
-	private col: number | undefined;
-
-	private ctx: CompilableParseToken<any> | undefined;
-
 	protected constructor(programCtx: KipperProgramContext) {
+		super();
 		this.programCtx = programCtx;
-	}
-
-	/**
-	 * Sets the traceback related line and column info.
-	 * @param ctx The token context.
-	 * @param line The line that is being processed at the moment.
-	 * @param col The column that is being processed at the moment.
-	 * @since 0.3.0
-	 */
-	public setTracebackData(ctx?: CompilableParseToken<any>, line?: number, col?: number): void {
-		this.line = line;
-		this.col = col;
-		this.ctx = ctx;
 	}
 
 	/**

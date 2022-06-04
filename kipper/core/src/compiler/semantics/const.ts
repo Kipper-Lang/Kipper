@@ -6,7 +6,7 @@
  */
 
 import type { KipperProgramContext } from "../program-ctx";
-import type { CompoundStatement } from "./tokens";
+import type { CompoundStatement } from "./language";
 import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
 
@@ -315,7 +315,7 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
 
 /**
- * Represents a scope for a {@link CompilableParseToken}.
+ * Represents a scope for a {@link CompilableASTNode}.
  * @since 0.6.0
  */
 export type KipperScope = KipperProgramContext | CompoundStatement;

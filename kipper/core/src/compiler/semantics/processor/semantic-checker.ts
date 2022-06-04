@@ -6,7 +6,12 @@
  * @since 0.7.0
  */
 
-import { CompoundStatement, Expression, ExpressionSemantics, IdentifierPrimaryExpression } from "./tokens";
+import {
+	type CompoundStatement,
+	type Expression,
+	type ExpressionSemantics,
+	IdentifierPrimaryExpression,
+} from "../language";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
@@ -21,19 +26,19 @@ import {
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
 	InvalidConversionError,
-} from "../../errors";
+} from "../../../errors";
 import {
-	KipperArithmeticOperator,
-	KipperFunction,
 	kipperPlusOperator,
-	KipperRef,
 	kipperStrLikeTypes,
 	kipperSupportedConversions,
-	KipperType,
-} from "./const";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import { KipperProgramContext } from "../program-ctx";
-import { KipperAsserter } from "./asserter";
+	type KipperRef,
+	type KipperArithmeticOperator,
+	type KipperFunction,
+	type KipperType,
+} from "../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
+import { KipperAsserter } from "../../asserter";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an

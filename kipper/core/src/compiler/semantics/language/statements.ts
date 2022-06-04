@@ -11,7 +11,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken, eligibleChildToken, eligibleParentToken } from "./parse-token";
+import type { compilableNodeChild, compilableNodeParent } from "../../parser/";
 import {
 	CompoundStatementContext,
 	ExpressionStatementContext,
@@ -26,6 +26,7 @@ import type { VariableDeclaration } from "./definitions";
 import type { Expression } from "./expressions";
 import type { TargetTokenCodeGenerator } from "../../translation";
 import type { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
+import { CompilableASTNode } from "../../parser";
 
 /**
  * Every antlr4 statement ctx type
@@ -42,7 +43,7 @@ export type antlrStatementCtxType =
  * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  */
-export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: eligibleParentToken): Statement<any> {
+export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any> {
 	if (antlrCtx instanceof CompoundStatementContext) {
 		return new CompoundStatement(antlrCtx, parent);
 	} else if (antlrCtx instanceof SelectionStatementContext) {
@@ -62,7 +63,7 @@ export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: el
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export abstract class Statement<Semantics> extends CompilableParseToken<Semantics> {
+export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -70,7 +71,7 @@ export abstract class Statement<Semantics> extends CompilableParseToken<Semantic
 	 */
 	protected override readonly _antlrRuleCtx: antlrStatementCtxType;
 
-	protected constructor(antlrCtx: antlrStatementCtxType, parent: eligibleParentToken) {
+	protected constructor(antlrCtx: antlrStatementCtxType, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 
@@ -111,9 +112,9 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 
 	protected readonly _children: Array<Statement<any>>;
 
-	private _localScope: Array<ScopeVariableDeclaration>;
+	private readonly _localScope: Array<ScopeVariableDeclaration>;
 
-	constructor(antlrCtx: CompoundStatementContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: CompoundStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._localScope = [];
@@ -218,7 +219,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 
 	protected readonly _children: Array<Statement<any>>;
 
-	constructor(antlrCtx: SelectionStatementContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: SelectionStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -275,7 +276,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 
 	protected readonly _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: ExpressionStatementContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: ExpressionStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -331,9 +332,9 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	 */
 	protected override readonly _antlrRuleCtx: IterationStatementContext;
 
-	protected readonly _children: Array<eligibleChildToken>;
+	protected readonly _children: Array<compilableNodeChild>;
 
-	constructor(antlrCtx: IterationStatementContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: IterationStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -342,7 +343,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<eligibleChildToken> {
+	public get children(): Array<compilableNodeChild> {
 		return this._children;
 	}
 
@@ -391,7 +392,7 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 
 	protected readonly _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: JumpStatementContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: JumpStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];

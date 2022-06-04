@@ -11,7 +11,6 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CharacterPrimaryExpression,
-	CompilableParseToken,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -38,15 +37,14 @@ import type {
 	VariableDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
-} from "../semantics";
-import {
 	GenericTypeSpecifierExpression,
 	SingleTypeSpecifierExpression,
 	TypeofTypeSpecifierExpression,
 } from "../semantics";
+import type { CompilableASTNode } from "../parser";
 
 /**
- * Represents a function that translates a Kipper {@link CompilableParseToken token} code into a
+ * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
  * {@link KipperCompileTarget specific language}.
  *
  * The return may only be of type {@link TranslatedExpression}, {@link TranslatedCodeLine} and
@@ -55,7 +53,7 @@ import {
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetTokenCodeGenerator<
-	T extends CompilableParseToken<any>,
+	T extends CompilableASTNode<any>,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
 	// eslint-disable-next-line no-unused-vars
 > = (token: T) => Promise<R>;

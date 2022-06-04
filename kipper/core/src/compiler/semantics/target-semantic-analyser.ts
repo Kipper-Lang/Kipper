@@ -5,7 +5,6 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CharacterPrimaryExpression,
-	CompilableParseToken,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -33,7 +32,9 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "./tokens";
+} from "./language";
+import type { CompilableASTNode } from "../parser";
+import { KipperSemanticErrorHandler } from "../token-asserter";
 
 /**
  * Represents a function that checks the semantics for a {@link CompoundStatement}.
@@ -42,14 +43,14 @@ import type {
  * @since 0.5.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TargetTokenSemanticAnalyser<T extends CompilableParseToken<any>> = (token: T) => Promise<void>;
+export type TargetTokenSemanticAnalyser<T extends CompilableASTNode<any>> = (token: T) => Promise<void>;
 
 /**
  * Represents a Semantic analyser that is specific for a {@link KipperCompileTarget}.
  * @since 0.5.0
  */
-export abstract class KipperTargetSemanticAnalyser {
-	/**
+export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHandler {
+	/**type
 	 * Performs translation-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
 	public abstract compoundStatement: TargetTokenSemanticAnalyser<CompoundStatement>;

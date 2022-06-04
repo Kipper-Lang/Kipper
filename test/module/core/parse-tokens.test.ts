@@ -1,23 +1,23 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { CompilableParseToken, KipperParseStream } from "@kipper/core";
+import { CompilableASTNode, KipperParseStream } from "@kipper/core";
 import { KipperProgramContext } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
-import { RootFileParseToken } from "@kipper/core";
+import { RootASTNode } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
 import { TargetTokenCodeGenerator } from "@kipper/core/";
 import { TargetTokenSemanticAnalyser } from "@kipper/core";
-import { eligibleParentToken } from "@kipper/core";
+import { compilableNodeParent } from "@kipper/core";
 import { ParserRuleContext } from "antlr4ts";
 import * as path from "path";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("Parse-Tokens", () => {
-	describe("CompilableParseToken", () => {
+	describe("CompilableASTNode", () => {
 		// Example class for testing purposes
-		class ExampleToken extends CompilableParseToken<any> {
-			constructor(antlrCtx: ParserRuleContext, parent: eligibleParentToken) {
+		class ExampleNode extends CompilableASTNode<any> {
+			constructor(antlrCtx: ParserRuleContext, parent: compilableNodeParent) {
 				super(antlrCtx, parent);
 			}
 
@@ -25,11 +25,11 @@ describe("Parse-Tokens", () => {
 				return Promise.resolve(undefined);
 			}
 
-			targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleToken> = async (T: ExampleToken) => {
+			targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleNode> = async (T: ExampleNode) => {
 				return;
 			};
 
-			targetCodeGenerator: TargetTokenCodeGenerator<ExampleToken, TranslatedCodeLine> = async (T: ExampleToken) => {
+			targetCodeGenerator: TargetTokenCodeGenerator<ExampleNode, TranslatedCodeLine> = async (T: ExampleNode) => {
 				return <TranslatedCodeLine>[];
 			};
 
@@ -49,8 +49,8 @@ describe("Parse-Tokens", () => {
 				assert(stream.charStream.sourceName === "anonymous-script");
 				assert(stream.charStream.toString() === fileContent);
 
-				let parenToken = new RootFileParseToken(programCtx);
-				let token = new ExampleToken(programCtx.antlrParseTree, parenToken);
+				let parenToken = new RootASTNode(programCtx, programCtx.antlrParseTree);
+				let token = new ExampleNode(programCtx.antlrParseTree, parenToken);
 				assert(token.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
 				assert(token.programCtx === programCtx, "Expected 'programCtx' to match");
 				assert(token.parent === parenToken, "Expected 'parent' to match");

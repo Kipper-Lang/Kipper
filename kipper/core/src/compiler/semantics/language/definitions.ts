@@ -1,10 +1,10 @@
 /**
- * Declaration statements in the Kipper language.
+ * Declaration and definitions in the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken, eligibleParentToken, SemanticData } from "./parse-token";
+import type { compilableNodeParent, SemanticData } from "../../parser";
 import {
 	CompoundStatementContext,
 	DeclarationContext,
@@ -15,15 +15,16 @@ import {
 	ParameterTypeListContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { ParseTree } from "antlr4ts/tree";
+import type { ScopeVariableDeclaration } from "../scope-declaration";
+import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
+import type { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
 import { TargetTokenCodeGenerator } from "../../translation";
 import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
-import { Expression, SingleTypeSpecifierExpression } from "./expressions";
-import { ParseTree } from "antlr4ts/tree";
-import { ScopeVariableDeclaration } from "../scope-declaration";
+import { CompilableASTNode } from "../../parser";
 
 /**
  * Every antlr4 definition ctx type
@@ -35,7 +36,10 @@ export type antlrDefinitionCtxType = FunctionDeclarationContext | ParameterDecla
  * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  */
-export function getDefinitionInstance(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken): Declaration<any> {
+export function getDefinitionInstance(
+	antlrCtx: antlrDefinitionCtxType,
+	parent: compilableNodeParent,
+): Declaration<any> {
 	if (antlrCtx instanceof FunctionDeclarationContext) {
 		return new FunctionDeclaration(antlrCtx, parent);
 	} else if (antlrCtx instanceof ParameterDeclarationContext) {
@@ -65,7 +69,7 @@ export interface DeclarationSemantics {
  * {@link FunctionDeclaration function declarations}.
  * @since 0.1.0
  */
-export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
+export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableASTNode<Semantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -73,7 +77,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	 */
 	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
-	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
+	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 
@@ -124,7 +128,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
-	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -202,7 +206,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
-	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -322,7 +326,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 	protected override _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];

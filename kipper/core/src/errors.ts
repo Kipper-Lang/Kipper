@@ -475,7 +475,7 @@ export class UnableToDetermineMetadataError extends KipperInternalError {
 }
 
 /**
- * Error that is thrown whenever the {@link CompilableParseToken.semanticData} field of a token is undefined.
+ * Error that is thrown whenever the {@link CompilableASTNode.semanticData} field of a token is undefined.
  * @since 0.6.0
  */
 export class UndefinedSemanticsError extends KipperInternalError {

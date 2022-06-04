@@ -5,13 +5,13 @@
  * @since 0.0.2
  */
 import { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
-import { RecognitionException } from "antlr4ts/RecognitionException";
-import { Recognizer } from "antlr4ts/Recognizer";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperSyntaxError } from "../errors";
-import { KipperParseStream } from "./parser";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
+import type { KipperParseStream } from "./parser";
+import type { RecognitionException } from "antlr4ts/RecognitionException";
+import type { Recognizer } from "antlr4ts/Recognizer";
 
 /**
  * The Error Handler for the Kipper implementation of {@link ANTLRErrorListener}

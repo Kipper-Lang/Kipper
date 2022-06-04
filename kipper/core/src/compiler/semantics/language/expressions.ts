@@ -4,7 +4,6 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
 	ArraySpecifierPostfixExpressionContext,
@@ -33,28 +32,29 @@ import {
 	TypeofTypeSpecifierContext,
 } from "../../parser";
 import {
-	KipperAdditiveOperator,
+	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
-	KipperArithmeticOperator,
-	KipperBoolTypeLiterals,
+	type KipperArithmeticOperator,
+	type KipperBoolTypeLiterals,
 	kipperCharType,
-	KipperCharType,
-	KipperFunction,
-	KipperListType,
-	KipperMultiplicativeOperator,
+	type KipperCharType,
+	type KipperFunction,
+	type KipperListType,
+	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
-	KipperNumType,
+	type KipperNumType,
 	kipperStrType,
-	KipperStrType,
-	KipperType,
-	TranslatedExpression,
+	type KipperStrType,
+	type KipperType,
+	type TranslatedExpression,
 } from "../const";
+import type { TargetTokenCodeGenerator } from "../../translation";
+import type { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
+import { CompoundStatement } from "./statements";
+import { CompilableASTNode } from "../../parser";
 import { ScopeVariableDeclaration } from "../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
 import { TerminalNode } from "antlr4ts/tree";
-import { CompoundStatement } from "./statements";
 
 /**
  * Every antlr4 expression ctx type
@@ -93,7 +93,7 @@ export type antlrExpressionCtxType =
  */
 export function getExpressionInstance(
 	antlrCtx: antlrExpressionCtxType,
-	parent: CompilableParseToken<any>,
+	parent: CompilableASTNode<any>,
 ): Expression<any> {
 	if (antlrCtx instanceof NumberPrimaryExpressionContext) {
 		return new NumberPrimaryExpression(antlrCtx, parent);
@@ -174,7 +174,7 @@ export interface ExpressionSemantics {
  * @abstract
  * @since 0.1.0
  */
-export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableParseToken<Semantics> {
+export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableASTNode<Semantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -184,7 +184,7 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 
 	protected override _children: Array<Expression<any>>;
 
-	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken<any>) {
+	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -274,7 +274,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
 
-	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -342,7 +342,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	 */
 	protected override readonly _antlrRuleCtx: CharacterPrimaryExpressionContext;
 
-	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -410,7 +410,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 */
 	protected override readonly _antlrRuleCtx: ListPrimaryExpressionContext;
 
-	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -477,7 +477,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
-	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -546,7 +546,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
 
-	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -624,7 +624,7 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 	 */
 	protected override readonly _antlrRuleCtx: SingleTypeSpecifierContext;
 
-	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -688,7 +688,7 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 	 */
 	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
 
-	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -751,7 +751,7 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 	 */
 	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
 
-	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -814,7 +814,7 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	 */
 	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
-	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -880,7 +880,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -942,7 +942,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 */
 	protected override readonly _antlrRuleCtx: TangledPrimaryExpressionContext;
 
-	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1005,7 +1005,7 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1069,7 +1069,7 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 */
 	protected override readonly _antlrRuleCtx: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1147,7 +1147,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 */
 	protected override readonly _antlrRuleCtx: FunctionCallPostfixExpressionContext;
 
-	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1223,7 +1223,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1289,7 +1289,7 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 */
 	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1365,7 +1365,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 */
 	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
 
-	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1476,7 +1476,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 */
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
-	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1574,7 +1574,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 */
 	protected override readonly _antlrRuleCtx: AdditiveExpressionContext;
 
-	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1676,7 +1676,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
 
-	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1744,7 +1744,7 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	 */
 	protected override readonly _antlrRuleCtx: EqualityExpressionContext;
 
-	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1811,7 +1811,7 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
 
-	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1876,7 +1876,7 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	 */
 	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
-	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1939,7 +1939,7 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 */
 	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
-	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -2015,7 +2015,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
-	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}

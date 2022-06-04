@@ -4,15 +4,15 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "./const";
-import {
+import type { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "./const";
+import type {
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
-} from "./tokens";
+} from "./language";
 import type { KipperProgramContext } from "../program-ctx";
 
 /**

@@ -6,13 +6,13 @@
  * @since 0.7.0
  */
 
-import { KipperAsserter } from "./asserter";
-import { Expression, ExpressionSemantics, ParameterDeclaration } from "./tokens";
-import { KipperFunction, kipperReturnTypes, KipperType, kipperTypes } from "./const";
-import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../errors";
-import { ScopeVariableDeclaration } from "./scope-declaration";
-import type { BuiltInFunctionArgument } from "../runtime-built-ins";
-import type { KipperProgramContext } from "../program-ctx";
+import { KipperAsserter } from "../../asserter";
+import { Expression, ExpressionSemantics, ParameterDeclaration } from "../language";
+import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
+import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../../errors";
+import type { ScopeVariableDeclaration } from "../scope-declaration";
+import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
+import type { KipperProgramContext } from "../../program-ctx";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an

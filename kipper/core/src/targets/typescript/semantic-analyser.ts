@@ -46,6 +46,10 @@ import {
  * @since 0.8.0
  */
 export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
+	private checkIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
+		// TODO!
+	}
+
 	/**
 	 * Performs typescript-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
