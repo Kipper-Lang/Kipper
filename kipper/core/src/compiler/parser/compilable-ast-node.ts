@@ -1,5 +1,5 @@
 /**
- * Compilable AST Parser Node that can be semantically analysed and translated into a target language.
+ * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
@@ -27,7 +27,7 @@ export type compilableNodeParent = CompilableASTNode<any> | RootASTNode;
 export type compilableNodeChild = CompilableASTNode<any>;
 
 /**
- * Compilable AST Parser Node that can be semantically analysed and translated into a target language.
+ * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
 export abstract class CompilableASTNode<Semantics extends SemanticData> extends ParserASTNode<Semantics> {

@@ -1,6 +1,5 @@
 /**
- * The root parse AST node of a file which contains all AST nodes of a file. This class is used to represent a file in
- * form of a single root node.
+ * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
@@ -13,8 +12,7 @@ import { NoSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 
 /**
- * The root parse AST node of a file which contains all AST nodes of a file. This class is used to represent a file in
- * form of a single root node.
+ * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
 export class RootASTNode extends ParserASTNode<NoSemantics> {

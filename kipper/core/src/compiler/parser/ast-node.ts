@@ -1,6 +1,7 @@
 /**
- * A Kipper Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and adds
- * additional semantic metadata.
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * simplifies its content down to a simplified representation, which can be used for semantic analysis and
+ * code translation.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
@@ -25,8 +26,9 @@ export type SemanticData = Record<string, any>;
 export interface NoSemantics {}
 
 /**
- * A Kipper Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and adds
- * additional semantic metadata.
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * simplifies its content down to a simplified representation, which can be used for semantic analysis and
+ * code translation.
  * @since 0.8.0
  */
 export abstract class ParserASTNode<Semantics extends SemanticData> {
