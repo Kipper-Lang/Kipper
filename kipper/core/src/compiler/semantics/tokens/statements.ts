@@ -152,7 +152,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 
 		// Add new declaration or definition
 		const declaration = new ScopeVariableDeclaration(token);
-		this._localScope = this._localScope.concat(declaration);
+		this._localScope.push(declaration);
 		return declaration;
 	}
 

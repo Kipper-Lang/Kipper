@@ -220,7 +220,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// TODO! Add tests for this
 		let genCode: TranslatedExpression = [];
 		for (let child of token.children) {
-			genCode = genCode.concat(await child.translateCtxAndChildren());
+			genCode.push(...(await child.translateCtxAndChildren()));
 		}
 		return genCode;
 	};

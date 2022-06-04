@@ -38,7 +38,6 @@ import {
 	IterationStatementContext,
 	JumpStatementContext,
 	KipperListener,
-	ListConstantContext,
 	ListPrimaryExpressionContext,
 	NestedParenthesesBlockContext,
 	NumberPrimaryExpressionContext,
@@ -72,7 +71,7 @@ import {
 	RootFileParseToken,
 	Statement,
 } from "./tokens";
-import { IfStatementContext, SwitchStatementContext } from "../parser/antlr/KipperParser";
+import { IfStatementContext, SwitchStatementContext } from "../parser";
 
 const passOnHandler = undefined;
 
@@ -470,18 +469,6 @@ export class KipperFileListener implements KipperListener {
 	public exitBoolPrimaryExpression(ctx: BoolPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.listConstant`.
-	 * @param ctx The parse tree
-	 */
-	public enterListConstant(ctx: ListConstantContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.listConstant`.
-	 * @param ctx The parse tree
-	 */
-	public exitListConstant(ctx: ListConstantContext): void {}
 
 	/**
 	 * We are ignoring postfix expressions, and only going to handle the rules 'referenceExpression' and

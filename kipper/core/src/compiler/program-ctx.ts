@@ -450,7 +450,7 @@ export class KipperProgramContext {
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
-		this._builtInGlobals = this._builtInGlobals.concat(newGlobals);
+		this._builtInGlobals.push(...newGlobals);
 	}
 
 	/**
@@ -476,7 +476,7 @@ export class KipperProgramContext {
 
 		const declaration =
 			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token);
-		this._globalScope = this._globalScope.concat(declaration);
+		this._globalScope.push(declaration);
 		return declaration;
 	}
 }
