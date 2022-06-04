@@ -61,18 +61,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `builtIns` to `kipperRuntimeBuiltIns`.
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
+- Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 
 ### Removed
 
 - Module `kipper/core/compiler/lib`, as the built-ins shall from now on be handled by each individual target instead
   of the whole Kipper package to allow a unique specific implementation per target.
-- Removed the following deprecated errors and functions:
+- Deprecated errors and functions:
   - `UnknownFunctionIdentifierError`
   - `UnknownVariableIdentifierError`
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
-- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
+- `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
   for example `print`) anymore.
+- Support for multi strings seperated by a whitespace (e.g. `"1" "2"` is counted as a single string `"12"`). This 
+	may be added back later, but for now it will be removed from the Kipper language. 
 
 ## [0.7.0] - 2022-05-22
 
