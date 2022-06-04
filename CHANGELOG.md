@@ -63,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `builtIns` to `kipperRuntimeBuiltIns`.
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
+  - `ParserASTNode.ensureTokenChildrenExist` to `getTokenChildren`.
+  - `ParserASTNode.ensureSemanticDataExists` to `getSemanticData`.
 - Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 - Updated `@kipper/core` code base structure:
   - `/parser/` now contains these new files:
