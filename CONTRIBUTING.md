@@ -142,11 +142,11 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 - If you want to add new syntax, you will have to edit the Antlr4 `/kipper/core/Kipper.g4` file and update the
   `KipperFileListener`, which walks through a generated parse tree and determines what items
-  should be added to the `RootASTNode` (represents the root node of the entire file, which contains all top-level 
-	statements and declarations as child nodes).
-- If you want to update the compiler logic and semantics, you will have to work in the `/compiler/semantics` folder of 
-	`@kipper/core`, where the semantic analyser, type checker and AST node classes are implemented that represent Kipper 
-	expressions, declarations and statements.
+  should be added to the `RootASTNode` (represents the root node of the entire file, which contains all top-level
+  statements and declarations as child nodes).
+- If you want to update the compiler logic and semantics, you will have to work in the `/compiler/semantics` folder of
+  `@kipper/core`, where the semantic analyser, type checker and AST node classes are implemented that represent Kipper
+  expressions, declarations and statements.
 - If you want to update the default translation to TypeScript, you will have to work in the
   `/compiler/target/typescript` file, which contains the semantic analyser and target code generator for TypeScript.
 - If you want to work on a new target or add any other functionality, you should add new files that extend the existing
@@ -233,10 +233,10 @@ this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 To update the behaviour of how a Kipper target translates, the target code generator (`KipperTargetCodeGenerator`) and
 target built-in generator (`KipperTargetBuiltInGenerator`) can be updated, which implement the code generation.
 
-In most cases, the `KipperTargetBuiltInGenerator` can be left alone, as it implements core and internal functionality 
+In most cases, the `KipperTargetBuiltInGenerator` can be left alone, as it implements core and internal functionality
 for keywords and internal logic.
 
-For example, the translation behaviour of the TypeScript target can be updated in the 
+For example, the translation behaviour of the TypeScript target can be updated in the
 `@kipper/core/compiler/targets/typescript` folder.
 
 ## Testing
