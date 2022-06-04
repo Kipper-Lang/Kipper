@@ -25,14 +25,14 @@ import { PassOnPostfixExpressionContext } from "./KipperParser";
 import { ArraySpecifierPostfixExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
 import { FunctionCallPostfixExpressionContext } from "./KipperParser";
+import { TangledPrimaryExpressionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
+import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
-import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
-import { CharacterPrimaryExpressionContext } from "./KipperParser";
 import { ListPrimaryExpressionContext } from "./KipperParser";
-import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { SingleTypeSpecifierContext } from "./KipperParser";
@@ -48,7 +48,6 @@ import { ExternalItemContext } from "./KipperParser";
 import { FunctionDeclarationContext } from "./KipperParser";
 import { EndOfLineContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { ListConstantContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { ArraySpecifierContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -286,12 +285,36 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitFunctionCallPostfixExpression?: (ctx: FunctionCallPostfixExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `tangledPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `boolPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `identifierPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitIdentifierPrimaryExpression?: (ctx: IdentifierPrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `characterPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCharacterPrimaryExpression?: (ctx: CharacterPrimaryExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `stringPrimaryExpression`
@@ -310,14 +333,6 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `tangledPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `numberPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
@@ -326,28 +341,12 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitNumberPrimaryExpression?: (ctx: NumberPrimaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `characterPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitCharacterPrimaryExpression?: (ctx: CharacterPrimaryExpressionContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by the `listPrimaryExpression`
 	 * labeled alternative in `KipperParser.primaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitListPrimaryExpression?: (ctx: ListPrimaryExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `boolPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
@@ -462,13 +461,6 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPrimaryExpression?: (ctx: PrimaryExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.listConstant`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitListConstant?: (ctx: ListConstantContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.postfixExpression`.
