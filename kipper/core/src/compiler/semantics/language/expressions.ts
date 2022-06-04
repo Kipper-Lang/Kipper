@@ -646,7 +646,7 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -709,7 +709,7 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -772,7 +772,7 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -1158,7 +1158,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
-		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].ensureSemanticDataExists();
+		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].getSemanticData();
 
 		// Fetching the called function and its semantic data
 		const calledFunc = this.programCtx.semanticCheck(this).getExistingFunction(identifierSemantics.identifier);
@@ -1184,7 +1184,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.function, semanticData.args);
 	}
@@ -1377,7 +1377,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetching the original exp and the type using the children
 		const exp: Expression<any> = this.children[0];
-		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).ensureSemanticDataExists().type;
+		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).getSemanticData().type;
 
 		// Ensure the children are fully present and not undefined
 		if (!exp || !type) {
@@ -1397,7 +1397,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
 	}
@@ -1486,7 +1486,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		const operator = <KipperMultiplicativeOperator | undefined>children
 			.find((token) => {
@@ -1584,7 +1584,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		const operator = <KipperAdditiveOperator | undefined>children
 			.find((token) => {
@@ -1604,8 +1604,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		const evaluateType: () => KipperType = () => {
-			const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
-			const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+			const exp1Type = exp1.getSemanticData().evaluatedType;
+			const exp2Type = exp2.getSemanticData().evaluatedType;
 			if (exp1Type === exp2Type) {
 				return exp1.semanticData.evaluatedType;
 			} else if (
@@ -2040,7 +2040,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		}
 
 		// Get the semantics / the evaluated type of this expression
-		const valueSemantics = assignValue.ensureSemanticDataExists();
+		const valueSemantics = assignValue.getSemanticData();
 		this.semanticData = {
 			evaluatedType: valueSemantics.evaluatedType,
 			value: assignValue,
@@ -2054,7 +2054,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validAssignment(semanticData.identifier, semanticData.value);
 	}

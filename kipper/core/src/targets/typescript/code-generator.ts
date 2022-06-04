@@ -114,7 +114,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into the typescript language.
 	 */
 	variableDeclaration = async (token: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
 		const tsType = getTypeScriptType(semanticData.valueType);
@@ -139,7 +139,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
 	 */
 	numberPrimaryExpression = async (token: NumberPrimaryExpression): Promise<TranslatedExpression> => {
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		return [
 			semanticData.value, // Simply get the constant value
@@ -164,7 +164,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link IdentifierPrimaryExpression} into the typescript language.
 	 */
 	identifierPrimaryExpression = async (token: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		return [semanticData.identifier];
 	};
@@ -194,7 +194,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link StringPrimaryExpression} into the typescript language.
 	 */
 	stringPrimaryExpression = async (token: StringPrimaryExpression): Promise<TranslatedExpression> => {
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		return [`"${semanticData.value}"`];
 	};
@@ -210,7 +210,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link BoolPrimaryExpression} into the typescript language.
 	 */
 	boolPrimaryExpression = async (token: BoolPrimaryExpression): Promise<TranslatedExpression> => {
-		return [token.ensureSemanticDataExists().value];
+		return [token.getSemanticData().value];
 	};
 
 	/**
@@ -244,7 +244,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	functionCallPostfixExpression = async (token: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 		const func = token.programCtx.semanticCheck(token).getExistingFunction(semanticData.identifier);
 
 		// Get the proper identifier for the function
@@ -284,10 +284,10 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	castOrConvertExpression = async (token: CastOrConvertExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
-		const originalType: KipperType = semanticData.exp.ensureSemanticDataExists().evaluatedType;
+		const originalType: KipperType = semanticData.exp.getSemanticData().evaluatedType;
 		const destType: KipperType = semanticData.type;
 
 		if (originalType === destType) {
@@ -304,7 +304,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	multiplicativeExpression = async (token: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
@@ -316,7 +316,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	additiveExpression = async (token: AdditiveExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
 		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
@@ -362,9 +362,9 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the typescript language.
 	 */
 	assignmentExpression = async (token: AssignmentExpression): Promise<TranslatedExpression> => {
-		const semanticData = token.ensureSemanticDataExists();
+		const semanticData = token.getSemanticData();
 
-		const identifier = semanticData.identifier.ensureSemanticDataExists().identifier;
+		const identifier = semanticData.identifier.getSemanticData().identifier;
 		const assignValue = await semanticData.value.translateCtxAndChildren();
 
 		// Only add ' = EXP' if assignValue is defined

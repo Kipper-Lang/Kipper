@@ -223,7 +223,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
@@ -241,7 +241,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: KipperType = typeSpecifier.ensureSemanticDataExists().type;
+		const type: KipperType = typeSpecifier.getSemanticData().type;
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
@@ -261,7 +261,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
@@ -348,7 +348,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children: Array<ParseTree> = this.ensureTokenChildrenExist();
+		const children: Array<ParseTree> = this.getTokenChildren();
 
 		// Determine the ctx instances
 		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
@@ -377,7 +377,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType = typeSpecifier.ensureSemanticDataExists().type;
+		const valueType = typeSpecifier.getSemanticData().type;
 		const scope = determineScope(this);
 
 		this.semanticData = {
@@ -403,7 +403,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		// Check whether the type of the variable even exists
 		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);

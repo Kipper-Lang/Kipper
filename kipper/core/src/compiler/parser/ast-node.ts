@@ -105,15 +105,16 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: ParserASTNode<any>) {
+	public addNewChild(newChild: ParserASTNode<any>): void {
 		this._children.push(newChild);
 	}
 
 	/**
-	 * Ensures that the children of this AST node are present.
+	 * Returns the children of the {@link antlrRuleCtx} and throws an error in case they are undefined.
+	 * @throws UnableToDetermineMetadataError If {@link antlrRuleCtx.children} is undefined.
 	 * @since 0.8.0
 	 */
-	public ensureTokenChildrenExist(): ParseTree[] {
+	public getTokenChildren(): Array<ParseTree> {
 		if (this.antlrRuleCtx.children === undefined) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -121,10 +122,11 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * Ensures the semantic data of this AST node exists.
+	 * Returns the semantic data of this AST node and throws an error in case it is undefined.
+	 * @throws UnableToDetermineMetadataError If {@link semanticData} is undefined.
 	 * @since 0.8.0
 	 */
-	public ensureSemanticDataExists(): Semantics {
+	public getSemanticData(): Semantics {
 		if (this.semanticData === undefined) {
 			throw new UndefinedSemanticsError();
 		}

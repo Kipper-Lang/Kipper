@@ -184,8 +184,8 @@ export class KipperSemanticChecker extends KipperAsserter {
 		exp2: Expression<ExpressionSemantics>,
 		op: KipperArithmeticOperator,
 	): void {
-		const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
-		const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+		const exp1Type = exp1.getSemanticData().evaluatedType;
+		const exp2Type = exp2.getSemanticData().evaluatedType;
 		if (exp1Type !== exp2Type) {
 			// String-like types can use '+' to concat strings
 			if (
@@ -308,7 +308,7 @@ export class KipperSemanticChecker extends KipperAsserter {
 	 * @since 0.8.0
 	 */
 	public validConversion(exp: Expression<any>, type: KipperType): void {
-		const originalType: KipperType = exp.ensureSemanticDataExists().evaluatedType;
+		const originalType: KipperType = exp.getSemanticData().evaluatedType;
 
 		const viableConversion = (() => {
 			// Check whether a supported pair of types exist.
