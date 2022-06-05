@@ -469,7 +469,7 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
  */
 export class UnableToDetermineMetadataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more tokens.`);
+		super(`Failed to determine metadata for one or more parse tree or AST nodes.`);
 	}
 }
 

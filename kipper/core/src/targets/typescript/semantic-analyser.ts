@@ -40,7 +40,7 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
-import { ReservedIdentifierOverwriteError } from "../../errors";
+import { KipperError, ReservedIdentifierOverwriteError } from "../../errors";
 
 /**
  * All reserved identifiers in TypeScript that may not be overwritten.

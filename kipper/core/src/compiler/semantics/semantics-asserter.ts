@@ -41,9 +41,6 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 		});
 		error.antlrCtx = this.ctx?.antlrRuleCtx;
 
-		// Log the error
-		this.programCtx.logger.reportError(LogLevel.ERROR, error);
-
 		return error;
 	}
 }

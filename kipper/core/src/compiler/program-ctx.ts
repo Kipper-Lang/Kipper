@@ -12,8 +12,8 @@ import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCod
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
-import { KipperLogger } from "../logger";
-import { KipperInternalError, UndefinedSemanticsError } from "../errors";
+import { KipperLogger, LogLevel } from "../logger";
+import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
@@ -270,13 +270,22 @@ export class KipperProgramContext {
 	 * @since 0.6.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
-		if (!this._processedParseTree) {
-			this._processedParseTree = await this.generateAbstractSyntaxTree(
-				new KipperFileListener(this, this.antlrParseTree),
-			);
-		}
+		try {
+			if (!this._processedParseTree) {
+				this._processedParseTree = await this.generateAbstractSyntaxTree(
+					new KipperFileListener(this, this.antlrParseTree),
+				);
+			}
+			await this._processedParseTree.semanticAnalysis();
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
 
-		return await this._processedParseTree.semanticAnalysis();
+			// Re-throw the error
+			throw e;
+		}
 	}
 
 	/**
@@ -290,13 +299,24 @@ export class KipperProgramContext {
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
 		if (!this._processedParseTree) {
+			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
-		let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
+		try {
+			let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
 
-		// Append required typescript code for Kipper for the program to work properly
-		return (await this.generateRequirements()).concat(genCode);
+			// Append required typescript code for Kipper for the program to work properly
+			return (await this.generateRequirements()).concat(genCode);
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
 	}
 
 	/**
@@ -342,12 +362,24 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private async generateAbstractSyntaxTree(listener: KipperFileListener): Promise<RootASTNode> {
-		// The walker used to go through the parse tree.
-		const walker = new ParseTreeWalker();
+		try {
+			// The walker used to go through the parse tree.
+			const walker = new ParseTreeWalker();
 
-		// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-		this.logger.debug(`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`);
-		walker.walk(listener, this.antlrParseTree);
+			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
+			this.logger.debug(
+				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
+			);
+			walker.walk(listener, this.antlrParseTree);
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
 
 		if (!listener.rootNode) {
 			// This should usually never happen. If it does, then something went wrong terribly
