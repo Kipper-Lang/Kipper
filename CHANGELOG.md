@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
   - `ParserASTNode.ensureTokenChildrenExist` to `getTokenChildren`.
   - `ParserASTNode.ensureSemanticDataExists` to `getSemanticData`.
+  - `KipperError.setMetadata` to `KipperError.setTracebackData()`.
   - `KipperAsserter` to `KipperSemanticsAsserter`.
   - `TargetTokenCodeGenerator` to `TargetASTNodeCodeGenerator`.
   - `TargetTokenSemanticAnalyser` to `TargetASTNodeSemanticAnalyser`.
@@ -91,6 +92,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for example `print`) anymore.
 - Support for multi strings seperated by a whitespace (e.g. `"1" "2"` is counted as a single string `"12"`). This
   may be added back later, but for now it will be removed from the Kipper language.
+- Error `InvalidOverwriteError`, as all errors it represented are now subclasses of `IdentifierError`.
 
 ## [0.7.0] - 2022-05-22
 
