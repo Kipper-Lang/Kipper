@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented type conversion expressions, which allow for the conversion of a value to another type. 
+- Implemented type conversion expressions, which allow for the conversion of a value to another type.
   ([#133](https://github.com/Luna-Klatzer/Kipper/issues/133)) The following conversions are supported:
   - `str` as `num`
   - `num` as `str`
@@ -19,9 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   expressions. (`true` and `false` are now reserved identifiers, which can never be overwritten and any attempts to do
   so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
   target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
-  translation function `KipperTargetCodeGenerator.boolPrimaryExpression`. 
+  translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
   ([#134](https://github.com/Luna-Klatzer/Kipper/issues/134))
-- Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal 
+- Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal
   identifier or reserved identifier/keyword. ([#153](https://github.com/Luna-Klatzer/Kipper/issues/153))
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 - New classes and interfaces:
