@@ -72,12 +72,12 @@ describe("Kipper errors", () => {
 				programCtx.registerGlobals({ identifier: "i", args: [], returnType: "void" });
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
-				assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-				assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+				assert((<KipperError>e).line !== undefined, "Expected existing 'line' meta field");
+				assert((<KipperError>e).col !== undefined, "Expected existing 'col' meta field");
 
 				// Token src should not exist, since this is a configuration error!
 				assert((<KipperError>e).tokenSrc === undefined, "Expected non-existing 'tokenSrc' meta field");
-				assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+				assert((<KipperError>e).filePath !== undefined, "Expected existing 'filePath' meta field");
 				return;
 			}
 			assert(false, "Expected 'InvalidGlobalError'");
