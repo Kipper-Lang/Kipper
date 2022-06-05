@@ -5,8 +5,8 @@ import { KipperProgramContext } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
 import { RootASTNode } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
-import { TargetTokenCodeGenerator } from "@kipper/core/";
-import { TargetTokenSemanticAnalyser } from "@kipper/core";
+import { TargetASTNodeCodeGenerator } from "@kipper/core/";
+import { TargetASTNodeSemanticAnalyser } from "@kipper/core";
 import { compilableNodeParent } from "@kipper/core";
 import { ParserRuleContext } from "antlr4ts";
 import * as path from "path";
@@ -25,11 +25,11 @@ describe("Parse-Tokens", () => {
 				return Promise.resolve(undefined);
 			}
 
-			targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExampleNode> = async (T: ExampleNode) => {
-				return;
+			targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExampleNode> = () => {
+				return Promise.resolve(undefined);
 			};
 
-			targetCodeGenerator: TargetTokenCodeGenerator<ExampleNode, TranslatedCodeLine> = async (T: ExampleNode) => {
+			targetCodeGenerator: TargetASTNodeCodeGenerator<ExampleNode, TranslatedCodeLine> = async () => {
 				return <TranslatedCodeLine>[];
 			};
 
@@ -50,11 +50,11 @@ describe("Parse-Tokens", () => {
 				assert(stream.charStream.toString() === fileContent);
 
 				let parenToken = new RootASTNode(programCtx, programCtx.antlrParseTree);
-				let token = new ExampleNode(programCtx.antlrParseTree, parenToken);
-				assert(token.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
-				assert(token.programCtx === programCtx, "Expected 'programCtx' to match");
-				assert(token.parent === parenToken, "Expected 'parent' to match");
-				assert(token.parent.programCtx === programCtx, "Expected 'parent' to match");
+				let node = new ExampleNode(programCtx.antlrParseTree, parenToken);
+				assert(node.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
+				assert(node.programCtx === programCtx, "Expected 'programCtx' to match");
+				assert(node.parent === parenToken, "Expected 'parent' to match");
+				assert(node.parent.programCtx === programCtx, "Expected 'parent' to match");
 			});
 		});
 	});
