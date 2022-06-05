@@ -6,20 +6,20 @@
  * @since 0.7.0
  */
 
-import { KipperAsserter } from "./asserter";
-import { Expression, ExpressionSemantics, ParameterDeclaration } from "./tokens";
-import { KipperFunction, kipperReturnTypes, KipperType, kipperTypes } from "./const";
-import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../errors";
-import { ScopeVariableDeclaration } from "./scope-declaration";
-import type { BuiltInFunctionArgument } from "../runtime-built-ins";
-import type { KipperProgramContext } from "../program-ctx";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
+import { Expression, ExpressionSemantics, ParameterDeclaration } from "../language";
+import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
+import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../../errors";
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
+import type { KipperProgramContext } from "../../program-ctx";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
  * invalid use of types and identifiers is detected.
  * @since 0.7.0
  */
-export class KipperTypeChecker extends KipperAsserter {
+export class KipperTypeChecker extends KipperSemanticsAsserter {
 	constructor(programCtx: KipperProgramContext) {
 		super(programCtx);
 	}
@@ -54,8 +54,8 @@ export class KipperTypeChecker extends KipperAsserter {
 	 * @since 0.7.0
 	 */
 	public validAssignment(leftExp: Expression<any>, rightExp: Expression<any>): void {
-		const leftExpType = leftExp.ensureSemanticDataExists().evaluatedType;
-		const rightExpType = rightExp.ensureSemanticDataExists().evaluatedType;
+		const leftExpType = leftExp.getSemanticData().evaluatedType;
+		const rightExpType = rightExp.getSemanticData().evaluatedType;
 		if (leftExpType !== rightExpType) {
 			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
 		}
@@ -69,7 +69,7 @@ export class KipperTypeChecker extends KipperAsserter {
 	 */
 	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, rightExp: Expression<any>): void {
 		const leftExpType = scopeEntry.type;
-		const rightExpType = rightExp.ensureSemanticDataExists().evaluatedType;
+		const rightExpType = rightExp.getSemanticData().evaluatedType;
 		if (leftExpType !== rightExpType) {
 			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
 		}
@@ -85,7 +85,7 @@ export class KipperTypeChecker extends KipperAsserter {
 	 * @since 0.7.0
 	 */
 	public argumentTypesMatch(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
-		const semanticData = arg instanceof ParameterDeclaration ? arg.ensureSemanticDataExists() : arg;
+		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
 
 		if (semanticData.type !== receivedType) {
 			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
@@ -101,7 +101,7 @@ export class KipperTypeChecker extends KipperAsserter {
 	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression<ExpressionSemantics>, index) => {
-			const semanticData = arg.ensureSemanticDataExists();
+			const semanticData = arg.getSemanticData();
 			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
 		});
 	}

@@ -72,12 +72,12 @@ describe("Kipper errors", () => {
 				programCtx.registerGlobals({ identifier: "i", args: [], returnType: "void" });
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
-				assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
-				assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+				assert((<KipperError>e).line !== undefined, "Expected existing 'line' meta field");
+				assert((<KipperError>e).col !== undefined, "Expected existing 'col' meta field");
 
 				// Token src should not exist, since this is a configuration error!
 				assert((<KipperError>e).tokenSrc === undefined, "Expected non-existing 'tokenSrc' meta field");
-				assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+				assert((<KipperError>e).filePath !== undefined, "Expected existing 'filePath' meta field");
 				return;
 			}
 			assert(false, "Expected 'InvalidGlobalError'");
@@ -800,7 +800,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("var x: num = 0; x = 3 + 3;");
 					} catch (e) {
-						assert(false, "Expected no 'InvalidArithmeticOperationError'");
+						assert(false, "Expected no 'InvalidAssignmentError'");
 					}
 				});
 			});
@@ -878,7 +878,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile('var x: str = "3";');
 					} catch (e) {
-						assert(false, "Expected no 'InvalidArithmeticOperationError'");
+						assert(false, "Expected no 'TypeError'");
 					}
 				});
 
@@ -886,7 +886,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("var x: num = 3;");
 					} catch (e) {
-						assert(false, "Expected no 'InvalidArithmeticOperationError'");
+						assert(false, "Expected no 'TypeError'");
 					}
 				});
 			});
@@ -1017,6 +1017,31 @@ describe("Kipper errors", () => {
 						assert(false, "Expected no 'InvalidConversionError'");
 					}
 				});
+			});
+		});
+
+		describe("ReservedIdentifierOverwriteError", () => {
+			it("Error", async () => {
+				try {
+					await new KipperCompiler().compile(new KipperParseStream("var instanceof: str; x = 5;"));
+				} catch (e) {
+					assert((<KipperError>e).constructor.name === "ReservedIdentifierOverwriteError", "Expected proper error");
+					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+					assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+					return;
+				}
+				assert(false, "Expected 'ReservedIdentifierOverwriteError'");
+			});
+
+			it("NoError", async () => {
+				try {
+					await new KipperCompiler().compile('var valid: str = "3";');
+				} catch (e) {
+					assert(false, "Expected no 'ReservedIdentifierOverwriteError'");
+				}
 			});
 		});
 	});

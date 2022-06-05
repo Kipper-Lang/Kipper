@@ -125,7 +125,7 @@ If antlr4 is not installed, install it from here: https://www.antlr.org/
    For example:
 
    ```
-   Bumped static versions to 0.5.0-rc.0
+   Bumped static index.ts versions to 0.5.0-rc.0
    ```
 
 4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to

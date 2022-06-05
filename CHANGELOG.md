@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Type Conversion expressions, which allow for the conversion of types to other types using Kipper defined
-  conversion functions. The following conversions are implemented:
+- Implemented type conversion expressions, which allow for the conversion of a value to another type.
+  ([#133](https://github.com/Luna-Klatzer/Kipper/issues/133)) The following conversions are supported:
   - `str` as `num`
   - `num` as `str`
   - `bool` as `str`
@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
   target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
   translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
+  ([#134](https://github.com/Luna-Klatzer/Kipper/issues/134))
+- Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal
+  identifier or reserved identifier/keyword. ([#153](https://github.com/Luna-Klatzer/Kipper/issues/153))
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 - New classes and interfaces:
   - `KipperTargetBuiltInGenerator`, which updates the behaviour for generating built-in functions.
@@ -33,12 +36,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     (Functionality not implemented yet! Planned for v0.11)
   - `InternalFunction`, which represents an internal function for Kipper, which provides specific functionality for
     keywords and other internal logic.
+  - `KipperSemanticErrorHandler`, which implements a default abstract error handler for semantic errors. This is
+    used by `KipperTargetSemanticAnalyser` and `KipperAsserter`.
 - New functions:
   - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
     Kipper.
 - New errors:
-  - `InvalidConversionError`, which is thrown whenever an invalid or unimplemented conversion is used in a Kipper
+  - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
     program.
+  - `ReservedIdentifierOverwriteError`, which is thrown whenever a declaration identifier overwrites/interferes with
+    an internal function or reserved keyword/identifier.
 - New types and constants:
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
@@ -61,18 +68,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `builtIns` to `kipperRuntimeBuiltIns`.
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
+  - `ParserASTNode.ensureTokenChildrenExist` to `getTokenChildren`.
+  - `ParserASTNode.ensureSemanticDataExists` to `getSemanticData`.
+  - `KipperError.setMetadata` to `KipperError.setTracebackData()`.
+  - `KipperAsserter` to `KipperSemanticsAsserter`.
+  - `TargetTokenCodeGenerator` to `TargetASTNodeCodeGenerator`.
+  - `TargetTokenSemanticAnalyser` to `TargetASTNodeSemanticAnalyser`.
+- Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
+- Updated `@kipper/core` code base structure:
+  - `/parser/` now contains these new files:
+    - `ast-node.test.ts` - AST Node (Previously parse-token.ts)
+    - `root-ast-node.test.ts` - Root AST Node (Extracted from compilable-ast-node.test.ts)
+    - `compilable-ast-node.test.ts` - Compilable AST Node (Previously compilable-parse-token.ts)
+  - `/semantics/language/` which contains the language specific AST Node classes that implement the semantics for the
+    expressions, definitions and statements in Kipper.
+  - `/semantics/processor/` which is the module containing the Semantic analyser and Type checker.
 
 ### Removed
 
 - Module `kipper/core/compiler/lib`, as the built-ins shall from now on be handled by each individual target instead
   of the whole Kipper package to allow a unique specific implementation per target.
-- Removed the following deprecated errors and functions:
+- Deprecated errors and functions:
   - `UnknownFunctionIdentifierError`
   - `UnknownVariableIdentifierError`
   - `KipperSemanticChecker.functionIsDefined`
   - `KipperSemanticChecker.variableIsDefined`
-- Removed `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
+- `BuiltInFunction.handler` as the core compiler will not handle code generation of Kipper built-ins (like
   for example `print`) anymore.
+- Support for multi strings seperated by a whitespace (e.g. `"1" "2"` is counted as a single string `"12"`). This
+  may be added back later, but for now it will be removed from the Kipper language.
+- Error `InvalidOverwriteError`, as all errors it represented are now subclasses of `IdentifierError`.
 
 ## [0.7.0] - 2022-05-22
 
@@ -94,7 +119,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     This field is `undefined` if `VariableDeclarationSemantics.isDefined` is `false`.
 - New functions:
   - `CompileAssert.validAssignment()`, which asserts that an assignment expression is valid.
-  - `abstract CompilableParseToken.semanticTypeChecking()`, which must be implemented by every child and should serve
+  - `abstract CompilableASTNode.semanticTypeChecking()`, which must be implemented by every child and should serve
     as a separate semantic type checking step outside of `primarySemanticAnalysis()`.
 - New classes:
   - `KipperAsserter`, which is an abstract base class that represents a class that can be used to assert certain truths
@@ -171,7 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New functions:
   - `getTokenIntervalSource()`, which fetches the source code for an interval of two `Token` instances.
   - `getParseTreeSource()`, which fetches the source code for a parse tree.
-  - `CompilableParseToken.ensureTokenChildrenExist()`, which throws an `UnableToDetermineMetadataError`
+  - `CompilableASTNode.ensureTokenChildrenExist()`, which throws an `UnableToDetermineMetadataError`
     error in case that the children tokens are undefined.
   - `KipperProgramContext.semanticAnalysis()` (which allows for semantic analysis without compiling)
   - `KipperProgramContext.translate()`, which translates a processed parse tree.
@@ -218,7 +243,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `getTokenSource` to `getParseRuleSource`, and replaced the original function with `getTokenSource` that only
     fetches the code for a single `Token` instance.
-  - `CompilableParseToken.antlrCtx` to `antlrRuleCtx`.
+  - `CompilableASTNode.antlrCtx` to `antlrRuleCtx`.
   - `functionIdentifierNotUsed` to `functionIdentifierNotDeclared`.
   - `variableIdentifierNotUsed` to `variableIdentifierNotDeclared`.
   - Field `name` to `identifier` in interface `BuiltInFunctionArgument`.
@@ -242,9 +267,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New field and constructor argument `KipperProgramContext.target`, which defines the compilation target for the
   program.
 - New type `TargetTokenSemanticAnalyser`, which represents a function type that semantically analyses a
-  `CompilableParseToken`.
+  `CompilableASTNode`.
 - New type `TargetTokenCodeGenerator`, which represents a function type that semantically analyses a
-  `CompilableParseToken`.
+  `CompilableASTNode`.
 - Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code into
   a specific target language.
 - Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis
@@ -253,8 +278,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   specific target.
 - Class `TypeScriptTarget`, which defines the default target for Kipper.
 - Abstract fields `targetCodeGenerator` and `targetSemanticAnalysis`, which must be defined in child classes of
-  abstract base class `CompilableParseToken`.
-- New getters `target`, `codeGenerator` and `semanticAnalyser` in class `CompilableParseToken`.
+  abstract base class `CompilableASTNode`.
+- New getters `target`, `codeGenerator` and `semanticAnalyser` in class `CompilableASTNode`.
 - New protected functions `primarySemanticAnalysis` and `targetSemanticAnalysis`, which are split to separate the
   core/primary semantic analysis and the target specific semantic analysis.
 - New types `KipperVoidType`, `KipperNumType`, `KipperStrType`, `KipperCharType`, `KipperBoolType` and `KipperListType`,
@@ -276,10 +301,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extracted the content of the `RootFileParseToken.compileCtx` function and added new two functions
   `RootFileParseToken.semanticAnalysis()`, which semantically analysis the code for basic semantics and target-specific
   semantics, and `RootFileParseToken.translate()`, which translates the code into the specific target.
-- Made `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()` non-abstract and
-  implemented basic processing algorithm to run the code from `CompilableParseToken.targetCodeGenerator` and
-  `CompilableParseToken.targetSemanticAnalysis`.
-- Changed semantic definitions for `CompilableParseToken` children classes and created for each child class a
+- Made `CompilableASTNode.semanticAnalysis()` and `CompilableASTNode.translateCtxAndChildren()` non-abstract and
+  implemented basic processing algorithm to run the code from `CompilableASTNode.targetCodeGenerator` and
+  `CompilableASTNode.targetSemanticAnalysis`.
+- Changed semantic definitions for `CompilableASTNode` children classes and created for each child class a
   representing semantics class defining the metadata for the token.
 - Renamed error `UnknownFunctionIdentifier` to `UnknownFunctionIdentifierError`.
 - Renamed function `CompileAssert.assertTypeExists` to `typeExists`.
@@ -343,12 +368,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Registrations and updates of stack information should also happen in the `semanticAnalysis()` step to properly
     compile top to bottom. (For now there is no support for calling functions that are defined afterwards in the file.
     So a pre-declaration is required!)
-- Updated behaviour of `CompilableParseToken` to determine semantics and semantic types using generic classes. This
-  means all semantic data is now stored using the get and setter `CompilableParseToken.semanticData`.
+- Updated behaviour of `CompilableASTNode` to determine semantics and semantic types using generic classes. This
+  means all semantic data is now stored using the get and setter `CompilableASTNode.semanticData`.
 
 ### Removed
 
-- Method `CompilableParseToken.compileCtx()` added in `0.2.0`, and split the handling of the semantic analysis and
+- Method `CompilableASTNode.compileCtx()` added in `0.2.0`, and split the handling of the semantic analysis and
   compilation into two separate stages. This means that before compilation, all children will be semantically analysed.
   Starting from the bottom/the simplest tokens working upwards as the tokens get more complicated.
 - Unneeded private tracking of `_currentScope` in `KipperFileListener`, as the scope handling system has been replaced
@@ -367,7 +392,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Created new class `CompileAssert`, which is used to assert certain compiler-required truths, which, if false, trigger
   corresponding errors.
 - New errors `UnknownVariableDefinition` and `UnknownFunctionDefinition`.
-- New getter `CompilableParseToken.tokenStream`, which returns the `programCtx.tokenStream` instance.
+- New getter `CompilableASTNode.tokenStream`, which returns the `programCtx.tokenStream` instance.
 - Created new expression class `ArgumentExpressionList` representing an argument list inside function calls.
 - New function `KipperCompileResult.write()`, which creates a human-readable string from the generated
   source code.
@@ -384,10 +409,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed compilation result from `Array<string>` to `Array<Array<string>>`, where each nested array represents a line
   combined of string tokens.
 - Set explicit children type for expressions and statements, instead of letting them inherit the children type from
-  `CompilableParseToken`.
+  `CompilableASTNode`.
 - Set return type of `compileCtx` to `Array<string>` in children classes of `Expression`.
-  - Changed visibility of `CompilableParseToken.semanticAnalysis()` and `CompilableParseToken.translateCtxAndChildren()`
-    to `protected`, as they will be replaced and tied together using `CompilableParseToken.compileCtx()`.
+  - Changed visibility of `CompilableASTNode.semanticAnalysis()` and `CompilableASTNode.translateCtxAndChildren()`
+    to `protected`, as they will be replaced and tied together using `CompilableASTNode.compileCtx()`.
 - Replaced compilation in `RootParseToken.translateCtxAndChildren` with `RootParseToken.compileCtx()`.
 - Changed values of `LogLevel` to numeric values, which can be translated into strings using `getLogLevelString()`.
 
@@ -438,7 +463,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   code again.
 - `LogLevel.UNKNOWN` as the default log level for `LogLevel`.
 - `KipperLogger.levels` as a static variable to access the enum `LogLevel`.
-- New abstract base class `CompilableParseToken`, which will represent the major parse tokens inside a kipper
+- New abstract base class `CompilableASTNode`, which will represent the major parse tokens inside a kipper
   program. The token class has the additional functionality of wrapping an entire antlr4 statement, expression or
   block, and being able to semantically analyse it using `semanticAnalysis()` and translate it to TypeScript using
   `compileCtx()`.

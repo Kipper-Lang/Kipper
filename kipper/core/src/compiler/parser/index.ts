@@ -6,3 +6,7 @@
  */
 export * from "./antlr";
 export * from "./parse-stream";
+export * from "./ast-node";
+export * from "./root-ast-node";
+export * from "./compilable-ast-node";
+export * from "./file-listener";

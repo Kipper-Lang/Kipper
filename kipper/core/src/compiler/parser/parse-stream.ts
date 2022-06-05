@@ -1,5 +1,5 @@
 /**
- * Classes implementing antlr4 streams and providing an interface to interact with the compiler
+ * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
@@ -7,8 +7,7 @@
 import { CharStreams, CodePointCharStream } from "antlr4ts";
 
 /**
- * The {@link KipperParseStream} class, which stores the content of a file/string in a "virtual" file in a UTF-16
- * encoded {@link CodePointCharStream}.
+ * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
  *
  * If {@link name} is not set during construction, it will default to "anonymous-script".
  * @since 0.0.3

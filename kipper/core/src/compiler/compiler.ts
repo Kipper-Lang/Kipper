@@ -10,9 +10,10 @@ import { KipperLexer, KipperParser } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperParseStream } from "./parser";
 import { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
+import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
 import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
+import type { TranslatedCodeLine } from "./semantics";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
@@ -134,17 +135,10 @@ export class KipperCompileResult {
 
 	/**
 	 * Creates a string from the compiled code that can be written to a file in a human-readable way.
-	 * @param lineEnding The line ending for each line of the file.
+	 * @param lineEnding The line ending for each line of the file. Default line ending is LF ('\n').
 	 */
 	public write(lineEnding: string = "\n"): string {
-		let genCode: string = "";
-		for (let line of this.result) {
-			for (let token of line) {
-				genCode = genCode.concat(token);
-			}
-			genCode = genCode.concat(lineEnding);
-		}
-		return genCode;
+		return this.result.map((line: TranslatedCodeLine) => line.join("") + lineEnding).join("");
 	}
 }
 

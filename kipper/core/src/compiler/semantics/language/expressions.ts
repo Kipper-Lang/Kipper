@@ -4,7 +4,6 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken } from "./parse-token";
 import {
 	AdditiveExpressionContext,
 	ArraySpecifierPostfixExpressionContext,
@@ -33,28 +32,29 @@ import {
 	TypeofTypeSpecifierContext,
 } from "../../parser";
 import {
-	KipperAdditiveOperator,
+	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
-	KipperArithmeticOperator,
-	KipperBoolTypeLiterals,
+	type KipperArithmeticOperator,
+	type KipperBoolTypeLiterals,
 	kipperCharType,
-	KipperCharType,
-	KipperFunction,
-	KipperListType,
-	KipperMultiplicativeOperator,
+	type KipperCharType,
+	type KipperFunction,
+	type KipperListType,
+	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
-	KipperNumType,
+	type KipperNumType,
 	kipperStrType,
-	KipperStrType,
-	KipperType,
-	TranslatedExpression,
+	type KipperStrType,
+	type KipperType,
+	type TranslatedExpression,
 } from "../const";
-import { ScopeVariableDeclaration } from "../scope-declaration";
-import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
-import { TerminalNode } from "antlr4ts/tree";
+import type { TargetASTNodeCodeGenerator } from "../../translation";
+import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompoundStatement } from "./statements";
+import { CompilableASTNode } from "../../parser";
+import { ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
+import { TerminalNode } from "antlr4ts/tree";
 
 /**
  * Every antlr4 expression ctx type
@@ -93,7 +93,7 @@ export type antlrExpressionCtxType =
  */
 export function getExpressionInstance(
 	antlrCtx: antlrExpressionCtxType,
-	parent: CompilableParseToken<any>,
+	parent: CompilableASTNode<any>,
 ): Expression<any> {
 	if (antlrCtx instanceof NumberPrimaryExpressionContext) {
 		return new NumberPrimaryExpression(antlrCtx, parent);
@@ -174,7 +174,7 @@ export interface ExpressionSemantics {
  * @abstract
  * @since 0.1.0
  */
-export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableParseToken<Semantics> {
+export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableASTNode<Semantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -184,7 +184,7 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 
 	protected override _children: Array<Expression<any>>;
 
-	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableParseToken<any>) {
+	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -217,7 +217,7 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, TranslatedExpression>;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 }
 
 /**
@@ -274,7 +274,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
 
-	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -307,9 +307,9 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<NumberPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression> =
 		this.semanticAnalyser.numberPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.numberPrimaryExpression;
 }
 
@@ -342,7 +342,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	 */
 	protected override readonly _antlrRuleCtx: CharacterPrimaryExpressionContext;
 
-	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -375,9 +375,9 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CharacterPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CharacterPrimaryExpression> =
 		this.semanticAnalyser.characterPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.characterPrimaryExpression;
 }
 
@@ -410,7 +410,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 */
 	protected override readonly _antlrRuleCtx: ListPrimaryExpressionContext;
 
-	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -442,9 +442,9 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ListPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ListPrimaryExpression> =
 		this.semanticAnalyser.listPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.listPrimaryExpression;
 }
 
@@ -477,7 +477,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
-	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -510,9 +510,9 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<StringPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<StringPrimaryExpression> =
 		this.semanticAnalyser.stringPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<StringPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<StringPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.stringPrimaryExpression;
 }
 
@@ -546,7 +546,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
 
-	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -594,9 +594,9 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IdentifierPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression> =
 		this.semanticAnalyser.identifierPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.identifierPrimaryExpression;
 }
 
@@ -624,7 +624,7 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 	 */
 	protected override readonly _antlrRuleCtx: SingleTypeSpecifierContext;
 
-	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -646,7 +646,7 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -658,9 +658,9 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SingleTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<SingleTypeSpecifierExpression> =
 		this.semanticAnalyser.singleTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.singleTypeSpecifierExpression;
 }
 
@@ -688,7 +688,7 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 	 */
 	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
 
-	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -709,7 +709,7 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -721,9 +721,9 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<GenericTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression> =
 		this.semanticAnalyser.genericTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.genericTypeSpecifierExpression;
 }
 
@@ -751,7 +751,7 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 	 */
 	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
 
-	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -772,7 +772,7 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
 	}
@@ -784,9 +784,9 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TypeofTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression> =
 		this.semanticAnalyser.typeofTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.typeofTypeSpecifierExpression;
 }
 
@@ -814,7 +814,7 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	 */
 	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
-	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -847,9 +847,9 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<BoolPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression> =
 		this.semanticAnalyser.boolPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.boolPrimaryExpression;
 }
 
@@ -880,7 +880,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -917,9 +917,9 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FStringPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FStringPrimaryExpression> =
 		this.semanticAnalyser.fStringPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.fStringPrimaryExpression;
 }
 
@@ -942,7 +942,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 */
 	protected override readonly _antlrRuleCtx: TangledPrimaryExpressionContext;
 
-	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -978,9 +978,9 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TangledPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression> =
 		this.semanticAnalyser.tangledPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<TangledPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.tangledPrimaryExpression;
 }
 
@@ -1005,7 +1005,7 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1043,9 +1043,9 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementExpression> =
 		this.semanticAnalyser.incrementOrDecrementExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
 		this.codeGenerator.incrementOrDecrementExpression;
 }
 
@@ -1069,7 +1069,7 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 */
 	protected override readonly _antlrRuleCtx: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1105,9 +1105,9 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArraySpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression> =
 		this.semanticAnalyser.arraySpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.arraySpecifierExpression;
 }
 
@@ -1147,7 +1147,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 */
 	protected override readonly _antlrRuleCtx: FunctionCallPostfixExpressionContext;
 
-	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1158,7 +1158,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
-		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].ensureSemanticDataExists();
+		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].getSemanticData();
 
 		// Fetching the called function and its semantic data
 		const calledFunc = this.programCtx.semanticCheck(this).getExistingFunction(identifierSemantics.identifier);
@@ -1184,7 +1184,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.function, semanticData.args);
 	}
@@ -1196,9 +1196,9 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression> =
 		this.semanticAnalyser.functionCallPostfixExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<FunctionCallPostfixExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionCallPostfixExpression, TranslatedExpression> =
 		this.codeGenerator.functionCallPostfixExpression;
 }
 
@@ -1223,7 +1223,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1261,9 +1261,9 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
 		this.semanticAnalyser.incrementOrDecrementUnaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
 		this.codeGenerator.incrementOrDecrementUnaryExpression;
 }
 
@@ -1289,7 +1289,7 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 */
 	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1327,9 +1327,9 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<OperatorModifiedUnaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<OperatorModifiedUnaryExpression> =
 		this.semanticAnalyser.operatorModifiedUnaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<OperatorModifiedUnaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<OperatorModifiedUnaryExpression, TranslatedExpression> =
 		this.codeGenerator.operatorModifiedUnaryExpression;
 }
 
@@ -1365,7 +1365,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 */
 	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
 
-	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1377,7 +1377,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetching the original exp and the type using the children
 		const exp: Expression<any> = this.children[0];
-		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).ensureSemanticDataExists().type;
+		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).getSemanticData().type;
 
 		// Ensure the children are fully present and not undefined
 		if (!exp || !type) {
@@ -1397,7 +1397,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
 	}
@@ -1409,9 +1409,9 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CastOrConvertExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CastOrConvertExpression> =
 		this.semanticAnalyser.castOrConvertExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
 		this.codeGenerator.castOrConvertExpression;
 }
 
@@ -1476,7 +1476,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 */
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
-	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1486,7 +1486,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		const operator = <KipperMultiplicativeOperator | undefined>children
 			.find((token) => {
@@ -1531,9 +1531,9 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<MultiplicativeExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<MultiplicativeExpression> =
 		this.semanticAnalyser.multiplicativeExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
 		this.codeGenerator.multiplicativeExpression;
 }
 
@@ -1574,7 +1574,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 */
 	protected override readonly _antlrRuleCtx: AdditiveExpressionContext;
 
-	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1584,7 +1584,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		const operator = <KipperAdditiveOperator | undefined>children
 			.find((token) => {
@@ -1604,8 +1604,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
 
 		const evaluateType: () => KipperType = () => {
-			const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
-			const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+			const exp1Type = exp1.getSemanticData().evaluatedType;
+			const exp2Type = exp2.getSemanticData().evaluatedType;
 			if (exp1Type === exp2Type) {
 				return exp1.semanticData.evaluatedType;
 			} else if (
@@ -1642,8 +1642,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<AdditiveExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<AdditiveExpression, TranslatedExpression> =
 		this.codeGenerator.additiveExpression;
 }
 
@@ -1676,7 +1676,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
 
-	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1714,9 +1714,9 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<RelationalExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<RelationalExpression> =
 		this.semanticAnalyser.relationalExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<RelationalExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<RelationalExpression, TranslatedExpression> =
 		this.codeGenerator.relationalExpression;
 }
 
@@ -1744,7 +1744,7 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	 */
 	protected override readonly _antlrRuleCtx: EqualityExpressionContext;
 
-	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1782,8 +1782,8 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<EqualityExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<EqualityExpression, TranslatedExpression> =
 		this.codeGenerator.equalityExpression;
 }
 
@@ -1811,7 +1811,7 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
 
-	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1847,9 +1847,9 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalAndExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<LogicalAndExpression> =
 		this.semanticAnalyser.logicalAndExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<LogicalAndExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<LogicalAndExpression, TranslatedExpression> =
 		this.codeGenerator.logicalAndExpression;
 }
 
@@ -1876,7 +1876,7 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	 */
 	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
-	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1912,8 +1912,9 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalOrExpression> = this.semanticAnalyser.logicalOrExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<LogicalOrExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<LogicalOrExpression> =
+		this.semanticAnalyser.logicalOrExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<LogicalOrExpression, TranslatedExpression> =
 		this.codeGenerator.logicalOrExpression;
 }
 
@@ -1939,7 +1940,7 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 */
 	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
-	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -1975,9 +1976,9 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ConditionalExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ConditionalExpression> =
 		this.semanticAnalyser.conditionalExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ConditionalExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ConditionalExpression, TranslatedExpression> =
 		this.codeGenerator.conditionalExpression;
 }
 
@@ -2015,7 +2016,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
-	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableParseToken<any>) {
+	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableASTNode<any>) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -2040,7 +2041,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		}
 
 		// Get the semantics / the evaluated type of this expression
-		const valueSemantics = assignValue.ensureSemanticDataExists();
+		const valueSemantics = assignValue.getSemanticData();
 		this.semanticData = {
 			evaluatedType: valueSemantics.evaluatedType,
 			value: assignValue,
@@ -2054,7 +2055,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validAssignment(semanticData.identifier, semanticData.value);
 	}
@@ -2066,8 +2067,8 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AssignmentExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<AssignmentExpression> =
 		this.semanticAnalyser.assignmentExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<AssignmentExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<AssignmentExpression, TranslatedExpression> =
 		this.codeGenerator.assignmentExpression;
 }

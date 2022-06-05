@@ -4,23 +4,26 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType } from "./const";
-import {
+import type {
+	KipperReturnType,
+	KipperScope,
+	KipperStorageType,
+	KipperType,
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	ParameterDeclaration,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
-} from "./tokens";
-import type { KipperProgramContext } from "../program-ctx";
+} from "./semantics";
+import type { KipperProgramContext } from "./program-ctx";
 
 /**
  * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
-	public abstract get token(): Declaration<any>;
+	public abstract get node(): Declaration<any>;
 
 	public abstract get identifier(): string;
 
@@ -28,7 +31,7 @@ export abstract class ScopeDeclaration {
 	 * Fetches the {@link KipperProgramContext program context instance} for this token.
 	 */
 	public get programCtx(): KipperProgramContext {
-		return this.token.programCtx;
+		return this.node.programCtx;
 	}
 }
 
@@ -42,19 +45,19 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _token: VariableDeclaration,
+		private _node: VariableDeclaration,
 	) {
 		super();
 
 		// Ensure the token is valid
-		this.semanticData = _token.ensureSemanticDataExists();
+		this.semanticData = _node.getSemanticData();
 	}
 
 	/**
 	 * Returns the {@link VariableDeclaration token} this scope declaration bases on.
 	 */
-	public get token(): VariableDeclaration {
-		return this._token;
+	public get node(): VariableDeclaration {
+		return this._node;
 	}
 
 	/**
@@ -102,19 +105,19 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 
 	public constructor(
 		// eslint-disable-next-line no-unused-vars
-		private _token: FunctionDeclaration,
+		private _node: FunctionDeclaration,
 	) {
 		super();
 
 		// Ensure the token is valid
-		this.semanticData = _token.ensureSemanticDataExists();
+		this.semanticData = _node.getSemanticData();
 	}
 
 	/**
 	 * Returns the {@link FunctionDeclaration token} this scope function declaration bases on.
 	 */
-	public get token(): FunctionDeclaration {
-		return this._token;
+	public get node(): FunctionDeclaration {
+		return this._node;
 	}
 
 	/**

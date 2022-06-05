@@ -17,7 +17,7 @@
     - [Add or update semantics](#add-or-update-semantics)
       - [Updating target specific semantic checks](#updating-target-specific-semantic-checks)
       - [Throwing semantic errors](#throwing-semantic-errors)
-    - [Add or update token translation](#add-or-update-token-translation)
+    - [Add or update translation](#add-or-update-translation)
   - [Testing](#testing)
     - [How to write tests](#how-to-write-tests)
 
@@ -142,11 +142,11 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 - If you want to add new syntax, you will have to edit the Antlr4 `/kipper/core/Kipper.g4` file and update the
   `KipperFileListener`, which walks through a generated parse tree and determines what items
-  should be added to the `RootFileParseToken` (represents the root item of the entire file, which contains all
-  statements and declarations as children).
-- If you want to update the compiler logic and semantics, you will have to work in the `/compiler/tokens` and
-  `/compiler/logic` folder of `@kipper/core`, where the logical tokens are contained that represent expressions,
-  declarations and statements.
+  should be added to the `RootASTNode` (represents the root node of the entire file, which contains all top-level
+  statements and declarations as child nodes).
+- If you want to update the compiler logic and semantics, you will have to work in the `/compiler/semantics` folder of
+  `@kipper/core`, where the semantic analyser, type checker and AST node classes are implemented that represent Kipper
+  expressions, declarations and statements.
 - If you want to update the default translation to TypeScript, you will have to work in the
   `/compiler/target/typescript` file, which contains the semantic analyser and target code generator for TypeScript.
 - If you want to work on a new target or add any other functionality, you should add new files that extend the existing
@@ -154,12 +154,12 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 ### Add or update semantics
 
-The semantics of a token is usually represented using an interface that defines what metadata must be present for an
+The semantics of a AST node is usually represented using an interface that defines what metadata must be present for an
 instance to be compilable. This semantic data interface is passed to the abstract generic class
-`CompilableParsenToken<Semantics>` as a generic type parameter, which then defines the semantic data that must be
+`CompilableASTNode<Semantics>` as a generic type parameter, which then defines the semantic data that must be
 present.
 
-Usually the semantic interfaces of Kipper tokens are defined right above, like for example:
+Usually the semantic interfaces of a Kipper AST node are defined right above, like for example:
 
 ```ts
 export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
@@ -174,12 +174,12 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 ```
 
 These semantics then are per default processed using the async function `primarySemanticAnalysis()`. This function
-should always evaluate and define the semantics by setting the field `CompilableParseToken.semanticData`. Though to
+should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. Though to
 avoid unexpected errors, when using the semantic data they should always be fetched using
-`CompilableParseToken.ensureSemanticDataExists()`, which throws an error in case they are undefined.
+`CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined.
 
 To update how semantics are handled or what semantic data exists, either the semantics interface or the
-function `CompilableParseToken.primarySemanticAnalysis()` should be updated and changed. Avoid at all cost
+function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed. Avoid at all cost
 checking semantic data and performing semantic analysis anywhere outside those functions and the target specific
 semantics!
 
@@ -188,7 +188,7 @@ semantics!
 As Kipper is a statically and strongly typed language, types must be checked at compile time to
 ensure the program can execute without issues.
 
-Kipper handles type checking for a single `CompilableParseToken` in its `semanticTypeChecking`
+Kipper handles type checking for a single `CompilableASTNode` in its `semanticTypeChecking`
 function, which is called after the general semantic analysis function. There all possible type issues
 should be checked for to avoid issues during code generation or execution.
 
@@ -198,11 +198,11 @@ explained more in-depth [here](#throwing-semantic-errors).
 #### Updating target specific semantic checks
 
 In case that a target (targets are for example TypeScript) has specific semantic logic that must be upheld, a
-`KipperTargetSemanticAnalyser` is used, which can do additional checks on specific tokens. Each program
+`KipperTargetSemanticAnalyser` is used, which can do additional checks on specific AST nodes. Each program
 (`KipperProgramContext`) has one `KipperCompileTarget` set, which defines how Kipper should be translated. This class
 also defines a `KipperTargetSemanticAnalyser`, where target-specific semantic can be checked.
 
-To update or add target specific semantic checks, you can update the corresponding functions for the tokens.
+To update or add target specific semantic checks, you can update the corresponding functions for the AST node class.
 For example `KipperTargetSemanticAnalyser.compoundStatement`, which handles the semantic analysis for `{ }` blocks.
 
 #### Throwing semantic errors
@@ -211,24 +211,33 @@ Throwing errors in Kipper is handled similarly to how mocha tests works. A truth
 and if it turns out to be false an error is thrown. This behaviour is handled using the classes `KipperSemanticChecker`
 and `KipperTypeChecker`, which pre-define certain assertions that can be performed to validate code.
 
-To also handle proper tracebacks, any assertion is done using either:
+To also handle tracebacks, any assertion is done using either:
 
 - `KipperProgramContext.typeCheck` or
 - `KipperProgramContext.semanticCheck`
 
-which handle the tracebacks by requiring the token being checked as an argument and returning
-an `KipperSemanticChecker` or `KipperTypeChecker` instance with the proper metadata already set.
+which handle the tracebacks by requiring an AST node instance as an argument and returning
+a `KipperSemanticChecker` or `KipperTypeChecker` instance with the proper metadata already set.
 This means in case that an assertion fails, these classes will handle the error themselves and
-create a `KipperError` using the token's metadata.
+create a `KipperError` using the node's metadata.
 
 For example (Code snippet from the class `FunctionDeclaration`):
 
 ```
-// 'this' is the token class - This may be used in an 'CompilableParseToken'
+// 'this' is the node class - This may be used in an 'CompilableASTNode'
 this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 ```
 
-### Add or update token translation
+### Add or update translation
+
+To update the behaviour of how a Kipper target translates, the target code generator (`KipperTargetCodeGenerator`) and
+target built-in generator (`KipperTargetBuiltInGenerator`) can be updated, which implement the code generation.
+
+In most cases, the `KipperTargetBuiltInGenerator` can be left alone, as it implements core and internal functionality
+for keywords and internal logic.
+
+For example, the translation behaviour of the TypeScript target can be updated in the
+`@kipper/core/compiler/targets/typescript` folder.
 
 ## Testing
 

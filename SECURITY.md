@@ -16,7 +16,6 @@ The following versions are supported and will get bug-fixes and security updates
 | 0.6.x   | :heavy_check_mark: |
 | <0.6.x  | :x:                |
 
-
 ### NPM Deprecation
 
 If a version gets deprecated/loses support, it will be deprecated as well on the NPM registry.

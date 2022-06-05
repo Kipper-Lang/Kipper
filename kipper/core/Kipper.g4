@@ -27,18 +27,14 @@ endOfLine
     ;
 
 primaryExpression
-    :   Identifier # identifierPrimaryExpression
-    |   (StringLiteral WS*)+ # stringPrimaryExpression
-    |   (FStringLiteral WS*)+ # fStringPrimaryExpression
-    |   '(' expression ')' # tangledPrimaryExpression
-    |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
+    :   '(' expression ')' # tangledPrimaryExpression
+    |   (True | False) #boolPrimaryExpression
+    | 	Identifier # identifierPrimaryExpression
     |   CharacterConstant #characterPrimaryExpression
-    |   listConstant #listPrimaryExpression
-    |   ('true' | 'false') #boolPrimaryExpression
-    ;
-
-listConstant
-    :   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']'
+    |   StringLiteral # stringPrimaryExpression
+    |   FStringLiteral # fStringPrimaryExpression
+    |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
+    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' #listPrimaryExpression
     ;
 
 postfixExpression
