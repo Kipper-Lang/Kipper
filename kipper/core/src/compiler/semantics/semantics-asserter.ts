@@ -5,18 +5,18 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
-import { KipperProgramContext } from "./program-ctx";
-import { KipperError } from "../errors";
-import { LogLevel } from "../logger";
-import { getParseRuleSource } from "../utils";
-import { KipperSemanticErrorHandler } from "./token-asserter";
+import { KipperProgramContext } from "../program-ctx";
+import { KipperError } from "../../errors";
+import { LogLevel } from "../../logger";
+import { getParseRuleSource } from "../../utils";
+import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
- * any form of misuse is found.
+ * any logical issue is found.
  * @since 0.7.0
  */
-export abstract class KipperAsserter extends KipperSemanticErrorHandler {
+export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler {
 	public readonly programCtx: KipperProgramContext;
 
 	protected constructor(programCtx: KipperProgramContext) {

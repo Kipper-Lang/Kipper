@@ -20,12 +20,12 @@ import {
 	SelectionStatementContext,
 } from "../../parser";
 import { determineScope } from "../../../utils";
-import { ScopeVariableDeclaration } from "../scope-declaration";
+import { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { KipperScope, TranslatedCodeLine } from "../const";
 import type { VariableDeclaration } from "./definitions";
 import type { Expression } from "./expressions";
-import type { TargetTokenCodeGenerator } from "../../translation";
-import type { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
+import type { TargetASTNodeCodeGenerator } from "../../translation";
+import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompilableASTNode } from "../../parser";
 
 /**
@@ -95,7 +95,7 @@ export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> 
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, Array<TranslatedCodeLine>>;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
 /**
@@ -200,8 +200,8 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
-	targetCodeGenerator: TargetTokenCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.compoundStatement;
 }
 
@@ -226,7 +226,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * The children of this parse token.
+	 * The children of this AST node.
 	 */
 	public get children(): Array<Statement<any>> {
 		return this._children;
@@ -258,8 +258,8 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SelectionStatement> = this.semanticAnalyser.selectionStatement;
-	targetCodeGenerator: TargetTokenCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<SelectionStatement> = this.semanticAnalyser.selectionStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.selectionStatement;
 }
 
@@ -315,8 +315,9 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ExpressionStatement> = this.semanticAnalyser.expressionStatement;
-	targetCodeGenerator: TargetTokenCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExpressionStatement> =
+		this.semanticAnalyser.expressionStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.expressionStatement;
 }
 
@@ -373,8 +374,8 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
-	targetCodeGenerator: TargetTokenCodeGenerator<IterationStatement, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IterationStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.iterationStatement;
 }
 
@@ -431,7 +432,7 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
-	targetCodeGenerator: TargetTokenCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.jumpStatement;
 }

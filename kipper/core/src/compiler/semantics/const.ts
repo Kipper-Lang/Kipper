@@ -7,7 +7,7 @@
 
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompoundStatement } from "./language";
-import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
 
 /**

@@ -16,4 +16,4 @@ export * from "./antlr-error-listener";
 export * from "./program-ctx";
 export * from "./compile-target";
 export * from "./compiler";
-export * from "./token-asserter";
+export * from "./scope-declaration";

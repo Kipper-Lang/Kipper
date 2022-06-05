@@ -16,14 +16,14 @@ import {
 	StorageTypeSpecifierContext,
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
-import type { ScopeVariableDeclaration } from "../scope-declaration";
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
 import type { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
+import { TargetASTNodeCodeGenerator } from "../../translation";
+import { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompilableASTNode } from "../../parser";
 
 /**
@@ -96,7 +96,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, Array<TranslatedCodeLine>>;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
 /**
@@ -157,9 +157,9 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ParameterDeclaration> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
 		this.semanticAnalyser.parameterDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.parameterDeclaration;
 }
 
@@ -267,8 +267,9 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionDeclaration> = this.semanticAnalyser.functionDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
+		this.semanticAnalyser.functionDeclaration;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.functionDeclaration;
 }
 
@@ -419,7 +420,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<VariableDeclaration> = this.semanticAnalyser.variableDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VariableDeclaration> =
+		this.semanticAnalyser.variableDeclaration;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.variableDeclaration;
 }

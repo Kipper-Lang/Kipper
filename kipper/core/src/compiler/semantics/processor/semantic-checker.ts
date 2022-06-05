@@ -37,15 +37,15 @@ import {
 	type KipperType,
 } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
-import { KipperAsserter } from "../../asserter";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
  * invalid use of tokens is detected.
  * @since 0.7.0
  */
-export class KipperSemanticChecker extends KipperAsserter {
+export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	constructor(programCtx: KipperProgramContext) {
 		super(programCtx);
 	}

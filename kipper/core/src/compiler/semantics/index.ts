@@ -7,6 +7,7 @@
 
 export * from "./language";
 export * from "./const";
-export * from "./scope-declaration";
-export * from "./processor/type-checker";
+export * from "./processor";
+export * from "./semantics-asserter";
+export * from "./semantics-error-handler";
 export * from "./target-semantic-analyser";

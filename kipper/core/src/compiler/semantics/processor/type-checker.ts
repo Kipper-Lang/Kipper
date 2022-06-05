@@ -6,11 +6,11 @@
  * @since 0.7.0
  */
 
-import { KipperAsserter } from "../../asserter";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
 import { Expression, ExpressionSemantics, ParameterDeclaration } from "../language";
 import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
 import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../../errors";
-import type { ScopeVariableDeclaration } from "../scope-declaration";
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 
@@ -19,7 +19,7 @@ import type { KipperProgramContext } from "../../program-ctx";
  * invalid use of types and identifiers is detected.
  * @since 0.7.0
  */
-export class KipperTypeChecker extends KipperAsserter {
+export class KipperTypeChecker extends KipperSemanticsAsserter {
 	constructor(programCtx: KipperProgramContext) {
 		super(programCtx);
 	}

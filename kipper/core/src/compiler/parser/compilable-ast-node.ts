@@ -8,8 +8,8 @@ import type { KipperParser } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperCompileTarget } from "../compile-target";
-import type { KipperTargetCodeGenerator, TargetTokenCodeGenerator } from "../translation";
-import type { KipperTargetSemanticAnalyser, TargetTokenSemanticAnalyser } from "../semantics";
+import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
+import type { KipperTargetSemanticAnalyser, TargetASTNodeSemanticAnalyser } from "../semantics";
 import type { RootASTNode } from "./root-ast-node";
 import { ParserASTNode, SemanticData } from "./ast-node";
 import { determineScope } from "../../utils";
@@ -198,11 +198,14 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * the {@link semanticData} field.
 	 * @since 0.8.0
 	 */
-	protected abstract targetSemanticAnalysis: TargetTokenSemanticAnalyser<any>;
+	protected abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
 
 	/**
 	 * Code generator function that is specific for the {@link KipperCompileTarget target}.
 	 * @since 0.8.0
 	 */
-	protected abstract targetCodeGenerator: TargetTokenCodeGenerator<any, TranslatedCodeLine | Array<TranslatedCodeLine>>;
+	protected abstract targetCodeGenerator: TargetASTNodeCodeGenerator<
+		any,
+		TranslatedCodeLine | Array<TranslatedCodeLine>
+	>;
 }

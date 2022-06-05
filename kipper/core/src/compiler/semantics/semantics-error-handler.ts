@@ -4,10 +4,10 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompilableASTNode } from "./parser";
-import type { KipperParseStream } from "./parser";
-import { KipperError } from "../errors";
-import { getParseRuleSource } from "../utils";
+import type { CompilableASTNode } from "../parser";
+import type { KipperParseStream } from "../parser";
+import { KipperError } from "../../errors";
+import { getParseRuleSource } from "../../utils";
 
 /**
  * Error handler which handles semantic errors for {@link CompilableASTNode compilable AST nodes}.
@@ -26,7 +26,7 @@ export abstract class KipperSemanticErrorHandler {
 
 	/**
 	 * Sets the traceback related line and column info.
-	 * @param ctx The token context.
+	 * @param ctx The AST node context.
 	 * @param line The line that is being processed at the moment.
 	 * @param col The column that is being processed at the moment.
 	 * @param filePath The path to the file where the error occurred.

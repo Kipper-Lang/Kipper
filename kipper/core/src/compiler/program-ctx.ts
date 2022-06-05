@@ -8,20 +8,14 @@
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import {
-	FunctionDeclaration,
-	VariableDeclaration,
-	KipperFunction,
-	ScopeFunctionDeclaration,
-	ScopeVariableDeclaration,
-	TranslatedCodeLine,
-} from "./semantics";
+import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine } from "./semantics";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import { KipperLogger } from "../logger";
 import { KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
-import { KipperSemanticChecker } from "./semantics/processor";
+import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
 
 /**
@@ -108,7 +102,7 @@ export class KipperProgramContext {
 
 	/**
 	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
-	 * invalid use of tokens is detected.
+	 * invalid use of AST nodes is detected.
 	 * @since 0.7.0
 	 */
 	private readonly _semanticChecker: KipperSemanticChecker;
@@ -145,7 +139,7 @@ export class KipperProgramContext {
 
 	/**
 	 * Asserts a certain truth.
-	 * @param ctx The token context item.
+	 * @param ctx The AST node context item.
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
@@ -161,7 +155,7 @@ export class KipperProgramContext {
 
 	/**
 	 * Performs a type check on {@link CompilableASTNode the ctx argument}.
-	 * @param ctx The token context item.
+	 * @param ctx The AST node context item.
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */

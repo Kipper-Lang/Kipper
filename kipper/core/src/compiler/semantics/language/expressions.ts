@@ -48,11 +48,11 @@ import {
 	type KipperType,
 	type TranslatedExpression,
 } from "../const";
-import type { TargetTokenCodeGenerator } from "../../translation";
-import type { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
+import type { TargetASTNodeCodeGenerator } from "../../translation";
+import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompoundStatement } from "./statements";
 import { CompilableASTNode } from "../../parser";
-import { ScopeVariableDeclaration } from "../scope-declaration";
+import { ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
 
@@ -217,7 +217,7 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, TranslatedExpression>;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 }
 
 /**
@@ -307,9 +307,9 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<NumberPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression> =
 		this.semanticAnalyser.numberPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.numberPrimaryExpression;
 }
 
@@ -375,9 +375,9 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CharacterPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CharacterPrimaryExpression> =
 		this.semanticAnalyser.characterPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.characterPrimaryExpression;
 }
 
@@ -442,9 +442,9 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ListPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ListPrimaryExpression> =
 		this.semanticAnalyser.listPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.listPrimaryExpression;
 }
 
@@ -510,9 +510,9 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<StringPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<StringPrimaryExpression> =
 		this.semanticAnalyser.stringPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<StringPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<StringPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.stringPrimaryExpression;
 }
 
@@ -594,9 +594,9 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IdentifierPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression> =
 		this.semanticAnalyser.identifierPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.identifierPrimaryExpression;
 }
 
@@ -658,9 +658,9 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<SingleTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<SingleTypeSpecifierExpression> =
 		this.semanticAnalyser.singleTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.singleTypeSpecifierExpression;
 }
 
@@ -721,9 +721,9 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<GenericTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression> =
 		this.semanticAnalyser.genericTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.genericTypeSpecifierExpression;
 }
 
@@ -784,9 +784,9 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TypeofTypeSpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression> =
 		this.semanticAnalyser.typeofTypeSpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.typeofTypeSpecifierExpression;
 }
 
@@ -847,9 +847,9 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<BoolPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression> =
 		this.semanticAnalyser.boolPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.boolPrimaryExpression;
 }
 
@@ -917,9 +917,9 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FStringPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FStringPrimaryExpression> =
 		this.semanticAnalyser.fStringPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.fStringPrimaryExpression;
 }
 
@@ -978,9 +978,9 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<TangledPrimaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression> =
 		this.semanticAnalyser.tangledPrimaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<TangledPrimaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.tangledPrimaryExpression;
 }
 
@@ -1043,9 +1043,9 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementExpression> =
 		this.semanticAnalyser.incrementOrDecrementExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
 		this.codeGenerator.incrementOrDecrementExpression;
 }
 
@@ -1105,9 +1105,9 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ArraySpecifierExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression> =
 		this.semanticAnalyser.arraySpecifierExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.arraySpecifierExpression;
 }
 
@@ -1196,9 +1196,9 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionCallPostfixExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression> =
 		this.semanticAnalyser.functionCallPostfixExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<FunctionCallPostfixExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionCallPostfixExpression, TranslatedExpression> =
 		this.codeGenerator.functionCallPostfixExpression;
 }
 
@@ -1261,9 +1261,9 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementUnaryExpression> =
 		this.semanticAnalyser.incrementOrDecrementUnaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
 		this.codeGenerator.incrementOrDecrementUnaryExpression;
 }
 
@@ -1327,9 +1327,9 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<OperatorModifiedUnaryExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<OperatorModifiedUnaryExpression> =
 		this.semanticAnalyser.operatorModifiedUnaryExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<OperatorModifiedUnaryExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<OperatorModifiedUnaryExpression, TranslatedExpression> =
 		this.codeGenerator.operatorModifiedUnaryExpression;
 }
 
@@ -1409,9 +1409,9 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<CastOrConvertExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CastOrConvertExpression> =
 		this.semanticAnalyser.castOrConvertExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
 		this.codeGenerator.castOrConvertExpression;
 }
 
@@ -1531,9 +1531,9 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<MultiplicativeExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<MultiplicativeExpression> =
 		this.semanticAnalyser.multiplicativeExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
 		this.codeGenerator.multiplicativeExpression;
 }
 
@@ -1642,8 +1642,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<AdditiveExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<AdditiveExpression> = this.semanticAnalyser.additiveExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<AdditiveExpression, TranslatedExpression> =
 		this.codeGenerator.additiveExpression;
 }
 
@@ -1714,9 +1714,9 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<RelationalExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<RelationalExpression> =
 		this.semanticAnalyser.relationalExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<RelationalExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<RelationalExpression, TranslatedExpression> =
 		this.codeGenerator.relationalExpression;
 }
 
@@ -1782,8 +1782,8 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<EqualityExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<EqualityExpression> = this.semanticAnalyser.equalityExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<EqualityExpression, TranslatedExpression> =
 		this.codeGenerator.equalityExpression;
 }
 
@@ -1847,9 +1847,9 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalAndExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<LogicalAndExpression> =
 		this.semanticAnalyser.logicalAndExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<LogicalAndExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<LogicalAndExpression, TranslatedExpression> =
 		this.codeGenerator.logicalAndExpression;
 }
 
@@ -1912,8 +1912,9 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<LogicalOrExpression> = this.semanticAnalyser.logicalOrExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<LogicalOrExpression, TranslatedExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<LogicalOrExpression> =
+		this.semanticAnalyser.logicalOrExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<LogicalOrExpression, TranslatedExpression> =
 		this.codeGenerator.logicalOrExpression;
 }
 
@@ -1975,9 +1976,9 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ConditionalExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ConditionalExpression> =
 		this.semanticAnalyser.conditionalExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<ConditionalExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ConditionalExpression, TranslatedExpression> =
 		this.codeGenerator.conditionalExpression;
 }
 
@@ -2066,8 +2067,8 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<AssignmentExpression> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<AssignmentExpression> =
 		this.semanticAnalyser.assignmentExpression;
-	targetCodeGenerator: TargetTokenCodeGenerator<AssignmentExpression, TranslatedExpression> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<AssignmentExpression, TranslatedExpression> =
 		this.codeGenerator.assignmentExpression;
 }
