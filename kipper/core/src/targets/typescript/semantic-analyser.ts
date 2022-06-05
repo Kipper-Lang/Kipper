@@ -40,6 +40,74 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
+import { ReservedIdentifierOverwriteError } from "../../errors";
+
+/**
+ * All reserved identifiers in TypeScript that may not be overwritten.
+ * @since 0.8.0
+ */
+export const tsReservedIdentifiers: Array<string> = [
+	"break",
+	"case",
+	"catch",
+	"class",
+	"const",
+	"continue",
+	"debugger",
+	"default",
+	"delete",
+	"do",
+	"else",
+	"enum",
+	"export",
+	"extends",
+	"false",
+	"finally",
+	"for",
+	"function",
+	"if",
+	"import",
+	"in",
+	"instanceof",
+	"new",
+	"null",
+	"return",
+	"super",
+	"switch",
+	"this",
+	"throw",
+	"true",
+	"try",
+	"typeof",
+	"var",
+	"void",
+	"while",
+	"with",
+	"as",
+	"implements",
+	"interface",
+	"let",
+	"package",
+	"private",
+	"protected",
+	"public",
+	"static",
+	"yield",
+	"any",
+	"boolean",
+	"constructor",
+	"declare",
+	"get",
+	"module",
+	"require",
+	"number",
+	"set",
+	"string",
+	"symbol",
+	"type",
+	"from",
+	"of",
+];
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -47,7 +115,17 @@ import {
  */
 export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
 	private checkIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
-		// TODO!
+		const identifier = declaration.getSemanticData().identifier;
+
+		// Throw an error in case the declaration identifier causes issues in TypeScript.
+		//
+		// Error cases:
+		// 1. Identifiers starting with '__' are always reserved and may not be defined.
+		// 2. Identifiers may not overwrite TypeScript specific keywords.
+		if (identifier.startsWith("__") || tsReservedIdentifiers.find((r) => r === identifier)) {
+			this.setTracebackData({ ctx: declaration });
+			throw this.error(new ReservedIdentifierOverwriteError(identifier));
+		}
 	}
 
 	/**
@@ -78,17 +156,23 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
-	parameterDeclaration = async (node: ParameterDeclaration) => {};
+	parameterDeclaration = async (node: ParameterDeclaration) => {
+		this.checkIdentifier(node);
+	};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link FunctionDeclaration} instances.
 	 */
-	functionDeclaration = async (node: FunctionDeclaration) => {};
+	functionDeclaration = async (node: FunctionDeclaration) => {
+		this.checkIdentifier(node);
+	};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
-	variableDeclaration = async (node: VariableDeclaration) => {};
+	variableDeclaration = async (node: VariableDeclaration) => {
+		this.checkIdentifier(node);
+	};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.
