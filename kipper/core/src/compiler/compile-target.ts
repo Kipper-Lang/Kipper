@@ -5,8 +5,8 @@
  * @since 0.5.0
  */
 
-import { KipperTargetBuiltInGenerator, KipperTargetCodeGenerator } from "./translation";
-import { KipperTargetSemanticAnalyser } from "./semantics";
+import type { KipperTargetBuiltInGenerator, KipperTargetCodeGenerator } from "./translation";
+import type { KipperTargetSemanticAnalyser } from "./semantics";
 
 /**
  * Represents a Kipper compilation translation defining how a Kipper parse tree shall

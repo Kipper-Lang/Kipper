@@ -1,10 +1,10 @@
 /**
- * Declaration statements in the Kipper language.
+ * Declaration and definitions in the Kipper language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { CompilableParseToken, eligibleParentToken, SemanticData } from "./parse-token";
+import type { compilableNodeParent, SemanticData } from "../../parser";
 import {
 	CompoundStatementContext,
 	DeclarationContext,
@@ -15,15 +15,16 @@ import {
 	ParameterTypeListContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
-import { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { ParseTree } from "antlr4ts/tree";
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
+import type { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import { KipperProgramContext } from "../../program-ctx";
 import { UnableToDetermineMetadataError } from "../../../errors";
 import { determineScope } from "../../../utils";
-import { TargetTokenCodeGenerator } from "../../translation";
-import { TargetTokenSemanticAnalyser } from "../target-semantic-analyser";
-import { Expression, SingleTypeSpecifierExpression } from "./expressions";
-import { ParseTree } from "antlr4ts/tree";
-import { ScopeVariableDeclaration } from "../scope-declaration";
+import { TargetASTNodeCodeGenerator } from "../../translation";
+import { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import { CompilableASTNode } from "../../parser";
 
 /**
  * Every antlr4 definition ctx type
@@ -35,7 +36,10 @@ export type antlrDefinitionCtxType = FunctionDeclarationContext | ParameterDecla
  * @param antlrCtx The context instance that the handler class should be fetched for.
  * @param parent The file context class that will be assigned to the instance.
  */
-export function getDefinitionInstance(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken): Declaration<any> {
+export function getDefinitionInstance(
+	antlrCtx: antlrDefinitionCtxType,
+	parent: compilableNodeParent,
+): Declaration<any> {
 	if (antlrCtx instanceof FunctionDeclarationContext) {
 		return new FunctionDeclaration(antlrCtx, parent);
 	} else if (antlrCtx instanceof ParameterDeclarationContext) {
@@ -65,7 +69,7 @@ export interface DeclarationSemantics {
  * {@link FunctionDeclaration function declarations}.
  * @since 0.1.0
  */
-export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableParseToken<Semantics> {
+export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableASTNode<Semantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -73,7 +77,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 	 */
 	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
-	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: eligibleParentToken) {
+	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 
@@ -92,7 +96,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetCodeGenerator: TargetTokenCodeGenerator<any, Array<TranslatedCodeLine>>;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
 /**
@@ -124,7 +128,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
-	constructor(antlrCtx: ParameterDeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -153,9 +157,9 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<ParameterDeclaration> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
 		this.semanticAnalyser.parameterDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.parameterDeclaration;
 }
 
@@ -202,7 +206,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
-	constructor(antlrCtx: FunctionDeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 	}
@@ -219,7 +223,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.ensureTokenChildrenExist();
+		const children = this.getTokenChildren();
 
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
@@ -237,7 +241,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: KipperType = typeSpecifier.ensureSemanticDataExists().type;
+		const type: KipperType = typeSpecifier.getSemanticData().type;
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
@@ -257,14 +261,15 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<FunctionDeclaration> = this.semanticAnalyser.functionDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
+		this.semanticAnalyser.functionDeclaration;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.functionDeclaration;
 }
 
@@ -322,7 +327,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 	protected override _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: DeclarationContext, parent: eligibleParentToken) {
+	constructor(antlrCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
@@ -344,7 +349,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children: Array<ParseTree> = this.ensureTokenChildrenExist();
+		const children: Array<ParseTree> = this.getTokenChildren();
 
 		// Determine the ctx instances
 		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
@@ -373,7 +378,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType = typeSpecifier.ensureSemanticDataExists().type;
+		const valueType = typeSpecifier.getSemanticData().type;
 		const scope = determineScope(this);
 
 		this.semanticData = {
@@ -399,7 +404,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.ensureSemanticDataExists();
+		const semanticData = this.getSemanticData();
 
 		// Check whether the type of the variable even exists
 		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
@@ -415,7 +420,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 	}
 
-	targetSemanticAnalysis: TargetTokenSemanticAnalyser<VariableDeclaration> = this.semanticAnalyser.variableDeclaration;
-	targetCodeGenerator: TargetTokenCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VariableDeclaration> =
+		this.semanticAnalyser.variableDeclaration;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.variableDeclaration;
 }

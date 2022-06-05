@@ -1,5 +1,5 @@
 /**
- * The main module for the Kipper compiler
+ * The main module for the Kipper compiler.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
@@ -16,3 +16,4 @@ export * from "./antlr-error-listener";
 export * from "./program-ctx";
 export * from "./compile-target";
 export * from "./compiler";
+export * from "./scope-declaration";
