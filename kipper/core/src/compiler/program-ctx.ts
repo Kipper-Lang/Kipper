@@ -145,11 +145,7 @@ export class KipperProgramContext {
 	 */
 	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
-		this._semanticChecker.setTracebackData(
-			ctx,
-			ctx?.antlrRuleCtx.start.line,
-			ctx?.antlrRuleCtx.start.charPositionInLine,
-		);
+		this._semanticChecker.setTracebackData({ ctx });
 		return this._semanticChecker;
 	}
 
@@ -161,19 +157,19 @@ export class KipperProgramContext {
 	 */
 	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
-		this._typeChecker.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
+		this._typeChecker.setTracebackData({ ctx });
 		return this._typeChecker;
 	}
 
 	/**
-	 * Returns the identifier of the file.
+	 * Returns the file name of the Kipper file.
 	 */
 	public get fileName(): string {
 		return this.stream.name;
 	}
 
 	/**
-	 * Returns the file path of the file.
+	 * Returns the path of the Kipper file.
 	 */
 	public get filePath(): string {
 		return this.stream.filePath;

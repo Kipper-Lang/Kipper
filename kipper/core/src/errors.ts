@@ -68,11 +68,11 @@ export class KipperError extends Error {
 	}
 
 	/**
-	 * Update traceback context based on a file-line and column.
+	 * Update traceback context data.
 	 * @param traceback The traceback data.
 	 * @since 0.3.0
 	 */
-	public setMetadata(traceback: {
+	public setTracebackData(traceback: {
 		location: { line: number | undefined; col: number | undefined };
 		filePath: string | undefined;
 		tokenSrc: string | undefined;
@@ -83,7 +83,7 @@ export class KipperError extends Error {
 
 	/**
 	 * Get the traceback of this item.
-	 * @note The metadata in this traceback should be set using {@link setMetadata}.
+	 * @note The metadata in this traceback should be set using {@link setTracebackData}.
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
@@ -292,7 +292,7 @@ export abstract class IdentifierError extends KipperError {
  */
 export class UndefinedIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Identifier '${identifier}' has been declared, but not defined.`);
+		super(`Invalid reference to declared '${identifier}'. `);
 		this.name = "UndefinedIdentifierError";
 	}
 }
@@ -329,31 +329,40 @@ export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 }
 
 /**
- * Represents all errors in the invalid overwrite group.
- * @since 0.3.0
+ * Error that is thrown whenever an identifier is declared that interferes with a built-in function or variable.
+ * No double definitions or overwrites of global built-in definitions allowed!
  */
-export abstract class InvalidOverwriteError extends KipperError {
-	protected constructor(msg: string) {
-		super(msg);
-		this.name = "InvalidOverwriteError";
+export class BuiltInOverwriteError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`May not overwrite built-in identifier '${identifier}'.`);
 	}
 }
 
 /**
- * Error that is thrown when a new function definition or declaration is registered and the used identifier is
+ * Error that is thrown whenever an identifier is declared that interferes with a reserved identifier.
+ * @since 0.8.0
+ */
+export class ReservedIdentifierOverwriteError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`May not overwrite reserved identifier '${identifier}'.`);
+	}
+}
+
+/**
+ * Error that is thrown when a new function is defined or declared and the used identifier is
  * already in use by a previous function definition.
  */
-export class FunctionDefinitionAlreadyExistsError extends InvalidOverwriteError {
+export class FunctionDefinitionAlreadyExistsError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Definition of function '${identifier}' already exists.`);
 	}
 }
 
 /**
- * Error that is thrown when a new variable definition or declaration is registered and the used identifier is
+ * Error that is thrown when a new variable is defined or declared and the used identifier is
  * already in use by a previous function definition.
  */
-export class VariableDefinitionAlreadyExistsError extends InvalidOverwriteError {
+export class VariableDefinitionAlreadyExistsError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Definition of variable '${identifier}' already exists.`);
 	}
@@ -415,6 +424,15 @@ export class InvalidConversionError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a variable type is used that is unknown the kipper language.
+ */
+export class UnknownTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Unknown type '${type}'!`);
+	}
+}
+
+/**
  * Error that is thrown whenever an assignment expression is invalid.
  * @since 0.7.0
  */
@@ -442,25 +460,6 @@ export class ArgumentError extends KipperError {
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
 		super(`Expected ${expected} arguments for function '${func}', received ${received}.`);
-	}
-}
-
-/**
- * Error that is thrown whenever a variable type is used that is unknown the kipper language.
- */
-export class UnknownTypeError extends KipperError {
-	constructor(type: string) {
-		super(`Unknown type '${type}'!`);
-	}
-}
-
-/**
- * Error that is thrown whenever an identifier is registered that interferes with a built-in function or variable.
- * No double definitions or overwrites of global built-in definitions allowed!
- */
-export class BuiltInOverwriteError extends KipperError {
-	constructor(identifier: string) {
-		super(`May not overwrite built-in identifier '${identifier}'.`);
 	}
 }
 

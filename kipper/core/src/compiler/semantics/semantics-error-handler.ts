@@ -26,25 +26,26 @@ export abstract class KipperSemanticErrorHandler {
 
 	/**
 	 * Sets the traceback related line and column info.
-	 * @param ctx The AST node context.
-	 * @param line The line that is being processed at the moment.
-	 * @param col The column that is being processed at the moment.
-	 * @param filePath The path to the file where the error occurred.
-	 * @param stream The UTF-16 token stream.
+	 *
+	 * In case that {@link data.ctx} is set and other fields are missing, these fields will be filled up using the data
+	 * in the {@link data.ctx AST node ctx} instance.
+	 * @param data The traceback data.
 	 * @since 0.8.0
 	 */
-	public setTracebackData(
-		ctx?: CompilableASTNode<any>,
-		line?: number,
-		col?: number,
-		filePath?: string,
-		stream?: KipperParseStream,
-	): void {
-		this.line = line;
-		this.col = col;
-		this.ctx = ctx;
-		this.filePath = filePath;
-		this.stream = stream;
+	public setTracebackData(data: {
+		ctx?: CompilableASTNode<any>;
+		line?: number;
+		col?: number;
+		filePath?: string;
+		stream?: KipperParseStream;
+	}): void {
+		this.ctx = data.ctx;
+
+		// Default to using context metadata in case that the fields were not manually set
+		this.line = data.line ?? data.ctx?.antlrRuleCtx.start.line;
+		this.col = data.col ?? data.ctx?.antlrRuleCtx.start.charPositionInLine;
+		this.filePath = data.filePath ?? data.ctx?.programCtx.filePath;
+		this.stream = data.stream ?? data.ctx?.programCtx.stream;
 	}
 
 	/**
@@ -56,7 +57,7 @@ export abstract class KipperSemanticErrorHandler {
 	 */
 	protected error(error: KipperError): KipperError {
 		// Update error metadata
-		error.setMetadata({
+		error.setTracebackData({
 			location: { line: this.line ?? 1, col: this.col ?? 0 },
 			filePath: this.filePath,
 			tokenSrc: this.ctx ? getParseRuleSource(this.ctx.antlrRuleCtx) : undefined,

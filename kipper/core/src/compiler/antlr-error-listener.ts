@@ -86,7 +86,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 
 		// Create new error and add traceback metadata
 		const err = new KipperSyntaxError<T>(recognizer, offendingSymbol, msg, e);
-		err.setMetadata({
+		err.setTracebackData({
 			location: { line: line, col: charPositionInLine },
 			filePath: this.parseStream.filePath,
 			streamSrc: this.parseStream,
