@@ -1,5 +1,5 @@
 /**
- * 'update' command for updating the CLI if there is a new version available.s
+ * 'update' command for updating the CLI if there is a new version available.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0

@@ -8,22 +8,14 @@
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import {
-	CompilableParseToken,
-	FunctionDeclaration,
-	KipperFileListener,
-	RootFileParseToken,
-	VariableDeclaration,
-	KipperFunction,
-	ScopeFunctionDeclaration,
-	ScopeVariableDeclaration,
-	TranslatedCodeLine,
-} from "./semantics";
+import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine } from "./semantics";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import { KipperLogger } from "../logger";
-import { UndefinedSemanticsError } from "../errors";
+import { KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
-import { KipperSemanticChecker } from "./semantics/semantic-checker";
+import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
 
 /**
@@ -71,7 +63,7 @@ export class KipperProgramContext {
 	 * which is returned inside the {@link this.processedParseTree}.
 	 * @private
 	 */
-	private _processedParseTree: RootFileParseToken | undefined;
+	private _processedParseTree: RootASTNode | undefined;
 
 	/**
 	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
@@ -84,7 +76,7 @@ export class KipperProgramContext {
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
-	private _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
+	private readonly _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 	/**
 	 * Represents the compilation translation for the program. This contains the
@@ -110,7 +102,7 @@ export class KipperProgramContext {
 
 	/**
 	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
-	 * invalid use of tokens is detected.
+	 * invalid use of AST nodes is detected.
 	 * @since 0.7.0
 	 */
 	private readonly _semanticChecker: KipperSemanticChecker;
@@ -147,41 +139,37 @@ export class KipperProgramContext {
 
 	/**
 	 * Asserts a certain truth.
-	 * @param ctx The token context item.
+	 * @param ctx The AST node context item.
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
-	public semanticCheck(ctx: CompilableParseToken<any> | undefined): KipperSemanticChecker {
+	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
-		this._semanticChecker.setTracebackData(
-			ctx,
-			ctx?.antlrRuleCtx.start.line,
-			ctx?.antlrRuleCtx.start.charPositionInLine,
-		);
+		this._semanticChecker.setTracebackData({ ctx });
 		return this._semanticChecker;
 	}
 
 	/**
-	 * Performs a type check on {@link CompilableParseToken the ctx argument}.
-	 * @param ctx The token context item.
+	 * Performs a type check on {@link CompilableASTNode the ctx argument}.
+	 * @param ctx The AST node context item.
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */
-	public typeCheck(ctx: CompilableParseToken<any> | undefined): KipperTypeChecker {
+	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
-		this._typeChecker.setTracebackData(ctx, ctx?.antlrRuleCtx.start.line, ctx?.antlrRuleCtx.start.charPositionInLine);
+		this._typeChecker.setTracebackData({ ctx });
 		return this._typeChecker;
 	}
 
 	/**
-	 * Returns the identifier of the file.
+	 * Returns the file name of the Kipper file.
 	 */
 	public get fileName(): string {
 		return this.stream.name;
 	}
 
 	/**
-	 * Returns the file path of the file.
+	 * Returns the path of the Kipper file.
 	 */
 	public get filePath(): string {
 		return this.stream.filePath;
@@ -195,7 +183,9 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the start item of the parser tree (top item).
+	 * The root node of the Antlr4 generated parse tree.
+	 *
+	 * This parse tree can be used in a {@link KipperFileListener} to generate an abstract syntax tree.
 	 */
 	public get antlrParseTree(): CompilationUnitContext {
 		return this._antlrParseTree;
@@ -267,7 +257,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
-	public get processedParseTree(): RootFileParseToken | undefined {
+	public get processedParseTree(): RootASTNode | undefined {
 		return this._processedParseTree;
 	}
 
@@ -276,24 +266,26 @@ export class KipperProgramContext {
 	 * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
 	 *
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
-	 * {@link this.generateProcessedParseTree} to generate it.
+	 * {@link this.generateAbstractSyntaxTree} to generate it.
 	 * @since 0.6.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		if (!this._processedParseTree) {
-			this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
+			this._processedParseTree = await this.generateAbstractSyntaxTree(
+				new KipperFileListener(this, this.antlrParseTree),
+			);
 		}
 
 		return await this._processedParseTree.semanticAnalysis();
 	}
 
 	/**
-	 * Translates the {@link CompilableParseToken} contained in the {@link this.processedParseTree}. This function should
+	 * Translates the {@link CompilableASTNode} contained in the {@link this.processedParseTree}. This function should
 	 * only be used if {@link semanticAnalysis} has been run before, otherwise it will throw an
 	 * {@link UndefinedSemanticsError}.
 	 *
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
-	 * {@link this.generateProcessedParseTree} to generate it.
+	 * {@link this.generateAbstractSyntaxTree} to generate it.
 	 * @since 0.6.0
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
@@ -313,13 +305,13 @@ export class KipperProgramContext {
 	 * Steps of compilation:
 	 * - Walking through the parsed antlr4 tree - ({@link antlrParseTree})
 	 * - Generating a proper Kipper parse tree, which is eligible for semantic analysis and compilation -
-	 *   ({@link generateProcessedParseTree})
+	 *   ({@link generateAbstractSyntaxTree})
 	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
 	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
 	 */
 	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._processedParseTree = await this.generateProcessedParseTree(new KipperFileListener(this));
+		this._processedParseTree = await this.generateAbstractSyntaxTree(new KipperFileListener(this, this.antlrParseTree));
 
 		// Running the semantic analysis
 		this.logger.info(`Analysing '${this.stream.name}'.`);
@@ -349,7 +341,7 @@ export class KipperProgramContext {
 	 * @param listener The listener instance to iterate through the antlr4 parse tree
 	 * @private
 	 */
-	private async generateProcessedParseTree(listener: KipperFileListener): Promise<RootFileParseToken> {
+	private async generateAbstractSyntaxTree(listener: KipperFileListener): Promise<RootASTNode> {
 		// The walker used to go through the parse tree.
 		const walker = new ParseTreeWalker();
 
@@ -357,12 +349,15 @@ export class KipperProgramContext {
 		this.logger.debug(`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`);
 		walker.walk(listener, this.antlrParseTree);
 
-		const numRootItems: number = listener.kipperParseTree.children.length;
-		this.logger.debug(
-			`Finished generation of processed Kipper parse tree for '${this.stream.name}'.` +
-				` Parsed ${numRootItems} root ${numRootItems <= 1 ? "item" : "items"}`,
-		);
-		return listener.kipperParseTree;
+		if (!listener.rootNode) {
+			// This should usually never happen. If it does, then something went wrong terribly
+			throw new KipperInternalError("Missing AST root node in listener instance");
+		}
+
+		const countNodes: number = listener.rootNode.children.length;
+		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
+		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
+		return listener.rootNode;
 	}
 
 	/**

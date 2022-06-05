@@ -1,4 +1,4 @@
-def function() -> void {
+def func() -> void {
   {
     {
       var lx: bool;

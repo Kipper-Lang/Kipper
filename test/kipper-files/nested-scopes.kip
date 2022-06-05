@@ -2,7 +2,7 @@ var x: bool;
 var y: num = 4;
 const z: str = "1";
 
-def function() -> void {
+def func() -> void {
   {
     var rx: bool;
     var ry: num = 5 * y;

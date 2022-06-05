@@ -6,7 +6,12 @@
  * @since 0.7.0
  */
 
-import { CompoundStatement, Expression, ExpressionSemantics, IdentifierPrimaryExpression } from "./tokens";
+import {
+	type CompoundStatement,
+	type Expression,
+	type ExpressionSemantics,
+	IdentifierPrimaryExpression,
+} from "../language";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
@@ -21,26 +26,26 @@ import {
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
 	InvalidConversionError,
-} from "../../errors";
+} from "../../../errors";
 import {
-	KipperArithmeticOperator,
-	KipperFunction,
 	kipperPlusOperator,
-	KipperRef,
 	kipperStrLikeTypes,
 	kipperSupportedConversions,
-	KipperType,
-} from "./const";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import { KipperProgramContext } from "../program-ctx";
-import { KipperAsserter } from "./asserter";
+	type KipperRef,
+	type KipperArithmeticOperator,
+	type KipperFunction,
+	type KipperType,
+} from "../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
  * invalid use of tokens is detected.
  * @since 0.7.0
  */
-export class KipperSemanticChecker extends KipperAsserter {
+export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	constructor(programCtx: KipperProgramContext) {
 		super(programCtx);
 	}
@@ -179,8 +184,8 @@ export class KipperSemanticChecker extends KipperAsserter {
 		exp2: Expression<ExpressionSemantics>,
 		op: KipperArithmeticOperator,
 	): void {
-		const exp1Type = exp1.ensureSemanticDataExists().evaluatedType;
-		const exp2Type = exp2.ensureSemanticDataExists().evaluatedType;
+		const exp1Type = exp1.getSemanticData().evaluatedType;
+		const exp2Type = exp2.getSemanticData().evaluatedType;
 		if (exp1Type !== exp2Type) {
 			// String-like types can use '+' to concat strings
 			if (
@@ -303,7 +308,7 @@ export class KipperSemanticChecker extends KipperAsserter {
 	 * @since 0.8.0
 	 */
 	public validConversion(exp: Expression<any>, type: KipperType): void {
-		const originalType: KipperType = exp.ensureSemanticDataExists().evaluatedType;
+		const originalType: KipperType = exp.getSemanticData().evaluatedType;
 
 		const viableConversion = (() => {
 			// Check whether a supported pair of types exist.

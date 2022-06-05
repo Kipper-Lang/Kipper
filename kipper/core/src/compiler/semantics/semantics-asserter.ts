@@ -6,40 +6,22 @@
  * @since 0.7.0
  */
 import { KipperProgramContext } from "../program-ctx";
-import { CompilableParseToken } from "./tokens";
 import { KipperError } from "../../errors";
 import { LogLevel } from "../../logger";
+import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../utils";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
- * any form of misuse is found.
+ * any logical issue is found.
  * @since 0.7.0
  */
-export abstract class KipperAsserter {
+export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler {
 	public readonly programCtx: KipperProgramContext;
 
-	private line: number | undefined;
-
-	private col: number | undefined;
-
-	private ctx: CompilableParseToken<any> | undefined;
-
 	protected constructor(programCtx: KipperProgramContext) {
+		super();
 		this.programCtx = programCtx;
-	}
-
-	/**
-	 * Sets the traceback related line and column info.
-	 * @param ctx The token context.
-	 * @param line The line that is being processed at the moment.
-	 * @param col The column that is being processed at the moment.
-	 * @since 0.3.0
-	 */
-	public setTracebackData(ctx?: CompilableParseToken<any>, line?: number, col?: number): void {
-		this.line = line;
-		this.col = col;
-		this.ctx = ctx;
 	}
 
 	/**
@@ -51,7 +33,7 @@ export abstract class KipperAsserter {
 	 */
 	protected assertError(error: KipperError): KipperError {
 		// Update error metadata
-		error.setMetadata({
+		error.setTracebackData({
 			location: { line: this.line ?? 1, col: this.col ?? 0 },
 			filePath: this.programCtx.filePath,
 			tokenSrc: this.ctx ? getParseRuleSource(this.ctx.antlrRuleCtx) : undefined,
