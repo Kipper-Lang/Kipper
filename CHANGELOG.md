@@ -39,8 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
     Kipper.
 - New errors:
-  - `InvalidConversionError`, which is thrown whenever an invalid or unimplemented conversion is used in a Kipper
+  - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
     program.
+  - `ReservedIdentifierOverwriteError`, which is thrown whenever a declaration identifier overwrites/interferes with
+    an internal function or reserved keyword/identifier.
 - New types and constants:
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
