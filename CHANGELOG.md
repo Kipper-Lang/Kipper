@@ -65,12 +65,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `semantic-analyser.ts` to `target-semantic-analyser.ts`.
   - `ParserASTNode.ensureTokenChildrenExist` to `getTokenChildren`.
   - `ParserASTNode.ensureSemanticDataExists` to `getSemanticData`.
+  - `KipperAsserter` to `KipperSemanticsAsserter`.
+  - `TargetTokenCodeGenerator` to `TargetASTNodeCodeGenerator`.
+  - `TargetTokenSemanticAnalyser` to `TargetASTNodeSemanticAnalyser`.
 - Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 - Updated `@kipper/core` code base structure:
   - `/parser/` now contains these new files:
-    - `ast-node.ts` - AST Node (Previously parse-token.ts)
-    - `root-ast-node.ts` - Root AST Node (Extracted from compilable-ast-node.ts)
-    - `compilable-ast-node.ts` - Compilable AST Node (Previously compilable-parse-token.ts)
+    - `ast-node.test.ts` - AST Node (Previously parse-token.ts)
+    - `root-ast-node.test.ts` - Root AST Node (Extracted from compilable-ast-node.test.ts)
+    - `compilable-ast-node.test.ts` - Compilable AST Node (Previously compilable-parse-token.ts)
   - `/semantics/language/` which contains the language specific AST Node classes that implement the semantics for the
     expressions, definitions and statements in Kipper.
   - `/semantics/processor/` which is the module containing the Semantic analyser and Type checker.
