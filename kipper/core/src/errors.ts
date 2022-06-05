@@ -202,10 +202,10 @@ export class KipperSyntaxError<Token> extends KipperError {
 
 	/**
 	 * KipperSyntaxError Constructor
-	 * @param {Recognizer<KipperParser, any>} recognizer The Antlr4 Parser - should normally always be KipperParser
-	 * @param {Token | undefined} offendingSymbol The token that caused the error
-	 * @param {string} msg The msg that was generated as the error message in the Parser
-	 * @param {RecognitionException} error The error instance that raised the syntax error in the Lexer
+	 * @param recognizer The Antlr4 Parser - should normally always be KipperParser
+	 * @param offendingSymbol The token that caused the error
+	 * @param msg The msg that was generated as the error message in the Parser
+	 * @param error The error instance that raised the syntax error in the Lexer
 	 */
 	public constructor(
 		recognizer: Recognizer<Token, any>,
