@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#134](https://github.com/Luna-Klatzer/Kipper/issues/134))
 - Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal
   identifier or reserved identifier/keyword. ([#153](https://github.com/Luna-Klatzer/Kipper/issues/153))
+- Implemented tree-shaking for internal and built-in functions using the new class `KipperOptimiser`, which removes 
+  any function definitions that are not used ([#159](https://github.com/Luna-Klatzer/Kipper/issues/159)).
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 - New classes and interfaces:
   - `KipperTargetBuiltInGenerator`, which updates the behaviour for generating built-in functions.
@@ -38,14 +40,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     keywords and other internal logic.
   - `KipperSemanticErrorHandler`, which implements a default abstract error handler for semantic errors. This is
     used by `KipperTargetSemanticAnalyser` and `KipperAsserter`.
+  - `KipperOptimiser`, which handles code optimisation for a Kipper program.
 - New functions:
   - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
     Kipper.
+  - `KipperOptimiser.optimise()`, which performs optimisation on an abstract syntax tree.
 - New errors:
   - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
     program.
   - `ReservedIdentifierOverwriteError`, which is thrown whenever a declaration identifier overwrites/interferes with
     an internal function or reserved keyword/identifier.
+  - `KipperProgramContext.optimise()`, which performs code optimisations for the local abstract syntax tree.
 - New types and constants:
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
@@ -76,6 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TargetTokenSemanticAnalyser` to `TargetASTNodeSemanticAnalyser`.
   - `CompilerEvaluatedOptions` to `EvaluatedCompileOptions`.
   - `KipperProgramContext.processedParseTree` to `abstractSyntaxTree`.
+  - `KipperProgramContext.builtInGlobals` to `builtIns`.
 - Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 - Updated `@kipper/core` code base structure:
   - `/parser/` now contains these new files:
