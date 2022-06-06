@@ -75,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `TargetTokenCodeGenerator` to `TargetASTNodeCodeGenerator`.
   - `TargetTokenSemanticAnalyser` to `TargetASTNodeSemanticAnalyser`.
   - `CompilerEvaluatedOptions` to `EvaluatedCompileOptions`.
+  - `KipperProgramContext.processedParseTree` to `abstractSyntaxTree`.
 - Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 - Updated `@kipper/core` code base structure:
   - `/parser/` now contains these new files:
