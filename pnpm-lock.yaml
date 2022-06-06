@@ -30,7 +30,7 @@ specifiers:
   tsify: 5.0.4
   tslib: ~2.4.0
   typescript: ~4.7.0
-  uglify-js: 3.15.5
+  uglify-js: 3.16.0
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -66,7 +66,7 @@ devDependencies:
   run-script-os: 1.1.6
   ts-mocha: 10.0.0_mocha@10.0.0
   tsify: 5.0.4_ihds425jv7utpzcxj6k6gl5i4e
-  uglify-js: 3.15.5
+  uglify-js: 3.16.0
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -5781,10 +5781,9 @@ packages:
     resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: false
 
-  /uglify-js/3.15.5:
-    resolution: {integrity: sha512-hNM5q5GbBRB5xB+PMqVRcgYe4c8jbyZ1pzZhS6jbq54/4F2gFK869ZheiE5A8/t+W5jtTNpWef/5Q9zk639FNQ==}
+  /uglify-js/3.16.0:
+    resolution: {integrity: sha512-FEikl6bR30n0T3amyBh3LoiBdqHRy/f4H80+My34HOesOKyHfOsxAPAxOoqC0JUnC1amnO0IwkYC3sko51caSw==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: true
