@@ -8,6 +8,7 @@
 export * as parser from "./parser";
 export * as semantics from "./semantics";
 export * as translation from "./translation";
+export * as optimiser from "./optimiser";
 export * from "./runtime-built-ins";
 export * from "./parser";
 export * from "./semantics";
@@ -17,3 +18,4 @@ export * from "./program-ctx";
 export * from "./compile-target";
 export * from "./compiler";
 export * from "./scope-declaration";
+export * from "./optimiser";

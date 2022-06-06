@@ -13,64 +13,29 @@ import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-decl
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import { KipperLogger, LogLevel } from "../logger";
-import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
+import { ArgumentError, KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
+import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 
 /**
  * The program context class used to represent a program for a compilation.
  * @since 0.0.3
  */
 export class KipperProgramContext {
-	/**
-	 * The private field '_stream' that actually stores the variable data,
-	 * which is returned inside the {@link this.stream}.
-	 * @private
-	 */
 	private readonly _stream: KipperParseStream;
 
-	/**
-	 * The private field '_parseTreeEntry' that actually stores the variable data,
-	 * which is returned inside the {@link this.parseTreeEntry}.
-	 * @private
-	 */
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	/**
-	 * The private field '_parser' that actually stores the variable data,
-	 * which is returned inside the {@link this.parser}.
-	 * @private
-	 */
-	private readonly _parser: KipperParser;
-
-	/**
-	 * The private field '_lexer' that actually stores the variable data,
-	 * which is returned inside the {@link this.lexer}.
-	 * @private
-	 */
-	private readonly _lexer: KipperLexer;
+	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
 	 * The private field '_builtInGlobals' that actually stores the variable data,
 	 * which is returned inside the getter {@link this.builtInGlobals}.
 	 * @private
 	 */
-	private _builtInGlobals: Array<BuiltInFunction>;
-
-	/**
-	 * The private field '_processedParseTree' that actually stores the variable data,
-	 * which is returned inside the {@link this.processedParseTree}.
-	 * @private
-	 */
-	private _abstractSyntaxTree: RootASTNode | undefined;
-
-	/**
-	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
-	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
-	 * @private
-	 */
-	private _compiledCode: Array<Array<string>> | undefined;
+	private readonly _builtInGlobals: Array<BuiltInFunction>;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -79,12 +44,51 @@ export class KipperProgramContext {
 	private readonly _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 	/**
+	 * The field compiledCode that will store the cached code, once 'compileProgram' has been called. This is
+	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
+	 * @private
+	 */
+	private _compiledCode: Array<Array<string>> | undefined;
+
+	/**
 	 * Represents the compilation translation for the program. This contains the
 	 * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
 	 * specific for the translation, and {@link KipperTargetCodeGenerator}, which
 	 * translates the Kipper code into a translation language.
 	 */
 	public readonly target: KipperCompileTarget;
+
+	/**
+	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
+	 * invalid use of AST nodes is detected.
+	 * @since 0.7.0
+	 */
+	public readonly semanticChecker: KipperSemanticChecker;
+
+	/**
+	 * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an invalid
+	 * use of types and identifiers is detected.
+	 * @since 0.7.0
+	 */
+	public readonly typeChecker: KipperTypeChecker;
+
+	/**
+	 * Kipper Code Optimiser, which performs
+	 * @since 0.8.0
+	 */
+	public readonly optimiser: KipperOptimiser;
+
+	/**
+	 * Returns the {@link KipperParser}, which parsed this program and generated the
+	 * {@link this.antlrParseTree parse tree}.
+	 */
+	public readonly parser: KipperParser;
+
+	/**
+	 * Returns the {@link KipperLexer}, which lexed this program and generated the tokens for it.
+	 * @private
+	 */
+	public readonly lexer: KipperLexer;
 
 	/**
 	 * The logger that should be used to log warnings and errors.
@@ -100,20 +104,6 @@ export class KipperProgramContext {
 	 */
 	public internals: Array<InternalFunction>;
 
-	/**
-	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
-	 * invalid use of AST nodes is detected.
-	 * @since 0.7.0
-	 */
-	private readonly _semanticChecker: KipperSemanticChecker;
-
-	/**
-	 * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an invalid
-	 * use of types and identifiers is detected.
-	 * @since 0.7.0
-	 */
-	private readonly _typeChecker: KipperTypeChecker;
-
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -122,16 +112,20 @@ export class KipperProgramContext {
 		logger: KipperLogger,
 		target: KipperCompileTarget,
 		internals: Array<InternalFunction>,
+		semanticChecker?: KipperSemanticChecker,
+		typeChecker?: KipperTypeChecker,
+		optimiser?: KipperOptimiser,
 	) {
 		this.logger = logger;
 		this.target = target;
 		this.internals = internals;
-		this._semanticChecker = new KipperSemanticChecker(this);
-		this._typeChecker = new KipperTypeChecker(this);
+		this.semanticChecker = semanticChecker ?? new KipperSemanticChecker(this);
+		this.typeChecker = typeChecker ?? new KipperTypeChecker(this);
+		this.optimiser = optimiser ?? new KipperOptimiser();
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
-		this._parser = parser;
-		this._lexer = lexer;
+		this.parser = parser;
+		this.lexer = lexer;
 		this._builtInGlobals = [];
 		this._globalScope = [];
 		this._abstractSyntaxTree = undefined;
@@ -145,8 +139,8 @@ export class KipperProgramContext {
 	 */
 	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
-		this._semanticChecker.setTracebackData({ ctx });
-		return this._semanticChecker;
+		this.semanticChecker.setTracebackData({ ctx });
+		return this.semanticChecker;
 	}
 
 	/**
@@ -157,8 +151,8 @@ export class KipperProgramContext {
 	 */
 	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
-		this._typeChecker.setTracebackData({ ctx });
-		return this._typeChecker;
+		this.typeChecker.setTracebackData({ ctx });
+		return this.typeChecker;
 	}
 
 	/**
@@ -189,21 +183,6 @@ export class KipperProgramContext {
 	 */
 	public get antlrParseTree(): CompilationUnitContext {
 		return this._antlrParseTree;
-	}
-
-	/**
-	 * Returns the {@link KipperParser}, which parsed this "virtual" file and generated the {@link this.parseTreeEntry} ctx
-	 * context.
-	 */
-	public get parser(): KipperParser {
-		return this._parser;
-	}
-
-	/**
-	 * Returns the {@link KipperLexer}, which lexed this "virtual" file and generated the tokens for it.
-	 */
-	public get lexer(): KipperLexer {
-		return this._lexer;
 	}
 
 	/**
@@ -269,7 +248,7 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private async generateAbstractSyntaxTree(
-		listener: KipperFileListener = new KipperFileListener(this, this.antlrParseTree)
+		listener: KipperFileListener = new KipperFileListener(this, this.antlrParseTree),
 	): Promise<RootASTNode> {
 		if (listener.rootNode.programCtx !== this) {
 			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");
@@ -310,7 +289,8 @@ export class KipperProgramContext {
 
 	/**
 	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
-	 * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
+	 * and warnings using the {@link this.logger logger of this instance} and throw errors in case any logical issues are
+	 * detected.
 	 *
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
 	 * {@link this.generateAbstractSyntaxTree} to generate it.
@@ -324,6 +304,35 @@ export class KipperProgramContext {
 
 			// Semantically analysing the AST starting from the root node
 			await this._abstractSyntaxTree.semanticAnalysis();
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
+	}
+
+	/**
+	 * Optimises the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
+	 * @param options The options for the optimisation. If undefined, the {@link defaultOptimisationOptions} are used.
+	 * @since 0.8.0
+	 */
+	public async optimise(options?: OptimisationOptions): Promise<RootASTNode> {
+		if (!this.abstractSyntaxTree) {
+			// TODO! Change this error to a more fitting one
+			throw new UndefinedSemanticsError();
+		}
+
+		try {
+			const result = await this.optimiser.optimise(this.abstractSyntaxTree, options);
+
+			// Caching the result
+			this._abstractSyntaxTree = result;
+
+			return result;
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -383,6 +392,10 @@ export class KipperProgramContext {
 		// Running the semantic analysis for the AST
 		this.logger.info(`Analysing '${this.stream.name}'.`);
 		await this.semanticAnalysis();
+
+		// Optimising the AST
+		this.logger.info(`Optimising '${this.stream.name}'`);
+		await this.optimise();
 
 		// Translating the context instances and children
 		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
