@@ -5,19 +5,20 @@
  * @since 0.0.3
  */
 
+import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
+import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
+import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
-import { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
 import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine } from "./semantics";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
-import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import { KipperLogger, LogLevel } from "../logger";
-import { ArgumentError, KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperCompileTarget } from "./compile-target";
+import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
+import { Reference } from "./reference";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -104,6 +105,28 @@ export class KipperProgramContext {
 	 */
 	public internals: Array<InternalFunction>;
 
+	/**
+	 * A list of all references to built-in functions. This is used to determine which built-in functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused built-in
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private _builtInReferences: Array<Reference>;
+
+	/**
+	 * A list of all references to internal functions. This is used to determine which internal functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused internal
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private _internalReferences: Array<Reference>;
+
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -121,14 +144,16 @@ export class KipperProgramContext {
 		this.internals = internals;
 		this.semanticChecker = semanticChecker ?? new KipperSemanticChecker(this);
 		this.typeChecker = typeChecker ?? new KipperTypeChecker(this);
-		this.optimiser = optimiser ?? new KipperOptimiser();
-		this._stream = stream;
-		this._antlrParseTree = parseTreeEntry;
+		this.optimiser = optimiser ?? new KipperOptimiser(this);
 		this.parser = parser;
 		this.lexer = lexer;
+		this._stream = stream;
+		this._antlrParseTree = parseTreeEntry;
 		this._builtInGlobals = [];
 		this._globalScope = [];
 		this._abstractSyntaxTree = undefined;
+		this._builtInReferences = [];
+		this._internalReferences = [];
 	}
 
 	/**
@@ -222,12 +247,36 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the typescript code counterpart to this "virtual" file.
+	 * Returns the cached compiled code.
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
 	public get compiledCode(): Array<Array<string>> | undefined {
 		return this._compiledCode;
+	}
+
+	/**
+	 * A list of all references to internal functions. This is used to determine which internal functions are used and
+	 * which aren't.
+	 *
+	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused internal functions,
+	 * so they will not be generated.
+	 * @since 0.8.0
+	 */
+	public get internalReferences(): Array<Reference> {
+		return this._internalReferences;
+	}
+
+	/**
+	 * A list of all references to built-in functions. This is used to determine which built-in functions are used and
+	 * which aren't.
+	 *
+	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused built-in functions,
+	 * so they will not be generated.
+	 * @since 0.8.0
+	 */
+	public get builtInReferences(): Array<Reference> {
+		return this._builtInReferences;
 	}
 
 	/**
@@ -316,7 +365,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Optimises the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
+	 * Processes the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
 	 * @param options The options for the optimisation. If undefined, the {@link defaultOptimisationOptions} are used.
 	 * @since 0.8.0
 	 */
@@ -376,14 +425,13 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
+	 * Translate the parse tree of this virtual file into the {@link target target language}.
 	 *
 	 * Steps of compilation:
-	 * - Walking through the parsed antlr4 tree - ({@link antlrParseTree})
-	 * - Generating a proper Kipper parse tree, which is eligible for semantic analysis and compilation -
-	 *   ({@link generateAbstractSyntaxTree})
-	 * - Running the semantic analysis - ({@link abstractSyntaxTree.semanticAnalysis})
-	 * - Generating the final source code - ({@link abstractSyntaxTree.translateCtxAndChildren})
+	 * - Generating a Kipper abstract syntax tree - ({@link generateAbstractSyntaxTree})
+	 * - Semantically analysing the AST - ({@link semanticAnalysis})
+	 * - Optimising the AST - ({@link optimise})
+	 * - Generating the final source code for the specified target - ({@link translate})
 	 */
 	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
 		// Getting the processed AST tree

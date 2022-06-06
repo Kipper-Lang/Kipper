@@ -5,7 +5,8 @@
  * @since 0.8.0
  */
 
-import { RootASTNode } from "../parser";
+import type { RootASTNode } from "../parser";
+import type { KipperProgramContext } from "../program-ctx";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -37,6 +38,8 @@ export const defaultOptimisationOptions: OptimisationOptions = {
  * @since 0.8.0
  */
 export class KipperOptimiser {
+	constructor(public programCtx: KipperProgramContext) {}
+
 	/**
 	 * Optimises the {@link astTree} based on the {@link options} argument.
 	 *
