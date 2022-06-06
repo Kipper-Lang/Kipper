@@ -16,7 +16,7 @@ import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
 
 /**
- * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link CompilerEvaluatedOptions}
+ * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileOptions}
  * if it's passed to {@link KipperCompiler.compile}.
  * @since 0.1.0
  */
@@ -44,17 +44,17 @@ export interface CompileConfig {
 }
 
 /**
- * Runtime Compile config, which wraps the {@link CompileConfig} interface and allows this class to be passed onto
- * the {@link KipperCompiler.compile} function as a valid argument.
+ * Runtime Compile config class, which implements the {@link CompileConfig} interface and is able to be
+ * passed onto the {@link KipperCompiler.compile} function as a valid config argument.
  *
- * This class will store both the default values and actual values for the compilation. All actual values will be
- * processed and generated on construction.
+ * This class will store both the {@link defaults default values} and actual values for the compilation. All actual
+ * values will be processed and evaluated on construction, so that every option is not undefined.
  * @since 0.1.0
  */
-export class CompilerEvaluatedOptions implements CompileConfig {
+export class EvaluatedCompileOptions implements CompileConfig {
 	/**
 	 * Original user-defined {@link CompileConfig}, which may not be overwritten anymore, as the compile-arguments
-	 * were processed using the {@link constructor}.
+	 * were already processed using the {@link constructor} of this class.
 	 */
 	public readonly userOptions: CompileConfig;
 
@@ -88,10 +88,10 @@ export class CompilerEvaluatedOptions implements CompileConfig {
 		this.userOptions = options;
 
 		// Write all items
-		this.globals = options.globals ?? Object.values(CompilerEvaluatedOptions.defaults.globals);
-		this.extendGlobals = options.extendGlobals ?? CompilerEvaluatedOptions.defaults.extendGlobals;
-		this.fileName = options.fileName ?? CompilerEvaluatedOptions.defaults.fileName;
-		this.target = options.target ?? CompilerEvaluatedOptions.defaults.target;
+		this.globals = options.globals ?? Object.values(EvaluatedCompileOptions.defaults.globals);
+		this.extendGlobals = options.extendGlobals ?? EvaluatedCompileOptions.defaults.extendGlobals;
+		this.fileName = options.fileName ?? EvaluatedCompileOptions.defaults.fileName;
+		this.target = options.target ?? EvaluatedCompileOptions.defaults.target;
 	}
 }
 
@@ -245,20 +245,20 @@ export class KipperCompiler {
 	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
 	 * @param compilerOptions {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
-	 * program and compilation. This uses per default {@link CompilerEvaluatedOptions} with an empty interface as user args
+	 * program and compilation. This uses per default {@link EvaluatedCompileOptions} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
-		compilerOptions: CompileConfig = new CompilerEvaluatedOptions({}),
+		compilerOptions: CompileConfig = new EvaluatedCompileOptions({}),
 	): Promise<KipperCompileResult> {
 		// Handle compiler options
-		const config: CompilerEvaluatedOptions =
-			compilerOptions instanceof CompilerEvaluatedOptions
+		const config: EvaluatedCompileOptions =
+			compilerOptions instanceof EvaluatedCompileOptions
 				? compilerOptions
-				: new CompilerEvaluatedOptions(compilerOptions);
+				: new EvaluatedCompileOptions(compilerOptions);
 
 		// Handle the input and format it
 		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);

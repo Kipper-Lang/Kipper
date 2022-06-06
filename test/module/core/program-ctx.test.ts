@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { InvalidGlobalError, KipperCompiler, KipperParseStream, KipperProgramContext } from "@kipper/core";
 import { promises as fs } from "fs";
-import { ScopeVariableDeclaration, CompilerEvaluatedOptions } from "@kipper/core";
+import { ScopeVariableDeclaration, EvaluatedCompileOptions } from "@kipper/core";
 import * as path from "path";
 
 const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -24,12 +24,12 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
 
 			// Register globals
-			programCtx.registerGlobals(CompilerEvaluatedOptions.defaults.globals.print);
+			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 
 			// Make sure a single global exists
 			assert(programCtx.builtInGlobals.length == 1, "Expected one global to exist");
 			assert(
-				programCtx.builtInGlobals[0] === CompilerEvaluatedOptions.defaults.globals.print,
+				programCtx.builtInGlobals[0] === EvaluatedCompileOptions.defaults.globals.print,
 				"Expected global to match!",
 			);
 		});
@@ -40,13 +40,13 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
 
 			// Register already registered global again
-			programCtx.registerGlobals(CompilerEvaluatedOptions.defaults.globals.print);
+			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 
 			// Make sure a single global exists
 			assert(programCtx.builtInGlobals.length == 1, "Expected one global to exist");
 
 			try {
-				programCtx.registerGlobals(CompilerEvaluatedOptions.defaults.globals.print);
+				programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 			} catch (e) {
 				if (e instanceof InvalidGlobalError) {
 					return;
@@ -69,7 +69,7 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.getGlobalIdentifier("id") === undefined, "No global should exist");
 
 			// Register globals and check again
-			programCtx.registerGlobals(CompilerEvaluatedOptions.defaults.globals.print);
+			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 			assert(programCtx.getGlobalIdentifier("") === undefined, "No global should exist");
 			assert(programCtx.getGlobalIdentifier("id") === undefined, "No global should exist");
 		});
@@ -78,9 +78,9 @@ describe("KipperProgramContext", async () => {
 			const programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
 			// Register globals and check again
-			programCtx.registerGlobals(CompilerEvaluatedOptions.defaults.globals.print);
+			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 			assert(
-				programCtx.getGlobalIdentifier("print") === CompilerEvaluatedOptions.defaults.globals.print,
+				programCtx.getGlobalIdentifier("print") === EvaluatedCompileOptions.defaults.globals.print,
 				"The built-in function 'print' should be returned.",
 			);
 		});
