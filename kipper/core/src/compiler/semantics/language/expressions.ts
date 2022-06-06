@@ -52,9 +52,11 @@ import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompoundStatement } from "./statements";
 import { CompilableASTNode } from "../../parser";
-import { ScopeVariableDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
+import { getConversionFunctionIdentifier } from "../../../utils";
+import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 
 /**
  * Every antlr4 expression ctx type
@@ -571,10 +573,15 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 				return "func";
 			}
 		};
+
 		this.semanticData = {
 			evaluatedType: evaluateType(),
 			identifier: identifier,
 		};
+
+		if (!(ref instanceof ScopeDeclaration)) {
+			this.programCtx.addBuiltInReference(this, ref);
+		}
 	}
 
 	/**
@@ -1389,6 +1396,13 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 			type: type,
 			exp: exp,
 		};
+
+		// Add internal reference to the program ctx.
+		const expType = (<Expression<ExpressionSemantics>>exp).getSemanticData().evaluatedType;
+		const internalIdentifier = getConversionFunctionIdentifier(expType, type);
+		if (internalIdentifier in kipperInternalBuiltIns) {
+			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
+		}
 	}
 
 	/**

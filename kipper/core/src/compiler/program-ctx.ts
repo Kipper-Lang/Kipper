@@ -10,7 +10,7 @@ import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStre
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine } from "./semantics";
+import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine, Expression } from "./semantics";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
@@ -574,5 +574,31 @@ export class KipperProgramContext {
 			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token);
 		this._globalScope.push(declaration);
 		return declaration;
+	}
+
+	/**
+	 * Adds a new built-in reference.
+	 * @param exp The expression referencing {@link ref}.
+	 * @param ref The built-in identifier referenced.
+	 * @since 0.8.0
+	 */
+	public addBuiltInReference(exp: Expression<any>, ref: BuiltInFunction) {
+		this._builtInReferences.push({
+			ref: ref,
+			exp: exp
+		});
+	}
+
+	/**
+	 * Adds a new internal reference.
+	 * @param exp The expression referencing {@link ref}.
+	 * @param ref The internal identifier referenced.
+	 * @since 0.8.0
+	 */
+	public addInternalReference(exp: Expression<any>, ref: InternalFunction) {
+		this._internalReferences.push({
+			ref: ref,
+			exp: exp
+		});
 	}
 }
