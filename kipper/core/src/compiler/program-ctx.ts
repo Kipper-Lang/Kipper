@@ -63,7 +63,7 @@ export class KipperProgramContext {
 	 * which is returned inside the {@link this.processedParseTree}.
 	 * @private
 	 */
-	private _processedParseTree: RootASTNode | undefined;
+	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
 	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
@@ -134,7 +134,7 @@ export class KipperProgramContext {
 		this._lexer = lexer;
 		this._builtInGlobals = [];
 		this._globalScope = [];
-		this._processedParseTree = undefined;
+		this._abstractSyntaxTree = undefined;
 	}
 
 	/**
@@ -257,8 +257,8 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
-	public get processedParseTree(): RootASTNode | undefined {
-		return this._processedParseTree;
+	public get abstractSyntaxTree(): RootASTNode | undefined {
+		return this._abstractSyntaxTree;
 	}
 
 	/**
@@ -271,12 +271,12 @@ export class KipperProgramContext {
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		try {
-			if (!this._processedParseTree) {
-				this._processedParseTree = await this.generateAbstractSyntaxTree(
+			if (!this._abstractSyntaxTree) {
+				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(
 					new KipperFileListener(this, this.antlrParseTree),
 				);
 			}
-			await this._processedParseTree.semanticAnalysis();
+			await this._abstractSyntaxTree.semanticAnalysis();
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -298,13 +298,13 @@ export class KipperProgramContext {
 	 * @since 0.6.0
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
-		if (!this._processedParseTree) {
+		if (!this._abstractSyntaxTree) {
 			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
 		try {
-			let genCode: Array<TranslatedCodeLine> = await this._processedParseTree.translate();
+			let genCode: Array<TranslatedCodeLine> = await this._abstractSyntaxTree.translate();
 
 			// Append required typescript code for Kipper for the program to work properly
 			return (await this.generateRequirements()).concat(genCode);
@@ -326,12 +326,12 @@ export class KipperProgramContext {
 	 * - Walking through the parsed antlr4 tree - ({@link antlrParseTree})
 	 * - Generating a proper Kipper parse tree, which is eligible for semantic analysis and compilation -
 	 *   ({@link generateAbstractSyntaxTree})
-	 * - Running the semantic analysis - ({@link processedParseTree.semanticAnalysis})
-	 * - Generating the final source code - ({@link processedParseTree.translateCtxAndChildren})
+	 * - Running the semantic analysis - ({@link abstractSyntaxTree.semanticAnalysis})
+	 * - Generating the final source code - ({@link abstractSyntaxTree.translateCtxAndChildren})
 	 */
 	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
 		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._processedParseTree = await this.generateAbstractSyntaxTree(new KipperFileListener(this, this.antlrParseTree));
+		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(new KipperFileListener(this, this.antlrParseTree));
 
 		// Running the semantic analysis
 		this.logger.info(`Analysing '${this.stream.name}'.`);
@@ -343,7 +343,7 @@ export class KipperProgramContext {
 
 		this.logger.debug(
 			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
-				`${this._processedParseTree.children.length}`,
+				`${this._abstractSyntaxTree.children.length}`,
 		);
 
 		// Cache the result
