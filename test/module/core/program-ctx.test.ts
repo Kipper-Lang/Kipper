@@ -15,35 +15,32 @@ describe("KipperProgramContext", async () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
 			// No globals registered yet!
-			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
+			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 		});
 
 		it("Add single global", async () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
-			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
+			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 
 			// Register globals
 			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 
 			// Make sure a single global exists
-			assert(programCtx.builtInGlobals.length == 1, "Expected one global to exist");
-			assert(
-				programCtx.builtInGlobals[0] === EvaluatedCompileOptions.defaults.globals.print,
-				"Expected global to match!",
-			);
+			assert(programCtx.builtIns.length == 1, "Expected one global to exist");
+			assert(programCtx.builtIns[0] === EvaluatedCompileOptions.defaults.globals.print, "Expected global to match!");
 		});
 
 		it("Expecting error with duplicate global", async () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
-			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
+			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 
 			// Register already registered global again
 			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
 
 			// Make sure a single global exists
-			assert(programCtx.builtInGlobals.length == 1, "Expected one global to exist");
+			assert(programCtx.builtIns.length == 1, "Expected one global to exist");
 
 			try {
 				programCtx.registerGlobals(EvaluatedCompileOptions.defaults.globals.print);
@@ -64,7 +61,7 @@ describe("KipperProgramContext", async () => {
 			const programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
 			// No globals should be there
-			assert(programCtx.builtInGlobals.length === 0, "Expected builtInGlobals to be empty");
+			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 			assert(programCtx.getGlobalIdentifier("") === undefined, "No global should exist");
 			assert(programCtx.getGlobalIdentifier("id") === undefined, "No global should exist");
 

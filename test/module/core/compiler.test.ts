@@ -171,7 +171,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.builtInGlobals.length === 1, "Expected a single global function");
+				assert(instance.programCtx.builtIns.length === 1, "Expected a single global function");
 			});
 
 			it("Single Function call", async () => {

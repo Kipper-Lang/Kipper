@@ -90,23 +90,24 @@ export class KipperProgramContext {
 	public logger: KipperLogger;
 
 	/**
-	 * Contains all the internal built-in functions, which are used by Kipper to provide internal functionality. These
+	 * Contains all the internal functions, which are used by Kipper to provide internal functionality. These
 	 * internal built-ins are commonly used to provide the functionality for keywords and other internal logic.
 	 *
-	 * This contains *every* builtin that also must be implemented by every target in the {@link KipperTargetBuiltInGenerator}.
+	 * This contains *every* internal functions that also must be implemented by every target in the
+	 * {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.8.0
 	 */
 	public internals: Array<InternalFunction>;
 
 	/**
-	 * Returns the builtIn global functions registered for this Kipper program. These global functions defined in the
+	 * Returns the built-in global functions registered for this Kipper program. These global functions defined in the
 	 * array will be available in the Kipper program and callable using their specified identifier.
 	 *
 	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
 	 * Kipper.
 	 * @since 0.8.0
 	 */
-	public builtInGlobals: Array<BuiltInFunction>;
+	public builtIns: Array<BuiltInFunction>;
 
 	/**
 	 * A list of all references to built-in functions. This is used to determine which built-in functions are
@@ -152,7 +153,7 @@ export class KipperProgramContext {
 		this.lexer = lexer;
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
-		this.builtInGlobals = [];
+		this.builtIns = [];
 		this._globalScope = [];
 		this._abstractSyntaxTree = undefined;
 		this._builtInReferences = [];
@@ -474,7 +475,7 @@ export class KipperProgramContext {
 		}
 
 		// Generating the code for the global functions
-		for (const builtInSpec of this.builtInGlobals) {
+		for (const builtInSpec of this.builtIns) {
 			// Fetch the function for handling this built-in
 			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
 				this.target.builtInGenerator,
@@ -495,13 +496,13 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
+	 * Tries to fetch a global function from the {@link this.builtIns} array based on the passed {@link identifier}
 	 * @param identifier The identifier of the function
 	 */
 	public getGlobalFunction(identifier: string): KipperFunction | undefined {
 		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
 		return (
-			this.builtInGlobals.find((value) => {
+			this.builtIns.find((value) => {
 				return value.identifier === identifier;
 			}) ?? <ScopeFunctionDeclaration | undefined>this.globalScope.find((value) => {
 				return value instanceof ScopeFunctionDeclaration && value.identifier == identifier;
@@ -522,7 +523,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Registers new builtInGlobals that are available inside the Kipper program.
+	 * Registers new builtIns that are available inside the Kipper program.
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
@@ -538,7 +539,7 @@ export class KipperProgramContext {
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
-		this.builtInGlobals.push(...newGlobals);
+		this.builtIns.push(...newGlobals);
 	}
 
 	/**

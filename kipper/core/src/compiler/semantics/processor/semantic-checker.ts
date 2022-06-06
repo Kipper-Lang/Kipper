@@ -207,7 +207,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public builtInNotDefined(identifier: string): void {
-		if (this.programCtx.builtInGlobals.find((val) => val.identifier === identifier)) {
+		if (this.programCtx.builtIns.find((val) => val.identifier === identifier)) {
 			throw this.assertError(new BuiltInOverwriteError(identifier));
 		}
 	}
@@ -221,7 +221,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		let identifierAlreadyExists: boolean =
 			this.programCtx.globalScope.find((val) => val.identifier == identifier) !== undefined;
 		let globalAlreadyExists: boolean =
-			this.programCtx.builtInGlobals.find((val) => val.identifier == identifier) !== undefined;
+			this.programCtx.builtIns.find((val) => val.identifier == identifier) !== undefined;
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {

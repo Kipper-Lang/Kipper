@@ -23,7 +23,7 @@ import type { TranslatedCodeLine } from "./semantics";
 export interface CompileConfig {
 	/**
 	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
-	 * default builtInGlobals will be overwritten! If you wish to only extend the builtInGlobals write to {@link extendGlobals}.
+	 * default builtIns will be overwritten! If you wish to only extend the builtIns write to {@link extendGlobals}.
 	 */
 	globals?: Array<BuiltInFunction>;
 	/**
@@ -70,7 +70,7 @@ export class EvaluatedCompileOptions implements CompileConfig {
 	};
 
 	/**
-	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged
+	 * The actual builtIns that will be used inside a compilation with this configuration. This has been merged
 	 * with the {@link userOptions.extendGlobals} argument as well, if it has been defined.
 	 */
 	public readonly globals: Array<BuiltInFunction>;
@@ -270,7 +270,7 @@ export class KipperCompiler {
 			// The file context storing the metadata for the "virtual file"
 			const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-			// If there are builtInGlobals to register, register them
+			// If there are builtIns to register, register them
 			let globals = [...config.globals, ...config.extendGlobals];
 			if (globals.length > 0) {
 				fileCtx.registerGlobals(globals);

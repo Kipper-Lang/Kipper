@@ -58,7 +58,7 @@ export class KipperOptimiser {
 				newBuiltIns.push(ref.ref);
 			}
 		}
-		this.programCtx.builtInGlobals = newBuiltIns;
+		this.programCtx.builtIns = newBuiltIns;
 	}
 
 	/**
