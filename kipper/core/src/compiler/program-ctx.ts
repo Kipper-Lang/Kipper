@@ -262,6 +262,53 @@ export class KipperProgramContext {
 	}
 
 	/**
+	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
+	 * the program and compile it.
+	 * @param listener The listener instance to walk through the antlr4 parse tree. If undefined a new default one
+	 * is created based on the metadata from this {@link KipperProgramContext}.
+	 * @private
+	 */
+	private async generateAbstractSyntaxTree(
+		listener: KipperFileListener = new KipperFileListener(this, this.antlrParseTree)
+	): Promise<RootASTNode> {
+		if (listener.rootNode.programCtx !== this) {
+			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");
+		}
+
+		try {
+			// The walker used to go through the parse tree.
+			const walker = new ParseTreeWalker();
+
+			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
+			this.logger.debug(
+				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
+			);
+			walker.walk(listener, this.antlrParseTree);
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
+
+		// Caching the result
+		this._abstractSyntaxTree = listener.rootNode;
+
+		if (!listener.rootNode) {
+			// This should usually never happen. If it does, then something went wrong terribly
+			throw new KipperInternalError("Missing AST root node in listener instance");
+		}
+
+		const countNodes: number = listener.rootNode.children.length;
+		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
+		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
+		return listener.rootNode;
+	}
+
+	/**
 	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
 	 * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
 	 *
@@ -272,10 +319,10 @@ export class KipperProgramContext {
 	public async semanticAnalysis(): Promise<void> {
 		try {
 			if (!this._abstractSyntaxTree) {
-				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(
-					new KipperFileListener(this, this.antlrParseTree),
-				);
+				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 			}
+
+			// Semantically analysing the AST starting from the root node
 			await this._abstractSyntaxTree.semanticAnalysis();
 		} catch (e) {
 			if (e instanceof KipperError) {
@@ -298,13 +345,13 @@ export class KipperProgramContext {
 	 * @since 0.6.0
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
-		if (!this._abstractSyntaxTree) {
+		if (!this.abstractSyntaxTree) {
 			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
 		try {
-			let genCode: Array<TranslatedCodeLine> = await this._abstractSyntaxTree.translate();
+			let genCode: Array<TranslatedCodeLine> = await this.abstractSyntaxTree.translate();
 
 			// Append required typescript code for Kipper for the program to work properly
 			return (await this.generateRequirements()).concat(genCode);
@@ -330,10 +377,10 @@ export class KipperProgramContext {
 	 * - Generating the final source code - ({@link abstractSyntaxTree.translateCtxAndChildren})
 	 */
 	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
-		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(new KipperFileListener(this, this.antlrParseTree));
+		// Getting the processed AST tree
+		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
-		// Running the semantic analysis
+		// Running the semantic analysis for the AST
 		this.logger.info(`Analysing '${this.stream.name}'.`);
 		await this.semanticAnalysis();
 
@@ -351,45 +398,6 @@ export class KipperProgramContext {
 
 		// Finished compilation
 		return genCode;
-	}
-
-	/**
-	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
-	 * the program and compile it.
-	 *
-	 *
-	 * @param listener The listener instance to iterate through the antlr4 parse tree
-	 * @private
-	 */
-	private async generateAbstractSyntaxTree(listener: KipperFileListener): Promise<RootASTNode> {
-		try {
-			// The walker used to go through the parse tree.
-			const walker = new ParseTreeWalker();
-
-			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-			this.logger.debug(
-				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
-			);
-			walker.walk(listener, this.antlrParseTree);
-		} catch (e) {
-			if (e instanceof KipperError) {
-				// Log the Kipper error
-				this.logger.reportError(LogLevel.ERROR, e);
-			}
-
-			// Re-throw the error
-			throw e;
-		}
-
-		if (!listener.rootNode) {
-			// This should usually never happen. If it does, then something went wrong terribly
-			throw new KipperInternalError("Missing AST root node in listener instance");
-		}
-
-		const countNodes: number = listener.rootNode.children.length;
-		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
-		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
-		return listener.rootNode;
 	}
 
 	/**

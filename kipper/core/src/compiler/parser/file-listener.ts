@@ -85,13 +85,6 @@ const passOnHandler = undefined;
  */
 export class KipperFileListener implements KipperListener {
 	/**
-	 * The private field '_programCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.programCtx}.
-	 * @private
-	 */
-	private readonly _programCtx: KipperProgramContext;
-
-	/**
 	 * The private field '_itemBuffer' that actually stores the variable data,
 	 * which is returned inside the {@link this.itemBuffer}.
 	 * @private
@@ -126,17 +119,9 @@ export class KipperFileListener implements KipperListener {
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);
-		this._programCtx = programCtx;
 		this._isExternalItem = false;
 		this._isFunctionDefinition = false;
 		this._currentPrimaryNode = undefined;
-	}
-
-	/**
-	 * The {@link KipperProgramContext} instance responsible for managing this {@link KipperFileListener} instance.
-	 */
-	public get programCtx(): KipperProgramContext {
-		return this._programCtx;
 	}
 
 	/**
