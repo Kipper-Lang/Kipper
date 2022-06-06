@@ -32,13 +32,6 @@ export class KipperProgramContext {
 	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
-	 * The private field '_builtInGlobals' that actually stores the variable data,
-	 * which is returned inside the getter {@link this.builtInGlobals}.
-	 * @private
-	 */
-	private readonly _builtInGlobals: Array<BuiltInFunction>;
-
-	/**
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
@@ -106,6 +99,16 @@ export class KipperProgramContext {
 	public internals: Array<InternalFunction>;
 
 	/**
+	 * Returns the builtIn global functions registered for this Kipper program. These global functions defined in the
+	 * array will be available in the Kipper program and callable using their specified identifier.
+	 *
+	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
+	 * Kipper.
+	 * @since 0.8.0
+	 */
+	public builtInGlobals: Array<BuiltInFunction>;
+
+	/**
 	 * A list of all references to built-in functions. This is used to determine which built-in functions are
 	 * used and which aren't.
 	 *
@@ -114,7 +117,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.8.0
 	 */
-	private _builtInReferences: Array<Reference>;
+	private readonly _builtInReferences: Array<Reference<BuiltInFunction>>;
 
 	/**
 	 * A list of all references to internal functions. This is used to determine which internal functions are
@@ -125,7 +128,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.8.0
 	 */
-	private _internalReferences: Array<Reference>;
+	private readonly _internalReferences: Array<Reference<InternalFunction>>;
 
 	constructor(
 		stream: KipperParseStream,
@@ -149,7 +152,7 @@ export class KipperProgramContext {
 		this.lexer = lexer;
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
-		this._builtInGlobals = [];
+		this.builtInGlobals = [];
 		this._globalScope = [];
 		this._abstractSyntaxTree = undefined;
 		this._builtInReferences = [];
@@ -228,17 +231,6 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the builtInGlobals registered for this Kipper program. These global functions defined in the array will be
-	 * available in the Kipper program and callable using their specified identifier.
-	 *
-	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
-	 * Kipper.
-	 */
-	public get builtInGlobals(): Array<BuiltInFunction> {
-		return this._builtInGlobals;
-	}
-
-	/**
 	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
@@ -263,7 +255,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.8.0
 	 */
-	public get internalReferences(): Array<Reference> {
+	public get internalReferences(): Array<Reference<InternalFunction>> {
 		return this._internalReferences;
 	}
 
@@ -275,7 +267,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.8.0
 	 */
-	public get builtInReferences(): Array<Reference> {
+	public get builtInReferences(): Array<Reference<BuiltInFunction>> {
 		return this._builtInReferences;
 	}
 
@@ -482,7 +474,7 @@ export class KipperProgramContext {
 		}
 
 		// Generating the code for the global functions
-		for (const builtInSpec of this._builtInGlobals) {
+		for (const builtInSpec of this.builtInGlobals) {
 			// Fetch the function for handling this built-in
 			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
 				this.target.builtInGenerator,
@@ -546,7 +538,7 @@ export class KipperProgramContext {
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
-		this._builtInGlobals.push(...newGlobals);
+		this.builtInGlobals.push(...newGlobals);
 	}
 
 	/**
@@ -585,7 +577,7 @@ export class KipperProgramContext {
 	public addBuiltInReference(exp: Expression<any>, ref: BuiltInFunction) {
 		this._builtInReferences.push({
 			ref: ref,
-			exp: exp
+			exp: exp,
 		});
 	}
 
@@ -598,7 +590,7 @@ export class KipperProgramContext {
 	public addInternalReference(exp: Expression<any>, ref: InternalFunction) {
 		this._internalReferences.push({
 			ref: ref,
-			exp: exp
+			exp: exp,
 		});
 	}
 }

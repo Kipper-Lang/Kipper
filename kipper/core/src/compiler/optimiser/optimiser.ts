@@ -7,6 +7,7 @@
 
 import type { RootASTNode } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
+import { BuiltInFunction, InternalFunction } from "../runtime-built-ins";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -38,10 +39,46 @@ export const defaultOptimisationOptions: OptimisationOptions = {
  * @since 0.8.0
  */
 export class KipperOptimiser {
-	constructor(public programCtx: KipperProgramContext) {}
+	public readonly programCtx: KipperProgramContext;
+
+	constructor(programCtx: KipperProgramContext) {
+		this.programCtx = programCtx;
+	}
 
 	/**
-	 * Optimises the {@link astTree} based on the {@link options} argument.
+	 * Optimises the built-in functions of Kipper by removing any unneeded built-in definition.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private async optimiseBuiltIns(): Promise<void> {
+		const newBuiltIns: Array<BuiltInFunction> = [];
+		for (const ref of this.programCtx.builtInReferences) {
+			const alreadyIncluded: boolean = newBuiltIns.find((r) => r === ref.ref) !== undefined;
+			if (!alreadyIncluded) {
+				newBuiltIns.push(ref.ref);
+			}
+		}
+		this.programCtx.builtInGlobals = newBuiltIns;
+	}
+
+	/**
+	 * Optimises the internal functions of Kipper by removing any unneeded internal definition.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private async optimiseInternals(): Promise<void> {
+		const newInternals: Array<InternalFunction> = [];
+		for (const ref of this.programCtx.internalReferences) {
+			const alreadyIncluded: boolean = newInternals.find((r) => r === ref.ref) !== undefined;
+			if (!alreadyIncluded) {
+				newInternals.push(ref.ref);
+			}
+		}
+		this.programCtx.internals = newInternals;
+	}
+
+	/**
+	 * Optimises the {@link astTree} and {@link programCtx} based on the {@link options} argument.
 	 *
 	 * This function takes in an abstract syntax tree that was semantically analysed and outputs a new optimised abstract
 	 * syntax tree that can be translated into a target language.
@@ -53,6 +90,13 @@ export class KipperOptimiser {
 		astTree: RootASTNode,
 		options: OptimisationOptions = defaultOptimisationOptions,
 	): Promise<RootASTNode> {
+		if (options.optimiseInternals) {
+			await this.optimiseInternals();
+		}
+		if (options.optimiseBuiltIns) {
+			await this.optimiseBuiltIns();
+		}
+
 		return astTree;
 	}
 }

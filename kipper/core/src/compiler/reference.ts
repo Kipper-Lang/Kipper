@@ -12,12 +12,14 @@ import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-decl
  * A reference to a variable/function/builtin/internal identifier.
  * @since 0.8.0
  */
-export interface Reference {
+export interface Reference<
+	T extends BuiltInFunction | InternalFunction | ScopeFunctionDeclaration | ScopeVariableDeclaration,
+> {
 	/**
-	 * The variable/function/builtin/internal identifier referenced.
+	 * The identifier referenced.
 	 * @since 0.8.0
 	 */
-	readonly ref: BuiltInFunction | InternalFunction | ScopeFunctionDeclaration | ScopeVariableDeclaration;
+	readonly ref: T;
 	/**
 	 * The expression which created the reference to {@link ref}.
 	 * @since 0.8.0
