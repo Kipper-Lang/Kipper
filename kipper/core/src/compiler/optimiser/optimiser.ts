@@ -15,10 +15,16 @@ import { BuiltInFunction, InternalFunction } from "../runtime-built-ins";
  */
 export interface OptimisationOptions {
 	/**
-	 * If true, this
+	 * If set to true, the internal functions of the compiled code will be optimised using tree-shaking reducing the size
+	 * of the output.
 	 * @since 0.8.0
 	 */
 	optimiseInternals?: boolean;
+	/**
+	 * If set to true, the built-in functions of the compiled code will be optimised using tree-shaking reducing the size
+	 * of the output.
+	 * @since 0.8.0
+	 */
 	optimiseBuiltIns?: boolean;
 }
 
@@ -28,11 +34,11 @@ export interface OptimisationOptions {
  */
 export const defaultOptimisationOptions: OptimisationOptions = {
 	optimiseInternals: true,
-	optimiseBuiltIns: true,
+	optimiseBuiltIns: false,
 };
 
 /**
- * The primary Kipper optimiser for optimising Kipper code and removing dead code.
+ * The Optimiser class for optimising Kipper code and removing dead code.
  *
  * This class takes in an abstract syntax tree that was semantically analysed and outputs a new optimised abstract
  * syntax tree that can be translated into a target language.

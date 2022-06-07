@@ -10,8 +10,7 @@ import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStre
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine, Expression } from "./semantics";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { TranslatedCodeLine, Expression } from "./semantics";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
@@ -19,6 +18,7 @@ import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { Reference } from "./reference";
+import { GlobalScope } from "./global-scope";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -35,7 +35,7 @@ export class KipperProgramContext {
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
-	private readonly _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
+	private readonly _globalScope: GlobalScope;
 
 	/**
 	 * The field compiledCode that will store the cached code, once 'compileProgram' has been called. This is
@@ -154,7 +154,7 @@ export class KipperProgramContext {
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this.builtIns = [];
-		this._globalScope = [];
+		this._globalScope = new GlobalScope(this);
 		this._abstractSyntaxTree = undefined;
 		this._builtInReferences = [];
 		this._internalReferences = [];
@@ -235,7 +235,7 @@ export class KipperProgramContext {
 	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
-	public get globalScope(): Array<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
+	public get globalScope(): GlobalScope {
 		return this._globalScope;
 	}
 
@@ -425,8 +425,9 @@ export class KipperProgramContext {
 	 * - Semantically analysing the AST - ({@link semanticAnalysis})
 	 * - Optimising the AST - ({@link optimise})
 	 * - Generating the final source code for the specified target - ({@link translate})
+	 * @param optimisationOptions The configuration for the {@link KipperOptimiser}.
 	 */
-	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
+	public async compileProgram(optimisationOptions?: OptimisationOptions): Promise<Array<TranslatedCodeLine>> {
 		// Getting the processed AST tree
 		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
@@ -436,7 +437,7 @@ export class KipperProgramContext {
 
 		// Optimising the AST
 		this.logger.info(`Optimising '${this.stream.name}'`);
-		await this.optimise();
+		await this.optimise(optimisationOptions);
 
 		// Translating the context instances and children
 		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
@@ -487,39 +488,14 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Tries to fetch the specific identifier from the global scope.
+	 * Searches for a built-in function with the specific {@link identifier} from the {@link builtIns}.
+	 *
+	 * If the identifier is unknown, this function will return undefined.
+	 * @param identifier The identifier to search for.
+	 * @since 0.8.0
 	 */
-	public getGlobalIdentifier(
-		identifier: string,
-	): BuiltInFunction | ScopeVariableDeclaration | ScopeFunctionDeclaration | undefined {
-		return this.getGlobalFunction(identifier) ?? this.getGlobalVariable(identifier);
-	}
-
-	/**
-	 * Tries to fetch a global function from the {@link this.builtIns} array based on the passed {@link identifier}
-	 * @param identifier The identifier of the function
-	 */
-	public getGlobalFunction(identifier: string): KipperFunction | undefined {
-		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
-		return (
-			this.builtIns.find((value) => {
-				return value.identifier === identifier;
-			}) ?? <ScopeFunctionDeclaration | undefined>this.globalScope.find((value) => {
-				return value instanceof ScopeFunctionDeclaration && value.identifier == identifier;
-			})
-		);
-	}
-
-	/**
-	 * Tries to fetch a global variable from the {@link this.globalScope} based on the passed {@link identifier}.
-	 * @param identifier The identifier of the variable.
-	 */
-	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		// Casting the type, as the return type will always be either ScopeDeclaration or undefined
-		// This is automatically the case, as we require the type inside find() to match ScopeDeclaration!
-		return <ScopeVariableDeclaration | undefined>this.globalScope.find((value) => {
-			return value instanceof ScopeVariableDeclaration && value.identifier == identifier;
-		});
+	public getBuiltInFunction(identifier: string): BuiltInFunction | undefined {
+		return this.builtIns.find((func) => func.identifier === identifier);
 	}
 
 	/**
@@ -540,33 +516,6 @@ export class KipperProgramContext {
 		}
 
 		this.builtIns.push(...newGlobals);
-	}
-
-	/**
-	 * Adds a new declaration entry to the global scope.
-	 * @param token The token that should be added.
-	 * @param identifier The identifier of the global variable.
-	 */
-	public async addGlobalVariable(
-		token: VariableDeclaration | FunctionDeclaration,
-		identifier: string,
-	): Promise<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
-		this.semanticCheck(token).builtInNotDefined(identifier);
-
-		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
-		if (token instanceof VariableDeclaration) {
-			// May not redeclare a variable
-			this.semanticCheck(token).functionIdentifierNotDeclared(identifier);
-			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
-		} else {
-			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
-			this.semanticCheck(token).functionIdentifierNotDefined(identifier);
-		}
-
-		const declaration =
-			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token);
-		this._globalScope.push(declaration);
-		return declaration;
 	}
 
 	/**

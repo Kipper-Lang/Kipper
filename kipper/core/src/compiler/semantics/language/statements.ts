@@ -11,7 +11,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeChild, compilableNodeParent } from "../../parser/";
+import type { compilableNodeChild, compilableNodeParent, NoSemantics } from "../../parser/";
 import {
 	CompoundStatementContext,
 	ExpressionStatementContext,
@@ -19,13 +19,11 @@ import {
 	JumpStatementContext,
 	SelectionStatementContext,
 } from "../../parser";
-import { determineScope } from "../../../utils";
-import { ScopeVariableDeclaration } from "../../scope-declaration";
-import type { KipperScope, TranslatedCodeLine } from "../const";
-import type { VariableDeclaration } from "./definitions";
+import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import { LocalScope } from "../../local-scope";
 import { CompilableASTNode } from "../../parser";
 
 /**
@@ -102,7 +100,7 @@ export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> 
  * Compound statement class, which represents a compound statement containing other items in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  */
-export class CompoundStatement extends Statement<{ scope: KipperScope }> {
+export class CompoundStatement extends Statement<NoSemantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -112,12 +110,12 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 
 	protected readonly _children: Array<Statement<any>>;
 
-	private readonly _localScope: Array<ScopeVariableDeclaration>;
+	private readonly _localScope: LocalScope;
 
 	constructor(antlrCtx: CompoundStatementContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._antlrRuleCtx = antlrCtx;
-		this._localScope = [];
+		this._localScope = new LocalScope(this);
 		this._children = [];
 	}
 
@@ -136,49 +134,10 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	}
 
 	/**
-	 * Returns the local variables that are exclusively accessible inside this compound statement.
+	 * Returns the local scope of this {@link CompoundStatement}.
 	 */
-	public get localScope(): Array<ScopeVariableDeclaration> {
+	public get localScope(): LocalScope {
 		return this._localScope;
-	}
-
-	/**
-	 * Adds a new local variable to this scope.
-	 * @param token The {@link VariableDeclaration} token.
-	 * @param identifier The identifier of the local variable.
-	 */
-	public async addLocalVariable(token: VariableDeclaration, identifier: string): Promise<ScopeVariableDeclaration> {
-		// Make sure the identifier is available
-		this.programCtx.semanticCheck(token).variableIdentifierNotDeclared(identifier, this);
-
-		// Add new declaration or definition
-		const declaration = new ScopeVariableDeclaration(token);
-		this._localScope.push(declaration);
-		return declaration;
-	}
-
-	/**
-	 * Tries to fetch the passed identifier in the current scope.
-	 * @since 0.6.0
-	 */
-	public getLocalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		return this.localScope.find((val) => val.identifier === identifier);
-	}
-
-	/**
-	 * Tries to fetch the passed identifier in the current scope and all parent scopes recursively.
-	 * @since 0.6.0
-	 */
-	public getVariableRecursively(identifier: string): ScopeVariableDeclaration | undefined {
-		const localVar = this.getLocalVariable(identifier);
-		if (!localVar) {
-			if (this.scope instanceof CompoundStatement) {
-				return this.scope.getVariableRecursively(identifier);
-			} else {
-				return this.scope.getGlobalVariable(identifier);
-			}
-		}
-		return localVar;
 	}
 
 	/**
@@ -186,9 +145,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			scope: determineScope(this),
-		};
+		this.semanticData = {};
 	}
 
 	/**
@@ -209,7 +166,7 @@ export class CompoundStatement extends Statement<{ scope: KipperScope }> {
  * Selection statement class, which represents a selection statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class SelectionStatement extends Statement<{ scope: KipperScope }> {
+export class SelectionStatement extends Statement<NoSemantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -244,9 +201,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			scope: determineScope(this),
-		};
+		this.semanticData = {};
 	}
 
 	/**
@@ -266,7 +221,7 @@ export class SelectionStatement extends Statement<{ scope: KipperScope }> {
 /**
  * Expression statement class, which represents a statement made up of an expression in the Kipper language.
  */
-export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
+export class ExpressionStatement extends Statement<NoSemantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -301,9 +256,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			scope: determineScope(this),
-		};
+		this.semanticData = {};
 	}
 
 	/**
@@ -325,7 +278,7 @@ export class ExpressionStatement extends Statement<{ scope: KipperScope }> {
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class IterationStatement extends Statement<{ scope: KipperScope }> {
+export class IterationStatement extends Statement<NoSemantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -360,9 +313,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			scope: determineScope(this),
-		};
+		this.semanticData = {};
 	}
 
 	/**
@@ -383,7 +334,7 @@ export class IterationStatement extends Statement<{ scope: KipperScope }> {
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<{ scope: KipperScope }> {
+export class JumpStatement extends Statement<NoSemantics> {
 	/**
 	 * The private field '_antlrCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrCtx}.
@@ -418,9 +369,7 @@ export class JumpStatement extends Statement<{ scope: KipperScope }> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			scope: determineScope(this),
-		};
+		this.semanticData = {};
 	}
 
 	/**

@@ -4,9 +4,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { Expression } from "./semantics";
-import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import type { Expression } from "./semantics";
+import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
+import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 
 /**
  * A reference to a variable/function/builtin/internal identifier.

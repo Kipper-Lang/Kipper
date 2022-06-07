@@ -50,7 +50,6 @@ import {
 } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
-import { CompoundStatement } from "./statements";
 import { CompilableASTNode } from "../../parser";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
@@ -563,7 +562,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 		// Make sure the referenced variable even exists!
 		const ref = this.programCtx
 			.semanticCheck(this)
-			.getExistingReference(identifier, this.scope instanceof CompoundStatement ? this.scope : undefined);
+			.getExistingReference(identifier, "localScope" in this.scopeCtx ? this.scopeCtx : undefined);
 
 		// Evaluate the type by attempting to fetch it from the global
 		const evaluateType: () => KipperType = () => {

@@ -4,9 +4,6 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.3.0
  */
-
-import type { KipperProgramContext } from "../program-ctx";
-import type { CompoundStatement } from "./language";
 import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
 
@@ -313,12 +310,6 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
  * @since 0.5.0
  */
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
-
-/**
- * Represents a scope for a {@link CompilableASTNode}.
- * @since 0.6.0
- */
-export type KipperScope = KipperProgramContext | CompoundStatement;
 
 /**
  * Represents a Kipper function that can be either declared or defined.

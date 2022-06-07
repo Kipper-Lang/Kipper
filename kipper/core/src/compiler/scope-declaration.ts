@@ -6,7 +6,6 @@
  */
 import type {
 	KipperReturnType,
-	KipperScope,
 	KipperStorageType,
 	KipperType,
 	Declaration,
@@ -17,6 +16,7 @@ import type {
 	VariableDeclarationSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
+import type { Scope } from "./scope";
 
 /**
  * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
@@ -84,7 +84,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	/**
 	 * Returns the scope associated with this {@link ScopeDeclaration}.
 	 */
-	public get scope(): KipperScope {
+	public get scope(): Scope {
 		return this.semanticData.scope;
 	}
 

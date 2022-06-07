@@ -37,6 +37,7 @@ import {
 	type KipperType,
 } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import type { BuiltInFunction } from "../../runtime-built-ins";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 
@@ -51,6 +52,25 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
+	 * Tries to
+	 * @param identifier The identifier to search for.
+	 * @param scopeCtx The scopeCtx to search in.
+	 * @since 0.8.0
+	 */
+	private getDeclaration(
+		identifier: string,
+		scopeCtx?: CompoundStatement,
+	): ScopeFunctionDeclaration | ScopeVariableDeclaration | BuiltInFunction | undefined {
+		return (
+			(scopeCtx // First try to fetch from the local scope if it is defined
+				? scopeCtx.localScope.getVariableRecursively(identifier)
+				: this.programCtx.globalScope.getDeclaration(identifier)) ??
+			this.programCtx.globalScope.getDeclaration(identifier) ?? // Fall back to looking globally
+			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
+		);
+	}
+
+	/**
 	 * Modifies the metadata for a {@link KipperNotImplementedError}
 	 * @param error The {@link KipperNotImplementedError} instance.
 	 * @since 0.7.0
@@ -60,14 +80,13 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Checks whether an identifier is declared. If the variable is defined it will also pass.
+	 * Checks whether an identifier is declared. If the identifier is defined it will also pass.
 	 * @param identifier The identifier to check for.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public identifierIsDeclared(identifier: string, scope?: CompoundStatement): void {
-		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+	public identifierIsDeclared(identifier: string, scopeCtx?: CompoundStatement): void {
+		const val = this.getDeclaration(identifier, scopeCtx);
 		if (!val) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		}
@@ -80,14 +99,13 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Checks whether an identifier is defined. If the variable is declared it will also fail!
+	 * Checks whether an identifier is defined. If the identifier is declared it will fail!
 	 * @param identifier The identifier to check for.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public identifierIsDefined(identifier: string, scope?: CompoundStatement): void {
-		const val = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalIdentifier(identifier);
+	public identifierIsDefined(identifier: string, scopeCtx?: CompoundStatement): void {
+		const val = this.getDeclaration(identifier, scopeCtx);
 		if (!val) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		}
@@ -105,7 +123,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public functionIdentifierNotDeclared(identifier: string): void {
-		if (this.programCtx.getGlobalFunction(identifier)) {
+		if (this.programCtx.getBuiltInFunction(identifier) || this.programCtx.globalScope.getFunction(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
 		}
 	}
@@ -113,20 +131,17 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Asserts that the passed variable identifier has not been declared yet.
 	 * @param identifier The identifier of the variable.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public variableIdentifierNotDeclared(identifier: string, scope?: CompoundStatement): void {
-		const check = (v: { identifier: string }) => v instanceof ScopeVariableDeclaration && v.identifier === identifier;
-
+	public variableIdentifierNotDeclared(identifier: string, scopeCtx?: CompoundStatement): void {
 		// Always check in the global scope
-		if (this.programCtx.globalScope.find(check)) {
+		if (this.programCtx.globalScope.getVariable(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
-		// Also check in the local scope if it was passed
-		if (scope !== undefined && scope?.localScope.find(check)) {
+		// Also check in the local scope if it was defined
+		if (scopeCtx && scopeCtx.localScope.getVariableRecursively(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 	}
@@ -134,23 +149,22 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Asserts that the passed variable identifier has not been defined yet.
 	 * @param identifier The identifier to check for in the global scope.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public variableIdentifierNotDefined(identifier: string, scope?: CompoundStatement): void {
+	public variableIdentifierNotDefined(identifier: string, scopeCtx?: CompoundStatement): void {
 		const check = (v: { identifier: string }) => {
 			// Return true only if the identifier match and the variable is DEFINED
 			return v instanceof ScopeVariableDeclaration && v.identifier === identifier && v.isDefined;
 		};
 
 		// Always check in the global scope
-		if (this.programCtx.globalScope.find(check)) {
+		if (this.programCtx.globalScope.localVariables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 
-		// Also check in the local scope if it was passed
-		if (scope !== undefined && scope?.localScope.find(check)) {
+		// Also check in the local scope if it was defined
+		if (scopeCtx && scopeCtx?.localScope.localVariables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 	}
@@ -167,7 +181,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
 		};
 
-		if (this.programCtx.globalScope.find(check)) {
+		if (this.programCtx.globalScope.localFunctions.find(check)) {
 			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
 		}
 	}
@@ -218,10 +232,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public globalCanBeRegistered(identifier: string): void {
-		let identifierAlreadyExists: boolean =
-			this.programCtx.globalScope.find((val) => val.identifier == identifier) !== undefined;
-		let globalAlreadyExists: boolean =
-			this.programCtx.builtIns.find((val) => val.identifier == identifier) !== undefined;
+		let identifierAlreadyExists: boolean = this.programCtx.globalScope.getDeclaration(identifier) !== undefined;
+		let globalAlreadyExists: boolean = this.programCtx.getBuiltInFunction(identifier) !== undefined;
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
@@ -245,13 +257,11 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownIdentifierError}.
 	 * @param identifier The identifier to fetch.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public getExistingReference(identifier: string, scope?: CompoundStatement): KipperRef {
-		const ref =
-			(scope ? scope.getVariableRecursively(identifier) : undefined) ?? this.programCtx.getGlobalIdentifier(identifier);
+	public getExistingReference(identifier: string, scopeCtx?: CompoundStatement): KipperRef {
+		const ref = this.getDeclaration(identifier, scopeCtx);
 		if (ref === undefined) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
@@ -262,12 +272,13 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownIdentifierError}.
 	 * @param identifier The identifier to fetch.
-	 * @param scope The scope to also check besides the global scope. If undefined, then it will only the global scope
-	 * of the {@link KipperProgramContext program}.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public getExistingVariable(identifier: string, scope?: CompoundStatement): ScopeVariableDeclaration {
-		const variable = scope ? scope.getVariableRecursively(identifier) : this.programCtx.getGlobalVariable(identifier);
+	public getExistingVariable(identifier: string, scopeCtx?: CompoundStatement): ScopeVariableDeclaration {
+		const variable = scopeCtx
+			? scopeCtx.localScope.getVariableRecursively(identifier)
+			: this.programCtx.globalScope.getVariable(identifier);
 		if (variable === undefined) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {
@@ -281,7 +292,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public getExistingFunction(identifier: string): KipperFunction {
-		const func = this.programCtx.getGlobalFunction(identifier);
+		const func = this.programCtx.getBuiltInFunction(identifier) ?? this.programCtx.globalScope.getFunction(identifier);
 		if (func === undefined) {
 			throw this.assertError(new UnknownIdentifierError(identifier));
 		} else {

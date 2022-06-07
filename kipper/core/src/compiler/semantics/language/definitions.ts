@@ -18,13 +18,12 @@ import {
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
-import type { KipperReturnType, KipperScope, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
-import { KipperProgramContext } from "../../program-ctx";
+import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { TargetASTNodeCodeGenerator } from "../../translation";
+import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { UnableToDetermineMetadataError } from "../../../errors";
-import { determineScope } from "../../../utils";
-import { TargetASTNodeCodeGenerator } from "../../translation";
-import { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { CompilableASTNode } from "../../parser";
+import { Scope } from "../../scope";
 
 /**
  * Every antlr4 definition ctx type
@@ -252,7 +251,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		};
 
 		// Add function definition to the global scope
-		await this.programCtx.addGlobalVariable(this, identifier);
+		await this.scope.addFunction(this);
 	}
 
 	/**
@@ -302,7 +301,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * The scope of this variable.
 	 * @since 0.5.0
 	 */
-	scope: KipperScope;
+	scope: Scope;
 	/**
 	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
 	 * @since 0.7.0
@@ -379,23 +378,17 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
 		const valueType = typeSpecifier.getSemanticData().type;
-		const scope = determineScope(this);
 
 		this.semanticData = {
 			isDefined: isDefined,
 			identifier: identifier,
 			storageType: storageType,
 			valueType: valueType,
-			scope: scope,
+			scope: this.scope,
 			value: assignValue,
 		};
 
-		// Load variable into a scope
-		if (scope instanceof KipperProgramContext) {
-			await scope.addGlobalVariable(this, identifier);
-		} else {
-			await scope.addLocalVariable(this, identifier);
-		}
+		await this.scope.addVariable(this);
 	}
 
 	/**
@@ -411,11 +404,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
-			const scopeEntry = <ScopeVariableDeclaration>(
-				(semanticData.scope instanceof KipperProgramContext
-					? semanticData.scope.getGlobalVariable(semanticData.identifier)
-					: semanticData.scope.getLocalVariable(semanticData.identifier))
-			);
+			const scopeEntry = <ScopeVariableDeclaration>semanticData.scope.getVariable(semanticData.identifier);
 			this.programCtx.typeCheck(this).validVariableDefinition(scopeEntry, semanticData.value);
 		}
 	}
