@@ -212,7 +212,7 @@ export class KipperCompiler {
 		parseStream: KipperParseStream,
 		target: KipperCompileTarget = new TypeScriptTarget(),
 	): Promise<KipperProgramContext> {
-		this._logger.info(`Parsing '${parseStream.name}'.`);
+		this._logger.info(`Parsing file content.`);
 
 		// Creating the char stream, based on the input
 		const inputStream: CodePointCharStream = parseStream.charStream;
@@ -296,7 +296,7 @@ export class KipperCompiler {
 			const code = await fileCtx.compileProgram(config.optimisationOptions);
 
 			// After the code is done, return the compilation result as an instance
-			this.logger.info(`Compilation finished successfully!`);
+			this.logger.info(`Compilation finished successfully without errors.`);
 			return new KipperCompileResult(fileCtx, code);
 		} catch (e) {
 			this.logger.reportError(LogLevel.FATAL, `Failed to compile '${inStream.name}'.`);

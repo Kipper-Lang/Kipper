@@ -432,15 +432,15 @@ export class KipperProgramContext {
 		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
 		// Running the semantic analysis for the AST
-		this.logger.info(`Analysing '${this.stream.name}'.`);
+		this.logger.info(`Analysing abstract syntax tree and logical content.`);
 		await this.semanticAnalysis();
 
 		// Optimising the AST
-		this.logger.info(`Optimising '${this.stream.name}'`);
+		this.logger.info(`Optimising file output.`);
 		await this.optimise(optimisationOptions);
 
 		// Translating the context instances and children
-		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
+		this.logger.info(`Translating and generating code for '${this.target.targetName}'.`);
 		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
 		this.logger.debug(

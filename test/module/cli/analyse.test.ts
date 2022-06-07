@@ -13,7 +13,7 @@ describe("analyse", () => {
 			.it("Valid syntax", (ctx) => {
 				expect(ctx.stdout).to.length.greaterThan(0);
 				expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
-				expect(ctx.stdout).to.contain("Parsing 'main.kip'.");
+				expect(ctx.stdout).to.contain("Parsing");
 				expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 				expect(ctx.stdout).to.contain("Finished code analysis in");
 			});
@@ -25,7 +25,7 @@ describe("analyse", () => {
 			.it("Invalid syntax", (ctx) => {
 				expect(ctx.stdout).to.length.greaterThan(0);
 				expect(ctx.stdout).to.contain("Starting syntax check for 'invalid.kip'.");
-				expect(ctx.stdout).to.contain("Parsing 'invalid.kip'.");
+				expect(ctx.stdout).to.contain("Parsing");
 				expect(ctx.stderr).to.contain("Traceback:");
 				expect(ctx.stderr).to.contain(`File '${invalidFilePath}'`);
 				expect(ctx.stderr).to.contain("KipperSyntaxError: Mismatched input");
@@ -40,7 +40,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'ascii'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
-					expect(ctx.stdout).to.contain("Parsing 'main.kip'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
@@ -51,7 +51,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'utf8'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
-					expect(ctx.stdout).to.contain("Parsing 'main.kip'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
@@ -62,7 +62,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'utf16le'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'hello-world-utf16.kip'.");
-					expect(ctx.stdout).to.contain("Parsing 'hello-world-utf16.kip'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
@@ -76,7 +76,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'ascii'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing 'anonymous-script'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
@@ -87,7 +87,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'utf8'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing 'anonymous-script'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
@@ -98,7 +98,7 @@ describe("analyse", () => {
 				.it("Compile using encoding 'utf16le'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing 'anonymous-script'.");
+					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
 					expect(ctx.stdout).to.contain("Finished code analysis in");
 				});
