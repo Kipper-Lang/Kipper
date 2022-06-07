@@ -47,12 +47,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperOptimiser.optimise()`, which performs optimisation on an abstract syntax tree.
   - `KipperProgramContext.getBuiltInFunction()`, which searches for a built-in function based on a passed
     identifier.
+  - `KipperProgramContext.optimise()`, which performs code optimisations for the local abstract syntax tree.
 - New errors:
   - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
     program.
   - `ReservedIdentifierOverwriteError`, which is thrown whenever a declaration identifier overwrites/interferes with
     an internal function or reserved keyword/identifier.
-  - `KipperProgramContext.optimise()`, which performs code optimisations for the local abstract syntax tree.
 - New types and constants:
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
