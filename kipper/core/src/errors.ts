@@ -268,7 +268,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 }
 
 /**
- * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.builtInGlobals}.
+ * Error that is thrown when trying to register a global that already exists in {@link KipperProgramContext.builtIns}.
  */
 export class InvalidGlobalError extends KipperError {
 	constructor(identifier: string) {

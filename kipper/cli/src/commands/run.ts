@@ -5,7 +5,13 @@
  * @since 0.0.3
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
+import {
+	defaultOptimisationOptions,
+	KipperCompiler,
+	KipperCompileResult,
+	KipperError,
+	KipperParseStream,
+} from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
@@ -14,6 +20,7 @@ import { spawn } from "child_process";
 import { LogLevel } from "@kipper/core";
 import { KipperInvalidInputError } from "../errors";
 import * as ts from "typescript";
+import { IFlag } from "@oclif/command/lib/flags";
 
 /**
  * Run the Kipper program.
@@ -47,22 +54,38 @@ export default class Run extends Command {
 		},
 	];
 
-	static flags = {
+	static flags: Record<string, IFlag<any>> = {
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
-		outputDir: flags.string({
+		"output-dir": flags.string({
 			char: "o",
 			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
-		stringCode: flags.string({
+		"string-code": flags.string({
 			char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
+		}),
+		"optimise-internals": flags.boolean({
+			char: "i",
+			default: <boolean>defaultOptimisationOptions.optimiseInternals,
+			description:
+				"If set to true, the internal functions of the compiled code will be optimised using tree-shaking " +
+				"reducing the size of the output.",
+			allowNo: true,
+		}),
+		"optimise-builtins": flags.boolean({
+			char: "b",
+			default: <boolean>defaultOptimisationOptions.optimiseInternals,
+			description:
+				"If set to true, the built-in functions of the compiled code will be optimised using tree-shaking " +
+				"reducing the size of the output.",
+			allowNo: true,
 		}),
 	};
 
@@ -74,11 +97,11 @@ export default class Run extends Command {
 		// Fetch the file
 		let file: KipperParseFile | KipperParseStream;
 		if (args.file) {
-			file = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
-		} else if (flags.stringCode) {
-			file = await new KipperParseStream(flags.stringCode);
+			file = await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
+		} else if (flags["string-code"]) {
+			file = await new KipperParseStream(flags["string-code"]);
 		} else {
-			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
+			throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
 		}
 
 		let result: KipperCompileResult;
@@ -91,9 +114,15 @@ export default class Run extends Command {
 					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
 					file.charStream,
 				),
+				{
+					optimisationOptions: {
+						optimiseInternals: flags["optimise-internals"],
+						optimiseBuiltIns: flags["optimise-builtins"],
+					},
+				},
 			);
 
-			await writeCompilationResult(result, file, flags.outputDir, flags.encoding as KipperEncoding);
+			await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
 
 			// Execute the program
 			const jsProgram = ts.transpileModule(result.write(), { compilerOptions: { module: ts.ModuleKind.CommonJS } });

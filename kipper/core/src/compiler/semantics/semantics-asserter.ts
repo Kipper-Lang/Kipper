@@ -5,9 +5,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
-import { KipperProgramContext } from "../program-ctx";
-import { KipperError } from "../../errors";
-import { LogLevel } from "../../logger";
+import type { KipperProgramContext } from "../program-ctx";
+import type { KipperError } from "../../errors";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../utils";
 
