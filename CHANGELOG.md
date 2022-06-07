@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
     Kipper.
   - `KipperOptimiser.optimise()`, which performs optimisation on an abstract syntax tree.
-  - `KipperProgramContext.getBuiltInFunction()`, which searches for a built-in function based on a passed 
+  - `KipperProgramContext.getBuiltInFunction()`, which searches for a built-in function based on a passed
     identifier.
 - New errors:
   - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
@@ -58,6 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
     Kipper.
 - New `CompileConfig` option `optimisationOptions`, which contains the configuration for the `KipperOptimiser`.
+- Added new flags `-b/--[no-]optimise-builtins` and `-i/--[no-]optimise-internals` to the `@kipper/cli` for enabling
+  internal and built-in functions optimisation.
 
 ### Changed
 
@@ -99,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated local and global scope handling by introducing three new classes: `Scope`, `GlobalScope` and `LocalScope`.
   These classes now handle local variables and functions and implement a standard interface for handling declarations
   and definitions.
+- Updated `@kipper/cli` flag names from camelCase to dash-case.
 
 ### Removed
 
