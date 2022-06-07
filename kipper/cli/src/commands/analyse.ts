@@ -10,6 +10,7 @@ import { KipperLogger } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperInvalidInputError } from "../errors";
+import { IFlag } from "@oclif/command/lib/flags";
 
 export default class Analyse extends Command {
 	static description = "Analyses a file and validates its syntax and semantic integrity.";
@@ -25,7 +26,7 @@ export default class Analyse extends Command {
 		},
 	];
 
-	static flags = {
+	static flags: Record<string, IFlag<any>> = {
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
@@ -46,9 +47,9 @@ export default class Analyse extends Command {
 		// Fetch the file
 		let file: KipperParseFile | KipperParseStream;
 		if (args.file) {
-			file = await KipperParseFile.fromFile(args.file, flags.encoding as KipperEncoding);
-		} else if (flags.stringCode) {
-			file = await new KipperParseStream(flags.stringCode);
+			file = await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
+		} else if (flags["string-code"]) {
+			file = await new KipperParseStream(flags["string-code"]);
 		} else {
 			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
 		}

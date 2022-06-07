@@ -7,8 +7,6 @@
  */
 import { ScopeVariableDeclaration, ScopeFunctionDeclaration } from "./scope-declaration";
 import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { KipperNotImplementedError } from "../errors";
-import { CompoundStatement } from "./semantics";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables} and
