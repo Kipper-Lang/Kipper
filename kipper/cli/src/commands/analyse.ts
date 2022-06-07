@@ -33,7 +33,7 @@ export default class Analyse extends Command {
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
-		stringCode: flags.string({
+		"string-code": flags.string({
 			char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
 		}),
@@ -51,7 +51,7 @@ export default class Analyse extends Command {
 		} else if (flags["string-code"]) {
 			file = await new KipperParseStream(flags["string-code"]);
 		} else {
-			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
+			throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
 		}
 
 		// Start timer for processing

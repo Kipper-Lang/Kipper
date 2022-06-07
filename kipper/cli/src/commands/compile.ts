@@ -80,7 +80,7 @@ export default class Compile extends Command {
 		} else if (flags["string-code"]) {
 			file = await new KipperParseStream(flags["string-code"]);
 		} else {
-			throw new KipperInvalidInputError("Argument 'file' or flag 'stringCode' must be populated. Aborting...");
+			throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
 		}
 
 		// Start timer for processing
