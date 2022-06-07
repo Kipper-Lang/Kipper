@@ -22,8 +22,8 @@ describe("compile", async () => {
 				.it("Compile file 'hello-world.kip' with file argument", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(compiledPath, constants.R_OK);
 					} catch (e) {
@@ -75,8 +75,8 @@ describe("compile", async () => {
 				.it("Compile Hello world with --stringCode flag", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(anonymousCompiledPath, constants.R_OK);
 					} catch (e) {
@@ -134,8 +134,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'ascii'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(compiledPath, constants.R_OK);
 					} catch (e) {
@@ -150,8 +150,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'utf8'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(compiledPath, constants.R_OK);
 					} catch (e) {
@@ -166,8 +166,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'utf16le'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world-utf16.kip'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(utf16CompiledPath, constants.R_OK);
 					} catch (e) {
@@ -185,8 +185,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'ascii'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(anonymousCompiledPath, constants.R_OK);
 					} catch (e) {
@@ -201,8 +201,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'utf8'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(anonymousCompiledPath, constants.R_OK);
 					} catch (e) {
@@ -217,8 +217,8 @@ describe("compile", async () => {
 				.it("Compile using encoding 'utf16le'", async (ctx) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing");
-					expect(ctx.stdout).to.contain("Finished in");
+					expect(ctx.stdout).to.contain("Parsing file content.");
+					expect(ctx.stdout).to.contain("Done in");
 					try {
 						await fs.access(anonymousCompiledPath, constants.R_OK);
 					} catch (e) {

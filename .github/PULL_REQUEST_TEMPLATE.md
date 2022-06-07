@@ -4,10 +4,10 @@
 
 - [ ] Requires a documentation update
 - [ ] Maintenance Change (Non-breaking change that updates dependencies or updated other text files)
-- [ ] Development or internal changes (These changes do not add new features or fixes bugs, but update the code in other ways)
+- [ ] Development or internal changes (These changes do not add new features or fix bugs, but update the code in other ways)
 - [ ] Bug fix (Non-breaking change which fixes an issue)
 - [ ] New feature (Non-breaking change which adds functionality)
-- [ ] Breaking change (Fix or feature that would cause existing functionality to not work as expected.)
+- [ ] Breaking change (Major bug fix or feature that would cause existing functionality to not work as expected.)
 
 <!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
 
