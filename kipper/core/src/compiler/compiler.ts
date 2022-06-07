@@ -14,6 +14,7 @@ import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } f
 import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
+import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileOptions}
@@ -22,15 +23,15 @@ import type { TranslatedCodeLine } from "./semantics";
  */
 export interface CompileConfig {
 	/**
-	 * List of global items, which should be made available inside Kipper as a built-in. If this is set, then the
-	 * default builtInGlobals will be overwritten! If you wish to only extend the builtInGlobals write to {@link extendGlobals}.
+	 * The built-in functions that will be available in a Kipper program. This option overwrites the default built-ins,
+	 * if you wish to only add new built-in functions write to {@link extendBuiltIns}.
 	 */
-	globals?: Array<BuiltInFunction>;
+	builtIns?: Array<BuiltInFunction>;
 	/**
-	 * Extends the {@link globals} with the specified items. If {@link globals} is undefined, then it will simply extend
+	 * Extends the {@link builtIns} with the specified items. If {@link builtIns} is undefined, then it will simply extend
 	 * the default array.
 	 */
-	extendGlobals?: Array<BuiltInFunction>;
+	extendBuiltIns?: Array<BuiltInFunction>;
 	/**
 	 * The filename that should be used to represent the program.
 	 * @since 0.2.0
@@ -41,6 +42,11 @@ export interface CompileConfig {
 	 * @since 0.5.0
 	 */
 	target?: KipperCompileTarget;
+	/**
+	 * Options for the {@link KipperOptimiser}.
+	 * @since 0.8.0
+	 */
+	optimisationOptions?: OptimisationOptions;
 }
 
 /**
@@ -63,35 +69,40 @@ export class EvaluatedCompileOptions implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		globals: kipperRuntimeBuiltIns,
-		extendGlobals: [],
-		fileName: "anonymous-script",
-		target: new TypeScriptTarget(), // Default target is TypeScript
+		builtIns: kipperRuntimeBuiltIns, // Default built-in globals
+		extendGlobals: [], // No globals
+		fileName: "anonymous-script", // Default name if no name is specified.
+		target: new TypeScriptTarget(), // Default target is TypeScript.
+		optimisationOptions: defaultOptimisationOptions,
 	};
 
-	/**
-	 * The actual builtInGlobals that will be used inside a compilation with this configuration. This has been merged
-	 * with the {@link userOptions.extendGlobals} argument as well, if it has been defined.
+	/**, // Include all built-ins to allow the user to modify the functions in the target language.
+	 * The built-in functions that will be available in a Kipper program.
+	 *
+	 * This will be extended by {@link extendBuiltIns}.
 	 */
-	public readonly globals: Array<BuiltInFunction>;
+	public readonly builtIns: Array<BuiltInFunction>;
 
 	/**
-	 * Extensions to the globals that should not replace the main {@link globals} array.
+	 * Extensions to the global built-in functions that should not replace the primary {@link builtIns}.
 	 */
-	public readonly extendGlobals: Array<BuiltInFunction>;
+	public readonly extendBuiltIns: Array<BuiltInFunction>;
 
 	public readonly fileName: string;
 
 	public readonly target: KipperCompileTarget;
 
+	public readonly optimisationOptions: OptimisationOptions;
+
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
 
-		// Write all items
-		this.globals = options.globals ?? Object.values(EvaluatedCompileOptions.defaults.globals);
-		this.extendGlobals = options.extendGlobals ?? EvaluatedCompileOptions.defaults.extendGlobals;
+		// Evaluate all config options
+		this.builtIns = options.builtIns ?? Object.values(EvaluatedCompileOptions.defaults.builtIns);
+		this.extendBuiltIns = options.extendBuiltIns ?? EvaluatedCompileOptions.defaults.extendGlobals;
 		this.fileName = options.fileName ?? EvaluatedCompileOptions.defaults.fileName;
 		this.target = options.target ?? EvaluatedCompileOptions.defaults.target;
+		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileOptions.defaults.optimisationOptions;
 	}
 }
 
@@ -242,9 +253,9 @@ export class KipperCompiler {
 	 *
 	 * This function is async to not render-block the browser and allow rendering to happen in-between the
 	 * async processing.
-	 * @param stream {string | KipperParseStream} The input to compile, which may be either a {@link String} or
+	 * @param stream The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
-	 * @param compilerOptions {BuiltInFunction[]} Compilation Configuration, which defines how the compiler should handle the
+	 * @param compilerOptions Compilation Configuration, which defines how the compiler should handle the
 	 * program and compilation. This uses per default {@link EvaluatedCompileOptions} with an empty interface as user args
 	 * (Default values will be used).
 	 * @returns The created {@link KipperCompileResult} instance.
@@ -270,19 +281,19 @@ export class KipperCompiler {
 			// The file context storing the metadata for the "virtual file"
 			const fileCtx: KipperProgramContext = await this.parse(inStream);
 
-			// If there are builtInGlobals to register, register them
-			let globals = [...config.globals, ...config.extendGlobals];
+			// If there are builtIns to register, register them
+			let globals = [...config.builtIns, ...config.extendBuiltIns];
 			if (globals.length > 0) {
 				fileCtx.registerGlobals(globals);
 			}
 			this.logger.debug(
-				`Registered ${globals.length} global function${globals.length <= 1 ? "s" : ""} for the program '${
+				`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"} for the program '${
 					inStream.name
 				}'.`,
 			);
 
-			// Start actual async compilation
-			const code = await fileCtx.compileProgram();
+			// Start compilation of the Kipper program
+			const code = await fileCtx.compileProgram(config.optimisationOptions);
 
 			// After the code is done, return the compilation result as an instance
 			this.logger.info(`Compilation finished successfully!`);

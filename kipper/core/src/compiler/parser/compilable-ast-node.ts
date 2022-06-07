@@ -3,7 +3,7 @@
  * @since 0.8.0
  */
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import type { KipperScope, TranslatedCodeLine } from "../semantics";
+import type { TranslatedCodeLine } from "../semantics";
 import type { KipperParser } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
@@ -11,8 +11,10 @@ import type { KipperCompileTarget } from "../compile-target";
 import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
 import type { KipperTargetSemanticAnalyser, TargetASTNodeSemanticAnalyser } from "../semantics";
 import type { RootASTNode } from "./root-ast-node";
-import { ParserASTNode, SemanticData } from "./ast-node";
-import { determineScope } from "../../utils";
+import type { SemanticData } from "./ast-node";
+import type { CompoundStatement } from "../semantics";
+import type { Scope } from "../scope";
+import { ParserASTNode } from "./ast-node";
 
 /**
  * An eligible parent for a compilable node.
@@ -31,7 +33,7 @@ export type compilableNodeChild = CompilableASTNode<any>;
  * @since 0.8.0
  */
 export abstract class CompilableASTNode<Semantics extends SemanticData> extends ParserASTNode<Semantics> {
-	protected _scope: KipperScope | undefined;
+	public _scopeCtx: CompoundStatement | KipperProgramContext | undefined;
 
 	protected _parent: compilableNodeParent;
 
@@ -129,13 +131,37 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	}
 
 	/**
-	 * The {@link scope} of this token. Dynamically fetched using {@link determineScope}.
+	 * The {@link scope} of this AST node.
 	 * @since 0.8.0
 	 */
-	public get scope(): KipperScope {
-		// Uses caching to speed up accessing this field multiple times
-		this._scope = this._scope ?? determineScope(this);
-		return <KipperScope>this._scope;
+	public get scope(): Scope {
+		if ("localScope" in this.scopeCtx) {
+			return this.scopeCtx.localScope;
+		} else {
+			return this.scopeCtx.globalScope;
+		}
+	}
+
+	/**
+	 * The context / AST node of the {@link scope}.
+	 * @since 0.8.0
+	 */
+	public get scopeCtx(): CompoundStatement | KipperProgramContext {
+		if (this._scopeCtx) {
+			return this._scopeCtx;
+		}
+
+		let parent: compilableNodeParent = this.parent;
+		while (parent.parent !== undefined && !("localScope" in parent)) {
+			parent = parent.parent;
+		}
+
+		// If there is no parent -> root node, return the program context
+		if (parent.parent === undefined) {
+			return parent.programCtx;
+		}
+		// Return the local scope (Compound statement) ctx.
+		return parent;
 	}
 
 	/**

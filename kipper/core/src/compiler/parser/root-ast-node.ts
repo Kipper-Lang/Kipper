@@ -18,12 +18,24 @@ import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 export class RootASTNode extends ParserASTNode<NoSemantics> {
 	protected _programCtx: KipperProgramContext;
 
+	protected readonly _parent: undefined;
+
 	protected readonly _children: Array<Declaration<any> | Statement<any>>;
 
 	constructor(programCtx: KipperProgramContext, antlrCtx: ParserRuleContext) {
 		super(antlrCtx, undefined);
 		this._programCtx = programCtx;
 		this._children = [];
+		this._parent = undefined;
+	}
+
+	/**
+	 * The parent of this root node. This will always return undefined, as there will never be a parent for a root AST
+	 * node.
+	 * @since 0.8.0
+	 */
+	public get parent(): undefined {
+		return this._parent;
 	}
 
 	/**

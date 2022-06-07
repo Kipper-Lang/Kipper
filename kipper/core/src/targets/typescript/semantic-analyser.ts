@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArraySpecifierExpression,
 	AssignmentExpression,
@@ -24,7 +24,6 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
-	KipperTargetSemanticAnalyser,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
@@ -40,7 +39,8 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
-import { KipperError, ReservedIdentifierOverwriteError } from "../../errors";
+import { KipperTargetSemanticAnalyser } from "../../compiler";
+import { ReservedIdentifierOverwriteError } from "../../errors";
 
 /**
  * All reserved identifiers in TypeScript that may not be overwritten.

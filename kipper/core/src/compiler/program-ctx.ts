@@ -5,78 +5,44 @@
  * @since 0.0.3
  */
 
+import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
+import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
+import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
-import { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import { FunctionDeclaration, VariableDeclaration, KipperFunction, TranslatedCodeLine } from "./semantics";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { TranslatedCodeLine, Expression } from "./semantics";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
-import { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperCompileTarget } from "./compile-target";
 import { KipperSemanticChecker } from "./semantics";
 import { KipperTypeChecker } from "./semantics";
+import { KipperOptimiser, OptimisationOptions } from "./optimiser";
+import { Reference } from "./reference";
+import { GlobalScope } from "./global-scope";
 
 /**
  * The program context class used to represent a program for a compilation.
  * @since 0.0.3
  */
 export class KipperProgramContext {
-	/**
-	 * The private field '_stream' that actually stores the variable data,
-	 * which is returned inside the {@link this.stream}.
-	 * @private
-	 */
 	private readonly _stream: KipperParseStream;
 
-	/**
-	 * The private field '_parseTreeEntry' that actually stores the variable data,
-	 * which is returned inside the {@link this.parseTreeEntry}.
-	 * @private
-	 */
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	/**
-	 * The private field '_parser' that actually stores the variable data,
-	 * which is returned inside the {@link this.parser}.
-	 * @private
-	 */
-	private readonly _parser: KipperParser;
-
-	/**
-	 * The private field '_lexer' that actually stores the variable data,
-	 * which is returned inside the {@link this.lexer}.
-	 * @private
-	 */
-	private readonly _lexer: KipperLexer;
-
-	/**
-	 * The private field '_builtInGlobals' that actually stores the variable data,
-	 * which is returned inside the getter {@link this.builtInGlobals}.
-	 * @private
-	 */
-	private _builtInGlobals: Array<BuiltInFunction>;
-
-	/**
-	 * The private field '_processedParseTree' that actually stores the variable data,
-	 * which is returned inside the {@link this.processedParseTree}.
-	 * @private
-	 */
 	private _abstractSyntaxTree: RootASTNode | undefined;
-
-	/**
-	 * The private field '_compiledCode' that will store the cached code, once 'compileProgram' has been called. This is
-	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
-	 * @private
-	 */
-	private _compiledCode: Array<Array<string>> | undefined;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
 	 * @private
 	 */
-	private readonly _globalScope: Array<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
+	private readonly _globalScope: GlobalScope;
+
+	/**
+	 * The field compiledCode that will store the cached code, once 'compileProgram' has been called. This is
+	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
+	 * @private
+	 */
+	private _compiledCode: Array<Array<string>> | undefined;
 
 	/**
 	 * Represents the compilation translation for the program. This contains the
@@ -87,32 +53,83 @@ export class KipperProgramContext {
 	public readonly target: KipperCompileTarget;
 
 	/**
-	 * The logger that should be used to log warnings and errors.
-	 */
-	public logger: KipperLogger;
-
-	/**
-	 * Contains all the internal built-in functions, which are used by Kipper to provide internal functionality. These
-	 * internal built-ins are commonly used to provide the functionality for keywords and other internal logic.
-	 *
-	 * This contains *every* builtin that also must be implemented by every target in the {@link KipperTargetBuiltInGenerator}.
-	 * @since 0.8.0
-	 */
-	public internals: Array<InternalFunction>;
-
-	/**
 	 * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
 	 * invalid use of AST nodes is detected.
 	 * @since 0.7.0
 	 */
-	private readonly _semanticChecker: KipperSemanticChecker;
+	public readonly semanticChecker: KipperSemanticChecker;
 
 	/**
 	 * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an invalid
 	 * use of types and identifiers is detected.
 	 * @since 0.7.0
 	 */
-	private readonly _typeChecker: KipperTypeChecker;
+	public readonly typeChecker: KipperTypeChecker;
+
+	/**
+	 * Kipper Code Optimiser, which performs
+	 * @since 0.8.0
+	 */
+	public readonly optimiser: KipperOptimiser;
+
+	/**
+	 * Returns the {@link KipperParser}, which parsed this program and generated the
+	 * {@link this.antlrParseTree parse tree}.
+	 */
+	public readonly parser: KipperParser;
+
+	/**
+	 * Returns the {@link KipperLexer}, which lexed this program and generated the tokens for it.
+	 * @private
+	 */
+	public readonly lexer: KipperLexer;
+
+	/**
+	 * The logger that should be used to log warnings and errors.
+	 */
+	public logger: KipperLogger;
+
+	/**
+	 * Contains all the internal functions, which are used by Kipper to provide internal functionality. These
+	 * internal built-ins are commonly used to provide the functionality for keywords and other internal logic.
+	 *
+	 * This contains *every* internal functions that also must be implemented by every target in the
+	 * {@link KipperTargetBuiltInGenerator}.
+	 * @since 0.8.0
+	 */
+	public internals: Array<InternalFunction>;
+
+	/**
+	 * Returns the built-in global functions registered for this Kipper program. These global functions defined in the
+	 * array will be available in the Kipper program and callable using their specified identifier.
+	 *
+	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
+	 * Kipper.
+	 * @since 0.8.0
+	 */
+	public builtIns: Array<BuiltInFunction>;
+
+	/**
+	 * A list of all references to built-in functions. This is used to determine which built-in functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused built-in
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private readonly _builtInReferences: Array<Reference<BuiltInFunction>>;
+
+	/**
+	 * A list of all references to internal functions. This is used to determine which internal functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused internal
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private readonly _internalReferences: Array<Reference<InternalFunction>>;
 
 	constructor(
 		stream: KipperParseStream,
@@ -122,19 +139,25 @@ export class KipperProgramContext {
 		logger: KipperLogger,
 		target: KipperCompileTarget,
 		internals: Array<InternalFunction>,
+		semanticChecker?: KipperSemanticChecker,
+		typeChecker?: KipperTypeChecker,
+		optimiser?: KipperOptimiser,
 	) {
 		this.logger = logger;
 		this.target = target;
 		this.internals = internals;
-		this._semanticChecker = new KipperSemanticChecker(this);
-		this._typeChecker = new KipperTypeChecker(this);
+		this.semanticChecker = semanticChecker ?? new KipperSemanticChecker(this);
+		this.typeChecker = typeChecker ?? new KipperTypeChecker(this);
+		this.optimiser = optimiser ?? new KipperOptimiser(this);
+		this.parser = parser;
+		this.lexer = lexer;
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
-		this._parser = parser;
-		this._lexer = lexer;
-		this._builtInGlobals = [];
-		this._globalScope = [];
+		this.builtIns = [];
+		this._globalScope = new GlobalScope(this);
 		this._abstractSyntaxTree = undefined;
+		this._builtInReferences = [];
+		this._internalReferences = [];
 	}
 
 	/**
@@ -145,8 +168,8 @@ export class KipperProgramContext {
 	 */
 	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
-		this._semanticChecker.setTracebackData({ ctx });
-		return this._semanticChecker;
+		this.semanticChecker.setTracebackData({ ctx });
+		return this.semanticChecker;
 	}
 
 	/**
@@ -157,8 +180,8 @@ export class KipperProgramContext {
 	 */
 	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
-		this._typeChecker.setTracebackData({ ctx });
-		return this._typeChecker;
+		this.typeChecker.setTracebackData({ ctx });
+		return this.typeChecker;
 	}
 
 	/**
@@ -192,21 +215,6 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the {@link KipperParser}, which parsed this "virtual" file and generated the {@link this.parseTreeEntry} ctx
-	 * context.
-	 */
-	public get parser(): KipperParser {
-		return this._parser;
-	}
-
-	/**
-	 * Returns the {@link KipperLexer}, which lexed this "virtual" file and generated the tokens for it.
-	 */
-	public get lexer(): KipperLexer {
-		return this._lexer;
-	}
-
-	/**
 	 * Returns the {@link ANTLRErrorListener} instances, which actively listen for errors on this "virtual" file.
 	 *
 	 * Considering this file is only generated after the lexing and parse step, no more errors will be handled by these
@@ -224,31 +232,44 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the builtInGlobals registered for this Kipper program. These global functions defined in the array will be
-	 * available in the Kipper program and callable using their specified identifier.
-	 *
-	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
-	 * Kipper.
-	 */
-	public get builtInGlobals(): Array<BuiltInFunction> {
-		return this._builtInGlobals;
-	}
-
-	/**
 	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
 	 */
-	public get globalScope(): Array<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
+	public get globalScope(): GlobalScope {
 		return this._globalScope;
 	}
 
 	/**
-	 * Returns the typescript code counterpart to this "virtual" file.
+	 * Returns the cached compiled code.
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
 	public get compiledCode(): Array<Array<string>> | undefined {
 		return this._compiledCode;
+	}
+
+	/**
+	 * A list of all references to internal functions. This is used to determine which internal functions are used and
+	 * which aren't.
+	 *
+	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused internal functions,
+	 * so they will not be generated.
+	 * @since 0.8.0
+	 */
+	public get internalReferences(): Array<Reference<InternalFunction>> {
+		return this._internalReferences;
+	}
+
+	/**
+	 * A list of all references to built-in functions. This is used to determine which built-in functions are used and
+	 * which aren't.
+	 *
+	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused built-in functions,
+	 * so they will not be generated.
+	 * @since 0.8.0
+	 */
+	public get builtInReferences(): Array<Reference<BuiltInFunction>> {
+		return this._builtInReferences;
 	}
 
 	/**
@@ -262,8 +283,56 @@ export class KipperProgramContext {
 	}
 
 	/**
+	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
+	 * the program and compile it.
+	 * @param listener The listener instance to walk through the antlr4 parse tree. If undefined a new default one
+	 * is created based on the metadata from this {@link KipperProgramContext}.
+	 * @private
+	 */
+	private async generateAbstractSyntaxTree(
+		listener: KipperFileListener = new KipperFileListener(this, this.antlrParseTree),
+	): Promise<RootASTNode> {
+		if (listener.rootNode.programCtx !== this) {
+			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");
+		}
+
+		try {
+			// The walker used to go through the parse tree.
+			const walker = new ParseTreeWalker();
+
+			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
+			this.logger.debug(
+				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
+			);
+			walker.walk(listener, this.antlrParseTree);
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
+
+		// Caching the result
+		this._abstractSyntaxTree = listener.rootNode;
+
+		if (!listener.rootNode) {
+			// This should usually never happen. If it does, then something went wrong terribly
+			throw new KipperInternalError("Missing AST root node in listener instance");
+		}
+
+		const countNodes: number = listener.rootNode.children.length;
+		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
+		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
+		return listener.rootNode;
+	}
+
+	/**
 	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
-	 * and warnings using the {@link this.logger} and throw errors in case any are encountered while running.
+	 * and warnings using the {@link this.logger logger of this instance} and throw errors in case any logical issues are
+	 * detected.
 	 *
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
 	 * {@link this.generateAbstractSyntaxTree} to generate it.
@@ -272,11 +341,40 @@ export class KipperProgramContext {
 	public async semanticAnalysis(): Promise<void> {
 		try {
 			if (!this._abstractSyntaxTree) {
-				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(
-					new KipperFileListener(this, this.antlrParseTree),
-				);
+				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 			}
+
+			// Semantically analysing the AST starting from the root node
 			await this._abstractSyntaxTree.semanticAnalysis();
+		} catch (e) {
+			if (e instanceof KipperError) {
+				// Log the Kipper error
+				this.logger.reportError(LogLevel.ERROR, e);
+			}
+
+			// Re-throw the error
+			throw e;
+		}
+	}
+
+	/**
+	 * Processes the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
+	 * @param options The options for the optimisation. If undefined, the {@link defaultOptimisationOptions} are used.
+	 * @since 0.8.0
+	 */
+	public async optimise(options?: OptimisationOptions): Promise<RootASTNode> {
+		if (!this.abstractSyntaxTree) {
+			// TODO! Change this error to a more fitting one
+			throw new UndefinedSemanticsError();
+		}
+
+		try {
+			const result = await this.optimiser.optimise(this.abstractSyntaxTree, options);
+
+			// Caching the result
+			this._abstractSyntaxTree = result;
+
+			return result;
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -298,13 +396,13 @@ export class KipperProgramContext {
 	 * @since 0.6.0
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
-		if (!this._abstractSyntaxTree) {
+		if (!this.abstractSyntaxTree) {
 			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
 		try {
-			let genCode: Array<TranslatedCodeLine> = await this._abstractSyntaxTree.translate();
+			let genCode: Array<TranslatedCodeLine> = await this.abstractSyntaxTree.translate();
 
 			// Append required typescript code for Kipper for the program to work properly
 			return (await this.generateRequirements()).concat(genCode);
@@ -320,22 +418,26 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Translate the parse tree of this virtual file into an array of valid TypeScript code lines.
+	 * Translate the parse tree of this virtual file into the {@link target target language}.
 	 *
 	 * Steps of compilation:
-	 * - Walking through the parsed antlr4 tree - ({@link antlrParseTree})
-	 * - Generating a proper Kipper parse tree, which is eligible for semantic analysis and compilation -
-	 *   ({@link generateAbstractSyntaxTree})
-	 * - Running the semantic analysis - ({@link abstractSyntaxTree.semanticAnalysis})
-	 * - Generating the final source code - ({@link abstractSyntaxTree.translateCtxAndChildren})
+	 * - Generating a Kipper abstract syntax tree - ({@link generateAbstractSyntaxTree})
+	 * - Semantically analysing the AST - ({@link semanticAnalysis})
+	 * - Optimising the AST - ({@link optimise})
+	 * - Generating the final source code for the specified target - ({@link translate})
+	 * @param optimisationOptions The configuration for the {@link KipperOptimiser}.
 	 */
-	public async compileProgram(): Promise<Array<TranslatedCodeLine>> {
-		// Getting the proper processed parse tree contained of proper Kipper tokens that are compilable
-		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree(new KipperFileListener(this, this.antlrParseTree));
+	public async compileProgram(optimisationOptions?: OptimisationOptions): Promise<Array<TranslatedCodeLine>> {
+		// Getting the processed AST tree
+		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
-		// Running the semantic analysis
+		// Running the semantic analysis for the AST
 		this.logger.info(`Analysing '${this.stream.name}'.`);
 		await this.semanticAnalysis();
+
+		// Optimising the AST
+		this.logger.info(`Optimising '${this.stream.name}'`);
+		await this.optimise(optimisationOptions);
 
 		// Translating the context instances and children
 		this.logger.info(`Translating '${this.stream.name}' to '${this.target.targetName}'.`);
@@ -351,45 +453,6 @@ export class KipperProgramContext {
 
 		// Finished compilation
 		return genCode;
-	}
-
-	/**
-	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
-	 * the program and compile it.
-	 *
-	 *
-	 * @param listener The listener instance to iterate through the antlr4 parse tree
-	 * @private
-	 */
-	private async generateAbstractSyntaxTree(listener: KipperFileListener): Promise<RootASTNode> {
-		try {
-			// The walker used to go through the parse tree.
-			const walker = new ParseTreeWalker();
-
-			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-			this.logger.debug(
-				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
-			);
-			walker.walk(listener, this.antlrParseTree);
-		} catch (e) {
-			if (e instanceof KipperError) {
-				// Log the Kipper error
-				this.logger.reportError(LogLevel.ERROR, e);
-			}
-
-			// Re-throw the error
-			throw e;
-		}
-
-		if (!listener.rootNode) {
-			// This should usually never happen. If it does, then something went wrong terribly
-			throw new KipperInternalError("Missing AST root node in listener instance");
-		}
-
-		const countNodes: number = listener.rootNode.children.length;
-		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
-		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
-		return listener.rootNode;
 	}
 
 	/**
@@ -413,7 +476,7 @@ export class KipperProgramContext {
 		}
 
 		// Generating the code for the global functions
-		for (const builtInSpec of this._builtInGlobals) {
+		for (const builtInSpec of this.builtIns) {
 			// Fetch the function for handling this built-in
 			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
 				this.target.builtInGenerator,
@@ -425,43 +488,18 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Tries to fetch the specific identifier from the global scope.
+	 * Searches for a built-in function with the specific {@link identifier} from the {@link builtIns}.
+	 *
+	 * If the identifier is unknown, this function will return undefined.
+	 * @param identifier The identifier to search for.
+	 * @since 0.8.0
 	 */
-	public getGlobalIdentifier(
-		identifier: string,
-	): BuiltInFunction | ScopeVariableDeclaration | ScopeFunctionDeclaration | undefined {
-		return this.getGlobalFunction(identifier) ?? this.getGlobalVariable(identifier);
+	public getBuiltInFunction(identifier: string): BuiltInFunction | undefined {
+		return this.builtIns.find((func) => func.identifier === identifier);
 	}
 
 	/**
-	 * Tries to fetch a global function from the {@link this.builtInGlobals} array based on the passed {@link identifier}
-	 * @param identifier The identifier of the function
-	 */
-	public getGlobalFunction(identifier: string): KipperFunction | undefined {
-		// First try to fetch from the built-in globals. If 'undefined' is returned, try to fetch it from the 'globalScope'
-		return (
-			this.builtInGlobals.find((value) => {
-				return value.identifier === identifier;
-			}) ?? <ScopeFunctionDeclaration | undefined>this.globalScope.find((value) => {
-				return value instanceof ScopeFunctionDeclaration && value.identifier == identifier;
-			})
-		);
-	}
-
-	/**
-	 * Tries to fetch a global variable from the {@link this.globalScope} based on the passed {@link identifier}.
-	 * @param identifier The identifier of the variable.
-	 */
-	public getGlobalVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		// Casting the type, as the return type will always be either ScopeDeclaration or undefined
-		// This is automatically the case, as we require the type inside find() to match ScopeDeclaration!
-		return <ScopeVariableDeclaration | undefined>this.globalScope.find((value) => {
-			return value instanceof ScopeVariableDeclaration && value.identifier == identifier;
-		});
-	}
-
-	/**
-	 * Registers new builtInGlobals that are available inside the Kipper program.
+	 * Registers new builtIns that are available inside the Kipper program.
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
@@ -477,33 +515,32 @@ export class KipperProgramContext {
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
-		this._builtInGlobals.push(...newGlobals);
+		this.builtIns.push(...newGlobals);
 	}
 
 	/**
-	 * Adds a new declaration entry to the global scope.
-	 * @param token The token that should be added.
-	 * @param identifier The identifier of the global variable.
+	 * Adds a new built-in reference.
+	 * @param exp The expression referencing {@link ref}.
+	 * @param ref The built-in identifier referenced.
+	 * @since 0.8.0
 	 */
-	public async addGlobalVariable(
-		token: VariableDeclaration | FunctionDeclaration,
-		identifier: string,
-	): Promise<ScopeVariableDeclaration | ScopeFunctionDeclaration> {
-		this.semanticCheck(token).builtInNotDefined(identifier);
+	public addBuiltInReference(exp: Expression<any>, ref: BuiltInFunction) {
+		this._builtInReferences.push({
+			ref: ref,
+			exp: exp,
+		});
+	}
 
-		// Check that the identifier is not used by some other definition and that there has not been a previous definition.
-		if (token instanceof VariableDeclaration) {
-			// May not redeclare a variable
-			this.semanticCheck(token).functionIdentifierNotDeclared(identifier);
-			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
-		} else {
-			this.semanticCheck(token).variableIdentifierNotDeclared(identifier);
-			this.semanticCheck(token).functionIdentifierNotDefined(identifier);
-		}
-
-		const declaration =
-			token instanceof VariableDeclaration ? new ScopeVariableDeclaration(token) : new ScopeFunctionDeclaration(token);
-		this._globalScope.push(declaration);
-		return declaration;
+	/**
+	 * Adds a new internal reference.
+	 * @param exp The expression referencing {@link ref}.
+	 * @param ref The internal identifier referenced.
+	 * @since 0.8.0
+	 */
+	public addInternalReference(exp: Expression<any>, ref: InternalFunction) {
+		this._internalReferences.push({
+			ref: ref,
+			exp: exp,
+		});
 	}
 }
