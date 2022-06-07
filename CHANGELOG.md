@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#134](https://github.com/Luna-Klatzer/Kipper/issues/134))
 - Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal
   identifier or reserved identifier/keyword. ([#153](https://github.com/Luna-Klatzer/Kipper/issues/153))
-- Implemented tree-shaking for internal and built-in functions using the new class `KipperOptimiser`, which removes 
+- Implemented tree-shaking for internal and built-in functions using the new class `KipperOptimiser`, which removes
   any function definitions that are not used ([#159](https://github.com/Luna-Klatzer/Kipper/issues/159)).
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 - New classes and interfaces:
@@ -45,6 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperSemanticChecker.validConversion()`, which checks whether a type conversion is valid and implemented by
     Kipper.
   - `KipperOptimiser.optimise()`, which performs optimisation on an abstract syntax tree.
+  - `KipperProgramContext.getBuiltInFunction()`, which searches for a built-in function based on a passed 
+    identifier.
 - New errors:
   - `InvalidConversionError`, which is thrown when an invalid or unimplemented conversion is performed in a Kipper
     program.
@@ -55,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Kipper meta type `type`, which represents the type of a Kipper type.
   - `kipperSupportedConversions`, which is an array containing multiple tuples representing allowed conversions in
     Kipper.
+- New `CompileConfig` option `optimisationOptions`, which contains the configuration for the `KipperOptimiser`.
 
 ### Changed
 
@@ -82,6 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CompilerEvaluatedOptions` to `EvaluatedCompileOptions`.
   - `KipperProgramContext.processedParseTree` to `abstractSyntaxTree`.
   - `KipperProgramContext.builtInGlobals` to `builtIns`.
+  - `CompileConfig.globals` to `builtIns`.
+  - `CompileConfig.extendGlobals` to `extendBuiltIns`.
 - Optimised and simplified Kipper code generation in `KipperCompileResult.write()`.
 - Updated `@kipper/core` code base structure:
   - `/parser/` now contains these new files:
@@ -91,6 +96,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `/semantics/language/` which contains the language specific AST Node classes that implement the semantics for the
     expressions, definitions and statements in Kipper.
   - `/semantics/processor/` which is the module containing the Semantic analyser and Type checker.
+- Updated local and global scope handling by introducing three new classes: `Scope`, `GlobalScope` and `LocalScope`.
+  These classes now handle local variables and functions and implement a standard interface for handling declarations
+  and definitions.
 
 ### Removed
 
@@ -106,6 +114,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for multi strings seperated by a whitespace (e.g. `"1" "2"` is counted as a single string `"12"`). This
   may be added back later, but for now it will be removed from the Kipper language.
 - Error `InvalidOverwriteError`, as all errors it represented are now subclasses of `IdentifierError`.
+- Unneeded functions from `KipperProgramContext`, as they were replaced by the new scope handling classes:
+  - `getGlobalFunction()`
+  - `getGlobalIdentifier()`
+  - `getGlobalVariable()`
+  - `addGlobalVariable()`
+- Unneeded function `determineScope()`, as the scope handling was moved to `CompilableASTNode.scope`.
 
 ## [0.7.0] - 2022-05-22
 
