@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Note that considering this is a work-in-progress project with no stable version released yet,
+Please note that considering this is a work-in-progress project with no stable versions released yet,
 only the most recent versions will be supported, while older versions will not get updated,
 and must be migrated to newer versions to work continuously.
 
@@ -11,10 +11,9 @@ and must be migrated to newer versions to work continuously.
 The following versions are supported and will get bug-fixes and security updates:
 
 | Version | Supported          |
-| ------- | ------------------ |
-| 0.7.x   | :heavy_check_mark: |
-| 0.6.x   | :heavy_check_mark: |
-| <0.6.x  | :x:                |
+|---------| ------------------ |
+| 0.8.x   | :heavy_check_mark: |
+| <0.8.x  | :x:                |
 
 ### NPM Deprecation
 
