@@ -52,7 +52,7 @@
 	"size-limit": [
 		{
 			"path": "./kipper-standalone.min.js",
-			"limit": "800 kB"
+			"limit": "250 kB"
 		}
 	],
   "license": "GPL-3.0",
