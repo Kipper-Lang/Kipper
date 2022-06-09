@@ -1,4 +1,4 @@
-name: "Size-Limit Performance Analysis"
+name: "Size Limit"
 on: pull_request
 jobs:
   size:
