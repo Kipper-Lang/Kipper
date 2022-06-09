@@ -106,7 +106,7 @@ export default class Run extends Command {
 
 		let result: KipperCompileResult;
 		try {
-			// Run the file
+			// Compile the file
 			result = await compiler.compile(
 				new KipperParseStream(
 					file.stringContent,

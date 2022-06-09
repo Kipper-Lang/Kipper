@@ -178,7 +178,7 @@ export class KipperInternalError extends Error {
  */
 export class KipperNotImplementedError extends KipperError {
 	constructor(msg: string) {
-		super(`${msg} Update Kipper or watch out for future updates.`);
+		super(`${msg} Update Kipper or watch out for future releases.`);
 	}
 }
 
