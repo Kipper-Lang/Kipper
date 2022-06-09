@@ -27,6 +27,7 @@ const addedHelloWorldFile = path.resolve(`${__dirname}/../../kipper-files/added-
 const assignmentArithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/assignment-arithmetics.kip`);
 const boolFile = path.resolve(`${__dirname}/../../kipper-files/bool.kip`);
 const typeConversion = path.resolve(`${__dirname}/../../kipper-files/type-conversion.kip`);
+const spacedProgram = path.resolve(`${__dirname}/../../kipper-files/spaced-program.kip`);
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -138,6 +139,12 @@ describe("KipperCompiler", () => {
 
 			it("Type conversion", async () => {
 				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Spaced program", async () => {
+				const fileContent = (await fs.readFile(spacedProgram, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
