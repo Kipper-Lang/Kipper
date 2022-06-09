@@ -21,7 +21,9 @@
     "json-parse-even-better-errors": "2.3.1",
     "run-script-os": "1.1.6",
     "ts-node": "10.8.1",
-    "@types/node": "17.0.32"
+    "@types/node": "17.0.32",
+		"size-limit": "^7.0.1",
+		"@size-limit/preset-big-lib": "^7.0.1"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -47,6 +49,12 @@
     "LICENSE",
     "Kipper.g4"
   ],
+	"size-limit": [
+		{
+			"path": "./kipper-standalone.min.js",
+			"limit": "800 kB"
+		}
+	],
   "license": "GPL-3.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -64,6 +72,7 @@
     "lint": "pnpm run tslint",
     "lint:fix": "pnpm run tslint:fix",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
-    "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix"
+    "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
+		"size-limit": "size-limit"
   }
 }
