@@ -1181,7 +1181,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterExpressionStatement(ctx: ExpressionStatementContext): void {
-		// TODO! Implement proper handling of parents for compound statements and function definitions
 		this.handleIncomingStatementCtx(ctx);
 	}
 
@@ -1239,7 +1238,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx the parse tree
 	 */
 	public enterIfStatement(ctx: IfStatementContext): void {
-		throw new Error("If statements are not supported yet in Kipper");
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1248,7 +1247,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx the parse tree
 	 */
 	public exitIfStatement(ctx: IfStatementContext): void {
-		throw new Error("If statements are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	/**
@@ -1257,7 +1256,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx the parse tree
 	 */
 	public enterSwitchStatement(ctx: SwitchStatementContext): void {
-		throw new Error("Switch statements are not supported yet in Kipper");
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1266,7 +1265,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx the parse tree
 	 */
 	public exitSwitchStatement(ctx: SwitchStatementContext): void {
-		throw new Error("Switch statements are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	/**
@@ -1274,7 +1273,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterSwitchLabeledStatement(ctx: SwitchLabeledStatementContext): void {
-		throw new Error("Switch statements are not supported yet in Kipper");
+		// TODO! Implement switch statements
 	}
 
 	/**
@@ -1282,7 +1281,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitSwitchLabeledStatement(ctx: SwitchLabeledStatementContext): void {
-		throw new Error("Switch statements are not supported yet in Kipper");
+		// TODO! Implement switch statements
 	}
 
 	/**
@@ -1290,7 +1289,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterIterationStatement(ctx: IterationStatementContext): void {
-		throw new Error("Iteration statements are not supported yet in Kipper");
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1298,7 +1297,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitIterationStatement(ctx: IterationStatementContext): void {
-		throw new Error("Iteration statements are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	/**
@@ -1306,7 +1305,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public enterJumpStatement(ctx: JumpStatementContext): void {
-		throw new Error("Jump statements are not supported yet in Kipper");
+		this.handleIncomingStatementCtx(ctx);
 	}
 
 	/**
@@ -1314,7 +1313,7 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitJumpStatement(ctx: JumpStatementContext): void {
-		throw new Error("Jump statements are not supported yet in Kipper");
+		this.handleExitingStatementOrDefinitionCtx();
 	}
 
 	// -- VariableDeclaration section --
