@@ -19,11 +19,11 @@ externalItem
     ;
 
 functionDeclaration
-    :   'def' WS* declarator WS* '(' parameterTypeList? ')' WS* '->' WS* typeSpecifier WS* (compoundStatement | endOfLine)
+    :   'def' WS* declarator WS* '(' WS* (parameterTypeList WS*)? ')' WS* '->' WS* typeSpecifier WS* (compoundStatement | endOfLine)
     ;
 
 endOfLine
-    :   Whitespace* ';' Whitespace*
+    :   WS* ';' WS*
     ;
 
 primaryExpression
@@ -147,7 +147,7 @@ initDeclarator
 // TODO! Implement the following type specifiers as expressions
 typeSpecifier
     :   Identifier # singleTypeSpecifier // for single items, like 'num'
-    |   Identifier '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
+    |   Identifier WS* '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
     |   'typeof' WS* '('  WS* Identifier  WS* ')' # typeofTypeSpecifier // typeof another variable
     ;
 
@@ -157,12 +157,6 @@ declarator
 
 directDeclarator
     :   Identifier
-    ;
-
-nestedParenthesesBlock
-    :   (   ~('(' | ')')
-        |   '(' WS* nestedParenthesesBlock WS* ')'
-        )*
     ;
 
 parameterTypeList

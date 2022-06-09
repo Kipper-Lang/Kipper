@@ -25,6 +25,7 @@ import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { LocalScope } from "../../local-scope";
 import { CompilableASTNode } from "../../parser";
+import { KipperNotImplementedError } from "../../../errors";
 
 /**
  * Every antlr4 statement ctx type
@@ -145,6 +146,7 @@ export class CompoundStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		// Compound statements will never have semantic data
 		this.semanticData = {};
 	}
 
@@ -153,8 +155,9 @@ export class CompoundStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+	public semanticTypeChecking(): Promise<void> {
+		// Compound statements will never have type checking
+		return Promise.resolve(undefined);
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
@@ -201,7 +204,9 @@ export class SelectionStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {};
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Selection statements have not been implemented yet."));
 	}
 
 	/**
@@ -256,6 +261,7 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		// Expression statements will never have semantic data
 		this.semanticData = {};
 	}
 
@@ -264,8 +270,9 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+	public semanticTypeChecking(): Promise<void> {
+		// Expression statements will never have type checking
+		return Promise.resolve(undefined);
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExpressionStatement> =
@@ -313,7 +320,9 @@ export class IterationStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {};
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Iteration statements have not been implemented yet."));
 	}
 
 	/**
@@ -369,7 +378,9 @@ export class JumpStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {};
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Jump statements have not been implemented yet."));
 	}
 
 	/**

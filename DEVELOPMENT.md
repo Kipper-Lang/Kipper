@@ -107,7 +107,7 @@ If antlr4 is not installed, install it from here: https://www.antlr.org/
    ### Removed
    ```
 
-   Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to the GitHub pages!
+   Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to their GitHub page!
 
 3. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
 

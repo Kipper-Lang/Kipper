@@ -256,10 +256,9 @@ export class KipperCompiler {
 	 * @param stream The input to compile, which may be either a {@link String} or
 	 * {@link KipperParseStream}.
 	 * @param compilerOptions Compilation Configuration, which defines how the compiler should handle the
-	 * program and compilation. This uses per default {@link EvaluatedCompileOptions} with an empty interface as user args
-	 * (Default values will be used).
+	 * program and compilation.
 	 * @returns The created {@link KipperCompileResult} instance.
-	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
+	 * @throws {KipperError} If any syntactical, semantic or logical issues were encountered during the compilation.
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
@@ -295,11 +294,14 @@ export class KipperCompiler {
 			// Start compilation of the Kipper program
 			const code = await fileCtx.compileProgram(config.optimisationOptions);
 
-			// After the code is done, return the compilation result as an instance
+			// After the compilation is done, return the compilation result as an instance
 			this.logger.info(`Compilation finished successfully without errors.`);
 			return new KipperCompileResult(fileCtx, code);
 		} catch (e) {
+			// Report the failure of the compilation
 			this.logger.reportError(LogLevel.FATAL, `Failed to compile '${inStream.name}'.`);
+
+			// Re-throw error
 			throw e;
 		}
 	}
