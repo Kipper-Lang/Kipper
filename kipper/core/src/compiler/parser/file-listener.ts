@@ -39,7 +39,6 @@ import type {
 	JumpStatementContext,
 	KipperListener,
 	ListPrimaryExpressionContext,
-	NestedParenthesesBlockContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
@@ -1489,18 +1488,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitDirectDeclarator(ctx: DirectDeclaratorContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.nestedParenthesesBlock`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	public enterNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.nestedParenthesesBlock`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
-	 */
-	public exitNestedParenthesesBlock(ctx: NestedParenthesesBlockContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterTypeList`.
