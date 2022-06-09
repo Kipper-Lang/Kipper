@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which are now thrown inside the `primarySemanticAnalysis()` functions of the affected statements.
 - Updated and simplified logging messages.
 - Fixed grammar issue in `Kipper.g4`, which resulted in spaces being not usable in empty function argument
-  declarations e.g. `def func(   )` was invalid before.
+  declarations e.g. `def func( )` was invalid before.
 
 ### Removed
 
