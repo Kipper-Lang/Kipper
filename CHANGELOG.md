@@ -12,8 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced outdated `NotImplemented` errors from `KipperFileListener.ts` with `KipperNotImplementedError` errors,
   which are now thrown inside the `primarySemanticAnalysis()` functions of the affected statements.
 - Updated and simplified logging messages.
-- Fixed grammar issue in `Kipper.g4`, which resulted in spaces being not usable in empty function argument
-  declarations e.g. `def func( )` was invalid before.
+- Fixed grammar issue in `Kipper.g4`, which resulted in spaces being syntactically invalid in an empty function argument
+  list, e.g. `def func( ) -> void;` was invalid before.
 
 ### Removed
 
