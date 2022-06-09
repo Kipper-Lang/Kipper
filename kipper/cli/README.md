@@ -4,21 +4,22 @@
 
 The Kipper command line interface (CLI) to interact with the Kipper compiler.
 
-Kipper is a simple TS-based strongly and statically typed programming language, which is designed to allow for
-simple and straightforward coding similar to TypeScript and Python! 🦊
+Kipper is a simple strongly and statically typed programming language, which is designed to allow for
+straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-![](https://img.shields.io/badge/Coverage-72%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
-[![Version](https://img.shields.io/npm/v/@kipper/cli)](https://npmjs.org/package/@kipper/cli)
-[![License](https://img.shields.io/npm/l/@kipper/cli)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
+[![Version](https://img.shields.io/npm/v/@kipper/cli?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/cli)
+![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+[![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
+[![Install size](https://packagephobia.com/badge?p=@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
+[![Publish size](https://badgen.net/packagephobia/publish/@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 
 <!-- toc -->
-
-- [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
-- [Kipper Docs](#kipper-docs)
-- [Usage](#usage)
-- [Commands](#commands)
+* [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
+* [Kipper Docs](#kipper-docs)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 # Kipper Docs
@@ -28,7 +29,6 @@ Proper documentation for the Kipper language is available [here](https://wmc-ahi
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
@@ -40,19 +40,17 @@ USAGE
   $ kipper COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kipper analyse [FILE]`](#kipper-analyse-file)
-- [`kipper compile [FILE]`](#kipper-compile-file)
-- [`kipper help [COMMAND]`](#kipper-help-command)
-- [`kipper run [FILE]`](#kipper-run-file)
-- [`kipper update [CHANNEL]`](#kipper-update-channel)
-- [`kipper version`](#kipper-version)
+* [`kipper analyse [FILE]`](#kipper-analyse-file)
+* [`kipper compile [FILE]`](#kipper-compile-file)
+* [`kipper help [COMMAND]`](#kipper-help-command)
+* [`kipper run [FILE]`](#kipper-run-file)
+* [`kipper update [CHANNEL]`](#kipper-update-channel)
+* [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
 
@@ -182,7 +180,6 @@ USAGE
 ```
 
 _See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.8.1/kipper/cli/src/commands/version.ts)_
-
 <!-- commandsstop -->
 
 ## Copyright and License
