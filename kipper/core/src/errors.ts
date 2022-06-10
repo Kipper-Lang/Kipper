@@ -459,7 +459,7 @@ export class ArgumentError extends KipperError {
  */
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
-		super(`Expected ${expected} arguments for function '${func}', received ${received}.`);
+		super(`Expected ${expected} argument${expected === 1 ? "" : "s"} for function '${func}', received ${received}.`);
 	}
 }
 
