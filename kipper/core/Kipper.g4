@@ -369,7 +369,7 @@ IntegerConstant
 
 fragment
 DecimalConstant
-    :   NonzeroDigit Digit*
+    :   Digit+
     ;
 
 fragment
@@ -408,8 +408,8 @@ FloatingConstant
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart? FloatingSuffix?
-    |   DigitSequence ExponentPart FloatingSuffix?
+    :   FractionalConstant ExponentPart?
+    |   DigitSequence ExponentPart
     ;
 
 fragment
@@ -435,11 +435,6 @@ DigitSequence
 fragment
 HexadecimalDigitSequence
     :   HexadecimalDigit+
-    ;
-
-fragment
-FloatingSuffix
-    :   [fF]
     ;
 
 CharacterConstant
