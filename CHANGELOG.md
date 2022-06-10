@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Handling of integer constants and cleaned up the lexer rules in Kipper.g4.
-- Updated error message in `InvalidAmountOfArgumentsError`.
+- Updated error message of `InvalidAmountOfArgumentsError`.
 
 ### Removed
 
