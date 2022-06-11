@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@size-limit/preset-big-lib': ^7.0.1
+  '@size-limit/preset-big-lib': 7.0.8
   '@types/node': 17.0.32
   ansi-regex: 6.0.1
   antlr4ts: ^0.5.0-alpha.4
@@ -12,7 +12,7 @@ specifiers:
   mkdirp: 1.0.4
   prettier: 2.6.2
   run-script-os: 1.1.6
-  size-limit: ^7.0.1
+  size-limit: 7.0.8
   ts-node: 10.8.1
   tsify: 5.0.4
   tslib: ~2.4.0
@@ -2379,7 +2379,7 @@ packages:
     dev: true
 
   /tr46/0.0.3:
-    resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
+    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
   /ts-node/10.8.1_fby3nupeyvr7j45ya62hv2sf6u:
@@ -2474,7 +2474,7 @@ packages:
   /unbzip2-stream/1.4.3:
     resolution: {integrity: sha512-mlExGW4w71ebDJviH16lQLtZS32VKqsSfk80GCfUlwT/4/hNRFsoscrF/c++9xinkMzECL1uL9DDwXqFWkruPg==}
     dependencies:
-      buffer: 5.2.1
+      buffer: 5.7.1
       through: 2.3.8
     dev: true
 
