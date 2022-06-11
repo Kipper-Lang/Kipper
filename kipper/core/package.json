@@ -51,7 +51,7 @@
   ],
 	"size-limit": [
 		{
-			"path": "./kipper-standalone.min.js",
+			"path": ["./kipper-standalone.min.js", "./kipper-standalone.js"],
 			"limit": "250 kB"
 		}
 	],
