@@ -17,4 +17,5 @@ jobs:
       - uses: andresz1/size-limit-action@v1.7.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          script: pnpm --filter "@kipper/core" exec size-limit --json
+          directory: kipper/core/
+          script: pnpm exec size-limit --json
