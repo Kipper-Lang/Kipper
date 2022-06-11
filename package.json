@@ -69,7 +69,11 @@
 	"size-limit": [
 		{
 			"path": "./kipper/core/kipper-standalone.min.js",
-			"limit": "250 kB"
+			"limit": "200 kB"
+		},
+		{
+			"path": "./kipper/core/kipper-standalone.js",
+			"limit": "400 kB"
 		}
 	],
   "scripts": {

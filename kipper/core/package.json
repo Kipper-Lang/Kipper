@@ -52,7 +52,11 @@
 	"size-limit": [
 		{
 			"path": "./kipper-standalone.min.js",
-			"limit": "250 kB"
+			"limit": "200 kB"
+		},
+		{
+			"path": "./kipper-standalone.js",
+			"limit": "400 kB"
 		}
 	],
   "license": "GPL-3.0",
