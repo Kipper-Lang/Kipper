@@ -12,6 +12,8 @@ jobs:
           version: 7.0.0
           run_install: |
             - recursive: true
+      - name: Setup size-limit
+        run: pnpm i
       - uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
