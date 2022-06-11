@@ -38,8 +38,8 @@
     "uglify-js": "3.16.0",
     "uuid": "8.3.2",
     "watchify": "4.0.0",
-		"size-limit": "^7.0.1",
-		"@size-limit/preset-big-lib": "^7.0.1"
+		"size-limit": "7.0.8",
+		"@size-limit/preset-big-lib": "7.0.8"
   },
   "engines": {
     "node": ">=14.0.0",
