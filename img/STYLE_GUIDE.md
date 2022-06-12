@@ -1,16 +1,8 @@
 # Kipper Style guide
 
-## Primary logo
-
-![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Logo-with-head.png)
-
-## Fox head logo
-
-![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Fox-Head.png)
-
 ## Colorscheme: 
 - Primary: #E01A4F
-- Secondary: #FFFFF or 
+- Secondary: #FFFFFF or #FFE74C
 
 ## Font
 - Inter (From https://fonts.google.com)
@@ -22,3 +14,11 @@
   - h5: 18px with 22px line height (normal)
   - h6: 18px with 22px line height (normal)
   - Regular: 16px with 24px line height
+
+## Primary logo
+
+![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Logo-with-head.png)
+
+## Fox head logo
+
+![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Fox-Head.png)
