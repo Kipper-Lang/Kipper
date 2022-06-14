@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { InvalidGlobalError, KipperCompiler, KipperParseStream, KipperProgramContext } from "@kipper/core";
 import { promises as fs } from "fs";
-import { ScopeVariableDeclaration, EvaluatedCompileOptions } from "@kipper/core";
+import { EvaluatedCompileOptions } from "@kipper/core";
 import * as path from "path";
 
 const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);

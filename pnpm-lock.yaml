@@ -433,7 +433,6 @@ packages:
       treeverse: 1.0.4
       walk-up-path: 1.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -463,8 +462,6 @@ packages:
       promise-retry: 2.0.1
       semver: 7.3.7
       which: 2.0.2
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /@npmcli/installed-package-contents/1.0.7:
@@ -495,7 +492,6 @@ packages:
       pacote: 12.0.3
       semver: 7.3.7
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -543,7 +539,6 @@ packages:
       node-gyp: 8.4.1
       read-package-json-fast: 2.0.3
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -1783,8 +1778,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cacache/16.0.7:
@@ -1809,8 +1802,6 @@ packages:
       ssri: 9.0.0
       tar: 6.1.11
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cached-path-relative/1.1.0:
@@ -4139,7 +4130,6 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 9.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4164,7 +4154,6 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 8.0.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4531,7 +4520,6 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4635,7 +4623,6 @@ packages:
       minizlib: 2.1.2
       npm-package-arg: 8.1.5
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4766,7 +4753,6 @@ packages:
       yeoman-generator: 5.6.1_yeoman-environment@3.9.1
       yosay: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -4938,7 +4924,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -5158,11 +5143,6 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha1-mEcocL8igTL8vdhoEputEsPAKeM=}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -6282,6 +6262,7 @@ packages:
     resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: false
 
   /uglify-js/3.16.0:
     resolution: {integrity: sha512-FEikl6bR30n0T3amyBh3LoiBdqHRy/f4H80+My34HOesOKyHfOsxAPAxOoqC0JUnC1amnO0IwkYC3sko51caSw==}
@@ -6834,7 +6815,6 @@ packages:
       textextensions: 5.15.0
       untildify: 4.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 

@@ -1,5 +1,5 @@
 /*
- * The Antlr4 Grammar file for the Kipper Programming Language
+ * The Antlr4 Grammar file for the Kipper programming language.
  */
 
 grammar Kipper;
@@ -10,7 +10,7 @@ compilationUnit
     ;
 
 translationUnit
-    :   (externalItem | endOfLine | WS+)+
+    :   (externalItem | endOfLine)+
     ;
 
 externalItem
@@ -19,11 +19,11 @@ externalItem
     ;
 
 functionDeclaration
-    :   'def' WS* declarator WS* '(' WS* (parameterTypeList WS*)? ')' WS* '->' WS* typeSpecifier WS* (compoundStatement | endOfLine)
+    :   'def' declarator '(' (parameterTypeList)? ')' '->' typeSpecifier (compoundStatement | endOfLine)
     ;
 
 endOfLine
-    :   WS* ';' WS*
+    :   ';'
     ;
 
 primaryExpression
@@ -34,28 +34,28 @@ primaryExpression
     |   StringLiteral # stringPrimaryExpression
     |   FStringLiteral # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
-    |   '[' WS* constantExpression WS* (',' WS* constantExpression WS*)* ']' #listPrimaryExpression
+    |   '[' constantExpression (',' constantExpression)* ']' #listPrimaryExpression
     ;
 
 postfixExpression
     :   primaryExpression #passOnPostfixExpression
     |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
     |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
-    |   'call' WS* primaryExpression WS* '(' WS* argumentExpressionList? WS* ')' # functionCallPostfixExpression
+    |   'call' primaryExpression '(' argumentExpressionList? ')' # functionCallPostfixExpression
     ;
 
 arraySpecifier
-    :   '[' WS* expression WS* ']'
+    :   '[' expression ']'
     ;
 
 argumentExpressionList
-    :   assignmentExpression WS* (',' WS* assignmentExpression WS*)*
+    :   assignmentExpression (',' assignmentExpression)*
     ;
 
 unaryExpression
     :   postfixExpression # passOnUnaryExpression
-    |   incrementOrDecrementOperator WS* postfixExpression # incrementOrDecrementUnaryExpression
-    |   unaryOperator WS* postfixExpression # operatorModifiedUnaryExpression
+    |   incrementOrDecrementOperator postfixExpression # incrementOrDecrementUnaryExpression
+    |   unaryOperator postfixExpression # operatorModifiedUnaryExpression
     ;
 
 incrementOrDecrementOperator
@@ -68,47 +68,47 @@ unaryOperator
 
 castOrConvertExpression
     :   unaryExpression # passOnCastOrConvertExpression
-    |   unaryExpression WS* 'as' WS* typeSpecifier # actualCastOrConvertExpression // conversion function
+    |   unaryExpression 'as' typeSpecifier # actualCastOrConvertExpression // conversion function
     ;
 
 multiplicativeExpression
     :   castOrConvertExpression # passOnMultiplicativeExpression
-    |   multiplicativeExpression WS* ('*'|'/'|'%'|'**') WS* castOrConvertExpression WS* # actualMultiplicativeExpression
+    |   multiplicativeExpression ('*'|'/'|'%'|'**') castOrConvertExpression # actualMultiplicativeExpression
     ;
 
 additiveExpression
     :   multiplicativeExpression # passOnAdditiveExpression
-    |   additiveExpression WS* ('+'|'-') WS* multiplicativeExpression WS* # actualAdditiveExpression
+    |   additiveExpression ('+'|'-') multiplicativeExpression # actualAdditiveExpression
     ;
 
 relationalExpression
     :   additiveExpression # passOnRelationalExpression
-    |   relationalExpression WS* ('<'|'>'|'<='|'>=') WS* additiveExpression WS* # actualRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') additiveExpression # actualRelationalExpression
     ;
 
 equalityExpression
     :   relationalExpression # passOnEqualityExpression
-    |   equalityExpression WS* ('=='| '!=') WS* relationalExpression WS* # actualEqualityExpression
+    |   equalityExpression ('=='| '!=') relationalExpression # actualEqualityExpression
     ;
 
 logicalAndExpression
     :   equalityExpression # passOnLogicalAndExpression
-    |   logicalAndExpression WS* '&&' WS* equalityExpression WS* # actualLogicalAndExpression
+    |   logicalAndExpression '&&' equalityExpression # actualLogicalAndExpression
     ;
 
 logicalOrExpression
     :   logicalAndExpression # passOnLogicalOrExpression
-    |   logicalOrExpression WS* '||' WS* logicalAndExpression WS* # actualLogicalOrExpression
+    |   logicalOrExpression '||' logicalAndExpression # actualLogicalOrExpression
     ;
 
 conditionalExpression
     :   logicalOrExpression # passOnConditionalExpression
-    |   logicalOrExpression WS* '?' WS* conditionalExpression WS* ':' WS* conditionalExpression WS* # actualConditionalExpression
+    |   logicalOrExpression '?' conditionalExpression ':' conditionalExpression # actualConditionalExpression
     ;
 
 assignmentExpression
     :   conditionalExpression # passOnAssignmentExpression
-    |   primaryExpression WS* assignmentOperator WS* assignmentExpression # actualAssignmentExpression
+    |   primaryExpression assignmentOperator assignmentExpression # actualAssignmentExpression
     ;
 
 assignmentOperator
@@ -116,7 +116,7 @@ assignmentOperator
     ;
 
 expression
-    :   assignmentExpression WS* (',' WS* assignmentExpression WS*)*
+    :   assignmentExpression (',' assignmentExpression)*
     ;
 
 constantExpression
@@ -124,7 +124,7 @@ constantExpression
     ;
 
 declaration
-    :   storageTypeSpecifier WS* initDeclarator endOfLine
+    :   storageTypeSpecifier initDeclarator endOfLine
     ;
 
 storageTypeSpecifier
@@ -133,7 +133,7 @@ storageTypeSpecifier
     ;
 
 declarationSpecifiers
-    :   (declarationSpecifier WS*)+
+    :   (declarationSpecifier)+
     ;
 
 declarationSpecifier
@@ -141,14 +141,14 @@ declarationSpecifier
     ;
 
 initDeclarator
-    :   declarator WS* ':' WS* typeSpecifier WS* ('=' WS* initializer WS*)?
+    :   declarator ':' typeSpecifier ('=' initializer)?
     ;
 
 // TODO! Implement the following type specifiers as expressions
 typeSpecifier
     :   Identifier # singleTypeSpecifier // for single items, like 'num'
-    |   Identifier WS* '<' WS* Identifier WS* '>' # genericTypeSpecifier // for lists
-    |   'typeof' WS* '('  WS* Identifier  WS* ')' # typeofTypeSpecifier // typeof another variable
+    |   Identifier '<' Identifier '>' # genericTypeSpecifier // for lists
+    |   'typeof' '('  Identifier  ')' # typeofTypeSpecifier // typeof another variable
     ;
 
 declarator
@@ -160,15 +160,15 @@ directDeclarator
     ;
 
 parameterTypeList
-    :   parameterList WS* (',' WS* '...' Identifier WS*)? /* Kipper should allow for a sequence of arguments */
+    :   parameterList (',' '...' Identifier)? /* Kipper should allow for a sequence of arguments */
     ;
 
 parameterList
-    :   parameterDeclaration WS* (',' WS* parameterDeclaration WS*)*
+    :   parameterDeclaration (',' parameterDeclaration)*
     ;
 
 parameterDeclaration
-    :   declarator WS* ':' WS* declarationSpecifiers
+    :   declarator ':' declarationSpecifiers
     ;
 
 initializer
@@ -184,7 +184,7 @@ statement
     ;
 
 compoundStatement
-    :   '{' WS* blockItemList? WS*'}'
+    :   '{' blockItemList?'}'
     ;
 
 blockItemList
@@ -192,7 +192,7 @@ blockItemList
     ;
 
 blockItem
-    :   WS* (statement | declaration) WS*
+    :   (statement | declaration)
     ;
 
 expressionStatement
@@ -200,19 +200,19 @@ expressionStatement
     ;
 
 selectionStatement
-    :   'if' WS* '(' WS* expression WS* ')' WS* statement WS* ('else' WS* statement)? #ifStatement
-    |   'switch' WS* '(' WS* expression WS* ')' WS* '{' (WS* switchLabeledStatement)* '}' #switchStatement
+    :   'if' '(' expression ')' statement ('else' statement)? #ifStatement
+    |   'switch' '(' expression ')' '{' (switchLabeledStatement)* '}' #switchStatement
     ;
 
 switchLabeledStatement
-    :   'case' WS* constantExpression WS* ':' WS* statement
-    |   'default' WS* ':' WS* statement
+    :   'case' constantExpression ':' statement
+    |   'default' ':' statement
     ;
 
 iterationStatement
-    :   For WS* '(' forCondition ')' WS* statement
-    |   While WS* '(' WS* expression WS* ')' WS* statement
-    |   Do WS* statement WS* While WS* '(' WS* expression WS* ')' endOfLine
+    :   For '(' forCondition ')' statement
+    |   While '(' expression ')' statement
+    |   Do statement While '(' expression ')' endOfLine
     ;
 
 forCondition
@@ -220,16 +220,16 @@ forCondition
 	  ;
 
 forDeclaration
-    :   storageTypeSpecifier WS* initDeclarator
+    :   storageTypeSpecifier initDeclarator
     ;
 
 forExpression
-    :   assignmentExpression WS* (',' WS* assignmentExpression WS* )*
+    :   assignmentExpression (',' assignmentExpression )*
     ;
 
 jumpStatement
     :   (('continue' | 'break')
-    |   'return' WS* expression?
+    |   'return' expression?
     )
     endOfLine
     ;
@@ -348,8 +348,6 @@ ExtensionTaskBlock
 fragment
 IdentifierNondigit
     :   Nondigit
-    |   UniversalCharacterName
-    //|   // other c-implementation-defined characters...
     ;
 
 fragment
@@ -362,47 +360,31 @@ Digit
     :   [0-9]
     ;
 
-fragment
-UniversalCharacterName
-    :   '\\u' HexQuad
-    |   '\\U' HexQuad HexQuad
-    ;
-
-fragment
-HexQuad
-    :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
-    ;
-
 IntegerConstant
-    :   DecimalConstant IntegerSuffix?
-    |   OctalConstant IntegerSuffix?
-    |   HexadecimalConstant IntegerSuffix?
-    |	BinaryConstant
+    :   DecimalConstant
+    |   OctalConstant
+    |   HexadecimalConstant
+    |		BinaryConstant
+    ;
+
+fragment
+DecimalConstant
+    :   Digit+
     ;
 
 fragment
 BinaryConstant
-	:	'0' [bB] [0-1]+
-	;
-
-fragment
-DecimalConstant
-    :   NonzeroDigit Digit*
-    ;
+		:		'0' [bB] [0-1]+
+		;
 
 fragment
 OctalConstant
-    :   '0' OctalDigit*
+    :   '0' [oO] OctalDigit*
     ;
 
 fragment
 HexadecimalConstant
-    :   HexadecimalPrefix HexadecimalDigit+
-    ;
-
-fragment
-HexadecimalPrefix
-    :   '0' [xX]
+    :    '0' [xX] HexadecimalDigitSequence
     ;
 
 fragment
@@ -420,43 +402,14 @@ HexadecimalDigit
     :   [0-9a-fA-F]
     ;
 
-fragment
-IntegerSuffix
-    :   UnsignedSuffix LongSuffix?
-    |   UnsignedSuffix LongLongSuffix
-    |   LongSuffix UnsignedSuffix?
-    |   LongLongSuffix UnsignedSuffix?
-    ;
-
-fragment
-UnsignedSuffix
-    :   [uU]
-    ;
-
-fragment
-LongSuffix
-    :   [lL]
-    ;
-
-fragment
-LongLongSuffix
-    :   'll' | 'LL'
-    ;
-
 FloatingConstant
     :   DecimalFloatingConstant
-    |   HexadecimalFloatingConstant
     ;
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart? FloatingSuffix?
-    |   DigitSequence ExponentPart FloatingSuffix?
-    ;
-
-fragment
-HexadecimalFloatingConstant
-    :   HexadecimalPrefix (HexadecimalFractionalConstant | HexadecimalDigitSequence) BinaryExponentPart FloatingSuffix?
+    :   FractionalConstant ExponentPart?
+    |   DigitSequence ExponentPart
     ;
 
 fragment
@@ -480,24 +433,8 @@ DigitSequence
     ;
 
 fragment
-HexadecimalFractionalConstant
-    :   HexadecimalDigitSequence? '.' HexadecimalDigitSequence
-    |   HexadecimalDigitSequence '.'
-    ;
-
-fragment
-BinaryExponentPart
-    :   [pP] Sign? DigitSequence
-    ;
-
-fragment
 HexadecimalDigitSequence
     :   HexadecimalDigit+
-    ;
-
-fragment
-FloatingSuffix
-    :   [flFL]
     ;
 
 CharacterConstant
@@ -520,7 +457,6 @@ EscapeSequence
     :   SimpleEscapeSequence
     |   OctalEscapeSequence
     |   HexadecimalEscapeSequence
-    |   UniversalCharacterName
     ;
 
 fragment
@@ -559,12 +495,9 @@ SChar
     |   '\\\r\n' // Added line
     ;
 
-WS
-    :   Whitespace
-    ;
-
 Whitespace
     :   [ \t]+
+    		-> channel(HIDDEN)
     ;
 
 BlockComment
@@ -574,5 +507,5 @@ BlockComment
 
 Newline
     :   (  '\r' '\n'? | '\n')
-        -> skip
+        -> channel(HIDDEN)
     ;

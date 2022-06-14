@@ -1,10 +1,12 @@
 # Kipper Style guide
 
-## Colorscheme: 
+## Colorscheme:
+
 - Primary: #E01A4F
 - Secondary: #FFFFFF or #FFE74C
 
 ## Font
+
 - Inter (From https://fonts.google.com)
 - Default sizes:
   - h1: 30px with 36px line height (bold)
