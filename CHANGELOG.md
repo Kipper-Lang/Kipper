@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Handling of integer constants and cleaned up the lexer rules in Kipper.g4.
 - Updated error message of `InvalidAmountOfArgumentsError`.
+- Updated and improved speed of space handling by optimising parser rules and removing manual spaces in rules.
 
 ### Removed
 
