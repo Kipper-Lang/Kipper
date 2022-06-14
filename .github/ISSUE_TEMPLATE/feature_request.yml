@@ -26,7 +26,7 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Exact behaviour you want
+      label: Exact behaviour/changes you want
       description: Describe how the feature could look like and how you would use it.
     validations:
       required: false
