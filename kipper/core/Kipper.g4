@@ -348,8 +348,6 @@ ExtensionTaskBlock
 fragment
 IdentifierNondigit
     :   Nondigit
-    |   UniversalCharacterName
-    //|   // other c-implementation-defined characters...
     ;
 
 fragment
@@ -362,47 +360,31 @@ Digit
     :   [0-9]
     ;
 
-fragment
-UniversalCharacterName
-    :   '\\u' HexQuad
-    |   '\\U' HexQuad HexQuad
-    ;
-
-fragment
-HexQuad
-    :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
-    ;
-
 IntegerConstant
-    :   DecimalConstant IntegerSuffix?
-    |   OctalConstant IntegerSuffix?
-    |   HexadecimalConstant IntegerSuffix?
-    |	BinaryConstant
+    :   DecimalConstant
+    |   OctalConstant
+    |   HexadecimalConstant
+    |		BinaryConstant
+    ;
+
+fragment
+DecimalConstant
+    :   Digit+
     ;
 
 fragment
 BinaryConstant
-	:	'0' [bB] [0-1]+
-	;
-
-fragment
-DecimalConstant
-    :   NonzeroDigit Digit*
-    ;
+		:		'0' [bB] [0-1]+
+		;
 
 fragment
 OctalConstant
-    :   '0' OctalDigit*
+    :   '0' [oO] OctalDigit*
     ;
 
 fragment
 HexadecimalConstant
-    :   HexadecimalPrefix HexadecimalDigit+
-    ;
-
-fragment
-HexadecimalPrefix
-    :   '0' [xX]
+    :    '0' [xX] HexadecimalDigitSequence
     ;
 
 fragment
@@ -420,43 +402,14 @@ HexadecimalDigit
     :   [0-9a-fA-F]
     ;
 
-fragment
-IntegerSuffix
-    :   UnsignedSuffix LongSuffix?
-    |   UnsignedSuffix LongLongSuffix
-    |   LongSuffix UnsignedSuffix?
-    |   LongLongSuffix UnsignedSuffix?
-    ;
-
-fragment
-UnsignedSuffix
-    :   [uU]
-    ;
-
-fragment
-LongSuffix
-    :   [lL]
-    ;
-
-fragment
-LongLongSuffix
-    :   'll' | 'LL'
-    ;
-
 FloatingConstant
     :   DecimalFloatingConstant
-    |   HexadecimalFloatingConstant
     ;
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart? FloatingSuffix?
-    |   DigitSequence ExponentPart FloatingSuffix?
-    ;
-
-fragment
-HexadecimalFloatingConstant
-    :   HexadecimalPrefix (HexadecimalFractionalConstant | HexadecimalDigitSequence) BinaryExponentPart FloatingSuffix?
+    :   FractionalConstant ExponentPart?
+    |   DigitSequence ExponentPart
     ;
 
 fragment
@@ -480,24 +433,8 @@ DigitSequence
     ;
 
 fragment
-HexadecimalFractionalConstant
-    :   HexadecimalDigitSequence? '.' HexadecimalDigitSequence
-    |   HexadecimalDigitSequence '.'
-    ;
-
-fragment
-BinaryExponentPart
-    :   [pP] Sign? DigitSequence
-    ;
-
-fragment
 HexadecimalDigitSequence
     :   HexadecimalDigit+
-    ;
-
-fragment
-FloatingSuffix
-    :   [flFL]
     ;
 
 CharacterConstant
@@ -520,7 +457,6 @@ EscapeSequence
     :   SimpleEscapeSequence
     |   OctalEscapeSequence
     |   HexadecimalEscapeSequence
-    |   UniversalCharacterName
     ;
 
 fragment

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Updated
+
+- Handling of integer constants and cleaned up the lexer rules in Kipper.g4.
+- Updated error message of `InvalidAmountOfArgumentsError`.
+
+### Removed
+
+- Integer and float suffixes from the lexer rules in Kipper.g4, as they are meaningless in Kipper.
+
 ## [0.8.1] - 2022-06-09
 
 ### Updated
