@@ -447,17 +447,29 @@ export class InvalidConversionTypeError extends TypeError {
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {
-		super(`Unknown type '${type}'!`);
+		super(`Unknown type '${type}'.`);
 	}
 }
 
 /**
- * Error that is thrown whenever an assignment expression is invalid.
+ * Error that is thrown whenever a constant declaration is not defined.
+ * @since 0.8.3
+ */
+export class UndefinedConstantError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "UndefinedConstantError";
+	}
+}
+
+/**
+ * Error that is thrown whenever an assignment expression is semantically invalid.
  * @since 0.7.0
  */
 export class InvalidAssignmentError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
+		this.name = "InvalidAssignmentError";
 	}
 }
 

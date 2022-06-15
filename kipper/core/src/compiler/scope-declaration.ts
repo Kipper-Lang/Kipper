@@ -36,7 +36,7 @@ export abstract class ScopeDeclaration {
 }
 
 /**
- * Represents the definition of a variable scope entry that may be a child of the global scope or local scope.
+ * Represents a variable scope entry that may be a child of the global scope or local scope.
  * @since 0.1.0
  */
 export class ScopeVariableDeclaration extends ScopeDeclaration {
