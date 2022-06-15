@@ -1141,5 +1141,30 @@ describe("Kipper errors", () => {
 				}
 			});
 		});
+
+		describe("UndefinedConstantError", () => {
+			it("Error", async () => {
+				try {
+					await new KipperCompiler().compile(new KipperParseStream(`const invalid: str;`));
+				} catch (e) {
+					assert((<KipperError>e).constructor.name === "UndefinedConstantError", "Expected proper error");
+					assert((<KipperError>e).name === "UndefinedConstantError", "Expected proper error");
+					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+					assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+					return;
+				}
+				assert(false, "Expected 'UndefinedConstantError'");
+			});
+
+			it("NoError", async () => {
+				try {
+					await new KipperCompiler().compile('const valid: str = "3";');
+				} catch (e) {
+					assert(false, "Expected no 'UndefinedConstantError'");
+				}
+			});
+		});
 	});
 });
