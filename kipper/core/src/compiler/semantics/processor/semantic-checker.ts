@@ -10,7 +10,8 @@ import {
 	type CompoundStatement,
 	type Expression,
 	type ExpressionSemantics,
-	IdentifierPrimaryExpression, VariableDeclaration
+	IdentifierPrimaryExpression,
+	VariableDeclaration,
 } from "../language";
 import {
 	BuiltInOverwriteError,
@@ -25,7 +26,8 @@ import {
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
-	InvalidConversionTypeError, UndefinedConstantError
+	InvalidConversionTypeError,
+	UndefinedConstantError,
 } from "../../../errors";
 import {
 	kipperPlusOperator,
@@ -299,9 +301,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	public validDeclaration(decl: VariableDeclaration): void {
 		const declSemanticData = decl.getSemanticData();
 		if (declSemanticData.storageType === "const" && !declSemanticData.isDefined) {
-			throw this.assertError(
-				new UndefinedConstantError("Constant declarations must be defined.")
-			);
+			throw this.assertError(new UndefinedConstantError("Constant declarations must be defined."));
 		}
 	}
 
