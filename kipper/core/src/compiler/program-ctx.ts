@@ -503,19 +503,20 @@ export class KipperProgramContext {
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
 	 */
-	public registerGlobals(newGlobals: BuiltInFunction | Array<BuiltInFunction>) {
+	public registerBuiltIns(newBuiltIns: BuiltInFunction | Array<BuiltInFunction>) {
 		// If the function is not an array already, make it one
-		if (!(newGlobals instanceof Array)) {
-			newGlobals = [newGlobals];
+		if (!(newBuiltIns instanceof Array)) {
+			newBuiltIns = [newBuiltIns];
 		}
 
 		// Make sure the global is valid and doesn't interfere with other identifiers
-		for (let g of newGlobals) {
-			// Use line 1 and col 1, as this is a pre-processing error.
+		for (let g of newBuiltIns) {
+			// If an error occurs, line 1 and col 1 will be used, as the ctx is undefined.
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 
-		this.builtIns.push(...newGlobals);
+		// Add new built-ins
+		this.builtIns.push(...newBuiltIns);
 	}
 
 	/**

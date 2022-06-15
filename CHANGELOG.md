@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## Added
+
+- New errors:
+  - `ReadOnlyAssignmentTypeError`, which is thrown whenever a read-only (constant) variable is being
+    assigned to.
+  - `InvalidAssignmentTypeError`, which is thrown whenever an assignment has mismatching types that
+    are not compatible.
+  - `UndefinedConstantError`, which is thrown whenever a constant declaration is not defined. (Constants
+    may not be undefined).
+
+## Updated
+
+- Fixed const assignment bug [#188](https://github.com/Luna-Klatzer/Kipper/issues/188), which allowed assignments to
+  read-only (constant) variables.
+- Fixed invalid identifier translation of built-in references in the TypeScript target.
+- Renamed:
+	- `KipperProgramContext.registerGlobals()` to `registerBuiltIns`.
+  - `InvalidConversionError` to `InvalidConversionTypeError`
+  - `InvalidArithmeticOperationError` to `InvalidArithmeticOperationTypeError`
+- Set display error name of `InvalidArithmeticOperationTypeError` to `TypeError`.
+
 ## [0.8.2] - 2022-06-14
 
 ### Updated

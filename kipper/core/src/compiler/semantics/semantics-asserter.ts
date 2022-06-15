@@ -9,6 +9,9 @@ import type { KipperProgramContext } from "../program-ctx";
 import type { KipperError } from "../../errors";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../utils";
+import { CompoundStatement } from "./language";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
+import { BuiltInFunction } from "../runtime-built-ins";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
@@ -21,6 +24,25 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 	protected constructor(programCtx: KipperProgramContext) {
 		super();
 		this.programCtx = programCtx;
+	}
+
+	/**
+	 * Tries to
+	 * @param identifier The identifier to search for.
+	 * @param scopeCtx The scopeCtx to search in.
+	 * @since 0.8.0
+	 */
+	protected getDeclaration(
+		identifier: string,
+		scopeCtx?: CompoundStatement,
+	): ScopeFunctionDeclaration | ScopeVariableDeclaration | BuiltInFunction | undefined {
+		return (
+			(scopeCtx // First try to fetch from the local scope if it is defined
+				? scopeCtx.localScope.getVariableRecursively(identifier)
+				: this.programCtx.globalScope.getDeclaration(identifier)) ??
+			this.programCtx.globalScope.getDeclaration(identifier) ?? // Fall back to looking globally
+			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
+		);
 	}
 
 	/**

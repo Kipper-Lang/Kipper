@@ -386,15 +386,6 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number;"), "Expected different TypeScript code");
 				});
-
-				it("const", async () => {
-					const stream = new KipperParseStream("const x: num;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
-
-					assert(instance.programCtx);
-					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("const x: number;"), "Expected different TypeScript code");
-				});
 			});
 
 			describe("Definition", () => {

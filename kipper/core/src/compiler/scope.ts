@@ -14,8 +14,8 @@ import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
  * @since 0.8.0
  */
 export abstract class Scope {
-	private readonly _localFunctions: Array<ScopeFunctionDeclaration>;
-	private readonly _localVariables: Array<ScopeVariableDeclaration>;
+	protected readonly _localFunctions: Array<ScopeFunctionDeclaration>;
+	protected readonly _localVariables: Array<ScopeVariableDeclaration>;
 
 	public constructor() {
 		this._localFunctions = [];

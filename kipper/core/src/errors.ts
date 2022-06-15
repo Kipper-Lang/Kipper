@@ -14,8 +14,8 @@ import type {
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
+import type { KipperParseStream } from "./compiler";
 import { getParseRuleSource } from "./utils";
-import { KipperParseStream } from "./compiler";
 
 /**
  * The core error for the Kipper module.
@@ -395,10 +395,9 @@ export class InvalidReturnTypeError extends TypeError {
  * interact with one another.
  * @since 0.6.0
  */
-export class InvalidArithmeticOperationError extends TypeError {
+export class InvalidArithmeticOperationTypeError extends TypeError {
 	constructor(firstType: string, secondType: string) {
 		super(`Invalid arithmetic operation between types '${firstType}' and '${secondType}'.`);
-		this.name = "InvalidArithmeticOperationError";
 	}
 }
 
@@ -414,10 +413,30 @@ export class InvalidArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever an assignments consists of invalid types.
+ * @since 0.8.3
+ */
+export class InvalidAssignmentTypeError extends TypeError {
+	constructor(leftExpType: string, rightExpType: string) {
+		super(`Type '${leftExpType}' is not assignable to type '${rightExpType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a read-only variable is being assigned to.
+ * @since 0.8.3
+ */
+export class ReadOnlyAssignmentTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`'${identifier}' is read-only and may not be assigned to.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a conversion is used that is not supported.
  * @since 0.8.0
  */
-export class InvalidConversionError extends TypeError {
+export class InvalidConversionTypeError extends TypeError {
 	constructor(originalType: string, destType: string) {
 		super(`Type conversion from '${originalType}' to '${destType}' is not allowed.`);
 	}
@@ -428,17 +447,29 @@ export class InvalidConversionError extends TypeError {
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {
-		super(`Unknown type '${type}'!`);
+		super(`Unknown type '${type}'.`);
 	}
 }
 
 /**
- * Error that is thrown whenever an assignment expression is invalid.
+ * Error that is thrown whenever a constant declaration is not defined.
+ * @since 0.8.3
+ */
+export class UndefinedConstantError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "UndefinedConstantError";
+	}
+}
+
+/**
+ * Error that is thrown whenever an assignment expression is semantically invalid.
  * @since 0.7.0
  */
 export class InvalidAssignmentError extends KipperError {
 	constructor(msg: string) {
 		super(msg);
+		this.name = "InvalidAssignmentError";
 	}
 }
 

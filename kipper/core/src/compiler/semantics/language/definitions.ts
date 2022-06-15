@@ -388,6 +388,10 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			value: assignValue,
 		};
 
+		// If the storage type is 'const' ensure that the variable has a value set.
+		this.programCtx.semanticCheck(this).validDeclaration(this);
+
+		// Add scope variable entry
 		await this.scope.addVariable(this);
 	}
 
