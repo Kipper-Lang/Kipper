@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - New errors:
-  - `ReadOnlyAssignmentTypeError`, which is thrown when a read-only (constant) variable is being
+  - `ReadOnlyAssignmentTypeError`, which is thrown whenever a read-only (constant) variable is being
     assigned to.
-  - `InvalidAssignmentTypeError`, which is thrown when an assignment has mismatching types that
+  - `InvalidAssignmentTypeError`, which is thrown whenever an assignment has mismatching types that
     are not compatible.
+  - `UndefinedConstantError`, which is thrown whenever a constant declaration is not defined. (Constants
+    may not be undefined).
 
 ## Updated
 
