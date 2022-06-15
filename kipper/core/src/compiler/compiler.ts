@@ -283,7 +283,7 @@ export class KipperCompiler {
 			// If there are builtIns to register, register them
 			let globals = [...config.builtIns, ...config.extendBuiltIns];
 			if (globals.length > 0) {
-				fileCtx.registerGlobals(globals);
+				fileCtx.registerBuiltIns(globals);
 			}
 			this.logger.debug(
 				`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"} for the program '${

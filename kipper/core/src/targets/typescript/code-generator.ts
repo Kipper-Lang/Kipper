@@ -165,7 +165,16 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
-		return [semanticData.identifier];
+		// Get the identifier of the reference
+		let identifier = semanticData.identifier;
+
+		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
+		// accordingly.
+		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+			identifier = getTypeScriptBuiltInIdentifier(identifier);
+		}
+
+		return [identifier];
 	};
 
 	/**
@@ -363,10 +372,19 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
-		const identifier = semanticData.identifier.getSemanticData().identifier;
-		const assignValue = await semanticData.value.translateCtxAndChildren();
+		// Get the identifier of the reference
+		let identifier = semanticData.identifier.getSemanticData().identifier;
 
-		// Only add ' = EXP' if assignValue is defined
-		return [identifier, " ", "=", " ", ...assignValue];
+		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
+		// accordingly.
+		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+			identifier = getTypeScriptBuiltInIdentifier(identifier);
+		}
+
+		// The expression that is assigned to the reference
+		const assignExp = await semanticData.value.translateCtxAndChildren();
+
+		// Only add ' = EXP' if assignExpression is defined
+		return [identifier, " ", "=", " ", ...assignExp];
 	};
 }

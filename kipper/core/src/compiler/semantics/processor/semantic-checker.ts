@@ -17,7 +17,7 @@ import {
 	FunctionDefinitionAlreadyExistsError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByVariableError,
-	InvalidArithmeticOperationError,
+	InvalidArithmeticOperationTypeError,
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
@@ -25,7 +25,7 @@ import {
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 	InvalidAmountOfArgumentsError,
-	InvalidConversionError,
+	InvalidConversionTypeError,
 } from "../../../errors";
 import {
 	kipperPlusOperator,
@@ -37,7 +37,6 @@ import {
 	type KipperType,
 } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { BuiltInFunction } from "../../runtime-built-ins";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 
@@ -49,25 +48,6 @@ import { KipperSemanticsAsserter } from "../semantics-asserter";
 export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	constructor(programCtx: KipperProgramContext) {
 		super(programCtx);
-	}
-
-	/**
-	 * Tries to
-	 * @param identifier The identifier to search for.
-	 * @param scopeCtx The scopeCtx to search in.
-	 * @since 0.8.0
-	 */
-	private getDeclaration(
-		identifier: string,
-		scopeCtx?: CompoundStatement,
-	): ScopeFunctionDeclaration | ScopeVariableDeclaration | BuiltInFunction | undefined {
-		return (
-			(scopeCtx // First try to fetch from the local scope if it is defined
-				? scopeCtx.localScope.getVariableRecursively(identifier)
-				: this.programCtx.globalScope.getDeclaration(identifier)) ??
-			this.programCtx.globalScope.getDeclaration(identifier) ?? // Fall back to looking globally
-			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
-		);
 	}
 
 	/**
@@ -211,7 +191,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			}
 
 			// If types are not matching, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationError(exp1Type, exp2Type));
+			throw this.assertError(new InvalidArithmeticOperationTypeError(exp1Type, exp2Type));
 		}
 	}
 
@@ -327,7 +307,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		})();
 		// In case that the type are not the same and no conversion is possible, throw an error!
 		if (!(originalType === type) && !viableConversion) {
-			throw this.assertError(new InvalidConversionError(originalType, type));
+			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
 }

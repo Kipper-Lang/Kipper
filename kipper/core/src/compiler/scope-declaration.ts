@@ -36,8 +36,7 @@ export abstract class ScopeDeclaration {
 }
 
 /**
- * Represents the definition of a scope entry that may be a child of the global scope, a function scope or compound
- * statement scope.
+ * Represents the definition of a variable scope entry that may be a child of the global scope or local scope.
  * @since 0.1.0
  */
 export class ScopeVariableDeclaration extends ScopeDeclaration {
@@ -61,21 +60,21 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The identifier of this entry.
+	 * The identifier of this variable.
 	 */
 	public get identifier(): string {
 		return this.semanticData.identifier;
 	}
 
 	/**
-	 * The variable type or return type of this scope entry.
+	 * The variable type or return type of this variable.
 	 */
 	public get type(): KipperType {
 		return this.semanticData.valueType;
 	}
 
 	/**
-	 * The storage type of this scope entry.
+	 * The storage type of this variable.
 	 */
 	public get storageType(): KipperStorageType {
 		return this.semanticData.storageType;
