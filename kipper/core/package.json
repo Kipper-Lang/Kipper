@@ -13,7 +13,7 @@
     "mkdirp": "1.0.4",
     "ansi-regex": "6.0.1",
     "minimist": "1.2.6",
-    "prettier": "2.7.0",
+    "prettier": "2.7.1",
     "tsify": "5.0.4",
     "browserify": "17.0.0",
     "watchify": "4.0.0",
