@@ -32,7 +32,7 @@ specifiers:
   tsify: 5.0.4
   tslib: ~2.4.0
   typescript: ~4.7.0
-  uglify-js: 3.16.0
+  uglify-js: 3.16.1
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -47,7 +47,7 @@ devDependencies:
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
   '@oclif/test': 2.1.0
-  '@size-limit/preset-big-lib': 7.0.8_fzm4o4pty2nprieojlltyvm5wq
+  '@size-limit/preset-big-lib': 7.0.8_wzmuhmecncp5g4zqaks44lroca
   '@types/chai': 4.3.0
   '@types/mocha': 9.1.1
   '@types/node': 17.0.35
@@ -70,7 +70,7 @@ devDependencies:
   size-limit: 7.0.8
   ts-mocha: 10.0.0_mocha@10.0.0
   tsify: 5.0.4_ihds425jv7utpzcxj6k6gl5i4e
-  uglify-js: 3.16.0
+  uglify-js: 3.16.1
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -433,6 +433,7 @@ packages:
       treeverse: 1.0.4
       walk-up-path: 1.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -462,6 +463,8 @@ packages:
       promise-retry: 2.0.1
       semver: 7.3.7
       which: 2.0.2
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /@npmcli/installed-package-contents/1.0.7:
@@ -492,6 +495,7 @@ packages:
       pacote: 12.0.3
       semver: 7.3.7
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -539,6 +543,7 @@ packages:
       node-gyp: 8.4.1
       read-package-json-fast: 2.0.3
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -800,14 +805,14 @@ packages:
       size-limit: 7.0.8
     dev: true
 
-  /@size-limit/preset-big-lib/7.0.8_fzm4o4pty2nprieojlltyvm5wq:
+  /@size-limit/preset-big-lib/7.0.8_wzmuhmecncp5g4zqaks44lroca:
     resolution: {integrity: sha512-m9C+FPPmETg9vg3V3Aq4hTflX1GVRpjYO94C4gqrl26I5YqB+BlKf8WKHmna3IbmJyePf7M8qvya/ougzMVHkQ==}
     peerDependencies:
       size-limit: 7.0.8
     dependencies:
       '@size-limit/file': 7.0.8_size-limit@7.0.8
       '@size-limit/time': 7.0.8_size-limit@7.0.8
-      '@size-limit/webpack': 7.0.8_fzm4o4pty2nprieojlltyvm5wq
+      '@size-limit/webpack': 7.0.8_wzmuhmecncp5g4zqaks44lroca
       size-limit: 7.0.8
     transitivePeerDependencies:
       - '@swc/core'
@@ -836,7 +841,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@size-limit/webpack/7.0.8_fzm4o4pty2nprieojlltyvm5wq:
+  /@size-limit/webpack/7.0.8_wzmuhmecncp5g4zqaks44lroca:
     resolution: {integrity: sha512-69YuY0o4geRNJDb55Vri+bNPs9+WZlK0pzcziip1p4uajCFMFQE0K8pKj3vsIOUADdTcimfypHciriCY/qrnJQ==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
     peerDependencies:
@@ -845,7 +850,7 @@ packages:
       escape-string-regexp: 4.0.0
       nanoid: 3.3.3
       size-limit: 7.0.8
-      webpack: 5.73.0_uglify-js@3.16.0
+      webpack: 5.73.0_uglify-js@3.16.1
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -1778,6 +1783,8 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /cacache/16.0.7:
@@ -1802,6 +1809,8 @@ packages:
       ssri: 9.0.0
       tar: 6.1.11
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /cached-path-relative/1.1.0:
@@ -4130,6 +4139,7 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 9.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4154,6 +4164,7 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 8.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4520,6 +4531,7 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4623,6 +4635,7 @@ packages:
       minizlib: 2.1.2
       npm-package-arg: 8.1.5
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4753,6 +4766,7 @@ packages:
       yeoman-generator: 5.6.1_yeoman-environment@3.9.1
       yosay: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -4924,6 +4938,7 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -5143,6 +5158,11 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha1-mEcocL8igTL8vdhoEputEsPAKeM=}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -6007,7 +6027,7 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /terser-webpack-plugin/5.3.3_3eks5mjgxky6ycf6k5e3s53gga:
+  /terser-webpack-plugin/5.3.3_44e6glnkortnojbutf5kxat6iy:
     resolution: {integrity: sha512-Fx60G5HNYknNTNQnzQ1VePRuu89ZVYWfjRAeT5rITuCY/1b08s49e5kSQwHDirKZWuoKOBRFS98EUUoZ9kLEwQ==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -6028,8 +6048,8 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.14.1
-      uglify-js: 3.16.0
-      webpack: 5.73.0_uglify-js@3.16.0
+      uglify-js: 3.16.1
+      webpack: 5.73.0_uglify-js@3.16.1
     dev: true
 
   /terser/5.14.1:
@@ -6262,10 +6282,9 @@ packages:
     resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: false
 
-  /uglify-js/3.16.0:
-    resolution: {integrity: sha512-FEikl6bR30n0T3amyBh3LoiBdqHRy/f4H80+My34HOesOKyHfOsxAPAxOoqC0JUnC1amnO0IwkYC3sko51caSw==}
+  /uglify-js/3.16.1:
+    resolution: {integrity: sha512-X5BGTIDH8U6IQ1TIRP62YC36k+ULAa1d59BxlWvPUJ1NkW5L3FwcGfEzuVvGmhJFBu0YJ5Ge25tmRISqCmLiRQ==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: true
@@ -6476,7 +6495,7 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack/5.73.0_uglify-js@3.16.0:
+  /webpack/5.73.0_uglify-js@3.16.1:
     resolution: {integrity: sha512-svjudQRPPa0YiOYa2lM/Gacw0r6PvxptHj4FuEKQ2kX05ZLkjbVc5MnPs6its5j7IZljnIqSVo/OsY2X0IpHGA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -6507,7 +6526,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.1.1
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.3_3eks5mjgxky6ycf6k5e3s53gga
+      terser-webpack-plugin: 5.3.3_44e6glnkortnojbutf5kxat6iy
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     transitivePeerDependencies:
@@ -6815,6 +6834,7 @@ packages:
       textextensions: 5.15.0
       untildify: 4.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
