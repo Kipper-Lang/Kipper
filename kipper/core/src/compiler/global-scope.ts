@@ -9,6 +9,7 @@ import { Scope } from "./scope";
 import { FunctionDeclaration, VariableDeclaration } from "./semantics";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { KipperProgramContext } from "./program-ctx";
+import { BuiltInFunction } from "./runtime-built-ins";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
@@ -16,8 +17,31 @@ import type { KipperProgramContext } from "./program-ctx";
  * @since 0.8.0
  */
 export class GlobalScope extends Scope {
+	protected readonly _localFunctions: Array<ScopeFunctionDeclaration>;
+	protected readonly _localVariables: Array<ScopeVariableDeclaration>;
+	protected readonly _builtInFunctions: Array<BuiltInFunction>;
+
 	constructor(public programCtx: KipperProgramContext) {
 		super();
+		this._localVariables = [];
+		this._localFunctions = [];
+		this._builtInFunctions = [];
+	}
+
+	/**
+	 * All 'local' functions in the global scope. This also includes built-in functions.
+	 * @since 0.8.0
+	 */
+	public get localFunctions(): Array<ScopeFunctionDeclaration> {
+		return this._localFunctions;
+	}
+
+	/**
+	 * All 'local' variables in the global scope.
+	 * @since 0.8.0
+	 */
+	public get localVariables(): Array<ScopeVariableDeclaration> {
+		return this._localVariables;
 	}
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {

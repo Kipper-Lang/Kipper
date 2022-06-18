@@ -7,9 +7,16 @@
  */
 
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { Expression, ExpressionSemantics, ParameterDeclaration } from "../language";
+import { Expression, ExpressionSemantics, IdentifierPrimaryExpression, ParameterDeclaration } from "../language";
 import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
-import { InvalidArgumentTypeError, InvalidReturnTypeError, TypeError, UnknownTypeError } from "../../../errors";
+import {
+	InvalidArgumentTypeError,
+	InvalidAssignmentTypeError,
+	InvalidReturnTypeError,
+	ReadOnlyAssignmentTypeError,
+	TypeError,
+	UnknownTypeError,
+} from "../../../errors";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -53,11 +60,21 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param rightExp The right-hand side of the assignment.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: Expression<any>, rightExp: Expression<any>): void {
-		const leftExpType = leftExp.getSemanticData().evaluatedType;
-		const rightExpType = rightExp.getSemanticData().evaluatedType;
-		if (leftExpType !== rightExpType) {
-			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
+	public validAssignment(leftExp: IdentifierPrimaryExpression, rightExp: Expression<any>): void {
+		const leftExpSemantics = leftExp.getSemanticData();
+		const rightExpSemantics = rightExp.getSemanticData();
+
+		// Ensure that the types are matching
+		if (rightExpSemantics.evaluatedType !== leftExpSemantics.evaluatedType) {
+			throw this.assertError(
+				new InvalidAssignmentTypeError(rightExpSemantics.evaluatedType, leftExpSemantics.evaluatedType),
+			);
+		}
+
+		// Get the storage type of the variable
+		const reference = this.getDeclaration(leftExpSemantics.identifier);
+		if (reference && "storageType" in reference && reference.storageType === "const") {
+			throw this.assertError(new ReadOnlyAssignmentTypeError(reference.identifier));
 		}
 	}
 

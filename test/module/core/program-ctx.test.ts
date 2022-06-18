@@ -24,7 +24,7 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 
 			// Register builtIns
-			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.builtIns.print);
+			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
 
 			// Make sure a single global exists
 			assert(programCtx.builtIns.length == 1, "Expe`cted one global to exist");
@@ -37,13 +37,13 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
 
 			// Register already registered global again
-			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.builtIns.print);
+			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
 
 			// Make sure a single global exists
 			assert(programCtx.builtIns.length == 1, "Expected one global to exist");
 
 			try {
-				programCtx.registerGlobals(EvaluatedCompileOptions.defaults.builtIns.print);
+				programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
 			} catch (e) {
 				if (e instanceof InvalidGlobalError) {
 					return;
@@ -66,7 +66,7 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
 
 			// Register builtIns and check again
-			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.builtIns.print);
+			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
 		});
@@ -75,7 +75,7 @@ describe("KipperProgramContext", async () => {
 			const programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
 
 			// Register builtIns and check again
-			programCtx.registerGlobals(EvaluatedCompileOptions.defaults.builtIns.print);
+			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
 			assert(
 				programCtx.getBuiltInFunction("print") === EvaluatedCompileOptions.defaults.builtIns.print,
 				"The built-in function 'print' should be returned.",
