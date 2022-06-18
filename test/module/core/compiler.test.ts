@@ -12,22 +12,27 @@ import * as ts from "typescript";
 import * as path from "path";
 import { getTypeScriptBuiltInIdentifier } from "@kipper/core/lib/targets/typescript/tools";
 
+function getFileName(pathString: string): string {
+	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
+}
+
 // Test files
-const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
-const singleFunctionFile = path.resolve(`${__dirname}/../../kipper-files/single-function-call.kip`);
-const multiFunctionFile = path.resolve(`${__dirname}/../../kipper-files/multi-function-call.kip`);
-const invalidFile = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
-const nestedScopesFile = path.resolve(`${__dirname}/../../kipper-files/nested-scopes.kip`);
-const singleFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-files/single-function-definition.kip`);
-const multiFunctionDefinitionFile = path.resolve(`${__dirname}/../../kipper-files/multi-function-definition.kip`);
-const variableDeclarationFile = path.resolve(`${__dirname}/../../kipper-files/variable-declaration.kip`);
-const arithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/arithmetics.kip`);
-const assignFile = path.resolve(`${__dirname}/../../kipper-files/assign.kip`);
-const addedHelloWorldFile = path.resolve(`${__dirname}/../../kipper-files/added-hello-world.kip`);
-const assignmentArithmeticsFile = path.resolve(`${__dirname}/../../kipper-files/assignment-arithmetics.kip`);
-const boolFile = path.resolve(`${__dirname}/../../kipper-files/bool.kip`);
-const typeConversion = path.resolve(`${__dirname}/../../kipper-files/type-conversion.kip`);
-const spacedProgram = path.resolve(`${__dirname}/../../kipper-files/spaced-program.kip`);
+const mainFile = getFileName("main.kip");
+const singleFunctionFile = getFileName("single-function-call.kip");
+const multiFunctionFile = getFileName("multi-function-call.kip");
+const invalidFile = getFileName("invalid.kip");
+const nestedScopesFile = getFileName("nested-scopes.kip");
+const singleFunctionDefinitionFile = getFileName("single-function-definition.kip");
+const multiFunctionDefinitionFile = getFileName("multi-function-definition.kip");
+const variableDeclarationFile = getFileName("variable-declaration.kip");
+const arithmeticsFile = getFileName("arithmetics.kip");
+const assignFile = getFileName("assign.kip");
+const addedHelloWorldFile = getFileName("added-hello-world.kip");
+const assignmentArithmeticsFile = getFileName("assignment-arithmetics.kip");
+const boolFile = getFileName("bool.kip");
+const typeConversion = getFileName("type-conversion.kip");
+const spacedProgram = getFileName("spaced-program.kip");
+const expressionStatements = getFileName("expression-statements.kip");
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -145,6 +150,12 @@ describe("KipperCompiler", () => {
 
 			it("Spaced program", async () => {
 				const fileContent = (await fs.readFile(spacedProgram, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("Expression statements", async () => {
+				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
@@ -374,6 +385,20 @@ describe("KipperCompiler", () => {
 				assert(code.includes(getTypeScriptBuiltInIdentifier("boolToStr")));
 				assert(code.includes(getTypeScriptBuiltInIdentifier("boolToNum")));
 			});
+
+			it("Expression statements", async () => {
+				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.internals);
+
+				const code = instance.write();
+				assert(code);
+				assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+			});
 		});
 
 		describe("basics", () => {
@@ -425,6 +450,38 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Expected different TypeScript code");
+				});
+			});
+
+			describe("Expression Statements", () => {
+				it("one expression", async () => {
+					const stream = new KipperParseStream("print = print;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("__kipper_print = __kipper_print;"), "Expected different TypeScript code");
+				});
+
+				it("two expressions", async () => {
+					const stream = new KipperParseStream('12 * 93, "5" + "1";');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("12 * 93;"), "Expected different TypeScript code");
+					assert(instance.write().includes('"5" + "1";'), "Expected different TypeScript code");
+				});
+
+				it("three expressions", async () => {
+					const stream = new KipperParseStream('call print("x"), call print("y"), call print("z");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes('__kipper_print("x");'), "Expected different TypeScript code");
+					assert(instance.write().includes('__kipper_print("y");'), "Expected different TypeScript code");
+					assert(instance.write().includes('__kipper_print("z");'), "Expected different TypeScript code");
 				});
 			});
 		});
