@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `UndefinedConstantError`, which is thrown whenever a constant declaration is not defined. (Constants
     may not be undefined).
 
-### Updated
+### Changed
 
 - Fixed const assignment bug [#188](https://github.com/Luna-Klatzer/Kipper/issues/188), which allowed assignments to
   read-only (constant) variables.
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.2] - 2022-06-14
 
-### Updated
+### Changed
 
 - Handling of integer constants and cleaned up the lexer rules in Kipper.g4.
 - Updated error message of `InvalidAmountOfArgumentsError`.
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.1] - 2022-06-09
 
-### Updated
+### Changed
 
 - Replaced outdated `NotImplemented` errors from `KipperFileListener.ts` with `KipperNotImplementedError` errors,
   which are now thrown inside the `primarySemanticAnalysis()` functions of the affected statements.
