@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.3] - 2022-06-18
 
-## Added
+### Added
 
 - New errors:
   - `ReadOnlyAssignmentTypeError`, which is thrown whenever a read-only (constant) variable is being
@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `UndefinedConstantError`, which is thrown whenever a constant declaration is not defined. (Constants
     may not be undefined).
 
-## Updated
+### Updated
 
 - Fixed const assignment bug [#188](https://github.com/Luna-Klatzer/Kipper/issues/188), which allowed assignments to
   read-only (constant) variables.
