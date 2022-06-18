@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   read-only (constant) variables.
 - Fixed invalid identifier translation of built-in references in the TypeScript target.
 - Renamed:
-	- `KipperProgramContext.registerGlobals()` to `registerBuiltIns`.
+  - `KipperProgramContext.registerGlobals()` to `registerBuiltIns`.
   - `InvalidConversionError` to `InvalidConversionTypeError`
   - `InvalidArithmeticOperationError` to `InvalidArithmeticOperationTypeError`
 - Set display error name of `InvalidArithmeticOperationTypeError` to `TypeError`.
