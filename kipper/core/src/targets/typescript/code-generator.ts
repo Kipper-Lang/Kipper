@@ -74,11 +74,13 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ExpressionStatement} into the typescript language.
 	 */
 	expressionStatement = async (node: ExpressionStatement): Promise<Array<TranslatedCodeLine>> => {
-		let childCode: TranslatedExpression = [];
+		let childCode: Array<TranslatedCodeLine> = [];
 		for (let child of node.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
+			// Expression lists (expression statements) will be evaluated per each expression, meaning every expression
+			// can be considered a single line of code.
+			childCode = [...childCode, [...(await child.translateCtxAndChildren()), ";"]];
 		}
-		return [[...childCode, ";"]];
+		return childCode;
 	};
 
 	/**
