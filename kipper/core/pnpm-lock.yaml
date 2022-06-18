@@ -10,13 +10,13 @@ specifiers:
   json-parse-even-better-errors: 2.3.1
   minimist: 1.2.6
   mkdirp: 1.0.4
-  prettier: 2.6.2
+  prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
   ts-node: 10.8.1
   tsify: 5.0.4
   tslib: ~2.4.0
-  typescript: 4.7.3
+  typescript: 4.7.4
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -33,12 +33,12 @@ devDependencies:
   json-parse-even-better-errors: 2.3.1
   minimist: 1.2.6
   mkdirp: 1.0.4
-  prettier: 2.6.2
+  prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
-  ts-node: 10.8.1_fby3nupeyvr7j45ya62hv2sf6u
-  tsify: 5.0.4_etzkf32656yy5qnwcgwvhq3cii
-  typescript: 4.7.3
+  ts-node: 10.8.1_wkok7lthibal5qjhsdd5yq2cfe
+  tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
+  typescript: 4.7.4
   uuid: 8.3.2
   watchify: 4.0.0
 
@@ -1890,8 +1890,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /prettier/2.6.2:
-    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -2382,7 +2382,7 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
-  /ts-node/10.8.1_fby3nupeyvr7j45ya62hv2sf6u:
+  /ts-node/10.8.1_wkok7lthibal5qjhsdd5yq2cfe:
     resolution: {integrity: sha512-Wwsnao4DQoJsN034wePSg5nZiw4YKXf56mPIAeD6wVmiv+RytNSWqc2f3fKvcUoV+Yn2+yocD71VOfQHbmVX4g==}
     hasBin: true
     peerDependencies:
@@ -2408,7 +2408,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.7.3
+      typescript: 4.7.4
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -2422,7 +2422,7 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /tsify/5.0.4_etzkf32656yy5qnwcgwvhq3cii:
+  /tsify/5.0.4_brov7mothvcejnwzylwtltjfwe:
     resolution: {integrity: sha512-XAZtQ5OMPsJFclkZ9xMZWkSNyMhMxEPsz3D2zu79yoKorH9j/DT4xCloJeXk5+cDhosEibu4bseMVjyPOAyLJA==}
     engines: {node: '>=0.12'}
     peerDependencies:
@@ -2436,7 +2436,7 @@ packages:
       semver: 6.3.0
       through2: 2.0.5
       tsconfig: 5.0.3
-      typescript: 4.7.3
+      typescript: 4.7.4
     dev: true
 
   /tslib/2.4.0:
@@ -2451,8 +2451,8 @@ packages:
     resolution: {integrity: sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=}
     dev: true
 
-  /typescript/4.7.3:
-    resolution: {integrity: sha512-WOkT3XYvrpXx4vMMqlD+8R8R37fZkjyLGlxavMc4iB8lrl8L0DeTcHbYgw/v0N/z9wAFsgBhcsF0ruoySS22mA==}
+  /typescript/4.7.4:
+    resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
