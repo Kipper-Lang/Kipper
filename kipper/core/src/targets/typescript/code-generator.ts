@@ -227,12 +227,8 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link TangledPrimaryExpression} into the typescript language.
 	 */
 	tangledPrimaryExpression = async (node: TangledPrimaryExpression): Promise<TranslatedExpression> => {
-		// TODO! Add tests for this
-		let genCode: TranslatedExpression = [];
-		for (let child of node.children) {
-			genCode.push(...(await child.translateCtxAndChildren()));
-		}
-		return genCode;
+		// Tangled expressions always contain only a single child (Enforced by Parser)
+		return ["(", ...(await node.children[0].translateCtxAndChildren()), ")"];
 	};
 
 	/**

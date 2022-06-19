@@ -682,7 +682,7 @@ export class KipperParser extends Parser {
 						this.state = 126;
 						this.match(KipperParser.LeftParen);
 						this.state = 127;
-						this.expression();
+						this.assignmentExpression();
 						this.state = 128;
 						this.match(KipperParser.RightParen);
 					}
@@ -3260,7 +3260,7 @@ export class KipperParser extends Parser {
 		"\x02vw\x03\x02\x02\x02wx\x07\x1E\x02\x02xy\x07\x03\x02\x02y|\x05<\x1F" +
 		"\x02z}\x05L'\x02{}\x05\n\x06\x02|z\x03\x02\x02\x02|{\x03\x02\x02\x02" +
 		"}\t\x03\x02\x02\x02~\x7F\x07\x04\x02\x02\x7F\v\x03\x02\x02\x02\x80\x81" +
-		"\x07\x1D\x02\x02\x81\x82\x05.\x18\x02\x82\x83\x07\x1E\x02\x02\x83\x96" +
+		"\x07\x1D\x02\x02\x81\x82\x05*\x16\x02\x82\x83\x07\x1E\x02\x02\x83\x96" +
 		"\x03\x02\x02\x02\x84\x96\t\x02\x02\x02\x85\x96\x07<\x02\x02\x86\x96\x07" +
 		"@\x02\x02\x87\x96\x07B\x02\x02\x88\x96\x07A\x02\x02\x89\x96\t\x03\x02" +
 		"\x02\x8A\x8B\x07\x1F\x02\x02\x8B\x90\x050\x19\x02\x8C\x8D\x07.\x02\x02" +
@@ -3666,8 +3666,8 @@ export class TangledPrimaryExpressionContext extends PrimaryExpressionContext {
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
-	public expression(): ExpressionContext {
-		return this.getRuleContext(0, ExpressionContext);
+	public assignmentExpression(): AssignmentExpressionContext {
+		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);

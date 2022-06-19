@@ -27,7 +27,7 @@ endOfLine
     ;
 
 primaryExpression
-    :   '(' expression ')' # tangledPrimaryExpression
+    :   '(' assignmentExpression ')' # tangledPrimaryExpression
     |   (True | False) #boolPrimaryExpression
     | 	Identifier # identifierPrimaryExpression
     |   CharacterConstant #characterPrimaryExpression

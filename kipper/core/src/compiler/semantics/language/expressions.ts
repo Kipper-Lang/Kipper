@@ -958,13 +958,17 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Tangled Expressions have not been implemented yet."));
+		// Tangled expressions always contain one expression child
+		const exp: Expression<any> = this.children[0];
 
-		// eslint-disable-next-line no-unreachable
+		// Ensure that the child expression is present
+		if (!exp) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			// Tangled expressions always evaluate to the type of its child expression
+			evaluatedType: exp.getSemanticData().evaluatedType,
 		};
 	}
 
@@ -1173,7 +1177,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
 		const args = this.children.slice(1, this.children.length);
 
-		// Ensure the arguments provided are valid
+		// Ensure that the arguments provided are valid
 		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
 
 		this.semanticData = {
@@ -1385,7 +1389,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		const exp: Expression<any> = this.children[0];
 		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).getSemanticData().type;
 
-		// Ensure the children are fully present and not undefined
+		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -1512,7 +1516,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		const exp1: Expression<any> = this.children[0];
 		const exp2: Expression<any> = this.children[1];
 
-		// Ensure the children are fully present and not undefined
+		// Ensure that the children are fully present and not undefined
 		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -1608,7 +1612,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		const exp1: Expression<any> = this.children[0];
 		const exp2: Expression<any> = this.children[1];
 
-		// Ensure the children are fully present and not undefined
+		// Ensure that the children are fully present and not undefined
 		if (!operator || !exp1 || !exp2) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -2042,7 +2046,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		// There will always be only two children, which are the identifier and expression assigned.
 		const identifier: IdentifierPrimaryExpression = (() => {
 			const exp = this.children[0];
-			// Ensure the left-hand side of the expression is an identifier
+			// Ensure that the left-hand side of the expression is an identifier
 			this.programCtx.semanticCheck(this).validAssignment(exp);
 			return <IdentifierPrimaryExpression>exp;
 		})();
