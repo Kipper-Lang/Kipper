@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented code generation of expression lists (expression statements containing of multiple expressions)
-  as explained in [#173](https://github.com/Luna-Klatzer/Kipper/issues/173).
+- Implemented code generation of expression lists (e.g. expression statements containing multiple child expressions)
+  ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
+- Implemented code generation for tangled expressions.
+  ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
 
 ## [0.8.3] - 2022-06-18
 
