@@ -20,7 +20,7 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
   their type can not be evaluated during compile time. For example when using `JSON.parse()`.
 - Runtime errors for invalid operations. No hidden errors like in JavaScript.
 - Null safety, by enforcing non-null types unless explicitly allowed.
-- Full translation and integration with TypeScript.
+- Full translation and integration with JavaScript and TypeScript.
 
 ## Example Code Snippet
 
