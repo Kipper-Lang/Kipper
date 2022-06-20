@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
 - Implemented code generation for tangled expressions.
   ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
+- Added support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and 
+	hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 
 ## [0.8.3] - 2022-06-18
 

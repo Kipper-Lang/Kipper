@@ -374,23 +374,28 @@ DecimalConstant
 
 fragment
 BinaryConstant
-		:		'0' [bB] [0-1]+
+		:		'0' [bB] BinaryDigit+
 		;
 
 fragment
 OctalConstant
-    :   '0' [oO] OctalDigit*
+    :   '0' [oO] OctalDigit+
     ;
 
 fragment
 HexadecimalConstant
-    :    '0' [xX] HexadecimalDigitSequence
+    :    '0' [xX] HexadecimalDigit+
     ;
 
 fragment
 NonzeroDigit
     :   [1-9]
     ;
+
+fragment
+BinaryDigit
+	  :		[0-1]
+	  ;
 
 fragment
 OctalDigit
@@ -430,11 +435,6 @@ Sign
 
 DigitSequence
     :   Digit+
-    ;
-
-fragment
-HexadecimalDigitSequence
-    :   HexadecimalDigit+
     ;
 
 CharacterConstant
