@@ -109,20 +109,37 @@ export const tsReservedIdentifiers: Array<string> = [
 	"of",
 ];
 
+// Reserved Kipper identifiers (cached)
+let reservedKipperIdentifiers: Array<string> = [];
+let reservedIdentifiersCached: boolean = false;
+
 /**
  * The TypeScript target-specific semantic analyser.
  * @since 0.8.0
  */
 export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
-	private checkIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
+	/**
+	 * Checks whether the identifier of the {@link declaration} is viable for the TypeScript target
+	 * and does not overwrite any built-in or reserved identifiers.
+	 * @param declaration The variable, function or parameter declaration.
+	 * @private
+	 */
+	private checkViabilityOfIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
 		const identifier = declaration.getSemanticData().identifier;
+
+		if (!reservedIdentifiersCached) {
+			reservedKipperIdentifiers = [
+				...(declaration.programCtx.internals.map((v) => v.identifier)),
+				...(declaration.programCtx.builtIns.map((v) => v.identifier))
+			];
+		}
 
 		// Throw an error in case the declaration identifier causes issues in TypeScript.
 		//
 		// Error cases:
 		// 1. Identifiers starting with '__' are always reserved and may not be defined.
 		// 2. Identifiers may not overwrite TypeScript specific keywords.
-		if (identifier.startsWith("__") || tsReservedIdentifiers.find((r) => r === identifier)) {
+		if (reservedKipperIdentifiers.find((i) => i === identifier) || tsReservedIdentifiers.find((i) => i === identifier)) {
 			this.setTracebackData({ ctx: declaration });
 			throw this.error(new ReservedIdentifierOverwriteError(identifier));
 		}
