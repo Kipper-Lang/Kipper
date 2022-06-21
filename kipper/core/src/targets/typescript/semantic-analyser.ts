@@ -41,6 +41,7 @@ import type {
 } from "../../compiler";
 import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
 import { ReservedIdentifierOverwriteError } from "../../errors";
+import { getTypeScriptBuiltInIdentifier } from "./tools";
 
 /**
  * All reserved identifiers in TypeScript that may not be overwritten.
@@ -129,8 +130,8 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 
 		if (!reservedIdentifiersCached) {
 			reservedKipperIdentifiers = [
-				...declaration.programCtx.internals.map((v) => v.identifier),
-				...declaration.programCtx.builtIns.map((v) => v.identifier),
+				...declaration.programCtx.internals.map((v) => getTypeScriptBuiltInIdentifier(v.identifier)),
+				...declaration.programCtx.builtIns.map((v) => getTypeScriptBuiltInIdentifier(v.identifier)),
 			];
 		}
 
