@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented syntax support and code generation for if, else-if and else statements 
+- Implemented syntax support and code generation for if, else-if and else statements
   ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
 - Implemented code generation of expression lists (e.g. expression statements containing multiple child expressions)
   ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
