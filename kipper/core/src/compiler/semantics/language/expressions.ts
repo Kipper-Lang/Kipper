@@ -222,7 +222,7 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 }
 
 /**
- * Semantics for {@link ConstantExpression}.
+ * Semantics for AST Node {@link ConstantExpression}.
  * @since 0.5.0
  */
 export interface ConstantExpressionSemantics extends ExpressionSemantics {
@@ -245,7 +245,7 @@ export interface ConstantExpressionSemantics extends ExpressionSemantics {
 export abstract class ConstantExpression<Semantics extends ConstantExpressionSemantics> extends Expression<Semantics> {}
 
 /**
- * Semantics for {@link NumberPrimaryExpression}.
+ * Semantics for AST Node {@link NumberPrimaryExpression}.
  * @since 0.5.0
  */
 export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -323,7 +323,7 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 }
 
 /**
- * Semantics for {@link CharacterPrimaryExpression}.
+ * Semantics for AST Node {@link CharacterPrimaryExpression}.
  * @since 0.5.0
  */
 export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -391,7 +391,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 }
 
 /**
- * Semantics for {@link ListPrimaryExpression}.
+ * Semantics for AST Node {@link ListPrimaryExpression}.
  * @since 0.5.0
  */
 export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -458,7 +458,7 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 }
 
 /**
- * Semantics for {@link StringPrimaryExpression}.
+ * Semantics for AST Node {@link StringPrimaryExpression}.
  * @since 0.5.0
  */
 export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -526,7 +526,7 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 }
 
 /**
- * Semantics for {@link IdentifierPrimaryExpression}.
+ * Semantics for AST Node {@link IdentifierPrimaryExpression}.
  * @since 0.5.0
  */
 export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -615,7 +615,7 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 }
 
 /**
- * Semantics for {@link SingleTypeSpecifierExpression}.
+ * Semantics for AST Node {@link SingleTypeSpecifierExpression}.
  * @since 0.8.0
  */
 export interface SingleTypeSpecifierExpressionSemantics extends ExpressionSemantics {
@@ -679,7 +679,7 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 }
 
 /**
- * Semantics for {@link GenericTypeSpecifierExpression}.
+ * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
  * @since 0.8.0
  */
 export interface GenericTypeSpecifierExpressionSemantics extends ExpressionSemantics {
@@ -742,7 +742,7 @@ export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecif
 }
 
 /**
- * Semantics for {@link TypeofTypeSpecifierExpression}.
+ * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
  * @since 0.8.0
  */
 export interface TypeofTypeSpecifierExpressionSemantics extends ExpressionSemantics {
@@ -805,7 +805,7 @@ export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifie
 }
 
 /**
- * Semantics for {@link BoolPrimaryExpression}.
+ * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
  */
 export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -868,7 +868,7 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 }
 
 /**
- * Semantics for {@link FStringPrimaryExpression}.
+ * Semantics for AST Node {@link FStringPrimaryExpression}.
  * @since 0.5.0
  */
 export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
@@ -938,7 +938,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 }
 
 /**
- * Semantics for {@link TangledPrimaryExpression}.
+ * Semantics for AST Node {@link TangledPrimaryExpression}.
  * @since 0.5.0
  */
 export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {}
@@ -1003,7 +1003,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 }
 
 /**
- * Semantics for {@link IncrementOrDecrementExpression}.
+ * Semantics for AST Node {@link IncrementOrDecrementExpression}.
  * @since 0.5.0
  */
 export interface IncrementOrDecrementExpressionSemantics extends ExpressionSemantics {}
@@ -1068,7 +1068,7 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 }
 
 /**
- * Semantics for {@link ArraySpecifierExpression}.
+ * Semantics for AST Node {@link ArraySpecifierExpression}.
  * @since 0.5.0
  */
 export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {}
@@ -1130,7 +1130,7 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 }
 
 /**
- * Semantics for {@link FunctionCallPostfixExpression}.
+ * Semantics for AST Node {@link FunctionCallPostfixExpression}.
  * @since 0.5.0
  */
 export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemantics {
@@ -1178,12 +1178,19 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 		// Get the identifier of the function that is called
 		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].getSemanticData();
 
+		// Ensure that the identifier is present
+		if (!identifierSemantics) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		// Fetching the called function and its semantic data
-		const calledFunc = this.programCtx.semanticCheck(this).getExistingFunction(identifierSemantics.identifier);
+		const calledFunc: KipperFunction = this.programCtx
+			.semanticCheck(this)
+			.getExistingFunction(identifierSemantics.identifier);
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
-		const args = this.children.slice(1, this.children.length);
+		const args: Array<Expression<any>> = this.children.length > 2 ? this.children.slice(1, this.children.length) : [];
 
 		// Ensure that the arguments provided are valid
 		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
@@ -1221,7 +1228,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 }
 
 /**
- * Semantics for {@link IncrementOrDecrementUnaryExpression}.
+ * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
 export interface IncrementOrDecrementUnaryExpressionSemantics extends ExpressionSemantics {}
@@ -1286,7 +1293,7 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 }
 
 /**
- * Semantics for {@link OperatorModifiedUnaryExpression}.
+ * Semantics for AST Node {@link OperatorModifiedUnaryExpression}.
  * @since 0.5.0
  */
 export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSemantics {}
@@ -1352,7 +1359,7 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 }
 
 /**
- * Semantics for {@link CastOrConvertExpression}.
+ * Semantics for AST Node {@link CastOrConvertExpression}.
  * @since 0.5.0
  */
 export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
@@ -1463,7 +1470,7 @@ export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Semantics for {@link MultiplicativeExpression}.
+ * Semantics for AST Node {@link MultiplicativeExpression}.
  * @since 0.5.0
  */
 export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionSemantics {
@@ -1563,7 +1570,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 }
 
 /**
- * Semantics for {@link AdditiveExpression}.
+ * Semantics for AST Node {@link AdditiveExpression}.
  * @since 0.5.0
  */
 export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
@@ -1673,7 +1680,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 }
 
 /**
- * Semantics for {@link RelationalExpression}.
+ * Semantics for AST Node {@link RelationalExpression}.
  * @since 0.5.0
  */
 export interface RelationalExpressionSemantics extends ExpressionSemantics {}
@@ -1746,7 +1753,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 }
 
 /**
- * Semantics for {@link EqualityExpressionSemantics}.
+ * Semantics for AST Node {@link EqualityExpressionSemantics}.
  * @since 0.5.0
  */
 export interface EqualityExpressionSemantics extends ExpressionSemantics {}
@@ -1813,7 +1820,7 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 }
 
 /**
- * Semantics for {@link LogicalAndExpression}.
+ * Semantics for AST Node {@link LogicalAndExpression}.
  * @since 0.5.0
  */
 export interface LogicalAndExpressionSemantics extends ExpressionSemantics {}
@@ -1879,7 +1886,7 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 }
 
 /**
- * Semantics for {@link LogicalOrExpression}.
+ * Semantics for AST Node {@link LogicalOrExpression}.
  * @since 0.5.0
  */
 export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
@@ -1944,7 +1951,7 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 }
 
 /**
- * Semantics for {@link ConditionalExpression}.
+ * Semantics for AST Node {@link ConditionalExpression}.
  * @since 0.5.0
  */
 export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
@@ -2008,7 +2015,7 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 }
 
 /**
- * Semantics for {@link AssignmentExpression}.
+ * Semantics for AST Node {@link AssignmentExpression}.
  * @since 0.5.0
  */
 export interface AssignmentExpressionSemantics extends ExpressionSemantics {

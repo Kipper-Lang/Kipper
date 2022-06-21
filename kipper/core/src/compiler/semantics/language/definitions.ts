@@ -49,7 +49,7 @@ export function getDefinitionInstance(
 }
 
 /**
- * Semantics for {@link FunctionDeclaration}.
+ * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.5.0
  */
 export interface DeclarationSemantics {
@@ -99,7 +99,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 }
 
 /**
- * Semantics for {@link ParameterDeclaration}.
+ * Semantics for AST Node {@link ParameterDeclaration}.
  * @since 0.5.0
  */
 export interface ParameterDeclarationSemantics extends DeclarationSemantics {
@@ -163,7 +163,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 }
 
 /**
- * Semantics for {@link FunctionDeclaration}.
+ * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
 export interface FunctionDeclarationSemantics {
@@ -234,7 +234,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		// step.
 		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
 
-		// Throw an error if children are incomplete
+		// Ensure that the children are fully present and not undefined
 		if (!declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -273,7 +273,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 }
 
 /**
- * Semantics for {@link VariableDeclaration}.
+ * Semantics for AST Node {@link VariableDeclaration}.
  * @since 0.3.0
  */
 export interface VariableDeclarationSemantics extends SemanticData {
