@@ -9,12 +9,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented syntax support and code generation for if, else-if and else statements 
+  ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
 - Implemented code generation of expression lists (e.g. expression statements containing multiple child expressions)
   ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
 - Implemented code generation for tangled expressions.
   ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
-- Added support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and 
-	hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
+- Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
+  hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
+- New classes:
+  - `IfStatement`, which represents an if, if-else and else statement.
+  - `SwitchStatement`, which represents a switch selection statement.
+  - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
+    a `antlrRuleCtx`.
+  - `ExpressionASTNodeFactory`, which is a factory that creates an expression instance based on
+    a `antlrRuleCtx`.
+  - `StatementASTNodeFactory`, which is a factory that creates a statement instance based on
+    a `antlrRuleCtx`.
+- New interfaces:
+  - `IfStatementSemantics`, which contains the semantic data of an if-statement.
+
+### Removed
+
+- Deprecated and replaced functions:
+  - `getDefinitionInstance`, which was replaced with `DefinitionASTNodeFactory`.
+  - `getExpressionInstance`, which was replaced with `ExpressionASTNodeFactory`.
+  - `getStatementInstance`, which was replaced with `StatementASTNodeFactory`.
 
 ## [0.8.3] - 2022-06-18
 
