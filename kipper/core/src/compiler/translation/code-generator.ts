@@ -31,7 +31,7 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SelectionStatement,
+	SwitchStatement,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	VariableDeclaration,
@@ -42,6 +42,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 } from "../semantics";
 import type { CompilableASTNode } from "../parser";
+import { IfStatement } from "../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -69,9 +70,14 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract compoundStatement: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>>;
 
 	/**
-	 * Translates a {@link SelectionStatement} into a specific language.
+	 * Translates a {@link IfStatement} into a specific language.
 	 */
-	public abstract selectionStatement: TargetASTNodeCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>>;
+	public abstract ifStatement: TargetASTNodeCodeGenerator<IfStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link SwitchStatement} into a specific language.
+	 */
+	public abstract switchStatement: TargetASTNodeCodeGenerator<SwitchStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ExpressionStatement} into a specific language.

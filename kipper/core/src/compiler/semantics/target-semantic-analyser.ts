@@ -26,7 +26,7 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SelectionStatement,
+	SwitchStatement,
 	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
@@ -35,6 +35,7 @@ import type {
 } from "./language";
 import type { CompilableASTNode } from "../parser";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
+import { IfStatement } from "./language";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.
@@ -56,9 +57,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract compoundStatement: TargetASTNodeSemanticAnalyser<CompoundStatement>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link SelectionStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link IfStatement} instances.
 	 */
-	public abstract selectionStatement: TargetASTNodeSemanticAnalyser<SelectionStatement>;
+	public abstract ifStatement: TargetASTNodeSemanticAnalyser<IfStatement>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link SwitchStatement} instances.
+	 */
+	public abstract switchStatement: TargetASTNodeSemanticAnalyser<SwitchStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ExpressionStatement} instances.

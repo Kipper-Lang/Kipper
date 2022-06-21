@@ -32,14 +32,14 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SelectionStatement,
+	SwitchStatement,
 	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
-import { KipperTargetSemanticAnalyser } from "../../compiler";
+import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
 import { ReservedIdentifierOverwriteError } from "../../errors";
 
 /**
@@ -129,8 +129,8 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 
 		if (!reservedIdentifiersCached) {
 			reservedKipperIdentifiers = [
-				...(declaration.programCtx.internals.map((v) => v.identifier)),
-				...(declaration.programCtx.builtIns.map((v) => v.identifier))
+				...declaration.programCtx.internals.map((v) => v.identifier),
+				...declaration.programCtx.builtIns.map((v) => v.identifier),
 			];
 		}
 
@@ -139,7 +139,10 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 		// Error cases:
 		// 1. Identifiers starting with '__' are always reserved and may not be defined.
 		// 2. Identifiers may not overwrite TypeScript specific keywords.
-		if (reservedKipperIdentifiers.find((i) => i === identifier) || tsReservedIdentifiers.find((i) => i === identifier)) {
+		if (
+			reservedKipperIdentifiers.find((i) => i === identifier) ||
+			tsReservedIdentifiers.find((i) => i === identifier)
+		) {
 			this.setTracebackData({ ctx: declaration });
 			throw this.error(new ReservedIdentifierOverwriteError(identifier));
 		}
@@ -151,9 +154,14 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	compoundStatement = async (node: CompoundStatement) => {};
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link SelectionStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link IfStatement} instances.
 	 */
-	selectionStatement = async (node: SelectionStatement) => {};
+	ifStatement = async (node: IfStatement) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link SwitchStatement} instances.
+	 */
+	switchStatement = async (node: SwitchStatement) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ExpressionStatement} instances.
@@ -174,21 +182,21 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration) => {
-		this.checkIdentifier(node);
+		this.checkViabilityOfIdentifier(node);
 	};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link FunctionDeclaration} instances.
 	 */
 	functionDeclaration = async (node: FunctionDeclaration) => {
-		this.checkIdentifier(node);
+		this.checkViabilityOfIdentifier(node);
 	};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	variableDeclaration = async (node: VariableDeclaration) => {
-		this.checkIdentifier(node);
+		this.checkViabilityOfIdentifier(node);
 	};
 
 	/**

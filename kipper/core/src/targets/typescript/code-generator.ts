@@ -35,7 +35,7 @@ import {
 	ParameterDeclaration,
 	RelationalExpression,
 	ScopeFunctionDeclaration,
-	SelectionStatement,
+	SwitchStatement,
 	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
@@ -43,6 +43,7 @@ import {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
+	IfStatement,
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
 import { getConversionFunctionIdentifier } from "../../utils";
@@ -64,9 +65,16 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link SelectionStatement} into the typescript language.
+	 * Translates a {@link IfStatement} into the typescript language.
 	 */
-	selectionStatement = async (node: SelectionStatement): Promise<Array<TranslatedCodeLine>> => {
+	ifStatement = async (node: IfStatement): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link SwitchStatement} into the typescript language.
+	 */
+	switchStatement = async (node: SwitchStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
