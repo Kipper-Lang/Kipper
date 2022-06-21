@@ -1190,13 +1190,13 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
-		const args: Array<Expression<any>> = this.children.length > 2 ? this.children.slice(1, this.children.length) : [];
+		const args: Array<Expression<any>> = this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		// Ensure that the arguments provided are valid
 		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
 
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: calledFunc.returnType,
 			identifier: calledFunc.identifier,
 			args: args,
 			function: calledFunc,
