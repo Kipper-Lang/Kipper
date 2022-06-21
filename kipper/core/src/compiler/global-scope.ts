@@ -17,31 +17,31 @@ import { BuiltInFunction } from "./runtime-built-ins";
  * @since 0.8.0
  */
 export class GlobalScope extends Scope {
-	protected readonly _localFunctions: Array<ScopeFunctionDeclaration>;
-	protected readonly _localVariables: Array<ScopeVariableDeclaration>;
+	protected readonly _functions: Array<ScopeFunctionDeclaration>;
+	protected readonly _variables: Array<ScopeVariableDeclaration>;
 	protected readonly _builtInFunctions: Array<BuiltInFunction>;
 
 	constructor(public programCtx: KipperProgramContext) {
 		super();
-		this._localVariables = [];
-		this._localFunctions = [];
+		this._variables = [];
+		this._functions = [];
 		this._builtInFunctions = [];
 	}
 
 	/**
-	 * All 'local' functions in the global scope. This also includes built-in functions.
+	 * All functions in this global scope. This also includes built-in functions.
 	 * @since 0.8.0
 	 */
-	public get localFunctions(): Array<ScopeFunctionDeclaration> {
-		return this._localFunctions;
+	public get functions(): Array<ScopeFunctionDeclaration> {
+		return this._functions;
 	}
 
 	/**
-	 * All 'local' variables in the global scope.
+	 * All variables in this global scope.
 	 * @since 0.8.0
 	 */
-	public get localVariables(): Array<ScopeVariableDeclaration> {
-		return this._localVariables;
+	public get variables(): Array<ScopeVariableDeclaration> {
+		return this._variables;
 	}
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
@@ -53,7 +53,7 @@ export class GlobalScope extends Scope {
 		this.programCtx.semanticCheck(declaration).functionIdentifierNotDefined(identifier);
 
 		const scopeDeclaration = new ScopeFunctionDeclaration(declaration);
-		this.localFunctions.push(scopeDeclaration);
+		this.functions.push(scopeDeclaration);
 		return scopeDeclaration;
 	}
 
@@ -66,15 +66,15 @@ export class GlobalScope extends Scope {
 		this.programCtx.semanticCheck(declaration).variableIdentifierNotDeclared(identifier);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
-		this.localVariables.push(scopeDeclaration);
+		this.variables.push(scopeDeclaration);
 		return scopeDeclaration;
 	}
 
 	public getFunction(identifier: string): ScopeFunctionDeclaration | undefined {
-		return this.localFunctions.find((i) => i.identifier === identifier);
+		return this.functions.find((i) => i.identifier === identifier);
 	}
 
 	public getVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		return this.localVariables.find((i) => i.identifier === identifier);
+		return this.variables.find((i) => i.identifier === identifier);
 	}
 }

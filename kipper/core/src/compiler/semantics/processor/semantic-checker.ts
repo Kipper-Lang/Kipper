@@ -141,12 +141,12 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		};
 
 		// Always check in the global scope
-		if (this.programCtx.globalScope.localVariables.find(check)) {
+		if (this.programCtx.globalScope.variables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 
 		// Also check in the local scope if it was defined
-		if (scopeCtx && scopeCtx?.localScope.localVariables.find(check)) {
+		if (scopeCtx && scopeCtx?.localScope.variables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 	}
@@ -163,7 +163,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
 		};
 
-		if (this.programCtx.globalScope.localFunctions.find(check)) {
+		if (this.programCtx.globalScope.functions.find(check)) {
 			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
 		}
 	}
