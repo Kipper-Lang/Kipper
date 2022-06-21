@@ -88,65 +88,69 @@ export type antlrExpressionCtxType =
 	| TypeofTypeSpecifierContext;
 
 /**
- * Fetches the handler for the specified {@link antlrExpressionCtxType}.
- * @param antlrCtx The context instance that the handler class should be fetched for.
- * @param parent The file context class that will be assigned to the instance.
+ * Factory class which generates expression class instances using {@link ExpressionASTNodeFactory.create ExpressionASTNodeFactory.create()}.
+ * @since 0.9.0
  */
-export function getExpressionInstance(
-	antlrCtx: antlrExpressionCtxType,
-	parent: CompilableASTNode<any>,
-): Expression<any> {
-	if (antlrCtx instanceof NumberPrimaryExpressionContext) {
-		return new NumberPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof CharacterPrimaryExpressionContext) {
-		return new CharacterPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof ListPrimaryExpressionContext) {
-		return new ListPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof IdentifierPrimaryExpressionContext) {
-		return new IdentifierPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof SingleTypeSpecifierContext) {
-		return new SingleTypeSpecifierExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof GenericTypeSpecifierContext) {
-		return new GenericTypeSpecifierExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof TypeofTypeSpecifierContext) {
-		return new TypeofTypeSpecifierExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof StringPrimaryExpressionContext) {
-		return new StringPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof FStringPrimaryExpressionContext) {
-		return new FStringPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof TangledPrimaryExpressionContext) {
-		return new TangledPrimaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof ArraySpecifierPostfixExpressionContext) {
-		return new ArraySpecifierExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof IncrementOrDecrementPostfixExpressionContext) {
-		return new IncrementOrDecrementExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof FunctionCallPostfixExpressionContext) {
-		return new FunctionCallPostfixExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
-		return new IncrementOrDecrementUnaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof OperatorModifiedUnaryExpressionContext) {
-		return new OperatorModifiedUnaryExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof CastOrConvertExpressionContext) {
-		return new CastOrConvertExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof MultiplicativeExpressionContext) {
-		return new MultiplicativeExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof AdditiveExpressionContext) {
-		return new AdditiveExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof RelationalExpressionContext) {
-		return new RelationalExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof EqualityExpressionContext) {
-		return new EqualityExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof LogicalAndExpressionContext) {
-		return new LogicalAndExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof LogicalOrExpressionContext) {
-		return new LogicalOrExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof ConditionalExpressionContext) {
-		return new ConditionalExpression(antlrCtx, parent);
-	} else if (antlrCtx instanceof BoolPrimaryExpressionContext) {
-		return new BoolPrimaryExpression(antlrCtx, parent);
-	} else {
-		// Last remaining possible type {@link AssignmentExpression}
-		return new AssignmentExpression(antlrCtx, parent);
+export class ExpressionASTNodeFactory {
+	/**
+	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
+	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
+	 * @param parent The file context class that will be assigned to the instance.
+	 * @since 0.9.0
+	 */
+	public static create(antlrRuleCtx: antlrExpressionCtxType, parent: CompilableASTNode<any>): Expression<any> {
+		if (antlrRuleCtx instanceof NumberPrimaryExpressionContext) {
+			return new NumberPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof CharacterPrimaryExpressionContext) {
+			return new CharacterPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ListPrimaryExpressionContext) {
+			return new ListPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IdentifierPrimaryExpressionContext) {
+			return new IdentifierPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof SingleTypeSpecifierContext) {
+			return new SingleTypeSpecifierExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof GenericTypeSpecifierContext) {
+			return new GenericTypeSpecifierExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof TypeofTypeSpecifierContext) {
+			return new TypeofTypeSpecifierExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof StringPrimaryExpressionContext) {
+			return new StringPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof FStringPrimaryExpressionContext) {
+			return new FStringPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof TangledPrimaryExpressionContext) {
+			return new TangledPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ArraySpecifierPostfixExpressionContext) {
+			return new ArraySpecifierExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IncrementOrDecrementPostfixExpressionContext) {
+			return new IncrementOrDecrementExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof FunctionCallPostfixExpressionContext) {
+			return new FunctionCallPostfixExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
+			return new IncrementOrDecrementUnaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof OperatorModifiedUnaryExpressionContext) {
+			return new OperatorModifiedUnaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof CastOrConvertExpressionContext) {
+			return new CastOrConvertExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof MultiplicativeExpressionContext) {
+			return new MultiplicativeExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof AdditiveExpressionContext) {
+			return new AdditiveExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof RelationalExpressionContext) {
+			return new RelationalExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof EqualityExpressionContext) {
+			return new EqualityExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof LogicalAndExpressionContext) {
+			return new LogicalAndExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof LogicalOrExpressionContext) {
+			return new LogicalOrExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ConditionalExpressionContext) {
+			return new ConditionalExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof BoolPrimaryExpressionContext) {
+			return new BoolPrimaryExpression(antlrRuleCtx, parent);
+		} else {
+			// Last remaining possible type {@link AssignmentExpression}
+			return new AssignmentExpression(antlrRuleCtx, parent);
+		}
 	}
 }
 
@@ -177,17 +181,17 @@ export interface ExpressionSemantics {
  */
 export abstract class Expression<Semantics extends ExpressionSemantics> extends CompilableASTNode<Semantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: antlrExpressionCtxType;
 
 	protected override _children: Array<Expression<any>>;
 
-	protected constructor(antlrCtx: antlrExpressionCtxType, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	protected constructor(antlrRuleCtx: antlrExpressionCtxType, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 
 		// Manually add the child to the parent
@@ -277,15 +281,15 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
 
-	constructor(antlrCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -345,15 +349,15 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: CharacterPrimaryExpressionContext;
 
-	constructor(antlrCtx: CharacterPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: CharacterPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -413,15 +417,15 @@ export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ListPrimaryExpressionContext;
 
-	constructor(antlrCtx: ListPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: ListPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -480,15 +484,15 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
-	constructor(antlrCtx: StringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: StringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -549,15 +553,15 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
  */
 export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
 
-	constructor(antlrCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -632,15 +636,15 @@ export interface SingleTypeSpecifierExpressionSemantics extends ExpressionSemant
  */
 export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifierExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: SingleTypeSpecifierContext;
 
-	constructor(antlrCtx: SingleTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: SingleTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -696,15 +700,15 @@ export interface GenericTypeSpecifierExpressionSemantics extends ExpressionSeman
  */
 export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecifierExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
 
-	constructor(antlrCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -759,15 +763,15 @@ export interface TypeofTypeSpecifierExpressionSemantics extends ExpressionSemant
  */
 export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifierExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
 
-	constructor(antlrCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -822,15 +826,15 @@ export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
-	constructor(antlrCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -886,17 +890,17 @@ export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: FStringPrimaryExpressionContext;
 
 	// TODO! Implement proper f-string value referencing using children expressions
 
-	constructor(antlrCtx: FStringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: FStringPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -950,15 +954,15 @@ export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: TangledPrimaryExpressionContext;
 
-	constructor(antlrCtx: TangledPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: TangledPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1017,15 +1021,15 @@ export interface IncrementOrDecrementExpressionSemantics extends ExpressionSeman
  */
 export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrementExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1081,15 +1085,15 @@ export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {
  */
 export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ArraySpecifierPostfixExpressionContext;
 
-	constructor(antlrCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1159,15 +1163,15 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
  */
 export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfixExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: FunctionCallPostfixExpressionContext;
 
-	constructor(antlrCtx: FunctionCallPostfixExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: FunctionCallPostfixExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1242,15 +1246,15 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends Expression
  */
 export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	constructor(antlrCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1308,15 +1312,15 @@ export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSema
  */
 export class OperatorModifiedUnaryExpression extends Expression<OperatorModifiedUnaryExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
 
-	constructor(antlrCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1384,15 +1388,15 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
  */
 export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
 
-	constructor(antlrCtx: CastOrConvertExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: CastOrConvertExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1502,15 +1506,15 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
  */
 export class MultiplicativeExpression extends Expression<MultiplicativeExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
-	constructor(antlrCtx: MultiplicativeExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: MultiplicativeExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1600,15 +1604,15 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
  */
 export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: AdditiveExpressionContext;
 
-	constructor(antlrCtx: AdditiveExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: AdditiveExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1702,15 +1706,15 @@ export interface RelationalExpressionSemantics extends ExpressionSemantics {}
  */
 export class RelationalExpression extends Expression<RelationalExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
 
-	constructor(antlrCtx: RelationalExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: RelationalExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1770,15 +1774,15 @@ export interface EqualityExpressionSemantics extends ExpressionSemantics {}
  */
 export class EqualityExpression extends Expression<EqualityExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: EqualityExpressionContext;
 
-	constructor(antlrCtx: EqualityExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: EqualityExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1837,15 +1841,15 @@ export interface LogicalAndExpressionSemantics extends ExpressionSemantics {}
  */
 export class LogicalAndExpression extends Expression<LogicalAndExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
 
-	constructor(antlrCtx: LogicalAndExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: LogicalAndExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1902,15 +1906,15 @@ export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
  */
 export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
-	constructor(antlrCtx: LogicalOrExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: LogicalOrExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -1966,15 +1970,15 @@ export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
  */
 export class ConditionalExpression extends Expression<ConditionalExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
-	constructor(antlrCtx: ConditionalExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: ConditionalExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -2042,15 +2046,15 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
  */
 export class AssignmentExpression extends Expression<AssignmentExpressionSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
-	constructor(antlrCtx: AssignmentExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**

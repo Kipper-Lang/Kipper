@@ -39,24 +39,31 @@ export type antlrStatementCtxType =
 	| JumpStatementContext;
 
 /**
- * Fetches the handler for the specified {@link antlrStatementCtxType}.
- * @param antlrCtx The context instance that the handler class should be fetched for.
- * @param parent The file context class that will be assigned to the instance.
+ * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
+ * @since 0.9.0
  */
-export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any> {
-	if (antlrCtx instanceof CompoundStatementContext) {
-		return new CompoundStatement(antlrCtx, parent);
-	} else if (antlrCtx instanceof IfStatementContext) {
-		return new IfStatement(antlrCtx, parent);
-	} else if (antlrCtx instanceof SwitchStatementContext) {
-		return new SwitchStatement(antlrCtx, parent);
-	} else if (antlrCtx instanceof ExpressionStatementContext) {
-		return new ExpressionStatement(antlrCtx, parent);
-	} else if (antlrCtx instanceof IterationStatementContext) {
-		return new IterationStatement(antlrCtx, parent);
-	} else {
-		// Can only be {@link JumpStatementContext}
-		return new JumpStatement(antlrCtx, parent);
+export class StatementASTNodeFactory {
+	/**
+	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
+	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
+	 * @param parent The file context class that will be assigned to the instance.
+	 * @since 0.9.0
+	 */
+	public static create(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any> {
+		if (antlrRuleCtx instanceof CompoundStatementContext) {
+			return new CompoundStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IfStatementContext) {
+			return new IfStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof SwitchStatementContext) {
+			return new SwitchStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ExpressionStatementContext) {
+			return new ExpressionStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IterationStatementContext) {
+			return new IterationStatement(antlrRuleCtx, parent);
+		} else {
+			// Can only be {@link JumpStatementContext}
+			return new JumpStatement(antlrRuleCtx, parent);
+		}
 	}
 }
 
@@ -67,15 +74,15 @@ export function getStatementInstance(antlrCtx: antlrStatementCtxType, parent: co
  */
 export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: antlrStatementCtxType;
 
-	protected constructor(antlrCtx: antlrStatementCtxType, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	protected constructor(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -106,8 +113,8 @@ export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> 
  */
 export class CompoundStatement extends Statement<NoSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: CompoundStatementContext;
@@ -116,9 +123,9 @@ export class CompoundStatement extends Statement<NoSemantics> {
 
 	private readonly _localScope: LocalScope;
 
-	constructor(antlrCtx: CompoundStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: CompoundStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._localScope = new LocalScope(this);
 		this._children = [];
 	}
@@ -199,17 +206,17 @@ export interface IfStatementSemantics {
  */
 export class IfStatement extends Statement<IfStatementSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IfStatementContext;
 
 	protected readonly _children: Array<Expression<any> | Statement<any>>;
 
-	constructor(antlrCtx: IfStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: IfStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
@@ -272,17 +279,17 @@ export class IfStatement extends Statement<IfStatementSemantics> {
  */
 export class SwitchStatement extends Statement<NoSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
 
 	protected readonly _children: Array<Statement<any>>;
 
-	constructor(antlrCtx: SwitchStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: SwitchStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
@@ -329,17 +336,17 @@ export class SwitchStatement extends Statement<NoSemantics> {
  */
 export class ExpressionStatement extends Statement<NoSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
 
 	protected readonly _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: ExpressionStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: ExpressionStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
@@ -388,17 +395,17 @@ export class ExpressionStatement extends Statement<NoSemantics> {
  */
 export class IterationStatement extends Statement<NoSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IterationStatementContext;
 
 	protected readonly _children: Array<compilableNodeChild>;
 
-	constructor(antlrCtx: IterationStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: IterationStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
@@ -446,17 +453,17 @@ export class IterationStatement extends Statement<NoSemantics> {
  */
 export class JumpStatement extends Statement<NoSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: JumpStatementContext;
 
 	protected readonly _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: JumpStatementContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: JumpStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
