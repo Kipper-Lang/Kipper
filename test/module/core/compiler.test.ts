@@ -30,10 +30,11 @@ const assignFile = getFileName("assign.kip");
 const addedHelloWorldFile = getFileName("added-hello-world.kip");
 const assignmentArithmeticsFile = getFileName("assignment-arithmetics.kip");
 const boolFile = getFileName("bool.kip");
-const typeConversion = getFileName("type-conversion.kip");
-const spacedProgram = getFileName("spaced-program.kip");
-const expressionStatements = getFileName("expression-statements.kip");
-const tangledExpressions = getFileName("tangled-expressions.kip");
+const typeConversionFile = getFileName("type-conversion.kip");
+const spacedProgramFile = getFileName("spaced-program.kip");
+const expressionStatementsFile = getFileName("expression-statements.kip");
+const tangledExpressionsFile = getFileName("tangled-expressions.kip");
+const ifStatementsFile = getFileName("if-statements.kip");
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -144,19 +145,25 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Type conversion", async () => {
-				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
 
 			it("Spaced program", async () => {
-				const fileContent = (await fs.readFile(spacedProgram, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(spacedProgramFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
 
 			it("Expression statements", async () => {
-				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("If statements", async () => {
+				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
@@ -394,7 +401,7 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Type conversion", async () => {
-				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -412,7 +419,7 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Expression statements", async () => {
-				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -428,7 +435,7 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Tangled expressions", async () => {
-				const fileContent = (await fs.readFile(tangledExpressions, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(tangledExpressionsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
@@ -452,6 +459,23 @@ describe("KipperCompiler", () => {
 
 				// Restore old console.log
 				console.log = prevLog;
+			});
+
+			it("If statements", async () => {
+				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.internals);
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected two global variables");
+
+				const code = instance.write();
+				assert(code);
+				assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
 			});
 		});
 
