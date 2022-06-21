@@ -46,7 +46,11 @@ import {
 	IfStatement,
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
-import { getConversionFunctionIdentifier } from "../../utils";
+import { getConversionFunctionIdentifier, indentLines } from "../../utils";
+
+function removeBrackets(lines: Array<TranslatedCodeLine>) {
+	return lines.slice(1, lines.length - 1);
+}
 
 /**
  * The TypeScript target-specific code generator for translating Kipper into TypeScript.
@@ -61,18 +65,89 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		for (let child of node.children) {
 			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
 		}
-		return [["{"], ...childCode, ["}"]];
+		return [["{"], ...indentLines(childCode), ["}"]];
 	};
 
 	/**
 	 * Translates a {@link IfStatement} into the typescript language.
+	 *
+	 * Implementation notes:
+	 * - This algorithm is indirectly recursive, as else-if statements are handling like else statements with an immediate
+	 *   if statement in them.
+	 * - The formatting algorithm tries to start at the top and slowly go down each area of the abstract syntax tree.
+	 *   First the starting 'if' will be formatted, and afterwards the alternative branches are processed if they exists.
+	 *   If they do, it is also formatted like with a regular starting 'if', unless there is another nested if-statement
+	 *   in which case it will pass that job down to the child if-statement.
+	 * @since 0.9.0
 	 */
 	ifStatement = async (node: IfStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const isElseIf = node.parent instanceof IfStatement && node === node.parent.getSemanticData().alternativeBranch;
+
+		// Core items, which will be always present
+		let condition = await semanticData.condition.translateCtxAndChildren();
+		let statement = await semanticData.statementBody.translateCtxAndChildren();
+
+		if (semanticData.statementBody instanceof CompoundStatement) {
+			statement = removeBrackets(statement);
+		} else {
+			statement = indentLines(statement); // Apply indent to the single statement
+		}
+
+		let baseCode = [
+			["if", " ", "(", ...condition, ")", " ", "{"],
+			...statement, // Statement, which is executed if the first condition is true
+			["}", " "],
+		];
+
+		// If there is no alternative branch, return with this code
+		if (!semanticData.alternativeBranch) {
+			return baseCode;
+		}
+
+		let secondBranchIsCompoundStatement = semanticData.alternativeBranch instanceof CompoundStatement;
+		let secondBranchIsElseIf = semanticData.alternativeBranch instanceof IfStatement;
+		let secondBranchIsElse = !secondBranchIsElseIf;
+		let secondCondition: Array<string> | null = null;
+		let secondBranch: Array<TranslatedCodeLine> | null = null;
+
+		// Evaluate the alternative branch if it exists
+		if (semanticData.alternativeBranch) {
+			secondBranch = await semanticData.alternativeBranch.translateCtxAndChildren();
+
+			if (secondBranchIsElseIf) {
+				// Else if statement
+				// Move 'if' condition into the else line -> 'else if (condition)'
+				secondCondition = ["else", " ", ...secondBranch[0]];
+				secondBranch = secondBranch.slice(1, secondBranch.length);
+			} else {
+				// Else statement
+				secondCondition = ["else"];
+			}
+
+			// Format code and remove brackets from compound statements if they exist
+			if (secondBranchIsCompoundStatement) {
+				secondBranch = removeBrackets(secondBranch);
+			} else if (secondBranchIsElse) {
+				// If the second branch is else, then the end of this branch of the AST was reached
+				secondBranch = indentLines(secondBranch);
+			}
+		}
+
+		// Return with the second branch added. (Since th	is function calls itself indirectly recursively, there can be as
+		// many else-ifs as the user wants.)
+		return [
+			...baseCode.slice(0, baseCode.length - 1), // Add all lines except the last one that ends the if-statement
+			["}", " ", ...(secondCondition ?? []), ...(secondBranchIsCompoundStatement ? [" ", "{"] : [])],
+			...(secondBranch ?? []), // Else-if/else statement, which is executed if the second condition is true
+			...(secondBranchIsCompoundStatement ? [["}", " "]] : []),
+		];
 	};
 
 	/**
 	 * Translates a {@link SwitchStatement} into the typescript language.
+	 *
+	 * @since 0.9.0
 	 */
 	switchStatement = async (node: SwitchStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
