@@ -226,7 +226,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getTokenChildren();
+		const children = this.getAntlrRuleChildren();
 
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
@@ -352,7 +352,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children: Array<ParseTree> = this.getTokenChildren();
+		const children: Array<ParseTree> = this.getAntlrRuleChildren();
 
 		// Determine the ctx instances
 		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(

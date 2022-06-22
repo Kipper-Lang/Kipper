@@ -38,11 +38,21 @@ import {
 	type KipperBoolTypeLiterals,
 	kipperCharType,
 	type KipperCharType,
+	KipperComparativeOperator,
+	KipperEqualityOperator,
+	kipperEqualityOperators,
 	type KipperFunction,
 	type KipperListType,
+	kipperLogicalAndOperator,
+	KipperLogicalAndOperator,
+	KipperLogicalOperator,
+	KipperLogicalOrOperator,
+	kipperLogicalOrOperator,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	type KipperNumType,
+	KipperRelationalOperator,
+	kipperRelationalOperators,
 	kipperStrType,
 	type KipperStrType,
 	type KipperType,
@@ -1303,8 +1313,8 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Operator modified unary expression class, which represents a signed (+/-) unary expression in the Kipper language
- * and is compilable using {@link translateCtxAndChildren}.
+ * Operator modified expressions, which are used to modify the value of an expression based on an
+ * {@link KipperUnaryOperator unary operator.}
  * @since 0.1.0
  * @example
  * -41 // -41
@@ -1380,7 +1390,9 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Convert expression class, which represents a conversion expression in the Kipper language.
+ * Convert expressions, which are used to convert a value to a different type.
+ *
+ * For now only conversions are supported, but this will be extended to conversions and casts in the future.
  * @since 0.1.0
  * @example
  * "4" as num // 4
@@ -1452,7 +1464,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 }
 
 /**
- * Semantics for the Arithmetic expressions: {@link MultiplicativeExpression} and {@link AdditiveExpression}.
+ * Semantics for arithmetic expressions ({@link MultiplicativeExpression} and {@link AdditiveExpression}).
  * @since 0.6.0
  */
 export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
@@ -1496,7 +1508,9 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
 }
 
 /**
- * Multiplicative expression class, which represents a multiplicative expression in the Kipper language.
+ * Multiplicative expression, which can be used to perform multiplicative operations on two expressions.
+ *
+ * Divisions, multiplications, and modulus are also considered to be multiplicative operations.
  * @since 0.1.0
  * @example
  * 16 * 6 // 96
@@ -1522,8 +1536,10 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getTokenChildren();
+		// Get the raw antlr4 parse-tree children, which should store the operator
+		const children = this.getAntlrRuleChildren();
 
+		// Get the operator
 		const operator = <KipperMultiplicativeOperator | undefined>children
 			.find((token) => {
 				return (
@@ -1532,6 +1548,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			})
 			?.text.trim();
 
+		// Get the expressions of this multiplicative expression
 		const exp1: Expression<any> = this.children[0];
 		const exp2: Expression<any> = this.children[1];
 
@@ -1596,7 +1613,9 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 }
 
 /**
- * Additive expression class, which represents an additive expression in the Kipper language.
+ * Additive expression, which can be used add together or concatenate two expressions.
+ *
+ * Subtraction is also considered to be an additive operation.
  * @since 0.1.0
  * @example
  * 4 + 4 // 8
@@ -1620,7 +1639,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getTokenChildren();
+		// Get the raw antlr4 parse-tree children, which should store the operator
+		const children = this.getAntlrRuleChildren();
 
 		const operator = <KipperAdditiveOperator | undefined>children
 			.find((token) => {
@@ -1628,6 +1648,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			})
 			?.text.trim();
 
+		// Get the expressions of this additive expression
 		const exp1: Expression<any> = this.children[0];
 		const exp2: Expression<any> = this.children[1];
 
@@ -1684,13 +1705,52 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 }
 
 /**
+ * Semantics for comparative expressions, which compare two expressions against one another and evaluate based on
+ * the input to a boolean value.
+ * @since 0.9.0
+ */
+export interface ComparativeExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The operator used to compare the two expressions of this logical expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperComparativeOperator;
+	/**
+	 * The first expression (left-hand side) used in this logical expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this logical expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
+
+/**
  * Semantics for AST Node {@link RelationalExpression}.
  * @since 0.5.0
  */
-export interface RelationalExpressionSemantics extends ExpressionSemantics {}
+export interface RelationalExpressionSemantics extends ComparativeExpressionSemantics {
+	/**
+	 * The operator used to compare the two expressions of this relational expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperRelationalOperator;
+	/**
+	 * The first expression (left-hand side) used in this relational expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this relational expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
 
 /**
- * Relational expression class, which represents a relational expression in the Kipper language.
+ * Relational expression, which can be used to compare two numeric expressions.
  * @since 0.1.0
  * @example
  * 19 > 11 // true
@@ -1722,15 +1782,28 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Logical Relational Expressions have not been implemented yet."),
-			);
+		// Get the raw antlr4 parse-tree children, which should store the operator
+		const children = this.getAntlrRuleChildren();
 
-		// eslint-disable-next-line no-unreachable
+		// Get the expressions of this relational expression
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+		const operator = <KipperRelationalOperator | undefined>children
+			.find((token) => {
+				return token instanceof TerminalNode && kipperRelationalOperators.find((op) => op === token.text) !== undefined;
+			})
+			?.text.trim();
+
+		// Ensure that the children are fully present and not undefined
+		if (!exp1 || !exp2 || !operator) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: "bool",
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
+			operator: operator,
 		};
 	}
 
@@ -1740,7 +1813,7 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Type check the expressions and ensure they are numeric
 	}
 
 	/**
@@ -1760,11 +1833,26 @@ export class RelationalExpression extends Expression<RelationalExpressionSemanti
  * Semantics for AST Node {@link EqualityExpressionSemantics}.
  * @since 0.5.0
  */
-export interface EqualityExpressionSemantics extends ExpressionSemantics {}
+export interface EqualityExpressionSemantics extends ComparativeExpressionSemantics {
+	/**
+	 * The operator used to compare the two expressions of this equality expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperEqualityOperator;
+	/**
+	 * The first expression (left-hand side) used in this equality expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this equality expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
 
 /**
- * Equality expression class, which represents an equality check expression in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}.
+ * Equality expression, which can be used to compare two expressions for equality.
  * @since 0.1.0
  * @example
  * 4 == 4 // true
@@ -1790,15 +1878,28 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Logical Equality Expressions have not been implemented yet."),
-			);
+		// Get the raw antlr4 parse-tree children, which should store the operator
+		const children = this.getAntlrRuleChildren();
 
-		// eslint-disable-next-line no-unreachable
+		// Get the expressions of this relational expression
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
+		const operator = <KipperEqualityOperator | undefined>children
+			.find((token) => {
+				return token instanceof TerminalNode && kipperEqualityOperators.find((op) => op === token.text) !== undefined;
+			})
+			?.text.trim();
+
+		// Ensure that the children are fully present and not undefined
+		if (!exp1 || !exp2 || !operator) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: "bool",
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
+			operator: operator,
 		};
 	}
 
@@ -1824,14 +1925,53 @@ export class EqualityExpression extends Expression<EqualityExpressionSemantics> 
 }
 
 /**
+ * Semantics for logical expressions, which combine two expressions/conditions and evaluate based on the input to a
+ * boolean value.
+ * @since 0.9.0
+ */
+export interface LogicalExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The operator used to combine the two expressions of this logical expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperLogicalAndOperator | KipperLogicalOrOperator;
+	/**
+	 * The first expression (left-hand side) used in this logical expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this logical expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
+
+/**
  * Semantics for AST Node {@link LogicalAndExpression}.
  * @since 0.5.0
  */
-export interface LogicalAndExpressionSemantics extends ExpressionSemantics {}
+export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantics {
+	/**
+	 * The operator used to combine the two expressions of this logical-and expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperLogicalAndOperator;
+	/**
+	 * The first expression (left-hand side) used in this logical-and expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this logical-and expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
 
 /**
- * Logical-And expression class, which represents a logical-and expression in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}.
+ * Logical-and expression, which can be used to combine multiple conditions. It will evaluate to true if all
+ * conditions are true.
  * @since 0.1.0
  * @example
  * false && false // false
@@ -1857,13 +1997,20 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Logical And Expressions have not been implemented yet."));
+		// Get the expressions of this logical-and expression
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
 
-		// eslint-disable-next-line no-unreachable
+		// Ensure that the children are fully present and not undefined
+		if (!exp1 || !exp2) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: "bool",
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
+			operator: kipperLogicalAndOperator,
 		};
 	}
 
@@ -1893,10 +2040,27 @@ export class LogicalAndExpression extends Expression<LogicalAndExpressionSemanti
  * Semantics for AST Node {@link LogicalOrExpression}.
  * @since 0.5.0
  */
-export interface LogicalOrExpressionSemantics extends ExpressionSemantics {}
+export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics {
+	/**
+	 * The operator used to combine the two expressions of this logical-or expression.
+	 * @since 0.9.0
+	 */
+	operator: KipperLogicalOrOperator;
+	/**
+	 * The first expression (left-hand side) used in this logical-or expression.
+	 * @since 0.9.0
+	 */
+	exp1: Expression<any>;
+	/**
+	 * The second expression (right-hand side) used in this logical-or expression.
+	 * @since 0.9.0
+	 */
+	exp2: Expression<any>;
+}
 
 /**
- * Logical-Or expression class, which represents a logical-or expression in the Kipper language.
+ * Logical-or expression, which can be used to combine multiple conditions. It returns true if at least one condition is
+ * true.
  * @since 0.1.0
  * @example
  * false || false // false
@@ -1922,13 +2086,20 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Logical Or Expressions have not been implemented yet."));
+		// Get the expressions of this logical-or expression
+		const exp1: Expression<any> = this.children[0];
+		const exp2: Expression<any> = this.children[1];
 
-		// eslint-disable-next-line no-unreachable
+		// Ensure that the children are fully present and not undefined
+		if (!exp1 || !exp2) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: "bool",
+			exp1: exp1, // First expression
+			exp2: exp2, // Second expression
+			operator: kipperLogicalOrOperator,
 		};
 	}
 

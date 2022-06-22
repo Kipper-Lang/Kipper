@@ -210,24 +210,121 @@ export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
 ];
 
 /**
- * All available storage types inside Kipper.
+ * All available storage types inside Kipper, which define how a variable is stored/can be accessed.
  */
 export type KipperStorageType = "var" | "const";
 
 /**
- * All available storage types inside Kipper.
+ * All available storage types inside Kipper, which define how a variable is stored/can be accessed.
  * @since 0.6.0
  */
-export const kipperStorageTypes = ["var", "const"];
+export const kipperStorageTypes: Array<KipperStorageType> = ["var", "const"];
 
 /**
- * All available multiplicative operations inside Kipper.
+ * All available unary operators in Kipper, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export type KipperUnaryOperator = "!" | "-" | "+";
+
+/**
+ * All available unary operators in Kipper, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export const kipperUnaryOperators: Array<KipperUnaryOperator> = ["!", "-", "+"];
+
+/**
+ * The logical-and operator, which can be used to combine multiple conditions and return true if all conditions are true.
+ * @example
+ * EXP && EXP;
+ * @since 0.9.0
+ */
+export type KipperLogicalAndOperator = "&&";
+
+/**
+ * The logical-and operator, which can be used to combine multiple conditions and return true if all conditions are true.
+ * @example
+ * EXP && EXP;
+ * @since 0.9.0
+ */
+export const kipperLogicalAndOperator: KipperLogicalAndOperator = "&&";
+
+/**
+ * The logical-or operator, which can be used to combine multiple conditions and return true if at least one condition
+ * is true.
+ * @example
+ * EXP || EXP;
+ * @since 0.9.0
+ */
+export type KipperLogicalOrOperator = "||";
+
+/**
+ * The logical-or operator, which can be used to combine multiple conditions and return true if at least one condition
+ * is true.
+ * @example
+ * EXP || EXP;
+ * @since 0.9.0
+ */
+export const kipperLogicalOrOperator: KipperLogicalOrOperator = "||";
+
+/**
+ * All available logical operators inside Kipper, which can be used to compare or combine two expressions.
+ * @since 0.9.0
+ */
+export type KipperLogicalOperator = KipperLogicalAndOperator | KipperLogicalOrOperator;
+
+/**
+ * All available logical operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export const kipperLogicalOperator: Array<KipperLogicalOperator> = ["&&", "||"];
+
+/**
+ * All available equality operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export type KipperEqualityOperator = "==" | "!=";
+
+/**
+ * All available equality operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export const kipperEqualityOperators: Array<KipperEqualityOperator> = ["==", "!="];
+
+/**
+ * All available relational operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export type KipperRelationalOperator = "<" | ">" | "<=" | ">=";
+
+/**
+ * All available relational operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export const kipperRelationalOperators: Array<KipperRelationalOperator> = ["<", ">", "<=", ">="];
+
+/**
+ * All available comparative operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export type KipperComparativeOperator = KipperEqualityOperator | KipperRelationalOperator;
+
+/**
+ * All available comparative operators inside Kipper, which can be used to compare two expressions against each other.
+ * @since 0.9.0
+ */
+export const kipperComparativeOperators: Array<KipperComparativeOperator> = [
+	...kipperEqualityOperators,
+	...kipperRelationalOperators,
+];
+
+/**
+ * All available multiplicative operators inside Kipper.
  * @since 0.6.0
  */
 export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
 
 /**
- * All available multiplicative operations inside Kipper.
+ * All available multiplicative operators inside Kipper.
  * @since 0.6.0
  */
 export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
