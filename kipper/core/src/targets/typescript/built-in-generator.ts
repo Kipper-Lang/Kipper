@@ -53,7 +53,7 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ return +(${convArgIdentifier}); }`]];
+		return [[createTSFunctionSignature(signature), " ", `{ return parseInt(${convArgIdentifier}); }`]];
 	}
 
 	async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
