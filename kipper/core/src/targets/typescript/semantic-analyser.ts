@@ -33,7 +33,7 @@ import type {
 	ParameterDeclaration,
 	RelationalExpression,
 	SwitchStatement,
-	SingleTypeSpecifierExpression,
+	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
@@ -221,9 +221,9 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression) => {};
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
 	 */
-	singleTypeSpecifierExpression = async (node: SingleTypeSpecifierExpression) => {};
+	identifierTypeSpecifierExpression = async (node: IdentifierTypeSpecifierExpression) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.

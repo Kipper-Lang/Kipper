@@ -36,7 +36,7 @@ import {
 	RelationalExpression,
 	ScopeFunctionDeclaration,
 	SwitchStatement,
-	SingleTypeSpecifierExpression,
+	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TranslatedCodeLine,
@@ -82,7 +82,6 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	ifStatement = async (node: IfStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const isElseIf = node.parent instanceof IfStatement && node === node.parent.getSemanticData().alternativeBranch;
 
 		// Core items, which will be always present
 		let condition = await semanticData.condition.translateCtxAndChildren();
@@ -263,9 +262,11 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link SingleTypeSpecifierExpression} into the typescript language.
+	 * Translates a {@link IdentifierTypeSpecifierExpression} into the typescript language.
 	 */
-	singleTypeSpecifierExpression = async (node: SingleTypeSpecifierExpression): Promise<TranslatedExpression> => {
+	identifierTypeSpecifierExpression = async (
+		node: IdentifierTypeSpecifierExpression,
+	): Promise<TranslatedExpression> => {
 		return [];
 	};
 

@@ -27,7 +27,7 @@ import type {
 	ParameterDeclaration,
 	RelationalExpression,
 	SwitchStatement,
-	SingleTypeSpecifierExpression,
+	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
@@ -132,9 +132,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract boolPrimaryExpression: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
 	 */
-	public abstract singleTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<SingleTypeSpecifierExpression>;
+	public abstract identifierTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.

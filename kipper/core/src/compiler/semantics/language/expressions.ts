@@ -641,18 +641,23 @@ export interface SingleTypeSpecifierExpressionSemantics extends ExpressionSemant
 }
 
 /**
- * Default type specifier
+ * Type specifier expression, which represents a simple identifier type specifier.
+ * @example
+ * num // Number type
+ * str // String type
+ * char // Character type
+ * bool // Boolean type
  * @since 0.8.0
  */
-export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifierExpressionSemantics> {
+export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<IdentifierTypeSpecifierExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: SingleTypeSpecifierContext;
+	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierContext;
 
-	constructor(antlrRuleCtx: SingleTypeSpecifierContext, parent: CompilableASTNode<any>) {
+	constructor(antlrRuleCtx: IdentifierTypeSpecifierContext, parent: CompilableASTNode<any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -686,10 +691,10 @@ export class SingleTypeSpecifierExpression extends Expression<SingleTypeSpecifie
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<SingleTypeSpecifierExpression> =
-		this.semanticAnalyser.singleTypeSpecifierExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<SingleTypeSpecifierExpression, TranslatedExpression> =
-		this.codeGenerator.singleTypeSpecifierExpression;
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression> =
+		this.semanticAnalyser.identifierTypeSpecifierExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.identifierTypeSpecifierExpression;
 }
 
 /**

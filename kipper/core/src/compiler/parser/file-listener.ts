@@ -53,7 +53,7 @@ import type {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 	BoolPrimaryExpressionContext,
-	SingleTypeSpecifierContext,
+	IdentifierTypeSpecifierContext,
 	CompilationUnitContext,
 } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
@@ -1400,20 +1400,20 @@ export class KipperFileListener implements KipperListener {
 	public exitInitDeclarator(ctx: InitDeclaratorContext): void {}
 
 	/**
-	 * Enter a parse tree produced by the `singleTypeSpecifier`
+	 * Enter a parse tree produced by the `identifierTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
-	public enterSingleTypeSpecifier(ctx: SingleTypeSpecifierContext): void {
+	public enteridentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
 		this.handleIncomingExpressionCtx(ctx);
 	}
 
 	/**
-	 * Exit a parse tree produced by the `singleTypeSpecifier`
+	 * Exit a parse tree produced by the `identifierTypeSpecifier`
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
-	public exitSingleTypeSpecifier(ctx: SingleTypeSpecifierContext): void {
+	public exitidentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
 		this.handleExitingExpressionCtx();
 	}
 

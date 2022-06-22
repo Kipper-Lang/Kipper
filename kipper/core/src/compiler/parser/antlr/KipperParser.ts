@@ -2034,7 +2034,7 @@ export class KipperParser extends Parser {
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 25, this._ctx)) {
 				case 1:
-					_localctx = new SingleTypeSpecifierContext(_localctx);
+					_localctx = new IdentifierTypeSpecifierContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 315;
@@ -5399,7 +5399,7 @@ export class TypeSpecifierContext extends ParserRuleContext {
 		super.copyFrom(ctx);
 	}
 }
-export class SingleTypeSpecifierContext extends TypeSpecifierContext {
+export class IdentifierTypeSpecifierContext extends TypeSpecifierContext {
 	public Identifier(): TerminalNode {
 		return this.getToken(KipperParser.Identifier, 0);
 	}
@@ -5409,20 +5409,20 @@ export class SingleTypeSpecifierContext extends TypeSpecifierContext {
 	}
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterSingleTypeSpecifier) {
-			listener.enterSingleTypeSpecifier(this);
+		if (listener.enterIdentifierTypeSpecifier) {
+			listener.enterIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitSingleTypeSpecifier) {
-			listener.exitSingleTypeSpecifier(this);
+		if (listener.exitIdentifierTypeSpecifier) {
+			listener.exitIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitSingleTypeSpecifier) {
-			return visitor.visitSingleTypeSpecifier(this);
+		if (visitor.visitIdentifierTypeSpecifier) {
+			return visitor.visitIdentifierTypeSpecifier(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

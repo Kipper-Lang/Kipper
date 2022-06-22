@@ -7,6 +7,7 @@
  */
 
 import {
+	ComparativeExpression,
 	type CompoundStatement,
 	type Expression,
 	type ExpressionSemantics,
@@ -323,4 +324,6 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
+
+	public validComparativeExpression(exp: ComparativeExpression<any>): void {}
 }

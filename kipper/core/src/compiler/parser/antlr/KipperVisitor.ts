@@ -31,7 +31,7 @@ import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
-import { SingleTypeSpecifierContext } from "./KipperParser";
+import { IdentifierTypeSpecifierContext } from "./KipperParser";
 import { GenericTypeSpecifierContext } from "./KipperParser";
 import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -332,12 +332,12 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitActualAssignmentExpression?: (ctx: ActualAssignmentExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `singleTypeSpecifier`
+	 * Visit a parse tree produced by the `identifierTypeSpecifier`
 	 * labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitSingleTypeSpecifier?: (ctx: SingleTypeSpecifierContext) => Result;
+	visitIdentifierTypeSpecifier?: (ctx: IdentifierTypeSpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `genericTypeSpecifier`

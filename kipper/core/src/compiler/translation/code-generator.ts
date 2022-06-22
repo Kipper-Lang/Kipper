@@ -38,7 +38,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	GenericTypeSpecifierExpression,
-	SingleTypeSpecifierExpression,
+	IdentifierTypeSpecifierExpression,
 	TypeofTypeSpecifierExpression,
 } from "../semantics";
 import type { CompilableASTNode } from "../parser";
@@ -151,10 +151,10 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract boolPrimaryExpression: TargetASTNodeCodeGenerator<BoolPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link SingleTypeSpecifierExpression} into a specific language.
+	 * Translates a {@link IdentifierTypeSpecifierExpression} into a specific language.
 	 */
-	public abstract singleTypeSpecifierExpression: TargetASTNodeCodeGenerator<
-		SingleTypeSpecifierExpression,
+	public abstract identifierTypeSpecifierExpression: TargetASTNodeCodeGenerator<
+		IdentifierTypeSpecifierExpression,
 		TranslatedExpression
 	>;
 
