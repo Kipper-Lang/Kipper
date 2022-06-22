@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
     structured like a tree, where the top if statement represents the root and each following if statement is a
     section/branch of the tree.
+  - `TypeSpecifierExpression`, which is an abstract class used provide the commonality between the
+    different type specifier expressions.
+  - `ComparativeExpression`, which is an abstract class used provide the commonality between the
+    different comparative expressions.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
@@ -51,7 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Renamed `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
+- Renamed:
+  - `SingleTypeSpecifierExpression` to `IdentifierTypeSpecifierExpression`.
+  - `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
 
 ### Removed
 
@@ -135,7 +141,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     This function should also allow the use of built-in variables in the future and also provide a basis for dynamic
     dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
     built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
-  - `SingleTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
+  - `identifierTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
   - `GenericTypeSpecifierExpression`, which represents a generic type constant, such as `type<T>`. (Functionality not
     implemented yet! Planned for v0.12)
   - `TypeofTypeSpecifierExpression`, which represents a dynamically evaluated type, such as `typeof("string")`.
