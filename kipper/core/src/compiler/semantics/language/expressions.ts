@@ -1711,17 +1711,17 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
  */
 export interface ComparativeExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The operator used to compare the two expressions of this logical expression.
+	 * The operator used to compare the two expressions of this comparative expression.
 	 * @since 0.9.0
 	 */
 	operator: KipperComparativeOperator;
 	/**
-	 * The first expression (left-hand side) used in this logical expression.
+	 * The first expression (left-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
 	exp1: Expression<any>;
 	/**
-	 * The second expression (right-hand side) used in this logical expression.
+	 * The second expression (right-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
 	exp2: Expression<any>;

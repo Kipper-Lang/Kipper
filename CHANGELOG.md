@@ -28,8 +28,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     a `antlrRuleCtx`.
   - `StatementASTNodeFactory`, which is a factory that creates a statement instance based on
     a `antlrRuleCtx`.
+- New types:
+  - `KipperUnaryOperator`
+  - `KipperLogicalAndOperator`
+  - `KipperLogicalOrOperator`
+  - `KipperLogicalOperator`
+  - `KipperEqualityOperator`
+  - `KipperRelationalOperator`
+  - `KipperComparativeOperator`
+- New constants:
+  - `kipperUnaryOperators`
+  - `kipperLogicalAndOperator`
+  - `kipperLogicalOrOperator`
+  - `kipperLogicalOperator`
+  - `kipperEqualityOperators`
+  - `kipperRelationalOperators`
+  - `kipperComparativeOperators`
 - New interfaces:
   - `IfStatementSemantics`, which contains the semantic data of an if-statement.
+  - `ComparativeExpressionSemantics`, which defines the semantic data of a comparative expression.
+  - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
 
 ### Changed
 
