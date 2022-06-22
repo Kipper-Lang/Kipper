@@ -17,7 +17,9 @@ import type {
 	ArraySpecifierContext,
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentOperatorContext,
+	BoolPrimaryExpressionContext,
 	CharacterPrimaryExpressionContext,
+	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
 	DeclarationSpecifierContext,
@@ -30,7 +32,9 @@ import type {
 	FStringPrimaryExpressionContext,
 	FunctionCallPostfixExpressionContext,
 	FunctionDeclarationContext,
+	GenericTypeSpecifierContext,
 	IdentifierPrimaryExpressionContext,
+	IdentifierTypeSpecifierContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
@@ -44,18 +48,15 @@ import type {
 	ParameterDeclarationContext,
 	ParameterListContext,
 	ParameterTypeListContext,
-	GenericTypeSpecifierContext,
 	StorageTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	SwitchLabeledStatementContext,
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
 	TypeSpecifierContext,
-	UnaryOperatorContext,
-	BoolPrimaryExpressionContext,
-	IdentifierTypeSpecifierContext,
-	CompilationUnitContext,
+	UnaryOperatorContext
 } from "./index";
+import { IfStatementContext, SwitchStatementContext } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
@@ -63,13 +64,12 @@ import {
 	type antlrExpressionCtxType,
 	type antlrStatementCtxType,
 	Declaration,
-	Statement,
-	Expression,
 	DefinitionASTNodeFactory,
-	StatementASTNodeFactory,
+	Expression,
 	ExpressionASTNodeFactory,
+	Statement,
+	StatementASTNodeFactory
 } from "../semantics";
-import { IfStatementContext, SwitchStatementContext } from "./index";
 import { RootASTNode } from "./root-ast-node";
 import { CompilableASTNode } from "./compilable-ast-node";
 
@@ -1404,7 +1404,7 @@ export class KipperFileListener implements KipperListener {
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
-	public enteridentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
+	public enterIdentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
 		this.handleIncomingExpressionCtx(ctx);
 	}
 
@@ -1413,7 +1413,7 @@ export class KipperFileListener implements KipperListener {
 	 * Labeled alternative in `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
-	public exitidentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
+	public exitIdentifierTypeSpecifier(ctx: IdentifierTypeSpecifierContext): void {
 		this.handleExitingExpressionCtx();
 	}
 

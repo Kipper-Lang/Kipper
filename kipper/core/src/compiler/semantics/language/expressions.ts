@@ -553,7 +553,6 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
 	identifier: string;
 }
 
-
 /**
  * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
