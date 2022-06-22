@@ -6,6 +6,7 @@
  */
 import type { compilableNodeParent, SemanticData } from "../../parser";
 import {
+	CompilableASTNode,
 	CompoundStatementContext,
 	DeclarationContext,
 	DeclaratorContext,
@@ -13,16 +14,15 @@ import {
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
 	ParameterTypeListContext,
-	StorageTypeSpecifierContext,
+	StorageTypeSpecifierContext
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
+import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { UnableToDetermineMetadataError } from "../../../errors";
-import { CompilableASTNode } from "../../parser";
 import { Scope } from "../../scope";
 
 /**
@@ -236,7 +236,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
-		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
+		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		// Ensure that the children are fully present and not undefined
 		if (!declaratorCtx || !typeSpecifier) {
@@ -367,7 +367,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
-		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
+		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.

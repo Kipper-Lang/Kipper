@@ -11,12 +11,14 @@ import {
 	BoolPrimaryExpressionContext,
 	CastOrConvertExpressionContext,
 	CharacterPrimaryExpressionContext,
+	CompilableASTNode,
 	ConditionalExpressionContext,
 	EqualityExpressionContext,
 	FStringPrimaryExpressionContext,
 	FunctionCallPostfixExpressionContext,
 	GenericTypeSpecifierContext,
 	IdentifierPrimaryExpressionContext,
+	IdentifierTypeSpecifierContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	ListPrimaryExpressionContext,
@@ -26,10 +28,9 @@ import {
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	RelationalExpressionContext,
-	SingleTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
-	TypeofTypeSpecifierContext,
+	TypeofTypeSpecifierContext
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
@@ -45,7 +46,6 @@ import {
 	type KipperListType,
 	kipperLogicalAndOperator,
 	KipperLogicalAndOperator,
-	KipperLogicalOperator,
 	KipperLogicalOrOperator,
 	kipperLogicalOrOperator,
 	type KipperMultiplicativeOperator,
@@ -56,11 +56,10 @@ import {
 	kipperStrType,
 	type KipperStrType,
 	type KipperType,
-	type TranslatedExpression,
+	type TranslatedExpression
 } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
-import { CompilableASTNode } from "../../parser";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
@@ -93,7 +92,7 @@ export type antlrExpressionCtxType =
 	| LogicalOrExpressionContext
 	| ConditionalExpressionContext
 	| AssignmentExpressionContext
-	| SingleTypeSpecifierContext
+	| IdentifierTypeSpecifierContext
 	| GenericTypeSpecifierContext
 	| TypeofTypeSpecifierContext;
 
@@ -117,8 +116,8 @@ export class ExpressionASTNodeFactory {
 			return new ListPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IdentifierPrimaryExpressionContext) {
 			return new IdentifierPrimaryExpression(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof SingleTypeSpecifierContext) {
-			return new SingleTypeSpecifierExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof IdentifierTypeSpecifierContext) {
+			return new IdentifierTypeSpecifierExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof GenericTypeSpecifierContext) {
 			return new GenericTypeSpecifierExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof TypeofTypeSpecifierContext) {
@@ -165,7 +164,7 @@ export class ExpressionASTNodeFactory {
 }
 
 /**
- * Semantics for any expression.
+ * Base semantics for any expression class that must be evaluated during the compilation process.
  * @since 0.6.0
  */
 export interface ExpressionSemantics {
@@ -183,9 +182,13 @@ export interface ExpressionSemantics {
 }
 
 /**
- * Expression class, which represents an expression in the Kipper language. Expressions are the fundamental logic
- * of the Kipper language and will {@link ExpressionSemantics.evaluatedType evaluate to a specific type} that can be
- * either used in another expression or discarded.
+ * Expression class, which represents any expression in the Kipper language that is able to evaluate to a value with
+ * a specific {@link evaluatedType type}.
+ *
+ * The {@link evaluatedType type} of the expression return depends on the type of the expression
+ * and its inputs, and will be evaluated during the semantic analysis phase to perform type checking.
+ *
+ * This class is the base class for all expression classes.
  * @abstract
  * @since 0.1.0
  */
@@ -253,8 +256,8 @@ export interface ConstantExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Abstract core class constant expression representing a constant expression. This type only exists to narrow down the
- * generic type.
+ * Abstract constant expression class representing a constant expression, which was defined in the source code. This
+ * class only exists to provide the commonality between the different constant expressions.
  */
 export abstract class ConstantExpression<Semantics extends ConstantExpressionSemantics> extends Expression<Semantics> {}
 
@@ -285,8 +288,7 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Integer constant expression class, which represents an integer constant in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}.
+ * Integer constant expression, which represents a number constant that was defined in the source code.
  * @since 0.1.0
  */
 export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExpressionSemantics> {
@@ -354,7 +356,7 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
 }
 
 /**
- * Character constant expression class, which represents a single character constant in the Kipper language.
+ * Character constant expression, which represents a character constant that was defined in the source code.
  * @since 0.1.0
  */
 export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrimaryExpressionSemantics> {
@@ -422,7 +424,7 @@ export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * List constant expression class, which represents a list constant in the Kipper language.
+ * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
 export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics> {
@@ -489,7 +491,7 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * String class, which represents a string expression in the Kipper language.
+ * String constant expression, which represents a string constant that was defined in the source code.
  * @since 0.1.0
  */
 export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExpressionSemantics> {
@@ -551,277 +553,6 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
 	identifier: string;
 }
 
-/**
- * Identifier expression class, which represents an identifier in the Kipper language.
- *
- * This is only used for identifier references used inside other expressions as its own expression. Therefore, variable
- * declarations or definition do not use this class and have their own implementation for identifier handling.
- * @example
- * var x: str = "5"; // 'x' is a declarator identifier and is not an identifier reference
- * call print(x); // 'print' and 'x' are identifier references
- * @since 0.1.0
- */
-export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
-
-	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		const identifier = this.sourceCode;
-
-		// Make sure the referenced variable even exists!
-		const ref = this.programCtx
-			.semanticCheck(this)
-			.getExistingReference(identifier, "localScope" in this.scopeCtx ? this.scopeCtx : undefined);
-
-		// Evaluate the type by attempting to fetch it from the global
-		const evaluateType: () => KipperType = () => {
-			if (ref instanceof ScopeVariableDeclaration) {
-				return ref.type;
-			} else {
-				return "func";
-			}
-		};
-
-		this.semanticData = {
-			evaluatedType: evaluateType(),
-			identifier: identifier,
-		};
-
-		if (!(ref instanceof ScopeDeclaration)) {
-			this.programCtx.addBuiltInReference(this, ref);
-		}
-	}
-
-	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.7.0
-	 */
-	public async semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): IdentifierPrimaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression> =
-		this.semanticAnalyser.identifierPrimaryExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
-		this.codeGenerator.identifierPrimaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link SingleTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface SingleTypeSpecifierExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	type: KipperType;
-}
-
-/**
- * Type specifier expression, which represents a simple identifier type specifier.
- * @example
- * num // Number type
- * str // String type
- * char // Character type
- * bool // Boolean type
- * @since 0.8.0
- */
-export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<IdentifierTypeSpecifierExpressionSemantics> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierContext;
-
-	constructor(antlrRuleCtx: IdentifierTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			type: <KipperType>this.sourceCode,
-			evaluatedType: "type",
-		};
-	}
-
-	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
-	 */
-	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): SingleTypeSpecifierContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression> =
-		this.semanticAnalyser.identifierTypeSpecifierExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierTypeSpecifierExpression, TranslatedExpression> =
-		this.codeGenerator.identifierTypeSpecifierExpression;
-}
-
-/**
- * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface GenericTypeSpecifierExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	type: KipperType;
-}
-
-/**
- * Default type specifier
- * @since 0.8.0
- */
-export class GenericTypeSpecifierExpression extends Expression<GenericTypeSpecifierExpressionSemantics> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
-
-	constructor(antlrRuleCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
-	}
-
-	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
-	 */
-	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): GenericTypeSpecifierContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression> =
-		this.semanticAnalyser.genericTypeSpecifierExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
-		this.codeGenerator.genericTypeSpecifierExpression;
-}
-
-/**
- * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface TypeofTypeSpecifierExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	type: KipperType;
-}
-
-/**
- * Default type specifier
- * @since 0.8.0
- */
-export class TypeofTypeSpecifierExpression extends Expression<TypeofTypeSpecifierExpressionSemantics> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
-
-	constructor(antlrRuleCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
-	}
-
-	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
-	 */
-	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): TypeofTypeSpecifierContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression> =
-		this.semanticAnalyser.typeofTypeSpecifierExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
-		this.codeGenerator.typeofTypeSpecifierExpression;
-}
 
 /**
  * Semantics for AST Node {@link BoolPrimaryExpression}.
@@ -892,8 +623,8 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
  */
 export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * Returns the items of the f-strings, where each item represents one section of a string. The section may either be
-	 * a {@link String constant string} or {@link Expression evaluable runtime expression}.
+	 * Returns the items of the f-strings, where each item represents one section of the string. The section may either be
+	 * a {@link StringPrimaryExpression constant string} or {@link Expression evaluable runtime expression}.
 	 * @since 0.5.0
 	 */
 	items: Array<string | Expression<any>>;
@@ -957,14 +688,308 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 }
 
 /**
+ * Identifier expression, which represents an identifier referencing a variable, function or built-in identifier.
+ *
+ * This is only represents a reference and not a declaration/definition.
+ * @since 0.1.0
+ */
+export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExpressionSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
+
+	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		const identifier = this.sourceCode;
+
+		// Make sure the referenced variable even exists!
+		const ref = this.programCtx
+			.semanticCheck(this)
+			.getExistingReference(identifier, "localScope" in this.scopeCtx ? this.scopeCtx : undefined);
+
+		// Evaluate the type by attempting to fetch it from the global
+		const evaluateType: () => KipperType = () => {
+			if (ref instanceof ScopeVariableDeclaration) {
+				return ref.type;
+			} else {
+				return "func";
+			}
+		};
+
+		this.semanticData = {
+			evaluatedType: evaluateType(),
+			identifier: identifier,
+		};
+
+		if (!(ref instanceof ScopeDeclaration)) {
+			this.programCtx.addBuiltInReference(this, ref);
+		}
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// Constants will never get type checking
+		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): IdentifierPrimaryExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression> =
+		this.semanticAnalyser.identifierPrimaryExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.identifierPrimaryExpression;
+}
+
+/**
+ * Semantics for AST Node {@link TypeSpecifierExpression}.
+ */
+export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Abstract type class representing a type specifier. This class only exists to provide the commonality between the
+ * different type specifier expressions.
+ */
+export abstract class TypeSpecifierExpression<T extends TypeSpecifierExpressionSemantics> extends Expression<T> {}
+
+/**
+ * Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Type specifier expression, which represents a simple identifier type specifier.
+ * @example
+ * num // Number type
+ * str // String type
+ * char // Character type
+ * bool // Boolean type
+ * @since 0.8.0
+ */
+export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<IdentifierTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierContext;
+
+	constructor(antlrRuleCtx: IdentifierTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			type: <KipperType>this.sourceCode,
+			evaluatedType: "type",
+		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): IdentifierTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression> =
+		this.semanticAnalyser.identifierTypeSpecifierExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IdentifierTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.identifierTypeSpecifierExpression;
+}
+
+/**
+ * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface GenericTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+	/**
+	 * The generic type defined in the brackets of this expression.
+	 * @since 0.9.0
+	 */
+	generic: KipperType;
+}
+
+/**
+ * Generic type specifier expression, which represents a generic type specifier.
+ * @example
+ * list<num> // List type with number as generic type
+ * @since 0.8.0
+ */
+export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<GenericTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
+
+	constructor(antlrRuleCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): GenericTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression> =
+		this.semanticAnalyser.genericTypeSpecifierExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<GenericTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.genericTypeSpecifierExpression;
+}
+
+/**
+ * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
+	/**
+	 * The type specified by this expression.
+	 * @since 0.8.0
+	 */
+	type: KipperType;
+}
+
+/**
+ * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
+ * @since 0.8.0
+ */
+export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<TypeofTypeSpecifierExpressionSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
+
+	constructor(antlrRuleCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.8.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): TypeofTypeSpecifierContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression> =
+		this.semanticAnalyser.typeofTypeSpecifierExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
+		this.codeGenerator.typeofTypeSpecifierExpression;
+}
+
+/**
  * Semantics for AST Node {@link TangledPrimaryExpression}.
  * @since 0.5.0
  */
 export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Tangled expression class, which represents a tangled expression in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}.
+ * Tangled/Parenthesised expression, which represents a parenthesised expression that wraps another expression and
+ * increases its order of precedence.
+ * @example
+ * (4 + 5) * 5; // 4 + 5 will be evaluated first, then the multiplication will be performed
  * @since 0.1.0
  */
 export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics> {
@@ -1028,11 +1053,11 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 export interface IncrementOrDecrementExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Increment or Decrement expression,  which represents a left-side -- or ++ expression in the Kipper language.
+ * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.
  * @since 0.1.0
  * @example
- * val++
- * val--
+ * 49++; // 49 will be incremented by 1
+ * 11--; // 11 will be decremented by 1
  */
 export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrementExpressionSemantics> {
 	/**
@@ -1253,11 +1278,11 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 export interface IncrementOrDecrementUnaryExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Increment or decrement expression class, which represents a left-side -- or ++ expression in the Kipper language.
+ * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
  * @since 0.1.0
  * @example
- * ++4 // 5
- * --61 // 60
+ * ++49; // 49 will be incremented by 1
+ * --11; // 11 will be decremented by 1
  */
 export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
@@ -1423,7 +1448,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetching the original exp and the type using the children
 		const exp: Expression<any> = this.children[0];
-		const type: KipperType = (<SingleTypeSpecifierExpression>this.children[1]).getSemanticData().type;
+		const type: KipperType = (<IdentifierTypeSpecifierExpression>this.children[1]).getSemanticData().type;
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
@@ -1733,6 +1758,13 @@ export interface ComparativeExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
+ * Abstract comparative expression class representing a comparative expression, which can be used to compare two
+ * expressions. This class only exists to provide the commonality between the different comparative expressions.
+ * @since 0.9.0
+ */
+export abstract class ComparativeExpression<T extends ComparativeExpressionSemantics> extends Expression<T> {}
+
+/**
  * Semantics for AST Node {@link RelationalExpression}.
  * @since 0.5.0
  */
@@ -1769,7 +1801,7 @@ export interface RelationalExpressionSemantics extends ComparativeExpressionSema
  * 77 <= 77 // true
  * 36 <= 12 // false
  */
-export class RelationalExpression extends Expression<RelationalExpressionSemantics> {
+export class RelationalExpression extends ComparativeExpression<RelationalExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1865,7 +1897,7 @@ export interface EqualityExpressionSemantics extends ComparativeExpressionSemant
  * 32 != 9 // true
  * 59 != 59 // false
  */
-export class EqualityExpression extends Expression<EqualityExpressionSemantics> {
+export class EqualityExpression extends ComparativeExpression<EqualityExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2137,8 +2169,8 @@ export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics
 export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
 
 /**
- * Conditional expression class, which represents a conditional expression in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}.
+ * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
+ * expression if it is false.
  * @since 0.1.0
  * @example
  * true ? 3 : 4; // 3
@@ -2212,8 +2244,8 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Assignment expression class, which represents an assignment expression in the Kipper language and is compilable
- * using {@link translateCtxAndChildren}. This class only represents assigning a value, but not declaring it!
+ * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to
+ * an existing variable, but not creating a new one.
  *
  * This expression will evaluate to the value that was assigned to the identifier.
  * @since 0.1.0
