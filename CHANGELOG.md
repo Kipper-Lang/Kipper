@@ -18,9 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 - New classes:
-  - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are 
-    structured like a tree, where the top if statement represents the root and each following if statement is a 
-		section/branch of the tree.
+  - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
+    structured like a tree, where the top if statement represents the root and each following if statement is a
+    section/branch of the tree.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
