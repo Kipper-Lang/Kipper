@@ -7,15 +7,22 @@
  */
 
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { Expression, ExpressionSemantics, IdentifierPrimaryExpression, ParameterDeclaration } from "../language";
+import {
+	Expression,
+	ExpressionSemantics,
+	IdentifierPrimaryExpression,
+	ParameterDeclaration,
+	RelationalExpression
+} from "../language";
 import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
 import {
 	InvalidArgumentTypeError,
 	InvalidAssignmentTypeError,
+	InvalidRelationalComparisonTypeError,
 	InvalidReturnTypeError,
 	ReadOnlyAssignmentTypeError,
 	TypeError,
-	UnknownTypeError,
+	UnknownTypeError
 } from "../../../errors";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
@@ -121,5 +128,23 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			const semanticData = arg.getSemanticData();
 			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
 		});
+	}
+
+	/**
+	 * Asserts that the passed relational expression is valid.
+	 * @param exp The expression to check.
+	 * @since 0.9.0
+	 */
+	public validRelationalExpression(exp: RelationalExpression): void {
+		const semanticData = exp.getSemanticData();
+		const exp1Semantics = semanticData.exp1.getSemanticData();
+		const exp2Semantics = semanticData.exp2.getSemanticData();
+
+		// Ensure that both expressions are of type 'num'
+		if (exp1Semantics.evaluatedType !== "num" || exp2Semantics.evaluatedType !== "num") {
+			throw this.assertError(
+				new InvalidRelationalComparisonTypeError(exp1Semantics.evaluatedType, exp2Semantics.evaluatedType),
+			);
+		}
 	}
 }

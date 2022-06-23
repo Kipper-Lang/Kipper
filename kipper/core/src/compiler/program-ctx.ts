@@ -7,15 +7,13 @@
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { TranslatedCodeLine, Expression } from "./semantics";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
+import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperSemanticChecker } from "./semantics";
-import { KipperTypeChecker } from "./semantics";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { Reference } from "./reference";
 import { GlobalScope } from "./global-scope";

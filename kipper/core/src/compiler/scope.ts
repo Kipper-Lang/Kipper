@@ -5,7 +5,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { ScopeVariableDeclaration, ScopeFunctionDeclaration } from "./scope-declaration";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
 
 /**

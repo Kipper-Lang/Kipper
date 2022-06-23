@@ -20,6 +20,7 @@ import type {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -32,12 +33,11 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SwitchStatement,
-	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
+	VariableDeclaration
 } from "../../compiler";
 import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
 import { ReservedIdentifierOverwriteError } from "../../errors";

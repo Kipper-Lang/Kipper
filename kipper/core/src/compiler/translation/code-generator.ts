@@ -18,7 +18,9 @@ import type {
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -31,18 +33,16 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SwitchStatement,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
-	VariableDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
-	GenericTypeSpecifierExpression,
-	IdentifierTypeSpecifierExpression,
 	TypeofTypeSpecifierExpression,
+	VariableDeclaration
 } from "../semantics";
-import type { CompilableASTNode } from "../parser";
 import { IfStatement } from "../semantics";
+import type { CompilableASTNode } from "../parser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

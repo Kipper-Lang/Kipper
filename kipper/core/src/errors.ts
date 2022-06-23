@@ -9,7 +9,7 @@ import type {
 	InputMismatchException,
 	LexerNoViableAltException,
 	NoViableAltException,
-	ParserRuleContext,
+	ParserRuleContext
 } from "antlr4ts";
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
@@ -443,11 +443,21 @@ export class InvalidConversionTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a variable type is used that is unknown the kipper language.
+ * Error that is thrown whenever a variable type is used that is unknown to the program.
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Unknown type '${type}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a relational comparison is used with types that are not comparable.
+ * @since 0.9.0
+ */
+export class InvalidRelationalComparisonTypeError extends TypeError {
+	constructor(type1: string, type2: string) {
+		super(`Type '${type1}' is not comparable to type '${type2}'.`);
 	}
 }
 

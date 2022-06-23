@@ -20,6 +20,8 @@ import {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
+	IfStatement,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -35,15 +37,13 @@ import {
 	ParameterDeclaration,
 	RelationalExpression,
 	ScopeFunctionDeclaration,
-	SwitchStatement,
-	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
 	TranslatedCodeLine,
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-	IfStatement,
+	VariableDeclaration
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "../../utils";

@@ -4,8 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompilableASTNode } from "../parser";
-import type { KipperParseStream } from "../parser";
+import type { CompilableASTNode, KipperParseStream } from "../parser";
 import { KipperError } from "../../errors";
 import { getParseRuleSource } from "../../utils";
 

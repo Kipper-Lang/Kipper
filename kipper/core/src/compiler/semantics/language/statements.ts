@@ -12,20 +12,20 @@
  * @since 0.1.0
  */
 import type { compilableNodeChild, compilableNodeParent, NoSemantics } from "../../parser/";
+import { IfStatementContext, SwitchStatementContext } from "../../parser/";
 import {
+	CompilableASTNode,
 	CompoundStatementContext,
 	ExpressionStatementContext,
 	IterationStatementContext,
-	JumpStatementContext,
+	JumpStatementContext
 } from "../../parser";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { LocalScope } from "../../local-scope";
-import { CompilableASTNode } from "../../parser";
 import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
-import { IfStatementContext, SwitchStatementContext } from "../../parser/";
 
 /**
  * Every antlr4 statement ctx type

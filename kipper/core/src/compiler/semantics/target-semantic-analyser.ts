@@ -14,6 +14,7 @@ import type {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -26,16 +27,15 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SwitchStatement,
-	IdentifierTypeSpecifierExpression,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
+	VariableDeclaration
 } from "./language";
+import { IfStatement } from "./language";
 import type { CompilableASTNode } from "../parser";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
-import { IfStatement } from "./language";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.

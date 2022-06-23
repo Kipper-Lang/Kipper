@@ -39,19 +39,19 @@ import {
 	type KipperBoolTypeLiterals,
 	kipperCharType,
 	type KipperCharType,
-	KipperComparativeOperator,
-	KipperEqualityOperator,
+	type KipperComparativeOperator,
+	type KipperEqualityOperator,
 	kipperEqualityOperators,
 	type KipperFunction,
 	type KipperListType,
 	kipperLogicalAndOperator,
-	KipperLogicalAndOperator,
-	KipperLogicalOrOperator,
+	type KipperLogicalAndOperator,
+	type KipperLogicalOrOperator,
 	kipperLogicalOrOperator,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	type KipperNumType,
-	KipperRelationalOperator,
+	type KipperRelationalOperator,
 	kipperRelationalOperators,
 	kipperStrType,
 	type KipperStrType,
@@ -257,7 +257,7 @@ export interface ConstantExpressionSemantics extends ExpressionSemantics {
 
 /**
  * Abstract constant expression class representing a constant expression, which was defined in the source code. This
- * class only exists to provide the commonality between the different constant expressions.
+ * abstract class only exists to provide the commonality between the different constant expressions.
  */
 export abstract class ConstantExpression<Semantics extends ConstantExpressionSemantics> extends Expression<Semantics> {}
 
@@ -771,7 +771,7 @@ export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Abstract type class representing a type specifier. This class only exists to provide the commonality between the
+ * Abstract type class representing a type specifier. This abstract class only exists to provide the commonality between the
  * different type specifier expressions.
  */
 export abstract class TypeSpecifierExpression<T extends TypeSpecifierExpressionSemantics> extends Expression<T> {}
@@ -1758,7 +1758,7 @@ export interface ComparativeExpressionSemantics extends ExpressionSemantics {
 
 /**
  * Abstract comparative expression class representing a comparative expression, which can be used to compare two
- * expressions. This class only exists to provide the commonality between the different comparative expressions.
+ * expressions. This abstract class only exists to provide the commonality between the different comparative expressions.
  * @since 0.9.0
  */
 export abstract class ComparativeExpression<T extends ComparativeExpressionSemantics> extends Expression<T> {}
@@ -1849,7 +1849,8 @@ export class RelationalExpression extends ComparativeExpression<RelationalExpres
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Type check the expressions and ensure they are numeric
+		// Type check the relational expression and ensure its operands are numeric
+		this.programCtx.typeCheck(this).validRelationalExpression(this);
 	}
 
 	/**
@@ -1984,6 +1985,14 @@ export interface LogicalExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
+ * Logical expression, representing an expression which can be used to combine two expressions/conditions using
+ * {@link LogicalAndExpression logical AND} or {@link LogicalOrExpression logical OR}. This
+ * abstract class only exists to provide the commonality between the different logical expressions.
+ * @abstract
+ */
+export abstract class LogicalExpression<T extends LogicalExpressionSemantics> extends Expression<T> {}
+
+/**
  * Semantics for AST Node {@link LogicalAndExpression}.
  * @since 0.5.0
  */
@@ -2006,8 +2015,8 @@ export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantic
 }
 
 /**
- * Logical-and expression, which can be used to combine multiple conditions. It will evaluate to true if all
- * conditions are true.
+ * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will
+ * evaluate to true if all conditions are true.
  * @since 0.1.0
  * @example
  * false && false // false
@@ -2015,7 +2024,7 @@ export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantic
  * false && true // false
  * true && true // true
  */
-export class LogicalAndExpression extends Expression<LogicalAndExpressionSemantics> {
+export class LogicalAndExpression extends LogicalExpression<LogicalAndExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2095,8 +2104,8 @@ export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics
 }
 
 /**
- * Logical-or expression, which can be used to combine multiple conditions. It returns true if at least one condition is
- * true.
+ * Logical-or expression, representing an expression which can be used to combine multiple conditions. It returns true
+ * if at least one condition is true.
  * @since 0.1.0
  * @example
  * false || false // false
@@ -2104,7 +2113,7 @@ export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics
  * false || true // true
  * true || true // true
  */
-export class LogicalOrExpression extends Expression<LogicalOrExpressionSemantics> {
+export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.

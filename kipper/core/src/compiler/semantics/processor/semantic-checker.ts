@@ -7,37 +7,36 @@
  */
 
 import {
-	ComparativeExpression,
 	type CompoundStatement,
 	type Expression,
 	type ExpressionSemantics,
 	IdentifierPrimaryExpression,
-	VariableDeclaration,
+	VariableDeclaration
 } from "../language";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByVariableError,
+	InvalidAmountOfArgumentsError,
 	InvalidArithmeticOperationTypeError,
 	InvalidAssignmentError,
+	InvalidConversionTypeError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
+	UndefinedConstantError,
 	UndefinedIdentifierError,
 	UnknownIdentifierError,
-	VariableDefinitionAlreadyExistsError,
-	InvalidAmountOfArgumentsError,
-	InvalidConversionTypeError,
-	UndefinedConstantError,
+	VariableDefinitionAlreadyExistsError
 } from "../../../errors";
 import {
-	kipperPlusOperator,
-	kipperStrLikeTypes,
-	kipperSupportedConversions,
-	type KipperRef,
 	type KipperArithmeticOperator,
 	type KipperFunction,
-	type KipperType,
+	kipperPlusOperator,
+	type KipperRef,
+	kipperStrLikeTypes,
+	kipperSupportedConversions,
+	type KipperType
 } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
@@ -324,6 +323,4 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
-
-	public validComparativeExpression(exp: ComparativeExpression<any>): void {}
 }
