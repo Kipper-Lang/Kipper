@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
 - Code generation for tangled expressions.
   ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
-- Comparative and relational expressions, which allow for logical operations and comparisons on expressions. List of all 
+- Comparative and relational expressions, which allow for logical operations and comparisons on expressions. List of all
   supported operators, which can be used between two expressions.
   - `!=` (Not Equal Operator)
   - `==` (Equal Operator)
@@ -25,12 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `<=` (Less or equal to Operator)
 - Logical expressions, which allow for the chaining and combination of expressions and conditions. List of all available
   supported operators, which can be used between two expressions/conditions:
-  - `&&` (Logical And Operator) 
+  - `&&` (Logical And Operator)
   - `||` (Logical Or Operator)
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 - New errors:
-  - `InvalidRelationalComparisonTypeError`, which is thrown  whenever a relational comparison is used with types that 
+  - `InvalidRelationalComparisonTypeError`, which is thrown whenever a relational comparison is used with types that
     are not comparable.
 - New classes:
   - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
