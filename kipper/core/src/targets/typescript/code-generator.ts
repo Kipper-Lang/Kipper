@@ -12,6 +12,7 @@ import {
 	CastOrConvertExpression,
 	CharacterPrimaryExpression,
 	ComparativeExpression,
+	ComparativeExpressionSemantics,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -32,6 +33,7 @@ import {
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
+	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -425,13 +427,20 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		node: ComparativeExpression<any> | LogicalExpression<any>,
 	): Promise<TranslatedExpression> {
 		// Get the semantic data
-		const semanticData = node.getSemanticData();
+		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
 
 		// Generate the code for the operands
 		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
 
-		return [...exp1, " ", semanticData.operator, " ", ...exp2];
+		let operator: string = semanticData.operator;
+
+		// Make sure equality checks are done with ===/!== and not ==/!= to ensure strict equality
+		if (operator === "==" || operator === "!=") {
+			operator = semanticData.operator + "=";
+		}
+
+		return [...exp1, " ", operator, " ", ...exp2];
 	}
 
 	/**
