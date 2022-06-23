@@ -9,14 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented syntax support and code generation for if, else-if and else statements
+- Syntax support and code generation for if, else-if and else statements
   ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
-- Implemented code generation of expression lists (e.g. expression statements containing multiple child expressions)
+- Code generation of expression lists (e.g. expression statements containing multiple child expressions)
   ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
-- Implemented code generation for tangled expressions.
+- Code generation for tangled expressions.
   ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
+- Comparative and relational expressions, which allow for logical operations and comparisons on expressions. List of all 
+  supported operators, which can be used between two expressions.
+  - `!=` (Not Equal Operator)
+  - `==` (Equal Operator)
+  - `>` (Greater than Operator)
+  - `>=` (Greater or equal to Operator)
+  - `<` (Less than than Operator)
+  - `<=` (Less or equal to Operator)
+- Logical expressions, which allow for the chaining and combination of expressions and conditions. List of all available
+  supported operators, which can be used between two expressions/conditions:
+  - `&&` (Logical And Operator) 
+  - `||` (Logical Or Operator)
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
+- New errors:
+  - `InvalidRelationalComparisonTypeError`, which is thrown  whenever a relational comparison is used with types that 
+    are not comparable.
 - New classes:
   - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
     structured like a tree, where the top if statement represents the root and each following if statement is a
@@ -26,7 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ComparativeExpression`, which is an abstract class used provide the commonality between the
     different comparative expressions.
   - `LogicalExpression`, which is an abstract class used provide the commonality between the
-		different type logical expressions.
+    different type logical expressions.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
