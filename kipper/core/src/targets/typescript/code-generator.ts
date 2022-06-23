@@ -11,6 +11,7 @@ import {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CharacterPrimaryExpression,
+	ComparativeExpression,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -30,6 +31,7 @@ import {
 	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
+	LogicalExpression,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -414,31 +416,50 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates any form of operator-based expression with two operands into the typescript language.
+	 * @param node The node to translate.
+	 * @private
+	 * @since 0.9.0
+	 */
+	private async translateOperatorExpressionWithOperands(
+		node: ComparativeExpression<any> | LogicalExpression<any>,
+	): Promise<TranslatedExpression> {
+		// Get the semantic data
+		const semanticData = node.getSemanticData();
+
+		// Generate the code for the operands
+		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+
+		return [...exp1, " ", semanticData.operator, " ", ...exp2];
+	}
+
+	/**
 	 * Translates a {@link RelationalExpression} into the typescript language.
 	 */
 	relationalExpression = async (node: RelationalExpression): Promise<TranslatedExpression> => {
-		return [];
+		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
 	 * Translates a {@link EqualityExpression} into the typescript language.
 	 */
 	equalityExpression = async (node: EqualityExpression): Promise<TranslatedExpression> => {
-		return [];
+		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
 	 * Translates a {@link LogicalAndExpression} into the typescript language.
 	 */
 	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
-		return [];
+		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
 	 * Translates a {@link LogicalOrExpression} into the typescript language.
 	 */
 	logicalOrExpression = async (node: LogicalOrExpression): Promise<TranslatedExpression> => {
-		return [];
+		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
