@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     different type specifier expressions.
   - `ComparativeExpression`, which is an abstract class used provide the commonality between the
     different comparative expressions.
+  - `LogicalExpression`, which is an abstract class used provide the commonality between the
+		different type logical expressions.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
