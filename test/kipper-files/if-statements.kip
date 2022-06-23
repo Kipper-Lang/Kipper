@@ -1,4 +1,4 @@
-if (false) {
+if (false || false || false) {
 	5;
 } else /* New block*/ if (false)
 	5;
@@ -9,7 +9,7 @@ if (false) {
 } else /* New block*/ if (false) {
 
 } else /* End block */ {
-	if (true) {
+	if (true && true && true && true == true) {
 		call print("Hello world!");
 
 		if (true) {
