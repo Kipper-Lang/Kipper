@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   supported operators, which can be used between two expressions/conditions:
   - `&&` (Logical And Operator)
   - `||` (Logical Or Operator)
-- Operator modified expressions, which allow for the modification of an expression using a specific operator. List 
+- Operator modified expressions, which allow for the modification of an expression using a specific operator. List
   of all supported operators:
   - `!` (Logical NOT Operator)
   - `+` (Plus Operator)
