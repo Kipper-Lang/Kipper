@@ -476,6 +476,21 @@ describe("KipperCompiler", () => {
 				assert(code);
 				assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
 				assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+
+				// Compile the program to JavaScript and evaluate it
+				const jsCode = ts.transpile(instance.write());
+
+				// Overwrite built-in to access output
+				const prevLog = console.log;
+				console.log = (message: string) => {
+					assert("Hello world!" === message, "Expected 'Hello world!'");
+				};
+
+				// Evaluate expression
+				eval(jsCode);
+
+				// Restore old console.log
+				console.log = prevLog;
 			});
 		});
 
@@ -641,7 +656,7 @@ describe("KipperCompiler", () => {
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
-						console.log = (message: string) => {
+						console.log = () => {
 							assert(false, "Expected no output");
 						};
 
@@ -669,7 +684,7 @@ describe("KipperCompiler", () => {
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
-						console.log = (message: string) => {
+						console.log = () => {
 							assert(false, "Expected no output");
 						};
 
@@ -697,7 +712,7 @@ describe("KipperCompiler", () => {
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
-						console.log = (message: string) => {
+						console.log = () => {
 							assert(false, "Expected no output");
 						};
 
@@ -811,7 +826,7 @@ describe("KipperCompiler", () => {
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
-						console.log = (message: string) => {
+						console.log = () => {
 							assert(false, "Expected no output");
 						};
 
