@@ -348,7 +348,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Generate the arguments
 		let args: TranslatedExpression = [];
 		for (const i of semanticData.args) {
-			// Generating the code for each expression and adding a whitespace for primitive formatting
+			// TODO! Rework this generation once function arguments are properly supported
 			args = [...args, ...(await i.translateCtxAndChildren()), " "];
 		}
 		args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
@@ -370,7 +370,15 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link OperatorModifiedUnaryExpression} into the typescript language.
 	 */
 	operatorModifiedUnaryExpression = async (node: OperatorModifiedUnaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		// Get the semantic data
+		const semanticData = node.getSemanticData();
+
+		// Get the operator and the operand
+		const operator = semanticData.operator;
+		const operand = semanticData.operand;
+
+		// Return the generated unary expression
+		return [operator, ...(await operand.translateCtxAndChildren())];
 	};
 
 	/**
