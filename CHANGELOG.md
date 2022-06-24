@@ -85,16 +85,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
   - `UnaryExpressionSemantics`, which defines the base semantics for every unary expression.
 - New functions:
-  - `KipperTypeChecker.validRelationalExpression`
-  - `KipperTypeChecker.validUnaryExpression`
+  - `KipperTypeChecker.validRelationalExpression`.
+  - `KipperTypeChecker.validUnaryExpression`.
 
 ### Changed
 
 - Moved `KipperSemanticChecker.arithmeticExpressionValid()` to `KipperTypeChecker` and renamed it to
   `validArithmeticExpression()`.
+- Renamed Antlr4 rule `singleTypeSpecifier` to `identifierTypeSpecifier` and its associated
+  class to `IdentifierTypeSpecifierExpression`.
 - Renamed:
   - `SingleTypeSpecifierExpression` to `IdentifierTypeSpecifierExpression`.
   - `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
+  - `Scope.localVariables` to `variables`.
+  - `Scope.localFunctions` to `functions`.
 
 ### Removed
 
