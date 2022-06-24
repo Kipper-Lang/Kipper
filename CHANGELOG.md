@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `==` (Equal Operator)
   - `>` (Greater than Operator)
   - `>=` (Greater or equal to Operator)
-  - `<` (Less than than Operator)
+  - `<` (Less than Operator)
   - `<=` (Less or equal to Operator)
 - Logical expressions, which allow for the chaining and combination of expressions and conditions. List of all available
   supported operators, which can be used between two expressions/conditions:
@@ -37,18 +37,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors:
   - `InvalidRelationalComparisonTypeError`, which is thrown whenever a relational comparison is used with types that
     are not comparable.
+  - `InvalidUnaryExpressionTypeError`, which is thrown whenever a unary expression has an operand with an invalid type.
 - New classes:
   - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
     structured like a tree, where the top if statement represents the root and each following if statement is a
     section/branch of the tree.
-  - `TypeSpecifierExpression`, which is an abstract class used provide the commonality between the
+  - `TypeSpecifierExpression`, which is an abstract class used to provide the commonality between the
     different type specifier expressions.
-  - `ComparativeExpression`, which is an abstract class used provide the commonality between the
+  - `ComparativeExpression`, which is an abstract class used to provide the commonality between the
     different comparative expressions.
-  - `LogicalExpression`, which is an abstract class used provide the commonality between the
-    different type logical expressions.
-  - `UnaryExpression`, which is an abstract class used provide the commonality between the
-    different type unary expressions.
+  - `LogicalExpression`, which is an abstract class used to provide the commonality between the
+    different logical expressions.
+  - `UnaryExpression`, which is an abstract class used to provide the commonality between the
+    different unary expressions.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
