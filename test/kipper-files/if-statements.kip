@@ -1,0 +1,110 @@
+if (false || false || false) {
+	5;
+} else /* New block*/ if (!true)
+	5;
+ else /* New block*/ if (false == true) {
+ 					call print(5 as str);
+} else /* New block*/ if (!1) {
+
+} else /* New block*/ if (false) {
+
+} else /* End block */ {
+	if (true && true && true && !true == !true) {
+		call print("Hello world!");
+
+		if (true) {
+			5;
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+    } else /* New block*/ if (true) {
+																									999;
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* End block */ {
+				0;
+    }
+  } else /* New block*/ if (true)
+		if (true) {
+			call print(3 as str);
+    } else /* New block*/ if (true) {
+			call print(3 as str);
+    } else /* New block*/ if (true) {
+			call print(3 as str);
+    } else /* New block*/ if (true) {
+			call print(3 as str);
+    } else /* New block*/ if (true) {
+			call print(3 as str);
+    } else /* End block */ {
+			call print(3 as str);
+    }
+  else /* New block*/ if (true) {
+		if (true) {
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* End block */ {
+
+    }
+  } else /* New block*/ if (true) {
+		if (true) {
+
+    } else /* New block*/ if (true) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+
+    } else /* New block*/ if (true) {
+
+    } else /* New block*/ if (true) {
+
+    } else /* End block */ {
+
+    }
+  } else /* New block*/ if (true) {
+		if (true) {
+
+    } else /* New block*/ if (true) if (false) if (true) if (false) {
+				call print(5 as str);
+
+    } else /* New block*/ if (true) {
+
+    } else /* New block*/ if (true) {
+
+    } else /* New block*/ if (true) {
+
+    } else /* End block */ {
+
+    }
+  } else /* End block */ {
+  	if (true) {
+			call print("Ending block");
+    } else /* New block*/ if (true) {
+			call print("Ending block");
+    } else /* New block*/ if (true) {
+
+			call print("Ending block");
+    } else /* New block*/ if (true) {
+
+			call print("Ending block");
+    } else /* New block*/ if (true) {
+
+			call print("Ending block");
+    } else /* End block */ {
+
+    }
+  }
+}

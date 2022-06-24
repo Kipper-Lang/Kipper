@@ -6,38 +6,23 @@
  * @since 0.7.0
  */
 
-import {
-	type CompoundStatement,
-	type Expression,
-	type ExpressionSemantics,
-	IdentifierPrimaryExpression,
-	VariableDeclaration,
-} from "../language";
+import { type CompoundStatement, type Expression, IdentifierPrimaryExpression, VariableDeclaration } from "../language";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByVariableError,
-	InvalidArithmeticOperationTypeError,
+	InvalidAmountOfArgumentsError,
 	InvalidAssignmentError,
+	InvalidConversionTypeError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
+	UndefinedConstantError,
 	UndefinedIdentifierError,
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError,
-	InvalidAmountOfArgumentsError,
-	InvalidConversionTypeError,
-	UndefinedConstantError,
 } from "../../../errors";
-import {
-	kipperPlusOperator,
-	kipperStrLikeTypes,
-	kipperSupportedConversions,
-	type KipperRef,
-	type KipperArithmeticOperator,
-	type KipperFunction,
-	type KipperType,
-} from "../const";
+import { type KipperFunction, type KipperRef, kipperSupportedConversions, type KipperType } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
@@ -141,12 +126,12 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		};
 
 		// Always check in the global scope
-		if (this.programCtx.globalScope.localVariables.find(check)) {
+		if (this.programCtx.globalScope.variables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 
 		// Also check in the local scope if it was defined
-		if (scopeCtx && scopeCtx?.localScope.localVariables.find(check)) {
+		if (scopeCtx && scopeCtx?.localScope.variables.find(check)) {
 			throw this.assertError(new VariableDefinitionAlreadyExistsError(identifier));
 		}
 	}
@@ -163,37 +148,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			return v instanceof ScopeFunctionDeclaration && v.identifier === identifier && v.isDefined;
 		};
 
-		if (this.programCtx.globalScope.localFunctions.find(check)) {
+		if (this.programCtx.globalScope.functions.find(check)) {
 			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param exp1 The first expression.
-	 * @param exp2 The second expression.
-	 * @param op The arithmetic operation that is performed.
-	 * @since 0.7.0
-	 */
-	public arithmeticExpressionValid(
-		exp1: Expression<ExpressionSemantics>,
-		exp2: Expression<ExpressionSemantics>,
-		op: KipperArithmeticOperator,
-	): void {
-		const exp1Type = exp1.getSemanticData().evaluatedType;
-		const exp2Type = exp2.getSemanticData().evaluatedType;
-		if (exp1Type !== exp2Type) {
-			// String-like types can use '+' to concat strings
-			if (
-				op === kipperPlusOperator &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
-			) {
-				return;
-			}
-
-			// If types are not matching, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationTypeError(exp1Type, exp2Type));
 		}
 	}
 

@@ -18,7 +18,9 @@ import type {
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
+	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -31,16 +33,15 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SelectionStatement,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
-	VariableDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
-	GenericTypeSpecifierExpression,
-	SingleTypeSpecifierExpression,
 	TypeofTypeSpecifierExpression,
+	VariableDeclaration,
 } from "../semantics";
+import { IfStatement } from "../semantics";
 import type { CompilableASTNode } from "../parser";
 
 /**
@@ -69,9 +70,14 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract compoundStatement: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>>;
 
 	/**
-	 * Translates a {@link SelectionStatement} into a specific language.
+	 * Translates a {@link IfStatement} into a specific language.
 	 */
-	public abstract selectionStatement: TargetASTNodeCodeGenerator<SelectionStatement, Array<TranslatedCodeLine>>;
+	public abstract ifStatement: TargetASTNodeCodeGenerator<IfStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link SwitchStatement} into a specific language.
+	 */
+	public abstract switchStatement: TargetASTNodeCodeGenerator<SwitchStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ExpressionStatement} into a specific language.
@@ -145,10 +151,10 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract boolPrimaryExpression: TargetASTNodeCodeGenerator<BoolPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link SingleTypeSpecifierExpression} into a specific language.
+	 * Translates a {@link IdentifierTypeSpecifierExpression} into a specific language.
 	 */
-	public abstract singleTypeSpecifierExpression: TargetASTNodeCodeGenerator<
-		SingleTypeSpecifierExpression,
+	public abstract identifierTypeSpecifierExpression: TargetASTNodeCodeGenerator<
+		IdentifierTypeSpecifierExpression,
 		TranslatedExpression
 	>;
 

@@ -6,6 +6,7 @@
  */
 import type { compilableNodeParent, SemanticData } from "../../parser";
 import {
+	CompilableASTNode,
 	CompoundStatementContext,
 	DeclarationContext,
 	DeclaratorContext,
@@ -17,12 +18,11 @@ import {
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import type { Expression, SingleTypeSpecifierExpression } from "./expressions";
+import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { UnableToDetermineMetadataError } from "../../../errors";
-import { CompilableASTNode } from "../../parser";
 import { Scope } from "../../scope";
 
 /**
@@ -31,25 +31,29 @@ import { Scope } from "../../scope";
 export type antlrDefinitionCtxType = FunctionDeclarationContext | ParameterDeclarationContext | DeclarationContext;
 
 /**
- * Fetches the handler for the specified {@link antlrDefinitionCtxType}.
- * @param antlrCtx The context instance that the handler class should be fetched for.
- * @param parent The file context class that will be assigned to the instance.
+ * Factory class which generates definition class instances using {@link DefinitionASTNodeFactory.create DefinitionASTNodeFactory.create()}.
+ * @since 0.9.0
  */
-export function getDefinitionInstance(
-	antlrCtx: antlrDefinitionCtxType,
-	parent: compilableNodeParent,
-): Declaration<any> {
-	if (antlrCtx instanceof FunctionDeclarationContext) {
-		return new FunctionDeclaration(antlrCtx, parent);
-	} else if (antlrCtx instanceof ParameterDeclarationContext) {
-		return new ParameterDeclaration(antlrCtx, parent);
-	} else {
-		return new VariableDeclaration(antlrCtx, parent);
+export class DefinitionASTNodeFactory {
+	/**
+	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
+	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
+	 * @param parent The file context class that will be assigned to the instance.
+	 * @since 0.9.0
+	 */
+	public static create(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent): Declaration<any> {
+		if (antlrRuleCtx instanceof FunctionDeclarationContext) {
+			return new FunctionDeclaration(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
+			return new ParameterDeclaration(antlrRuleCtx, parent);
+		} else {
+			return new VariableDeclaration(antlrRuleCtx, parent);
+		}
 	}
 }
 
 /**
- * Semantics for {@link FunctionDeclaration}.
+ * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.5.0
  */
 export interface DeclarationSemantics {
@@ -63,22 +67,22 @@ export interface DeclarationSemantics {
 /**
  * Base Declaration class that represents a value or function declaration or definition in Kipper.
  *
- * Any declarations in Kipper will be registered in a {@link KipperScope} or be associated with another parent
- * declaration, like {@link ParameterDeclaration parameter declarations} in
- * {@link FunctionDeclaration function declarations}.
+ * Any function or variable declaration in Kipper will be registered in a {@link Scope}, which will define the
+ * visibility of the variable. The only exception is a {@link ParameterDeclaration}, which is bound to a function
+ * and its local scope.
  * @since 0.1.0
  */
 export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableASTNode<Semantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
-	protected constructor(antlrCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	protected constructor(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 
 		// Manually add the child to the parent
 		parent.addNewChild(this);
@@ -99,7 +103,7 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 }
 
 /**
- * Semantics for {@link ParameterDeclaration}.
+ * Semantics for AST Node {@link ParameterDeclaration}.
  * @since 0.5.0
  */
 export interface ParameterDeclarationSemantics extends DeclarationSemantics {
@@ -121,15 +125,15 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  */
 export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
-	constructor(antlrCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -163,7 +167,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 }
 
 /**
- * Semantics for {@link FunctionDeclaration}.
+ * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
 export interface FunctionDeclarationSemantics {
@@ -199,15 +203,15 @@ export interface FunctionDeclarationSemantics {
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
-	constructor(antlrCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -222,7 +226,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getTokenChildren();
+		const children = this.getAntlrRuleChildren();
 
 		// Fetch context instances
 		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
@@ -232,9 +236,9 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
-		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
+		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
 
-		// Throw an error if children are incomplete
+		// Ensure that the children are fully present and not undefined
 		if (!declaratorCtx || !typeSpecifier) {
 			throw new UnableToDetermineMetadataError();
 		}
@@ -273,7 +277,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 }
 
 /**
- * Semantics for {@link VariableDeclaration}.
+ * Semantics for AST Node {@link VariableDeclaration}.
  * @since 0.3.0
  */
 export interface VariableDeclarationSemantics extends SemanticData {
@@ -318,17 +322,17 @@ export interface VariableDeclarationSemantics extends SemanticData {
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
 	/**
-	 * The private field '_antlrCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrCtx}.
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
 	protected override _children: Array<Expression<any>>;
 
-	constructor(antlrCtx: DeclarationContext, parent: compilableNodeParent) {
-		super(antlrCtx, parent);
-		this._antlrRuleCtx = antlrCtx;
+	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
 	}
 
@@ -348,7 +352,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children: Array<ParseTree> = this.getTokenChildren();
+		const children: Array<ParseTree> = this.getAntlrRuleChildren();
 
 		// Determine the ctx instances
 		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
@@ -363,7 +367,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
-		const typeSpecifier: SingleTypeSpecifierExpression = <SingleTypeSpecifierExpression>this.children[0];
+		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.

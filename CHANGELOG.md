@@ -5,6 +5,109 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Syntax support and code generation for if, else-if and else statements
+  ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
+- Code generation of expression lists (e.g. expression statements containing multiple child expressions)
+  ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
+- Code generation for tangled expressions.
+  ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
+- Comparative and relational expressions, which allow for logical operations and comparisons on expressions. List of all
+  supported operators, which can be used between two expressions.
+  - `!=` (Not Equal Operator)
+  - `==` (Equal Operator)
+  - `>` (Greater than Operator)
+  - `>=` (Greater or equal to Operator)
+  - `<` (Less than Operator)
+  - `<=` (Less or equal to Operator)
+- Logical expressions, which allow for the chaining and combination of expressions and conditions. List of all available
+  supported operators, which can be used between two expressions/conditions:
+  - `&&` (Logical And Operator)
+  - `||` (Logical Or Operator)
+- Operator modified expressions, which allow for the modification of an expression using a specific operator. List
+  of all supported operators:
+  - `!` (Logical NOT Operator)
+  - `+` (Plus Operator)
+  - `-` (Minus Operator)
+- Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
+  hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
+- New errors:
+  - `InvalidRelationalComparisonTypeError`, which is thrown whenever a relational comparison is used with types that
+    are not comparable.
+  - `InvalidUnaryExpressionTypeError`, which is thrown whenever a unary expression has an operand with an invalid type.
+- New classes:
+  - `IfStatement`, which represents if, if-else and else statements. Chained if, else-if and else statements are
+    structured like a tree, where the top if statement represents the root and each following if statement is a
+    section/branch of the tree.
+  - `TypeSpecifierExpression`, which is an abstract class used to provide the commonality between the
+    different type specifier expressions.
+  - `ComparativeExpression`, which is an abstract class used to provide the commonality between the
+    different comparative expressions.
+  - `LogicalExpression`, which is an abstract class used to provide the commonality between the
+    different logical expressions.
+  - `UnaryExpression`, which is an abstract class used to provide the commonality between the
+    different unary expressions.
+  - `SwitchStatement`, which represents a switch selection statement.
+  - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
+    a `antlrRuleCtx`.
+  - `ExpressionASTNodeFactory`, which is a factory that creates an expression instance based on
+    a `antlrRuleCtx`.
+  - `StatementASTNodeFactory`, which is a factory that creates a statement instance based on
+    a `antlrRuleCtx`.
+- New types:
+  - `KipperUnaryOperator`
+  - `KipperLogicalAndOperator`
+  - `KipperLogicalOrOperator`
+  - `KipperLogicalOperator`
+  - `KipperEqualityOperator`
+  - `KipperRelationalOperator`
+  - `KipperComparativeOperator`
+  - `KipperUnaryModifierOperator`
+  - `KipperIncrementOrDecrementOperator`
+  - `KipperNegateOperator`
+  - `KipperSignOperator`
+- New constants:
+  - `kipperUnaryOperators`
+  - `kipperLogicalAndOperator`
+  - `kipperLogicalOrOperator`
+  - `kipperLogicalOperator`
+  - `kipperEqualityOperators`
+  - `kipperRelationalOperators`
+  - `kipperComparativeOperators`
+  - `kipperIncrementOrDecrementOperators`
+  - `kipperNegateOperators`
+  - `kipperSignOperators`
+- New interfaces:
+  - `IfStatementSemantics`, which contains the semantic data of an if-statement.
+  - `ComparativeExpressionSemantics`, which defines the semantic data of a comparative expression.
+  - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
+  - `UnaryExpressionSemantics`, which defines the base semantics for every unary expression.
+- New functions:
+  - `KipperTypeChecker.validRelationalExpression`.
+  - `KipperTypeChecker.validUnaryExpression`.
+
+### Changed
+
+- Moved `KipperSemanticChecker.arithmeticExpressionValid()` to `KipperTypeChecker` and renamed it to
+  `validArithmeticExpression()`.
+- Renamed Antlr4 rule `singleTypeSpecifier` to `identifierTypeSpecifier` and its associated
+  class to `IdentifierTypeSpecifierExpression`.
+- Renamed:
+  - `SingleTypeSpecifierExpression` to `IdentifierTypeSpecifierExpression`.
+  - `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
+  - `Scope.localVariables` to `variables`.
+  - `Scope.localFunctions` to `functions`.
+
+### Removed
+
+- Deprecated and replaced functions:
+  - `getDefinitionInstance`, which was replaced with `DefinitionASTNodeFactory`.
+  - `getExpressionInstance`, which was replaced with `ExpressionASTNodeFactory`.
+  - `getStatementInstance`, which was replaced with `StatementASTNodeFactory`.
+
 ## [0.8.3] - 2022-06-18
 
 ### Added
@@ -80,7 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     This function should also allow the use of built-in variables in the future and also provide a basis for dynamic
     dependency generation for the Kipper built-ins. This means that targets can now specify themselves how the
     built-in should be generated and can handle all type conversions, internal prefixes, name mangling etc. themselves.
-  - `SingleTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
+  - `identifierTypeSpecifierExpression`, which represents a single constant type identifier, such as `str`.
   - `GenericTypeSpecifierExpression`, which represents a generic type constant, such as `type<T>`. (Functionality not
     implemented yet! Planned for v0.12)
   - `TypeofTypeSpecifierExpression`, which represents a dynamically evaluated type, such as `typeof("string")`.

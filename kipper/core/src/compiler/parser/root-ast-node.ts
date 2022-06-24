@@ -5,9 +5,7 @@
  * @since 0.8.0
  */
 import { KipperProgramContext } from "../program-ctx";
-import { Declaration } from "../semantics";
-import { Statement } from "../semantics";
-import { TranslatedCodeLine } from "../semantics";
+import { Declaration, Statement, TranslatedCodeLine } from "../semantics";
 import { NoSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 

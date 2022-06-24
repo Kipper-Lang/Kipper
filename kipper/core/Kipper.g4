@@ -27,7 +27,7 @@ endOfLine
     ;
 
 primaryExpression
-    :   '(' expression ')' # tangledPrimaryExpression
+    :   '(' assignmentExpression ')' # tangledPrimaryExpression
     |   (True | False) #boolPrimaryExpression
     | 	Identifier # identifierPrimaryExpression
     |   CharacterConstant #characterPrimaryExpression
@@ -146,7 +146,7 @@ initDeclarator
 
 // TODO! Implement the following type specifiers as expressions
 typeSpecifier
-    :   Identifier # singleTypeSpecifier // for single items, like 'num'
+    :   Identifier # identifierTypeSpecifier // for simple type identifiers, like 'num'
     |   Identifier '<' Identifier '>' # genericTypeSpecifier // for lists
     |   'typeof' '('  Identifier  ')' # typeofTypeSpecifier // typeof another variable
     ;
@@ -374,23 +374,28 @@ DecimalConstant
 
 fragment
 BinaryConstant
-		:		'0' [bB] [0-1]+
+		:		'0' [bB] BinaryDigit+
 		;
 
 fragment
 OctalConstant
-    :   '0' [oO] OctalDigit*
+    :   '0' [oO] OctalDigit+
     ;
 
 fragment
 HexadecimalConstant
-    :    '0' [xX] HexadecimalDigitSequence
+    :    '0' [xX] HexadecimalDigit+
     ;
 
 fragment
 NonzeroDigit
     :   [1-9]
     ;
+
+fragment
+BinaryDigit
+	  :		[0-1]
+	  ;
 
 fragment
 OctalDigit
@@ -430,11 +435,6 @@ Sign
 
 DigitSequence
     :   Digit+
-    ;
-
-fragment
-HexadecimalDigitSequence
-    :   HexadecimalDigit+
     ;
 
 CharacterConstant

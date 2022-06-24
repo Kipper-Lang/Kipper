@@ -28,8 +28,7 @@ View a list of all available NPM versions [here](https://www.npmjs.com/package/@
 Reporting a vulnerability or issue can be done under
 the [issues page](https://github.com/Luna-Klatzer/Kipper/issues/new/choose).
 Mark the issue as a bug report, and follow the guidelines inside the issue editor. Be as detailed as possible to avoid
-too many
-followup questions.
+too many followup questions.
 
-Remember though when reporting an issue, this project is in build-up and development, so it will almost definitely not
-be a high priority for development.
+Remember when reporting an issue, this project is in active build-up and development, so bug fixes
+may take some time to be done and released in new versions.

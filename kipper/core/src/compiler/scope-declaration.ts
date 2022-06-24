@@ -5,12 +5,12 @@
  * @since 0.1.0
  */
 import type {
-	KipperReturnType,
-	KipperStorageType,
-	KipperType,
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
+	KipperReturnType,
+	KipperStorageType,
+	KipperType,
 	ParameterDeclaration,
 	VariableDeclaration,
 	VariableDeclarationSemantics,

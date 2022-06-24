@@ -3,14 +3,10 @@
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -682,7 +678,7 @@ export class KipperParser extends Parser {
 						this.state = 126;
 						this.match(KipperParser.LeftParen);
 						this.state = 127;
-						this.expression();
+						this.assignmentExpression();
 						this.state = 128;
 						this.match(KipperParser.RightParen);
 					}
@@ -2034,7 +2030,7 @@ export class KipperParser extends Parser {
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 25, this._ctx)) {
 				case 1:
-					_localctx = new SingleTypeSpecifierContext(_localctx);
+					_localctx = new IdentifierTypeSpecifierContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 315;
@@ -3260,7 +3256,7 @@ export class KipperParser extends Parser {
 		"\x02vw\x03\x02\x02\x02wx\x07\x1E\x02\x02xy\x07\x03\x02\x02y|\x05<\x1F" +
 		"\x02z}\x05L'\x02{}\x05\n\x06\x02|z\x03\x02\x02\x02|{\x03\x02\x02\x02" +
 		"}\t\x03\x02\x02\x02~\x7F\x07\x04\x02\x02\x7F\v\x03\x02\x02\x02\x80\x81" +
-		"\x07\x1D\x02\x02\x81\x82\x05.\x18\x02\x82\x83\x07\x1E\x02\x02\x83\x96" +
+		"\x07\x1D\x02\x02\x81\x82\x05*\x16\x02\x82\x83\x07\x1E\x02\x02\x83\x96" +
 		"\x03\x02\x02\x02\x84\x96\t\x02\x02\x02\x85\x96\x07<\x02\x02\x86\x96\x07" +
 		"@\x02\x02\x87\x96\x07B\x02\x02\x88\x96\x07A\x02\x02\x89\x96\t\x03\x02" +
 		"\x02\x8A\x8B\x07\x1F\x02\x02\x8B\x90\x050\x19\x02\x8C\x8D\x07.\x02\x02" +
@@ -3666,8 +3662,8 @@ export class TangledPrimaryExpressionContext extends PrimaryExpressionContext {
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
-	public expression(): ExpressionContext {
-		return this.getRuleContext(0, ExpressionContext);
+	public assignmentExpression(): AssignmentExpressionContext {
+		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
@@ -5399,7 +5395,7 @@ export class TypeSpecifierContext extends ParserRuleContext {
 		super.copyFrom(ctx);
 	}
 }
-export class SingleTypeSpecifierContext extends TypeSpecifierContext {
+export class IdentifierTypeSpecifierContext extends TypeSpecifierContext {
 	public Identifier(): TerminalNode {
 		return this.getToken(KipperParser.Identifier, 0);
 	}
@@ -5409,20 +5405,20 @@ export class SingleTypeSpecifierContext extends TypeSpecifierContext {
 	}
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterSingleTypeSpecifier) {
-			listener.enterSingleTypeSpecifier(this);
+		if (listener.enterIdentifierTypeSpecifier) {
+			listener.enterIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitSingleTypeSpecifier) {
-			listener.exitSingleTypeSpecifier(this);
+		if (listener.exitIdentifierTypeSpecifier) {
+			listener.exitIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitSingleTypeSpecifier) {
-			return visitor.visitSingleTypeSpecifier(this);
+		if (visitor.visitIdentifierTypeSpecifier) {
+			return visitor.visitIdentifierTypeSpecifier(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
