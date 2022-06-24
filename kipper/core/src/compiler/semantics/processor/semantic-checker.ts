@@ -20,7 +20,7 @@ import {
 	UndefinedConstantError,
 	UndefinedIdentifierError,
 	UnknownIdentifierError,
-	VariableDefinitionAlreadyExistsError
+	VariableDefinitionAlreadyExistsError,
 } from "../../../errors";
 import { type KipperFunction, type KipperRef, kipperSupportedConversions, type KipperType } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";

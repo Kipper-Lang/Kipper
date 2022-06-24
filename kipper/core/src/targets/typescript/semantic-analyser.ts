@@ -37,7 +37,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../../compiler";
 import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
 import { ReservedIdentifierOverwriteError } from "../../errors";

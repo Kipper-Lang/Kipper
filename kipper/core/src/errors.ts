@@ -9,7 +9,7 @@ import type {
 	InputMismatchException,
 	LexerNoViableAltException,
 	NoViableAltException,
-	ParserRuleContext
+	ParserRuleContext,
 } from "antlr4ts";
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";

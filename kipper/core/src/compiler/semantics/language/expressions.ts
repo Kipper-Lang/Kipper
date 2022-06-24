@@ -31,7 +31,7 @@ import {
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
-	UnaryOperatorContext
+	UnaryOperatorContext,
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
@@ -63,7 +63,7 @@ import {
 	KipperUnaryModifierOperator,
 	kipperUnaryModifierOperators,
 	KipperUnaryOperator,
-	type TranslatedExpression
+	type TranslatedExpression,
 } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";

@@ -7,7 +7,7 @@ import type {
 	CompoundStatement,
 	KipperTargetSemanticAnalyser,
 	TargetASTNodeSemanticAnalyser,
-	TranslatedCodeLine
+	TranslatedCodeLine,
 } from "../semantics";
 import type { KipperParser } from "./index";
 import type { KipperProgramContext } from "../program-ctx";

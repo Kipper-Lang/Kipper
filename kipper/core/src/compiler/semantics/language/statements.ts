@@ -18,7 +18,7 @@ import {
 	CompoundStatementContext,
 	ExpressionStatementContext,
 	IterationStatementContext,
-	JumpStatementContext
+	JumpStatementContext,
 } from "../../parser";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";

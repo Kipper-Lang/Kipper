@@ -54,7 +54,7 @@ import type {
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
 	TypeSpecifierContext,
-	UnaryOperatorContext
+	UnaryOperatorContext,
 } from "./index";
 import { IfStatementContext, SwitchStatementContext } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
@@ -68,7 +68,7 @@ import {
 	Expression,
 	ExpressionASTNodeFactory,
 	Statement,
-	StatementASTNodeFactory
+	StatementASTNodeFactory,
 } from "../semantics";
 import { RootASTNode } from "./root-ast-node";
 import { CompilableASTNode } from "./compilable-ast-node";

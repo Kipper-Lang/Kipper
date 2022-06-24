@@ -5,7 +5,7 @@ import {
 	KipperLogger,
 	KipperParseStream,
 	KipperSyntaxError,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
@@ -570,7 +570,7 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("4;"), "Expected different TypeScript code");
+					assert(instance.write().includes("+4;"), "Expected different TypeScript code");
 				});
 
 				it("unary minus", async () => {

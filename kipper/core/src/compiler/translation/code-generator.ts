@@ -39,7 +39,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../semantics";
 import { IfStatement } from "../semantics";
 import type { CompilableASTNode } from "../parser";

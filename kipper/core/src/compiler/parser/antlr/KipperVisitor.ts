@@ -90,7 +90,7 @@ import {
 	TypeofTypeSpecifierContext,
 	TypeSpecifierContext,
 	UnaryExpressionContext,
-	UnaryOperatorContext
+	UnaryOperatorContext,
 } from "./KipperParser";
 
 /**

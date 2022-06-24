@@ -13,7 +13,7 @@ import type {
 	KipperType,
 	ParameterDeclaration,
 	VariableDeclaration,
-	VariableDeclarationSemantics
+	VariableDeclarationSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";

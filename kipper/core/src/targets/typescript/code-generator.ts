@@ -47,7 +47,7 @@ import {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "../../utils";

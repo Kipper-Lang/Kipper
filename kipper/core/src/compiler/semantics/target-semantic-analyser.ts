@@ -31,7 +31,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "./language";
 import { IfStatement } from "./language";
 import type { CompilableASTNode } from "../parser";

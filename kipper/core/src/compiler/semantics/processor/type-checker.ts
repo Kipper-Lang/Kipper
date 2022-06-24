@@ -14,7 +14,7 @@ import {
 	ParameterDeclaration,
 	RelationalExpression,
 	UnaryExpression,
-	UnaryExpressionSemantics
+	UnaryExpressionSemantics,
 } from "../language";
 import {
 	KipperArithmeticOperator,
@@ -23,7 +23,7 @@ import {
 	kipperReturnTypes,
 	kipperStrLikeTypes,
 	type KipperType,
-	kipperTypes
+	kipperTypes,
 } from "../const";
 import {
 	InvalidArgumentTypeError,
@@ -34,7 +34,7 @@ import {
 	InvalidUnaryExpressionTypeError,
 	ReadOnlyAssignmentTypeError,
 	TypeError,
-	UnknownTypeError
+	UnknownTypeError,
 } from "../../../errors";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
