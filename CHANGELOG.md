@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   supported operators, which can be used between two expressions/conditions:
   - `&&` (Logical And Operator)
   - `||` (Logical Or Operator)
+- Operator modified expressions, which allow for the modification of an expression using a specific operator. List 
+  of all supported operators:
+  - `!` (Logical NOT Operator)
+  - `+` (Plus Operator)
+  - `-` (Minus Operator)
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 - New errors:
@@ -42,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     different comparative expressions.
   - `LogicalExpression`, which is an abstract class used provide the commonality between the
     different type logical expressions.
+  - `UnaryExpression`, which is an abstract class used provide the commonality between the
+    different type unary expressions.
   - `SwitchStatement`, which represents a switch selection statement.
   - `DefinitionASTNodeFactory`, which is a factory that creates a definition instance based on
     a `antlrRuleCtx`.
@@ -57,6 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperEqualityOperator`
   - `KipperRelationalOperator`
   - `KipperComparativeOperator`
+  - `KipperUnaryModifierOperator`
+  - `KipperIncrementOrDecrementOperator`
+  - `KipperNegateOperator`
+  - `KipperSignOperator`
 - New constants:
   - `kipperUnaryOperators`
   - `kipperLogicalAndOperator`
@@ -65,13 +76,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `kipperEqualityOperators`
   - `kipperRelationalOperators`
   - `kipperComparativeOperators`
+  - `kipperIncrementOrDecrementOperators`
+  - `kipperNegateOperators`
+  - `kipperSignOperators`
 - New interfaces:
   - `IfStatementSemantics`, which contains the semantic data of an if-statement.
   - `ComparativeExpressionSemantics`, which defines the semantic data of a comparative expression.
   - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
+  - `UnaryExpressionSemantics`, which defines the base semantics for every unary expression.
+- New functions:
+  - `KipperTypeChecker.validRelationalExpression`
+  - `KipperTypeChecker.validUnaryExpression`
 
 ### Changed
 
+- Moved `KipperSemanticChecker.arithmeticExpressionValid()` to `KipperTypeChecker` and renamed it to
+  `validArithmeticExpression()`.
 - Renamed:
   - `SingleTypeSpecifierExpression` to `IdentifierTypeSpecifierExpression`.
   - `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
