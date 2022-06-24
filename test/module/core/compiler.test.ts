@@ -1,11 +1,11 @@
 import { assert } from "chai";
 import {
 	KipperCompiler,
+	KipperCompileResult,
 	KipperLogger,
 	KipperParseStream,
 	KipperSyntaxError,
 	LogLevel,
-	KipperCompileResult,
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
@@ -30,10 +30,11 @@ const assignFile = getFileName("assign.kip");
 const addedHelloWorldFile = getFileName("added-hello-world.kip");
 const assignmentArithmeticsFile = getFileName("assignment-arithmetics.kip");
 const boolFile = getFileName("bool.kip");
-const typeConversion = getFileName("type-conversion.kip");
-const spacedProgram = getFileName("spaced-program.kip");
-const expressionStatements = getFileName("expression-statements.kip");
-const tangledExpressions = getFileName("tangled-expressions.kip");
+const typeConversionFile = getFileName("type-conversion.kip");
+const spacedProgramFile = getFileName("spaced-program.kip");
+const expressionStatementsFile = getFileName("expression-statements.kip");
+const tangledExpressionsFile = getFileName("tangled-expressions.kip");
+const ifStatementsFile = getFileName("if-statements.kip");
 
 describe("KipperCompiler", () => {
 	describe("constructor", () => {
@@ -144,19 +145,25 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Type conversion", async () => {
-				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
 
 			it("Spaced program", async () => {
-				const fileContent = (await fs.readFile(spacedProgram, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(spacedProgramFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
 
 			it("Expression statements", async () => {
-				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				await compiler.syntaxAnalyse(stream);
+			});
+
+			it("If statements", async () => {
+				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				await compiler.syntaxAnalyse(stream);
 			});
@@ -191,8 +198,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 1, "Expected one global function");
-				assert(instance.programCtx.globalScope.localVariables.length === 3, "Expected three global variables");
+				assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
+				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
 				assert(instance.programCtx.builtIns.length === 1, "Expected a single global function");
 			});
 
@@ -204,8 +211,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 
 				// Compile the program to JavaScript and evaluate it
 				const jsCode = ts.transpile(instance.write());
@@ -231,8 +238,8 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 
 				// Compile the program to JavaScript and evaluate it
 				const jsCode = ts.transpile(instance.write());
@@ -259,8 +266,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 1, "Expected one global function");
-				assert(instance.programCtx.globalScope.localVariables.length === 3, "Expected three global variables");
+				assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
+				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
 			});
 
 			it("Single Function definition", async () => {
@@ -271,8 +278,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 1, "Expected a single global function");
-				assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+				assert(instance.programCtx.globalScope.functions.length === 1, "Expected a single global function");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 			});
 
 			it("Multi Function definition", async () => {
@@ -283,8 +290,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 3, "Expected three global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+				assert(instance.programCtx.globalScope.functions.length === 3, "Expected three global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 			});
 
 			it("Variable Declaration", async () => {
@@ -295,8 +302,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 1, "Expected one global variable");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
 			});
 
 			describe("Arithmetics", () => {
@@ -308,8 +315,8 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 					assert(instance.write().includes(fileContent), "Expected compiled code to not change");
 				});
 
@@ -321,8 +328,8 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -349,8 +356,8 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.localVariables.length === 1, "Expected one global variable");
+					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -377,8 +384,8 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 1, "Expected one global variable");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
 			});
 
 			it("Bool", async () => {
@@ -389,19 +396,19 @@ describe("KipperCompiler", () => {
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 2, "Expected two global variables");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 2, "Expected two global variables");
 			});
 
 			it("Type conversion", async () => {
-				const fileContent = (await fs.readFile(typeConversion, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 4, "Expected four global variables");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 4, "Expected four global variables");
 
 				const code = instance.write();
 				assert(code);
@@ -412,14 +419,14 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Expression statements", async () => {
-				const fileContent = (await fs.readFile(expressionStatements, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 3, "Expected three global variable");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variable");
 
 				const code = instance.write();
 				assert(code);
@@ -428,15 +435,15 @@ describe("KipperCompiler", () => {
 			});
 
 			it("Tangled expressions", async () => {
-				const fileContent = (await fs.readFile(tangledExpressions, "utf8" as BufferEncoding)).toString();
+				const fileContent = (await fs.readFile(tangledExpressionsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
-				assert(instance.programCtx.globalScope.localFunctions.length === 0, "Expected no global functions");
-				assert(instance.programCtx.globalScope.localVariables.length === 0, "Expected no global variables");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
 
 				// Compile the program to JavaScript and evaluate it
 				const jsCode = ts.transpile(instance.write());
@@ -453,10 +460,42 @@ describe("KipperCompiler", () => {
 				// Restore old console.log
 				console.log = prevLog;
 			});
+
+			it("If statements", async () => {
+				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
+				const stream = new KipperParseStream(fileContent);
+				const instance: KipperCompileResult = await compiler.compile(stream);
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.internals);
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+				assert(instance.programCtx.globalScope.variables.length === 0, "Expected two global variables");
+
+				const code = instance.write();
+				assert(code);
+				assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
+				assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+
+				// Compile the program to JavaScript and evaluate it
+				const jsCode = ts.transpile(instance.write());
+
+				// Overwrite built-in to access output
+				const prevLog = console.log;
+				console.log = (message: string) => {
+					assert("Hello world!" === message, "Expected 'Hello world!'");
+				};
+
+				// Evaluate expression
+				eval(jsCode);
+
+				// Restore old console.log
+				console.log = prevLog;
+			});
 		});
 
 		describe("basics", () => {
-			describe("Declaration", () => {
+			describe("declaration", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -467,7 +506,7 @@ describe("KipperCompiler", () => {
 				});
 			});
 
-			describe("Definition", () => {
+			describe("definition", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num = 4;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -487,7 +526,7 @@ describe("KipperCompiler", () => {
 				});
 			});
 
-			describe("Assignment", () => {
+			describe("assignment", () => {
 				it("num", async () => {
 					const stream = new KipperParseStream("var x: num = 4;\nx = 5;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -536,6 +575,437 @@ describe("KipperCompiler", () => {
 					assert(instance.write().includes('__kipper_print("x");'), "Expected different TypeScript code");
 					assert(instance.write().includes('__kipper_print("y");'), "Expected different TypeScript code");
 					assert(instance.write().includes('__kipper_print("z");'), "Expected different TypeScript code");
+				});
+			});
+
+			describe("Unary Operators", () => {
+				it("unary plus", async () => {
+					const stream = new KipperParseStream("+4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("+4;"), "Expected different TypeScript code");
+				});
+
+				it("unary minus", async () => {
+					const stream = new KipperParseStream("-4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("-4;"), "Expected different TypeScript code");
+				});
+
+				// Technically, this is a logical operator, but it's considered a unary operator in Kipper, as it modifies
+				// the value of the operand.
+				it("!", async () => {
+					const stream = new KipperParseStream("!true;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("!true;"), "Expected different TypeScript code");
+				});
+			});
+
+			describe("logical expressions", () => {
+				describe("Logical AND", () => {
+					it("true && true", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 && x < 5) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 3 && x < 5) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = (message: string) => {
+							assert(message === "Works", "Expected different output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("true && false", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 && x < 2) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 3 && x < 2) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = () => {
+							assert(false, "Expected no output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("false && true", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 && x < 3) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 5 && x < 3) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = () => {
+							assert(false, "Expected no output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("false && false", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 && x < 8) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 5 && x < 8) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = () => {
+							assert(false, "Expected no output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+				});
+
+				describe("Logical OR", () => {
+					it("true || true", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 || x < 5) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 3 || x < 5) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = (message: string) => {
+							assert(message === "Works", "Expected different output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("true || false", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 || x < 2) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 3 || x < 2) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = (message: string) => {
+							assert(message === "Works", "Expected different output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("false || true", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 || x < 3) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 5 || x < 3) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = (message: string) => {
+							assert(message === "Works", "Expected different output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+
+					it("false || false", async () => {
+						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 || x > 8) { call print("Works"); }');
+						const instance: KipperCompileResult = await compiler.compile(stream);
+
+						assert(instance.programCtx);
+						assert(instance.programCtx.stream === stream, "Expected matching streams");
+						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+						assert(
+							instance.write().includes('if (x > 5 || x > 8) {\n  __kipper_print("Works");\n}'),
+							"Expected different TypeScript code",
+						);
+
+						// Compile the program to JavaScript and check the output.
+						const jsCode = ts.transpile(instance.write());
+
+						// Overwrite built-in to access output
+						const prevLog = console.log;
+						console.log = () => {
+							assert(false, "Expected no output");
+						};
+
+						// Evaluate expression
+						eval(jsCode);
+
+						// Restore old console.log
+						console.log = prevLog;
+					});
+				});
+			});
+
+			describe("comparisons", () => {
+				it("==", async () => {
+					const stream = new KipperParseStream('var x: num = 4;\nif (x == 4) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x === 4) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
+				});
+
+				it("!=", async () => {
+					const stream = new KipperParseStream('var x: num = 4;\nif (x != 5) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x !== 5) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
+				});
+
+				it("<", async () => {
+					const stream = new KipperParseStream('var x: num = 4;\nif (x < 5) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x < 5) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
+				});
+
+				it("<=", async () => {
+					const stream = new KipperParseStream('var x: num = 4;\nif (x <= 5) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x <= 5) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
+				});
+
+				it(">", async () => {
+					const stream = new KipperParseStream('var x: num = 5;\nif (x > 4) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x > 4) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
+				});
+
+				it(">=", async () => {
+					const stream = new KipperParseStream('var x: num = 5;\nif (x >= 4) call print("Works");');
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
+					assert(
+						instance.write().includes('if (x >= 4) {\n  __kipper_print("Works");\n}'),
+						"Expected different TypeScript code",
+					);
+
+					// Compile the program to JavaScript and check the output.
+					const jsCode = ts.transpile(instance.write());
+
+					// Overwrite built-in to access output
+					const prevLog = console.log;
+					console.log = (message: string) => {
+						assert(message === "Works", "Expected different output");
+					};
+
+					// Evaluate expression
+					eval(jsCode);
+
+					// Restore old console.log
+					console.log = prevLog;
 				});
 			});
 		});

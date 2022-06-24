@@ -3,14 +3,10 @@
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -2034,7 +2030,7 @@ export class KipperParser extends Parser {
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 25, this._ctx)) {
 				case 1:
-					_localctx = new SingleTypeSpecifierContext(_localctx);
+					_localctx = new IdentifierTypeSpecifierContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 315;
@@ -5399,7 +5395,7 @@ export class TypeSpecifierContext extends ParserRuleContext {
 		super.copyFrom(ctx);
 	}
 }
-export class SingleTypeSpecifierContext extends TypeSpecifierContext {
+export class IdentifierTypeSpecifierContext extends TypeSpecifierContext {
 	public Identifier(): TerminalNode {
 		return this.getToken(KipperParser.Identifier, 0);
 	}
@@ -5409,20 +5405,20 @@ export class SingleTypeSpecifierContext extends TypeSpecifierContext {
 	}
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterSingleTypeSpecifier) {
-			listener.enterSingleTypeSpecifier(this);
+		if (listener.enterIdentifierTypeSpecifier) {
+			listener.enterIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitSingleTypeSpecifier) {
-			listener.exitSingleTypeSpecifier(this);
+		if (listener.exitIdentifierTypeSpecifier) {
+			listener.exitIdentifierTypeSpecifier(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitSingleTypeSpecifier) {
-			return visitor.visitSingleTypeSpecifier(this);
+		if (visitor.visitIdentifierTypeSpecifier) {
+			return visitor.visitIdentifierTypeSpecifier(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

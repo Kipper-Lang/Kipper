@@ -443,11 +443,31 @@ export class InvalidConversionTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a variable type is used that is unknown the kipper language.
+ * Error that is thrown whenever a variable type is used that is unknown to the program.
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Unknown type '${type}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a relational comparison is used with types that are not comparable.
+ * @since 0.9.0
+ */
+export class InvalidRelationalComparisonTypeError extends TypeError {
+	constructor(type1: string, type2: string) {
+		super(`Type '${type1}' is not comparable to type '${type2}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a unary operator is used with an expression of an invalid type.
+ * @since 0.9.0
+ */
+export class InvalidUnaryExpressionTypeError extends TypeError {
+	constructor(operator: string, type: string) {
+		super(`Unary operator '${operator}' is not allowed for type '${type}'.`);
 	}
 }
 

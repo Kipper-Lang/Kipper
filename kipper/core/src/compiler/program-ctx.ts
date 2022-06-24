@@ -7,15 +7,13 @@
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
-import { TranslatedCodeLine, Expression } from "./semantics";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
+import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperSemanticChecker } from "./semantics";
-import { KipperTypeChecker } from "./semantics";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { Reference } from "./reference";
 import { GlobalScope } from "./global-scope";
@@ -45,10 +43,10 @@ export class KipperProgramContext {
 	private _compiledCode: Array<Array<string>> | undefined;
 
 	/**
-	 * Represents the compilation translation for the program. This contains the
-	 * {@link KipperTargetSemanticAnalyser}, which performs semantic analysis
-	 * specific for the translation, and {@link KipperTargetCodeGenerator}, which
-	 * translates the Kipper code into a translation language.
+	 * Represents the compilation translation target for the program. This contains the:
+	 * - {@link KipperTargetSemanticAnalyser}, which performs semantic analysis specific for the target.
+	 * - {@link KipperTargetCodeGenerator}, which translates the Kipper code (AST) into another language.
+	 * - {@link KipperTargetBuiltInGenerator}, which generates the internal and built-in functions for the target.
 	 */
 	public readonly target: KipperCompileTarget;
 
@@ -91,9 +89,9 @@ export class KipperProgramContext {
 
 	/**
 	 * Contains all the internal functions, which are used by Kipper to provide internal functionality. These
-	 * internal built-ins are commonly used to provide the functionality for keywords and other internal logic.
+	 * internal built-ins are commonly used to provide the logic for keywords and other internal logic.
 	 *
-	 * This contains *every* internal functions that also must be implemented by every target in the
+	 * This contains *every* internal functions that also must be implemented by the {@link this.target target's}
 	 * {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.8.0
 	 */

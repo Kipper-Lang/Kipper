@@ -111,10 +111,10 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 
 	/**
 	 * Returns the children of the {@link antlrRuleCtx} and throws an error in case they are undefined.
-	 * @throws UnableToDetermineMetadataError If {@link antlrRuleCtx.children} is undefined.
+	 * @throws UnableToDetermineMetadataError if {@link antlrRuleCtx.children} is undefined.
 	 * @since 0.8.0
 	 */
-	public getTokenChildren(): Array<ParseTree> {
+	public getAntlrRuleChildren(): Array<ParseTree> {
 		if (this.antlrRuleCtx.children === undefined) {
 			throw new UnableToDetermineMetadataError();
 		}

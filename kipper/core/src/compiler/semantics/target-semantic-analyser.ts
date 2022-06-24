@@ -14,6 +14,7 @@ import type {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -26,13 +27,13 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	SelectionStatement,
-	SingleTypeSpecifierExpression,
 	StringPrimaryExpression,
+	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "./language";
+import { IfStatement } from "./language";
 import type { CompilableASTNode } from "../parser";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 
@@ -56,9 +57,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract compoundStatement: TargetASTNodeSemanticAnalyser<CompoundStatement>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link SelectionStatement} instances.
+	 * Performs translation-specific semantic analysis for {@link IfStatement} instances.
 	 */
-	public abstract selectionStatement: TargetASTNodeSemanticAnalyser<SelectionStatement>;
+	public abstract ifStatement: TargetASTNodeSemanticAnalyser<IfStatement>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link SwitchStatement} instances.
+	 */
+	public abstract switchStatement: TargetASTNodeSemanticAnalyser<SwitchStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ExpressionStatement} instances.
@@ -126,9 +132,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract boolPrimaryExpression: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link SingleTypeSpecifierExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
 	 */
-	public abstract singleTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<SingleTypeSpecifierExpression>;
+	public abstract identifierTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.

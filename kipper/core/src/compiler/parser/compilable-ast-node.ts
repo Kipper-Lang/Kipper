@@ -3,18 +3,21 @@
  * @since 0.8.0
  */
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import type { TranslatedCodeLine } from "../semantics";
+import type {
+	CompoundStatement,
+	KipperTargetSemanticAnalyser,
+	TargetASTNodeSemanticAnalyser,
+	TranslatedCodeLine,
+} from "../semantics";
 import type { KipperParser } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperCompileTarget } from "../compile-target";
 import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
-import type { KipperTargetSemanticAnalyser, TargetASTNodeSemanticAnalyser } from "../semantics";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
-import type { CompoundStatement } from "../semantics";
-import type { Scope } from "../scope";
 import { ParserASTNode } from "./ast-node";
+import type { Scope } from "../scope";
 
 /**
  * An eligible parent for a compilable node.

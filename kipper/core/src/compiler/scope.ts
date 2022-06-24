@@ -5,7 +5,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { ScopeVariableDeclaration, ScopeFunctionDeclaration } from "./scope-declaration";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
 
 /**
@@ -14,12 +14,12 @@ import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
  * @since 0.8.0
  */
 export abstract class Scope {
-	protected readonly _localFunctions: Array<ScopeFunctionDeclaration>;
-	protected readonly _localVariables: Array<ScopeVariableDeclaration>;
+	protected readonly _functions: Array<ScopeFunctionDeclaration>;
+	protected readonly _variables: Array<ScopeVariableDeclaration>;
 
-	public constructor() {
-		this._localFunctions = [];
-		this._localVariables = [];
+	protected constructor() {
+		this._functions = [];
+		this._variables = [];
 	}
 
 	/**
@@ -29,21 +29,21 @@ export abstract class Scope {
 	 * implemented in the Kipper Parser yet.
 	 * @since 0.8.0
 	 */
-	public get localFunctions(): Array<ScopeFunctionDeclaration> {
-		return this._localFunctions;
+	public get functions(): Array<ScopeFunctionDeclaration> {
+		return this._functions;
 	}
 
 	/**
 	 * All local variables in this scope.
 	 * @since 0.8.0
 	 */
-	public get localVariables(): Array<ScopeVariableDeclaration> {
-		return this._localVariables;
+	public get variables(): Array<ScopeVariableDeclaration> {
+		return this._variables;
 	}
 
 	/**
-	 * Searches for a function or variable with the specific identifier from the {@link localVariables} and
-	 * {@link localFunctions}.
+	 * Searches for a function or variable with the specific identifier from the {@link variables} and
+	 * {@link functions}.
 	 *
 	 * If the identifier is unknown, this function will return undefined.
 	 * @param identifier The identifier to search for.
@@ -54,7 +54,7 @@ export abstract class Scope {
 	}
 
 	/**
-	 * Adds a new variable declaration to the {@link localVariables}.
+	 * Adds a new variable declaration to the {@link variables}.
 	 * @param declaration The declaration to add.
 	 * @returns The generated {@link ScopeVariableDeclaration scope declaration}.
 	 * @since 0.8.0
@@ -62,7 +62,7 @@ export abstract class Scope {
 	public abstract addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration;
 
 	/**
-	 * Searches for a variable with the specific {@link identifier} from the {@link localVariables}.
+	 * Searches for a variable with the specific {@link identifier} from the {@link variables}.
 	 *
 	 * If the identifier is unknown, this function will return undefined.
 	 * @param identifier The identifier to search for.
@@ -71,7 +71,7 @@ export abstract class Scope {
 	public abstract getVariable(identifier: string): ScopeVariableDeclaration | undefined;
 
 	/**
-	 * Adds a new function declaration to the {@link localFunctions}.
+	 * Adds a new function declaration to the {@link functions}.
 	 * @param declaration The declaration to add.
 	 * @returns The generated {@link ScopeFunctionDeclaration scope declaration}.
 	 * @since 0.8.0
@@ -79,7 +79,7 @@ export abstract class Scope {
 	public abstract addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration;
 
 	/**
-	 * Searches for a function with the specific {@link identifier} from the {@link localFunctions}.
+	 * Searches for a function with the specific {@link identifier} from the {@link functions}.
 	 *
 	 * If the identifier is unknown, this function will return undefined.
 	 * @param identifier The identifier to search for.

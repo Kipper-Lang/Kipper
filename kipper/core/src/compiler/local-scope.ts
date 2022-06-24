@@ -1,4 +1,4 @@
-import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "./semantics/language";
+import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "./semantics";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { KipperNotImplementedError } from "../errors";
 import { Scope } from "./scope";
@@ -25,7 +25,7 @@ export class LocalScope extends Scope {
 		this.ctx.programCtx.semanticCheck(this.ctx).variableIdentifierNotDeclared(identifier, this.ctx);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
-		this.localVariables.push(scopeDeclaration);
+		this.variables.push(scopeDeclaration);
 		return scopeDeclaration;
 	}
 
@@ -36,7 +36,7 @@ export class LocalScope extends Scope {
 	}
 
 	public getVariable(identifier: string): ScopeVariableDeclaration | undefined {
-		return this.localVariables.find((i) => i.identifier === identifier);
+		return this.variables.find((i) => i.identifier === identifier);
 	}
 
 	/**
