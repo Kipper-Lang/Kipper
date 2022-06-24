@@ -6,20 +6,13 @@
  * @since 0.7.0
  */
 
-import {
-	type CompoundStatement,
-	type Expression,
-	type ExpressionSemantics,
-	IdentifierPrimaryExpression,
-	VariableDeclaration
-} from "../language";
+import { type CompoundStatement, type Expression, IdentifierPrimaryExpression, VariableDeclaration } from "../language";
 import {
 	BuiltInOverwriteError,
 	FunctionDefinitionAlreadyExistsError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByVariableError,
 	InvalidAmountOfArgumentsError,
-	InvalidArithmeticOperationTypeError,
 	InvalidAssignmentError,
 	InvalidConversionTypeError,
 	InvalidGlobalError,
@@ -29,15 +22,7 @@ import {
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError
 } from "../../../errors";
-import {
-	type KipperArithmeticOperator,
-	type KipperFunction,
-	kipperPlusOperator,
-	type KipperRef,
-	kipperStrLikeTypes,
-	kipperSupportedConversions,
-	type KipperType
-} from "../const";
+import { type KipperFunction, type KipperRef, kipperSupportedConversions, type KipperType } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
@@ -165,35 +150,6 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 
 		if (this.programCtx.globalScope.functions.find(check)) {
 			throw this.assertError(new FunctionDefinitionAlreadyExistsError(identifier));
-		}
-	}
-
-	/**
-	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param exp1 The first expression.
-	 * @param exp2 The second expression.
-	 * @param op The arithmetic operation that is performed.
-	 * @since 0.7.0
-	 */
-	public arithmeticExpressionValid(
-		exp1: Expression<ExpressionSemantics>,
-		exp2: Expression<ExpressionSemantics>,
-		op: KipperArithmeticOperator,
-	): void {
-		const exp1Type = exp1.getSemanticData().evaluatedType;
-		const exp2Type = exp2.getSemanticData().evaluatedType;
-		if (exp1Type !== exp2Type) {
-			// String-like types can use '+' to concat strings
-			if (
-				op === kipperPlusOperator &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
-			) {
-				return;
-			}
-
-			// If types are not matching, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationTypeError(exp1Type, exp2Type));
 		}
 	}
 

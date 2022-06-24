@@ -12,14 +12,26 @@ import {
 	ExpressionSemantics,
 	IdentifierPrimaryExpression,
 	ParameterDeclaration,
-	RelationalExpression
+	RelationalExpression,
+	UnaryExpression,
+	UnaryExpressionSemantics
 } from "../language";
-import { type KipperFunction, kipperReturnTypes, type KipperType, kipperTypes } from "../const";
+import {
+	KipperArithmeticOperator,
+	type KipperFunction,
+	kipperPlusOperator,
+	kipperReturnTypes,
+	kipperStrLikeTypes,
+	type KipperType,
+	kipperTypes
+} from "../const";
 import {
 	InvalidArgumentTypeError,
+	InvalidArithmeticOperationTypeError,
 	InvalidAssignmentTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidReturnTypeError,
+	InvalidUnaryExpressionTypeError,
 	ReadOnlyAssignmentTypeError,
 	TypeError,
 	UnknownTypeError
@@ -145,6 +157,52 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			throw this.assertError(
 				new InvalidRelationalComparisonTypeError(exp1Semantics.evaluatedType, exp2Semantics.evaluatedType),
 			);
+		}
+	}
+
+	/**
+	 * Asserts that the passed unary expression is valid.
+	 * @param exp The expression to check.
+	 * @since 0.9.0
+	 */
+	public validUnaryExpression(exp: UnaryExpression<UnaryExpressionSemantics>): void {
+		const semanticData = exp.getSemanticData();
+		const expSemantics = semanticData.operand.getSemanticData();
+
+		// Ensure that the operator '+' and '-' are only used on numbers
+		if (semanticData.operator === "+" || semanticData.operator === "-") {
+			if (expSemantics.evaluatedType !== "num") {
+				throw this.assertError(new InvalidUnaryExpressionTypeError(expSemantics.operator, semanticData.evaluatedType));
+			}
+		}
+	}
+
+	/**
+	 * Asserts that the passed type allows the arithmetic operation.
+	 * @param exp1 The first expression.
+	 * @param exp2 The second expression.
+	 * @param op The arithmetic operation that is performed.
+	 * @since 0.9.0
+	 */
+	public validArithmeticExpression(
+		exp1: Expression<ExpressionSemantics>,
+		exp2: Expression<ExpressionSemantics>,
+		op: KipperArithmeticOperator,
+	): void {
+		const exp1Type = exp1.getSemanticData().evaluatedType;
+		const exp2Type = exp2.getSemanticData().evaluatedType;
+		if (exp1Type !== exp2Type || exp1Type !== "num" || exp2Type !== "num") {
+			// String-like types can use '+' to concat strings
+			if (
+				op === kipperPlusOperator &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
+				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
+			) {
+				return;
+			}
+
+			// If types are not matching, not numeric, and they are not of string-like types, throw an error
+			throw this.assertError(new InvalidArithmeticOperationTypeError(exp1Type, exp2Type));
 		}
 	}
 }

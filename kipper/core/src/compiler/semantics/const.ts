@@ -221,18 +221,6 @@ export type KipperStorageType = "var" | "const";
 export const kipperStorageTypes: Array<KipperStorageType> = ["var", "const"];
 
 /**
- * All available unary operators in Kipper, which can be used to modify the value of an expression.
- * @since 0.9.0
- */
-export type KipperUnaryOperator = "!" | "-" | "+";
-
-/**
- * All available unary operators in Kipper, which can be used to modify the value of an expression.
- * @since 0.9.0
- */
-export const kipperUnaryOperators: Array<KipperUnaryOperator> = ["!", "-", "+"];
-
-/**
  * The logical-and operator, which can be used to combine multiple conditions and return true if all conditions are true.
  * @example
  * EXP && EXP;
@@ -318,18 +306,6 @@ export const kipperComparativeOperators: Array<KipperComparativeOperator> = [
 ];
 
 /**
- * All available multiplicative operators inside Kipper.
- * @since 0.6.0
- */
-export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
-
-/**
- * All available multiplicative operators inside Kipper.
- * @since 0.6.0
- */
-export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
-
-/**
  * The plus operator.
  * @since 0.6.0
  */
@@ -358,6 +334,100 @@ export const kipperMinusOperator: KipperMinusOperator = "-";
  * @since 0.6.0
  */
 export type KipperAdditiveOperator = KipperMinusOperator | KipperPlusOperator;
+
+/**
+ * All available sign operators inside Kipper, which can be used to modify the value of a numeric expression.
+ * @since 0.9.0
+ */
+export type KipperSignOperator = "+" | "-";
+
+/**
+ * All available sign operators inside Kipper, which can be used to modify the value of a numeric expression.
+ * @since 0.9.0
+ */
+export const kipperSignOperators: Array<KipperSignOperator> = [kipperPlusOperator, kipperMinusOperator];
+
+/**
+ * Negate operator, which can be used to negate a boolean expression. It evaluates to the opposite boolean
+ * representation of the original expression.
+ * @example
+ * !true; // false
+ * !false; // true
+ * !1; // false
+ * !0; // true
+ * @since 0.9.0
+ */
+export type KipperNegateOperator = "!";
+
+/**
+ * Negate operator, which can be used to negate a boolean expression. It evaluates to the opposite boolean
+ * representation of the original expression.
+ * @example
+ * !true; // false
+ * !false; // true
+ * !1; // false
+ * !0; // true
+ * @since 0.9.0
+ */
+export const kipperNegateOperator: KipperNegateOperator = "!";
+
+/**
+ * All available increment and decrement operators, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export type KipperIncrementOrDecrementOperator = "++" | "--";
+
+/**
+ * Increment and decrement operators, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export const kipperIncrementOrDecrementOperators: Array<KipperIncrementOrDecrementOperator> = ["++", "--"];
+
+/**
+ * Modifier Unary operators, which can be used to modify the value of an expression.
+ *
+ * This type specifically exists for the {@link OperatorModifiedUnaryExpression}.
+ * @since 0.9.0
+ */
+export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOperator;
+
+/**
+ * Modifier Unary operators, which are used to modify the value of an expression.
+ *
+ * This type specifically exists for the {@link OperatorModifiedUnaryExpression}.
+ * @since 0.9.0
+ */
+export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = [
+	kipperNegateOperator,
+	...kipperSignOperators,
+];
+
+/**
+ * All available unary operators in Kipper, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperIncrementOrDecrementOperator;
+
+/**
+ * All available unary operators in Kipper, which can be used to modify the value of an expression.
+ * @since 0.9.0
+ */
+export const kipperUnaryOperators: Array<KipperUnaryOperator> = [
+	...kipperUnaryModifierOperators,
+	...kipperIncrementOrDecrementOperators,
+];
+
+/**
+ * All available multiplicative operators inside Kipper.
+ * @since 0.6.0
+ */
+export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
+
+/**
+ * All available multiplicative operators inside Kipper.
+ * @since 0.6.0
+ */
+export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
 
 /**
  * All available additive operations inside Kipper.

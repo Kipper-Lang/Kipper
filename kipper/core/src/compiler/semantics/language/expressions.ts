@@ -30,7 +30,8 @@ import {
 	RelationalExpressionContext,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
-	TypeofTypeSpecifierContext
+	TypeofTypeSpecifierContext,
+	UnaryOperatorContext
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
@@ -43,6 +44,7 @@ import {
 	type KipperEqualityOperator,
 	kipperEqualityOperators,
 	type KipperFunction,
+	KipperIncrementOrDecrementOperator,
 	type KipperListType,
 	kipperLogicalAndOperator,
 	type KipperLogicalAndOperator,
@@ -50,12 +52,17 @@ import {
 	kipperLogicalOrOperator,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
+	KipperNegateOperator,
 	type KipperNumType,
 	type KipperRelationalOperator,
 	kipperRelationalOperators,
+	KipperSignOperator,
 	kipperStrType,
 	type KipperStrType,
 	type KipperType,
+	KipperUnaryModifierOperator,
+	kipperUnaryModifierOperators,
+	KipperUnaryOperator,
 	type TranslatedExpression
 } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
@@ -1271,10 +1278,47 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 }
 
 /**
+ * Semantics for unary expressions, which can be used to modify an expression with
+ * a specified operator.
+ * @since 0.9.0
+ */
+export interface UnaryExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The operator that is used to modify the {@link operand}.
+	 * @since 0.9.0
+	 */
+	operator: KipperUnaryOperator;
+	/**
+	 * The operand that is modified by the operator.
+	 * @since 0.9.0
+	 */
+	operand: Expression<any>;
+}
+
+/**
+ * Abstract unary expression class representing a unary expression, which can be used to modify an expression with
+ * a specified operator. This abstract class only exists to provide the commonality between the different comparative
+ * expressions.
+ * @since 0.9.0
+ */
+export abstract class UnaryExpression<T extends UnaryExpressionSemantics> extends Expression<T> {}
+
+/**
  * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
-export interface IncrementOrDecrementUnaryExpressionSemantics extends ExpressionSemantics {}
+export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpressionSemantics {
+	/**
+	 * The operator that is used to modify the {@link operand}.
+	 * @since 0.9.0
+	 */
+	operator: KipperIncrementOrDecrementOperator;
+	/**
+	 * The operand that is modified by the operator.
+	 * @since 0.9.0
+	 */
+	operand: Expression<any>;
+}
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
@@ -1283,7 +1327,7 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends Expression
  * ++49; // 49 will be incremented by 1
  * --11; // 11 will be decremented by 1
  */
-export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrDecrementUnaryExpressionSemantics> {
+export class IncrementOrDecrementUnaryExpression extends UnaryExpression<IncrementOrDecrementUnaryExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1306,11 +1350,6 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
 			.notImplementedError(
 				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
 			);
-
-		// eslint-disable-next-line no-unreachable
-		this.semanticData = {
-			evaluatedType: "void",
-		};
 	}
 
 	/**
@@ -1339,7 +1378,18 @@ export class IncrementOrDecrementUnaryExpression extends Expression<IncrementOrD
  * Semantics for AST Node {@link OperatorModifiedUnaryExpression}.
  * @since 0.5.0
  */
-export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSemantics {}
+export interface OperatorModifiedUnaryExpressionSemantics extends UnaryExpressionSemantics {
+	/**
+	 * The operator that is used to modify the {@link operand}.
+	 * @since 0.9.0
+	 */
+	operator: KipperUnaryModifierOperator;
+	/**
+	 * The operand that is modified by the {@link operator}.
+	 * @since 0.9.0
+	 */
+	operand: Expression<any>;
+}
 
 /**
  * Operator modified expressions, which are used to modify the value of an expression based on an
@@ -1349,7 +1399,7 @@ export interface OperatorModifiedUnaryExpressionSemantics extends ExpressionSema
  * -41 // -41
  * +59 // 59
  */
-export class OperatorModifiedUnaryExpression extends Expression<OperatorModifiedUnaryExpressionSemantics> {
+export class OperatorModifiedUnaryExpression extends UnaryExpression<OperatorModifiedUnaryExpressionSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1367,15 +1417,31 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Operator Modified Expression have not been implemented yet."),
-			);
+		// Get the raw antlr4 parse-tree children, which should store the operator
+		const children = this.getAntlrRuleChildren();
 
-		// eslint-disable-next-line no-unreachable
+		// Get the operator
+		const unaryOperator = <KipperNegateOperator | KipperSignOperator | undefined>children
+			.find((token) => {
+				return (
+					token instanceof UnaryOperatorContext &&
+					kipperUnaryModifierOperators.find((op) => op === token.text) !== undefined
+				);
+			})
+			?.text.trim();
+
+		// Get the expression of this unary expression
+		const exp: Expression<any> = this.children[0];
+
+		// Ensure that the children are fully present and not undefined
+		if (!exp || !unaryOperator) {
+			throw new UnableToDetermineMetadataError();
+		}
+
 		this.semanticData = {
-			evaluatedType: "void",
+			evaluatedType: unaryOperator === "!" ? "bool" : "num",
+			operator: unaryOperator,
+			operand: exp,
 		};
 	}
 
@@ -1385,7 +1451,8 @@ export class OperatorModifiedUnaryExpression extends Expression<OperatorModified
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// Ensure the operator is compatible with the type of the operand
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1586,9 +1653,6 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			throw new UnableToDetermineMetadataError();
 		}
 
-		// Assert that the arithmetic expression is valid
-		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
-
 		this.semanticData = {
 			evaluatedType: "num",
 			exp1: exp1, // First expression
@@ -1603,7 +1667,12 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.getSemanticData();
+
+		// Assert that the arithmetic expression is valid
+		this.programCtx
+			.typeCheck(this)
+			.validArithmeticExpression(semanticData.exp1, semanticData.exp2, semanticData.operator);
 	}
 
 	/**
@@ -1686,9 +1755,6 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			throw new UnableToDetermineMetadataError();
 		}
 
-		// Assert that the arithmetic expression is valid
-		this.programCtx.semanticCheck(this).arithmeticExpressionValid(exp1, exp2, operator);
-
 		const evaluateType: () => KipperType = () => {
 			const exp1Type = exp1.getSemanticData().evaluatedType;
 			const exp2Type = exp2.getSemanticData().evaluatedType;
@@ -1700,10 +1766,11 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			) {
 				return kipperStrType;
 			} else {
-				// This should never happen
-				throw new UnableToDetermineMetadataError();
+				// Returning undefined as there is no logical type that can be determined that could describe this expression.
+				return "undefined";
 			}
 		};
+
 		this.semanticData = {
 			evaluatedType: evaluateType(),
 			exp1: exp1, // First expression
@@ -1718,7 +1785,12 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.getSemanticData();
+
+		// Assert that the arithmetic expression is valid
+		this.programCtx
+			.typeCheck(this)
+			.validArithmeticExpression(semanticData.exp1, semanticData.exp2, semanticData.operator);
 	}
 
 	/**
@@ -1849,7 +1921,7 @@ export class RelationalExpression extends ComparativeExpression<RelationalExpres
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Type check the relational expression and ensure its operands are numeric
+		// Type check the relational expression and ensure its operands are of type 'num'
 		this.programCtx.typeCheck(this).validRelationalExpression(this);
 	}
 
@@ -1946,7 +2018,8 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// No type checking needed, since every type can be compared against every other type
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -2064,8 +2137,9 @@ export class LogicalAndExpression extends LogicalExpression<LogicalAndExpression
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+	public semanticTypeChecking(): Promise<void> {
+		// No type checking needed, since every type is simply converted to a boolean
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -2153,8 +2227,9 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+	public semanticTypeChecking(): Promise<void> {
+		// No type checking needed, since every type is simply converted to a boolean
+		return Promise.resolve(undefined);
 	}
 
 	/**

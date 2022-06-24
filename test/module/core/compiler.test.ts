@@ -564,13 +564,34 @@ describe("KipperCompiler", () => {
 			});
 
 			describe("Unary Operators", () => {
-				it("unary plus", async () => {});
+				it("unary plus", async () => {
+					const stream = new KipperParseStream("+4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
 
-				it("unary minus", async () => {});
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("4;"), "Expected different TypeScript code");
+				});
+
+				it("unary minus", async () => {
+					const stream = new KipperParseStream("-4;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("-4;"), "Expected different TypeScript code");
+				});
 
 				// Technically, this is a logical operator, but it's considered a unary operator in Kipper, as it modifies
 				// the value of the operand.
-				it("!", async () => {});
+				it("!", async () => {
+					const stream = new KipperParseStream("!true;");
+					const instance: KipperCompileResult = await compiler.compile(stream);
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("!true;"), "Expected different TypeScript code");
+				});
 			});
 
 			describe("logical expressions", () => {

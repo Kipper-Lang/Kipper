@@ -462,6 +462,16 @@ export class InvalidRelationalComparisonTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a unary operator is used with an expression of an invalid type.
+ * @since 0.9.0
+ */
+export class InvalidUnaryExpressionTypeError extends TypeError {
+	constructor(operator: string, type: string) {
+		super(`Unary operator '${operator}' is not allowed for type '${type}'.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a constant declaration is not defined.
  * @since 0.8.3
  */
