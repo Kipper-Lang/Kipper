@@ -1,7 +1,5 @@
 /**
- * The global logger that will handle the output for either the browser or
- * the local command line
- *
+ * The global logger that will handle the log output of the {@link KipperCompiler}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
