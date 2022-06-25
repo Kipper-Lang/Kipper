@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `!` (Logical NOT Operator)
   - `+` (Plus Operator)
   - `-` (Minus Operator)
-- Compiler Warnings by allowing `KipperError` instances to be warnings if `isWarning` is set to true and 
+- Compiler Warnings by allowing `KipperError` instances to be warnings if `isWarning` is set to true and
   implementing AST-based checks for warnings using the new function `CompilableASTNode.checkForWarnings()`.
   ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
@@ -93,10 +93,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CompilableASTNode.checkForWarnings()`, which checks for warnings in an AST Node.
   - `KipperTypeChecker.validRelationalExpression`, which ensures a `RelationalExpression` is semantically valid.
   - `KipperTypeChecker.validUnaryExpression`, which ensures a `UnaryExpression` is semantically valid.
-- New fields:
+- New fields/properties:
   - `KipperCompileResult.warnings`, which contains a list of all warnings that were found during the compilation of a
     program.
-  - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the 
+  - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the
     compilation from continuing.
   - `KipperProgramContext.warnings`, which contains all warnings that have been found in the program.
 
