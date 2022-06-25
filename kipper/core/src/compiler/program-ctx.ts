@@ -27,13 +27,9 @@ export class KipperProgramContext {
 
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	private _abstractSyntaxTree: RootASTNode | undefined;
+	private _warnings: Array<KipperError>;
 
-	/**
-	 * The global scope of this program, containing all variable and function definitions
-	 * @private
-	 */
-	private readonly _globalScope: GlobalScope;
+	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
 	 * The field compiledCode that will store the cached code, once 'compileProgram' has been called. This is
@@ -41,6 +37,34 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private _compiledCode: Array<Array<string>> | undefined;
+
+	/**
+	 * A list of all references to built-in functions. This is used to determine which built-in functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused built-in
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private readonly _builtInReferences: Array<Reference<BuiltInFunction>>;
+
+	/**
+	 * A list of all references to internal functions. This is used to determine which internal functions are
+	 * used and which aren't.
+	 *
+	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused internal
+	 * functions, so they will not be generated.
+	 * @private
+	 * @since 0.8.0
+	 */
+	private readonly _internalReferences: Array<Reference<InternalFunction>>;
+
+	/**
+	 * The global scope of this program, containing all variable and function definitions
+	 * @private
+	 */
+	private readonly _globalScope: GlobalScope;
 
 	/**
 	 * Represents the compilation translation target for the program. This contains the:
@@ -107,28 +131,6 @@ export class KipperProgramContext {
 	 */
 	public builtIns: Array<BuiltInFunction>;
 
-	/**
-	 * A list of all references to built-in functions. This is used to determine which built-in functions are
-	 * used and which aren't.
-	 *
-	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused built-in
-	 * functions, so they will not be generated.
-	 * @private
-	 * @since 0.8.0
-	 */
-	private readonly _builtInReferences: Array<Reference<BuiltInFunction>>;
-
-	/**
-	 * A list of all references to internal functions. This is used to determine which internal functions are
-	 * used and which aren't.
-	 *
-	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused internal
-	 * functions, so they will not be generated.
-	 * @private
-	 * @since 0.8.0
-	 */
-	private readonly _internalReferences: Array<Reference<InternalFunction>>;
-
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -156,6 +158,7 @@ export class KipperProgramContext {
 		this._abstractSyntaxTree = undefined;
 		this._builtInReferences = [];
 		this._internalReferences = [];
+		this._warnings = [];
 	}
 
 	/**
@@ -278,6 +281,27 @@ export class KipperProgramContext {
 	 */
 	public get abstractSyntaxTree(): RootASTNode | undefined {
 		return this._abstractSyntaxTree;
+	}
+
+	/**
+	 * The list of warnings that were raised during the compilation process.
+	 *
+	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to be
+	 * problematic, but which it cannot fix.
+	 * @since 0.9.0
+	 */
+	public get warnings(): Array<KipperError> {
+		return this._warnings;
+	}
+
+	/**
+	 * Adds a new warning to the list of warnings for this file.
+	 * @param warning The warning to add.
+	 * @private
+	 * @since 0.9.0
+	 */
+	private addWarning(warning: KipperError): void {
+		this.warnings.push(warning);
 	}
 
 	/**

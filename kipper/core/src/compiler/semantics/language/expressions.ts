@@ -227,6 +227,16 @@ export abstract class Expression<Semantics extends ExpressionSemantics> extends 
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): antlrExpressionCtxType {
@@ -333,6 +343,16 @@ export class NumberPrimaryExpression extends ConstantExpression<NumberPrimaryExp
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): NumberPrimaryExpressionContext {
@@ -398,6 +418,16 @@ export class CharacterPrimaryExpression extends ConstantExpression<CharacterPrim
 	public async semanticTypeChecking(): Promise<void> {
 		// Constants will never get type checking
 		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -468,6 +498,16 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): ListPrimaryExpressionContext {
@@ -533,6 +573,16 @@ export class StringPrimaryExpression extends ConstantExpression<StringPrimaryExp
 	public async semanticTypeChecking(): Promise<void> {
 		// Constants will never get type checking
 		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -611,6 +661,16 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): BoolPrimaryExpressionContext {
@@ -677,6 +737,16 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 
@@ -751,6 +821,16 @@ export class IdentifierPrimaryExpression extends Expression<IdentifierPrimaryExp
 	public async semanticTypeChecking(): Promise<void> {
 		// Constants will never get type checking
 		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -840,6 +920,16 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<I
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): IdentifierTypeSpecifierContext {
@@ -910,6 +1000,16 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<Gene
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): GenericTypeSpecifierContext {
@@ -970,6 +1070,16 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<Typeo
 		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1040,6 +1150,16 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): TangledPrimaryExpressionContext {
@@ -1105,6 +1225,16 @@ export class IncrementOrDecrementExpression extends Expression<IncrementOrDecrem
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): IncrementOrDecrementPostfixExpressionContext {
@@ -1163,6 +1293,16 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 
@@ -1265,6 +1405,16 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): FunctionCallPostfixExpressionContext {
@@ -1358,6 +1508,16 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<Increme
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 
@@ -1456,6 +1616,16 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<OperatorMod
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): OperatorModifiedUnaryExpressionContext {
@@ -1544,6 +1714,16 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		const semanticData = this.getSemanticData();
 
 		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1676,6 +1856,16 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): MultiplicativeExpressionContext {
@@ -1791,6 +1981,16 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 		this.programCtx
 			.typeCheck(this)
 			.validArithmeticExpression(semanticData.exp1, semanticData.exp2, semanticData.operator);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -1926,6 +2126,16 @@ export class RelationalExpression extends ComparativeExpression<RelationalExpres
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): RelationalExpressionContext {
@@ -2020,6 +2230,16 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 	public async semanticTypeChecking(): Promise<void> {
 		// No type checking needed, since every type can be compared against every other type
 		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -2143,6 +2363,16 @@ export class LogicalAndExpression extends LogicalExpression<LogicalAndExpression
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): LogicalAndExpressionContext {
@@ -2233,6 +2463,16 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): LogicalOrExpressionContext {
@@ -2293,6 +2533,16 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 
@@ -2385,6 +2635,16 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validAssignment(semanticData.identifier, semanticData.value);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
