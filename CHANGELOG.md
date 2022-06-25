@@ -94,8 +94,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperTypeChecker.validRelationalExpression`, which ensures a `RelationalExpression` is semantically valid.
   - `KipperTypeChecker.validUnaryExpression`, which ensures a `UnaryExpression` is semantically valid.
 - New fields:
+  - `KipperCompileResult.warnings`, which contains a list of all warnings that were found during the compilation of a
+    program.
   - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the 
-		compilation from continuing.
+    compilation from continuing.
   - `KipperProgramContext.warnings`, which contains all warnings that have been found in the program.
 
 ### Changed
