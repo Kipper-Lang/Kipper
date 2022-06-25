@@ -93,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `CompilableASTNode.checkForWarnings()`, which checks for warnings in an AST Node.
   - `KipperTypeChecker.validRelationalExpression`, which ensures a `RelationalExpression` is semantically valid.
   - `KipperTypeChecker.validUnaryExpression`, which ensures a `UnaryExpression` is semantically valid.
-- New fields:
+- New fields/properties:
   - `KipperCompileResult.warnings`, which contains a list of all warnings that were found during the compilation of a
     program.
   - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the 
