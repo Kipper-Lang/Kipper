@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `!` (Logical NOT Operator)
   - `+` (Plus Operator)
   - `-` (Minus Operator)
+- Compiler Warnings by allowing `KipperError` instances to be warnings if `isWarning` is set to true and 
+  implementing AST-based checks for warnings using the new function `CompilableASTNode.checkForWarnings()`.
+  ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 - New errors:
@@ -85,9 +88,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ComparativeExpressionSemantics`, which defines the semantic data of a comparative expression.
   - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
   - `UnaryExpressionSemantics`, which defines the base semantics for every unary expression.
+  - `TracebackMetadata`, which defines the required data for a full traceback in a `KipperError`.
 - New functions:
-  - `KipperTypeChecker.validRelationalExpression`.
-  - `KipperTypeChecker.validUnaryExpression`.
+  - `CompilableASTNode.checkForWarnings()`, which checks for warnings in an AST Node.
+  - `KipperTypeChecker.validRelationalExpression`, which ensures a `RelationalExpression` is semantically valid.
+  - `KipperTypeChecker.validUnaryExpression`, which ensures a `UnaryExpression` is semantically valid.
+- New fields:
+  - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the 
+		compilation from continuing.
+  - `KipperProgramContext.warnings`, which contains all warnings that have been found in the program.
 
 ### Changed
 
