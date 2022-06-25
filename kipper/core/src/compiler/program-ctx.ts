@@ -287,7 +287,7 @@ export class KipperProgramContext {
 	 * The list of warnings that were raised during the compilation process.
 	 *
 	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to be
-	 * problematic, but which it cannot fix.
+	 * problematic, which do not prevent the program from being compiled.
 	 * @since 0.9.0
 	 */
 	public get warnings(): Array<KipperError> {

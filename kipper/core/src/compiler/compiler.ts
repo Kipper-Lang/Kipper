@@ -14,6 +14,7 @@ import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
 import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
+import type { KipperError } from "../errors";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileOptions}
@@ -141,6 +142,17 @@ export class KipperCompileResult {
 	 */
 	public get result(): Array<Array<string>> {
 		return this._result;
+	}
+
+	/**
+	 * The list of warnings that were raised during the compilation process.
+	 *
+	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to
+	 * be problematic, but which do not prevent the program from being compiled.
+	 * @since 0.9.0
+	 */
+	public get warnings(): Array<KipperError> {
+		return this.programCtx.warnings;
 	}
 
 	/**
