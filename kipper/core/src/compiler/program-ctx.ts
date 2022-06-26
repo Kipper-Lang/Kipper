@@ -151,7 +151,7 @@ export class KipperProgramContext {
 		semanticChecker?: KipperSemanticChecker,
 		typeChecker?: KipperTypeChecker,
 		optimiser?: KipperOptimiser,
-		reportWarnings: boolean = true
+		reportWarnings: boolean = true,
 	) {
 		this.logger = logger;
 		this.target = target;
