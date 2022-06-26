@@ -9,7 +9,6 @@
     "../kipper/**/*.ts",
     "../kipper/core/src/**/*.ts",
     "../kipper/cli/src/**/*.ts",
-    "../module/**/*.ts"
   ],
   "ts-node": {
     "files": true
@@ -21,5 +20,11 @@
   ],
   "include": [
     "./**/*.ts"
-  ]
+  ],
+	"exclude": [
+		"node_modules",
+		"lib",
+		"dist",
+		"**/*.spec.ts"
+	]
 }

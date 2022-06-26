@@ -1,7 +1,7 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language! 🦊",
-  "version": "0.9.0-beta.0",
+  "version": "0.9.0-beta.1",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/core": "workspace:~",
@@ -77,8 +77,8 @@
     }
   ],
   "scripts": {
-    "fastbuild": "pnpm run -r build",
-    "build": "pnpm run -r build",
+    "fastbuild": "pnpm run -r build && tsc",
+    "build": "pnpm run fastbuild",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",

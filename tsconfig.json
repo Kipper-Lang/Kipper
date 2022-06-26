@@ -7,8 +7,9 @@
     "noImplicitAny": false,
     "moduleResolution": "node",
     "module": "commonjs",
-    "rootDir": "kipper",
-    "strict": true,
+    "rootDir": "./kipper",
+		"outDir": "./lib",
+		"strict": true,
     "target": "es2020",
     "lib": [
       "ES7"
@@ -18,6 +19,13 @@
   "exclude": [
     "node_modules",
     "lib",
-    "dist"
-  ]
+    "dist",
+		"test",
+		"**/*.spec.ts",
+		"kipper/core",
+		"kipper/cli",
+	],
+	"files": [
+		"./kipper/index.ts"
+	],
 }

@@ -7,5 +7,12 @@
   },
   "include": [
     "./src/**/*"
-  ]
+  ],
+	"exclude": [
+		"node_modules",
+		"lib",
+		"dist",
+		"**/*.spec.ts"
+	],
+	"files": [],
 }
