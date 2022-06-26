@@ -204,11 +204,16 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 		await this.primarySemanticAnalysis();
 		await this.semanticTypeChecking();
 		await this.targetSemanticAnalysis(this);
+
+		// Check for warnings after the semantic analysis has been completed
+		if (this.programCtx.reportWarnings) {
+			await this.checkForWarnings();
+		}
 	}
 
 	/**
-	 * Semantically analyses the code inside this AST node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Semantically analyses the code inside this AST node.
+	 * @throws KipperError if the code is not valid.
 	 * @since 0.8.0
 	 */
 	public abstract primarySemanticAnalysis(): Promise<void>;
@@ -219,6 +224,14 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * @since 0.8.0
 	 */
 	public abstract semanticTypeChecking(): Promise<void>;
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public abstract checkForWarnings(): Promise<void>;
 
 	/**
 	 * Semantic analyser function that is specific for the {@link KipperCompileTarget target}.

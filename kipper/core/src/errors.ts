@@ -18,44 +18,58 @@ import type { KipperParseStream } from "./compiler";
 import { getParseRuleSource } from "./utils";
 
 /**
- * The core error for the Kipper module.
+ * The interface representing the traceback data for a {@link KipperError}.
+ * @since 0.9.0
+ */
+export interface TracebackMetadata {
+	/**
+	 * The line and column of the error.
+	 * @since 0.3.0
+	 */
+	location: { line: number | undefined; col: number | undefined };
+	/**
+	 * The path to the file where the error occurred.
+	 * @since 0.3.0
+	 */
+	filePath: string | undefined;
+	/**
+	 * The line of code that caused this error.
+	 * @since 0.4.0
+	 */
+	tokenSrc: string | undefined;
+	/**
+	 * The token stream (source code) of the program.
+	 * @since 0.8.0
+	 */
+	streamSrc: KipperParseStream | undefined;
+}
+
+/**
+ * The base error for the Kipper module. If a compiler error occurs in the Kipper module, this error is thrown.
+ *
+ * Ifv{@link isWarning} is set to true, then this error is a warning and will not cause the compiler to exit.
  */
 export class KipperError extends Error {
 	/**
-	 * Traceback metadata.
-	 * @private
+	 * The traceback metadata for this error. It contains the line and column of the error, the path to the file,
+	 * the line of code that caused the error, and the token stream (source code) of the program.
 	 * @since 0.3.0
 	 */
-	private tracebackData: {
-		/**
-		 * Represents the line and column of the error.
-		 * @since 0.3.0
-		 */
-		location: { line: number | undefined; col: number | undefined };
-		/**
-		 * Represents the path to the file where the error occurred.
-		 * @since 0.3.0
-		 */
-		filePath: string | undefined;
-		/**
-		 * Represents the original line of code that caused this error.
-		 * @since 0.4.0
-		 */
-		tokenSrc: string | undefined;
-		/**
-		 * The original stream/code of the program.
-		 * @since 0.8.0
-		 */
-		streamSrc: KipperParseStream | undefined;
-	};
+	public tracebackData: TracebackMetadata;
 
 	/**
-	 * The original {@link ParserRuleContext antlr4 context} instance for this token.
+	 * The {@link ParserRuleContext antlr4 context} instance, which is the context in which the error occurred.
 	 * @since 0.3.0
 	 */
-	public antlrCtx: ParserRuleContext | undefined;
+	public antlrCtx?: ParserRuleContext;
 
-	constructor(msg: string, token?: ParserRuleContext) {
+	/**
+	 * If true this error is a warning and does not cause the compiler to exit with an error.
+	 * @since 0.9.0
+	 */
+	public readonly isWarning: boolean = false;
+
+	constructor(msg: string, isWarning?: boolean, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
 		this.tracebackData = {
@@ -65,6 +79,7 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 		};
 		this.antlrCtx = token;
+		this.isWarning = isWarning ?? false;
 	}
 
 	/**
@@ -109,7 +124,7 @@ export class KipperError extends Error {
 					.map((_, i) => (i >= startOfError && i < endOfError ? "^" : " "))
 					.join("");
 
-				return `${srcLine}\n    ${underline}`;
+				return `${srcLine}\n  ${underline}`;
 			} else {
 				return (
 					(this.tokenSrc ? `${this.tokenSrc}\n` : "") + (this.tokenSrc ? "    " + "^".repeat(this.tokenSrc.length) : "")
@@ -118,7 +133,7 @@ export class KipperError extends Error {
 		})();
 
 		return (
-			`Traceback:\n  File '${this.tracebackData.filePath ?? "Unknown"}', ` +
+			`Traceback:\nFile '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
 			`${tokenSrc ? `    ${tokenSrc}\n` : ""}` +
