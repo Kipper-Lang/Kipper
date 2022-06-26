@@ -30,7 +30,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 
 ## Child Packages
 
-These are the child packages that are shipped with this bundle of Kipper:
+The `kipper` package ships with multiple child packages to implement specific functionality:
 
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
