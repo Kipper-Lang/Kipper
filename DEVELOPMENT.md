@@ -109,7 +109,7 @@ If antlr4 is not installed, install it from here: https://www.antlr.org/
 
    Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to their GitHub page!
 
-3. Updated the static `version` identifiers in the `src/index.ts` files of each child package:
+3. Updated the static `version` identifiers in the `index.ts` files of each package:
 
    ```ts
    export const version = "MAJOR.MINOR.PATCH";
