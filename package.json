@@ -77,8 +77,8 @@
     }
   ],
   "scripts": {
-    "fastbuild": "pnpm run -r build",
-    "build": "pnpm run -r build",
+    "fastbuild": "tsc && pnpm run -r build",
+    "build": "pnpm run fastbuild",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",
