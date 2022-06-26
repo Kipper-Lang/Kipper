@@ -11,7 +11,6 @@
 		"outDir": "./lib",
 		"strict": true,
     "target": "es2020",
-		"composite": true,
     "lib": [
       "ES7"
     ]
