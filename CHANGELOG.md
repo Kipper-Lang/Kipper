@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Entry point file for the root package `kipper`, which exports `@kipper/core` allowing the `kipper` 
+  package to be used in projects.
 - Syntax support and code generation for if, else-if and else statements
   ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
 - Code generation of expression lists (e.g. expression statements containing multiple child expressions)
