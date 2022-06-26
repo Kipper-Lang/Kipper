@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `!` (Logical NOT Operator)
   - `+` (Plus Operator)
   - `-` (Minus Operator)
+- Partial support for compiler warnings by allowing `KipperError` instances to be warnings if `isWarning` is set to
+  true and implementing AST-based checks for warnings using the new function `CompilableASTNode.checkForWarnings()`.
+  ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
+- New flag `-w/--warnings` in the commands `compile`, `run` and `analyse`, which enables logger warnings.
+  ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
   hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
 - New errors:
@@ -85,9 +90,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ComparativeExpressionSemantics`, which defines the semantic data of a comparative expression.
   - `LogicalExpressionSemantics`, which defines the semantics of a logical expression.
   - `UnaryExpressionSemantics`, which defines the base semantics for every unary expression.
+  - `TracebackMetadata`, which defines the required data for a full traceback in a `KipperError`.
 - New functions:
-  - `KipperTypeChecker.validRelationalExpression`.
-  - `KipperTypeChecker.validUnaryExpression`.
+  - `CompilableASTNode.checkForWarnings()`, which checks for warnings in an AST Node.
+  - `KipperTypeChecker.validRelationalExpression()`, which ensures a `RelationalExpression` is semantically valid.
+  - `KipperTypeChecker.validUnaryExpression()`, which ensures a `UnaryExpression` is semantically valid.
+  - `KipperProgramContext.addWarning()`, which adds a warning to the program context.
+  - `KipperLogger.reportWarning()`, which reports a warning with its traceback to the consoles.
+- New fields/properties:
+  - `CompileConfig.warnings`, which if set to true enables warnings and stores them in `KipperCompileResult.warnings`.
+  - `EvaluatedCompileOptions.warnings`, which if set to true enables warnings and stores them in
+    `KipperCompileResult.warnings`.
+  - `KipperCompileResult.warnings`, which contains a list of all warnings that were found during the compilation of a
+    program.
+  - `KipperError.isWarning`, which if true defines the error as non-fatal warning that does not prevent the
+    compilation from continuing.
+  - `KipperProgramContext.warnings`, which contains all warnings that have been found in the program.
+  - `KipperLogger.reportWarnings`, which if set to true will report warnings to the console.
+  - `KipperProgramContext.reportWarnings`, which if set to true will run warning checks on the AST nodes of the program.
 
 ### Changed
 
@@ -100,6 +120,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ParserASTNode.getTokenChildren()` to `getAntlrRuleChildren()`.
   - `Scope.localVariables` to `variables`.
   - `Scope.localFunctions` to `functions`.
+- Updated logging messages and shortened them to be more concise.
 
 ### Removed
 

@@ -1,7 +1,5 @@
 /**
- * The global logger that will handle the output for either the browser or
- * the local command line
- *
+ * The global logger that will handle the log output of the {@link KipperCompiler}.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
@@ -57,6 +55,13 @@ export function getLogLevelString(level: LogLevel): string {
  */
 export class KipperLogger {
 	/**
+	 * The private field '_emitHandler' that actually stores the variable data,
+	 * which is returned inside the {@link this.emitHandler}.
+	 * @private
+	 */
+	private readonly _emitHandler: (level: LogLevel, msg: string) => void;
+
+	/**
 	 * Available log levels for the {@link KipperLogger}.
 	 * @static
 	 * @public
@@ -71,26 +76,30 @@ export class KipperLogger {
 	public static numLevels: typeof LogLevel = LogLevel;
 
 	/**
-	 * The private field '_emitHandler' that actually stores the variable data,
-	 * which is returned inside the {@link this.emitHandler}.
-	 * @private
+	 * The current log level of the {@link KipperLogger}. Everything with a lower level will be ignored and not logged.
 	 */
-	// eslint-disable-next-line no-unused-vars
-	private readonly _emitHandler: (level: LogLevel, msg: string) => void;
+	public logLevel: LogLevel;
+
+	/**
+	 * If set to true, warnings will be reported. Otherwise, they will be ignored even if the log level is set to
+	 * 'WARN' or lower.
+	 * @since 0.9.0
+	 */
+	public readonly reportWarnings: boolean;
 
 	constructor(
-		// eslint-disable-next-line no-unused-vars
 		emitHandler: (level: LogLevel, msg: string) => void,
-		// eslint-disable-next-line no-unused-vars
-		public logLevel: LogLevel = LogLevel.INFO,
+		logLevel: LogLevel = LogLevel.INFO,
+		reportWarnings: boolean = true,
 	) {
 		this._emitHandler = emitHandler;
+		this.reportWarnings = reportWarnings;
+		this.logLevel = logLevel;
 	}
 
 	/**
 	 * The specific handler that should handle emitted log messages
 	 */
-	// eslint-disable-next-line no-unused-vars
 	public get emitHandler(): (level: LogLevel, msg: string) => void {
 		return this._emitHandler;
 	}
@@ -141,7 +150,9 @@ export class KipperLogger {
 	 * @param msg The content of the logging message.
 	 */
 	public log(level: LogLevel, msg: string): void {
-		if (level < this.logLevel) {
+		// If the level is lower than the current log level or the level is 'WARN' and the warnings are disabled, then
+		// ignore the message.
+		if (level < this.logLevel || (level === LogLevel.WARN && !this.reportWarnings)) {
 			return;
 		}
 
@@ -156,5 +167,14 @@ export class KipperLogger {
 	 */
 	public reportError(level: LogLevel.WARN | LogLevel.ERROR | LogLevel.FATAL, err: KipperError | string) {
 		this.log(level, err instanceof KipperError ? err.getTraceback() : err);
+	}
+
+	/**
+	 * Reports a warning with the passed level.
+	 * @param warn The warning to log.
+	 * @since 0.9.0
+	 */
+	public reportWarning(warn: KipperError | string) {
+		this.reportError(LogLevel.WARN, warn);
 	}
 }

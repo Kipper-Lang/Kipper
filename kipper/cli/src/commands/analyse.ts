@@ -5,7 +5,7 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperError, KipperParseStream } from "@kipper/core";
+import { KipperCompiler, KipperError, KipperParseStream, LogLevel } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
@@ -37,11 +37,17 @@ export default class Analyse extends Command {
 			char: "s",
 			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
 		}),
+		warnings: flags.boolean({
+			char: "w",
+			default: true,
+			description: "Show warnings that were emitted during the analysis.",
+			allowNo: true,
+		}),
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Analyse);
-		const logger = new KipperLogger(defaultCliEmitHandler);
+		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Fetch the file

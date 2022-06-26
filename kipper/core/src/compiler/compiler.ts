@@ -14,6 +14,7 @@ import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
 import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
+import type { KipperError } from "../errors";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileOptions}
@@ -24,11 +25,15 @@ export interface CompileConfig {
 	/**
 	 * The built-in functions that will be available in a Kipper program. This option overwrites the default built-ins,
 	 * if you wish to only add new built-in functions write to {@link extendBuiltIns}.
+	 *
+	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
 	builtIns?: Array<BuiltInFunction>;
 	/**
 	 * Extends the {@link builtIns} with the specified items. If {@link builtIns} is undefined, then it will simply extend
 	 * the default array.
+	 *
+	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
 	extendBuiltIns?: Array<BuiltInFunction>;
 	/**
@@ -46,6 +51,12 @@ export interface CompileConfig {
 	 * @since 0.8.0
 	 */
 	optimisationOptions?: OptimisationOptions;
+	/**
+	 * If set to true, the compiler will check for warnings and add them to {@link KipperProgramContext.warnings} and
+	 * {@link KipperCompileResult.warnings}.
+	 * @since 0.9.0
+	 */
+	warnings?: boolean;
 }
 
 /**
@@ -73,25 +84,48 @@ export class EvaluatedCompileOptions implements CompileConfig {
 		fileName: "anonymous-script", // Default name if no name is specified.
 		target: new TypeScriptTarget(), // Default target is TypeScript.
 		optimisationOptions: defaultOptimisationOptions,
+		warnings: true, // Always generate warnings by default.
 	};
 
-	/**, // Include all built-ins to allow the user to modify the functions in the target language.
+	/**
 	 * The built-in functions that will be available in a Kipper program.
 	 *
-	 * This will be extended by {@link extendBuiltIns}.
+	 * This will be extended by {@link extendBuiltIns}. All built-in functions defined here must be implemented by the
+	 * {@link target.builtInGenerator}.
 	 */
 	public readonly builtIns: Array<BuiltInFunction>;
 
 	/**
 	 * Extensions to the global built-in functions that should not replace the primary {@link builtIns}.
+	 *
+	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
 	public readonly extendBuiltIns: Array<BuiltInFunction>;
 
+	/**
+	 * The filename that should be used to represent the program.
+	 * @since 0.2.0
+	 */
 	public readonly fileName: string;
 
+	/**
+	 * The translation languages for the compilation.
+	 * @since 0.5.0
+	 */
 	public readonly target: KipperCompileTarget;
 
+	/**
+	 * Options for the {@link KipperOptimiser}.
+	 * @since 0.8.0
+	 */
 	public readonly optimisationOptions: OptimisationOptions;
+
+	/**
+	 * If set to true, the compiler will check for warnings and add them to {@link KipperProgramContext.warnings} and
+	 * {@link KipperCompileResult.warnings}.
+	 * @since 0.9.0
+	 */
+	public readonly warnings: boolean;
 
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
@@ -102,6 +136,7 @@ export class EvaluatedCompileOptions implements CompileConfig {
 		this.fileName = options.fileName ?? EvaluatedCompileOptions.defaults.fileName;
 		this.target = options.target ?? EvaluatedCompileOptions.defaults.target;
 		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileOptions.defaults.optimisationOptions;
+		this.warnings = options.warnings ?? EvaluatedCompileOptions.defaults.warnings;
 	}
 }
 
@@ -141,6 +176,17 @@ export class KipperCompileResult {
 	 */
 	public get result(): Array<Array<string>> {
 		return this._result;
+	}
+
+	/**
+	 * The list of warnings that were raised during the compilation process.
+	 *
+	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to
+	 * be problematic, but which do not prevent the program from being compiled.
+	 * @since 0.9.0
+	 */
+	public get warnings(): Array<KipperError> {
+		return this.programCtx.warnings;
 	}
 
 	/**
@@ -234,7 +280,7 @@ export class KipperCompiler {
 		// Parse the input, where `compilationUnit` is whatever entry point you defined
 		return (() => {
 			let result = parser.compilationUnit();
-			this._logger.debug(`Finished generation of parse tree for file '${parseStream.name}'.`);
+			this._logger.debug(`Finished generation of parse tree.`);
 			return new KipperProgramContext(
 				parseStream,
 				result,
@@ -284,11 +330,7 @@ export class KipperCompiler {
 			if (globals.length > 0) {
 				fileCtx.registerBuiltIns(globals);
 			}
-			this.logger.debug(
-				`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"} for the program '${
-					inStream.name
-				}'.`,
-			);
+			this.logger.debug(`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"}.`);
 
 			// Start compilation of the Kipper program
 			const code = await fileCtx.compileProgram(config.optimisationOptions);

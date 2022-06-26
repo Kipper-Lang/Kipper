@@ -1,3 +1,9 @@
+/**
+ * Utility functions for the Kipper core package.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.9.0
+ */
 import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext, Token } from "antlr4ts";
 import { ParseTree } from "antlr4ts/tree";

@@ -170,6 +170,16 @@ export class CompoundStatement extends Statement<NoSemantics> {
 		return Promise.resolve(undefined);
 	}
 
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.compoundStatement;
@@ -269,6 +279,16 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 		// TODO!
 	}
 
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IfStatement> = this.semanticAnalyser.ifStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<IfStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.ifStatement;
@@ -323,6 +343,16 @@ export class SwitchStatement extends Statement<NoSemantics> {
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 
@@ -381,6 +411,16 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	public semanticTypeChecking(): Promise<void> {
 		// Expression statements will never have type checking
 		return Promise.resolve(undefined);
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExpressionStatement> =
@@ -442,6 +482,16 @@ export class IterationStatement extends Statement<NoSemantics> {
 		// TODO!
 	}
 
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<IterationStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.iterationStatement;
@@ -497,6 +547,16 @@ export class JumpStatement extends Statement<NoSemantics> {
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
 		// TODO!
 	}
 

@@ -11,6 +11,7 @@ import {
 	KipperCompileResult,
 	KipperError,
 	KipperParseStream,
+	LogLevel,
 } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
@@ -66,11 +67,17 @@ export default class Compile extends Command {
 				"reducing the size of the output.",
 			allowNo: true,
 		}),
+		warnings: flags.boolean({
+			char: "w",
+			default: true,
+			description: "Show warnings that were emitted during the compilation.",
+			allowNo: true,
+		}),
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Compile);
-		const logger = new KipperLogger(defaultCliEmitHandler);
+		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Fetch the file

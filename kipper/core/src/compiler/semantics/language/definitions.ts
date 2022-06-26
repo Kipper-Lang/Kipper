@@ -95,10 +95,15 @@ export abstract class Declaration<Semantics extends DeclarationSemantics> extend
 		return this._antlrRuleCtx;
 	}
 
+	/**
+	 * Generates the typescript code for this item, and all children (if they exist).
+	 * @since 0.8.0
+	 */
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
 		return await this.targetCodeGenerator(this);
 	}
 
+	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
 	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
@@ -134,6 +139,16 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -212,6 +227,16 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**
@@ -334,6 +359,16 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
 	}
 
 	/**

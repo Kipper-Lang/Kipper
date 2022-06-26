@@ -36,6 +36,10 @@ describe("Parse-Tokens", () => {
 			semanticTypeChecking(): Promise<void> {
 				return Promise.resolve(undefined);
 			}
+
+			checkForWarnings(): Promise<void> {
+				return Promise.resolve(undefined);
+			}
 		}
 
 		describe("sourceCode", () => {
