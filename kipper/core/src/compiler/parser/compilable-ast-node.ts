@@ -204,6 +204,11 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 		await this.primarySemanticAnalysis();
 		await this.semanticTypeChecking();
 		await this.targetSemanticAnalysis(this);
+
+		// Check for warnings after the semantic analysis has been completed
+		if (this.programCtx.reportWarnings) {
+			await this.checkForWarnings();
+		}
 	}
 
 	/**

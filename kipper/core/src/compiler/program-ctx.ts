@@ -131,6 +131,15 @@ export class KipperProgramContext {
 	 */
 	public builtIns: Array<BuiltInFunction>;
 
+	/**
+	 * If set to true, the compiler will check for warnings and report them to the logger and store them in
+	 * {@link this.warnings}.
+	 *
+	 * If set to false, the warnings check will be skipped and {@link this.warnings} will be always empty.
+	 * @since 0.9.0
+	 */
+	public reportWarnings: boolean;
+
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -142,6 +151,7 @@ export class KipperProgramContext {
 		semanticChecker?: KipperSemanticChecker,
 		typeChecker?: KipperTypeChecker,
 		optimiser?: KipperOptimiser,
+		reportWarnings: boolean = true
 	) {
 		this.logger = logger;
 		this.target = target;
@@ -151,9 +161,10 @@ export class KipperProgramContext {
 		this.optimiser = optimiser ?? new KipperOptimiser(this);
 		this.parser = parser;
 		this.lexer = lexer;
+		this.builtIns = [];
+		this.reportWarnings = reportWarnings;
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
-		this.builtIns = [];
 		this._globalScope = new GlobalScope(this);
 		this._abstractSyntaxTree = undefined;
 		this._builtInReferences = [];
@@ -295,13 +306,19 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Adds a new warning to the list of warnings for this file.
+	 * Adds a new warning to the list of warnings for this file and reports the warning to the logger.
 	 * @param warning The warning to add.
 	 * @private
 	 * @since 0.9.0
 	 */
-	private addWarning(warning: KipperError): void {
-		this.warnings.push(warning);
+	public addWarning(warning: KipperError): void {
+		// Only log warnings if they are enabled
+		if (this.reportWarnings) {
+			this._warnings.push(warning);
+			this.logger.reportWarning(warning);
+		} else {
+			throw new Error("Warnings are disabled for this file.");
+		}
 	}
 
 	/**
@@ -323,9 +340,7 @@ export class KipperProgramContext {
 			const walker = new ParseTreeWalker();
 
 			// Walking through the parse tree using the listener and generating the processed Kipper parse tree
-			this.logger.debug(
-				`Translating antlr4 parse tree into the corresponding Kipper parse tree '${this.stream.name}'.`,
-			);
+			this.logger.debug(`Translating antlr4 parse tree into the corresponding Kipper AST.`);
 			walker.walk(listener, this.antlrParseTree);
 		} catch (e) {
 			if (e instanceof KipperError) {
@@ -346,8 +361,8 @@ export class KipperProgramContext {
 		}
 
 		const countNodes: number = listener.rootNode.children.length;
-		this.logger.debug(`Finished generation of Kipper AST for '${this.stream.name}'.`);
-		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}`);
+		this.logger.debug(`Finished generation of Kipper AST.`);
+		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}.`);
 		return listener.rootNode;
 	}
 
@@ -465,10 +480,8 @@ export class KipperProgramContext {
 		this.logger.info(`Generating code for target '${this.target.targetName}'.`);
 		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
-		this.logger.debug(
-			`Lines of generated code: ${genCode.length}. Number of processed root items: ` +
-				`${this._abstractSyntaxTree.children.length}`,
-		);
+		this.logger.debug(`Lines of generated code: ${genCode.length}.`);
+		this.logger.debug(`Number of processed root items: ${this._abstractSyntaxTree.children.length}.`);
 
 		// Cache the result
 		this._compiledCode = genCode;

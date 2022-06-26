@@ -11,13 +11,13 @@ import {
 	KipperCompileResult,
 	KipperError,
 	KipperParseStream,
+	LogLevel,
 } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
-import { LogLevel } from "@kipper/core";
 import { KipperInvalidInputError } from "../errors";
 import * as ts from "typescript";
 import { IFlag } from "@oclif/command/lib/flags";
@@ -87,11 +87,17 @@ export default class Run extends Command {
 				"reducing the size of the output.",
 			allowNo: true,
 		}),
+		warnings: flags.boolean({
+			char: "w",
+			default: false, // Log warnings ONLY if the user intends to do so
+			description: "Show warnings that were emitted during the compilation.",
+			allowNo: true,
+		}),
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Run);
-		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.ERROR);
+		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.ERROR, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Fetch the file
