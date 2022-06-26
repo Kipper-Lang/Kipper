@@ -16,7 +16,7 @@ export * as utils from "./utils";
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/core";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.9.0-beta.1";
+export const version = "0.9.0-rc.0";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars
