@@ -11,9 +11,10 @@ and must be migrated to newer versions to work continuously.
 The following versions are supported and will get bug-fixes and security updates:
 
 | Version | Supported          |
-| ------- | ------------------ |
-| 0.8.x   | :heavy_check_mark: |
-| <0.8.x  | :x:                |
+|---------| ------------------ |
+| 0.9.x   | :heavy_check_mark: |
+| 0.8.3   | :heavy_check_mark: |
+| <0.8.3  | :x:                |
 
 ### NPM Deprecation
 
