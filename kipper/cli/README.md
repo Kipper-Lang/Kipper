@@ -16,10 +16,11 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 
 <!-- toc -->
-* [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
-* [Kipper Docs](#kipper-docs)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
+- [Kipper Docs](#kipper-docs)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 # Kipper Docs
@@ -29,6 +30,7 @@ Proper documentation for the Kipper language is available [here](https://wmc-ahi
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
@@ -40,17 +42,19 @@ USAGE
   $ kipper COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`kipper analyse [FILE]`](#kipper-analyse-file)
-* [`kipper compile [FILE]`](#kipper-compile-file)
-* [`kipper help [COMMAND]`](#kipper-help-command)
-* [`kipper run [FILE]`](#kipper-run-file)
-* [`kipper update [CHANNEL]`](#kipper-update-channel)
-* [`kipper version`](#kipper-version)
+
+- [`kipper analyse [FILE]`](#kipper-analyse-file)
+- [`kipper compile [FILE]`](#kipper-compile-file)
+- [`kipper help [COMMAND]`](#kipper-help-command)
+- [`kipper run [FILE]`](#kipper-run-file)
+- [`kipper update [CHANNEL]`](#kipper-update-channel)
+- [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
 
@@ -186,6 +190,7 @@ USAGE
 ```
 
 _See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.9.0/kipper/cli/src/commands/version.ts)_
+
 <!-- commandsstop -->
 
 ## Copyright and License
