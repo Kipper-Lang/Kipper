@@ -127,7 +127,7 @@ export class KipperError extends Error {
 				return `${srcLine}\n  ${underline}`;
 			} else {
 				return (
-					(this.tokenSrc ? `${this.tokenSrc}\n` : "") + (this.tokenSrc ? "    " + "^".repeat(this.tokenSrc.length) : "")
+					(this.tokenSrc ? `${this.tokenSrc}\n` : "") + (this.tokenSrc ? "  " + "^".repeat(this.tokenSrc.length) : "")
 				);
 			}
 		})();
@@ -136,7 +136,7 @@ export class KipperError extends Error {
 			`Traceback:\nFile '${this.tracebackData.filePath ?? "Unknown"}', ` +
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
-			`${tokenSrc ? `    ${tokenSrc}\n` : ""}` +
+			`${tokenSrc ? `  ${tokenSrc}\n` : ""}` +
 			`${this.name}: ${this.message}`
 		);
 	}
@@ -307,7 +307,7 @@ export abstract class IdentifierError extends KipperError {
  */
 export class UndefinedIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Invalid reference to declared '${identifier}'. `);
+		super(`Invalid reference to undefined identifier '${identifier}'. `);
 		this.name = "UndefinedIdentifierError";
 	}
 }
@@ -329,7 +329,7 @@ export class UnknownIdentifierError extends IdentifierError {
  */
 export class IdentifierAlreadyUsedByVariableError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Identifier '${identifier}' already in use by a variable.`);
+		super(`Redeclaration of variable '${identifier}'.`);
 	}
 }
 
@@ -339,7 +339,7 @@ export class IdentifierAlreadyUsedByVariableError extends IdentifierError {
  */
 export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Identifier '${identifier}' already in use by a function.`);
+		super(`Redeclaration of function '${identifier}'.`);
 	}
 }
 
@@ -349,7 +349,7 @@ export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
  */
 export class BuiltInOverwriteError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`May not overwrite built-in identifier '${identifier}'.`);
+		super(`Redeclaration of built-in identifier '${identifier}'.`);
 	}
 }
 
@@ -359,7 +359,7 @@ export class BuiltInOverwriteError extends IdentifierError {
  */
 export class ReservedIdentifierOverwriteError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`May not overwrite reserved identifier '${identifier}'.`);
+		super(`Redeclaration of reserved identifier '${identifier}'.`);
 	}
 }
 
@@ -369,7 +369,7 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  */
 export class FunctionDefinitionAlreadyExistsError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Definition of function '${identifier}' already exists.`);
+		super(`Redeclaration of function '${identifier}'.`);
 	}
 }
 
@@ -379,7 +379,7 @@ export class FunctionDefinitionAlreadyExistsError extends IdentifierError {
  */
 export class VariableDefinitionAlreadyExistsError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Definition of variable '${identifier}' already exists.`);
+		super(`Redeclaration of variable '${identifier}'.`);
 	}
 }
 
@@ -421,9 +421,7 @@ export class InvalidArithmeticOperationTypeError extends TypeError {
  */
 export class InvalidArgumentTypeError extends TypeError {
 	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
-		super(
-			`Argument of type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
-		);
+		super(`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`);
 	}
 }
 
@@ -453,7 +451,7 @@ export class ReadOnlyAssignmentTypeError extends TypeError {
  */
 export class InvalidConversionTypeError extends TypeError {
 	constructor(originalType: string, destType: string) {
-		super(`Type conversion from '${originalType}' to '${destType}' is not allowed.`);
+		super(`Invalid conversion from '${originalType}' to '${destType}'.`);
 	}
 }
 
@@ -525,7 +523,7 @@ export class ArgumentError extends KipperError {
  */
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
-		super(`Expected ${expected} argument${expected === 1 ? "" : "s"} for function '${func}', received ${received}.`);
+		super(`Function '${func}' only accepts ${expected} argument${expected === 1 ? "" : "s"}, received ${received}.`);
 	}
 }
 
