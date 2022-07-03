@@ -36,18 +36,35 @@
 }
 
 #docs-content {
-  flex-grow: 1;
-  width: inherit;
+	flex-grow: 1;
+	width: inherit;
 
-  & > section > article :first-child h1 {
-    margin-top: 0.6rem;
-  }
+	& > section > article :first-child h1 {
+		margin-top: 0.6rem;
+	}
 
-  & img {
-    width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
+	& img {
+		width: 100%;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	& p,
+	& div {
+		& + p,
+		& + div:not(.code-toolbar),
+		& + div.code-toolbar pre[class*="language-"] {
+			margin: var(--default-parapgraph-margin) 0 0 0;
+		}
+	}
+
+	& div:last-child,
+	& article:last-child {
+		&,
+		& div.code-toolbar pre[class*="language-"] {
+			margin-bottom: 0 !important;
+		}
+	}
 }
 
 #nav-kipper-header {

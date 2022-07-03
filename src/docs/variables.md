@@ -1,4 +1,4 @@
-# Kipper Variables
+# Variables
 
 Variables are data items, which can contain data based on their [data type](./datatypes.html). The value of a variable
 is dynamic and can be changed as often as you want throughout the code. Variables are essential for a program to store
@@ -26,17 +26,21 @@ In this case, we have now also defined the scope and visibility of the variable,
 value yet, attempting to read from a variable will result in a compiler error, as you can not read from a variable with
 no value.
 
-<article class="red-highlight-text">
+<div class="red-highlight-text">
   <h2>Important</h2>
   <p>
     You may re-declare a variable as often as you want, as long as the types match and the scope is identical. If
     they are not, it will result in a compiler error!
   </p>
-  <em class="green-checkmark">✓ VALID CODE</em>
+  <p>
+    <em class="green-checkmark">✓ VALID CODE</em>
+  </p>
   <pre><code class="language-ts">// ✓ Valid
 var var1: str;
 var var1: str;</code></pre>
-  <em class="red-checkmark">X INVALID CODE</em>
+  <p>
+    <em class="red-checkmark">X INVALID CODE</em>
+  </p>
   <pre><code class="language-ts">// X Invalid - May not re-declare with new type signature
 var var2: str;
 var var2: num;
@@ -44,9 +48,10 @@ var var2: num;
 // X Invalid - May not re-declare in a different scope
 var var3: str;
 {
-  var var3: str;
+var var3: str;
 }</code></pre>
-</article>
+
+</div>
 
 ## How to define variables in Kipper
 
@@ -64,14 +69,15 @@ again, the following is also valid code:
 NAME = VALUE;
 ```
 
-<article class="red-highlight-text">
+<div class="red-highlight-text">
   <h2>Important</h2>
   <p>
     When you already have defined or declared a variable, you may not change its type anymore, but only overwrite its
     value with the same type!
   </p>
-  <em class="green-checkmark">✓ VALID CODE</em>
-
+  <p>
+    <em class="green-checkmark">✓ VALID CODE</em>
+  </p>
   <pre><code class="language-ts">// ✓ Valid
 var var1: str = "3"; // Declaring and defining a variable in a one-line statement
 var1 = "Another string"; // Assigning a new value
@@ -80,8 +86,9 @@ var1 = "Another string"; // Assigning a new value
 var var2: str; // Declaring a variable
 var var2: str = "3"; // Declaring again and defining a variable in a one-line statement</code></pre>
 
-<em class="red-checkmark">X INVALID CODE</em>
-
+  <p>
+    <em class="red-checkmark">X INVALID CODE</em>
+  </p>
   <pre><code class="language-ts">// X Invalid - May not re-define with new type signature
 var var1: str = "3";
 var var1: num = 3;
@@ -89,7 +96,8 @@ var var1: num = 3;
 // X Also Invalid - May not overwrite with a different type
 var var2: str = "3";
 var2 = 3; // typeof(3) -> num</code></pre>
-</article>
+
+</div>
 
 ## Scopes and Visibility of Variables
 
@@ -99,11 +107,11 @@ variable defines simply where your code can access a variable, and not interfere
 ```ts
 // This is a simple scope or also called "block of code"
 {
-  // Variable that is bound to this scope
-  var var1: num = 0;
+	// Variable that is bound to this scope
+	var var1: num = 0;
 
-  // ✓ 'var2' is able to see 'var1' as it's in the same scope, and as such the value may be copied!
-  var var2: num = var1;
+	// ✓ 'var2' is able to see 'var1' as it's in the same scope, and as such the value may be copied!
+	var var2: num = var1;
 }
 ```
 
@@ -119,11 +127,11 @@ var var3: num = 0;
 
 // This is another simple scope
 {
-  // ✓ 'var4' is able to see 'var3' as it's in the parent scope, and as such the value may be copied!
-  var var4: num = var3;
+	// ✓ 'var4' is able to see 'var3' as it's in the parent scope, and as such the value may be copied!
+	var var4: num = var3;
 
-  // ✓ 'var5' is able to see 'var4' as it's in the same scope, and as such the value may be copied!
-  var var5: num = var4;
+	// ✓ 'var5' is able to see 'var4' as it's in the same scope, and as such the value may be copied!
+	var var5: num = var4;
 }
 ```
 
@@ -137,20 +145,20 @@ var var3: num = 0;
 
 // This is another simple scope
 {
-  // ✓ 'var4' is able to see 'var3' as it's in the parent scope,
-  // and as such the value may be copied!
-  var var4: num = var3;
+	// ✓ 'var4' is able to see 'var3' as it's in the parent scope,
+	// and as such the value may be copied!
+	var var4: num = var3;
 }
 
 // This is another simple scope
 {
-  // X 'var5' is NOT able to see 'var4' as it's not in this or any parent's scope,
-  // and as such the value may NOT be copied!
-  var var5: num = var4;
+	// X 'var5' is NOT able to see 'var4' as it's not in this or any parent's scope,
+	// and as such the value may NOT be copied!
+	var var5: num = var4;
 }
 ```
 
-# Kipper Constants
+# Constants
 
 Besides, the already explained variables that may change throughout the code, there are also the so-called constants,
 which are defined once with a value and may never be re-defined or overwritten.
@@ -177,28 +185,31 @@ var var9: num = var7 + var8; // 1 + 3 -> 4
 const var10: num = var9 + var8; // 4 + 3 -> 4
 ```
 
-<article class="red-highlight-text">
+<div class="red-highlight-text">
   <h2>Important</h2>
   <p>
   You may not overwrite the value of a constant or declare it without a value.
   </p>
-  <em class="green-checkmark">✓ VALID CODE</em>
-
+  <p>
+    <em class="green-checkmark">✓ VALID CODE</em>
+  </p>
   <pre><code class="language-ts">// ✓ Valid
 const var1: num = 4;
 
 // ✓ Also Valid
 const var2: num = var1;</code></pre>
 
-  <em class="red-checkmark">X INVALID CODE</em>
-
+  <p>
+    <em class="red-checkmark">X INVALID CODE</em>
+  </p>
   <pre><code class="language-ts">// X Also Invalid - A value must be present for a constant definition!
-  const var1;
+const var1;
 
-  // X Invalid - May not overwrite read-only constant
-  const var2: num = 4;
-  var2 = 5;
+// X Invalid - May not overwrite read-only constant
+const var2: num = 4;
+var2 = 5;
 
-  // X Also Invalid - May not define with a different type
-  const var2: num = "4"; // typeof("4") -> string</code></pre>
-</article>
+// X Also Invalid - May not define with a different type
+const var2: num = "4"; // typeof("4") -> string</code></pre>
+
+</div>

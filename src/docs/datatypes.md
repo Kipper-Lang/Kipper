@@ -1,4 +1,4 @@
-# Kipper Datatypes
+# Datatypes
 
 As previously shown in the docs page [Variables](./variables.html), every variable always has a type that defines what
 values it can store. This also means that you often can not mix variables of different data types together, as they
@@ -12,14 +12,15 @@ A variable with the datatype `num`, for example, can only contain numbers. A var
 contain text, symbols or numbers, but saves them as text. This makes them for example impossible to use for calculations
 and as such using them in arithmetic expression is invalid.
 
-### Remember!
-
-Data types can not be mixed together and must be converted before being used with another type.
-
-<em class="green-checkmark">✓ VALID CODE</em>
-
-```ts
-// ✓ Valid
+<div class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+  Data types can not be mixed together and must be converted before being used with another type.
+  </p>
+  <p>
+    <em class="green-checkmark">✓ VALID CODE</em>
+  </p>
+  <pre><code class="language-ts">// ✓ Valid
 var var1: str = "This ";
 var var2: str = "is ";
 var var3: str = "a string";
@@ -31,13 +32,12 @@ var var5: num = (var4 as num) + 5; // Converts the string to 'num' and adds 5 to
 
 // ✓ Also Valid
 var var6: num = 32;
-var var7: num = (var6 as num) * 2; // Converts the string to 'num' and multiplies it by 2
-```
+var var7: num = (var6 as num) \* 2; // Converts the string to 'num' and multiplies it by 2</code></pre>
 
-<em class="red-checkmark">X INVALID CODE</em>
-
-```ts
-// X Invalid - May not re-define with new type signature
+  <p>
+    <em class="red-checkmark">X INVALID CODE</em>
+  </p>
+  <pre><code class="language-ts">// X Invalid - May not re-define with new type signature
 var var1: str = "3";
 var var1: num = 3;
 
@@ -47,8 +47,9 @@ var var3: num = var4 as num; // Impossible to convert!
 
 // X Invalid - Invalid conversion from 'str' to 'num'
 var var2: str = ""; // empty
-var var3: num = var2 as num; // Impossible to convert, as it is an empty value!
-```
+var var3: num = var2 as num; // Impossible to convert, as it is an empty value!</code></pre>
+
+</div>
 
 ## List of data types in Kipper
 
@@ -88,7 +89,7 @@ var var2: num = 2 ** 8; // -> 256
 var var2: num = 51 % 10; // -> 1
 ```
 
-<article class="red-highlight-text">
+<div class="red-highlight-text">
   <h3>Important</h3>
   <p>
     Remember that Kipper will interpret mathematical calculations as defined in the standard
@@ -97,7 +98,7 @@ var var2: num = 51 % 10; // -> 1
   </p>
   <pre><code class="language-ts">// ✓ Standard math rules apply
   var result: num = 4 + 4 * 5; // 4 + (4 * 5) -> 24</code></pre>
-</article>
+</div>
 
 Additionally, to the default Base-10 numbers, you may also use Hex, Octal and Binary numbers:
 

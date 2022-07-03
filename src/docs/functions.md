@@ -1,4 +1,4 @@
-# Kipper Functions
+# Functions
 
 Functions are an easy way to re-use code and provide interface to do certain things over and over again. These functions
 may also accept arguments/parameters to change the functions behaviour and also return values after execution.
