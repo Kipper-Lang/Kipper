@@ -36,18 +36,18 @@
 }
 
 #docs-content {
-	flex-grow: 1;
-	width: inherit;
+  flex-grow: 1;
+  width: inherit;
 
-	& > section > article :first-child h1 {
-		margin-top: 0.6rem;
-	}
+  & > section > article :first-child h1 {
+    margin-top: 0.6rem;
+  }
 
-	& img {
-		width: 100%;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-	}
+  & img {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 
 #nav-kipper-header {

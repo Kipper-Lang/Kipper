@@ -16,7 +16,7 @@ and as such using them in arithmetic expression is invalid.
 
 Data types can not be mixed together and must be converted before being used with another type.
 
-- <em class="green-checkmark">✓ VALID CODE</em>
+<em class="green-checkmark">✓ VALID CODE</em>
 
 ```ts
 // ✓ Valid
@@ -34,7 +34,7 @@ var var6: num = 32;
 var var7: num = (var6 as num) * 2; // Converts the string to 'num' and multiplies it by 2
 ```
 
-- <em class="red-checkmark">X INVALID CODE</em>
+<em class="red-checkmark">X INVALID CODE</em>
 
 ```ts
 // X Invalid - May not re-define with new type signature

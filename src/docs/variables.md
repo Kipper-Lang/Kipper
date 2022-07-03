@@ -31,27 +31,27 @@ no value.
 You may re-declare a variable as often as you want, as long as the types match and the scope is identical. If they are
 not, it will result in a compiler error!
 
-- <em class="green-checkmark">✓ VALID CODE</em>
+<em class="green-checkmark">✓ VALID CODE</em>
 
-  ```ts
-  // ✓ Valid
-  var var1: str;
-  var var1: str;
-  ```
+```ts
+// ✓ Valid
+var var1: str;
+var var1: str;
+```
 
-- <em class="red-checkmark">X INVALID CODE</em>
+<em class="red-checkmark">X INVALID CODE</em>
 
-  ```ts
-  // X Invalid - May not re-declare with new type signature
-  var var2: str;
-  var var2: num;
+```ts
+// X Invalid - May not re-declare with new type signature
+var var2: str;
+var var2: num;
 
-  // X Invalid - May not re-declare in a different scope
+// X Invalid - May not re-declare in a different scope
+var var3: str;
+{
   var var3: str;
-  {
-    var var3: str;
-  }
-  ```
+}
+```
 
 ## How to define variables in Kipper
 
@@ -74,29 +74,29 @@ NAME = VALUE;
 When you already have defined or declared a variable, you may not change its type anymore, but only overwrite its value
 with the same type!
 
-- <em class="green-checkmark">✓ VALID CODE</em>
+<em class="green-checkmark">✓ VALID CODE</em>
 
-  ```ts
-  // ✓ Valid
-  var var1: str = "3"; // Declaring and defining a variable in a one-line statement
-  var1 = "Another string"; // Assigning a new value
+```ts
+// ✓ Valid
+var var1: str = "3"; // Declaring and defining a variable in a one-line statement
+var1 = "Another string"; // Assigning a new value
 
-  // ✓ Also Valid
-  var var2: str; // Declaring a variable
-  var var2: str = "3"; // Declaring again and defining a variable in a one-line statement
-  ```
+// ✓ Also Valid
+var var2: str; // Declaring a variable
+var var2: str = "3"; // Declaring again and defining a variable in a one-line statement
+```
 
-- <em class="red-checkmark">X INVALID CODE</em>
+<em class="red-checkmark">X INVALID CODE</em>
 
-  ```ts
-  // X Invalid - May not re-define with new type signature
-  var var1: str = "3";
-  var var1: num = 3;
+```ts
+// X Invalid - May not re-define with new type signature
+var var1: str = "3";
+var var1: num = 3;
 
-  // X Also Invalid - May not overwrite with a different type
-  var var2: str = "3";
-  var2 = 3; // typeof(3) -> num
-  ```
+// X Also Invalid - May not overwrite with a different type
+var var2: str = "3";
+var2 = 3; // typeof(3) -> num
+```
 
 ## Scopes and Visibility of Variables
 
@@ -144,13 +144,15 @@ var var3: num = 0;
 
 // This is another simple scope
 {
-  // ✓ 'var4' is able to see 'var3' as it's in the parent scope, and as such the value may be copied!
+  // ✓ 'var4' is able to see 'var3' as it's in the parent scope,
+  // and as such the value may be copied!
   var var4: num = var3;
 }
 
 // This is another simple scope
 {
-  // X 'var5' is NOT able to see 'var4' as it's in this or any parent's scope, and as such the value may NOT be copied!
+  // X 'var5' is NOT able to see 'var4' as it's not in this or any parent's scope,
+  // and as such the value may NOT be copied!
   var var5: num = var4;
 }
 ```
@@ -186,26 +188,26 @@ const var10: num = var9 + var8; // 4 + 3 -> 4
 
 You may NEVER overwrite the set value of a constant or only **declare** a constant.
 
-- <em class="green-checkmark">✓ VALID CODE</em>
+<em class="green-checkmark">✓ VALID CODE</em>
 
-  ```ts
-  // ✓ Valid
-  const var1: num = 4;
+```ts
+// ✓ Valid
+const var1: num = 4;
 
-  // ✓ Also Valid
-  const var2: num = var1;
-  ```
+// ✓ Also Valid
+const var2: num = var1;
+```
 
-- <em class="red-checkmark">X INVALID CODE</em>
+<em class="red-checkmark">X INVALID CODE</em>
 
-  ```ts
-  // X Also Invalid - A value must be present for a constant definition!
-  const var1;
+```ts
+// X Also Invalid - A value must be present for a constant definition!
+const var1;
 
-  // X Invalid - May not overwrite read-only constant
-  const var2: num = 4;
-  var2 = 5;
+// X Invalid - May not overwrite read-only constant
+const var2: num = 4;
+var2 = 5;
 
-  // X Also Invalid - May not define with a different type
-  const var2: num = "4"; // typeof("4") -> string
-  ```
+// X Also Invalid - May not define with a different type
+const var2: num = "4"; // typeof("4") -> string
+```
