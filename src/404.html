@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>404 - Page Not Found</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
+
+		<style>
+			:root {
+				--scheme-primary: #e01a4f;
+				--button-dark-primary: #c71242;
+			}
+
+			* {
+				line-height: 1.2;
+				margin: 0;
+			}
+
+			html {
+				font-family: "Inter", Georgia, Verdana, monospace;
+				height: 100%;
+				width: 100%;
+				color: #555;
+			}
+
+			body {
+				background-color: var(--scheme-primary) !important;
+				display: flex;
+				text-align: center;
+				align-items: center;
+				justify-content: center;
+				height: 100%;
+				width: 100%;
+			}
+
+			.white-box {
+				position: center;
+				text-align: center;
+				background-color: white;
+				opacity: 85;
+				border-radius: 1em;
+				padding: 4vw;
+			}
+
+			h1 {
+				font-size: 42px;
+				line-height: 1.2;
+				font-weight: 400;
+			}
+
+			h2 {
+				font-size: 28px;
+				line-height: 1.2;
+				font-weight: 300;
+				margin: 0.5rem 0;
+			}
+
+			p {
+				margin: 0 auto;
+				width: 280px;
+			}
+
+			/* Inverted Transparent-Background Button */
+			.inverted-button {
+				display: inline-block;
+				border-radius: 26px;
+				font-size: 16px;
+				font-weight: bold;
+				text-align: center;
+				text-decoration: none !important; /* Overwrite default a text decorations */
+				box-sizing: border-box; /* Include border into the size-properties */
+				border: 2px solid var(--scheme-primary) !important;
+				color: var(--scheme-primary) !important;
+				background-color: transparent !important;
+				padding: calc(1em - 2px) calc(1.6em - 2px) !important;
+				margin: 1.2rem 0 1.2rem 0;
+			}
+
+			.inverted-button:active,
+			.inverted-button:visited {
+				color: var(--scheme-primary) !important;
+			}
+
+			.inverted-button:hover {
+				background-color: var(--button-dark-primary) !important;
+				box-shadow: 0 0 0.5em var(--scheme-gray) !important;
+				color: white !important;
+				border-color: var(--button-dark-primary) !important;
+			}
+
+			@media only screen and (max-width: 380px) {
+				html {
+					margin: 0 5%;
+				}
+
+				body,
+				p {
+					width: 90%;
+				}
+
+				h1 {
+					font-size: 1.5em;
+					margin: 0 0 0.3em;
+				}
+
+				h2 {
+					font-size: 1.2em;
+					margin: 0.3rem 0;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="white-box">
+			<h1>404</h1>
+			<h2>Page Not Found</h2>
+			<p>Sorry, but the page you were trying to view does not exist.</p>
+			<p><a href="./index.html" class="inverted-button">Homepage</a></p>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-background-overlay"></div>
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script type="module" src="./js/search.ts"></script>
+	</body>
+</html>

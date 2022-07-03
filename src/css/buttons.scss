@@ -1,0 +1,144 @@
+/*! Defaults design for the buttons */
+
+:root {
+	--button-dark-primary: #c71242;
+}
+
+/* Default sizing for buttons */
+.button,
+.button-dark {
+	padding: 1em 1.6em;
+	margin: 1.2rem 1.2rem 1.2rem 0;
+}
+
+/* Base Button Properties */
+.button,
+.inverted-button,
+.button-dark {
+	display: inline-block;
+	border-radius: 26px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none !important; /* Overwrite default a text decorations */
+	box-sizing: border-box; /* Include border into the size-properties */
+}
+
+/* Default Button */
+.button {
+	border: none;
+	color: white;
+	background-color: var(--scheme-primary) !important; /* Overwrite default background color */
+
+	&:active,
+	&:visited {
+		color: white !important;
+	}
+
+	&:hover {
+		background-color: var(--button-dark-primary) !important;
+		box-shadow: 0 0 0.5em var(--scheme-gray) !important;
+	}
+}
+
+.docs-button {
+	padding: 10px 14px;
+	margin: 1.2rem 0.6rem 1.2rem 0;
+}
+
+/* Darker Button */
+.button-dark {
+	border: none !important;
+	color: white !important;
+	background-color: var(--button-dark-primary) !important;
+
+	&:active,
+	&:visited {
+		background-color: var(--button-dark-primary) !important;
+		color: white;
+	}
+
+	&:hover {
+		background-color: var(--button-dark-primary) !important;
+		box-shadow: 0 0 0.5em var(--scheme-gray) !important;
+		color: white;
+	}
+}
+
+/* Inverted Transparent-Background Button */
+.inverted-button {
+	border: 2px solid var(--scheme-primary);
+	color: var(--scheme-primary);
+	background-color: transparent;
+	padding: calc(1em - 2px) calc(1.6em - 2px);
+	margin: 1.2rem 1.2rem 1.2rem 0;
+
+	&:active,
+	&:visited {
+		color: var(--scheme-primary);
+	}
+
+	&:hover {
+		background-color: var(--button-dark-primary) !important;
+		box-shadow: 0 0 0.5em var(--scheme-gray);
+		color: white !important;
+		border-color: var(--button-dark-primary);
+	}
+}
+
+/* Underline buttons */
+.underline-button {
+	position: relative;
+	border: none;
+	color: white;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	box-sizing: border-box;
+
+	& h1,
+	& h2,
+	& h3,
+	& h4,
+	& h5,
+	& h6,
+	& a,
+	& p {
+		margin: 0.25rem 0;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 2px;
+		bottom: 0;
+		left: 0;
+		background-color: white;
+		transform: scaleX(0);
+		transform-origin: top left;
+		transition: transform 0.4s ease;
+	}
+
+	&:hover::before {
+		transform: scaleX(1);
+	}
+
+	&:hover {
+		color: white !important;
+	}
+}
+
+/* Navigation Menu Button */
+@media (max-width: 1200px) {
+	.top-nav-button {
+		margin: 0.25em 0.5em !important;
+	}
+}
+
+@media (min-width: 1200px) {
+	.top-nav-button {
+		margin: 0.25em 1em !important;
+	}
+}

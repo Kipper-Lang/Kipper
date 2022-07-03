@@ -1,5 +1,3 @@
-lib
-img
-node_modules
-dist
-kipper-standalone.*
+node_modules/
+dist/
+coverage/

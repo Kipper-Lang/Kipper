@@ -1,0 +1,89 @@
+<% let title = "Kipper Interactive Playground"; %>
+<% let description = "Online Playground for trying out Kipper in an already set up environment."; %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', { title: title, description: description }) %>
+    <link rel="stylesheet" href="css/playground.scss" />
+    <link rel="stylesheet" href="css/spinner.scss" />
+    <link rel="stylesheet" href="./prism/shades-of-purple.css" />
+</head>
+<body>
+<script src="./js/plugins.ts"></script>
+<script src="./prism/prism.js"></script>
+
+<!-- Show Error if JS is disabled or blocked -->
+<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        <%- include('./partials/nav-bar', { header: true, title: title, description: description })  %>
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div id="interactive-console" class="flex-parent-container flex-fill-to-parent flex-row">
+            <div id="left-console-interface" class="flex-column">
+                <div id="playground-option-menu" class="flex-row">
+                    <div class="playground-button" id="run-code-list-item">
+                        <button>Run</button>
+                    </div>
+                    <div class="playground-button" id="copy-code-list-item">
+                        <button>Copy</button>
+                    </div>
+                    <div class="playground-button" id="clear-content-list-item">
+                        <button>Clear</button>
+                    </div>
+                    <!--
+                      Independent text saving state list item for letting the user
+                      know the state of saving
+                    -->
+                    <div id="text-saving-state" class="flex-row flex-center"></div>
+                </div>
+                <div id="code-editor">
+                    <label for="code-editor-textarea"></label>
+                    <textarea
+                            id="code-editor-textarea"
+                            type="text"
+                            placeholder="Write your Code here"
+                            spellcheck="false"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="off"
+                            data-gramm="false"
+                            wrap="off">
+							</textarea>
+                    <pre
+                            id="highlighting-field"
+                            aria-hidden="true"><code class="language-kipper"
+                                                     id="highlighting-field-content"></code></pre>
+                </div>
+            </div>
+            <div id="shell-sidebar" class="flex-column">
+                <div id="shell-sidebar-menu" class="flex-parent-container flex-row">
+                    <div id="console-output-button" class="playground-button">
+                        <button>Console</button>
+                    </div>
+                    <div id="compiler-output-button" class="playground-button">
+                        <button>Compiler</button>
+                    </div>
+                </div>
+                <div id="shell-output">
+							<pre
+                                    id="shell-sidebar-highlight-field"
+                                    class="console-bash"><code class="language-bash console-bash"
+                                                               id="shell-sidebar-highlight-field-content"></code></pre>
+                </div>
+            </div>
+        </div>
+
+        <script type="module" src="js/playground.ts"></script>
+
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <%- include('./partials/footer') %>
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<%- include('./partials/search-bar-overlay') %>
+</body>
+</html>

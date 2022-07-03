@@ -1,7 +1,0 @@
-/* Variable declaration */
-var name: str;
-
-/* Variable assignment */
-name = "4";
-
-call print(name);

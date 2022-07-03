@@ -1,0 +1,39 @@
+name: Deploy GH-Pages
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.0.0
+          run_install: |
+            - recursive: true
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build Files using Parcel
+        run: pnpm run gh-pages-build
+      - name: Add Local Identification Config
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name  "github-actions"
+      - name: Commit changes to main
+        run: |
+          git add .
+          git commit -m "Updated parcel build"
+          git push origin +main:gh-pages --force

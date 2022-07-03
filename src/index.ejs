@@ -1,0 +1,54 @@
+<!-- Page EJS Config -->
+<% let title = "Welcome to Kipper!"; %>
+<% let description = "The simple, easy-to-use and fast open-source language designed for Browsers, Node.js and Deno."; %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', { title: title, description: description }) %>
+</head>
+<body>
+<script src="./js/plugins.ts"></script>
+<script src="./prism/prism.js"></script>
+
+<!-- Show Error if JS is disabled or blocked -->
+<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        <%- include('./partials/nav-bar', { header: false }) %>
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="text-page-content-container">
+            <section>
+                <!-- Alternative image if the window is too small to display the animation -->
+                <a href="./playground.html">
+                    <img id="alternative-welcome-image" src="./img/carbon-code-main.png" alt="" />
+                </a>
+                <ul id="homepage-content" class="no-style-list flex-row flex-parent-container flex-end">
+                    <li>
+                        <section id="welcome-text" class="flex-parent-container flex-column flex-start">
+                            <h2 id="welcome-header" class="super-large-header">Welcome to <br />Kipper!</h2>
+                            <p class="flex-parent-container flex-row flex-start">
+                                <a href="./playground.html" class="button"> Try our Playground </a>
+                                <a href="./docs/index.html" class="inverted-button"> View the Kipper docs </a>
+                            </p>
+                        </section>
+                    </li>
+                    <li>
+                        <a href="./playground.html">
+                            <img id="welcome-image" src="./img/carbon-code-main.png" alt="" />
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <%- include('./partials/footer') %>
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<%- include('./partials/search-bar-overlay') %>
+</body>
+</html>

@@ -1,0 +1,20 @@
+/*! Defaults design for the lists and special formatting */
+
+ul,
+ol {
+	display: flex;
+	list-style-type: disc;
+	flex-direction: column;
+	padding-left: 2rem;
+
+	&.no-style-list {
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	&.bullet-list {
+		list-style-type: disc;
+		list-style-position: outside;
+	}
+}

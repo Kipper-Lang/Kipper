@@ -1,9 +1,0 @@
-def func() -> void {
-  {
-    {
-      var lx: bool;
-      var ly: num = 4;
-      const lz: str = "5";
-    }
-  }
-}

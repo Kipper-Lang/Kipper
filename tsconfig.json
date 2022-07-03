@@ -1,31 +1,18 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "sourceMap": true,
-    "declaration": true,
-    "importHelpers": true,
     "removeComments": true,
-    "noImplicitAny": false,
-    "moduleResolution": "node",
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "target": "ES2022",
     "module": "commonjs",
-    "rootDir": "./kipper",
-		"outDir": "./lib",
-		"strict": true,
-    "target": "es2020",
+    "moduleResolution": "node",
     "lib": [
-      "ES7"
+      "DOM",
+      "WebWorker"
     ]
-    // ES7 -> ES2016
   },
-  "exclude": [
-    "node_modules",
-    "lib",
-    "dist",
-		"test",
-		"**/*.spec.ts",
-		"kipper/core",
-		"kipper/cli",
-	],
-	"files": [
-		"./kipper/index.ts"
-	],
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

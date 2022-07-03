@@ -1,0 +1,12 @@
+{
+  "short_name": "Kipper",
+  "name": "Kipper",
+  "icons": [{
+    "src": "src/img/icon.png",
+    "type": "image/png",
+    "sizes": "192x192"
+  }],
+  "start_url": "/?utm_source=homescreen",
+  "background_color": "#ffffff",
+  "theme_color": "#e01a4f"
+}

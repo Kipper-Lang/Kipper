@@ -1,0 +1,21 @@
+/*! Defines the pure CSS Spinners - Origin: https://loading.io/css/ */
+
+.spinner {
+	color: var(--scheme-dark-gray);
+	border: 0.25em solid var(--scheme-gray); /* Light grey */
+	border-top: 0.25em solid var(--scheme-dark-gray); /* Blue */
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	animation: spin 1.25s linear infinite;
+	margin: 0 0.5em;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

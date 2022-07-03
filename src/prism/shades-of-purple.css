@@ -1,0 +1,196 @@
+/**
+ * Shades of Purple Theme for Prism.js
+ *
+ * @author Ahmad Awais <https://twitter.com/MrAhmadAwais/>
+ * @support Follow/tweet at https://twitter.com/MrAhmadAwais/
+ */
+
+code.console-bash[class*="language-"],
+pre.console-bash[class*="language-"] {
+	color: #9efeff;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+
+	font-family: "Operator Mono", "Fira code.console-bash", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 25px;
+	letter-spacing: 0.5px;
+	text-shadow: 0 1px #222245;
+}
+
+pre.console-bash[class*="language-"]::-moz-selection,
+pre.console-bash[class*="language-"] ::-moz-selection,
+code.console-bash[class*="language-"]::-moz-selection,
+code.console-bash[class*="language-"] ::-moz-selection,
+pre.console-bash[class*="language-"]::selection,
+pre.console-bash[class*="language-"] ::selection,
+code.console-bash[class*="language-"]::selection,
+code.console-bash[class*="language-"] ::selection {
+	color: inherit;
+	background: #a599e9;
+}
+
+/* code.console-bash blocks. */
+pre.console-bash[class*="language-"] {
+	padding: 2em;
+	margin: 0.5em 0;
+	overflow: auto;
+}
+
+:not(pre.console-bash) > code.console-bash[class*="language-"],
+pre.console-bash[class*="language-"] {
+	background: #1e1e3f;
+}
+
+/* Inline code.console-bash */
+:not(pre.console-bash) > code.console-bash[class*="language-"] {
+	padding: 0.1em;
+	border-radius: 0.3em;
+}
+
+.console-bash .token {
+	font-weight: 400;
+}
+
+.console-bash .token.comment,
+.console-bash .token.prolog,
+.console-bash .token.cdata {
+	color: #b362ff;
+}
+
+.console-bash .token.delimiter,
+.console-bash .token.keyword,
+.console-bash .token.selector,
+.console-bash .token.important,
+.console-bash .token.atrule {
+	color: #ff9d00;
+}
+
+.console-bash .token.operator,
+.console-bash .token.attr-name {
+	color: rgb(255, 180, 84);
+}
+
+.console-bash .token.punctuation {
+	color: #ffffff;
+}
+
+.console-bash .token.boolean {
+	color: rgb(255, 98, 140);
+}
+
+.console-bash .token.tag,
+.console-bash .token.tag .punctuation,
+.console-bash .token.doctype,
+.console-bash .token.builtin {
+	color: rgb(255, 157, 0);
+}
+
+.console-bash .token.entity,
+.console-bash .token.symbol {
+	color: #6897bb;
+}
+
+.console-bash .token.number {
+	color: #ff628c;
+}
+
+.console-bash .token.property,
+.console-bash .token.constant,
+.console-bash .token.variable {
+	color: #ff628c;
+}
+
+.console-bash .token.string,
+.console-bash .token.char {
+	color: #a5ff90;
+}
+
+.console-bash .token.attr-value,
+.console-bash .token.attr-value .punctuation {
+	color: #a5c261;
+}
+
+.console-bash .token.attr-value .punctuation:first-child {
+	color: #a9b7c6;
+}
+
+.console-bash .token.url {
+	color: #287bde;
+	text-decoration: underline;
+}
+
+.console-bash .token.function {
+	color: rgb(250, 208, 0);
+}
+
+.console-bash .token.regex {
+	background: #364135;
+}
+
+.console-bash .token.bold {
+	font-weight: bold;
+}
+
+.console-bash .token.italic {
+	font-style: italic;
+}
+
+.console-bash .token.inserted {
+	background: #00ff00;
+}
+
+.console-bash .token.deleted {
+	background: #ff000d;
+}
+
+code.console-bash.language-css .console-bash .token.property,
+code.console-bash.language-css .console-bash .token.property + .console-bash .token.punctuation {
+	color: #a9b7c6;
+}
+
+code.console-bash.language-css .console-bash .token.id {
+	color: #ffc66d;
+}
+
+code.console-bash.language-css .console-bash .token.selector > .console-bash .token.class,
+code.console-bash.language-css .console-bash .token.selector > .console-bash .token.attribute,
+code.console-bash.language-css .console-bash .token.selector > .console-bash .token.pseudo-class,
+code.console-bash.language-css .console-bash .token.selector > .console-bash .token.pseudo-element {
+	color: #ffc66d;
+}
+
+.console-bash .token.class-name {
+	color: #fb94ff;
+}
+
+.console-bash .token.operator,
+.console-bash .token.entity,
+.console-bash .token.url,
+.language-css .console-bash .token.string,
+.style .console-bash .token.string {
+	background: none;
+}
+
+.line-highlight.line-highlight {
+	margin-top: 36px;
+	background: linear-gradient(to right, rgba(179, 98, 255, 0.17), transparent);
+}
+
+.line-highlight.line-highlight:before,
+.line-highlight.line-highlight[data-end]:after {
+	content: "";
+}

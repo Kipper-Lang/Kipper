@@ -9,6 +9,7 @@ bin
 .npmignore
 .prettierignore
 kipper-standalone.js
-kipper-standalone.min.js
+*.min.js
+*.min.ts
 *.yaml
 *.json

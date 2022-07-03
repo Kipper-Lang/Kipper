@@ -1,4 +1,0 @@
-call print(("Hello world!"));
-call print(((4 + 5) * 8) as str);
-call print(("9" + ("5" + "5")) as str);
-call print((194 * (100 / 40)) as str);

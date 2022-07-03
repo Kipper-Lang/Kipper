@@ -1,0 +1,59 @@
+<!-- Page EJS Config -->
+<% let title = "Changelog"; %>
+<% let description = "Detailed Changelog documenting changes in Kipper."; %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', { title: title, description: description }) %>
+    <link rel="stylesheet" href="./css/changelog.scss" />
+</head>
+<body>
+<script src="./js/plugins.ts"></script>
+<script src="./prism/prism.js"></script>
+
+<!-- Show Error if JS is disabled or blocked -->
+<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        <%- include('./partials/nav-bar', { header: true, title: title, description: description }) %>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="text-page-content-container">
+            <div id="changelog-content" class="text-content shadowed-box">
+                <section>
+                    <script src="./showdown/showdown.min.js"></script>
+                    <script>
+                      console.log("Loading Changelog...");
+                      const url = "https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/CHANGELOG.md";
+                      fetch(url)
+                        .then((response) => response.text())
+                        .then((response) => {
+                          // Set markdown flavor to 'github'
+                          showdown.setFlavor("github");
+
+                          const converter = new showdown.Converter();
+                          const md = response.toString();
+                          document.getElementById("markdown-content").innerHTML = converter.makeHtml(md);
+                        });
+                    </script>
+                    <div id="changelog">
+                        <!-- Markdown will be added here -->
+                        <div id="markdown-content"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <%- include('./partials/footer') %>
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<%- include('./partials/search-bar-overlay') %>
+</body>
+</html>

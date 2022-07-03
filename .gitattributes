@@ -1,5 +1,4 @@
-## Git attributes for Web-Projects
-# Forked from: https://github.com/alexkaratarakis/gitattributes/blob/master/Web.gitattributes
+## GITATTRIBUTES FOR WEB PROJECTS
 #
 # These settings are for any web project.
 #
@@ -10,195 +9,186 @@
 # Note that binary is a macro for -text -diff.
 ######################################################################
 
-# Auto detect
+## AUTO-DETECT
 ##   Handle line endings automatically for files detected as
 ##   text and leave all files detected as binary untouched.
 ##   This will handle all files NOT defined below.
-*                 text=auto eol=lf
+* text=auto
 
-# Source code
-*.bash            text eol=lf
-*.bat             text eol=crlf
-*.cmd             text eol=crlf
-*.coffee          text eol=lf
-*.css             text eol=lf diff=css
-*.htm             text eol=lf diff=html
-*.html            text eol=lf diff=html
-*.inc             text eol=lf
-*.ini             text eol=lf
-*.js              text eol=lf
-*.json            text eol=lf
-*.jsx             text eol=lf
-*.kip 						text eol=lf
-*.less            text eol=lf
-*.ls              text eol=lf
-*.map             text -diff
-*.od              text eol=lf
-*.onlydata        text eol=lf
-*.php             text eol=lf diff=php
-*.pl              text eol=lf
-*.ps1             text eol=crlf
-*.py              text eol=lf diff=python
-*.rb              text eol=lf diff=ruby
-*.sass            text eol=lf
-*.scm             text eol=lf
-*.scss            text eol=lf diff=css
-*.sh              text eol=lf
-*.sql             text eol=lf
-*.styl            text eol=lf
-*.tag             text eol=lf
-*.ts              text eol=lf
-*.tsx             text eol=lf
-*.xml             text eol=lf
-*.xhtml           text eol=lf diff=html
+## SOURCE CODE
+*.bat      text eol=crlf
+*.coffee   text
+*.css      text
+*.htm      text
+*.html     text
+*.inc      text
+*.ini      text
+*.js       text
+*.json     text
+*.jsx      text
+*.less     text
+*.od       text
+*.onlydata text
+*.php      text
+*.pl       text
+*.py       text
+*.rb       text
+*.sass     text
+*.scm      text
+*.scss     text
+*.sh       text eol=lf
+*.sql      text
+*.styl     text
+*.tag      text
+*.ts       text
+*.tsx      text
+*.xml      text
+*.xhtml    text
 
-# Docker
-Dockerfile        text eol=lf
+## DOCKER
+*.dockerignore text
+Dockerfile     text
 
-# Documentation
-*.ipynb           text eol=lf
-*.markdown        text eol=lf diff=markdown
-*.md              text eol=lf diff=markdown
-*.mdwn            text eol=lf diff=markdown
-*.mdown           text eol=lf diff=markdown
-*.mkd             text eol=lf diff=markdown
-*.mkdn            text eol=lf diff=markdown
-*.mdtxt           text eol=lf
-*.mdtext          text eol=lf
-*.txt             text eol=lf
-AUTHORS           text eol=lf
-CHANGELOG         text eol=lf
-CHANGES           text eol=lf
-CONTRIBUTING      text eol=lf
-COPYING           text eol=lf
-copyright         text eol=lf
-*COPYRIGHT*       text eol=lf
-INSTALL           text eol=lf
-license           text eol=lf
-LICENSE           text eol=lf
-NEWS              text eol=lf
-readme            text eol=lf
-*README*          text eol=lf
-TODO              text eol=lf
+## DOCUMENTATION
+*.markdown   text
+*.md         text
+*.mdwn       text
+*.mdown      text
+*.mkd        text
+*.mkdn       text
+*.mdtxt      text
+*.mdtext     text
+*.txt        text
+AUTHORS      text
+CHANGELOG    text
+CHANGES      text
+CONTRIBUTING text
+COPYING      text
+copyright    text
+*COPYRIGHT*  text
+INSTALL      text
+license      text
+LICENSE      text
+NEWS         text
+readme       text
+*README*     text
+TODO         text
 
-# Templates
-*.dot             text eol=lf
-*.ejs             text eol=lf
-*.erb             text eol=lf
-*.haml            text eol=lf
-*.handlebars      text eol=lf
-*.hbs             text eol=lf
-*.hbt             text eol=lf
-*.jade            text eol=lf
-*.latte           text eol=lf
-*.mustache        text eol=lf
-*.njk             text eol=lf
-*.phtml           text eol=lf
-*.svelte          text eol=lf
-*.tmpl            text eol=lf
-*.tpl             text eol=lf
-*.twig            text eol=lf
-*.vue             text eol=lf
+## TEMPLATES
+*.dot        text
+*.ejs        text
+*.haml       text
+*.handlebars text
+*.hbs        text
+*.hbt        text
+*.jade       text
+*.latte      text
+*.mustache   text
+*.njk        text
+*.phtml      text
+*.tmpl       text
+*.tpl        text
+*.twig       text
 
-# Configs
-*.cnf             text eol=lf
-*.conf            text eol=lf
-*.config          text eol=lf
-.editorconfig     text eol=lf
-.env              text eol=lf
-.gitattributes    text eol=lf
-.gitconfig        text eol=lf
-.htaccess         text eol=lf
-*.lock            text -diff
-package.json      text eol=lf
-package-lock.json text -diff
-pnpm-lock.yaml    text eol=lf -diff
-.prettierrc       text eol=lf
-yarn.lock         text -diff
-*.toml            text eol=lf
-*.yaml            text eol=lf
-*.yml             text eol=lf
-browserslist      text eol=lf
-Makefile          text eol=lf
-makefile          text eol=lf
+## LINTERS
+.babelrc      text
+.csslintrc    text
+.eslintrc     text
+.htmlhintrc   text
+.jscsrc       text
+.jshintrc     text
+.jshintignore text
+.prettierrc   text
+.stylelintrc  text
 
-# Heroku
-Procfile          text eol=lf
+## CONFIGS
+*.bowerrc       text
+*.cnf           text
+*.conf          text
+*.config        text
+.browserslistrc text
+.editorconfig   text
+.gitattributes  text
+.gitconfig      text
+.gitignore      text
+.htaccess       text
+*.npmignore     text
+*.yaml          text
+*.yml           text
+browserslist    text
+Makefile        text
+makefile        text
 
-# Graphics
-*.ai              binary
-*.bmp             binary
-*.eps             binary
-*.gif             binary
-*.gifv            binary
-*.ico             binary
-*.jng             binary
-*.jp2             binary
-*.jpg             binary
-*.jpeg            binary
-*.jpx             binary
-*.jxr             binary
-*.pdf             binary
-*.png             binary
-*.psb             binary
-*.psd             binary
-*.svg             binary
-*.svgz            binary
-*.tif             binary
-*.tiff            binary
-*.wbmp            binary
-*.webp            binary
+## HEROKU
+Procfile    text
+.slugignore text
 
-# Audio
-*.kar             binary
-*.m4a             binary
-*.mid             binary
-*.midi            binary
-*.mp3             binary
-*.ogg             binary
-*.ra              binary
+## GRAPHICS
+*.ai   binary
+*.bmp  binary
+*.eps  binary
+*.gif  binary
+*.ico  binary
+*.jng  binary
+*.jp2  binary
+*.jpg  binary
+*.jpeg binary
+*.jpx  binary
+*.jxr  binary
+*.pdf  binary
+*.png  binary
+*.psb  binary
+*.psd  binary
+*.svg  text
+*.svgz binary
+*.tif  binary
+*.tiff binary
+*.wbmp binary
+*.webp binary
 
-# Video
-*.3gpp            binary
-*.3gp             binary
-*.as              binary
-*.asf             binary
-*.asx             binary
-*.avi             binary
-*.fla             binary
-*.flv             binary
-*.m4v             binary
-*.mng             binary
-*.mov             binary
-*.mp4             binary
-*.mpeg            binary
-*.mpg             binary
-*.ogv             binary
-*.swc             binary
-*.swf             binary
-*.webm            binary
+## AUDIO
+*.kar  binary
+*.m4a  binary
+*.mid  binary
+*.midi binary
+*.mp3  binary
+*.ogg  binary
+*.ra   binary
 
-# Archives
-*.7z              binary
-*.gz              binary
-*.jar             binary
-*.rar             binary
-*.tar             binary
-*.zip             binary
+## VIDEO
+*.3gpp binary
+*.3gp  binary
+*.as   binary
+*.asf  binary
+*.asx  binary
+*.fla  binary
+*.flv  binary
+*.m4v  binary
+*.mng  binary
+*.mov  binary
+*.mp4  binary
+*.mpeg binary
+*.mpg  binary
+*.ogv  binary
+*.swc  binary
+*.swf  binary
+*.webm binary
 
-# Fonts
-*.ttf             binary
-*.eot             binary
-*.otf             binary
-*.woff            binary
-*.woff2           binary
+## ARCHIVES
+*.7z  binary
+*.gz  binary
+*.jar binary
+*.rar binary
+*.tar binary
+*.zip binary
 
-# Executables
-*.exe             binary
-*.pyc             binary
+## FONTS
+*.ttf   binary
+*.eot   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
 
-# RC files (like .babelrc or .eslintrc)
-*.*rc             text eol=lf
-
-# Ignore files (like .npmignore or .gitignore)
-*.*ignore         text eol=lf
+## EXECUTABLES
+*.exe binary
+*.pyc binary

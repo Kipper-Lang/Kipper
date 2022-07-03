@@ -1,0 +1,198 @@
+/*! header-nav-bar Config */
+
+@media (max-width: 1200px) {
+	:root {
+		--search-bar-size: 12.5vw;
+		--search-bar-size-expanded: 20vw;
+	}
+
+	#header-nav-bar {
+		padding-right: 1rem;
+		padding-left: 1rem;
+	}
+}
+
+@media (min-width: 1200px) {
+	:root {
+		--search-bar-size: 15vw;
+		--search-bar-size-expanded: 25vw;
+	}
+
+	#header-nav-bar {
+		padding-right: 2rem;
+		padding-left: 2rem;
+	}
+}
+
+#header-nav-bar {
+	display: flex;
+	justify-content: space-between;
+
+	& > ul > :first-child {
+		padding-right: 1rem;
+	}
+
+	& .selected-nav-page {
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+
+		h4 {
+			padding-top: 0.25em;
+			padding-bottom: 0.25rem;
+			border-bottom: 2px solid white;
+		}
+	}
+
+	& #kipper-logo {
+		height: 4rem;
+		margin-right: 0.5rem;
+	}
+
+	& ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: row;
+		overflow: hidden;
+	}
+
+	& li {
+		float: left;
+		display: inherit;
+		justify-content: center;
+		align-items: center;
+		flex-shrink: inherit;
+	}
+
+	& li a,
+	& li h1 {
+		color: white;
+		text-align: center;
+		text-decoration: none;
+	}
+
+	& .version-identifier {
+		display: flex;
+		align-items: flex-start;
+		justify-content: flex-start;
+	}
+
+	& .version-identifier > small {
+		font-family: "Noto Sans", "Inter", Georgia, Verdana, serif;
+		font-size: 14px !important;
+		line-height: 18px !important;
+		padding-left: 0.4rem;
+		margin-top: -12px;
+		text-decoration: none;
+		letter-spacing: -0.01em;
+		color: rgba(255, 255, 255, 0.8);
+		transition: ease-in-out 300ms;
+	}
+
+	& .version-identifier > small:hover {
+		color: white;
+	}
+
+	& .kipper-logo-identifier h1 {
+		font-size: 28px;
+		line-height: 34px;
+	}
+}
+
+.underline-button.selected-nav-page::before {
+	/* Overwriting the background color of the underline-button */
+	background-color: transparent !important;
+}
+
+/* Search Bar */
+#search-bar-wrapper {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: row;
+	justify-content: right;
+	align-items: center;
+	align-content: end;
+
+	& ul {
+		height: 2rem;
+		background-color: white;
+		border-radius: var(--default-border-radius);
+		box-shadow: rgba(9, 30, 66, 0.25) 0 4px 8px -2px, rgba(9, 30, 66, 0.08) 0 0 0 1px;
+		flex-direction: row;
+	}
+
+	& ul #search-bar {
+		display: flex;
+		flex-direction: row;
+		justify-content: right;
+		align-items: end;
+		align-content: end;
+	}
+
+	& ul #search-icon {
+		margin-left: 0.5rem;
+	}
+
+	& ul #search-bar #search-bar-input {
+		background-color: white;
+		color: var(--scheme-primary);
+		border: none;
+		outline: none;
+		height: 2rem;
+		padding-left: 1rem;
+		overflow-wrap: break-word;
+		word-wrap: break-word; /* For IE */
+	}
+}
+
+/* Disable animation for screens that are too small */
+@media (min-width: 1200px) {
+	#search-bar-wrapper ul #search-bar #search-bar-input {
+		width: var(--search-bar-size);
+		transition: width 0.75s ease-in-out;
+	}
+
+	#search-bar-wrapper #search-bar #search-bar-input:focus {
+		width: var(--search-bar-size-expanded);
+	}
+}
+
+@media (max-width: 1200px) {
+	#search-bar-wrapper ul #search-bar #search-bar-input {
+		width: var(--search-bar-size-expanded);
+	}
+}
+
+#search-result-overlay,
+#search-background-overlay {
+	/* Sit on top of the page content */
+	position: fixed;
+	visibility: hidden;
+	cursor: pointer; /* Add a pointer on hover */
+	display: block;
+}
+
+#search-result-overlay {
+	background-color: rgba(255, 255, 255, 0.9); /* Black background with opacity */
+	z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+	cursor: pointer; /* Add a pointer on hover */
+	border-radius: 10px;
+	margin-top: 1rem;
+
+	& #search-result {
+		margin: 1rem;
+	}
+}
+
+#search-background-overlay {
+	width: 100%; /* Full width (cover the whole page) */
+	height: 100%; /* Full height (cover the whole page) */
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
+	z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
