@@ -13,7 +13,7 @@ specifiers:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
-  ts-node: 10.8.1
+  ts-node: 10.8.2
   tsify: 5.0.4
   tslib: ~2.4.0
   typescript: 4.7.4
@@ -36,7 +36,7 @@ devDependencies:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
-  ts-node: 10.8.1_wkok7lthibal5qjhsdd5yq2cfe
+  ts-node: 10.8.2_wkok7lthibal5qjhsdd5yq2cfe
   tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
   typescript: 4.7.4
   uuid: 8.3.2
@@ -2382,8 +2382,8 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
-  /ts-node/10.8.1_wkok7lthibal5qjhsdd5yq2cfe:
-    resolution: {integrity: sha512-Wwsnao4DQoJsN034wePSg5nZiw4YKXf56mPIAeD6wVmiv+RytNSWqc2f3fKvcUoV+Yn2+yocD71VOfQHbmVX4g==}
+  /ts-node/10.8.2_wkok7lthibal5qjhsdd5yq2cfe:
+    resolution: {integrity: sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
