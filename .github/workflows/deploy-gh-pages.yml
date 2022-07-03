@@ -26,6 +26,8 @@ jobs:
             - recursive: true
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Compile Templates and Markdown
+        run: pnpm run build
       - name: Build Files using Parcel
         run: pnpm run gh-pages-build
       - name: Add Local Identification Config
