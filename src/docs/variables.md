@@ -26,23 +26,18 @@ In this case, we have now also defined the scope and visibility of the variable,
 value yet, attempting to read from a variable will result in a compiler error, as you can not read from a variable with
 no value.
 
-## Remember!
-
-You may re-declare a variable as often as you want, as long as the types match and the scope is identical. If they are
-not, it will result in a compiler error!
-
-<em class="green-checkmark">✓ VALID CODE</em>
-
-```ts
-// ✓ Valid
+<article class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+    You may re-declare a variable as often as you want, as long as the types match and the scope is identical. If
+    they are not, it will result in a compiler error!
+  </p>
+  <em class="green-checkmark">✓ VALID CODE</em>
+  <pre><code class="language-ts">// ✓ Valid
 var var1: str;
-var var1: str;
-```
-
-<em class="red-checkmark">X INVALID CODE</em>
-
-```ts
-// X Invalid - May not re-declare with new type signature
+var var1: str;</code></pre>
+  <em class="red-checkmark">X INVALID CODE</em>
+  <pre><code class="language-ts">// X Invalid - May not re-declare with new type signature
 var var2: str;
 var var2: num;
 
@@ -50,8 +45,8 @@ var var2: num;
 var var3: str;
 {
   var var3: str;
-}
-```
+}</code></pre>
+</article>
 
 ## How to define variables in Kipper
 
@@ -69,34 +64,32 @@ again, the following is also valid code:
 NAME = VALUE;
 ```
 
-## Remember!
+<article class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+    When you already have defined or declared a variable, you may not change its type anymore, but only overwrite its
+    value with the same type!
+  </p>
+  <em class="green-checkmark">✓ VALID CODE</em>
 
-When you already have defined or declared a variable, you may not change its type anymore, but only overwrite its value
-with the same type!
-
-<em class="green-checkmark">✓ VALID CODE</em>
-
-```ts
-// ✓ Valid
+  <pre><code class="language-ts">// ✓ Valid
 var var1: str = "3"; // Declaring and defining a variable in a one-line statement
 var1 = "Another string"; // Assigning a new value
 
 // ✓ Also Valid
 var var2: str; // Declaring a variable
-var var2: str = "3"; // Declaring again and defining a variable in a one-line statement
-```
+var var2: str = "3"; // Declaring again and defining a variable in a one-line statement</code></pre>
 
 <em class="red-checkmark">X INVALID CODE</em>
 
-```ts
-// X Invalid - May not re-define with new type signature
+  <pre><code class="language-ts">// X Invalid - May not re-define with new type signature
 var var1: str = "3";
 var var1: num = 3;
 
 // X Also Invalid - May not overwrite with a different type
 var var2: str = "3";
-var2 = 3; // typeof(3) -> num
-```
+var2 = 3; // typeof(3) -> num</code></pre>
+</article>
 
 ## Scopes and Visibility of Variables
 
@@ -184,30 +177,28 @@ var var9: num = var7 + var8; // 1 + 3 -> 4
 const var10: num = var9 + var8; // 4 + 3 -> 4
 ```
 
-## Remember!
+<article class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+  You may not overwrite the value of a constant or declare it without a value.
+  </p>
+  <em class="green-checkmark">✓ VALID CODE</em>
 
-You may NEVER overwrite the set value of a constant or only **declare** a constant.
-
-<em class="green-checkmark">✓ VALID CODE</em>
-
-```ts
-// ✓ Valid
+  <pre><code class="language-ts">// ✓ Valid
 const var1: num = 4;
 
 // ✓ Also Valid
-const var2: num = var1;
-```
+const var2: num = var1;</code></pre>
 
-<em class="red-checkmark">X INVALID CODE</em>
+  <em class="red-checkmark">X INVALID CODE</em>
 
-```ts
-// X Also Invalid - A value must be present for a constant definition!
-const var1;
+  <pre><code class="language-ts">// X Also Invalid - A value must be present for a constant definition!
+  const var1;
 
-// X Invalid - May not overwrite read-only constant
-const var2: num = 4;
-var2 = 5;
+  // X Invalid - May not overwrite read-only constant
+  const var2: num = 4;
+  var2 = 5;
 
-// X Also Invalid - May not define with a different type
-const var2: num = "4"; // typeof("4") -> string
-```
+  // X Also Invalid - May not define with a different type
+  const var2: num = "4"; // typeof("4") -> string</code></pre>
+</article>

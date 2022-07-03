@@ -34,8 +34,22 @@ article {
 	}
 }
 
-p + p {
-	margin: var(--default-parapgraph-margin) 0 0 0;
+p,
+em,
+strong,
+strike,
+input,
+textarea,
+image {
+  & + p,
+  & + em,
+  & + strong,
+  & + strike,
+  & + input,
+  & + textarea,
+  & + image {
+    margin: var(--default-parapgraph-margin) 0 0 0;
+  }
 }
 
 h1,
@@ -199,6 +213,8 @@ p {
 }
 
 .red-highlight-text {
+  display: flex;
+  flex-direction: column;
 	border-radius: var(--default-border-radius);
 	margin-right: var(--default-text-margin);
 	border: 1px solid;
