@@ -24,7 +24,7 @@
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="text-page-content-container">
             <div id="changelog-content" class="text-content shadowed-box">
-                <section>
+                <section id="changelog">
                     <script src="./showdown/showdown.min.js"></script>
                     <script>
                       console.log("Loading Changelog...");
@@ -40,10 +40,8 @@
                           document.getElementById("markdown-content").innerHTML = converter.makeHtml(md);
                         });
                     </script>
-                    <div id="changelog">
-                        <!-- Markdown will be added here -->
-                        <div id="markdown-content"></div>
-                    </div>
+                    <!-- Markdown will be added here -->
+                    <article id="markdown-content"></article>
                 </section>
             </div>
         </div>
