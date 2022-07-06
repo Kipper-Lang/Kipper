@@ -41,64 +41,118 @@ The following table shows all valid operators and expressions in the Kipper lang
 </thead>
 <tbody>
   <tr>
-    <td>11</td>
-    <td>++ / --<br />call ...( )<br />[ ]<br />( )<br />.</td>
+    <td>13</td>
+    <td><code>( ... )</code></td>
     <td>
-      Suffix/Postfix increment and decrement<br />Function Call<br />List subscripting and list
-      initializer list<br />Tangled expression - Forced importance<br />Object member
-      accessing<br />
+      Tangled expression - Forced increased precedence
+    <td>n/a</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td>
+      <code>++ ...</code> / <code>-- ...</code><br />
+      <code>call ... ( ... )</code><br />
+      <code>... [ ... ]</code><br/>
+      <code>... . ...</code>
+    </td>
+    <td>
+      Prefix increment and decrement (Suffix)<br />
+      Function Call<br />
+      List subscripting<br />
+      Object member accessing<br />
     </td>
     <td>Left-To-Right</td>
   </tr>
   <tr>
-    <td>10</td>
-    <td>++ / --<br />+ / -<br />!<br />... as type</td>
+    <td>11</td>
     <td>
-      Prefix increment and decrement<br />Unary plus and minus<br />Logical NOT<br />Type
-      conversion
+      <code>... ++</code>/ <code>... --</code><br />
+    </td>
+    <td>
+      Postfix increment and decrement<br />
+    </td>
+    <td>n/a</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>
+      <code>+ ...</code> / <code>- ...</code><br />
+      <code>! ...</code><br />
+      <code>... as ...</code>
+    </td>
+    <td>
+      Unary plus and minus<br />
+      Logical NOT<br />
+      Type conversion
     </td>
     <td>Right-To-Left</td>
   </tr>
   <tr>
     <td>9</td>
-    <td>* <br />/ <br />% <br />**</td>
-    <td>Multiplication<br />Division<br />Rest of Division / Remainder<br />Power-To<br /></td>
+    <td>
+      <code>... * ...</code><br />
+      <code>... / ...</code><br />
+      <code>... % ...</code><br />
+      <code>... ** ...</code>
+    </td>
+    <td>
+      Multiplication<br />
+      Division<br />
+      Modulus<br />
+      Power-To<br />
+    </td>
     <td rowspan="6">Left-To-Right</td>
   </tr>
   <tr>
     <td>8</td>
-    <td>+ / - <br /></td>
+    <td>
+      <code>... + ...</code> / <code>... - ...</code>
+    </td>
     <td>Addition and subtraction<br /></td>
   </tr>
   <tr>
     <td>7</td>
-    <td>&lt; / &lt;=<br />&gt; / =&gt;<br /></td>
-    <td>Relational operators (smaller-equal)<br />Relational operators (bigger-equal)<br /></td>
+    <td>
+      <code>... &lt; ...</code> / <code>... &lt;= ...</code><br />
+      <code>... &gt; ...</code> / <code></code>... =&gt; ...</code><br />
+    </td>
+    <td>
+      More than / More or Equal to<br />
+      Less than / Less or Equal to<br />
+    </td>
   </tr>
   <tr>
     <td>6</td>
-    <td>== / !=<br /></td>
-    <td>Relational comparison<br /></td>
+    <td>
+      <code>... == ...</code> / <code>... != ...</code>
+    </td>
+    <td>Relational comparison (Equal / Not equal to)<br /></td>
   </tr>
   <tr>
     <td>5</td>
-    <td>&amp;&amp; <br /></td>
+    <td><code>... &amp;&amp; ...</code><br /></td>
     <td>Logical AND<br /></td>
   </tr>
   <tr>
     <td>4</td>
-    <td>||</td>
+    <td><code>... || ...</code></td>
     <td>Logical OR<br /></td>
   </tr>
   <tr>
     <td>3</td>
-    <td>? :<br /></td>
-    <td>Ternary conditional<br /></td>
+    <td><code> ... ? ... : ...</code><br /></td>
+    <td>Ternary expression<br /></td>
     <td rowspan="2">Right-To-Left</td>
   </tr>
   <tr>
     <td>2</td>
-    <td>=<br />+= / -=<br />*= <br />/=<br />%=</td>
+    <td>
+      <code>... = ...</code><br />
+      <code>... += ...</code> / <code>... -= ...</code><br />
+      <code>... *= ...</code><br />
+      <code>... /= ...</code><br />
+      <code>... %= ...</code>
+    </td>
     <td>
       Simple assignment<br />Increment or Decrement assignment<br />Multiplicative assignment<br />Divisional
       assignment<br />Rest of Division / Remainder assignment<br />
@@ -106,7 +160,7 @@ The following table shows all valid operators and expressions in the Kipper lang
   </tr>
   <tr>
     <td>1</td>
-    <td>,</td>
+    <td><code>... , ...</code></td>
     <td>Comma</td>
     <td>Left-To-Right</td>
   </tr>

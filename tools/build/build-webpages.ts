@@ -198,9 +198,6 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 			// File metadata which can be set inside the file and can overwrite the file defaults
 			let fileMetadata = converter.getMetadata();
 
-			// Remove any additional newlines, as the CSS rules should handle the formatting
-			html = html.replace(/<br \/>/g, "");
-
 			// Set markdown content to the generated HTML
 			itemData["markdownContent"] = html;
 
