@@ -114,7 +114,7 @@ The following table shows all valid operators and expressions in the Kipper lang
     <td>7</td>
     <td>
       <code>... &lt; ...</code> / <code>... &lt;= ...</code><br />
-      <code>... &gt; ...</code> / <code></code>... =&gt; ...</code><br />
+      <code>... &gt; ...</code> / <code>... =&gt; ...</code><br />
     </td>
     <td>
       More than / More or Equal to<br />
