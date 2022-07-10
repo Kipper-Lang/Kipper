@@ -4,7 +4,6 @@
   "securityURL": "https://github.com/Luna-Klatzer/Kipper/security/policy",
   "issueTracker": "https://github.com/Luna-Klatzer/Kipper/issues",
   "licenseURL": "https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE",
-  "websiteGitHubURL": "https://github.com/WMC-AHIF-2021/Kipper-Web",
-  "websitePublicURL": "https://wmc-ahif-2021.github.io/Kipper-Web",
+  "websitePublicURL": "https://luna-klatzer.github.io/Kipper",
   "copyright": "Copyright © 2021-2022 Luna Klatzer & Maximilian Seebacher"
 }
