@@ -8,7 +8,6 @@ export function capitalizeFirstLetter(string: string): string {
 export function setSearchVisibility(visible: boolean): void {
 	document.getElementById("search-result").style.visibility = visible ? "visible" : "hidden";
 	document.getElementById("search-result-overlay").style.visibility = visible ? "visible" : "hidden";
-	document.getElementById("search-background-overlay").style.visibility = visible ? "visible" : "hidden";
 }
 
 export async function search(): Promise<void> {
@@ -54,10 +53,10 @@ export async function search(): Promise<void> {
 			searchResult.innerHTML = resultsHTML;
 		} else {
 			// Negative Result at Search
-			searchResult.innerHTML = "Sorry, we couldn't find anything for your search!";
+			searchResult.innerHTML = "<div><p>Sorry, we couldn't find anything for your search!</p></div>";
 		}
 	} else {
-		searchResult.innerHTML = "Type to search...";
+		searchResult.innerHTML = "<div><p>Type to search...</p></div>";
 	}
 
 	// Set position of the search result box

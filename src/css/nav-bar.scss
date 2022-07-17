@@ -2,8 +2,8 @@
 
 @media (max-width: 1200px) {
 	:root {
-		--search-bar-size: 12.5vw;
-		--search-bar-size-expanded: 20vw;
+		--search-bar-size: 10vw;
+		--search-bar-size-expanded: 16vw;
 	}
 
 	#header-nav-bar {
@@ -14,8 +14,8 @@
 
 @media (min-width: 1200px) {
 	:root {
-		--search-bar-size: 15vw;
-		--search-bar-size-expanded: 25vw;
+		--search-bar-size: 14vw;
+		--search-bar-size-expanded: 22vw;
 	}
 
 	#header-nav-bar {
@@ -145,7 +145,7 @@
 		border: none;
 		outline: none;
 		height: 2rem;
-		padding-left: 1rem;
+		padding-left: 0.8rem;
 		overflow-wrap: break-word;
 		word-wrap: break-word; /* For IE */
 	}
@@ -155,11 +155,13 @@
 @media (min-width: 1200px) {
 	#search-bar-wrapper ul #search-bar #search-bar-input {
 		width: var(--search-bar-size);
-		transition: width 0.75s ease-in-out;
+    max-width: var(--search-bar-size);
+		transition: width 0.5s ease-in-out;
 	}
 
 	#search-bar-wrapper #search-bar #search-bar-input:focus {
 		width: var(--search-bar-size-expanded);
+    max-width: var(--search-bar-size-expanded);
 	}
 }
 
@@ -169,34 +171,25 @@
 	}
 }
 
-#search-result-overlay,
-#search-background-overlay {
-	/* Sit on top of the page content */
+/* Sits on top of the page content */
+#search-result-overlay {
 	position: fixed;
 	visibility: hidden;
-	cursor: pointer; /* Add a pointer on hover */
+	cursor: pointer;
 	display: block;
-}
-
-#search-result-overlay {
-	background-color: rgba(255, 255, 255, 0.9); /* Black background with opacity */
-	z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
-	cursor: pointer; /* Add a pointer on hover */
+	z-index: 2;
+  border: 1px solid rgba(25, 25, 28, 0.2);
 	border-radius: 10px;
-	margin-top: 1rem;
+	margin-top: 0.5rem;
+  background-color: white;
 
 	& #search-result {
-		margin: 1rem;
-	}
-}
+    & div {
+      padding: 0.8rem;
 
-#search-background-overlay {
-	width: 100%; /* Full width (cover the whole page) */
-	height: 100%; /* Full height (cover the whole page) */
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: rgba(0, 0, 0, 0.7); /* Black background with opacity */
-	z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(25, 25, 28, 0.2);
+      }
+    }
+	}
 }
