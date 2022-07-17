@@ -275,6 +275,7 @@ codeTextArea.addEventListener("input", (event) => {
 });
 
 // Print default message to the console output
+window.addEventListener("DOMContentLoaded", switchToConsoleOutput);
 window.addEventListener("DOMContentLoaded", writeConsoleOutputDefaultMessage);
 
 // Warmup the compiler to speed up future compilations
