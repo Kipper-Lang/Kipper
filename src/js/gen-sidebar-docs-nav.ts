@@ -2,8 +2,6 @@
  * Generator for the sidebar navigation for the documentation
  */
 
-import { path } from "./main";
-
 const docsFiles: Record<string, { file: string; title: string }> = {
 	quickstart: {
 		file: "quickstart.html",
@@ -75,7 +73,7 @@ function GenDocsSidebarNavigation(): string {
 	let headers = "";
 	for (const item of Object.values(docsFiles)) {
 		const pathToInsert = `./${item.file}`;
-		const isCurrentFile = item.file == path.split("/").pop();
+		const isCurrentFile = item.file === window.location.pathname.split("/").pop();
 		headers = headers.concat(`
       <li>
         <p class="sidebar-nav-header ${isCurrentFile ? "selected-page-sidebar-nav-header" : ""}">
