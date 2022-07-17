@@ -22,18 +22,6 @@ article {
 	margin-top: 1rem;
 }
 
-.red-highlight-text {
-	& h1,
-	& h2,
-	& h3,
-	& h4,
-	& h5,
-	& h6 {
-		margin-top: 0;
-		margin-bottom: 0.4em;
-	}
-}
-
 p,
 em,
 strong,
@@ -60,45 +48,62 @@ h5,
 h6 {
 	display: flex;
 	align-items: center;
-	font-weight: 700;
-	margin-top: 1em;
-	margin-bottom: 0.4em;
+	margin-bottom: 0.5em;
+
+  div &,
+  section &,
+  article &,
+  li &,
+  .red-highlight-text & {
+    margin-top: 1.2em;
+  }
+
+  #markdown-content div &:first-child,
+  #markdown-content .red-highlight-text &:first-child {
+    margin-top: 0;
+  }
 }
 
 h1 {
 	font-style: normal;
-	font-size: 32px;
+	font-size: 40px;
 	line-height: 1.2;
+  font-weight: 600;
 }
 
 h2 {
 	font-style: normal;
-	font-size: 24px;
-	line-height: 29px;
+	font-size: 28px;
+	line-height: 1.2;
+  font-weight: 500;
 }
 
 h3 {
 	font-style: normal;
-	font-size: 22px;
-	line-height: 26px;
+	font-size: 24px;
+	line-height: 28px;
+  font-weight: 300;
 }
 
 h4 {
 	font-style: normal;
 	font-size: 20px;
 	line-height: 24px;
+  font-weight: 300;
 }
 
 h5 {
 	font-style: normal;
 	font-size: 18px;
 	line-height: 22px;
+  font-weight: 300;
 }
 
 h6 {
 	font-style: normal;
 	font-size: 18px;
 	line-height: 22px;
+  font-weight: 300;
 }
 
 /* Block the CSS from applying text link formatting on buttons and docs headers */
@@ -109,13 +114,13 @@ h6 {
 		&:active:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
 		&:visited:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
 			color: #c71239;
-			text-decoration: none;
+      text-decoration: none;
 			background-color: transparent;
 		}
 
 		&:hover:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
 			color: var(--scheme-primary);
-			text-decoration: underline;
+      text-decoration: underline;
 		}
 	}
 }

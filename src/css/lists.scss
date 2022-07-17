@@ -18,3 +18,9 @@ ol {
 		list-style-position: outside;
 	}
 }
+
+li {
+  #markdown-content & + & {
+    margin-top: .25em;
+  }
+}
