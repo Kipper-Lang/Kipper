@@ -114,6 +114,8 @@
 
 		& #shell-output {
 			& > .code-toolbar {
+				color: #9efeff; /* Shades of purple - Console theme color */
+
 				& pre,
 				& code {
 					border-radius: 0;

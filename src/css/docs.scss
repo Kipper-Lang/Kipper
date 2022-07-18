@@ -52,7 +52,7 @@
 	& p,
 	& div {
 		& + p,
-		& + div:not(.code-toolbar),
+		& + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
 		& + div.code-toolbar pre[class*="language-"] {
 			margin: var(--default-parapgraph-margin) 0 0 0;
 		}
