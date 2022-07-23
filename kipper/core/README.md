@@ -3,7 +3,7 @@
 # Kipper Core Package - `@kipper/core`
 
 [![Version](https://img.shields.io/npm/v/@kipper/core?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/core)
-![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-82%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
@@ -11,8 +11,18 @@
 
 The core module for Kipper, which contains the primary language and compiler.
 
-Kipper is a simple strongly and statically typed programming language, which is designed to allow for
-straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
+Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 🦊
+
+## Installation
+
+To install the whole Kipper package with its CLI, run the following command:
+
+```bash
+npm i @kipper/core
+```
+
+If you are using `pnpm` and `yarn`, use `pnpm i @kipper/core` or `yarn add @kipper/core`.
 
 ## Kipper Docs
 

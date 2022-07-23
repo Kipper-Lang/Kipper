@@ -8,16 +8,25 @@
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-The full module for Kipper, which contains the core language, compiler and command line interface (CLI).
+Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 🦊
 
-Kipper is a simple strongly and statically typed programming language, which is designed to allow for
-straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
+## Installation
+
+To install the whole Kipper package with its CLI, run the following command:
+
+```bash
+npm i kipper
+```
+
+If you are using `pnpm` and `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Goals
 
 - Full type safety to ensure errors occur on compile time, not runtime.
-- Runtime types and type checking, which allow variable types to be checked during runtime, if
-  their type can not be evaluated during compile time. For example when using `JSON.parse()`.
+- Runtime types and type checking, which allow variable types to be checked during runtime, if their type can not be
+  evaluated during compile time. For example when using `JSON.parse()` and the object type is
+  unknown.
 - Runtime errors for invalid operations. No hidden errors like in JavaScript.
 - Null safety, by enforcing non-null types unless explicitly allowed.
 - Full translation to/and integration with JavaScript and TypeScript.
@@ -28,10 +37,9 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 
 _Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
 
-## Child Packages
+## Packages
 
-The `kipper` package ships with multiple child packages to implement specific functionality:
-
+- [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
   with the Kipper compiler! 🦊
