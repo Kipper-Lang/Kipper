@@ -40,7 +40,7 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 
 ## Detailed Changelog
 
-*The exact items here should appear in the CHANGELOG.md file as well.*
+_The exact items here should appear in the CHANGELOG.md file as well._
 
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
 
