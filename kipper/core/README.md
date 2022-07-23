@@ -26,7 +26,7 @@ If you are using `pnpm` and `yarn`, use `pnpm i @kipper/core` or `yarn add @kipp
 
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
+Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
 
 ## How to use Kipper?
 

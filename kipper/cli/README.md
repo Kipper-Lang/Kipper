@@ -25,7 +25,7 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 
 # Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
+Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
 
 # Usage
 

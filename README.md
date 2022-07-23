@@ -46,7 +46,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://wmc-ahif-2021.github.io/Kipper-Web/)!
+Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
 
 ## How to use Kipper?
 
