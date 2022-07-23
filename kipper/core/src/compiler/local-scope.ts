@@ -14,7 +14,7 @@ export class LocalScope extends Scope {
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
 		throw this.ctx.programCtx
-			.semanticCheck(this.ctx)
+			.semanticCheck(declaration)
 			.notImplementedError(new KipperNotImplementedError("Local functions have not been implemented yet."));
 	}
 
@@ -22,7 +22,8 @@ export class LocalScope extends Scope {
 		const identifier = declaration.getSemanticData().identifier;
 
 		// Ensuring that the declaration does not overwrite other definitions
-		this.ctx.programCtx.semanticCheck(this.ctx).variableIdentifierNotDeclared(identifier, this.ctx);
+		// Using 'declaration' as a context, as that's the origin of the error, not the scope
+		this.ctx.programCtx.semanticCheck(declaration).variableIdentifierNotDeclared(identifier, this.ctx);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
 		this.variables.push(scopeDeclaration);
