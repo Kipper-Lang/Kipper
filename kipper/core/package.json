@@ -1,7 +1,7 @@
 {
   "name": "@kipper/core",
   "description": "The Kipper programming language and compiler for the browser and Node.js! 🦊",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "antlr4ts": "^0.5.0-alpha.4",
@@ -20,7 +20,7 @@
     "antlr4ts-cli": "0.5.0-alpha.4",
     "json-parse-even-better-errors": "2.3.1",
     "run-script-os": "1.1.6",
-    "ts-node": "10.8.1",
+    "ts-node": "10.9.1",
     "@types/node": "17.0.32",
     "size-limit": "7.0.8",
     "@size-limit/preset-big-lib": "7.0.8"
