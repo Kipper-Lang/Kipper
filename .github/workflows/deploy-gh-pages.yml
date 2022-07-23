@@ -2,7 +2,7 @@ name: Deploy GH-Pages
 
 on:
   push:
-    branches: [ docs ]
+    branches: [ docs, workflow_dispatch ]
 
 jobs:
   build:
