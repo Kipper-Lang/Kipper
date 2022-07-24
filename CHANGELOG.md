@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added
+### Added
 
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New functions:
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
   - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
 
-## Changed
+### Changed
 
 - Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
   variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.2] - 2022-07-23
 
-## Changed
+### Changed
 
 - Fixed traceback bug for re-declarations inside compound statements generating an invalid error message and traceback.
   ([#240](https://github.com/Luna-Klatzer/Kipper/issues/240))
