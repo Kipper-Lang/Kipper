@@ -5,9 +5,11 @@
  * @since 0.8.0
  */
 import { KipperProgramContext } from "../program-ctx";
-import { Declaration, Statement, TranslatedCodeLine } from "../semantics";
+import { Declaration, KipperTargetSemanticAnalyser, Statement, TranslatedCodeLine } from "../semantics";
 import { NoSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import { KipperTargetCodeGenerator, TargetSetUpCodeGenerator, TargetWrapUpCodeGenerator } from "../translation";
+import { KipperCompileTarget } from "../compile-target";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
@@ -53,6 +55,32 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	}
 
 	/**
+	 * The compilation translation for this specific token.
+	 * @since 0.10.0
+	 */
+	public get target(): KipperCompileTarget {
+		return this.programCtx.target;
+	}
+
+	/**
+	 * The code generator, which will generate the code for this specific token into the
+	 * {@link this.target target language}.
+	 * @since 0.10.0
+	 */
+	public get codeGenerator(): KipperTargetCodeGenerator {
+		return this.target.codeGenerator;
+	}
+
+	/**
+	 * The translation-specific semantic analyser, which will perform semantic analysis specific for the
+	 * {@link this.target target language}.
+	 * @since 0.10.0
+	 */
+	public get semanticAnalyser(): KipperTargetSemanticAnalyser {
+		return this.target.semanticAnalyser;
+	}
+
+	/**
 	 * Adds new child at the end of the tree.
 	 * @since 0.8.0
 	 */
@@ -80,10 +108,23 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	 * @protected
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
-		let genCode: Array<TranslatedCodeLine> = [];
+		// SetUp and WrapUp functions
+		const targetSetUp: TargetSetUpCodeGenerator = this.codeGenerator.setUp;
+		const targetWrapUp: TargetWrapUpCodeGenerator = this.codeGenerator.wrapUp;
+
+		// Add set up code, and then append all children
+		let genCode: Array<TranslatedCodeLine> = [
+			...(await targetSetUp(this.programCtx)),
+			...(await this.programCtx.generateRequirements()),
+		];
 		for (let child of this.children) {
 			genCode.push(...(await child.translateCtxAndChildren()));
 		}
+
+		// Add wrap up code
+		genCode.push(...(await targetWrapUp(this.programCtx)));
+
+		// Finished code for this Kipper file
 		return genCode;
 	}
 }

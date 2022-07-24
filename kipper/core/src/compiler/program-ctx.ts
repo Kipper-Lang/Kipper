@@ -439,10 +439,7 @@ export class KipperProgramContext {
 		}
 
 		try {
-			let genCode: Array<TranslatedCodeLine> = await this.abstractSyntaxTree.translate();
-
-			// Append required typescript code for Kipper for the program to work properly
-			return (await this.generateRequirements()).concat(genCode);
+			return await this.abstractSyntaxTree.translate();
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -497,7 +494,7 @@ export class KipperProgramContext {
 	 * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
 	 * @private
 	 */
-	private async generateRequirements(): Promise<Array<Array<string>>> {
+	public async generateRequirements(): Promise<Array<Array<string>>> {
 		let code: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the builtin wrappers

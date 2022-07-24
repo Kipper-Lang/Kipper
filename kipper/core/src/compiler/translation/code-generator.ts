@@ -40,9 +40,10 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
+	IfStatement,
 } from "../semantics";
-import { IfStatement } from "../semantics";
 import type { CompilableASTNode } from "../parser";
+import type { KipperProgramContext } from "../program-ctx";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -60,10 +61,46 @@ export type TargetASTNodeCodeGenerator<
 > = (node: T) => Promise<R>;
 
 /**
+ * Represents a function that generates setup code for a Kipper file.
+ *
+ * This is not intended as a replacement to {@link KipperTargetBuiltInGenerator}.
+ * @since 0.10.0
+ */
+export type TargetSetUpCodeGenerator = (programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>>;
+
+/**
+ * Represents a function that generates wrap up code for a Kipper file.
+ *
+ * This is not intended as a replacement to {@link KipperTargetBuiltInGenerator}.
+ * @since 0.10.0
+ */
+export type TargetWrapUpCodeGenerator = (programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>>;
+
+/**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @since 0.5.0
  */
 export abstract class KipperTargetCodeGenerator {
+	/**
+	 * Code generation function, which is called at the start of a translation and generates
+	 * the dependencies for a file in the target language.
+	 *
+	 * This should be only used to set up a Kipper file in the target language and not as a
+	 * replacement to {@link KipperTargetBuiltInGenerator}.
+	 * @since 0.10.0
+	 */
+	public abstract setUp: TargetSetUpCodeGenerator;
+
+	/**
+	 * Code generation function, which is called at the end of a translation and should wrap
+	 * up a program in the target language.
+	 *
+	 * This should be only used to add additional items to finish a Kipper file in the target
+	 * language and not as a replacement to {@link KipperTargetBuiltInGenerator}.
+	 * @since 0.10.0
+	 */
+	public abstract wrapUp: TargetWrapUpCodeGenerator;
+
 	/**
 	 * Translates a {@link CompoundStatement} into a specific language.
 	 */
