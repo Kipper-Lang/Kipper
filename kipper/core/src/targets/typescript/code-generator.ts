@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArraySpecifierExpression,
 	AssignmentExpression,
@@ -13,7 +13,6 @@ import {
 	CharacterPrimaryExpression,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
-	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
 	ExpressionStatement,
@@ -23,12 +22,11 @@ import {
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
-	IfStatement,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
-	KipperTargetCodeGenerator,
+	KipperProgramContext,
 	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
@@ -40,7 +38,6 @@ import {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	ScopeFunctionDeclaration,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -49,8 +46,10 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../compiler";
+import { CompoundStatement, IfStatement, KipperTargetCodeGenerator, ScopeFunctionDeclaration } from "../../compiler";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "../../utils";
+import { version } from "../../index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -61,6 +60,47 @@ function removeBrackets(lines: Array<TranslatedCodeLine>) {
  * @since 0.8.0
  */
 export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
+	/**
+	 * Code generation function, which is called at the start of a translation and generates
+	 * the dependencies for a file in the target language.
+	 *
+	 * This should be only used to set up a Kipper file in the target language and not as a
+	 * replacement to {@link KipperTargetBuiltInGenerator}.
+	 * @since 0.10.0
+	 */
+	setUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
+		return [
+			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
+			// Always enable strict mode when using Kipper
+			['"use strict"', ";"],
+			// Determine the global scope in the JS execution environment
+			["// @ts-ignore"],
+			[
+				'var __kipperGlobalScope = typeof __kipperGlobalScope !== "undefined" ? __kipperGlobalScope : typeof' +
+					' globalThis !== "undefined" ?' +
+					" globalThis : typeof" +
+					' window !== "undefined" ?' +
+					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
+				";",
+			],
+			// Create global kipper object - Always prefer the global '__kipper' instance
+			["// @ts-ignore"],
+			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+		];
+	};
+
+	/**
+	 * Code generation function, which is called at the end of a translation and should wrap
+	 * up a program in the target language.
+	 *
+	 * This should be only used to add additional items to finish a Kipper file in the target
+	 * language and not as a replacement to {@link KipperTargetBuiltInGenerator}.
+	 * @since 0.10.0
+	 */
+	wrapUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
 	/**
 	 * Translates a {@link CompoundStatement} into the typescript language.
 	 */

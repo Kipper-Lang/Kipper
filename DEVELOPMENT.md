@@ -95,7 +95,7 @@ If antlr4 is not installed, install it from here: https://www.antlr.org/
 
 2. Update CHANGELOG.md and replace `Unreleased` with new version identifier:
 
-   _Skip this step unless it's a stable release!_
+   _Skip this step unless it's a stable release! No alpha, beta or rc versions should be listed here!_
 
    ```markdown
    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY

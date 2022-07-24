@@ -1,5 +1,6 @@
 lib
 dist
+build
 node_modules
 bin
 .editorconfig

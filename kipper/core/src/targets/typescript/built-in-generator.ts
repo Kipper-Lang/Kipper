@@ -5,8 +5,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { BuiltInFunction, KipperTargetBuiltInGenerator, TranslatedCodeLine } from "../../compiler/";
-import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
+import type { BuiltInFunction, TranslatedCodeLine } from "../../compiler/";
+import { KipperTargetBuiltInGenerator } from "../../compiler";
+import { getTypeScriptType } from "./tools";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.
@@ -18,8 +19,8 @@ function getTSFunctionSignature(funcSpec: BuiltInFunction): {
 	args: Array<[string, string]>;
 } {
 	// Translate the function signature into TypeScript
+	const identifier: string = funcSpec.identifier;
 	const type: string = getTypeScriptType(funcSpec.returnType);
-	const identifier: string = getTypeScriptBuiltInIdentifier(funcSpec.identifier);
 	const args: Array<[string, string]> = funcSpec.args.map((arg) => [arg.identifier, getTypeScriptType(arg.type)]);
 
 	return { type, identifier, args };
@@ -45,7 +46,18 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ return (${convArgIdentifier}).toString(); }`]];
+		return [
+			[
+				`__kipper.${signature.identifier}`,
+				" ",
+				"=",
+				" ",
+				createTSFunctionSignature(signature),
+				" ",
+				`{ return (${convArgIdentifier}).toString(); }`,
+				";",
+			],
+		];
 	}
 
 	async strToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
@@ -53,7 +65,18 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ return parseInt(${convArgIdentifier}); }`]];
+		return [
+			[
+				`__kipper.${signature.identifier}`,
+				" ",
+				"=",
+				" ",
+				createTSFunctionSignature(signature),
+				" ",
+				`{ return parseInt(${convArgIdentifier}); }`,
+				";",
+			],
+		];
 	}
 
 	async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
@@ -61,7 +84,18 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ return \`\${${convArgIdentifier}}\`; }`]];
+		return [
+			[
+				`__kipper.${signature.identifier}`,
+				" ",
+				"=",
+				" ",
+				createTSFunctionSignature(signature),
+				" ",
+				`{ return \`\${${convArgIdentifier}}\`; }`,
+				";",
+			],
+		];
 	}
 
 	async boolToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
@@ -69,7 +103,18 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ return ${convArgIdentifier} ? 1 : 0; }`]];
+		return [
+			[
+				`__kipper.${signature.identifier}`,
+				" ",
+				"=",
+				" ",
+				createTSFunctionSignature(signature),
+				" ",
+				`{ return ${convArgIdentifier} ? 1 : 0; }`,
+				";",
+			],
+		];
 	}
 
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
@@ -77,6 +122,17 @@ export class TypeScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const printArgIdentifier = signature.args[0][0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [[createTSFunctionSignature(signature), " ", `{ console.log(${printArgIdentifier}); }`]];
+		return [
+			[
+				`__kipper.${signature.identifier}`,
+				" ",
+				"=",
+				" ",
+				createTSFunctionSignature(signature),
+				" ",
+				`{ console.log(${printArgIdentifier}); }`,
+				";",
+			],
+		];
 	}
 }
