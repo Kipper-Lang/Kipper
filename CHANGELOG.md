@@ -25,7 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
   variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
-  bound to the JS runtime and any function definition is placed after the initial evaluation of the global scope.
+  bound to the JS runtime and any function definition in the generated file is placed after the initial evaluation 
+	of the global scope.
 - Updated the function call syntax and made the 'call' keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
 
