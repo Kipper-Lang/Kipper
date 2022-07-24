@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Changed
 
-- Updated the function call syntax and made the 'call' keyword optional. This allows for simplified function calls, 
-	such as `print("Hello world!");`.
+- Updated the function call syntax and made the 'call' keyword optional. This allows for simplified function calls,
+  such as `print("Hello world!");`.
 
 ## [0.9.2] - 2022-07-23
 
