@@ -34,6 +34,7 @@
     "prettier": "2.7.1",
     "run-script-os": "1.1.6",
     "ts-mocha": "10.0.0",
+		"ts-node": "10.9.1",
     "tsify": "5.0.4",
     "uglify-js": "3.16.2",
     "uuid": "8.3.2",
