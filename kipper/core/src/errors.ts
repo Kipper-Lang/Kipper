@@ -46,8 +46,7 @@ export interface TracebackMetadata {
 
 /**
  * The base error for the Kipper module. If a compiler error occurs in the Kipper module, this error is thrown.
- *
- * Ifv{@link isWarning} is set to true, then this error is a warning and will not cause the compiler to exit.
+ * @since 0.1.0
  */
 export class KipperError extends Error {
 	/**
@@ -63,13 +62,7 @@ export class KipperError extends Error {
 	 */
 	public antlrCtx?: ParserRuleContext;
 
-	/**
-	 * If true this error is a warning and does not cause the compiler to exit with an error.
-	 * @since 0.9.0
-	 */
-	public readonly isWarning: boolean = false;
-
-	constructor(msg: string, isWarning?: boolean, token?: ParserRuleContext) {
+	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
 		this.tracebackData = {
@@ -79,7 +72,6 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 		};
 		this.antlrCtx = token;
-		this.isWarning = isWarning ?? false;
 	}
 
 	/**
@@ -173,6 +165,19 @@ export class KipperError extends Error {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
 		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
+	}
+}
+
+/**
+ * Warning, which is thrown whenever a compiler encounters an item that could potentially be problematic that it can
+ * not solve itself.
+ *
+ * This is primarily like a {@link KipperError}, but should be not used as one.
+ * @since 0.10.0
+ */
+export class KipperWarning extends KipperError {
+	constructor(msg: string, token?: ParserRuleContext) {
+		super(msg, token);
 	}
 }
 

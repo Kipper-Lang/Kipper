@@ -5,7 +5,7 @@
  * @since 0.0.3
  */
 
-import { KipperError } from "./errors";
+import { KipperError, KipperWarning } from "./errors";
 
 /**
  * The log levels for the {@link KipperLogger}, but as numeric values to allow comparisons.
@@ -174,7 +174,7 @@ export class KipperLogger {
 	 * @param warn The warning to log.
 	 * @since 0.9.0
 	 */
-	public reportWarning(warn: KipperError | string) {
+	public reportWarning(warn: KipperWarning | string) {
 		this.reportError(LogLevel.WARN, warn);
 	}
 }

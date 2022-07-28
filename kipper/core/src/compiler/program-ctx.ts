@@ -13,7 +13,7 @@ import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
-import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
+import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { Reference } from "./reference";
 import { GlobalScope } from "./global-scope";
@@ -27,7 +27,9 @@ export class KipperProgramContext {
 
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	private _warnings: Array<KipperError>;
+	private _errors: Array<KipperError>;
+
+	private _warnings: Array<KipperWarning>;
 
 	private _abstractSyntaxTree: RootASTNode | undefined;
 
@@ -170,6 +172,7 @@ export class KipperProgramContext {
 		this._builtInReferences = [];
 		this._internalReferences = [];
 		this._warnings = [];
+		this._errors = [];
 	}
 
 	/**
@@ -285,8 +288,8 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the processed parse tree, which is a converted antlr4 parse tree in a customised Kipper form, which allows
-	 * it to be used for semantic analysis and translation to typescript.
+	 * Returns the abstract syntax tree, which is a converted antlr4 parse tree in a specialised Kipper form, which allows
+	 * it to be used for semantic analysis and translation to other languages.
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
@@ -301,7 +304,7 @@ export class KipperProgramContext {
 	 * problematic, which do not prevent the program from being compiled.
 	 * @since 0.9.0
 	 */
-	public get warnings(): Array<KipperError> {
+	public get warnings(): Array<KipperWarning> {
 		return this._warnings;
 	}
 
@@ -311,7 +314,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.9.0
 	 */
-	public addWarning(warning: KipperError): void {
+	public addWarning(warning: KipperWarning): void {
 		// Only log warnings if they are enabled
 		if (this.reportWarnings) {
 			this._warnings.push(warning);
