@@ -28,6 +28,7 @@ specifiers:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
+  source-map-support: 0.5.21
   ts-mocha: 10.0.0
   ts-node: 10.9.1
   tsify: 5.0.4
@@ -69,6 +70,7 @@ devDependencies:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 7.0.8
+  source-map-support: 0.5.21
   ts-mocha: 10.0.0_mocha@10.0.0
   ts-node: 10.9.1_smgpfffxrhk5i4ijhe3532b4hq
   tsify: 5.0.4_ihds425jv7utpzcxj6k6gl5i4e
@@ -449,7 +451,6 @@ packages:
       treeverse: 1.0.4
       walk-up-path: 1.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -479,8 +480,6 @@ packages:
       promise-retry: 2.0.1
       semver: 7.3.7
       which: 2.0.2
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /@npmcli/installed-package-contents/1.0.7:
@@ -511,7 +510,6 @@ packages:
       pacote: 12.0.3
       semver: 7.3.7
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -559,7 +557,6 @@ packages:
       node-gyp: 8.4.1
       read-package-json-fast: 2.0.3
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -1858,8 +1855,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cacache/16.0.7:
@@ -1884,8 +1879,6 @@ packages:
       ssri: 9.0.0
       tar: 6.1.11
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cached-path-relative/1.1.0:
@@ -2928,7 +2921,7 @@ packages:
     dev: true
 
   /fast-levenshtein/2.0.6:
-    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==, tarball: fast-levenshtein/-/fast-levenshtein-2.0.6.tgz}
     dependencies:
       fastest-levenshtein: 1.0.12
     dev: true
@@ -4225,7 +4218,6 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 9.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4250,7 +4242,6 @@ packages:
       socks-proxy-agent: 6.2.0
       ssri: 8.0.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4617,7 +4608,6 @@ packages:
       tar: 6.1.11
       which: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4721,7 +4711,6 @@ packages:
       minizlib: 2.1.2
       npm-package-arg: 8.1.5
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -4852,7 +4841,6 @@ packages:
       yeoman-generator: 5.6.1_yeoman-environment@3.9.1
       yosay: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -5024,7 +5012,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.11
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -5244,11 +5231,6 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -5786,7 +5768,7 @@ packages:
     dev: true
 
   /source-map/0.5.7:
-    resolution: {integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=}
+    resolution: {integrity: sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -5989,8 +5971,10 @@ packages:
     dev: true
 
   /strip-bom/3.0.0:
-    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
-    engines: {node: '>=4'}
+    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==, tarball: strip-bom/-/strip-bom-3.0.0.tgz}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      is-utf8: 0.2.1
     dev: true
 
   /strip-bom/4.0.0:
@@ -6399,6 +6383,7 @@ packages:
     resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: false
 
   /uglify-js/3.16.3:
     resolution: {integrity: sha512-uVbFqx9vvLhQg0iBaau9Z75AxWJ8tqM9AV890dIZCLApF4rTcyHwmAvLeEdYRs+BzYWu8Iw81F79ah0EfTXbaw==}
@@ -6955,7 +6940,6 @@ packages:
       textextensions: 5.15.0
       untildify: 4.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
