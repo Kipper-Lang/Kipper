@@ -93,6 +93,8 @@ export default class Run extends Command {
 			description: "Show warnings that were emitted during the compilation.",
 			allowNo: true,
 		}),
+
+		// TODO! Add new options '--recover' and '--abort-on-first-error'
 	};
 
 	async run() {

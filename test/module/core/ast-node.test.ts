@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { CompilableASTNode, KipperParseStream } from "@kipper/core";
+import { CompilableASTNode, KipperParseStream, ParseData } from "@kipper/core";
 import { KipperProgramContext } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
 import { RootASTNode } from "@kipper/core";
@@ -46,7 +46,8 @@ describe("Parse-Tokens", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
 				let stream: KipperParseStream = new KipperParseStream(fileContent);
-				let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+				let parseData: ParseData = await new KipperCompiler().parse(stream);
+				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {});
 
 				assert(stream.name === "anonymous-script");
 				assert(stream.stringContent === fileContent);

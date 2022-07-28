@@ -174,11 +174,12 @@ describe("KipperCompiler", () => {
 		it("Validate file ctx return", async () => {
 			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
 			let compiler = new KipperCompiler();
-			const stream = new KipperParseStream(fileContent);
-			let instance = await compiler.parse(stream);
+			let stream = new KipperParseStream(fileContent);
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			assert(instance.stream === stream, "Expected streams to equal");
-			assert(instance.antlrParseTree !== null, "Start item must exist");
+			assert(programCtx.stream === stream, "Expected streams to equal");
+			assert(programCtx.antlrParseTree !== null, "Start item must exist");
 			assert(stream.name === "anonymous-script");
 			assert(stream.stringContent === fileContent);
 			assert(stream.charStream.sourceName === "anonymous-script");
