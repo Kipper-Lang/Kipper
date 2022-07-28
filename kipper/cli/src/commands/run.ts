@@ -128,6 +128,11 @@ export default class Run extends Command {
 				},
 			);
 
+			// If the compilation failed, abort
+			if (!result.success) {
+				return;
+			}
+
 			await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
 
 			// Execute the program

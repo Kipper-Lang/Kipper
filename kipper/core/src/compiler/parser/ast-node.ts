@@ -42,8 +42,9 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 
 	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
-		this._parent = parent;
 		this._children = [];
+		this._parent = parent;
+		this._semanticData = undefined;
 	}
 
 	/**

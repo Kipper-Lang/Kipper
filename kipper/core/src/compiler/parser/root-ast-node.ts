@@ -10,6 +10,8 @@ import { NoSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperTargetCodeGenerator, TargetSetUpCodeGenerator, TargetWrapUpCodeGenerator } from "../translation";
 import { KipperCompileTarget } from "../compile-target";
+import { KipperError } from "../../errors";
+import { EvaluatedCompileConfig } from "../compiler";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
@@ -63,6 +65,15 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	}
 
 	/**
+	 * The compilation config for this program.
+	 * @private
+	 * @since 0.10.0
+	 */
+	public get compileConfig(): EvaluatedCompileConfig {
+		return this.programCtx.compileConfig;
+	}
+
+	/**
 	 * The code generator, which will generate the code for this specific token into the
 	 * {@link this.target target language}.
 	 * @since 0.10.0
@@ -97,7 +108,16 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	public async semanticAnalysis(): Promise<void> {
 		// Run for every child the analysis
 		for (let child of this.children) {
-			await child.semanticAnalysis();
+			try {
+				await child.semanticAnalysis();
+			} catch (e) {
+				// If it's a compile error, add it to the list of errors
+				if (e instanceof KipperError && !this.compileConfig.abortOnFirstError) {
+					this.programCtx.addError(e);
+				} else {
+					throw e;
+				}
+			}
 		}
 	}
 

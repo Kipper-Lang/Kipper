@@ -112,12 +112,17 @@ export default class Compile extends Command {
 				},
 			);
 
+			// If the compilation failed, abort
+			if (!result.success) {
+				return;
+			}
+
 			const out = await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
-			result.programCtx.logger.debug(`Generated file '${out}'.`);
+			logger.debug(`Generated file '${out}'.`);
 
 			// Finished!
 			const duration: number = (new Date().getTime() - startTime) / 1000;
-			await logger.info(`Done in ${duration}s.`);
+			logger.info(`Done in ${duration}s.`);
 		} catch (e) {
 			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
 			// output of the error and traceback.

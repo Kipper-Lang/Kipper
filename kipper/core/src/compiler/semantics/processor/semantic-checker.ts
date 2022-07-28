@@ -257,7 +257,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	public validDeclaration(decl: VariableDeclaration): void {
 		const declSemanticData = decl.getSemanticData();
 		if (declSemanticData.storageType === "const" && !declSemanticData.isDefined) {
-			throw this.assertError(new UndefinedConstantError("Constant declarations must be defined."));
+			throw this.assertError(new UndefinedConstantError("Constant declarations must have a value."));
 		}
 	}
 

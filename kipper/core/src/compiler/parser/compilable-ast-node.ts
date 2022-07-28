@@ -16,8 +16,10 @@ import type { KipperCompileTarget } from "../compile-target";
 import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
-import { ParserASTNode } from "./ast-node";
 import type { Scope } from "../scope";
+import type { EvaluatedCompileConfig } from "../compiler";
+import { ParserASTNode } from "./ast-node";
+import { KipperError } from "../../errors";
 
 /**
  * An eligible parent for a compilable node.
@@ -134,6 +136,15 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	}
 
 	/**
+	 * The compilation config for this program.
+	 * @private
+	 * @since 0.10.0
+	 */
+	public get compileConfig(): EvaluatedCompileConfig {
+		return this.programCtx.compileConfig;
+	}
+
+	/**
 	 * The {@link scope} of this AST node.
 	 * @since 0.8.0
 	 */
@@ -193,11 +204,25 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * @since 0.8.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
-		// Start with the children, and then work upwards as the structures get more complex
+		// Start with the evaluation of the children
 		for (let child of this.children) {
-			// The child will likely also have its own children, which need to be also called first before the parent node
-			// can be processed.
-			await child.semanticAnalysis();
+			try {
+				await child.semanticAnalysis();
+			} catch (e) {
+				// Try recovering from the error if it is enabled
+				// Option 'abortOnFirstError' overwrites 'recover' per default
+				if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+					this.programCtx.addError(e);
+
+					// If the semantic data wasn't evaluated, return as that means the logical evaluation of this item failed.
+					// Otherwise, continue with the semantic data that is present.
+					if (!child.semanticData) {
+						return;
+					}
+				} else {
+					throw e;
+				}
+			}
 		}
 
 		// Finally, check if this node is semantically valid
@@ -206,7 +231,7 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 		await this.targetSemanticAnalysis(this);
 
 		// Check for warnings after the semantic analysis has been completed
-		if (this.programCtx.reportWarnings) {
+		if (this.compileConfig.warnings) {
 			await this.checkForWarnings();
 		}
 	}

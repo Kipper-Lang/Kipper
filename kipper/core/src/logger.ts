@@ -165,7 +165,7 @@ export class KipperLogger {
 	 * @param err The error to log.
 	 * @since 0.4.0
 	 */
-	public reportError(level: LogLevel.WARN | LogLevel.ERROR | LogLevel.FATAL, err: KipperError | string) {
+	public reportError(level: LogLevel.ERROR | LogLevel.FATAL, err: KipperError | string) {
 		this.log(level, err instanceof KipperError ? `Compilation error - ${err.getTraceback()}` : err);
 	}
 
@@ -175,6 +175,6 @@ export class KipperLogger {
 	 * @since 0.9.0
 	 */
 	public reportWarning(warn: KipperWarning | string) {
-		this.reportError(LogLevel.WARN, warn);
+		this.log(LogLevel.WARN, warn instanceof KipperError ? `Compilation warning - ${warn.getTraceback()}` : warn);
 	}
 }

@@ -6,7 +6,7 @@
  */
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "./antlr-error-listener";
-import { KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
@@ -17,7 +17,7 @@ import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
 import type { KipperError } from "../errors";
 
 /**
- * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileOptions}
+ * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileConfig}
  * if it's passed to {@link KipperCompiler.compile}.
  * @since 0.1.0
  */
@@ -29,6 +29,7 @@ export interface CompileConfig {
 	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
 	builtIns?: Array<BuiltInFunction>;
+
 	/**
 	 * Extends the {@link builtIns} with the specified items. If {@link builtIns} is undefined, then it will simply extend
 	 * the default array.
@@ -36,27 +37,50 @@ export interface CompileConfig {
 	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
 	extendBuiltIns?: Array<BuiltInFunction>;
+
 	/**
 	 * The filename that should be used to represent the program.
 	 * @since 0.2.0
 	 */
 	fileName?: string;
+
 	/**
 	 * The translation languages for the compilation.
 	 * @since 0.5.0
 	 */
 	target?: KipperCompileTarget;
+
 	/**
 	 * Options for the {@link KipperOptimiser}.
 	 * @since 0.8.0
 	 */
 	optimisationOptions?: OptimisationOptions;
+
 	/**
 	 * If set to true, the compiler will check for warnings and add them to {@link KipperProgramContext.warnings} and
 	 * {@link KipperCompileResult.warnings}.
 	 * @since 0.9.0
 	 */
 	warnings?: boolean;
+
+	/**
+	 * If set to true, the compiler will attempt to recover from compilation errors if they are encountered. This will
+	 * lead to more errors being reported and allowing for bigger more detailed compiler logs, but can in rare cases
+	 * lead to misleading errors that are caused as a result of another compilation errors.
+	 *
+	 * Generally though, it is considered a good practise to use compiler error recovery, which is why it is enabled per
+	 * default.
+	 * @since 0.10.0
+	 */
+	recover?: boolean;
+
+	/**
+	 * Throws an error and cancels the compilation on the first error that is encountered.
+	 *
+	 * This per default overwrites {@link recover}.
+	 * @since 0.10.0
+	 */
+	abortOnFirstError?: boolean;
 }
 
 /**
@@ -67,7 +91,7 @@ export interface CompileConfig {
  * values will be processed and evaluated on construction, so that every option is not undefined.
  * @since 0.1.0
  */
-export class EvaluatedCompileOptions implements CompileConfig {
+export class EvaluatedCompileConfig implements CompileConfig {
 	/**
 	 * Original user-defined {@link CompileConfig}, which may not be overwritten anymore, as the compile-arguments
 	 * were already processed using the {@link constructor} of this class.
@@ -80,11 +104,13 @@ export class EvaluatedCompileOptions implements CompileConfig {
 	 */
 	public static readonly defaults = {
 		builtIns: kipperRuntimeBuiltIns, // Default built-in globals
-		extendGlobals: [], // No globals
-		fileName: "anonymous-script", // Default name if no name is specified.
-		target: new TypeScriptTarget(), // Default target is TypeScript.
+		extendGlobals: [], // Use no custom globals per default
+		fileName: "anonymous-script", // Default name if no name is specified
+		target: new TypeScriptTarget(), // Default target is TypeScript
 		optimisationOptions: defaultOptimisationOptions,
-		warnings: true, // Always generate warnings by default.
+		warnings: true, // Always generate warnings by default
+		recover: true, // Always try to recover from compilation errors
+		abortOnFirstError: false, // This should never be enabled per default
 	};
 
 	/**
@@ -127,16 +153,37 @@ export class EvaluatedCompileOptions implements CompileConfig {
 	 */
 	public readonly warnings: boolean;
 
+	/**
+	 * If set to true, the compiler will attempt to recover from compilation errors if they are encountered. This will
+	 * lead to more errors being reported and allowing for bigger more detailed compiler logs, but can in rare cases
+	 * lead to misleading errors that are caused as a result of another compilation errors.
+	 *
+	 * Generally though, it is considered a good practise to use compiler error recovery, which is why it is enabled per
+	 * default.
+	 * @since 0.10.0
+	 */
+	public readonly recover: boolean;
+
+	/**
+	 * Throws an error and cancels the compilation on the first error that is encountered.
+	 *
+	 * This per default overwrites {@link recover}.
+	 * @since 0.10.0
+	 */
+	public readonly abortOnFirstError: boolean;
+
 	constructor(options: CompileConfig) {
 		this.userOptions = options;
 
 		// Evaluate all config options
-		this.builtIns = options.builtIns ?? Object.values(EvaluatedCompileOptions.defaults.builtIns);
-		this.extendBuiltIns = options.extendBuiltIns ?? EvaluatedCompileOptions.defaults.extendGlobals;
-		this.fileName = options.fileName ?? EvaluatedCompileOptions.defaults.fileName;
-		this.target = options.target ?? EvaluatedCompileOptions.defaults.target;
-		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileOptions.defaults.optimisationOptions;
-		this.warnings = options.warnings ?? EvaluatedCompileOptions.defaults.warnings;
+		this.builtIns = options.builtIns ?? Object.values(EvaluatedCompileConfig.defaults.builtIns);
+		this.extendBuiltIns = options.extendBuiltIns ?? EvaluatedCompileConfig.defaults.extendGlobals;
+		this.fileName = options.fileName ?? EvaluatedCompileConfig.defaults.fileName;
+		this.target = options.target ?? EvaluatedCompileConfig.defaults.target;
+		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileConfig.defaults.optimisationOptions;
+		this.warnings = options.warnings ?? EvaluatedCompileConfig.defaults.warnings;
+		this.recover = options.recover ?? EvaluatedCompileConfig.defaults.recover;
+		this.abortOnFirstError = options.abortOnFirstError ?? EvaluatedCompileConfig.defaults.abortOnFirstError;
 	}
 }
 
@@ -145,21 +192,10 @@ export class EvaluatedCompileOptions implements CompileConfig {
  * @since 0.0.3
  */
 export class KipperCompileResult {
-	/**
-	 * The private field '_fileCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.fileCtx}.
-	 * @private
-	 */
-	private readonly _programCtx: KipperProgramContext;
+	public readonly _programCtx: KipperProgramContext;
+	public readonly _result: Array<TranslatedCodeLine> | undefined;
 
-	/**
-	 * The private field '_result' that actually stores the variable data,
-	 * which is returned inside the {@link this.result}.
-	 * @private
-	 */
-	private readonly _result: Array<Array<string>>;
-
-	constructor(fileCtx: KipperProgramContext, result: Array<Array<string>>) {
+	constructor(fileCtx: KipperProgramContext, result: Array<TranslatedCodeLine> | undefined) {
 		this._programCtx = fileCtx;
 		this._result = result;
 	}
@@ -174,8 +210,16 @@ export class KipperCompileResult {
 	/**
 	 * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
 	 */
-	public get result(): Array<Array<string>> {
+	public get result(): Array<TranslatedCodeLine> | undefined {
 		return this._result;
+	}
+
+	/**
+	 * Returns true, if the compilation was successful without errors.
+	 * @since 0.10.0
+	 */
+	public get success(): boolean {
+		return Boolean(this.result);
 	}
 
 	/**
@@ -190,10 +234,25 @@ export class KipperCompileResult {
 	}
 
 	/**
+	 * The list of errors that were raised during the compilation process.
+	 *
+	 * Errors are fatal errors, which are raised when the compiler encounters a situation that it considers to be
+	 * problematic, which prevents it from compiling the program.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		return this.programCtx.errors;
+	}
+
+	/**
 	 * Creates a string from the compiled code that can be written to a file in a human-readable way.
 	 * @param lineEnding The line ending for each line of the file. Default line ending is LF ('\n').
 	 */
 	public write(lineEnding: string = "\n"): string {
+		if (this.result === undefined) {
+			throw Error("Can not generate code for a failed compilation");
+		}
+
 		return this.result.map((line: TranslatedCodeLine) => line.join("") + lineEnding).join("");
 	}
 }
@@ -253,10 +312,7 @@ export class KipperCompiler {
 	 * @returns The generated and parsed {@link CompilationUnitContext}.
 	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
 	 */
-	public async parse(
-		parseStream: KipperParseStream,
-		target: KipperCompileTarget = new TypeScriptTarget(),
-	): Promise<KipperProgramContext> {
+	public async parse(parseStream: KipperParseStream): Promise<ParseData> {
 		this._logger.info(`Parsing file content.`);
 
 		// Creating the char stream, based on the input
@@ -277,20 +333,46 @@ export class KipperCompiler {
 		parser.removeErrorListeners(); // removing all error listeners
 		parser.addErrorListener(errorListener); // adding our own error listener
 
-		// Parse the input, where `compilationUnit` is whatever entry point you defined
-		return (() => {
-			let result = parser.compilationUnit();
-			this._logger.debug(`Finished generation of parse tree.`);
-			return new KipperProgramContext(
-				parseStream,
-				result,
-				parser,
-				lexer,
-				this.logger,
-				target,
-				Object.values(kipperInternalBuiltIns),
-			);
-		})();
+		// Get the root parse item of the parse tree
+		const parseTree = parser.compilationUnit();
+
+		this._logger.debug(`Finished generation of parse tree.`);
+		return { parseStream, parseTree, parser, lexer };
+	}
+
+	/**
+	 * Creates a new {@link KipperProgramContext} based on the passed {@link parseData} and {@link config configuration}.
+	 * @param parseData The parsing data of the file.
+	 * @param compilerOptions The compilation config.
+	 * @since 0.10.0
+	 */
+	public async getProgramCtx(
+		parseData: ParseData,
+		compilerOptions: CompileConfig | EvaluatedCompileConfig,
+	): Promise<KipperProgramContext> {
+		const config: EvaluatedCompileConfig =
+			compilerOptions instanceof EvaluatedCompileConfig ? compilerOptions : new EvaluatedCompileConfig(compilerOptions);
+
+		// Creates a new program context using the parse data and compilation configuration
+		let programCtx = new KipperProgramContext(
+			parseData.parseStream,
+			parseData.parseTree,
+			parseData.parser,
+			parseData.lexer,
+			this.logger,
+			config.target,
+			Object.values(kipperInternalBuiltIns),
+			config,
+		);
+
+		// Register all available built-in functions
+		let globals = [...config.builtIns, ...config.extendBuiltIns];
+		if (globals.length > 0) {
+			programCtx.registerBuiltIns(globals);
+		}
+		this.logger.debug(`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"}.`);
+
+		return programCtx;
 	}
 
 	/**
@@ -307,14 +389,8 @@ export class KipperCompiler {
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
-		compilerOptions: CompileConfig = new EvaluatedCompileOptions({}),
+		compilerOptions: CompileConfig = new EvaluatedCompileConfig({}),
 	): Promise<KipperCompileResult> {
-		// Handle compiler options
-		const config: EvaluatedCompileOptions =
-			compilerOptions instanceof EvaluatedCompileOptions
-				? compilerOptions
-				: new EvaluatedCompileOptions(compilerOptions);
-
 		// Handle the input and format it
 		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
 
@@ -322,27 +398,25 @@ export class KipperCompiler {
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
 		try {
-			// The file context storing the metadata for the "virtual file"
-			const fileCtx: KipperProgramContext = await this.parse(inStream);
-
-			// If there are builtIns to register, register them
-			let globals = [...config.builtIns, ...config.extendBuiltIns];
-			if (globals.length > 0) {
-				fileCtx.registerBuiltIns(globals);
-			}
-			this.logger.debug(`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"}.`);
+			// Initial parsing step -> New ctx instance for the program
+			const parseData = await this.parse(inStream);
+			const programCtx = await this.getProgramCtx(parseData, compilerOptions);
 
 			// Start compilation of the Kipper program
-			const code = await fileCtx.compileProgram(config.optimisationOptions);
+			const code = await programCtx.compileProgram();
 
 			// After the compilation is done, return the compilation result as an instance
-			this.logger.info(`Compilation finished successfully without errors.`);
-			return new KipperCompileResult(fileCtx, code);
+			if (programCtx.errors) {
+				let errs = programCtx.errors.length;
+				this.logger.fatal(`Encountered ${errs} error${errs === 1 ? "" : "s"} during compilation.`);
+			} else {
+				this.logger.info(`Compilation finished successfully without errors.`);
+			}
+
+			return new KipperCompileResult(programCtx, code);
 		} catch (e) {
 			// Report the failure of the compilation
-			this.logger.reportError(LogLevel.FATAL, `Failed to compile '${inStream.name}'.`);
-
-			// Re-throw error
+			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
 			throw e;
 		}
 	}
@@ -359,6 +433,7 @@ export class KipperCompiler {
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
 	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
+		// TODO! Remove this function and replace it with a new compilation option 'noCodeGeneration'
 		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream);
 
 		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
