@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
+- New classes:
+  - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
+    This replaces the use of `KipperError` for warnings.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
@@ -29,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+
+### Removed
+
+- `KipperError.isWarning`, which has been replaced by the new class `KipperWarning`.
 
 ## [0.9.2] - 2022-07-23
 
