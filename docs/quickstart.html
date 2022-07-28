@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+
+<meta charset="utf-8">
+<title>Quickstart - Kipper Docs v0.9.2</title>
+<meta name="description" content="Welcome to the Quickstart Guide for the Kipper programming language! Here you will find a concise guide on how to install Kipper and start using it for your own projects.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="https://luna-klatzer.github.io/Kipper/up_/site.webmanifest">
+<link rel="apple-touch-icon" href="https://luna-klatzer.github.io/Kipper/icon.3e13c935.png">
+<link rel="shortcut icon" type="image/ico" href="https://luna-klatzer.github.io/Kipper/favicon.62a0df78.ico">
+
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.df60b42a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.8bc68452.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5a2d8ecf.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.41673934.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.9cfda3f7.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.114c529a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.1181b2d9.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.024f62c5.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5724c4e8.css">
+
+<!-- Loading the prism highlighting style-sheet -->
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.d1fdcc78.css">
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Including stylesheet for the Inter-Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+<meta name="theme-color" content="#e01a4f">
+
+<!-- Meta fields -->
+<meta property="og:site_name" content="Kipper">
+<meta property="og:title" content="Quickstart - Kipper v0.9.2">
+<meta property="og:description" content="Welcome to the Quickstart Guide for the Kipper programming language! Here you will find a concise guide on how to install Kipper and start using it for your own projects.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luna-klatzer.github.io/Kipper/docs/quickstart.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/WMC-AHIF-2021/Kipper-Web/main/src/img/head_icon.png">
+<meta property="og:locale" content="en_GB">
+
+    <link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/docs/index.7e2c8ee6.css">
+</head>
+<body>
+<script src="https://luna-klatzer.github.io/Kipper/index.d795c60a.js"></script>
+<script src="https://luna-klatzer.github.io/Kipper/index.c6ec5ac3.js"></script>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        
+
+<header id="home-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                    no-style-list
+                    flex-row
+                    flex-parent-container
+                    flex-center
+                    kipper-logo-container
+                    ">
+                    <img id="kipper-logo" src="https://luna-klatzer.github.io/Kipper/base_head.ee0cf29f.png" alt="">
+                </a>
+                <a class="
+                         underline-button kipper-logo-identifier
+                         " href="https://luna-klatzer.github.io/Kipper/index.html">
+                    <h2>Kipper</h2>
+                </a>
+                <a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.9.2">
+                    <small>v0.9.2</small>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/download.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Downloads</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                        underline-button
+                        selected-nav-page
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Docs</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/playground.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Playground</h4>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/changelog.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Changelog</h4>
+                </a>
+            </li>
+        </ul>
+        <div id="search-bar-wrapper">
+            <ul>
+                <li>
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </li>
+                <li id="search-bar">
+                    <label for="search-bar-input"></label>
+                    <input id="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="header-description-content" class="text-page-content-container">
+        
+    </div>
+</header>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="flex-parent-container flex-fill-to-parent">
+            <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
+                <script src="https://luna-klatzer.github.io/Kipper/docs/index.49ea9f72.js" defer=""></script>
+                <li class="docs-page-content-container">
+                    <div id="docs-content" class="shadowed-box">
+                        <!-- Content -->
+                        <section>
+                            <nav id="docs-page-nav">
+                                <ul class="flex-row no-style-list">
+                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="https://luna-klatzer.github.io/Kipper/docs/index.html">Kipper Docs /</a></li>
+                                    <li><a class="docs-page-nav-header" href="https://luna-klatzer.github.io/Kipper/docs/quickstart.html">Quickstart</a></li>
+                                </ul>
+                            </nav>
+                            <article id="markdown-content">
+                                <h1 id="quickstart">Quickstart</h1>
+<p>Welcome to the Quickstart Guide for the Kipper programming language! Here you will find a concise guide on how to
+install Kipper and start using it for your own projects.</p>
+<p class="red-highlight-text">
+  Before using Kipper make sure your system or browser is supported! View support list
+  <a href="https://luna-klatzer.github.io/Kipper/docs/supported-platforms.html">here</a>.
+</p>
+<h2 id="how-to-use-kipper">How to use Kipper?</h2>
+<p>Since the Kipper Compiler per default translates to TypeScript and therefore also JavaScript, there are several options to using Kipper:</p>
+<ol>
+<li>Running the Kipper Compiler in a Browser and using a Transpiler to generate native JavaScript code.</li>
+<li>Running the Kipper Compiler using the <code>@kipper/cli</code> package in a terminal.</li>
+<li>Including the <code>@kipper/core</code> package into a Node.js program.</li>
+</ol>
+<h2 id="setting-up-kipper-in-an-html-file">Setting up Kipper in an HTML file</h2>
+<p>For running Kipper in the browser, you will have to include:</p>
+<ol>
+<li>The primary <code>kipper-standalone.min.js</code> file, which provides the kipper source code compatible for <em>modern</em> browsers.
+View the <a href="https://luna-klatzer.github.io/Kipper/docs/supported-platforms.html" rel="noopener noreferrer" target="_blank">support list</a> to make sure your browser is supported.</li>
+<li>The Babel typescript transpiler, which allows native browser transpiling and code generation. This is required as Kipper is not a language that compiles directly to JavaScript code, but uses TypeScript as another level of abstraction. (This may change in the future. View <a href="https://github.com/Luna-Klatzer/Kipper/issues/208" rel="noopener noreferrer" target="_blank">#208</a> for more info.)</li>
+</ol>
+<h3 id="including-the-kipper-script">Including the Kipper Script</h3>
+<p>The snippet shown below includes both the Kipper compiler and the Babel typescript transpiler, which allows you to compile Kipper code and directly transpile it to JavaScript.</p>
+<pre><code class="html language-html">&lt;!-- Babel --&gt;
+&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- Kipper --&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"&gt;&lt;/script&gt;</code></pre>
+<p>Once the Kipper file has been loaded, you can access the library using the identifier <code>Kipper</code>, which will be globally available in your HTML file.</p>
+<h3 id="running-the-compiler-in-an-html-file">Running the Compiler in an HTML file</h3>
+<p>This is a simple example of how to use Kipper in a HTML file. This will compile the string <code>call print("Hello world");</code> down to JavaScript, and evaluate it. If everything worked, you should see the logger output and <code>Hello world!</code> printed to the browser console.</p>
+<p>Example code:</p>
+<pre><code class="html language-html">&lt;script type="module"&gt;
+    // Define your own logger and compiler, which will handle the compilation
+    const logger = new Kipper.KipperLogger((level, msg) =&gt; {
+        console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
+    });
+
+    // Define your own compiler with your wanted configuration
+    const compiler = new Kipper.KipperCompiler(logger, {});
+
+    // Compile the code to Typescript
+    // Top-level await ref:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
+    const result = (await compiler.compile(`call print("Hello world!");`)).write();
+
+    // Transpile the TS code into JS
+    const jsCode = Babel.transform(result, {
+        filename: "kipper-web-script.ts",
+        presets: ["env", "typescript"],
+    });
+
+    // Finally, run your program
+    eval(jsCode.code);
+&lt;/script&gt;</code></pre>
+<h2 id="setting-up-kipper-for-the-terminal">Setting up Kipper for the Terminal</h2>
+<p>To use Kipper in a terminal, you will have to install the package <code>@kipper/cli</code>, which provides the CLI for the Kipper Compiler. This will make the identifier <code>kipper</code> globally available in your project work-directory and will allow you to run the Kipper Compiler from the terminal.</p>
+<p>Example <code>package.json</code>:</p>
+<pre><code class="json language-json">{
+    "name": "example",
+    "version": "0.1.0",
+    "description": "An example program using Kipper",
+    "keywords": ["kipper", "example"],
+    "license": "GPL-3.0",
+    "dependencies": {
+        "@kipper/cli": "latest"
+    }
+}</code></pre>
+<h3 id="post-installation">Post Installation</h3>
+<p>After finishing the installation, try to run the following command:</p>
+<pre><code class="bash language-bash">kipper --version</code></pre>
+<p>If the identifier <code>kipper</code> is not found, try to run Kipper using your project's package manager. For example, if you are using <code>npm</code>, you can run the following code:</p>
+<pre><code class="bash language-bash">npx kipper</code></pre>
+<h3 id="global-installation">Global Installation</h3>
+<p>If you intend to only try out Kipper, you can also simply install Kipper globally:</p>
+<pre><code class="bash language-bash">npm install -g @kipper/cli</code></pre>
+<article class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+  If possible avoid installing Kipper globally if you intend to use it inside your own projects, as it can cause issues with locally installed versions (node project dependencies). For a localised and project-dependent kipper installation add kipper to your dependencies as shown previously.
+  </p>
+</article>
+<h3 id="importing-kipper-as-a-module">Importing Kipper as a module</h3>
+<p>To set up Kipper for your personal code, simply add <code>@kipper/core</code> or <code>kipper</code> (also includes the
+Kipper CLI) to your project dependencies or development dependencies in your <code>package.json</code> file.</p>
+<p>Example package.json</p>
+<pre><code class="json language-json">{
+    "name": "example",
+    "version": "0.1.0",
+    "description": "An example program using Kipper",
+    "keywords": ["kipper", "example"],
+    "license": "GPL-3.0",
+    "dependencies": {
+        "@kipper/core": "latest"
+    }
+}</code></pre>
+<h3 id="importing-the-kipper-package">Importing the Kipper package</h3>
+<p>Afterwards you can include the <code>@kipper/core</code> package in your JavaScript or TypeScript file. This package contains the full Kipper Compiler and API, which can be customised according to your needs.</p>
+<p>Kipper is shipped as a commonjs module and can therefore be imported using <code>require()</code> in Javascript or<code>import</code> in TypeScript.</p>
+<h3 id="example">Example</h3>
+<p>Using JavaScript:</p>
+<pre><code class="ts language-ts">const ts = require("typescript");
+const fs = require("fs").promises;
+const kipper = require("@kipper/core");
+
+const path = "INSERT_PATH";
+fs.readFile(path, "utf8").then(async (fileContent) =&gt; {
+    // Define your own logger and compiler, which will handle the compilation
+    const logger = new kipper.KipperLogger((level, msg) =&gt; {
+        console.log(`[${level}] ${msg}`);
+    });
+    const compiler = new kipper.KipperCompiler(logger);
+
+    // Compile the code string or stream
+    let result = await compiler.compile(fileContent, {
+        /* Config */
+    });
+    let tsCode = result.write();
+
+    // Compiling down to JS using the typescript node module
+    let jsCode = ts.transpile(tsCode);
+
+    // Running the Kipper program
+    eval(jsCode);
+});</code></pre>
+<p>Using TypeScript:</p>
+<pre><code class="ts language-ts">import * as ts from "typescript";
+import { promises as fs } from "fs";
+import * as kipper from "@kipper/core";
+
+const path = "INSERT_PATH";
+fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) =&gt; {
+    // Define your own logger and compiler, which will handle the compilation
+    const logger = new kipper.KipperLogger((level, msg) =&gt; {
+        console.log(`[${level}] ${msg}`);
+    });
+    const compiler = new kipper.KipperCompiler(logger);
+
+    // Compile the code string or stream
+    let result = await compiler.compile(fileContent, {
+        /* Config */
+    });
+    let tsCode = result.write();
+
+    // Compiling down to JS using the typescript node module
+    let jsCode = ts.transpile(tsCode);
+
+    // Running the Kipper program
+    eval(jsCode);
+});</code></pre>
+                            </article>
+                        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <footer id="footer-bar" class="flex-parent-container flex-column">
+    <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+        <li>
+            <img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+        </li>
+        <li>
+            <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+                    </small>
+                </li>
+            </ul>
+        </li>
+        <li id="copyright">
+            <small class="centered-text white-text">
+                Copyright © 2021-2022 Luna Klatzer &amp; Maximilian Seebacher. Kipper is licensed under the GPL-3.0 license.
+            </small>
+        </li>
+    </ul>
+</footer>
+
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<div id="search-result-overlay">
+    <div class="flex-column flex-parent-container" id="search-result"></div>
+</div>
+<script src="https://luna-klatzer.github.io/Kipper/changelog.78f41315.js" defer=""></script>
+
+</body>
+</html>

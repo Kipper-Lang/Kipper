@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+
+<meta charset="utf-8">
+<title>Statements - Kipper Docs v0.9.2</title>
+<meta name="description" content="Statements form the basis of Kipper next to &lt;a href=&#34;./expressions.html&#34; rel=&#34;noopener noreferrer&#34; target=&#34;_blank&#34;&gt;expressions, and perform the basic operations and define the logic in your program. They can be easily identified with their usage of either curly brackets ({ }) or a semicolon (;).">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="https://luna-klatzer.github.io/Kipper/up_/site.webmanifest">
+<link rel="apple-touch-icon" href="https://luna-klatzer.github.io/Kipper/icon.3e13c935.png">
+<link rel="shortcut icon" type="image/ico" href="https://luna-klatzer.github.io/Kipper/favicon.62a0df78.ico">
+
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.df60b42a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.8bc68452.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5a2d8ecf.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.41673934.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.9cfda3f7.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.114c529a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.1181b2d9.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.024f62c5.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5724c4e8.css">
+
+<!-- Loading the prism highlighting style-sheet -->
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.d1fdcc78.css">
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Including stylesheet for the Inter-Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+<meta name="theme-color" content="#e01a4f">
+
+<!-- Meta fields -->
+<meta property="og:site_name" content="Kipper">
+<meta property="og:title" content="Statements - Kipper v0.9.2">
+<meta property="og:description" content="Statements form the basis of Kipper next to &lt;a href=&#34;./expressions.html&#34; rel=&#34;noopener noreferrer&#34; target=&#34;_blank&#34;&gt;expressions, and perform the basic operations and define the logic in your program. They can be easily identified with their usage of either curly brackets ({ }) or a semicolon (;).">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luna-klatzer.github.io/Kipper/docs/statements.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/WMC-AHIF-2021/Kipper-Web/main/src/img/head_icon.png">
+<meta property="og:locale" content="en_GB">
+
+    <link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/docs/index.7e2c8ee6.css">
+</head>
+<body>
+<script src="https://luna-klatzer.github.io/Kipper/index.d795c60a.js"></script>
+<script src="https://luna-klatzer.github.io/Kipper/index.c6ec5ac3.js"></script>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        
+
+<header id="home-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                    no-style-list
+                    flex-row
+                    flex-parent-container
+                    flex-center
+                    kipper-logo-container
+                    ">
+                    <img id="kipper-logo" src="https://luna-klatzer.github.io/Kipper/base_head.ee0cf29f.png" alt="">
+                </a>
+                <a class="
+                         underline-button kipper-logo-identifier
+                         " href="https://luna-klatzer.github.io/Kipper/index.html">
+                    <h2>Kipper</h2>
+                </a>
+                <a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.9.2">
+                    <small>v0.9.2</small>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/download.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Downloads</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                        underline-button
+                        selected-nav-page
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Docs</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/playground.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Playground</h4>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/changelog.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Changelog</h4>
+                </a>
+            </li>
+        </ul>
+        <div id="search-bar-wrapper">
+            <ul>
+                <li>
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </li>
+                <li id="search-bar">
+                    <label for="search-bar-input"></label>
+                    <input id="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="header-description-content" class="text-page-content-container">
+        
+    </div>
+</header>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="flex-parent-container flex-fill-to-parent">
+            <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
+                <script src="https://luna-klatzer.github.io/Kipper/docs/index.49ea9f72.js" defer=""></script>
+                <li class="docs-page-content-container">
+                    <div id="docs-content" class="shadowed-box">
+                        <!-- Content -->
+                        <section>
+                            <nav id="docs-page-nav">
+                                <ul class="flex-row no-style-list">
+                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="https://luna-klatzer.github.io/Kipper/docs/index.html">Kipper Docs /</a></li>
+                                    <li><a class="docs-page-nav-header" href="https://luna-klatzer.github.io/Kipper/docs/statements.html">Statements</a></li>
+                                </ul>
+                            </nav>
+                            <article id="markdown-content">
+                                <h1 id="statements">Statements</h1>
+<p>Statements form the basis of Kipper next to <a href="https://luna-klatzer.github.io/Kipper/docs/expressions.html" rel="noopener noreferrer" target="_blank">expressions</a>, and perform the basic operations and
+define the logic in your program. They can be easily identified with their usage of either curly brackets (<code>{ }</code>) or a
+semicolon (<code>;</code>).</p>
+<p>Every operation in a Kipper program must be contained in a statement to be valid. This also includes
+<a href="https://luna-klatzer.github.io/Kipper/docs/expressions.html" rel="noopener noreferrer" target="_blank">expressions</a>, which can never be written alone.</p>
+<h2 id="list-of-statements-in-kipper">List of statements in Kipper</h2>
+<h3 id="expression-statement">Expression Statement</h3>
+<p>An expression statement is a simple expression that ends in a semicolon (<code>;</code>) and evaluates one or more expressions,
+without the involvement of any other statements.</p>
+<h4 id="syntax">Syntax</h4>
+<pre><code class="ts language-ts">EXPRESSION;</code></pre>
+<h4 id="examples">Examples</h4>
+<p>Common examples of expression statements are with increment or decrement expressions ( <code>val++</code>/<code>val--</code>) that simply add
+or subtract <code>1</code> to/from a value. These often do not require any other expressions, and can simply be used as a whole
+statement, like this:</p>
+<pre><code class="ts language-ts">// Defining a variable
+var increase_this: num = 4;
+increase_this++; // Expression statement -&gt; 5
+increase_this--; // Expression statement -&gt; 4</code></pre>
+<h3 id="compound-statement">Compound Statement</h3>
+<p>A compound statement is also called block of code, and defines, as already explained in <a href="https://luna-klatzer.github.io/Kipper/docs/variables.html" rel="noopener noreferrer" target="_blank">variables</a>,
+a scope for variables. Compound statements are commonly used together with other statements, such as
+<a href="https://luna-klatzer.github.io/Kipper/docs/if-statement.html" rel="noopener noreferrer" target="_blank">if-statements</a>, <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loops</a> and <a href="https://luna-klatzer.github.io/Kipper/docs/for-loop.html" rel="noopener noreferrer" target="_blank">for-loops</a>.</p>
+<h4 id="syntax-1">Syntax</h4>
+<pre><code class="ts language-ts">{
+  STATEMENTS (OPTIONAL)...
+}</code></pre>
+<h3 id="if-statement">If Statement</h3>
+<p><em>This also has its own docs page, which can be accessed <a href="https://luna-klatzer.github.io/Kipper/docs/if-statement.html" rel="noopener noreferrer" target="_blank">here</a>.</em></p>
+<p>If-statements or also if-else-statements make up an essential part of every program. These statements check if a
+specified condition is met and react accordingly. If the specified condition isn’t met, the program will execute a
+different code, which may be specified inside an <code>else</code> code block.</p>
+<h4 id="syntax-2">Syntax</h4>
+<p>They must have a single starting <code>if</code>, may have multiple extending <code>else if</code> branches and can have a single ending <code>else</code> branch, which is evaluated if the previous condition were all <code>false</code>.</p>
+<pre><code class="ts language-ts">if (CONDITION) STATEMENT; // Required
+else if (CONDITION) STATEMENT; // Optional - No limit for the amount of 'else if' branches
+else STATEMENT; // Optional</code></pre>
+<h4 id="examples-1">Examples</h4>
+<pre><code class="ts language-ts">// Simple comparison of a value
+var var1: num = 4;
+if (var1 == 4) {
+  call print("It's 4");
+} else {
+  call print("It's not 4");
+}
+
+// Simple else-if branch chaining
+var var2: num = 5;
+if (var2 &lt; 5) {
+  call print("It's less than 5");
+} else if (var2 == 5) {
+  call print("It's 5");
+} else {
+  call print("It's more than 4");
+}</code></pre>
+<h3 id="for-loop-statement">For-loop Statement</h3>
+<p class="red-highlight-text">
+  Scheduled for release in Kipper v0.11.0
+</p>
+<p><em>This also has its own docs page, which can be accessed <a href="https://luna-klatzer.github.io/Kipper/docs/for-loop.html" rel="noopener noreferrer" target="_blank">here</a>.</em></p>
+<p>For-loops are statements with a loop-expression, a loop condition and a statement body that are executed as long as a
+specified condition is met.</p>
+<p>For-loops have the unique attribute, unlike <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loops</a> and <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">do-while-loops</a>,
+of having an executable <code>LOOP_EXPRESSION</code>, which is evaluated at the end of every loop cycle. This <code>LOOP_EXPRESSION</code> can
+be used to do repeating tasks at the end of a loop cycle, like calling a function or increasing a counter.</p>
+<h4 id="syntax-3">Syntax</h4>
+<pre><code class="ts language-ts">for (INIT_EXPRESSION(OPTIONAL); CONDITION(OPTIONAL); LOOP_EXPRESSION(OPTIONAL)) STATEMENT;</code></pre>
+<p>The execution of a for-loop follows this schema:</p>
+<ul>
+<li>Evaluate <code>INIT_EXPRESSION</code>, if it exists (Only the first time).</li>
+<li>Check <code>CONDITION</code>, if it exists, before running the <code>STATEMENT</code>. If <code>CONDITION</code> is <code>false</code>, then the loop will be stopped!</li>
+<li>Run <code>STATEMENT</code> if <code>CONDITION</code> was <code>true</code>.</li>
+<li>Evaluate <code>LOOP_EXPRESSION</code> after finishing the execution of <code>STATEMENT</code>, and the loop was not stopped using <code>return;</code> or <code>break;</code>.</li>
+</ul>
+<h3 id="while-loop-statement">While-loop Statement</h3>
+<p class="red-highlight-text">
+  Scheduled for release in Kipper v0.11.0
+</p>
+<p><em>This also has its own docs page, which can be accessed <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">here</a>.</em></p>
+<p>While-loops are code blocks that are executed multiple times as long as the specified <code>CONDITION</code> is met. The behaviour
+of while-loops is very similar to <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">do-while-loops</a>, and in some cases it even might be better to
+use do-while than while-loops, so watch out for opportunities to replace while-loops with do-while loops.</p>
+<h4 id="syntax-4">Syntax</h4>
+<pre><code class="ts language-ts">while (CONDITION) STATEMENT;</code></pre>
+<p>The execution of a while-loop follows this schema:</p>
+<ul>
+<li>Check <code>CONDITION</code>, if it exists, before running the <code>STATEMENT</code>. If <code>CONDITION</code> is <code>false</code>, then the loop will be stopped!</li>
+<li>Run <code>STATEMENT</code> if <code>CONDITION</code> was <code>true</code>.</li>
+</ul>
+<h3 id="do-while-loop-statement">Do-while-loop Statement</h3>
+<p class="red-highlight-text">
+  Scheduled for release in Kipper v0.12.0
+</p>
+<p><em>This also has its own docs page, which can be accessed <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">here</a>.</em></p>
+<p>Do-while-loops are loops with a similar behaviour to <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loops</a>, with the main difference being
+that do-while loops run the statement once before starting evaluating its condition. Afterwards the
+statement is only run if the <code>CONDITION</code> is met.</p>
+<h4 id="syntax-5">Syntax</h4>
+<pre><code class="ts language-ts">do STATEMENT while (CONDITION);</code></pre>
+<p>The execution of a do-while-loop follows this schema:</p>
+<ul>
+<li>Run <code>STATEMENT</code> (Only the first time).</li>
+<li>Check <code>CONDITION</code>, if it exists, before running the <code>STATEMENT</code> again. If <code>CONDITION</code> is <code>false</code>, then the loop will
+be stopped!</li>
+<li>Run <code>STATEMENT</code> if <code>CONDITION</code> was <code>true</code>.</li>
+</ul>
+<h3 id="jump-statement">Jump Statement</h3>
+<p>Jump statements are statements that can stop the execution of a <a href="https://luna-klatzer.github.io/Kipper/docs/functions.html" rel="noopener noreferrer" target="_blank">function</a> or a loop
+(<a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loops</a>, <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">do-while-loops</a> or <a href="https://luna-klatzer.github.io/Kipper/docs/for-loop.html" rel="noopener noreferrer" target="_blank">for-loops</a>)
+prematurely.</p>
+<p>Jump statements must always have a valid target (parent statement) that can be determined at compile time, otherwise
+the statement is invalid and an error will be thrown.</p>
+<p>These jump statements are:</p>
+<ul>
+<li><code>break</code> - Stops a <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loop</a>, <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">do-while-loop</a> or <a href="https://luna-klatzer.github.io/Kipper/docs/for-loop.html" rel="noopener noreferrer" target="_blank">for-loop</a>.</li>
+<li><code>return</code> - Returns from a <a href="https://luna-klatzer.github.io/Kipper/docs/functions.html" rel="noopener noreferrer" target="_blank">functions</a> with an optional specific return value (Must match function return type).</li>
+<li><code>continue</code> - Jumps directly to the execution of the next loop cycle and will compare the loop-condition again.</li>
+</ul>
+<h4 id="syntax-6">Syntax</h4>
+<pre><code class="ts language-ts">// Only valid in functions
+return VALUE(OPTIONAL); // 'VALUE' is only required if the return type of the function is not 'void'
+
+// Only valid in loops
+break;
+
+// Only valid in loops
+continue;</code></pre>
+                            </article>
+                        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <footer id="footer-bar" class="flex-parent-container flex-column">
+    <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+        <li>
+            <img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+        </li>
+        <li>
+            <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+                    </small>
+                </li>
+            </ul>
+        </li>
+        <li id="copyright">
+            <small class="centered-text white-text">
+                Copyright © 2021-2022 Luna Klatzer &amp; Maximilian Seebacher. Kipper is licensed under the GPL-3.0 license.
+            </small>
+        </li>
+    </ul>
+</footer>
+
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<div id="search-result-overlay">
+    <div class="flex-column flex-parent-container" id="search-result"></div>
+</div>
+<script src="https://luna-klatzer.github.io/Kipper/changelog.78f41315.js" defer=""></script>
+
+</body>
+</html>

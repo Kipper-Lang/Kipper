@@ -1,0 +1,22 @@
+/* Defines Screen-Specific size variables and overwrites */
+:root {
+  --large-screen-size: 1200px;
+  --middle-screen-size: 800px;
+  --small-screen-size: 600px;
+}
+
+#main-frame {
+  display: flex;
+}
+#main-frame #actual-content {
+  display: flex;
+  height: 100vh;
+  flex-grow: 1;
+  flex-direction: column;
+}
+#main-frame #actual-content .page-header, #main-frame #actual-content #nav-header {
+  background-color: var(--scheme-primary);
+  display: flex;
+  flex-direction: column;
+}
+/*# sourceMappingURL=index.5a2d8ecf.css.map */

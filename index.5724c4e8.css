@@ -1,0 +1,29 @@
+/* Formatting for html-tables */
+table {
+  border-color: black;
+  border-collapse: collapse;
+  border-spacing: 0;
+  line-height: 1.2em;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+table thead tr th {
+  color: var(--scheme-primary);
+  overflow: hidden;
+  word-break: normal;
+  font-weight: 700;
+  border-width: 1px 1px 2px 1px;
+}
+table tbody tr td {
+  border-width: 1px;
+}
+table tbody tr td, table thead tr th {
+  text-align: left;
+  vertical-align: top;
+  padding: 1rem 0.8rem;
+  line-height: 1.5em;
+  border-color: rgba(25, 25, 28, 0.2);
+  border-style: solid;
+  border-collapse: collapse;
+}
+/*# sourceMappingURL=index.5724c4e8.css.map */

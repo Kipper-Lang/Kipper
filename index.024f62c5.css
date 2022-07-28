@@ -1,0 +1,24 @@
+/*! Footer Bar Configuration and Styling */
+#footer-bar {
+  margin-top: auto;
+  background-color: var(--scheme-background-gray);
+}
+#footer-bar #footer-content {
+  padding: 0.5rem 1.5rem 1.5rem;
+  flex-shrink: 1;
+}
+#footer-bar #footer-content #htl-leonding-logo {
+  margin: 1rem;
+  height: 2.5rem;
+}
+#footer-bar #footer-content #footer-bar-list li {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  font-weight: 400;
+}
+#footer-bar #footer-content #copyright {
+  border-top: 1px solid #f4f4f4;
+  margin-top: 1em;
+  padding-top: 1rem;
+}
+/*# sourceMappingURL=index.024f62c5.css.map */

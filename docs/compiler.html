@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+
+<meta charset="utf-8">
+<title>Kipper Compiler - Kipper Docs v0.9.2</title>
+<meta name="description" content="The Kipper Compiler is a TypeScript-based compiler that can compile Kipper code into TypeScript and generate the required overhead for the Kipper program. (In the future, native JavaScript should be supported as well. See &lt;a href=&#34;https://github.com/Luna-Klatzer/Kipper/issues/32&#34; rel=&#34;noopener noreferrer&#34; target=&#34;_blank&#34;&gt;#32 for more information.)">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="https://luna-klatzer.github.io/Kipper/up_/site.webmanifest">
+<link rel="apple-touch-icon" href="https://luna-klatzer.github.io/Kipper/icon.3e13c935.png">
+<link rel="shortcut icon" type="image/ico" href="https://luna-klatzer.github.io/Kipper/favicon.62a0df78.ico">
+
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.df60b42a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.8bc68452.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5a2d8ecf.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.41673934.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.9cfda3f7.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.114c529a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.1181b2d9.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.024f62c5.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5724c4e8.css">
+
+<!-- Loading the prism highlighting style-sheet -->
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.d1fdcc78.css">
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Including stylesheet for the Inter-Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+<meta name="theme-color" content="#e01a4f">
+
+<!-- Meta fields -->
+<meta property="og:site_name" content="Kipper">
+<meta property="og:title" content="Kipper Compiler - Kipper v0.9.2">
+<meta property="og:description" content="The Kipper Compiler is a TypeScript-based compiler that can compile Kipper code into TypeScript and generate the required overhead for the Kipper program. (In the future, native JavaScript should be supported as well. See &lt;a href=&#34;https://github.com/Luna-Klatzer/Kipper/issues/32&#34; rel=&#34;noopener noreferrer&#34; target=&#34;_blank&#34;&gt;#32 for more information.)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luna-klatzer.github.io/Kipper/docs/compiler.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/WMC-AHIF-2021/Kipper-Web/main/src/img/head_icon.png">
+<meta property="og:locale" content="en_GB">
+
+    <link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/docs/index.7e2c8ee6.css">
+</head>
+<body>
+<script src="https://luna-klatzer.github.io/Kipper/index.d795c60a.js"></script>
+<script src="https://luna-klatzer.github.io/Kipper/index.c6ec5ac3.js"></script>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        
+
+<header id="home-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                    no-style-list
+                    flex-row
+                    flex-parent-container
+                    flex-center
+                    kipper-logo-container
+                    ">
+                    <img id="kipper-logo" src="https://luna-klatzer.github.io/Kipper/base_head.ee0cf29f.png" alt="">
+                </a>
+                <a class="
+                         underline-button kipper-logo-identifier
+                         " href="https://luna-klatzer.github.io/Kipper/index.html">
+                    <h2>Kipper</h2>
+                </a>
+                <a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.9.2">
+                    <small>v0.9.2</small>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/download.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Downloads</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                        underline-button
+                        selected-nav-page
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Docs</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/playground.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Playground</h4>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/changelog.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Changelog</h4>
+                </a>
+            </li>
+        </ul>
+        <div id="search-bar-wrapper">
+            <ul>
+                <li>
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </li>
+                <li id="search-bar">
+                    <label for="search-bar-input"></label>
+                    <input id="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="header-description-content" class="text-page-content-container">
+        
+    </div>
+</header>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="flex-parent-container flex-fill-to-parent">
+            <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
+                <script src="https://luna-klatzer.github.io/Kipper/docs/index.49ea9f72.js" defer=""></script>
+                <li class="docs-page-content-container">
+                    <div id="docs-content" class="shadowed-box">
+                        <!-- Content -->
+                        <section>
+                            <nav id="docs-page-nav">
+                                <ul class="flex-row no-style-list">
+                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="https://luna-klatzer.github.io/Kipper/docs/index.html">Kipper Docs /</a></li>
+                                    <li><a class="docs-page-nav-header" href="https://luna-klatzer.github.io/Kipper/docs/compiler.html">Kipper Compiler</a></li>
+                                </ul>
+                            </nav>
+                            <article id="markdown-content">
+                                <h1 id="kipper-compiler">Kipper Compiler</h1>
+<p>The Kipper Compiler is a TypeScript-based compiler that can compile Kipper code into TypeScript and generate the required overhead for the Kipper program. (In the future, native JavaScript should be supported as well. See <a href="https://github.com/Luna-Klatzer/Kipper/issues/32" rel="noopener noreferrer" target="_blank">#32</a> for more information.)</p>
+<h2 id="kipper-api">Kipper API</h2>
+<p>Kipper provides a TypeScript API for interacting with its compiler, which can be used to configure and inspect the compilation of a program. This API is per default shipped with the <code>@kipper/core</code> package and the <code>kipper-standalone.js</code> file.</p>
+<h2 id="configuring-the-kipper-compiler">Configuring the Kipper Compiler</h2>
+<p>Configuring <code>KipperCompile.compile()</code> can be done using the <code>CompileConfig</code> interface, which defines all available parameters for a compilation.</p>
+<h3 id="kipper-compiler-parameters">Kipper Compiler Parameters</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type<br></th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>fileName</td>
+      <td>string</td>
+      <td>
+        The name of the file. Per default
+        <code>anonymous-script</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>target</td>
+      <td>KipperTarget</td>
+      <td>
+        The Kipper target instance, which defines the translation behaviour of the Kipper AST
+        nodes. Per default <code>TypeScriptTarget</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>optimisationOptions</td>
+      <td>OptimisationOptions</td>
+      <td>
+        <p>The options for optimising the Kipper output.</p>
+        <p>Defaults to an object with the following values:</p>
+        <ul class="bullet-list">
+          <li><code>optimiseInternals: true</code></li>
+          <li><code>optimiseBuiltIns: false</code></li>
+        </ul>
+        <p>
+          More info down below in
+          <a href="#kipper-optimiser-parameters">Kipper Optimiser Parameters</a>.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td>extendBuiltIns</td>
+      <td>Array&lt;BuiltInFunction&gt;</td>
+      <td>
+        Additional built-in functions that should be available in the Kipper program. This
+        extends builtIns and is per default empty.<br>
+      </td>
+    </tr>
+    <tr>
+      <td>builtIns<br></td>
+      <td>Array&lt;BuiltInFunction&gt;</td>
+      <td>
+        Standard built-in functions that should be available in the Kipper program.
+        <br><br>If this is defined with new built-in functions that Kipper does not
+        implement per default, the Kipper target class will have to be updated as well to
+        implement the generation of these built-ins. <br><br>Defaults to the function as
+        listed in <a href="https://luna-klatzer.github.io/Kipper/docs/built-in-functions.html">Built-in Functions</a>.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="kipper-optimiser-parameters">Kipper Optimiser Parameters</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>optimiseInternals</td>
+      <td>boolean</td>
+      <td>
+        If set to true, the internal functions (functions generated by the Kipper compiler to
+        provide specific functionality) of the compiled code will be optimised using
+        tree-shaking reducing the size of the output. Defaults to <code>true</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>optimiseBuiltIns</td>
+      <td>boolean</td>
+      <td>
+        If set to true, the
+        <a href="https://luna-klatzer.github.io/Kipper/docs/built-in-functions.html">built-in functions</a>
+        of the compiled code will be optimised using tree-shaking reducing the size of the
+        output. Defaults to <code>false</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="example-configuration">Example Configuration</h3>
+<pre><code class="ts language-ts">import { KipperCompiler } from "@kipper/core";
+import { TypeScriptTarget } from "@kipper/core/lib/targets/typescript";
+
+const compiler = new KipperCompiler();
+const result = compiler.compile(
+    kipperCode, // A string or a KipperParseStream containing the source code
+    {
+        fileName: "myProgram.kip",
+        target: new TypeScriptTarget(),
+        optimisationOptions: {
+            optimiseInternals: true, // Removes any unused internal function
+            optimiseBuiltIns: true, // Removes any unused built-in function
+        },
+    },
+);</code></pre>
+<h2 id="kipper-cli-parameters">Kipper CLI Parameters</h2>
+<p>Parameters for the Kipper Compiler CLI in the console.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Flags</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-b, --[no-]optimise-builtins<br></td>
+      <td>
+        If set to true, the built-in functions of the compiled code will be optimised using
+        tree-shaking reducing the size of the output.
+      </td>
+    </tr>
+    <tr>
+      <td>-e, --encoding=encoding</td>
+      <td>
+        The encoding that should be used to read the file (ascii,utf8,utf16le). Defaults to
+        <code>utf8</code>.
+      </td>
+    </tr>
+    <tr>
+      <td>-i, --[no-]optimise-internals</td>
+      <td>
+        If set to true, the internal functions of the compiled code will be optimised using
+        tree-shaking reducing the size of the output.
+      </td>
+    </tr>
+    <tr>
+      <td>-o, --output-dir=output-dir</td>
+      <td>
+        The build directory where the compiled files should be placed. If the path does not
+        exist, it will be created. Defaults to
+        <code>build</code>.<br>
+      </td>
+    </tr>
+    <tr>
+      <td>-s, --string-code=string-code<br></td>
+      <td>
+        The content of a Kipper file that can be passed as a replacement for the 'file'
+        parameter.<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h3 id="example-cli-command">Example CLI Command</h3>
+<pre><code class="bash language-bash">kipper compile -s 'call print("Hello world!");' -e utf16le -i -b</code></pre>
+                            </article>
+                        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <footer id="footer-bar" class="flex-parent-container flex-column">
+    <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+        <li>
+            <img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+        </li>
+        <li>
+            <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+                    </small>
+                </li>
+            </ul>
+        </li>
+        <li id="copyright">
+            <small class="centered-text white-text">
+                Copyright © 2021-2022 Luna Klatzer &amp; Maximilian Seebacher. Kipper is licensed under the GPL-3.0 license.
+            </small>
+        </li>
+    </ul>
+</footer>
+
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<div id="search-result-overlay">
+    <div class="flex-column flex-parent-container" id="search-result"></div>
+</div>
+<script src="https://luna-klatzer.github.io/Kipper/changelog.78f41315.js" defer=""></script>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+
+<meta charset="utf-8">
+<title>Functions - Kipper Docs v0.9.2</title>
+<meta name="description" content="Functions are an easy way to re-use code and provide interface to do certain things over and over again. These functions may also accept arguments/parameters to change the functions behaviour and also return values after execution.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="https://luna-klatzer.github.io/Kipper/up_/site.webmanifest">
+<link rel="apple-touch-icon" href="https://luna-klatzer.github.io/Kipper/icon.3e13c935.png">
+<link rel="shortcut icon" type="image/ico" href="https://luna-klatzer.github.io/Kipper/favicon.62a0df78.ico">
+
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.df60b42a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.8bc68452.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5a2d8ecf.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.41673934.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.9cfda3f7.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.114c529a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.1181b2d9.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.024f62c5.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5724c4e8.css">
+
+<!-- Loading the prism highlighting style-sheet -->
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.d1fdcc78.css">
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Including stylesheet for the Inter-Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+<meta name="theme-color" content="#e01a4f">
+
+<!-- Meta fields -->
+<meta property="og:site_name" content="Kipper">
+<meta property="og:title" content="Functions - Kipper v0.9.2">
+<meta property="og:description" content="Functions are an easy way to re-use code and provide interface to do certain things over and over again. These functions may also accept arguments/parameters to change the functions behaviour and also return values after execution.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luna-klatzer.github.io/Kipper/docs/functions.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/WMC-AHIF-2021/Kipper-Web/main/src/img/head_icon.png">
+<meta property="og:locale" content="en_GB">
+
+    <link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/docs/index.7e2c8ee6.css">
+</head>
+<body>
+<script src="https://luna-klatzer.github.io/Kipper/index.d795c60a.js"></script>
+<script src="https://luna-klatzer.github.io/Kipper/index.c6ec5ac3.js"></script>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        
+
+<header id="home-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                    no-style-list
+                    flex-row
+                    flex-parent-container
+                    flex-center
+                    kipper-logo-container
+                    ">
+                    <img id="kipper-logo" src="https://luna-klatzer.github.io/Kipper/base_head.ee0cf29f.png" alt="">
+                </a>
+                <a class="
+                         underline-button kipper-logo-identifier
+                         " href="https://luna-klatzer.github.io/Kipper/index.html">
+                    <h2>Kipper</h2>
+                </a>
+                <a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.9.2">
+                    <small>v0.9.2</small>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/download.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Downloads</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                        underline-button
+                        selected-nav-page
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Docs</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/playground.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Playground</h4>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/changelog.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Changelog</h4>
+                </a>
+            </li>
+        </ul>
+        <div id="search-bar-wrapper">
+            <ul>
+                <li>
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </li>
+                <li id="search-bar">
+                    <label for="search-bar-input"></label>
+                    <input id="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="header-description-content" class="text-page-content-container">
+        
+    </div>
+</header>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="flex-parent-container flex-fill-to-parent">
+            <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
+                <script src="https://luna-klatzer.github.io/Kipper/docs/index.49ea9f72.js" defer=""></script>
+                <li class="docs-page-content-container">
+                    <div id="docs-content" class="shadowed-box">
+                        <!-- Content -->
+                        <section>
+                            <nav id="docs-page-nav">
+                                <ul class="flex-row no-style-list">
+                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="https://luna-klatzer.github.io/Kipper/docs/index.html">Kipper Docs /</a></li>
+                                    <li><a class="docs-page-nav-header" href="https://luna-klatzer.github.io/Kipper/docs/functions.html">Functions</a></li>
+                                </ul>
+                            </nav>
+                            <article id="markdown-content">
+                                <h1 id="functions">Functions</h1>
+<p>Functions are an easy way to re-use code and provide interface to do certain things over and over again. These functions
+may also accept arguments/parameters to change the functions behaviour and also return values after execution.</p>
+<p>Functions are essential for every program, as the ability to re-execute statements over and over again, makes them an
+powerful tool for every program allowing the creation of complex behaviour fairly easily and avoiding ugly code
+repetition.</p>
+<p class="red-highlight-text">
+  Scheduled for release in Kipper v0.10.0
+</p>
+<h2 id="syntax">Syntax</h2>
+<p>Defining a Kipper function:</p>
+<pre><code class="ts language-ts">def NAME(ARG_NAME: TYPE, ...) -&gt; RETURN_TYPE {
+  STATEMENTS... (OPTIONAL) // Function content
+
+  return; // Optional if RETURN_TYPE is void, invalid if RETURN_TYPE is not void
+  return VALUE; // Required if RETURN_TYPE is not void
+}</code></pre>
+<p>Rules for defining a Kipper function:</p>
+<ul>
+<li>A function body/statement must exist.</li>
+<li>An identifier must be specified.</li>
+<li>The return type must be specified.</li>
+<li>Arguments are optional.</li>
+</ul>
+<p>Calling a defined function (<a href="https://luna-klatzer.github.io/Kipper/docs/expressions.html" rel="noopener noreferrer" target="_blank">Function call expression</a>):</p>
+<pre><code class="ts language-ts">call NAME(ARGS...);</code></pre>
+<h2 id="behaviour">Behaviour</h2>
+<p>When calling a function all arguments have to be passed with the argument types matching. When calling, the variables are going to be copied to the local function stack (local scope), where the function may utilise them for its behaviour.</p>
+<p><em>Note! A function allows for an infinite amount of arguments (<code>ARG_NAME: TYPE</code>), though at the current stage of development, no optional or default arguments are available/planned. Meaning <strong>all</strong> arguments have to be passed when calling a function!</em></p>
+<h2 id="examples">Examples</h2>
+<pre><code class="ts language-ts">// ✓ Simple void function with no arguments and return
+def print_banner() -&gt; void {
+  call print("Welcome to Kipper!");
+  return; // Optional
+}
+
+// ✓ Calling the function
+call print_banner();
+
+// ✓ Simple function with arguments and return-type
+// Note: It is good to always document your functions to make sure you understand their behaviour even later on!
+/*
+ * @brief Adds the prefix before the main_str
+ * @param prefix The prefix that shall be added
+ * @param main_str The main_str to append to
+ */
+def add_prefix(prefix: str, main_str: str) -&gt; str {
+  return prefix + main_str;
+}
+
+// ✓ Calling the function with all the required arguments and passing the result to a variable
+var result_str: str = call add_prefix("pre", "fix"); // -&gt; "prefix"
+
+// X May not pass the function itself to a variable!
+var any_var: str = add_prefix("pre", "fix");
+
+// X May not pass the function itself to a variable!
+var any_var: str = add_prefix;
+
+// X May not call a function without its required arguments or brackets!
+var any_var: str = call add_prefix;</code></pre>
+                            </article>
+                        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <footer id="footer-bar" class="flex-parent-container flex-column">
+    <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+        <li>
+            <img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+        </li>
+        <li>
+            <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+                    </small>
+                </li>
+            </ul>
+        </li>
+        <li id="copyright">
+            <small class="centered-text white-text">
+                Copyright © 2021-2022 Luna Klatzer &amp; Maximilian Seebacher. Kipper is licensed under the GPL-3.0 license.
+            </small>
+        </li>
+    </ul>
+</footer>
+
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<div id="search-result-overlay">
+    <div class="flex-column flex-parent-container" id="search-result"></div>
+</div>
+<script src="https://luna-klatzer.github.io/Kipper/changelog.78f41315.js" defer=""></script>
+
+</body>
+</html>

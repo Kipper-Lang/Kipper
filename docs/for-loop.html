@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+
+
+<meta charset="utf-8">
+<title>For-Loop - Kipper Docs v0.9.2</title>
+<meta name="description" content="For-loops are statements with a loop-expression, a loop condition and a statement body that are executed as long as a specified condition is met.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="https://luna-klatzer.github.io/Kipper/up_/site.webmanifest">
+<link rel="apple-touch-icon" href="https://luna-klatzer.github.io/Kipper/icon.3e13c935.png">
+<link rel="shortcut icon" type="image/ico" href="https://luna-klatzer.github.io/Kipper/favicon.62a0df78.ico">
+
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.df60b42a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.8bc68452.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5a2d8ecf.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.41673934.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.9cfda3f7.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.114c529a.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.1181b2d9.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.024f62c5.css">
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.5724c4e8.css">
+
+<!-- Loading the prism highlighting style-sheet -->
+<link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/index.d1fdcc78.css">
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Including stylesheet for the Inter-Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+<meta name="theme-color" content="#e01a4f">
+
+<!-- Meta fields -->
+<meta property="og:site_name" content="Kipper">
+<meta property="og:title" content="For-Loop - Kipper v0.9.2">
+<meta property="og:description" content="For-loops are statements with a loop-expression, a loop condition and a statement body that are executed as long as a specified condition is met.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://luna-klatzer.github.io/Kipper/docs/for-loop.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/WMC-AHIF-2021/Kipper-Web/main/src/img/head_icon.png">
+<meta property="og:locale" content="en_GB">
+
+    <link rel="stylesheet" href="https://luna-klatzer.github.io/Kipper/docs/index.7e2c8ee6.css">
+</head>
+<body>
+<script src="https://luna-klatzer.github.io/Kipper/index.d795c60a.js"></script>
+<script src="https://luna-klatzer.github.io/Kipper/index.c6ec5ac3.js"></script>
+
+<div id="main-frame">
+    <div id="actual-content">
+        <!-- The top element: menu and search bar -->
+        
+
+<header id="home-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                    no-style-list
+                    flex-row
+                    flex-parent-container
+                    flex-center
+                    kipper-logo-container
+                    ">
+                    <img id="kipper-logo" src="https://luna-klatzer.github.io/Kipper/base_head.ee0cf29f.png" alt="">
+                </a>
+                <a class="
+                         underline-button kipper-logo-identifier
+                         " href="https://luna-klatzer.github.io/Kipper/index.html">
+                    <h2>Kipper</h2>
+                </a>
+                <a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.9.2">
+                    <small>v0.9.2</small>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/download.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Downloads</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/docs/index.html" class="
+                        underline-button
+                        selected-nav-page
+                        top-nav-menu-item
+                        top-nav-button
+                        "><h4>Docs</h4></a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/playground.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Playground</h4>
+                </a>
+            </li>
+            <li>
+                <a href="https://luna-klatzer.github.io/Kipper/changelog.html" class="
+                        underline-button
+                        
+                        top-nav-menu-item
+                        top-nav-button
+                        ">
+                    <h4>Changelog</h4>
+                </a>
+            </li>
+        </ul>
+        <div id="search-bar-wrapper">
+            <ul>
+                <li>
+                    <i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
+                </li>
+                <li id="search-bar">
+                    <label for="search-bar-input"></label>
+                    <input id="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="header-description-content" class="text-page-content-container">
+        
+    </div>
+</header>
+
+
+        <!-- Main Content, where the text is located and the items unique to this site are defined -->
+        <div class="flex-parent-container flex-fill-to-parent">
+            <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
+                <script src="https://luna-klatzer.github.io/Kipper/docs/index.49ea9f72.js" defer=""></script>
+                <li class="docs-page-content-container">
+                    <div id="docs-content" class="shadowed-box">
+                        <!-- Content -->
+                        <section>
+                            <nav id="docs-page-nav">
+                                <ul class="flex-row no-style-list">
+                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="https://luna-klatzer.github.io/Kipper/docs/index.html">Kipper Docs /</a></li>
+                                    <li><a class="docs-page-nav-header" href="https://luna-klatzer.github.io/Kipper/docs/for-loop.html">For-Loop</a></li>
+                                </ul>
+                            </nav>
+                            <article id="markdown-content">
+                                <h1 id="for-loop">For-Loop</h1>
+<p>For-loops are statements with a loop-expression, a loop condition and a statement body that are executed as long as a
+specified condition is met.</p>
+<p>For-loops have the unique attribute, unlike <a href="https://luna-klatzer.github.io/Kipper/docs/while-loop.html" rel="noopener noreferrer" target="_blank">while-loops</a> and <a href="https://luna-klatzer.github.io/Kipper/docs/do-while-loop.html" rel="noopener noreferrer" target="_blank">do-while-loops</a>,
+of having an executable <code>LOOP_EXPRESSION</code>, which is evaluated at the end of every loop cycle. This <code>LOOP_EXPRESSION</code> can
+be used to do repeating tasks at the end of a loop cycle, like calling a function or increasing a counter.</p>
+<p class="red-highlight-text">
+  Scheduled for release in Kipper v0.11.0
+</p>
+<h2 id="syntax">Syntax</h2>
+<pre><code class="ts language-ts">for (INIT_EXPRESSION (OPTIONAL); CONDITION (OPTIONAL); LOOP_EXPRESSIONS (OPTIONAL)...) STATEMENT;</code></pre>
+<h2 id="execution-schema">Execution Schema</h2>
+<ul>
+<li>Evaluate <code>INIT_EXPRESSION</code>, if it exists (Only the first time).</li>
+<li>Check <code>CONDITION</code>, if it exists, before running the <code>STATEMENT</code>. If <code>CONDITION</code> is <code>false</code>, then the loop will be stopped!</li>
+<li>Run <code>STATEMENT</code> if <code>CONDITION</code> was <code>true</code>.</li>
+<li>If the loop was not stopped using <code>return</code> or <code>break</code>, evaluate <code>LOOP_EXPRESSION</code> after finishing the execution of <code>STATEMENT</code>.</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<pre><code class="ts language-ts">// ✓ Simple for-loop with an execution counter
+for (var i: num = 1; i &lt; 10; i++) {
+  call print(f"Running for the {i}. time!");
+}
+
+// ✓ Simple for-loop with two execution counters
+var j: num = 0;
+for (var i: num = 1; i &lt; 10; i++, j++) {
+  call print(f"i = {i}");
+}
+call print(f"Additional variable j = {j}"); // -&gt; Additional variable j = 10
+
+// X Infinite loop - Avoid this, as it results in your program freezing/running forever
+for ( ; ; ) {
+  call print(f"Running for the {i}. time!");
+}</code></pre>
+                            </article>
+                        </section>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- Footer bar - contains some links and general copyright notice -->
+        <footer id="footer-bar" class="flex-parent-container flex-column">
+    <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+        <li>
+            <img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+        </li>
+        <li>
+            <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+                    </small>
+                </li>
+                <li>
+                    <small>
+                        <a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+                    </small>
+                </li>
+            </ul>
+        </li>
+        <li id="copyright">
+            <small class="centered-text white-text">
+                Copyright © 2021-2022 Luna Klatzer &amp; Maximilian Seebacher. Kipper is licensed under the GPL-3.0 license.
+            </small>
+        </li>
+    </ul>
+</footer>
+
+    </div>
+</div>
+
+<!-- Overlay for displaying search results -->
+<div id="search-result-overlay">
+    <div class="flex-column flex-parent-container" id="search-result"></div>
+</div>
+<script src="https://luna-klatzer.github.io/Kipper/changelog.78f41315.js" defer=""></script>
+
+</body>
+</html>

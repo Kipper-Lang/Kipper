@@ -1,0 +1,132 @@
+/*! Configuration for the Playground */
+#interactive-console {
+  /* Sidebar styling */
+}
+#interactive-console #left-console-interface {
+  margin: 0;
+  display: flex;
+  flex-grow: 2;
+  /* The entire code entire window -> parent of the label and textarea */
+}
+#interactive-console #left-console-interface #playground-option-menu {
+  border-bottom: 2px solid var(--scheme-gray);
+}
+#interactive-console #left-console-interface #clear-content-list-item {
+  margin-right: 1rem;
+}
+#interactive-console #left-console-interface #code-editor {
+  display: flex;
+  flex-grow: 1;
+  min-width: 0;
+  min-height: 0;
+  /*
+      * The user input fields - the two fields will be put over each other to make it look
+      * like a single field
+      */
+}
+#interactive-console #left-console-interface #code-editor #code-editor-textarea, #interactive-console #left-console-interface #code-editor #highlighting-field {
+  /* Putting them on top of each other */
+  position: absolute;
+  flex-grow: 0;
+  /* Allow scrolling */
+  overflow: auto;
+  /* Identical styling */
+  margin: 0;
+  padding: 1rem;
+  resize: none;
+  border: none;
+  outline: none;
+  max-height: 60vh;
+  max-width: 70vw;
+}
+#interactive-console #left-console-interface #code-editor #code-editor-textarea, #interactive-console #left-console-interface #code-editor #highlighting-field, #interactive-console #left-console-interface #code-editor #highlighting-field * {
+  /* Also add text styles to highlighting tokens */
+  font-size: 14px;
+  font-family: consolas, monospace;
+  line-height: 18px;
+  background-color: white;
+  tab-size: 2;
+}
+#interactive-console #left-console-interface #code-editor #code-editor-textarea {
+  /* Move the textarea in front of the result */
+  z-index: 1;
+  color: transparent;
+  background: transparent;
+  caret-color: var(--scheme-primary);
+}
+#interactive-console #left-console-interface #code-editor #code-editor-textarea::selection {
+  text-shadow: none;
+  background: rgba(70, 93, 160, 0.2);
+}
+#interactive-console #left-console-interface #code-editor #highlighting-field {
+  z-index: 0;
+}
+#interactive-console #left-console-interface #code-editor #highlighting-field #highlighting-field-content {
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+#interactive-console .playground-button button {
+  padding: 1rem 1rem;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+#interactive-console .playground-button button:hover {
+  color: var(--scheme-primary);
+  background-color: var(--scheme-gray);
+}
+#interactive-console #shell-sidebar {
+  margin: 0;
+  display: flex;
+}
+#interactive-console #shell-sidebar #shell-sidebar-menu {
+  padding: 0;
+  width: inherit;
+}
+#interactive-console #shell-sidebar #shell-sidebar-menu .playground-button {
+  display: flex;
+  flex-grow: 1;
+}
+#interactive-console #shell-sidebar #shell-sidebar-menu button {
+  border-bottom: 2px solid var(--scheme-gray);
+  flex-grow: 1;
+}
+#interactive-console #shell-sidebar #shell-output > .code-toolbar {
+  color: #9efeff; /* Shades of purple - Console theme color */
+}
+#interactive-console #shell-sidebar #shell-output > .code-toolbar pre, #interactive-console #shell-sidebar #shell-output > .code-toolbar code {
+  border-radius: 0;
+}
+#interactive-console #shell-sidebar #shell-output, #interactive-console #shell-sidebar #shell-output > .code-toolbar, #interactive-console #shell-sidebar #shell-output > .code-toolbar > pre {
+  display: flex;
+  flex-grow: 1;
+}
+#interactive-console #shell-sidebar #shell-output #shell-sidebar-highlight-field {
+  background-color: var(--scheme-console-blue);
+  display: flex;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  width: inherit;
+}
+#interactive-console #shell-sidebar #shell-output #shell-sidebar-highlight-field > #shell-sidebar-highlight-field-content {
+  border-radius: 0;
+  align-self: flex-start;
+  overflow: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* For IE */
+  /* Apply proper formatting */
+  margin: 0;
+  padding: 1rem;
+  width: 30vw;
+  min-height: 0;
+  min-width: 0;
+  flex-grow: 1;
+  /* Update font */
+  font-size: 14px;
+  line-height: 18px;
+  /* Tabs should be handled like spaces */
+  tab-size: 1;
+}
+/*# sourceMappingURL=playground.bd0448f4.css.map */
