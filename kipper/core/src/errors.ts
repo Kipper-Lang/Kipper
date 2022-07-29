@@ -533,10 +533,11 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
 }
 
 /**
- * Error that is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
- * compilation is started without the required semantic data.
+ * Error that is thrown whenever an AST node can not determine its own metadata or the metadata of its children.
+ *
+ * This error is primarily used for error recovery to signalise the failure of an AST node.
  */
-export class UnableToDetermineMetadataError extends KipperInternalError {
+export class UnableToDetermineSemanticDataError extends KipperInternalError {
 	constructor() {
 		super(`Failed to determine metadata for one or more parse tree or AST nodes.`);
 	}

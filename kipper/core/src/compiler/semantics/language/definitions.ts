@@ -22,7 +22,7 @@ import type { Expression, IdentifierTypeSpecifierExpression } from "./expression
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
-import { UnableToDetermineMetadataError } from "../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../errors";
 import { Scope } from "../../scope";
 
 /**
@@ -265,7 +265,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Ensure that the children are fully present and not undefined
 		if (!declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
@@ -410,7 +410,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);

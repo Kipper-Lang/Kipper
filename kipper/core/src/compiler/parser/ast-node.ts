@@ -10,7 +10,7 @@
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import type { ParseTree } from "antlr4ts/tree";
 import { getParseRuleSource } from "../../utils";
-import { UnableToDetermineMetadataError, UndefinedSemanticsError } from "../../errors";
+import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../../errors";
 
 /**
  * Semantics type which defines the blueprint for {@link CompilableASTNode.semanticData semanticData} inside a
@@ -117,7 +117,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	 */
 	public getAntlrRuleChildren(): Array<ParseTree> {
 		if (this.antlrRuleCtx.children === undefined) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 		return this.antlrRuleCtx.children;
 	}

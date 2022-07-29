@@ -68,7 +68,7 @@ import {
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
-import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
 import { getConversionFunctionIdentifier } from "../../../utils";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
@@ -1131,7 +1131,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 
 		// Ensure that the child expression is present
 		if (!exp) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -1370,7 +1370,7 @@ export class FunctionCallPostfixExpression extends Expression<FunctionCallPostfi
 
 		// Ensure that the identifier is present
 		if (!identifierSemantics) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		// Fetching the called function and its semantic data
@@ -1595,7 +1595,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<OperatorMod
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !unaryOperator) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -1688,7 +1688,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -1830,7 +1830,7 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 
 		// Ensure that the children are fully present and not undefined
 		if (!operator || !exp1 || !exp2) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -1942,7 +1942,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 
 		// Ensure that the children are fully present and not undefined
 		if (!operator || !exp1 || !exp2) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const evaluateType: () => KipperType = () => {
@@ -1956,8 +1956,9 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> 
 			) {
 				return kipperStrType;
 			} else {
-				// Returning undefined as there is no logical type that can be determined that could describe this expression.
-				return "undefined";
+				// Assume for the sake of error recovery, that the type is the type of the first expression
+				// The type checker will throw an error later, if this is also wrong
+				return exp1Type;
 			}
 		};
 
@@ -2104,7 +2105,7 @@ export class RelationalExpression extends ComparativeExpression<RelationalExpres
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp1 || !exp2 || !operator) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -2211,7 +2212,7 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp1 || !exp2 || !operator) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -2341,7 +2342,7 @@ export class LogicalAndExpression extends LogicalExpression<LogicalAndExpression
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp1 || !exp2) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -2441,7 +2442,7 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp1 || !exp2) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -2614,7 +2615,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 
 		// Throw an error if the children are incomplete
 		if (!assignValue) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		// Get the semantics / the evaluated type of this expression

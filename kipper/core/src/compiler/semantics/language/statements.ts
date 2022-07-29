@@ -25,7 +25,7 @@ import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { LocalScope } from "../../local-scope";
-import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 
 /**
  * Every antlr4 statement ctx type
@@ -260,7 +260,7 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 
 		// Ensure that the children are fully present and not undefined
 		if (!condition || !body) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {

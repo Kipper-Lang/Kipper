@@ -19,7 +19,7 @@ import type { SemanticData } from "./ast-node";
 import type { Scope } from "../scope";
 import type { EvaluatedCompileConfig } from "../compiler";
 import { ParserASTNode } from "./ast-node";
-import { KipperError } from "../../errors";
+import { KipperError, UnableToDetermineSemanticDataError } from "../../errors";
 
 /**
  * An eligible parent for a compilable node.
@@ -219,6 +219,10 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 					if (!child.semanticData) {
 						return;
 					}
+				} else if (e instanceof UnableToDetermineSemanticDataError) {
+					// If the child was unable to determine its semantic data, abort the evaluation of this node
+					// This error should never be visible to the user!
+					return;
 				} else {
 					throw e;
 				}
