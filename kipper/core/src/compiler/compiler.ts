@@ -7,7 +7,7 @@
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "./antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
-import { KipperLogger, LogLevel } from "../logger";
+import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
 import { KipperCompileTarget } from "./compile-target";

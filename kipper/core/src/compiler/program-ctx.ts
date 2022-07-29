@@ -489,7 +489,7 @@ export class KipperProgramContext {
 		await this.semanticAnalysis();
 
 		// If the semantic analysis failed, return an empty array
-		if (this.errors) {
+		if (this.errors.length > 0) {
 			return undefined;
 		}
 
