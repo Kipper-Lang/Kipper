@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+- Renamed:
+  - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`
 
 ### Removed
 
