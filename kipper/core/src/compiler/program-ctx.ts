@@ -180,7 +180,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
-	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
+	public semanticCheck(ctx: CompilableASTNode<any, any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
 		this.semanticChecker.setTracebackData({ ctx });
 		return this.semanticChecker;
@@ -192,7 +192,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */
-	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
+	public typeCheck(ctx: CompilableASTNode<any, any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
 		this.typeChecker.setTracebackData({ ctx });
 		return this.typeChecker;
@@ -581,7 +581,7 @@ export class KipperProgramContext {
 	 * @param ref The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression<any>, ref: BuiltInFunction) {
+	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
 		this._builtInReferences.push({
 			ref: ref,
 			exp: exp,
@@ -594,7 +594,7 @@ export class KipperProgramContext {
 	 * @param ref The internal identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addInternalReference(exp: Expression<any>, ref: InternalFunction) {
+	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
 		this._internalReferences.push({
 			ref: ref,
 			exp: exp,

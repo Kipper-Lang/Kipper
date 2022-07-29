@@ -55,7 +55,7 @@ import type { KipperProgramContext } from "../program-ctx";
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeCodeGenerator<
-	T extends CompilableASTNode<any>,
+	T extends CompilableASTNode<any, any>,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
 	// eslint-disable-next-line no-unused-vars
 > = (node: T) => Promise<R>;

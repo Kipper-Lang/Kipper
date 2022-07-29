@@ -17,7 +17,6 @@ import { KipperLogger } from "@kipper/core";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, writeCompilationResult } from "../compile";
-import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 import { Logger } from "tslog";
 

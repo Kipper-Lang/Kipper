@@ -20,10 +20,22 @@ import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../
 export type SemanticData = Record<string, any>;
 
 /**
+ * Type semantics for an expression class that must be evaluated during Type Checking.
+ * @since 0.10.0
+ */
+export type TypeData = Record<string, any>;
+
+/**
  * Empty semantics interface for hinting an AST node has *no* semantics.
  * @since 0.8.0
  */
 export interface NoSemantics {}
+
+/**
+ * Empty type data interface for hinting an AST node has *no* type data.
+ * @since 0.10.0
+ */
+export interface NoTypeSemantics {}
 
 /**
  * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
@@ -31,16 +43,18 @@ export interface NoSemantics {}
  * code translation.
  * @since 0.8.0
  */
-export abstract class ParserASTNode<Semantics extends SemanticData> {
+export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantics extends TypeData> {
 	protected readonly _antlrRuleCtx: ParserRuleContext;
 
-	protected readonly _children: Array<ParserASTNode<any>>;
+	protected readonly _children: Array<ParserASTNode<any, any>>;
 
-	protected readonly _parent: ParserASTNode<any> | undefined;
+	protected readonly _parent: ParserASTNode<any, any> | undefined;
 
 	protected _semanticData: Semantics | undefined;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any> | undefined) {
+	protected _typeData: TypeSemantics | undefined;
+
+	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 		this._parent = parent;
@@ -48,7 +62,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * Returns the semantic data of this token.
+	 * Returns the semantic data of this AST node.
 	 * @since 0.8.0
 	 */
 	public get semanticData(): Semantics | undefined {
@@ -56,12 +70,29 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	}
 
 	/**
-	 * Sets the semantic data of this item.
-	 * @param value The semantic data that should be written onto this item.
+	 * Sets the semantic data of this AST node.
+	 * @param value The semantic data that should be written onto this AST node.
 	 * @since 0.8.0
 	 */
 	protected set semanticData(value: Semantics | undefined) {
 		this._semanticData = value;
+	}
+
+	/**
+	 * Returns the type data of this AST node.
+	 * @since 0.10.0
+	 */
+	public get typeData(): TypeSemantics | undefined {
+		return this._typeData;
+	}
+
+	/**
+	 * Sets the type data of this AST node.
+	 * @param value The semantic data that should be written onto this AST node.
+	 * @since 0.10.0
+	 */
+	protected set typeData(value: TypeSemantics | undefined) {
+		this._typeData = value;
 	}
 
 	/**
@@ -77,7 +108,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	 * this item is a root node.
 	 * @since 0.8.0
 	 */
-	public get parent(): ParserASTNode<any> | undefined {
+	public get parent(): ParserASTNode<any, any> | undefined {
 		return this._parent;
 	}
 
@@ -95,7 +126,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	 * The children of this AST node.
 	 * @since 0.8.0
 	 */
-	public get children(): Array<ParserASTNode<any>> {
+	public get children(): Array<ParserASTNode<any, any>> {
 		return this._children;
 	}
 
@@ -106,7 +137,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData> {
 	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: ParserASTNode<any>): void {
+	public addNewChild(newChild: ParserASTNode<any, any>): void {
 		this._children.push(newChild);
 	}
 

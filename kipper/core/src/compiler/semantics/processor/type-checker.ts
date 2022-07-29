@@ -9,7 +9,7 @@
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import {
 	Expression,
-	ExpressionSemantics,
+	ExpressionSemantics, ExpressionTypeSemantics,
 	IdentifierPrimaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -79,7 +79,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param rightExp The right-hand side of the assignment.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: IdentifierPrimaryExpression, rightExp: Expression<any>): void {
+	public validAssignment(leftExp: IdentifierPrimaryExpression, rightExp: Expression<any, any>): void {
 		const leftExpSemantics = leftExp.getSemanticData();
 		const rightExpSemantics = rightExp.getSemanticData();
 
@@ -103,7 +103,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param rightExp The right expression/value of the assignment.
 	 * @since 0.7.0
 	 */
-	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, rightExp: Expression<any>): void {
+	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, rightExp: Expression<any, any>): void {
 		const leftExpType = scopeEntry.type;
 		const rightExpType = rightExp.getSemanticData().evaluatedType;
 		if (leftExpType !== rightExpType) {
@@ -134,9 +134,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param args The arguments for the call expression.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
+	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any, any>>): void {
 		// Iterate through both arrays at the same type to verify each type is valid
-		args.forEach((arg: Expression<ExpressionSemantics>, index) => {
+		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
 			const semanticData = arg.getSemanticData();
 			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
 		});
@@ -165,7 +165,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param exp The expression to check.
 	 * @since 0.9.0
 	 */
-	public validUnaryExpression(exp: UnaryExpression<UnaryExpressionSemantics>): void {
+	public validUnaryExpression(exp: UnaryExpression<UnaryExpressionSemantics, ExpressionTypeSemantics>): void {
 		const semanticData = exp.getSemanticData();
 		const expSemantics = semanticData.operand.getSemanticData();
 
@@ -185,8 +185,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.9.0
 	 */
 	public validArithmeticExpression(
-		exp1: Expression<ExpressionSemantics>,
-		exp2: Expression<ExpressionSemantics>,
+		exp1: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+		exp2: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
 		op: KipperArithmeticOperator,
 	): void {
 		const exp1Type = exp1.getSemanticData().evaluatedType;

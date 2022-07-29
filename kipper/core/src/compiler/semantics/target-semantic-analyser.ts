@@ -44,7 +44,7 @@ import { KipperSemanticErrorHandler } from "./semantics-error-handler";
  * @since 0.5.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any>> = (node: T) => Promise<void>;
+export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any, any>> = (node: T) => Promise<void>;
 
 /**
  * Represents a Semantic analyser that is specific for a {@link KipperCompileTarget}.

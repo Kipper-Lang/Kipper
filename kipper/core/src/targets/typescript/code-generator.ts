@@ -472,7 +472,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.9.0
 	 */
 	private async translateOperatorExpressionWithOperands(
-		node: ComparativeExpression<any> | LogicalExpression<any>,
+		node: ComparativeExpression<any, any> | LogicalExpression<any, any>,
 	): Promise<TranslatedExpression> {
 		// Get the semantic data
 		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();

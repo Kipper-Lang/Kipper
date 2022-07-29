@@ -20,24 +20,28 @@ import type { Scope } from "../scope";
 import type { EvaluatedCompileConfig } from "../compiler";
 import { ParserASTNode } from "./ast-node";
 import { KipperError, UnableToDetermineSemanticDataError } from "../../errors";
+import { TypeData } from "./index";
 
 /**
  * An eligible parent for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeParent = CompilableASTNode<any> | RootASTNode;
+export type compilableNodeParent = CompilableASTNode<any, any> | RootASTNode;
 
 /**
  * An eligible child for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeChild = CompilableASTNode<any>;
+export type compilableNodeChild = CompilableASTNode<any, any>;
 
 /**
  * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
-export abstract class CompilableASTNode<Semantics extends SemanticData> extends ParserASTNode<Semantics> {
+export abstract class CompilableASTNode<
+	Semantics extends SemanticData,
+	TypeSemantics extends TypeData,
+> extends ParserASTNode<Semantics, TypeSemantics> {
 	public _scopeCtx: CompoundStatement | KipperProgramContext | undefined;
 
 	protected _parent: compilableNodeParent;
@@ -73,7 +77,7 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: compilableNodeChild) {
+	public addNewChild(newChild: compilableNodeChild): void {
 		this._children.push(newChild);
 	}
 

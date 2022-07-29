@@ -24,5 +24,5 @@ export interface Reference<
 	 * The expression which created the reference to {@link ref}.
 	 * @since 0.8.0
 	 */
-	readonly exp: Expression<any>;
+	readonly exp: Expression<any, any>;
 }

@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent, SemanticData } from "../../parser";
+import type { compilableNodeParent, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -41,7 +41,7 @@ export class DefinitionASTNodeFactory {
 	 * @param parent The file context class that will be assigned to the instance.
 	 * @since 0.9.0
 	 */
-	public static create(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent): Declaration<any> {
+	public static create(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent): Declaration<any, any> {
 		if (antlrRuleCtx instanceof FunctionDeclarationContext) {
 			return new FunctionDeclaration(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
@@ -53,16 +53,22 @@ export class DefinitionASTNodeFactory {
 }
 
 /**
- * Semantics for AST Node {@link FunctionDeclaration}.
+ * Semantics for a {@link Declaration}.
  * @since 0.5.0
  */
-export interface DeclarationSemantics {
+export interface DeclarationSemantics extends SemanticData {
 	/**
 	 * The identifier of the declaration.
 	 * @since 0.5.0
 	 */
 	identifier: string;
 }
+
+/**
+ * Type data for a {@link Declaration}.
+ * @since 0.10.0
+ */
+export interface DeclarationTypeData extends TypeData {}
 
 /**
  * Base Declaration class that represents a value or function declaration or definition in Kipper.
@@ -72,7 +78,10 @@ export interface DeclarationSemantics {
  * and its local scope.
  * @since 0.1.0
  */
-export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableASTNode<Semantics> {
+export abstract class Declaration<
+	Semantics extends DeclarationSemantics,
+	TypeData extends DeclarationTypeData,
+> extends CompilableASTNode<Semantics, TypeData> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -128,7 +137,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
+export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -216,7 +225,7 @@ export interface FunctionDeclarationSemantics {
  * @todo Implement support for arguments using {@link ParameterDeclaration}.
  * @since 0.1.2
  */
-export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
+export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -335,7 +344,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
 	 * @since 0.7.0
 	 */
-	value: Expression<any> | undefined;
+	value: Expression<any, any> | undefined;
 }
 
 /**
@@ -345,7 +354,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
  * In case that {@link scope} is of type {@link KipperProgramContext}, then the scope is defined as global
  * (accessible for the entire program).
  */
-export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
+export class VariableDeclaration extends Declaration<VariableDeclarationSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -353,7 +362,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
-	protected override _children: Array<Expression<any>>;
+	protected override _children: Array<Expression<any, any>>;
 
 	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -378,7 +387,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return this._antlrRuleCtx;
 	}
 
-	public get children(): Array<Expression<any>> {
+	public get children(): Array<Expression<any, any>> {
 		return this._children;
 	}
 
@@ -406,7 +415,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
-		const assignValue: Expression<any> | undefined = this.children[1];
+		const assignValue: Expression<any, any> | undefined = this.children[1];
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {

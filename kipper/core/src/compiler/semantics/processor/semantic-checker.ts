@@ -184,7 +184,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param leftExp The left-hand side of the assignment.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: Expression<any>): void {
+	public validAssignment(leftExp: Expression<any, any>): void {
 		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
@@ -244,7 +244,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param args The arguments for the call expression.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any>>): void {
+	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any, any>>): void {
 		if (func.args.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
 		}
@@ -267,7 +267,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param type The type to convert to.
 	 * @since 0.8.0
 	 */
-	public validConversion(exp: Expression<any>, type: KipperType): void {
+	public validConversion(exp: Expression<any, any>, type: KipperType): void {
 		const originalType: KipperType = exp.getSemanticData().evaluatedType;
 
 		const viableConversion = (() => {

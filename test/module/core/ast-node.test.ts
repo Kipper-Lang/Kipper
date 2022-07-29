@@ -16,7 +16,7 @@ const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.
 describe("Parse-Tokens", () => {
 	describe("CompilableASTNode", () => {
 		// Example class for testing purposes
-		class ExampleNode extends CompilableASTNode<any> {
+		class ExampleNode extends CompilableASTNode<any, any> {
 			constructor(antlrCtx: ParserRuleContext, parent: compilableNodeParent) {
 				super(antlrCtx, parent);
 			}
