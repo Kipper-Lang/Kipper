@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `RootASTNode.target`, which returns the `KipperCompileTarget` of the program ctx the root AST node is in.
   - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
   - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
-	- `ASTNode.typeSemantics`
+  - `ASTNode.typeSemantics`
 
 ### Changed
 
