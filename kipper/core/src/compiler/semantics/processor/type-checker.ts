@@ -9,7 +9,8 @@
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import {
 	Expression,
-	ExpressionSemantics, ExpressionTypeSemantics,
+	ExpressionSemantics,
+	ExpressionTypeSemantics,
 	IdentifierPrimaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
