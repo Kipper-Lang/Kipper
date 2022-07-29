@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
-	([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
+  ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
 - Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
   variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
   bound to the JS runtime and any function definition in the generated file is placed after the initial evaluation
