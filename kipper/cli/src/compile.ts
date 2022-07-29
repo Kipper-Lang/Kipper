@@ -6,9 +6,28 @@
  */
 import { KipperCompileResult, KipperParseStream } from "@kipper/core";
 import { constants, promises as fs } from "fs";
-import { KipperFileWriteError } from "./errors";
+import { KipperFileWriteError, KipperInvalidInputError } from "./errors";
 import * as path from "path";
 import { KipperEncoding, KipperParseFile } from "./file-stream";
+
+/**
+ * Evaluates the file or stream provided by the command arguments or flags.
+ * @param args The arguments that were passed to the command.
+ * @param flags The flags that were passed to the command.
+ * @since 0.10.0
+ */
+export async function getFile(
+	args: { [name: string]: any },
+	flags: { [name: string]: any },
+): Promise<KipperParseFile | KipperParseStream> {
+	if (args.file) {
+		return await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
+	} else if (flags["string-code"]) {
+		return new KipperParseStream(flags["string-code"]);
+	} else {
+		throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
+	}
+}
 
 /**
  * Writes the file that exist inside the {@link KipperCompileResult compilation result}.

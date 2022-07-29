@@ -14,14 +14,14 @@ import {
 	LogLevel,
 } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
-import {CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig} from "../logger";
+import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { writeCompilationResult } from "../compile";
+import { getFile, writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
 import { KipperInvalidInputError } from "../errors";
 import * as ts from "typescript";
 import { IFlag } from "@oclif/command/lib/flags";
-import {Logger} from "tslog";
+import { Logger } from "tslog";
 
 /**
  * Run the Kipper program.
@@ -56,7 +56,7 @@ export default class Run extends Command {
 	];
 
 	static flags: Record<string, IFlag<any>> = {
-		"encoding": flags.string({
+		encoding: flags.string({
 			char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
@@ -84,7 +84,7 @@ export default class Run extends Command {
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
-		"warnings": flags.boolean({
+		warnings: flags.boolean({
 			char: "w",
 			default: false, // Log warnings ONLY if the user intends to do so
 			description: "Show warnings that were emitted during the compilation.",
@@ -95,7 +95,7 @@ export default class Run extends Command {
 			default: false,
 			description: "Show the timestamp of each log message.",
 			allowNo: true,
-		})
+		}),
 
 		// TODO! Add new options '--recover' and '--abort-on-first-error'
 	};
@@ -105,22 +105,13 @@ export default class Run extends Command {
 
 		// If 'logTimestamp' is set, set the logger to use the timestamp
 		if (flags["log-timestamp"]) {
-			CLIEmitHandler.cliLogger = new Logger({...defaultKipperLoggerConfig, displayDateTime: true});
+			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
 		}
 
-		// The logger and compiler for this run
+		// Input data for this run
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
-
-		// Fetch the file
-		let file: KipperParseFile | KipperParseStream;
-		if (args.file) {
-			file = await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
-		} else if (flags["string-code"]) {
-			file = await new KipperParseStream(flags["string-code"]);
-		} else {
-			throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
-		}
+		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
 
 		let result: KipperCompileResult;
 		try {

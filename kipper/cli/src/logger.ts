@@ -15,7 +15,7 @@ export const defaultKipperLoggerConfig: ISettingsParam = {
 	dateTimePattern: "hour:minute:second",
 	displayFilePath: "hidden",
 	displayFunctionName: false,
-	displayDateTime: false
+	displayDateTime: false,
 };
 
 /**

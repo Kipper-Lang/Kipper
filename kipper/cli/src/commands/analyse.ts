@@ -8,7 +8,7 @@ import { Command, flags } from "@oclif/command";
 import { KipperCompiler, KipperError, KipperParseStream, LogLevel } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import {CLIEmitHandler, defaultCliLogger} from "../logger";
+import { CLIEmitHandler, defaultCliLogger } from "../logger";
 import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 
