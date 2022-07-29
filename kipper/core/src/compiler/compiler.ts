@@ -406,7 +406,7 @@ export class KipperCompiler {
 			const code = await programCtx.compileProgram();
 
 			// After the compilation is done, return the compilation result as an instance
-			if (programCtx.errors) {
+			if (programCtx.errors.length > 0) {
 				let errs = programCtx.errors.length;
 				this.logger.fatal(`Encountered ${errs} error${errs === 1 ? "" : "s"} during compilation.`);
 			} else {
