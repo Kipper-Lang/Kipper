@@ -75,6 +75,7 @@ export default class Compile extends Command {
 		}),
 
 		// TODO! Add new options '--recover' and '--abort-on-first-error'
+		// TODO! Add new option '--log-timestamp' and make log timestamps optional
 	};
 
 	async run() {
@@ -126,8 +127,7 @@ export default class Compile extends Command {
 			const duration: number = (new Date().getTime() - startTime) / 1000;
 			logger.info(`Done in ${duration}s.`);
 		} catch (e) {
-			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
-			// output of the error and traceback.
+			// In case the error is not a KipperError, throw it as an internal error (this should not happen)
 			if (!(e instanceof KipperError)) {
 				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
 			}
