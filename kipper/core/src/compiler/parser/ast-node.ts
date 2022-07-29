@@ -52,7 +52,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 
 	protected _semanticData: Semantics | undefined;
 
-	protected _typeData: TypeSemantics | undefined;
+	protected _typeSemantics: TypeSemantics | undefined;
 
 	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
@@ -82,8 +82,8 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * Returns the type data of this AST node.
 	 * @since 0.10.0
 	 */
-	public get typeData(): TypeSemantics | undefined {
-		return this._typeData;
+	public get typeSemantics(): TypeSemantics | undefined {
+		return this._typeSemantics;
 	}
 
 	/**
@@ -91,8 +91,8 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @param value The semantic data that should be written onto this AST node.
 	 * @since 0.10.0
 	 */
-	protected set typeData(value: TypeSemantics | undefined) {
-		this._typeData = value;
+	protected set typeSemantics(value: TypeSemantics | undefined) {
+		this._typeSemantics = value;
 	}
 
 	/**
@@ -143,7 +143,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 
 	/**
 	 * Returns the children of the {@link antlrRuleCtx} and throws an error in case they are undefined.
-	 * @throws UnableToDetermineMetadataError if {@link antlrRuleCtx.children} is undefined.
+	 * @throws UndefinedSemanticsError if {@link antlrRuleCtx.children} is undefined.
 	 * @since 0.8.0
 	 */
 	public getAntlrRuleChildren(): Array<ParseTree> {
@@ -155,7 +155,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 
 	/**
 	 * Returns the semantic data of this AST node and throws an error in case it is undefined.
-	 * @throws UnableToDetermineMetadataError If {@link semanticData} is undefined.
+	 * @throws UndefinedSemanticsError If {@link semanticData} is undefined.
 	 * @since 0.8.0
 	 */
 	public getSemanticData(): Semantics {
@@ -163,5 +163,17 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 			throw new UndefinedSemanticsError();
 		}
 		return this.semanticData;
+	}
+
+	/**
+	 * Returns the type semantic data of this AST node and throws an error in case it is undefined.
+	 * @throws UndefinedSemanticsError If {@link semanticData} is undefined.
+	 * @since 0.10.0
+	 */
+	public getTypeSemantics(): TypeSemantics {
+		if (this.typeSemantics === undefined) {
+			throw new UndefinedSemanticsError();
+		}
+		return this.typeSemantics;
 	}
 }
