@@ -10,13 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
+- New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should 
+	evaluate during type checking.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
+  - `ASTNode.getTypeSemantics`, which returns the type semantics if they are defined, otherwise throws an 
+     `UndefinedSemanticsError`.
 - New types:
+	- `TypeData`, which represents the type data of an `ASTNode`.
+  - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
   - `TargetSetUpCodeGenerator`, which represents a function that generates SetUp code for a Kipper file.
   - `TargetWrapUpCodeGenerator`, which represents a function that generates WrapUp code for a Kipper file.
 - New fields/properties:
@@ -26,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `RootASTNode.target`, which returns the `KipperCompileTarget` of the program ctx the root AST node is in.
   - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
   - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
-	- `ASTNode.typeSemantics`
+	- `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
 
 ### Changed
 
@@ -39,7 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
 - Renamed:
-  - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`
+  - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
+  - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
 
 ### Removed
 
