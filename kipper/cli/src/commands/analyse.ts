@@ -13,7 +13,7 @@ import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 
 export default class Analyse extends Command {
-	static description = "Analyses a file and validates its syntax and semantic integrity.";
+	static description = "Analyse a Kipper file and validate its syntax and semantic integrity.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];

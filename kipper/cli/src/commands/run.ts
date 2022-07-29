@@ -42,7 +42,7 @@ export function executeKipperProgram(jsCode: string) {
 }
 
 export default class Run extends Command {
-	static description = "Compiles and executes a Kipper program.";
+	static description = "Compile and execute a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
@@ -75,17 +75,13 @@ export default class Run extends Command {
 		"optimise-internals": flags.boolean({
 			char: "i",
 			default: <boolean>defaultOptimisationOptions.optimiseInternals,
-			description:
-				"If set to true, the internal functions of the compiled code will be optimised using tree-shaking " +
-				"reducing the size of the output.",
+			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
 			default: <boolean>defaultOptimisationOptions.optimiseInternals,
-			description:
-				"If set to true, the built-in functions of the compiled code will be optimised using tree-shaking " +
-				"reducing the size of the output.",
+			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"warnings": flags.boolean({
