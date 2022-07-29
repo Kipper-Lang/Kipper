@@ -14,11 +14,16 @@ import {
 	LogLevel,
 } from "@kipper/core";
 import { KipperLogger } from "@kipper/core";
-import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
+import {
+	CLIEmitHandler,
+	defaultCliLogger,
+	defaultKipperLoggerConfig
+} from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { writeCompilationResult } from "../compile";
 import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
+import {Logger} from "tslog";
 
 export default class Compile extends Command {
 	static description = "Compiles a Kipper program.";
@@ -35,7 +40,7 @@ export default class Compile extends Command {
 	];
 
 	static flags: Record<string, IFlag<any>> = {
-		encoding: flags.string({
+		"encoding": flags.string({
 			char: "e",
 			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
@@ -67,20 +72,32 @@ export default class Compile extends Command {
 				"reducing the size of the output.",
 			allowNo: true,
 		}),
-		warnings: flags.boolean({
+		"warnings": flags.boolean({
 			char: "w",
 			default: true,
 			description: "Show warnings that were emitted during the compilation.",
 			allowNo: true,
 		}),
+		"log-timestamp": flags.boolean({
+			char: "t",
+			default: false,
+			description: "Show the timestamp of each log message.",
+			allowNo: true,
+		})
 
 		// TODO! Add new options '--recover' and '--abort-on-first-error'
-		// TODO! Add new option '--log-timestamp' and make log timestamps optional
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Compile);
-		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.INFO, flags["warnings"]);
+
+		// If 'logTimestamp' is set, set the logger to use the timestamp
+		if (flags["log-timestamp"]) {
+			CLIEmitHandler.cliLogger = new Logger({...defaultKipperLoggerConfig, displayDateTime: true});
+		}
+
+		// The logger and compiler for this run
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Fetch the file
