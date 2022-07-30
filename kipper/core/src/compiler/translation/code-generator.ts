@@ -21,6 +21,7 @@ import type {
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
+	IfStatement,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -40,7 +41,6 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	IfStatement,
 } from "../semantics";
 import type { CompilableASTNode } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";

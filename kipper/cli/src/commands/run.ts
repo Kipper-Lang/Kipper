@@ -10,15 +10,14 @@ import {
 	KipperCompiler,
 	KipperCompileResult,
 	KipperError,
+	KipperLogger,
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
-import { KipperLogger } from "@kipper/core";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
-import { KipperInvalidInputError } from "../errors";
 import * as ts from "typescript";
 import { IFlag } from "@oclif/command/lib/flags";
 import { Logger } from "tslog";
