@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
-  - `ASTNode.getTypeSemantics`, which returns the type semantics if they are defined, otherwise throws an
+  - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.

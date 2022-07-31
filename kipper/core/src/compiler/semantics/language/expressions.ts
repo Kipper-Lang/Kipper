@@ -39,7 +39,9 @@ import {
 	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	type KipperArithmeticOperator,
+	KipperBoolType,
 	type KipperBoolTypeLiterals,
+	KipperCharType,
 	kipperCharType,
 	type KipperComparativeOperator,
 	type KipperEqualityOperator,
@@ -51,9 +53,12 @@ import {
 	type KipperLogicalAndOperator,
 	type KipperLogicalOrOperator,
 	kipperLogicalOrOperator,
+	KipperMetaType,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNegateOperator,
+	KipperNumType,
+	KipperRef,
 	type KipperRelationalOperator,
 	kipperRelationalOperators,
 	KipperSignOperator,
@@ -117,7 +122,7 @@ export class ExpressionASTNodeFactory {
 	public static create(
 		antlrRuleCtx: antlrExpressionCtxType,
 		parent: CompilableASTNode<any, any>,
-	): Expression<any, any> {
+	): Expression<ExpressionSemantics, ExpressionTypeSemantics> {
 		if (antlrRuleCtx instanceof NumberPrimaryExpressionContext) {
 			return new NumberPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof CharacterPrimaryExpressionContext) {
@@ -214,7 +219,7 @@ export abstract class Expression<
 	 */
 	protected override readonly _antlrRuleCtx: antlrExpressionCtxType;
 
-	protected override _children: Array<Expression<any, any>>;
+	protected override _children: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
 
 	protected constructor(antlrRuleCtx: antlrExpressionCtxType, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -225,11 +230,11 @@ export abstract class Expression<
 		parent.addNewChild(this);
 	}
 
-	public get children(): Array<Expression<any, any>> {
+	public get children(): Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>> {
 		return this._children;
 	}
 
-	public addNewChild(newChild: Expression<any, any>) {
+	public addNewChild(newChild: Expression<ExpressionSemantics, ExpressionTypeSemantics>) {
 		this._children.push(newChild);
 	}
 
@@ -305,12 +310,25 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
+ * Type Semantics for AST Node {@link NumberPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface NumberPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperNumType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperNumType;
+}
+
+/**
  * Integer constant expression, which represents a number constant that was defined in the source code.
  * @since 0.1.0
  */
 export class NumberPrimaryExpression extends ConstantExpression<
 	NumberPrimaryExpressionSemantics,
-	ExpressionTypeSemantics
+	NumberPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -329,9 +347,10 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		// The value should stay the same as written, and the code generator implementation should handle outputting the
+		// value in the target language
 		this.semanticData = {
 			value: this.sourceCode,
-			evaluatedType: "num",
 		};
 	}
 
@@ -341,8 +360,10 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
+		// This will always be of type 'number'
+		this.typeSemantics = {
+			evaluatedType: "num",
+		};
 	}
 
 	/**
@@ -368,6 +389,8 @@ export class NumberPrimaryExpression extends ConstantExpression<
 		this.codeGenerator.numberPrimaryExpression;
 }
 
+// TODO! Remove 'char' expression and type
+
 /**
  * Semantics for AST Node {@link CharacterPrimaryExpression}.
  * @since 0.5.0
@@ -381,12 +404,25 @@ export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics
 }
 
 /**
+ * Type Semantics for AST Node {@link CharacterPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface CharacterPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperCharType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperCharType;
+}
+
+/**
  * Character constant expression, which represents a character constant that was defined in the source code.
  * @since 0.1.0
  */
 export class CharacterPrimaryExpression extends ConstantExpression<
 	CharacterPrimaryExpressionSemantics,
-	ExpressionTypeSemantics
+	CharacterPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -417,8 +453,10 @@ export class CharacterPrimaryExpression extends ConstantExpression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
+		// This will always be of type 'char'
+		this.typeSemantics = {
+			evaluatedType: "char",
+		};
 	}
 
 	/**
@@ -450,22 +488,33 @@ export class CharacterPrimaryExpression extends ConstantExpression<
  */
 export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The type of the constant list expression.
-	 * @since 0.5.0
-	 */
-	evaluatedType: KipperListType<KipperType>;
-	/**
 	 * The value of the constant list expression.
 	 * @since 0.5.0
 	 */
-	value: Array<Expression<any, any>>;
+	value: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+}
+
+/**
+ * Type Semantics for AST Node {@link ListPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface ListPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperListType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperListType<KipperType>;
 }
 
 /**
  * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
-export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpressionSemantics, ExpressionTypeSemantics> {
+export class ListPrimaryExpression extends ConstantExpression<
+	ListPrimaryExpressionSemantics,
+	ListPrimaryExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -484,7 +533,6 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			evaluatedType: "list",
 			value: [], // TODO! Implement list data fetching.
 		};
 	}
@@ -495,7 +543,10 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// This will always be of type 'list'
+		this.typeSemantics = {
+			evaluatedType: "list",
+		};
 	}
 
 	/**
@@ -527,15 +578,23 @@ export class ListPrimaryExpression extends ConstantExpression<ListPrimaryExpress
  */
 export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The type of the constant string expression.
-	 * @since 0.5.0
-	 */
-	evaluatedType: KipperStrType;
-	/**
 	 * The value of the constant string expression.
 	 * @since 0.5.0
 	 */
 	value: string;
+}
+
+/**
+ * Type Semantics for AST Node {@link StringPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface StringPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperStrType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperStrType;
 }
 
 /**
@@ -544,7 +603,7 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
  */
 export class StringPrimaryExpression extends ConstantExpression<
 	StringPrimaryExpressionSemantics,
-	ExpressionTypeSemantics
+	StringPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -564,8 +623,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			evaluatedType: "str",
-			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
+			value: this.sourceCode.slice(1, this.sourceCode.length - 1), // Remove string quotation marks
 		};
 	}
 
@@ -575,8 +633,10 @@ export class StringPrimaryExpression extends ConstantExpression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
+		// This will always be of type 'str'
+		this.typeSemantics = {
+			evaluatedType: "str",
+		};
 	}
 
 	/**
@@ -603,18 +663,6 @@ export class StringPrimaryExpression extends ConstantExpression<
 }
 
 /**
- * Semantics for AST Node {@link IdentifierPrimaryExpression}.
- * @since 0.5.0
- */
-export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The constant identifier.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-}
-
-/**
  * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
  */
@@ -627,10 +675,26 @@ export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
+ * Type Semantics for AST Node {@link BoolPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface BoolPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperBoolType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperBoolType;
+}
+
+/**
  * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
  * @since 0.8.0
  */
-export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSemantics, ExpressionTypeSemantics> {
+export class BoolPrimaryExpression extends Expression<
+	BoolPrimaryExpressionSemantics,
+	BoolPrimaryExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -649,7 +713,6 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			evaluatedType: "bool",
 			value: <KipperBoolTypeLiterals>this.sourceCode,
 		};
 	}
@@ -659,9 +722,11 @@ export class BoolPrimaryExpression extends Expression<BoolPrimaryExpressionSeman
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
+	public async semanticTypeChecking(): Promise<void> {
+		// This will always be of type 'bool'
+		this.typeSemantics = {
+			evaluatedType: "bool",
+		};
 	}
 
 	/**
@@ -697,14 +762,30 @@ export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
 	 * a {@link StringPrimaryExpression constant string} or {@link Expression evaluable runtime expression}.
 	 * @since 0.5.0
 	 */
-	items: Array<string | Expression<any, any>>;
+	items: Array<string | Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+}
+
+/**
+ * Type Semantics for AST Node {@link FStringPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface FStringPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
+	 * type, this will always be of type {@link KipperStrType}.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperStrType;
 }
 
 /**
  * F-String class, which represents an f-string expression in the Kipper language.
  * @since 0.1.0
  */
-export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressionSemantics, ExpressionTypeSemantics> {
+export class FStringPrimaryExpression extends Expression<
+	FStringPrimaryExpressionSemantics,
+	FStringPrimaryExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -727,12 +808,6 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("F-String Expressions have not been implemented yet."));
-
-		// eslint-disable-next-line no-unreachable
-		this.semanticData = {
-			evaluatedType: "str",
-			items: [], // TODO! Implement proper fetching of the string items and expressions contained in the f-string
-		};
 	}
 
 	/**
@@ -741,7 +816,10 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		// This will always be of type 'str'
+		this.typeSemantics = {
+			evaluatedType: "str",
+		};
 	}
 
 	/**
@@ -768,6 +846,42 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
 }
 
 /**
+ * Semantics for AST Node {@link IdentifierPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The identifier of the {@link IdentifierPrimaryExpressionSemantics.ref reference}.
+	 * @since 0.5.0
+	 */
+	identifier: string;
+	/**
+	 * The reference that the {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
+	 *
+	 * This reference may either be a {@link BuiltInFunction built-in function},
+	 * {@link ScopeVariableDeclaration user-defined variable} or
+	 * {@link ScopeFunctionDeclaration user-defined function}.
+	 * @since 0.10.0
+	 */
+	ref: KipperRef;
+}
+
+/**
+ * Type Semantics for AST Node {@link IdentifierPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface IdentifierPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to.
+	 *
+	 * This will always be the value type of the reference that the
+	 * {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
+}
+
+/**
  * Identifier expression, which represents an identifier referencing a variable, function or built-in identifier.
  *
  * This is only represents a reference and not a declaration/definition.
@@ -775,7 +889,7 @@ export class FStringPrimaryExpression extends Expression<FStringPrimaryExpressio
  */
 export class IdentifierPrimaryExpression extends Expression<
 	IdentifierPrimaryExpressionSemantics,
-	ExpressionTypeSemantics
+	IdentifierPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -801,18 +915,9 @@ export class IdentifierPrimaryExpression extends Expression<
 			.semanticCheck(this)
 			.getExistingReference(identifier, "localScope" in this.scopeCtx ? this.scopeCtx : undefined);
 
-		// Evaluate the type by attempting to fetch it from the global
-		const evaluateType: () => KipperType = () => {
-			if (ref instanceof ScopeVariableDeclaration) {
-				return ref.type;
-			} else {
-				return "func";
-			}
-		};
-
 		this.semanticData = {
-			evaluatedType: evaluateType(),
 			identifier: identifier,
+			ref: ref,
 		};
 
 		if (!(ref instanceof ScopeDeclaration)) {
@@ -826,8 +931,21 @@ export class IdentifierPrimaryExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// Constants will never get type checking
-		return Promise.resolve(undefined);
+		const semanticData = this.getSemanticData();
+
+		// Get the type of the reference
+		let evaluatedType: KipperType;
+		if (semanticData.ref instanceof ScopeVariableDeclaration) {
+			evaluatedType = semanticData.ref.type;
+		} else {
+			// If the type is not a variable declaration, then it must always be a function. Since the other possible
+			// references are built-in functions and user-defined functions, which if not called will always be of type 'func'
+			evaluatedType = "func";
+		}
+
+		this.typeSemantics = {
+			evaluatedType: evaluatedType,
+		};
 	}
 
 	/**
@@ -856,12 +974,19 @@ export class IdentifierPrimaryExpression extends Expression<
 /**
  * Semantics for AST Node {@link TypeSpecifierExpression}.
  */
-export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {
+export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {}
+
+/**
+ * Type Semantics for AST Node {@link TypeSpecifierExpression}.
+ * @since 0.10.0
+ */
+export interface TypeSpecifierTypeSemantics extends ExpressionTypeSemantics {
 	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
 	 */
-	type: KipperType;
+	evaluatedType: KipperMetaType;
 }
 
 /**
@@ -870,7 +995,7 @@ export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {
  */
 export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics,
-	TypeSemantics extends ExpressionTypeSemantics,
+	TypeSemantics extends TypeSpecifierTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
 
 /**
@@ -882,7 +1007,19 @@ export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifie
 	 * The type specified by this expression.
 	 * @since 0.8.0
 	 */
-	type: KipperType;
+	typeIdentifier: string;
+}
+
+/**
+ * Type Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
+ */
+export interface IdentifierTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperMetaType;
 }
 
 /**
@@ -896,7 +1033,7 @@ export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifie
  */
 export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	IdentifierTypeSpecifierExpressionSemantics,
-	ExpressionTypeSemantics
+	IdentifierTypeSpecifierTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -916,8 +1053,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			type: <KipperType>this.sourceCode,
-			evaluatedType: "type",
+			typeIdentifier: this.sourceCode,
 		};
 	}
 
@@ -929,7 +1065,13 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	public async semanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+		// Ensure the type exists
+		this.programCtx.typeCheck(this).typeExists(semanticData.typeIdentifier);
+
+		// A type identifier will always be of type 'type'
+		this.typeSemantics = {
+			evaluatedType: "type",
+		};
 	}
 
 	/**
@@ -960,16 +1102,15 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
  * @since 0.8.0
  */
 export interface GenericTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	type: KipperType;
-	/**
-	 * The generic type defined in the brackets of this expression.
-	 * @since 0.9.0
-	 */
-	generic: KipperType;
+	// Not implemented.
+}
+
+/**
+ * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
+ * @since 0.10.0
+ */
+export interface GenericTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
+	// Not implemented.
 }
 
 /**
@@ -980,7 +1121,7 @@ export interface GenericTypeSpecifierExpressionSemantics extends TypeSpecifierEx
  */
 export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	GenericTypeSpecifierExpressionSemantics,
-	ExpressionTypeSemantics
+	GenericTypeSpecifierTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1010,9 +1151,9 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
 	}
 
 	/**
@@ -1043,11 +1184,15 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
  * @since 0.8.0
  */
 export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	type: KipperType;
+	// Not implemented.
+}
+
+/**
+ * Type Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
+ * @since 0.8.0
+ */
+export interface TypeofTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
+	// Not implemented.
 }
 
 /**
@@ -1056,7 +1201,7 @@ export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExp
  */
 export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	TypeofTypeSpecifierExpressionSemantics,
-	ExpressionTypeSemantics
+	TypeofTypeSpecifierTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1086,9 +1231,9 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @since 0.8.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).typeExists(semanticData.type);
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
 	}
 
 	/**
@@ -1118,7 +1263,26 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
  * Semantics for AST Node {@link TangledPrimaryExpression}.
  * @since 0.5.0
  */
-export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {}
+export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The child expression contained in this tangled expression.
+	 * @since 0.10.0
+	 */
+	childExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link TangledPrimaryExpression}.
+ * @since 0.5.0
+ */
+export interface TangledPrimaryTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
+}
 
 /**
  * Tangled/Parenthesised expression, which represents a parenthesised expression that wraps another expression and
@@ -1127,7 +1291,10 @@ export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
  * (4 + 5) * 5; // 4 + 5 will be evaluated first, then the multiplication will be performed
  * @since 0.1.0
  */
-export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressionSemantics, ExpressionTypeSemantics> {
+export class TangledPrimaryExpression extends Expression<
+	TangledPrimaryExpressionSemantics,
+	TangledPrimaryTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1146,7 +1313,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Tangled expressions always contain one expression child
-		const exp: Expression<any, any> = this.children[0];
+		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
 
 		// Ensure that the child expression is present
 		if (!exp) {
@@ -1154,8 +1321,7 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 		}
 
 		this.semanticData = {
-			// Tangled expressions always evaluate to the type of its child expression
-			evaluatedType: exp.getSemanticData().evaluatedType,
+			childExp: exp,
 		};
 	}
 
@@ -1165,7 +1331,12 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		const exp = this.getSemanticData().childExp;
+
+		this.typeSemantics = {
+			// Tangled expressions always evaluate to the type of its child expression
+			evaluatedType: exp.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	/**
@@ -1198,6 +1369,19 @@ export class TangledPrimaryExpression extends Expression<TangledPrimaryExpressio
 export interface IncrementOrDecrementExpressionSemantics extends ExpressionSemantics {}
 
 /**
+ * Type Semantics for AST Node {@link IncrementOrDecrementExpression}.
+ * @since 0.10.0
+ */
+export interface IncrementOrDecrementTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
+}
+
+/**
  * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.
  * @since 0.1.0
  * @example
@@ -1206,7 +1390,7 @@ export interface IncrementOrDecrementExpressionSemantics extends ExpressionSeman
  */
 export class IncrementOrDecrementExpression extends Expression<
 	IncrementOrDecrementExpressionSemantics,
-	ExpressionTypeSemantics
+	IncrementOrDecrementTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1230,11 +1414,6 @@ export class IncrementOrDecrementExpression extends Expression<
 			.notImplementedError(
 				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
 			);
-
-		// eslint-disable-next-line no-unreachable
-		this.semanticData = {
-			evaluatedType: "void",
-		};
 	}
 
 	/**
@@ -1243,7 +1422,11 @@ export class IncrementOrDecrementExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
+			);
 	}
 
 	/**
@@ -1276,12 +1459,28 @@ export class IncrementOrDecrementExpression extends Expression<
 export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {}
 
 /**
+ * Type Semantics for AST Node {@link ArraySpecifierExpression}.
+ * @since 0.5.0
+ */
+export interface ArraySpecifierTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
+}
+
+/**
  * Array Specifier expression, which accesses a list/array based on its index.
  * @since 0.1.0
  * @example
  * array[0]
  */
-export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressionSemantics, ExpressionTypeSemantics> {
+export class ArraySpecifierExpression extends Expression<
+	ArraySpecifierExpressionSemantics,
+	ArraySpecifierTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1302,11 +1501,6 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
-
-		// eslint-disable-next-line no-unreachable
-		this.semanticData = {
-			evaluatedType: "void",
-		};
 	}
 
 	/**
@@ -1315,7 +1509,9 @@ export class ArraySpecifierExpression extends Expression<ArraySpecifierExpressio
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
 	}
 
 	/**
@@ -1360,7 +1556,20 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
 	 * The arguments that were passed to this function.
 	 * @since 0.6.0
 	 */
-	args: Array<Expression<any, any>>;
+	args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+}
+
+/**
+ * Type Semantics for AST Node {@link FunctionCallPostfixExpression}.
+ * @since 0.5.0
+ */
+export interface FunctionCallPostfixTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1368,10 +1577,12 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
  * @since 0.1.0
  * @example
  * call print("Hello world!")
+ * // or
+ * print("Hello world!")
  */
 export class FunctionCallPostfixExpression extends Expression<
 	FunctionCallPostfixExpressionSemantics,
-	ExpressionTypeSemantics
+	FunctionCallPostfixTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1391,7 +1602,7 @@ export class FunctionCallPostfixExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
-		const identifierSemantics: IdentifierPrimaryExpressionSemantics = this.children[0].getSemanticData();
+		const identifierSemantics = <IdentifierPrimaryExpressionSemantics>this.children[0].getSemanticData();
 
 		// Ensure that the identifier is present
 		if (!identifierSemantics) {
@@ -1405,14 +1616,13 @@ export class FunctionCallPostfixExpression extends Expression<
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
-		const args: Array<Expression<any, any>> =
+		const args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>> =
 			this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		// Ensure that the arguments provided are valid
 		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
 
 		this.semanticData = {
-			evaluatedType: calledFunc.returnType,
 			identifier: calledFunc.identifier,
 			args: args,
 			function: calledFunc,
@@ -1427,7 +1637,13 @@ export class FunctionCallPostfixExpression extends Expression<
 	public async semanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.function, semanticData.args);
+
+		// The evaluated type is always equal to the return of the function
+		this.typeSemantics = {
+			evaluatedType: semanticData.function.returnType,
+		};
 	}
 
 	/**
@@ -1468,7 +1684,21 @@ export interface UnaryExpressionSemantics extends ExpressionSemantics {
 	 * The operand that is modified by the operator.
 	 * @since 0.9.0
 	 */
-	operand: Expression<any, any>;
+	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Semantics for unary expressions, which can be used to modify an expression with
+ * a specified operator.
+ * @since 0.10.0
+ */
+export interface UnaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1479,7 +1709,7 @@ export interface UnaryExpressionSemantics extends ExpressionSemantics {
  */
 export abstract class UnaryExpression<
 	Semantics extends UnaryExpressionSemantics,
-	TypeSemantics extends ExpressionTypeSemantics,
+	TypeSemantics extends UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
 
 /**
@@ -1496,7 +1726,20 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpre
 	 * The operand that is modified by the operator.
 	 * @since 0.9.0
 	 */
-	operand: Expression<any, any>;
+	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
+ * @since 0.10.0
+ */
+export interface IncrementOrDecrementUnaryTypeSemantics extends UnaryExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1508,7 +1751,7 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpre
  */
 export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	IncrementOrDecrementUnaryExpressionSemantics,
-	ExpressionTypeSemantics
+	IncrementOrDecrementUnaryTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1540,7 +1783,11 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
+			);
 	}
 
 	/**
@@ -1580,7 +1827,20 @@ export interface OperatorModifiedUnaryExpressionSemantics extends UnaryExpressio
 	 * The operand that is modified by the {@link operator}.
 	 * @since 0.9.0
 	 */
-	operand: Expression<any, any>;
+	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link OperatorModifiedUnaryExpression}.
+ * @since 0.10.0
+ */
+export interface OperatorModifiedUnaryTypeSemantics extends UnaryExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1593,7 +1853,7 @@ export interface OperatorModifiedUnaryExpressionSemantics extends UnaryExpressio
  */
 export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	OperatorModifiedUnaryExpressionSemantics,
-	ExpressionTypeSemantics
+	OperatorModifiedUnaryTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1626,7 +1886,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 			?.text.trim();
 
 		// Get the expression of this unary expression
-		const exp: Expression<any, any> = this.children[0];
+		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !unaryOperator) {
@@ -1634,7 +1894,6 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		}
 
 		this.semanticData = {
-			evaluatedType: unaryOperator === "!" ? "bool" : "num",
 			operator: unaryOperator,
 			operand: exp,
 		};
@@ -1646,8 +1905,14 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
 		// Ensure the operator is compatible with the type of the operand
 		this.programCtx.typeCheck(this).validUnaryExpression(this);
+
+		this.typeSemantics = {
+			evaluatedType: semanticData.operator === "!" ? "bool" : "num",
+		};
 	}
 
 	/**
@@ -1682,12 +1947,25 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * The expression to convert.
 	 * @since 0.8.0
 	 */
-	exp: Expression<any, any>;
+	exp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The type the {@link exp} should be converted to.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
-	type: KipperType;
+	castType: KipperType;
+}
+
+/**
+ * Type Semantics for AST Node {@link CastOrConvertExpression}.
+ * @since 0.10.0
+ */
+export interface CastOrConvertTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1699,7 +1977,7 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
  * "4" as num // 4
  * 39 as str // "39"
  */
-export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics, ExpressionTypeSemantics> {
+export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics, CastOrConvertTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1718,7 +1996,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetching the original exp and the type using the children
-		const exp: Expression<any, any> = this.children[0];
+		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
 		const type: KipperType = (<IdentifierTypeSpecifierExpression>this.children[1]).getSemanticData().type;
 
 		// Ensure that the children are fully present and not undefined
@@ -1727,13 +2005,12 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		}
 
 		this.semanticData = {
-			evaluatedType: type,
-			type: type,
+			castType: type,
 			exp: exp,
 		};
 
-		// Add internal reference to the program ctx.
-		const expType = (<Expression<ExpressionSemantics, ExpressionTypeSemantics>>exp).getSemanticData().evaluatedType;
+		// Add internal reference to the program ctx
+		const expType = (<Expression<ExpressionSemantics, ExpressionTypeSemantics>>exp).getTypeSemanticData().evaluatedType;
 		const internalIdentifier = getConversionFunctionIdentifier(expType, type);
 		if (internalIdentifier in kipperInternalBuiltIns) {
 			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
@@ -1748,7 +2025,13 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	public async semanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.type);
+		// Ensure the type can be casted/converted into the target type
+		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.castType);
+
+		this.typeSemantics = {
+			// The evaluated type of the expression is equal to the cast type
+			evaluatedType: semanticData.castType,
+		};
 	}
 
 	/**
@@ -1780,20 +2063,33 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
  */
 export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The first expression. The left side of the expression.
-	 * @since 0.6.0
+	 * The left operand of the expression.
+	 * @since 0.10.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
-	 * The second expression. The right side of the expression.
-	 * @since 0.6.0
+	 * The right operand of the expression.
+	 * @since 0.10.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
-	 * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
 	 */
 	operator: KipperArithmeticOperator;
+}
+
+/**
+ * Type Semantics for arithmetic expressions ({@link MultiplicativeExpression} and {@link AdditiveExpression}).
+ * @since 0.10.0
+ */
+export interface ArithmeticExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1805,17 +2101,30 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
 	 * The first expression. The left side of the expression.
 	 * @since 0.6.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression. The right side of the expression.
 	 * @since 0.6.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
-	 * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
 	 */
 	operator: KipperMultiplicativeOperator;
+}
+
+/**
+ * Type Semantics for AST Node {@link MultiplicativeExpression}.
+ * @since 0.10.0
+ */
+export interface MultiplicativeTypeSemantics extends ArithmeticExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1829,7 +2138,10 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
  * 96 % 15 // 6
  * 2 ** 8 // 256
  */
-export class MultiplicativeExpression extends Expression<MultiplicativeExpressionSemantics, ExpressionTypeSemantics> {
+export class MultiplicativeExpression extends Expression<
+	MultiplicativeExpressionSemantics,
+	MultiplicativeTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1860,18 +2172,17 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 			?.text.trim();
 
 		// Get the expressions of this multiplicative expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
-		if (!operator || !exp1 || !exp2) {
+		if (!operator || !leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			evaluatedType: "num",
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp,
+			rightOp: rightOp,
 			operator: operator,
 		};
 	}
@@ -1887,7 +2198,12 @@ export class MultiplicativeExpression extends Expression<MultiplicativeExpressio
 		// Assert that the arithmetic expression is valid
 		this.programCtx
 			.typeCheck(this)
-			.validArithmeticExpression(semanticData.exp1, semanticData.exp2, semanticData.operator);
+			.validArithmeticExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
+
+		// A multiplicative expression will always be of type 'num'
+		this.typeSemantics = {
+			evaluatedType: "num",
+		};
 	}
 
 	/**
@@ -1922,17 +2238,30 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 	 * The first expression. The left side of the expression.
 	 * @since 0.6.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression. The right side of the expression.
 	 * @since 0.6.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
-	 * The operator using the two values {@link this.exp1 exp1} and {@link this.exp2 exp2} to generate a result.
+	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
 	 */
 	operator: KipperAdditiveOperator;
+}
+
+/**
+ * Type Semantics for AST Node {@link AdditiveExpression}.
+ * @since 0.10.0
+ */
+export interface AdditiveExpressionTypeSemantics extends ArithmeticExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -1944,7 +2273,7 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
  * 4 + 4 // 8
  * 9 - 3 // 6
  */
-export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, ExpressionTypeSemantics> {
+export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, AdditiveExpressionTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1972,35 +2301,17 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 			?.text.trim();
 
 		// Get the expressions of this additive expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
-		if (!operator || !exp1 || !exp2) {
+		if (!operator || !leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		const evaluateType: () => KipperType = () => {
-			const exp1Type = exp1.getSemanticData().evaluatedType;
-			const exp2Type = exp2.getSemanticData().evaluatedType;
-			if (exp1Type === exp2Type) {
-				return exp1.semanticData.evaluatedType;
-			} else if (
-				(exp1Type === kipperCharType && exp2Type === kipperStrType) ||
-				(exp1Type === kipperStrType && exp2Type === kipperCharType)
-			) {
-				return kipperStrType;
-			} else {
-				// Assume for the sake of error recovery, that the type is the type of the first expression
-				// The type checker will throw an error later, if this is also wrong
-				return exp1Type;
-			}
-		};
-
 		this.semanticData = {
-			evaluatedType: evaluateType(),
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp,
+			rightOp: rightOp,
 			operator: operator,
 		};
 	}
@@ -2016,7 +2327,22 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 		// Assert that the arithmetic expression is valid
 		this.programCtx
 			.typeCheck(this)
-			.validArithmeticExpression(semanticData.exp1, semanticData.exp2, semanticData.operator);
+			.validArithmeticExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
+
+		// Evaluate the type based on the types of the operands
+		let evaluatedType: KipperType;
+
+		const leftOpType = semanticData.leftOp.getTypeSemanticData().evaluatedType;
+		const rightOpType = semanticData.rightOp.getTypeSemanticData().evaluatedType;
+		if (leftOpType === rightOpType) {
+			evaluatedType = leftOpType;
+		} else {
+			evaluatedType = kipperStrType;
+		}
+
+		this.typeSemantics = {
+			evaluatedType: evaluatedType,
+		};
 	}
 
 	/**
@@ -2042,8 +2368,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 }
 
 /**
- * Semantics for comparative expressions, which compare two expressions against one another and evaluate based on
- * the input to a boolean value.
+ * Semantics for a comparative expression, which compares two operands against each other using a specified
+ * operator.
  * @since 0.9.0
  */
 export interface ComparativeExpressionSemantics extends ExpressionSemantics {
@@ -2053,15 +2379,29 @@ export interface ComparativeExpressionSemantics extends ExpressionSemantics {
 	 */
 	operator: KipperComparativeOperator;
 	/**
-	 * The first expression (left-hand side) used in this comparative expression.
+	 * The left expression (left-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
-	 * The second expression (right-hand side) used in this comparative expression.
+	 * The right expression (right-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for a comparative expression, which compares two operands against each other using a specified
+ * operator.
+ * @since 0.10.0
+ */
+export interface ComparativeExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2071,7 +2411,7 @@ export interface ComparativeExpressionSemantics extends ExpressionSemantics {
  */
 export abstract class ComparativeExpression<
 	Semantics extends ComparativeExpressionSemantics,
-	TypeSemantics extends ExpressionTypeSemantics,
+	TypeSemantics extends ComparativeExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
 
 /**
@@ -2088,12 +2428,25 @@ export interface RelationalExpressionSemantics extends ComparativeExpressionSema
 	 * The first expression (left-hand side) used in this relational expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression (right-hand side) used in this relational expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link RelationalExpression}.
+ * @since 0.10.0
+ */
+export interface RelationalExpressionTypeSemantics extends ComparativeExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2113,7 +2466,7 @@ export interface RelationalExpressionSemantics extends ComparativeExpressionSema
  */
 export class RelationalExpression extends ComparativeExpression<
 	RelationalExpressionSemantics,
-	ExpressionTypeSemantics
+	RelationalExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -2136,8 +2489,8 @@ export class RelationalExpression extends ComparativeExpression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the expressions of this relational expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 		const operator = <KipperRelationalOperator | undefined>children
 			.find((token) => {
 				return token instanceof TerminalNode && kipperRelationalOperators.find((op) => op === token.text) !== undefined;
@@ -2145,14 +2498,13 @@ export class RelationalExpression extends ComparativeExpression<
 			?.text.trim();
 
 		// Ensure that the children are fully present and not undefined
-		if (!exp1 || !exp2 || !operator) {
+		if (!leftOp || !rightOp || !operator) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			evaluatedType: "bool",
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp,
+			rightOp: rightOp,
 			operator: operator,
 		};
 	}
@@ -2165,6 +2517,11 @@ export class RelationalExpression extends ComparativeExpression<
 	public async semanticTypeChecking(): Promise<void> {
 		// Type check the relational expression and ensure its operands are of type 'num'
 		this.programCtx.typeCheck(this).validRelationalExpression(this);
+
+		// Relational expressions always return 'bool'
+		this.typeSemantics = {
+			evaluatedType: "bool",
+		};
 	}
 
 	/**
@@ -2204,12 +2561,25 @@ export interface EqualityExpressionSemantics extends ComparativeExpressionSemant
 	 * The first expression (left-hand side) used in this equality expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression (right-hand side) used in this equality expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link EqualityExpressionSemantics}.
+ * @since 0.10.0
+ */
+export interface EqualityExpressionTypeSemantics extends ComparativeExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2221,7 +2591,10 @@ export interface EqualityExpressionSemantics extends ComparativeExpressionSemant
  * 32 != 9 // true
  * 59 != 59 // false
  */
-export class EqualityExpression extends ComparativeExpression<EqualityExpressionSemantics, ExpressionTypeSemantics> {
+export class EqualityExpression extends ComparativeExpression<
+	EqualityExpressionSemantics,
+	EqualityExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2243,8 +2616,8 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 		const children = this.getAntlrRuleChildren();
 
 		// Get the expressions of this relational expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 		const operator = <KipperEqualityOperator | undefined>children
 			.find((token) => {
 				return token instanceof TerminalNode && kipperEqualityOperators.find((op) => op === token.text) !== undefined;
@@ -2252,14 +2625,13 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 			?.text.trim();
 
 		// Ensure that the children are fully present and not undefined
-		if (!exp1 || !exp2 || !operator) {
+		if (!leftOp || !rightOp || !operator) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			evaluatedType: "bool",
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp, // First expression
+			rightOp: rightOp, // Second expression
 			operator: operator,
 		};
 	}
@@ -2270,8 +2642,10 @@ export class EqualityExpression extends ComparativeExpression<EqualityExpression
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// No type checking needed, since every type can be compared against every other type
-		return Promise.resolve(undefined);
+		// Equality expressions always return 'bool'
+		this.typeSemantics = {
+			evaluatedType: "bool",
+		};
 	}
 
 	/**
@@ -2311,12 +2685,26 @@ export interface LogicalExpressionSemantics extends ExpressionSemantics {
 	 * The first expression (left-hand side) used in this logical expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression (right-hand side) used in this logical expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for logical expressions, which combine two expressions/conditions and evaluate based on the input to a
+ * boolean value.
+ * @since 0.10.0
+ */
+export interface LogicalExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2327,7 +2715,7 @@ export interface LogicalExpressionSemantics extends ExpressionSemantics {
  */
 export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics,
-	TypeSemantics extends ExpressionTypeSemantics,
+	TypeSemantics extends LogicalExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
 
 /**
@@ -2344,12 +2732,25 @@ export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantic
 	 * The first expression (left-hand side) used in this logical-and expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression (right-hand side) used in this logical-and expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link LogicalAndExpression}.
+ * @since 0.10.0
+ */
+export interface LogicalAndExpressionTypeSemantics extends LogicalExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2362,7 +2763,10 @@ export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantic
  * false && true // false
  * true && true // true
  */
-export class LogicalAndExpression extends LogicalExpression<LogicalAndExpressionSemantics, ExpressionTypeSemantics> {
+export class LogicalAndExpression extends LogicalExpression<
+	LogicalAndExpressionSemantics,
+	LogicalAndExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2381,18 +2785,17 @@ export class LogicalAndExpression extends LogicalExpression<LogicalAndExpression
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-and expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
-		if (!exp1 || !exp2) {
+		if (!leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			evaluatedType: "bool",
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp, // First expression
+			rightOp: rightOp, // Second expression
 			operator: kipperLogicalAndOperator,
 		};
 	}
@@ -2402,9 +2805,11 @@ export class LogicalAndExpression extends LogicalExpression<LogicalAndExpression
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
-		// No type checking needed, since every type is simply converted to a boolean
-		return Promise.resolve(undefined);
+	public async semanticTypeChecking(): Promise<void> {
+		// Logical expressions always return 'bool'
+		this.typeSemantics = {
+			evaluatedType: "bool",
+		};
 	}
 
 	/**
@@ -2444,12 +2849,25 @@ export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics
 	 * The first expression (left-hand side) used in this logical-or expression.
 	 * @since 0.9.0
 	 */
-	exp1: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The second expression (right-hand side) used in this logical-or expression.
 	 * @since 0.9.0
 	 */
-	exp2: Expression<any, any>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Type Semantics for AST Node {@link LogicalOrExpression}.
+ * @since 0.10.0
+ */
+export interface LogicalOrExpressionTypeSemantics extends LogicalExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
+	 * expressions that do not explicitly show their type.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperType;
 }
 
 /**
@@ -2462,7 +2880,10 @@ export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics
  * false || true // true
  * true || true // true
  */
-export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSemantics, ExpressionTypeSemantics> {
+export class LogicalOrExpression extends LogicalExpression<
+	LogicalOrExpressionSemantics,
+	LogicalOrExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2481,18 +2902,17 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-or expression
-		const exp1: Expression<any, any> = this.children[0];
-		const exp2: Expression<any, any> = this.children[1];
+		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
-		if (!exp1 || !exp2) {
+		if (!leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			evaluatedType: "bool",
-			exp1: exp1, // First expression
-			exp2: exp2, // Second expression
+			leftOp: leftOp, // First expression
+			rightOp: rightOp, // Second expression
 			operator: kipperLogicalOrOperator,
 		};
 	}
@@ -2502,9 +2922,11 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
-		// No type checking needed, since every type is simply converted to a boolean
-		return Promise.resolve(undefined);
+	public async semanticTypeChecking(): Promise<void> {
+		// Logical expressions always return 'bool'
+		this.typeSemantics = {
+			evaluatedType: "bool",
+		};
 	}
 
 	/**
@@ -2537,6 +2959,12 @@ export class LogicalOrExpression extends LogicalExpression<LogicalOrExpressionSe
 export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
 
 /**
+ * Type Semantics for AST Node {@link ConditionalExpression}.
+ * @since 0.10.0
+ */
+export interface ConditionalExpressionTypeSemantics extends ExpressionTypeSemantics {}
+
+/**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
  * expression if it is false.
  * @since 0.1.0
@@ -2544,7 +2972,10 @@ export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
  * true ? 3 : 4; // 3
  * false ? 3 : 4; // 4
  */
-export class ConditionalExpression extends Expression<ConditionalExpressionSemantics, ExpressionTypeSemantics> {
+export class ConditionalExpression extends Expression<
+	ConditionalExpressionSemantics,
+	ConditionalExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2565,11 +2996,6 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
-
-		// eslint-disable-next-line no-unreachable
-		this.semanticData = {
-			evaluatedType: "void",
-		};
 	}
 
 	/**
@@ -2578,7 +3004,9 @@ export class ConditionalExpression extends Expression<ConditionalExpressionSeman
 	 * @since 0.7.0
 	 */
 	public async semanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
 	}
 
 	/**
@@ -2613,13 +3041,29 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	 * The identifier expression that is being assigned to.
 	 * @since 0.7.0
 	 */
-	identifier: IdentifierPrimaryExpression;
+	identifier: string;
+	/**
+	 * The identifier AST node context that the {@link AssignmentExpressionSemantics.identifier identifier} points to.
+	 * @since 0.10.0
+	 */
+	identifierCtx: IdentifierPrimaryExpression;
+	/**
+	 * The reference that is being assigned to.
+	 * @since 0.10.0
+	 */
+	ref: KipperRef;
 	/**
 	 * The assigned value to this variable.
 	 * @since 0.7.0
 	 */
-	value: Expression<any, any>;
+	value: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 }
+
+/**
+ * Type Semantics for AST Node {@link AssignmentExpression}.
+ * @since 0.10.0
+ */
+export interface AssignmentExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
  * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to
@@ -2630,7 +3074,7 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
  * @example
  * x = 4
  */
-export class AssignmentExpression extends Expression<AssignmentExpressionSemantics, ExpressionTypeSemantics> {
+export class AssignmentExpression extends Expression<AssignmentExpressionSemantics, AssignmentExpressionTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -2651,23 +3095,25 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		// There will always be only two children, which are the identifier and expression assigned.
 		const identifier: IdentifierPrimaryExpression = (() => {
 			const exp = this.children[0];
+
 			// Ensure that the left-hand side of the expression is an identifier
 			this.programCtx.semanticCheck(this).validAssignment(exp);
+
 			return <IdentifierPrimaryExpression>exp;
 		})();
-		const assignValue: Expression<any, any> = this.children[1];
+		const assignValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
 		// Throw an error if the children are incomplete
 		if (!assignValue) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		// Get the semantics / the evaluated type of this expression
-		const valueSemantics = assignValue.getSemanticData();
+		let identifierSemantics = identifier.getSemanticData();
 		this.semanticData = {
-			evaluatedType: valueSemantics.evaluatedType,
 			value: assignValue,
-			identifier: identifier,
+			identifierCtx: identifier,
+			identifier: identifierSemantics.identifier,
+			ref: identifierSemantics.ref,
 		};
 	}
 
@@ -2679,7 +3125,13 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	public async semanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		this.programCtx.typeCheck(this).validAssignment(semanticData.identifier, semanticData.value);
+		// Ensure the assignment is valid and the types match up
+		this.programCtx.typeCheck(this).validAssignment(semanticData.identifierCtx, semanticData.value);
+
+		// The evaluated type of an assignment expression is always the evaluated type assigned to the variable
+		this.typeSemantics = {
+			evaluatedType: semanticData.value.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	/**

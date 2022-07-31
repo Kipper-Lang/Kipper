@@ -80,21 +80,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param rightExp The right-hand side of the assignment.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: IdentifierPrimaryExpression, rightExp: Expression<any, any>): void {
-		const leftExpSemantics = leftExp.getSemanticData();
-		const rightExpSemantics = rightExp.getSemanticData();
+	public validAssignment(
+		leftExp: IdentifierPrimaryExpression,
+		rightExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+	): void {
+		const leftExpTypeData = leftExp.getTypeSemanticData();
+		const rightExpTypeData = rightExp.getTypeSemanticData();
 
 		// Ensure that the types are matching
-		if (rightExpSemantics.evaluatedType !== leftExpSemantics.evaluatedType) {
+		if (rightExpTypeData.evaluatedType !== leftExpTypeData.evaluatedType) {
 			throw this.assertError(
-				new InvalidAssignmentTypeError(rightExpSemantics.evaluatedType, leftExpSemantics.evaluatedType),
+				new InvalidAssignmentTypeError(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType),
 			);
 		}
 
 		// Get the storage type of the variable
-		const reference = this.getDeclaration(leftExpSemantics.identifier);
-		if (reference && "storageType" in reference && reference.storageType === "const") {
-			throw this.assertError(new ReadOnlyAssignmentTypeError(reference.identifier));
+		const ref = leftExp.getSemanticData().ref;
+		if (ref && "storageType" in ref && ref.storageType === "const") {
+			throw this.assertError(new ReadOnlyAssignmentTypeError(ref.identifier));
 		}
 	}
 
@@ -104,9 +107,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param rightExp The right expression/value of the assignment.
 	 * @since 0.7.0
 	 */
-	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, rightExp: Expression<any, any>): void {
+	public validVariableDefinition(
+		scopeEntry: ScopeVariableDeclaration,
+		rightExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+	): void {
 		const leftExpType = scopeEntry.type;
-		const rightExpType = rightExp.getSemanticData().evaluatedType;
+		const rightExpType = rightExp.getTypeSemanticData().evaluatedType;
+
+		// Ensure the value of the definition match the definition type
 		if (leftExpType !== rightExpType) {
 			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
 		}
@@ -135,11 +143,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param args The arguments for the call expression.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any, any>>): void {
+	public validFunctionCallArguments(
+		func: KipperFunction,
+		args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>,
+	): void {
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
-			const semanticData = arg.getSemanticData();
-			this.argumentTypesMatch(func.args[index], semanticData.evaluatedType);
+			const typeData = arg.getTypeSemanticData();
+			this.argumentTypesMatch(func.args[index], typeData.evaluatedType);
 		});
 	}
 
@@ -150,13 +161,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validRelationalExpression(exp: RelationalExpression): void {
 		const semanticData = exp.getSemanticData();
-		const exp1Semantics = semanticData.exp1.getSemanticData();
-		const exp2Semantics = semanticData.exp2.getSemanticData();
+		const leftOpTypeData = semanticData.leftOp.getTypeSemanticData();
+		const rightOpTypeData = semanticData.rightOp.getTypeSemanticData();
 
 		// Ensure that both expressions are of type 'num'
-		if (exp1Semantics.evaluatedType !== "num" || exp2Semantics.evaluatedType !== "num") {
+		if (leftOpTypeData.evaluatedType !== "num" || rightOpTypeData.evaluatedType !== "num") {
 			throw this.assertError(
-				new InvalidRelationalComparisonTypeError(exp1Semantics.evaluatedType, exp2Semantics.evaluatedType),
+				new InvalidRelationalComparisonTypeError(leftOpTypeData.evaluatedType, rightOpTypeData.evaluatedType),
 			);
 		}
 	}
@@ -168,42 +179,42 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validUnaryExpression(exp: UnaryExpression<UnaryExpressionSemantics, ExpressionTypeSemantics>): void {
 		const semanticData = exp.getSemanticData();
-		const expSemantics = semanticData.operand.getSemanticData();
+		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 
-		// Ensure that the operator '+' and '-' are only used on numbers
-		if (semanticData.operator === "+" || semanticData.operator === "-") {
-			if (expSemantics.evaluatedType !== "num") {
-				throw this.assertError(new InvalidUnaryExpressionTypeError(expSemantics.operator, semanticData.evaluatedType));
-			}
+		// Ensure that the operator '+', '-', '++' and '--' are only used on numbers
+		if (semanticData.operator !== "!" && expTypeSemantics.evaluatedType !== "num") {
+			throw this.assertError(
+				new InvalidUnaryExpressionTypeError(semanticData.operator, expTypeSemantics.evaluatedType),
+			);
 		}
 	}
 
 	/**
 	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param exp1 The first expression.
-	 * @param exp2 The second expression.
+	 * @param leftOp The left operand expression.
+	 * @param rightOp The right operand expression.
 	 * @param op The arithmetic operation that is performed.
 	 * @since 0.9.0
 	 */
 	public validArithmeticExpression(
-		exp1: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		exp2: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+		leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+		rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
 		op: KipperArithmeticOperator,
 	): void {
-		const exp1Type = exp1.getSemanticData().evaluatedType;
-		const exp2Type = exp2.getSemanticData().evaluatedType;
-		if (exp1Type !== exp2Type || exp1Type !== "num" || exp2Type !== "num") {
+		const leftOpType = leftOp.getTypeSemanticData().evaluatedType;
+		const rightOpType = rightOp.getTypeSemanticData().evaluatedType;
+		if (leftOpType !== rightOpType || leftOpType !== "num" || rightOpType !== "num") {
 			// String-like types can use '+' to concat strings
 			if (
 				op === kipperPlusOperator &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp1Type) &&
-				kipperStrLikeTypes.find((t: KipperType) => t === exp2Type)
+				kipperStrLikeTypes.find((t: KipperType) => t === leftOpType) &&
+				kipperStrLikeTypes.find((t: KipperType) => t === rightOpType)
 			) {
 				return;
 			}
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationTypeError(exp1Type, exp2Type));
+			throw this.assertError(new InvalidArithmeticOperationTypeError(leftOpType, rightOpType));
 		}
 	}
 }

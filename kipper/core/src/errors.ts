@@ -533,13 +533,13 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
 }
 
 /**
- * Error that is thrown whenever an AST node can not determine its own metadata or the metadata of its children.
- *
- * This error is primarily used for error recovery to signalise the failure of an AST node.
+ * Error that is thrown whenever an {@link ParserASTNode} can not determine its own metadata and fails to process
+ * itself during {@link CompilableASTNode.semanticAnalysis semantic analysis}.
+ * @since 0.6.0
  */
 export class UnableToDetermineSemanticDataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more parse tree or AST nodes.`);
+		super(`Failed to determine metadata for one or more AST nodes.`);
 	}
 }
 

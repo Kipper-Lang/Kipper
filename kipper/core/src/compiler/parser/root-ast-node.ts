@@ -10,7 +10,7 @@ import { NoSemantics, NoTypeSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperTargetCodeGenerator, TargetSetUpCodeGenerator, TargetWrapUpCodeGenerator } from "../translation";
 import { KipperCompileTarget } from "../compile-target";
-import { KipperError, UnableToDetermineSemanticDataError } from "../../errors";
+import { KipperError, UndefinedSemanticsError } from "../../errors";
 import { EvaluatedCompileConfig } from "../compiler";
 
 /**
@@ -114,8 +114,8 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 				// If it's a compile error, add it to the list of errors
 				if (e instanceof KipperError && !this.compileConfig.abortOnFirstError) {
 					this.programCtx.addError(e);
-				} else if (!(e instanceof UnableToDetermineSemanticDataError)) {
-					// Avoid showing the internal error 'UnableToDetermineSemanticDataError', as that should only happen
+				} else if (!(e instanceof UndefinedSemanticsError)) {
+					// Avoid showing the internal error 'UndefinedSemanticsError', as that should only happen
 					// when error recovery is enabled. -> The compiler will handle the errors itself.
 					throw e;
 				}

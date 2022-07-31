@@ -170,7 +170,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @throws UndefinedSemanticsError If {@link semanticData} is undefined.
 	 * @since 0.10.0
 	 */
-	public getTypeSemantics(): TypeSemantics {
+	public getTypeSemanticData(): TypeSemantics {
 		if (this.typeSemantics === undefined) {
 			throw new UndefinedSemanticsError();
 		}

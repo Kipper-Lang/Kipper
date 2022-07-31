@@ -268,7 +268,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.8.0
 	 */
 	public validConversion(exp: Expression<any, any>, type: KipperType): void {
-		const originalType: KipperType = exp.getSemanticData().evaluatedType;
+		const originalType: KipperType = exp.getTypeSemanticData().evaluatedType;
 
 		const viableConversion = (() => {
 			// Check whether a supported pair of types exist.
