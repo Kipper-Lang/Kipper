@@ -208,6 +208,7 @@ export abstract class CompilableASTNode<
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		// Start with the evaluation of the children
+		let encounteredError: boolean = false;
 		for (let child of this.children) {
 			try {
 				await child.semanticAnalysis();
@@ -220,16 +221,24 @@ export abstract class CompilableASTNode<
 					// If the semantic data wasn't evaluated, return as that means the logical evaluation of this item failed.
 					// Otherwise, continue with the semantic data that is present.
 					if (!child.semanticData || !child.typeSemantics) {
-						return;
+						encounteredError = true;
 					}
 				} else if (e instanceof UndefinedSemanticsError) {
 					// If the child was unable to determine its semantic data, abort the evaluation of this node
 					// This error should never be visible to the user!
-					return;
+					encounteredError = true;
 				} else {
 					throw e;
 				}
 			}
+		}
+
+		// If an error was thrown, then the semantic analysis of this node failed and should be aborted.
+		// For now, we will not try to perform more advanced error recovery, like for example using a symbol table
+		// (Therefore we also still try to handle 'UndefinedSemanticsError' errors, as there can be cases, where semantic
+		// data is missing and there is no proper way to recover from it or try to fix the issue
+		if (encounteredError) {
+			return;
 		}
 
 		// Finally, check if this node is semantically valid

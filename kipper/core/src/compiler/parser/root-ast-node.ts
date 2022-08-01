@@ -115,8 +115,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 				if (e instanceof KipperError && !this.compileConfig.abortOnFirstError) {
 					this.programCtx.addError(e);
 				} else if (!(e instanceof UndefinedSemanticsError)) {
-					// Avoid showing the internal error 'UndefinedSemanticsError', as that should only happen
-					// when error recovery is enabled. -> The compiler will handle the errors itself.
+					// If it's not a 'KipperError' or 'UndefinedSemanticsError', throw it as the compiler can not handle it
 					throw e;
 				}
 			}
