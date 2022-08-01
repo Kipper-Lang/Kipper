@@ -1136,7 +1136,7 @@ describe("Kipper errors", () => {
 		describe("ReservedIdentifierOverwriteError", () => {
 			it("Error", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("var instanceof: str; x = 5;"), {
+					await new KipperCompiler().compile(new KipperParseStream("var instanceof: str;"), {
 						abortOnFirstError: true,
 					});
 				} catch (e) {

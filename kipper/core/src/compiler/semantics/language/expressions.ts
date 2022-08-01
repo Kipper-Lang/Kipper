@@ -358,7 +358,7 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'number'
 		this.typeSemantics = {
 			evaluatedType: "num",
@@ -451,7 +451,7 @@ export class CharacterPrimaryExpression extends ConstantExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'char'
 		this.typeSemantics = {
 			evaluatedType: "char",
@@ -541,7 +541,7 @@ export class ListPrimaryExpression extends ConstantExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'list'
 		this.typeSemantics = {
 			evaluatedType: "list",
@@ -631,7 +631,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
 			evaluatedType: "str",
@@ -721,7 +721,7 @@ export class BoolPrimaryExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'bool'
 		this.typeSemantics = {
 			evaluatedType: "bool",
@@ -814,7 +814,7 @@ export class FStringPrimaryExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
 			evaluatedType: "str",
@@ -929,7 +929,7 @@ export class IdentifierPrimaryExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Get the type of the reference
@@ -1061,7 +1061,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure the type exists
@@ -1149,7 +1149,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
@@ -1229,7 +1229,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
@@ -1329,7 +1329,7 @@ export class TangledPrimaryExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const exp = this.getSemanticData().childExp;
 
 		this.typeSemantics = {
@@ -1420,7 +1420,7 @@ export class IncrementOrDecrementExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(
@@ -1507,7 +1507,7 @@ export class ArraySpecifierExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
@@ -1633,7 +1633,7 @@ export class FunctionCallPostfixExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure valid arguments are passed
@@ -1781,7 +1781,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(
@@ -1903,7 +1903,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure the operator is compatible with the type of the operand
@@ -2015,13 +2015,6 @@ export class CastOrConvertExpression extends Expression<
 			castType: type,
 			exp: exp,
 		};
-
-		// Add internal reference to the program ctx
-		const expType = (<Expression<ExpressionSemantics, ExpressionTypeSemantics>>exp).getTypeSemanticData().evaluatedType;
-		const internalIdentifier = getConversionFunctionIdentifier(expType, type);
-		if (internalIdentifier in kipperInternalBuiltIns) {
-			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
-		}
 	}
 
 	/**
@@ -2029,7 +2022,7 @@ export class CastOrConvertExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure the type can be casted/converted into the target type
@@ -2041,6 +2034,14 @@ export class CastOrConvertExpression extends Expression<
 			evaluatedType: <KipperType>semanticData.castType,
 			castType: <KipperType>semanticData.castType,
 		};
+
+		// Add internal reference to the program ctx
+		const expType = (<Expression<ExpressionSemantics, ExpressionTypeSemantics>>semanticData.exp).getTypeSemanticData()
+			.evaluatedType;
+		const internalIdentifier = getConversionFunctionIdentifier(expType, semanticData.castType);
+		if (internalIdentifier in kipperInternalBuiltIns) {
+			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
+		}
 	}
 
 	/**
@@ -2201,7 +2202,7 @@ export class MultiplicativeExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Assert that the arithmetic expression is valid
@@ -2330,7 +2331,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Assert that the arithmetic expression is valid
@@ -2523,7 +2524,7 @@ export class RelationalExpression extends ComparativeExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// Type check the relational expression and ensure its operands are of type 'num'
 		this.programCtx.typeCheck(this).validRelationalExpression(this);
 
@@ -2650,7 +2651,7 @@ export class EqualityExpression extends ComparativeExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// Equality expressions always return 'bool'
 		this.typeSemantics = {
 			evaluatedType: "bool",
@@ -2814,7 +2815,7 @@ export class LogicalAndExpression extends LogicalExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
 			evaluatedType: "bool",
@@ -2931,7 +2932,7 @@ export class LogicalOrExpression extends LogicalExpression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
 			evaluatedType: "bool",
@@ -3012,7 +3013,7 @@ export class ConditionalExpression extends Expression<
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
@@ -3131,7 +3132,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure the assignment is valid and the types match up

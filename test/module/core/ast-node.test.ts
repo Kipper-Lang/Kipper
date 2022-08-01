@@ -33,7 +33,7 @@ describe("Parse-Tokens", () => {
 				return <TranslatedCodeLine>[];
 			};
 
-			semanticTypeChecking(): Promise<void> {
+			primarySemanticTypeChecking(): Promise<void> {
 				return Promise.resolve(undefined);
 			}
 

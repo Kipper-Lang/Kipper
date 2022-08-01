@@ -180,7 +180,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -309,7 +309,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Ensure the return type is valid
@@ -480,7 +480,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Check whether the type of the variable even exists

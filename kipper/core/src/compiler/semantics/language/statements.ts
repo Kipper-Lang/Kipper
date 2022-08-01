@@ -168,7 +168,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
+	public primarySemanticTypeChecking(): Promise<void> {
 		// Compound statements will never have type checking
 		return Promise.resolve(undefined);
 	}
@@ -278,7 +278,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -345,7 +345,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -411,7 +411,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
+	public primarySemanticTypeChecking(): Promise<void> {
 		// Expression statements will never have type checking
 		return Promise.resolve(undefined);
 	}
@@ -481,7 +481,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -549,7 +549,7 @@ export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 

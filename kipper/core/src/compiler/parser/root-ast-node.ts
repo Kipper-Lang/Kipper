@@ -100,24 +100,58 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
+	 * Handles a semantic error that was thrown in the function {@link this.semanticAnalysis}.
+	 * @param e The error that was thrown.
+	 * @since 0.10.0
+	 */
+	async handleSemanticError(e: Error | UndefinedSemanticsError | KipperError): Promise<void> {
+		// If it's a compile error, add it to the list of errors
+		if (e instanceof KipperError && !this.compileConfig.abortOnFirstError) {
+			this.programCtx.addError(e);
+		} else if (!(e instanceof UndefinedSemanticsError)) {
+			// If it's not a 'KipperError' or 'UndefinedSemanticsError', throw it as the compiler can not handle it
+			throw e;
+		}
+	}
+
+	/**
 	 * Semantically analyses the children tokens of this
 	 * {@link RootASTNode instance} and performs additional
 	 * {@link CompilableASTNode.targetSemanticAnalysis translation specific analysis}.
 	 * @since 0.8.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
-		// Run for every child the analysis
+		// Core semantic analysis
 		for (let child of this.children) {
 			try {
 				await child.semanticAnalysis();
 			} catch (e) {
-				// If it's a compile error, add it to the list of errors
-				if (e instanceof KipperError && !this.compileConfig.abortOnFirstError) {
-					this.programCtx.addError(e);
-				} else if (!(e instanceof UndefinedSemanticsError)) {
-					// If it's not a 'KipperError' or 'UndefinedSemanticsError', throw it as the compiler can not handle it
-					throw e;
-				}
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Perform type-checking based on the existing AST nodes and evaluated semantics
+		for (let child of this.children) {
+			try {
+				await child.semanticTypeChecking();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Perform wrap-up semantic analysis for the specified target
+		for (let child of this.children) {
+			try {
+				await child.wrapUpSemanticAnalysis();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Check for warnings, if they are enabled
+		if (this.compileConfig.warnings) {
+			for (let child of this.children) {
+				await child.checkForWarnings();
 			}
 		}
 	}
