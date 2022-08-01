@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI) to interact with the Kipper compiler.",
-  "version": "0.9.1",
+  "version": "0.10.0-alpha.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
@@ -27,7 +27,7 @@
   "devDependencies": {
     "@oclif/test": "2.1.0",
     "typescript": "4.7.4",
-    "@types/sinon": "10.0.12",
+    "@types/sinon": "10.0.13",
     "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "9.1.2",
     "os-tmpdir": "1.0.2",
@@ -45,7 +45,7 @@
     "oclif.manifest.json",
     "LICENSE"
   ],
-  "homepage": "https://wmc-ahif-2021.github.io/Kipper-Web/",
+  "homepage": "https://luna-klatzer.github.io/Kipper/",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
     "type": "git",

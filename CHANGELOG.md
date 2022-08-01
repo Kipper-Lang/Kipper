@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
+- New functions:
+  - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
+  - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
+- New types:
+  - `TargetSetUpCodeGenerator`, which represents a function that generates SetUp code for a Kipper file.
+  - `TargetWrapUpCodeGenerator`, which represents a function that generates WrapUp code for a Kipper file.
+- New fields/properties:
+  - `RootASTNode.target`, which returns the `KipperCompileTarget` of the program ctx the root AST node is in.
+  - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
+  - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
+
+### Changed
+
+- Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
+  variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
+  bound to the JS runtime and any function definition in the generated file is placed after the initial evaluation
+  of the global scope.
+- Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
+  such as `print("Hello world!");`.
+
+## [0.9.2] - 2022-07-23
+
+### Changed
+
+- Fixed traceback bug for re-declarations inside compound statements generating an invalid error message and traceback.
+  ([#240](https://github.com/Luna-Klatzer/Kipper/issues/240))
+- Updated Kipper compiler error message.
+
 ## [0.9.1] - 2022-06-29
 
 ### Changed
@@ -763,7 +796,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.9.1..HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.9.2..HEAD
+[0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.3...v0.9.0
 [0.8.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.2...v0.8.3

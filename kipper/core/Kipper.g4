@@ -41,7 +41,7 @@ postfixExpression
     :   primaryExpression #passOnPostfixExpression
     |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
     |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
-    |   'call' primaryExpression '(' argumentExpressionList? ')' # functionCallPostfixExpression
+    |   'call'? primaryExpression '(' argumentExpressionList? ')' # functionCallPostfixExpression
     ;
 
 arraySpecifier

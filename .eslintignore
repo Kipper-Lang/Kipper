@@ -2,4 +2,5 @@ lib
 img
 node_modules
 dist
+build
 kipper-standalone.*

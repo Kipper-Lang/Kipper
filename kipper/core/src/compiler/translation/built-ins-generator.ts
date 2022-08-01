@@ -22,7 +22,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0
 	 */
-	abstract numToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract numToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'str' to 'num' type conversion functionality.
@@ -30,7 +30,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0
 	 */
-	abstract strToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract strToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
@@ -38,7 +38,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0
 	 */
-	abstract boolToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract boolToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
@@ -46,7 +46,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0
 	 */
-	abstract boolToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract boolToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Print function which provides default IO console output functionality.
@@ -54,5 +54,5 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.8.0
 	 */
-	abstract print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 }

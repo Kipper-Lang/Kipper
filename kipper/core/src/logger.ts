@@ -150,7 +150,7 @@ export class KipperLogger {
 	 * @param msg The content of the logging message.
 	 */
 	public log(level: LogLevel, msg: string): void {
-		// If the level is lower than the current log level or the level is 'WARN' and the warnings are disabled, then
+		// If the level is lower than the current  log level or the level is 'WARN' and the warnings are disabled, then
 		// ignore the message.
 		if (level < this.logLevel || (level === LogLevel.WARN && !this.reportWarnings)) {
 			return;
@@ -166,7 +166,7 @@ export class KipperLogger {
 	 * @since 0.4.0
 	 */
 	public reportError(level: LogLevel.WARN | LogLevel.ERROR | LogLevel.FATAL, err: KipperError | string) {
-		this.log(level, err instanceof KipperError ? err.getTraceback() : err);
+		this.log(level, err instanceof KipperError ? `Compilation error - ${err.getTraceback()}` : err);
 	}
 
 	/**

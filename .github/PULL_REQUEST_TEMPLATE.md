@@ -19,7 +19,7 @@
 
 Closes # <!-- Remove this if this is not a bug fix PR -->
 
-## Changes
+## Summary of Changes
 
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
 
@@ -38,10 +38,11 @@ Closes # <!-- Remove this if this is not a bug fix PR -->
 
 <!-- Remove example text! -->
 
-## Changelog
+## Detailed Changelog
 
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added). -->
 
+<!-- The exact items listed here should appear in the CHANGELOG.md file as well. -->
 <!-- ### Added -->
 <!-- ### Changed -->
 <!-- ### Removed -->

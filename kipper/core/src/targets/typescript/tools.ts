@@ -48,5 +48,5 @@ export function getTypeScriptType(kipperType: KipperType): string {
  * @since 0.8.0
  */
 export function getTypeScriptBuiltInIdentifier(identifier: string): string {
-	return `__kipper_${identifier}`;
+	return `__kipper.${identifier}`;
 }

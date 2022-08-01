@@ -553,7 +553,7 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("__kipper_print = __kipper_print;"), "Expected different TypeScript code");
+					assert(instance.write().includes("__kipper.print = __kipper.print;"), "Expected different TypeScript code");
 				});
 
 				it("two expressions", async () => {
@@ -572,9 +572,9 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes('__kipper_print("x");'), "Expected different TypeScript code");
-					assert(instance.write().includes('__kipper_print("y");'), "Expected different TypeScript code");
-					assert(instance.write().includes('__kipper_print("z");'), "Expected different TypeScript code");
+					assert(instance.write().includes('__kipper.print("x");'), "Expected different TypeScript code");
+					assert(instance.write().includes('__kipper.print("y");'), "Expected different TypeScript code");
+					assert(instance.write().includes('__kipper.print("z");'), "Expected different TypeScript code");
 				});
 			});
 
@@ -619,7 +619,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 && x < 5) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -647,7 +647,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 && x < 2) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -675,7 +675,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 && x < 3) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -703,7 +703,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 && x < 8) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -733,7 +733,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 || x < 5) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -761,7 +761,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 || x < 2) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -789,7 +789,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 || x < 3) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -817,7 +817,7 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 || x > 8) {\n  __kipper_print("Works");\n}'),
+							instance.write().includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
@@ -848,7 +848,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x === 4) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x === 4) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
@@ -876,7 +876,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x !== 5) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x !== 5) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
@@ -904,7 +904,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x < 5) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x < 5) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
@@ -932,7 +932,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x <= 5) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x <= 5) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
@@ -960,7 +960,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x > 4) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x > 4) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
@@ -988,7 +988,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
 					assert(
-						instance.write().includes('if (x >= 4) {\n  __kipper_print("Works");\n}'),
+						instance.write().includes('if (x >= 4) {\n  __kipper.print("Works");\n}'),
 						"Expected different TypeScript code",
 					);
 
