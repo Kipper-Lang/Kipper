@@ -23,7 +23,7 @@
     "antlr4ts-cli": "0.5.0-alpha.4",
     "browserify": "17.0.0",
     "chai": "4.3.6",
-    "coverage-badge-creator": "1.0.12",
+    "coverage-badge-creator": "1.0.13",
     "eslint": "8.21.0",
     "json-parse-even-better-errors": "2.3.1",
     "minimist": "1.2.6",
