@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
   - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
+  - `CompilableASTNode.semanticTypeChecking`, which performs type checking for the AST node and its children nodes. 
+  	This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
+	- `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
+		This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -40,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
   ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
+- Updated behaviour of Kipper Compiler semantic analysis and seperated primary semantic analysis, type checking and
+  target-specific semantic analysis into their own processing steps. (E.g. First all AST nodes are semantically 
+	analysed, then type checked and semantically analysed for the target language)
 - Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
   variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
   bound to the JS runtime and any function definition in the generated file is placed after the initial evaluation
