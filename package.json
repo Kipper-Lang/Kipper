@@ -40,7 +40,7 @@
     "uuid": "8.3.2",
     "watchify": "4.0.0",
     "size-limit": "7.0.8",
-    "@size-limit/preset-big-lib": "7.0.8"
+    "@size-limit/preset-big-lib": "8.0.0"
   },
   "engines": {
     "node": ">=14.0.0",
