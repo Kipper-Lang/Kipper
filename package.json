@@ -23,8 +23,8 @@
     "antlr4ts-cli": "0.5.0-alpha.4",
     "browserify": "17.0.0",
     "chai": "4.3.6",
-    "coverage-badge-creator": "1.0.12",
-    "eslint": "8.20.0",
+    "coverage-badge-creator": "1.0.13",
+    "eslint": "8.21.0",
     "json-parse-even-better-errors": "2.3.1",
     "minimist": "1.2.6",
     "mkdirp": "1.0.4",
@@ -39,8 +39,8 @@
     "uglify-js": "3.16.3",
     "uuid": "8.3.2",
     "watchify": "4.0.0",
-    "size-limit": "7.0.8",
-    "@size-limit/preset-big-lib": "7.0.8",
+    "size-limit": "8.0.0",
+    "@size-limit/preset-big-lib": "8.0.0",
 		"source-map-support": "0.5.21"
   },
   "engines": {
