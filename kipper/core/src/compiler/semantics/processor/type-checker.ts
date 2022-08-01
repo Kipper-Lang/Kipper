@@ -23,6 +23,7 @@ import {
 	kipperPlusOperator,
 	kipperReturnTypes,
 	kipperStrLikeTypes,
+	kipperSupportedConversions,
 	type KipperType,
 	kipperTypes,
 } from "../const";
@@ -30,6 +31,7 @@ import {
 	InvalidArgumentTypeError,
 	InvalidArithmeticOperationTypeError,
 	InvalidAssignmentTypeError,
+	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidReturnTypeError,
 	InvalidUnaryExpressionTypeError,
@@ -67,7 +69,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param type
 	 * @since 0.7.0
 	 */
-	public validReturnType(type: KipperType): void {
+	public validReturnType(type: string): void {
 		// If the type is not in the array of valid return types, throw an error
 		if (!kipperReturnTypes.find((t) => t === type)) {
 			throw this.assertError(new InvalidReturnTypeError(type));
@@ -215,6 +217,25 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
 			throw this.assertError(new InvalidArithmeticOperationTypeError(leftOpType, rightOpType));
+		}
+	}
+
+	/**
+	 * Asserts that the type conversion for the {@link exp} is valid.
+	 * @param exp The expression to convert.
+	 * @param type The type to convert to.
+	 * @since 0.8.0
+	 */
+	public validConversion(exp: Expression<any, any>, type: KipperType): void {
+		const originalType: KipperType = exp.getTypeSemanticData().evaluatedType;
+
+		const viableConversion = (() => {
+			// Check whether a supported pair of types exist.
+			return kipperSupportedConversions.find((types) => types[0] === originalType && types[1] === type) !== undefined;
+		})();
+		// In case that the type are not the same and no conversion is possible, throw an error!
+		if (!(originalType === type) && !viableConversion) {
+			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
 }

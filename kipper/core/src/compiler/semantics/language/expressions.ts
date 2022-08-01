@@ -42,7 +42,6 @@ import {
 	KipperBoolType,
 	type KipperBoolTypeLiterals,
 	KipperCharType,
-	kipperCharType,
 	type KipperComparativeOperator,
 	type KipperEqualityOperator,
 	kipperEqualityOperators,
@@ -1952,20 +1951,25 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * The type the {@link exp} should be converted to.
 	 * @since 0.10.0
 	 */
-	castType: KipperType;
+	castType: string;
 }
 
 /**
  * Type Semantics for AST Node {@link CastOrConvertExpression}.
  * @since 0.10.0
  */
-export interface CastOrConvertTypeSemantics extends ExpressionTypeSemantics {
+export interface CastOrConvertExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
 	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
 	 * expressions that do not explicitly show their type.
 	 * @since 0.10.0
 	 */
 	evaluatedType: KipperType;
+	/**
+	 * The type the {@link CastOrConvertExpressionSemantics.exp} should be converted to.
+	 * @since 0.10.0
+	 */
+	castType: KipperType;
 }
 
 /**
@@ -1977,7 +1981,10 @@ export interface CastOrConvertTypeSemantics extends ExpressionTypeSemantics {
  * "4" as num // 4
  * 39 as str // "39"
  */
-export class CastOrConvertExpression extends Expression<CastOrConvertExpressionSemantics, CastOrConvertTypeSemantics> {
+export class CastOrConvertExpression extends Expression<
+	CastOrConvertExpressionSemantics,
+	CastOrConvertExpressionTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -1997,7 +2004,7 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Fetching the original exp and the type using the children
 		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const type: KipperType = (<IdentifierTypeSpecifierExpression>this.children[1]).getSemanticData().type;
+		const type: string = (<IdentifierTypeSpecifierExpression>this.children[1]).getSemanticData().typeIdentifier;
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
@@ -2026,11 +2033,13 @@ export class CastOrConvertExpression extends Expression<CastOrConvertExpressionS
 		const semanticData = this.getSemanticData();
 
 		// Ensure the type can be casted/converted into the target type
-		this.programCtx.semanticCheck(this).validConversion(semanticData.exp, semanticData.castType);
+		this.programCtx.typeCheck(this).typeExists(semanticData.castType);
+		this.programCtx.typeCheck(this).validConversion(semanticData.exp, <KipperType>semanticData.castType);
 
 		this.typeSemantics = {
 			// The evaluated type of the expression is equal to the cast type
-			evaluatedType: semanticData.castType,
+			evaluatedType: <KipperType>semanticData.castType,
+			castType: <KipperType>semanticData.castType,
 		};
 	}
 

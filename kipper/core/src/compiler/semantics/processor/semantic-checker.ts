@@ -14,7 +14,6 @@ import {
 	IdentifierAlreadyUsedByVariableError,
 	InvalidAmountOfArgumentsError,
 	InvalidAssignmentError,
-	InvalidConversionTypeError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
 	UndefinedConstantError,
@@ -22,7 +21,7 @@ import {
 	UnknownIdentifierError,
 	VariableDefinitionAlreadyExistsError,
 } from "../../../errors";
-import { type KipperFunction, type KipperRef, kipperSupportedConversions, type KipperType } from "../const";
+import { type KipperFunction, type KipperRef } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
@@ -258,25 +257,6 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		const declSemanticData = decl.getSemanticData();
 		if (declSemanticData.storageType === "const" && !declSemanticData.isDefined) {
 			throw this.assertError(new UndefinedConstantError("Constant declarations must have a value."));
-		}
-	}
-
-	/**
-	 * Asserts that the type conversion for the {@link exp} is valid.
-	 * @param exp The expression to convert.
-	 * @param type The type to convert to.
-	 * @since 0.8.0
-	 */
-	public validConversion(exp: Expression<any, any>, type: KipperType): void {
-		const originalType: KipperType = exp.getTypeSemanticData().evaluatedType;
-
-		const viableConversion = (() => {
-			// Check whether a supported pair of types exist.
-			return kipperSupportedConversions.find((types) => types[0] === originalType && types[1] === type) !== undefined;
-		})();
-		// In case that the type are not the same and no conversion is possible, throw an error!
-		if (!(originalType === type) && !viableConversion) {
-			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
 }

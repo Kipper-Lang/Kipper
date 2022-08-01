@@ -242,9 +242,10 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = getTypeScriptType(semanticData.valueType);
+		const tsType = getTypeScriptType(typeData.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
@@ -425,12 +426,12 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
 	castOrConvertExpression = async (node: CastOrConvertExpression): Promise<TranslatedExpression> => {
-		// Get the semantic data
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
 		const originalType: KipperType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const destType: KipperType = semanticData.castType;
+		const destType: KipperType = typeData.castType;
 
 		if (originalType === destType) {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.

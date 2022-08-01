@@ -33,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
   - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
   - `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
+  - `ScopeFunctionDeclaration.typeData`, which returns the type data of the function AST node.
+  - `ScopeVariableDeclaration.typeData`, which returns the type data of the variable AST node.
 
 ### Changed
 

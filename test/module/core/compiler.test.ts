@@ -198,6 +198,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
 				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
@@ -211,6 +212,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -238,6 +240,7 @@ describe("KipperCompiler", () => {
 				const instance: KipperCompileResult = await compiler.compile(stream);
 
 				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -266,6 +269,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
 				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
@@ -278,6 +282,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 1, "Expected a single global function");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -290,6 +295,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 3, "Expected three global functions");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -302,6 +308,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
@@ -315,6 +322,7 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -328,6 +336,7 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -356,6 +365,7 @@ describe("KipperCompiler", () => {
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
@@ -384,6 +394,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
@@ -396,6 +407,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 2, "Expected two global variables");
@@ -408,6 +420,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 4, "Expected four global variables");
 
@@ -426,6 +439,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variable");
 
@@ -442,6 +456,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
@@ -469,6 +484,7 @@ describe("KipperCompiler", () => {
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
 				assert(instance.programCtx.globalScope.variables.length === 0, "Expected two global variables");
@@ -502,6 +518,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number;"), "Expected different TypeScript code");
 				});
@@ -513,6 +530,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 				});
@@ -522,6 +540,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("const x: number = 4;"), "Expected different TypeScript code");
 				});
@@ -533,6 +552,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;\nx = 5;"), "Expected different TypeScript code");
 				});
@@ -542,6 +562,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Expected different TypeScript code");
 				});
@@ -553,6 +574,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("__kipper.print = __kipper.print;"), "Expected different TypeScript code");
 				});
@@ -562,6 +584,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("12 * 93;"), "Expected different TypeScript code");
 					assert(instance.write().includes('"5" + "1";'), "Expected different TypeScript code");
@@ -572,6 +595,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes('__kipper.print("x");'), "Expected different TypeScript code");
 					assert(instance.write().includes('__kipper.print("y");'), "Expected different TypeScript code");
@@ -585,6 +609,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("+4;"), "Expected different TypeScript code");
 				});
@@ -594,6 +619,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("-4;"), "Expected different TypeScript code");
 				});
@@ -605,6 +631,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("!true;"), "Expected different TypeScript code");
 				});
@@ -617,6 +644,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -629,6 +657,7 @@ describe("KipperCompiler", () => {
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						console.log = (message: string) => {
 							assert(message === "Works", "Expected different output");
 						};
@@ -645,6 +674,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -673,6 +703,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -701,6 +732,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -731,6 +763,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -759,6 +792,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -787,6 +821,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -815,6 +850,7 @@ describe("KipperCompiler", () => {
 						const instance: KipperCompileResult = await compiler.compile(stream);
 
 						assert(instance.programCtx);
+						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
 						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
@@ -846,6 +882,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
@@ -874,6 +911,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
@@ -902,6 +940,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
@@ -930,6 +969,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
 					assert(
@@ -958,6 +998,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
 					assert(
@@ -986,6 +1027,7 @@ describe("KipperCompiler", () => {
 					const instance: KipperCompileResult = await compiler.compile(stream);
 
 					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
 					assert(

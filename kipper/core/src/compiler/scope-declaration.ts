@@ -8,12 +8,14 @@ import type {
 	Declaration,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
+	FunctionDeclarationTypeSemantics,
 	KipperReturnType,
 	KipperStorageType,
 	KipperType,
 	ParameterDeclaration,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
+	VariableDeclarationTypeSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";
@@ -40,20 +42,33 @@ export abstract class ScopeDeclaration {
  * @since 0.1.0
  */
 export class ScopeVariableDeclaration extends ScopeDeclaration {
-	private readonly semanticData: VariableDeclarationSemantics;
+	private readonly _node: VariableDeclaration;
 
-	public constructor(
-		// eslint-disable-next-line no-unused-vars
-		private _node: VariableDeclaration,
-	) {
+	public constructor(node: VariableDeclaration) {
 		super();
-
-		// Ensure the token is valid
-		this.semanticData = _node.getSemanticData();
+		this._node = node;
 	}
 
 	/**
-	 * Returns the {@link VariableDeclaration token} this scope declaration bases on.
+	 * The semantic data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
+	 * @private
+	 */
+	private get semanticData(): VariableDeclarationSemantics {
+		return this._node.getSemanticData();
+	}
+
+	/**
+	 * The type data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
+	 * @private
+	 */
+	private get typeData(): VariableDeclarationTypeSemantics {
+		return this._node.getTypeSemanticData();
+	}
+
+	/**
+	 * Returns the {@link VariableDeclaration AST node} this scope declaration bases on.
 	 */
 	public get node(): VariableDeclaration {
 		return this._node;
@@ -70,7 +85,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * The variable type or return type of this variable.
 	 */
 	public get type(): KipperType {
-		return this.semanticData.valueType;
+		return this.typeData.valueType;
 	}
 
 	/**
@@ -100,20 +115,33 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
  * @since 0.1.2
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
-	private readonly semanticData: FunctionDeclarationSemantics;
+	private readonly _node: FunctionDeclaration;
 
-	public constructor(
-		// eslint-disable-next-line no-unused-vars
-		private _node: FunctionDeclaration,
-	) {
+	public constructor(node: FunctionDeclaration) {
 		super();
-
-		// Ensure the token is valid
-		this.semanticData = _node.getSemanticData();
+		this._node = node;
 	}
 
 	/**
-	 * Returns the {@link FunctionDeclaration token} this scope function declaration bases on.
+	 * The semantic data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
+	 * @private
+	 */
+	private get semanticData(): FunctionDeclarationSemantics {
+		return this._node.getSemanticData();
+	}
+
+	/**
+	 * The type data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
+	 * @private
+	 */
+	private get typeData(): FunctionDeclarationTypeSemantics {
+		return this._node.getTypeSemanticData();
+	}
+
+	/**
+	 * Returns the {@link FunctionDeclaration AST node} this scope function declaration bases on.
 	 */
 	public get node(): FunctionDeclaration {
 		return this._node;
@@ -130,7 +158,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
 	public get returnType(): KipperReturnType {
-		return this.semanticData.returnType;
+		return this.typeData.returnType;
 	}
 
 	/**

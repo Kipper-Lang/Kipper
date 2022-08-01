@@ -9,18 +9,17 @@ import type {
 	TargetASTNodeSemanticAnalyser,
 	TranslatedCodeLine,
 } from "../semantics";
-import type { KipperParser } from "./index";
-import type { TypeData } from "./index";
+import type { KipperParser, TypeData } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperCompileTarget } from "../compile-target";
 import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
+import { ParserASTNode } from "./ast-node";
 import type { Scope } from "../scope";
 import type { EvaluatedCompileConfig } from "../compiler";
 import { KipperError, UndefinedSemanticsError } from "../../errors";
-import { ParserASTNode } from "./ast-node";
 
 /**
  * An eligible parent for a compilable node.
@@ -220,7 +219,7 @@ export abstract class CompilableASTNode<
 
 					// If the semantic data wasn't evaluated, return as that means the logical evaluation of this item failed.
 					// Otherwise, continue with the semantic data that is present.
-					if (!child.semanticData) {
+					if (!child.semanticData || !child.typeSemantics) {
 						return;
 					}
 				} else if (e instanceof UndefinedSemanticsError) {
