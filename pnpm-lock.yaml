@@ -28,6 +28,7 @@ specifiers:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.0.0
+  source-map-support: 0.5.21
   ts-mocha: 10.0.0
   ts-node: 10.9.1
   tsify: 5.0.4
@@ -69,6 +70,7 @@ devDependencies:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.0.0
+  source-map-support: 0.5.21
   ts-mocha: 10.0.0_mocha@10.0.0
   ts-node: 10.9.1_smgpfffxrhk5i4ijhe3532b4hq
   tsify: 5.0.4_ihds425jv7utpzcxj6k6gl5i4e
@@ -5802,7 +5804,7 @@ packages:
     dev: true
 
   /source-map/0.5.7:
-    resolution: {integrity: sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=}
+    resolution: {integrity: sha512-LbrmJOMUSdEVxIKvdcJzQC+nQhe8FUZQTXQy6+I75skNgn3OoQ0DZA8YnFa7gp8tqtL3KPf1kmo0R5DoApeSGQ==}
     engines: {node: '>=0.10.0'}
     dev: true
 
