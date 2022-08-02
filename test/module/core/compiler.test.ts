@@ -512,7 +512,7 @@ describe("KipperCompiler", () => {
 		});
 
 		describe("basics", () => {
-			describe("declaration", () => {
+			describe("Declaration", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -524,7 +524,7 @@ describe("KipperCompiler", () => {
 				});
 			});
 
-			describe("definition", () => {
+			describe("Definition", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num = 4;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -546,7 +546,7 @@ describe("KipperCompiler", () => {
 				});
 			});
 
-			describe("assignment", () => {
+			describe("Assignment", () => {
 				it("num", async () => {
 					const stream = new KipperParseStream("var x: num = 4;\nx = 5;");
 					const instance: KipperCompileResult = await compiler.compile(stream);
@@ -637,7 +637,7 @@ describe("KipperCompiler", () => {
 				});
 			});
 
-			describe("logical expressions", () => {
+			describe("Logical expressions", () => {
 				describe("Logical AND", () => {
 					it("true && true", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 && x < 5) { call print("Works"); }');
