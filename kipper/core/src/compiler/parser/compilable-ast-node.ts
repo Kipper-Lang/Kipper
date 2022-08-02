@@ -19,7 +19,7 @@ import type { SemanticData } from "./ast-node";
 import { ParserASTNode } from "./ast-node";
 import type { Scope } from "../scope";
 import type { EvaluatedCompileConfig } from "../compiler";
-import { KipperError, UndefinedSemanticsError } from "../../errors";
+import { KipperError } from "../../errors";
 
 /**
  * An eligible parent for a compilable node.

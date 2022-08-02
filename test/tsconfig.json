@@ -1,12 +1,13 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+		"sourceMap": true,
     "noEmit": true,
     "rootDir": ".",
     "noImplicitAny": false
   },
   "files": [
-    "../kipper/**/*.ts",
+    "../kipper/*.ts",
     "../kipper/core/src/**/*.ts",
     "../kipper/cli/src/**/*.ts",
   ],
@@ -25,6 +26,7 @@
 		"node_modules",
 		"lib",
 		"dist",
-		"**/*.spec.ts"
+		"**/*.spec.ts",
+		"**/*.d.ts"
 	]
 }

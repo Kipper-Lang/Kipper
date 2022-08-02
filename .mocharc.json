@@ -4,11 +4,13 @@
   "exit": true,
   "recursive": true,
   "reporter": "spec",
-  "require": "ts-node/register",
-  "extensions": ["ts", "tsx"],
-  "spec": [
-    "**/*.test.ts"
-  ],
+  "require": [
+		"ts-node/register",
+		"source-map-support/register"
+	],
+	"spec": [
+		"**/*.test.ts"
+	],
   "watch-files": [
     "test/**/*.ts",
     "kipper/cli/src/**/*.ts",
