@@ -226,10 +226,6 @@ export abstract class CompilableASTNode<
 					if (!child.semanticData) {
 						incompleteSemantics = true;
 					}
-				} else if (e instanceof UndefinedSemanticsError) {
-					// If the child was unable to determine its semantic data, abort the evaluation of this node
-					// This error should never be visible to the user!
-					incompleteSemantics = true;
 				} else {
 					throw e;
 				}
@@ -258,6 +254,12 @@ export abstract class CompilableASTNode<
 		let incompleteSemantics: boolean = false;
 		for (let child of this.children) {
 			try {
+				// If no semantic data is present, abort processing this item, as there were already semantic errors
+				// (For now will not bother performing any error recovery, like fixing types or auto-casting)
+				if (!child.semanticData) {
+					return;
+				}
+
 				await child.semanticTypeChecking();
 			} catch (e) {
 				// Try recovering from the error if it is enabled
@@ -270,10 +272,6 @@ export abstract class CompilableASTNode<
 					if (!child.typeSemantics) {
 						incompleteSemantics = true;
 					}
-				} else if (e instanceof UndefinedSemanticsError) {
-					// If the child was unable to determine its semantic data, abort the evaluation of this node
-					// This error should never be visible to the user!
-					incompleteSemantics = true;
 				} else {
 					throw e;
 				}
@@ -303,6 +301,13 @@ export abstract class CompilableASTNode<
 		// Start with the evaluation of the children
 		for (let child of this.children) {
 			try {
+				// If no semantic data or type data is present, abort processing this item, as there were already semantic
+				// or type errors.
+				// (For now will not bother performing any error recovery, like fixing types or auto-casting)
+				if (!child.semanticData || !child.typeSemantics) {
+					return;
+				}
+
 				await child.wrapUpSemanticAnalysis();
 			} catch (e) {
 				// Try recovering from the error if it is enabled

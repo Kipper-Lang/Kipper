@@ -133,6 +133,11 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		// Perform type-checking based on the existing AST nodes and evaluated semantics
 		for (let child of this.children) {
 			try {
+				// If the child has failed to process, avoid type checking
+				if (!child.semanticData) {
+					continue;
+				}
+
 				await child.semanticTypeChecking();
 			} catch (e) {
 				await this.handleSemanticError(<Error>e);
@@ -142,6 +147,11 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		// Perform wrap-up semantic analysis for the specified target
 		for (let child of this.children) {
 			try {
+				// If the child has failed to process, avoid wrap-up semantic analysis
+				if (!child.semanticData || !child.typeSemantics) {
+					continue;
+				}
+
 				await child.wrapUpSemanticAnalysis();
 			} catch (e) {
 				await this.handleSemanticError(<Error>e);
@@ -151,6 +161,12 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		// Check for warnings, if they are enabled
 		if (this.compileConfig.warnings) {
 			for (let child of this.children) {
+				// If the child has failed to process, avoid checking for warnings
+				if (!child.semanticData || !child.typeSemantics) {
+					continue;
+				}
+
+				// TODO! Implement proper recursive handling for warnings
 				await child.checkForWarnings();
 			}
 		}

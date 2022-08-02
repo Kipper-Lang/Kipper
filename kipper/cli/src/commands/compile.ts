@@ -75,14 +75,22 @@ export default class Compile extends Command {
 			description: "Show the timestamp of each log message.",
 			allowNo: true,
 		}),
-
-		// TODO! Add new options '--recover' and '--abort-on-first-error'
+		"recover": flags.boolean({
+			default: true,
+			description: "Recover from compiler errors and log all detected semantic issues.",
+			allowNo: true,
+		}),
+		"abort-on-first-error": flags.boolean({
+			default: false,
+			description: "Abort on the first error the compiler encounters.",
+			allowNo: true,
+		}),
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Compile);
 
-		// If 'logTimestamp' is set, set the logger to use the timestamp
+		// If 'log-timestamp' is set, set the logger to use the timestamp
 		if (flags["log-timestamp"]) {
 			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
 		}
@@ -111,6 +119,8 @@ export default class Compile extends Command {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],
 					},
+					recover: flags["recover"],
+					abortOnFirstError: flags["abort-on-first-error"],
 				},
 			);
 
