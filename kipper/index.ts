@@ -9,7 +9,7 @@ export * from "@kipper/core";
 // eslint-disable-next-line no-unused-vars
 export const name = "kipper";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.10.0-alpha.0";
+export const version = "0.10.0-alpha.1";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars
