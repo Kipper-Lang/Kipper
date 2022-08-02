@@ -11,8 +11,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeChild, compilableNodeParent, NoSemantics } from "../../parser/";
-import { IfStatementContext, SwitchStatementContext } from "../../parser/";
+import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
+import { IfStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -25,7 +25,7 @@ import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
 import { LocalScope } from "../../local-scope";
-import { KipperNotImplementedError, UnableToDetermineMetadataError } from "../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 
 /**
  * Every antlr4 statement ctx type
@@ -49,7 +49,7 @@ export class StatementASTNodeFactory {
 	 * @param parent The file context class that will be assigned to the instance.
 	 * @since 0.9.0
 	 */
-	public static create(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any> {
+	public static create(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any, any> {
 		if (antlrRuleCtx instanceof CompoundStatementContext) {
 			return new CompoundStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IfStatementContext) {
@@ -72,7 +72,10 @@ export class StatementASTNodeFactory {
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
-export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> {
+export abstract class Statement<
+	Semantics extends SemanticData,
+	TypeSemantics extends TypeData,
+> extends CompilableASTNode<Semantics, TypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -111,7 +114,7 @@ export abstract class Statement<Semantics> extends CompilableASTNode<Semantics> 
  * Compound statement class, which represents a compound statement containing other items in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  */
-export class CompoundStatement extends Statement<NoSemantics> {
+export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -119,7 +122,7 @@ export class CompoundStatement extends Statement<NoSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: CompoundStatementContext;
 
-	protected readonly _children: Array<Statement<any>>;
+	protected readonly _children: Array<Statement<any, any>>;
 
 	private readonly _localScope: LocalScope;
 
@@ -133,7 +136,7 @@ export class CompoundStatement extends Statement<NoSemantics> {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Statement<any>> {
+	public get children(): Array<Statement<any, any>> {
 		return this._children;
 	}
 
@@ -165,7 +168,7 @@ export class CompoundStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
+	public primarySemanticTypeChecking(): Promise<void> {
 		// Compound statements will never have type checking
 		return Promise.resolve(undefined);
 	}
@@ -189,17 +192,17 @@ export class CompoundStatement extends Statement<NoSemantics> {
  * Semantics for AST Node {@link IfStatement}.
  * @since 0.9.0
  */
-export interface IfStatementSemantics {
+export interface IfStatementSemantics extends SemanticData {
 	/**
 	 * The condition of the if-statement.
 	 * @since 0.9.0
 	 */
-	condition: Expression<any>;
+	condition: Expression<any, any>;
 	/**
 	 * The body of the if-statement.
 	 * @since 0.9.0
 	 */
-	statementBody: Statement<any>;
+	statementBody: Statement<any, any>;
 	/**
 	 * The alternative branch of the if-statement, which is optional. This alternative branch can either be:
 	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
@@ -207,14 +210,14 @@ export interface IfStatementSemantics {
 	 * - Or an else-if branch, if the type is another {@link IfStatement}.
 	 * @since 0.9.0
 	 */
-	alternativeBranch?: IfStatement | Statement<any>;
+	alternativeBranch?: IfStatement | Statement<any, any>;
 }
 
 /**
  * If statement class, which represents if, else-if and else statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class IfStatement extends Statement<IfStatementSemantics> {
+export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -222,7 +225,7 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: IfStatementContext;
 
-	protected readonly _children: Array<Expression<any> | Statement<any>>;
+	protected readonly _children: Array<Expression<any, any> | Statement<any, any>>;
 
 	constructor(antlrRuleCtx: IfStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -236,7 +239,7 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 	 * May contain both {@link Expression expressions} and {@link Statement statements}, as it will always contain
 	 * an expression at index 03 to represent the condition.
 	 */
-	public get children(): Array<Expression<any> | Statement<any>> {
+	public get children(): Array<Expression<any, any> | Statement<any, any>> {
 		return this._children;
 	}
 
@@ -253,14 +256,14 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// There will be always at least two children
-		const condition: Expression<any> = <Expression<any>>this.children[0];
-		const body: Statement<any> = <Statement<any>>this.children[1];
-		const alternativeBranch: IfStatement | Statement<any> | null =
-			this.children.length > 2 ? <IfStatement | Statement<any>>this.children[2] : null;
+		const condition: Expression<any, any> = <Expression<any, any>>this.children[0];
+		const body: Statement<any, any> = <Statement<any, any>>this.children[1];
+		const alternativeBranch: IfStatement | Statement<any, any> | null =
+			this.children.length > 2 ? <IfStatement | Statement<any, any>>this.children[2] : null;
 
 		// Ensure that the children are fully present and not undefined
 		if (!condition || !body) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
@@ -275,7 +278,7 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -297,7 +300,7 @@ export class IfStatement extends Statement<IfStatementSemantics> {
 /**
  * Switch statement class, which represents a switch selection statement in the Kipper language.
  */
-export class SwitchStatement extends Statement<NoSemantics> {
+export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -305,7 +308,7 @@ export class SwitchStatement extends Statement<NoSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
 
-	protected readonly _children: Array<Statement<any>>;
+	protected readonly _children: Array<Statement<any, any>>;
 
 	constructor(antlrRuleCtx: SwitchStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -316,7 +319,7 @@ export class SwitchStatement extends Statement<NoSemantics> {
 	/**
 	 * The children of this AST node.
 	 */
-	public get children(): Array<Statement<any>> {
+	public get children(): Array<Statement<any, any>> {
 		return this._children;
 	}
 
@@ -342,7 +345,7 @@ export class SwitchStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -364,7 +367,7 @@ export class SwitchStatement extends Statement<NoSemantics> {
 /**
  * Expression statement class, which represents a statement made up of an expression in the Kipper language.
  */
-export class ExpressionStatement extends Statement<NoSemantics> {
+export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -372,7 +375,7 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
 
-	protected readonly _children: Array<Expression<any>>;
+	protected readonly _children: Array<Expression<any, any>>;
 
 	constructor(antlrRuleCtx: ExpressionStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -383,7 +386,7 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Expression<any>> {
+	public get children(): Array<Expression<any, any>> {
 		return this._children;
 	}
 
@@ -408,7 +411,7 @@ export class ExpressionStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public semanticTypeChecking(): Promise<void> {
+	public primarySemanticTypeChecking(): Promise<void> {
 		// Expression statements will never have type checking
 		return Promise.resolve(undefined);
 	}
@@ -433,7 +436,7 @@ export class ExpressionStatement extends Statement<NoSemantics> {
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class IterationStatement extends Statement<NoSemantics> {
+export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -478,7 +481,7 @@ export class IterationStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -501,7 +504,7 @@ export class IterationStatement extends Statement<NoSemantics> {
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<NoSemantics> {
+export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -509,7 +512,7 @@ export class JumpStatement extends Statement<NoSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: JumpStatementContext;
 
-	protected readonly _children: Array<Expression<any>>;
+	protected readonly _children: Array<Expression<any, any>>;
 
 	constructor(antlrRuleCtx: JumpStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -520,7 +523,7 @@ export class JumpStatement extends Statement<NoSemantics> {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Expression<any>> {
+	public get children(): Array<Expression<any, any>> {
 		return this._children;
 	}
 
@@ -546,7 +549,7 @@ export class JumpStatement extends Statement<NoSemantics> {
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 

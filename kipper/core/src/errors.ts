@@ -46,8 +46,7 @@ export interface TracebackMetadata {
 
 /**
  * The base error for the Kipper module. If a compiler error occurs in the Kipper module, this error is thrown.
- *
- * Ifv{@link isWarning} is set to true, then this error is a warning and will not cause the compiler to exit.
+ * @since 0.1.0
  */
 export class KipperError extends Error {
 	/**
@@ -63,13 +62,7 @@ export class KipperError extends Error {
 	 */
 	public antlrCtx?: ParserRuleContext;
 
-	/**
-	 * If true this error is a warning and does not cause the compiler to exit with an error.
-	 * @since 0.9.0
-	 */
-	public readonly isWarning: boolean = false;
-
-	constructor(msg: string, isWarning?: boolean, token?: ParserRuleContext) {
+	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
 		this.name = this.constructor.name;
 		this.tracebackData = {
@@ -79,7 +72,6 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 		};
 		this.antlrCtx = token;
-		this.isWarning = isWarning ?? false;
 	}
 
 	/**
@@ -173,6 +165,19 @@ export class KipperError extends Error {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
 		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
+	}
+}
+
+/**
+ * Warning, which is thrown whenever a compiler encounters an item that could potentially be problematic that it can
+ * not solve itself.
+ *
+ * This is primarily like a {@link KipperError}, but should be not used as one.
+ * @since 0.10.0
+ */
+export class KipperWarning extends KipperError {
+	constructor(msg: string, token?: ParserRuleContext) {
+		super(msg, token);
 	}
 }
 
@@ -412,7 +417,7 @@ export class InvalidReturnTypeError extends TypeError {
  */
 export class InvalidArithmeticOperationTypeError extends TypeError {
 	constructor(firstType: string, secondType: string) {
-		super(`Invalid arithmetic operation between types '${firstType}' and '${secondType}'.`);
+		super(`Invalid arithmetic operation between operands of type '${firstType}' and '${secondType}'.`);
 	}
 }
 
@@ -528,12 +533,13 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
 }
 
 /**
- * Error that is thrown whenever a token is unable to fetch its metadata from the antlr4 context instances or a
- * compilation is started without the required semantic data.
+ * Error that is thrown whenever an {@link ParserASTNode} can not determine its own metadata and fails to process
+ * itself during {@link CompilableASTNode.semanticAnalysis semantic analysis}.
+ * @since 0.6.0
  */
-export class UnableToDetermineMetadataError extends KipperInternalError {
+export class UnableToDetermineSemanticDataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more parse tree or AST nodes.`);
+		super(`Failed to determine metadata for one or more AST nodes.`);
 	}
 }
 

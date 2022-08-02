@@ -9,7 +9,7 @@ import type {
 	TargetASTNodeSemanticAnalyser,
 	TranslatedCodeLine,
 } from "../semantics";
-import type { KipperParser } from "./index";
+import type { KipperParser, TypeData } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { KipperCompileTarget } from "../compile-target";
@@ -18,24 +18,29 @@ import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
 import { ParserASTNode } from "./ast-node";
 import type { Scope } from "../scope";
+import type { EvaluatedCompileConfig } from "../compiler";
+import { KipperError, UndefinedSemanticsError } from "../../errors";
 
 /**
  * An eligible parent for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeParent = CompilableASTNode<any> | RootASTNode;
+export type compilableNodeParent = CompilableASTNode<any, any> | RootASTNode;
 
 /**
  * An eligible child for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeChild = CompilableASTNode<any>;
+export type compilableNodeChild = CompilableASTNode<any, any>;
 
 /**
  * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
-export abstract class CompilableASTNode<Semantics extends SemanticData> extends ParserASTNode<Semantics> {
+export abstract class CompilableASTNode<
+	Semantics extends SemanticData,
+	TypeSemantics extends TypeData,
+> extends ParserASTNode<Semantics, TypeSemantics> {
 	public _scopeCtx: CompoundStatement | KipperProgramContext | undefined;
 
 	protected _parent: compilableNodeParent;
@@ -71,7 +76,7 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: compilableNodeChild) {
+	public addNewChild(newChild: compilableNodeChild): void {
 		this._children.push(newChild);
 	}
 
@@ -134,6 +139,15 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	}
 
 	/**
+	 * The compilation config for this program.
+	 * @private
+	 * @since 0.10.0
+	 */
+	public get compileConfig(): EvaluatedCompileConfig {
+		return this.programCtx.compileConfig;
+	}
+
+	/**
 	 * The {@link scope} of this AST node.
 	 * @since 0.8.0
 	 */
@@ -185,30 +199,128 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	}
 
 	/**
-	 * Semantically analyses the code inside this AST node.
+	 * Semantically analyses the code inside this AST node and all {@link this.children children nodes}.
 	 *
 	 * This function will recursively call itself on the {@link this.children} instances and analyse the deepest children
 	 * nodes first, working up as the tokens get more complex. This way the parent tokens can access the semantics of
 	 * the children and properly process itself.
+	 *
+	 * This function will set the {@link this.semanticData} property and allow the use of {@link this.getSemanticData},
+	 * without getting any error.
 	 * @since 0.8.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
-		// Start with the children, and then work upwards as the structures get more complex
+		// Start with the evaluation of the children
+		let incompleteSemantics: boolean = false;
 		for (let child of this.children) {
-			// The child will likely also have its own children, which need to be also called first before the parent node
-			// can be processed.
-			await child.semanticAnalysis();
+			try {
+				await child.semanticAnalysis();
+			} catch (e) {
+				// Try recovering from the error if it is enabled
+				// Option 'abortOnFirstError' overwrites 'recover' per default
+				if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+					this.programCtx.addError(e);
+
+					// If the semantic data wasn't evaluated, return as that means the logical evaluation of this item failed.
+					// Otherwise, continue with the semantic data that is present.
+					if (!child.semanticData) {
+						incompleteSemantics = true;
+					}
+				} else {
+					throw e;
+				}
+			}
+		}
+
+		// If an error was thrown, then the semantic analysis of this node failed and should be aborted.
+		// For now, we will not try to perform more advanced error recovery, like for example using a symbol table
+		// (Therefore we also still try to handle 'UndefinedSemanticsError' errors, as there can be cases, where semantic
+		// data is missing and there is no proper way to recover from it or try to fix the issue
+		if (incompleteSemantics) {
+			return;
 		}
 
 		// Finally, check if this node is semantically valid
 		await this.primarySemanticAnalysis();
-		await this.semanticTypeChecking();
-		await this.targetSemanticAnalysis(this);
+	}
 
-		// Check for warnings after the semantic analysis has been completed
-		if (this.programCtx.reportWarnings) {
-			await this.checkForWarnings();
+	/**
+	 * Performs type checking on this AST node and all {@link this.children children nodes}. This uses the
+	 * {@link this.semanticData semantic data} that was evaluated during {@link this.semanticAnalysis semantic analysis}.
+	 * @since 0.10.0
+	 */
+	public async semanticTypeChecking(): Promise<void> {
+		// Start with the evaluation of the children
+		let incompleteSemantics: boolean = false;
+		for (let child of this.children) {
+			try {
+				// If no semantic data is present, abort processing this item, as there were already semantic errors
+				// (For now will not bother performing any error recovery, like fixing types or auto-casting)
+				if (!child.semanticData) {
+					return;
+				}
+
+				await child.semanticTypeChecking();
+			} catch (e) {
+				// Try recovering from the error if it is enabled
+				// Option 'abortOnFirstError' overwrites 'recover' per default
+				if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+					this.programCtx.addError(e);
+
+					// If the semantic data wasn't evaluated, return as that means the logical evaluation of this item failed.
+					// Otherwise, continue with the semantic data that is present.
+					if (!child.typeSemantics) {
+						incompleteSemantics = true;
+					}
+				} else {
+					throw e;
+				}
+			}
 		}
+
+		// If an error was thrown, then the semantic analysis of this node failed and should be aborted.
+		// For now, we will not try to perform more advanced error recovery, like for example using a symbol table
+		// (Therefore we also still try to handle 'UndefinedSemanticsError' errors, as there can be cases, where semantic
+		// data is missing and there is no proper way to recover from it or try to fix the issue
+		if (incompleteSemantics) {
+			return;
+		}
+
+		// Finally, check if this node's type data is semantically valid
+		await this.primarySemanticTypeChecking();
+	}
+
+	/**
+	 * Wrap-up semantic analysis, which analyses this AST node and all {@link this.children children nodes}, and
+	 * checks whether they are semantically valid for the {@link this.target target language}. This uses the
+	 * {@link this.semanticData semantic data} and {@link this.typeData type data} that was evaluated during the
+	 * {@link this.semanticAnalysis semantic analysis} and {@link this.semanticTypeChecking type checking}.
+	 * @since 0.10.0
+	 */
+	public async wrapUpSemanticAnalysis(): Promise<void> {
+		// Start with the evaluation of the children
+		for (let child of this.children) {
+			try {
+				// If no semantic data or type data is present, abort processing this item, as there were already semantic
+				// or type errors.
+				// (For now will not bother performing any error recovery, like fixing types or auto-casting)
+				if (!child.semanticData || !child.typeSemantics) {
+					return;
+				}
+
+				await child.wrapUpSemanticAnalysis();
+			} catch (e) {
+				// Try recovering from the error if it is enabled
+				// Option 'abortOnFirstError' overwrites 'recover' per default
+				if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+					this.programCtx.addError(e);
+				} else {
+					throw e;
+				}
+			}
+		}
+
+		await this.targetSemanticAnalysis(this);
 	}
 
 	/**
@@ -223,7 +335,7 @@ export abstract class CompilableASTNode<Semantics extends SemanticData> extends 
 	 * @throws TypeError When a type mismatch or invalid usage is encountered.
 	 * @since 0.8.0
 	 */
-	public abstract semanticTypeChecking(): Promise<void>;
+	public abstract primarySemanticTypeChecking(): Promise<void>;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

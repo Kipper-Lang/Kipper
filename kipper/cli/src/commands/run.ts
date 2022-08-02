@@ -10,17 +10,17 @@ import {
 	KipperCompiler,
 	KipperCompileResult,
 	KipperError,
+	KipperLogger,
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
-import { KipperLogger } from "@kipper/core";
-import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
+import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { writeCompilationResult } from "../compile";
+import { getFile, writeCompilationResult } from "../compile";
 import { spawn } from "child_process";
-import { KipperInvalidInputError } from "../errors";
 import * as ts from "typescript";
 import { IFlag } from "@oclif/command/lib/flags";
+import { Logger } from "tslog";
 
 /**
  * Run the Kipper program.
@@ -41,7 +41,7 @@ export function executeKipperProgram(jsCode: string) {
 }
 
 export default class Run extends Command {
-	static description = "Compiles and executes a Kipper program.";
+	static description = "Compile and execute a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
@@ -74,17 +74,13 @@ export default class Run extends Command {
 		"optimise-internals": flags.boolean({
 			char: "i",
 			default: <boolean>defaultOptimisationOptions.optimiseInternals,
-			description:
-				"If set to true, the internal functions of the compiled code will be optimised using tree-shaking " +
-				"reducing the size of the output.",
+			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
 			default: <boolean>defaultOptimisationOptions.optimiseInternals,
-			description:
-				"If set to true, the built-in functions of the compiled code will be optimised using tree-shaking " +
-				"reducing the size of the output.",
+			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		warnings: flags.boolean({
@@ -93,22 +89,35 @@ export default class Run extends Command {
 			description: "Show warnings that were emitted during the compilation.",
 			allowNo: true,
 		}),
+		"log-timestamp": flags.boolean({
+			default: false,
+			description: "Show the timestamp of each log message.",
+			allowNo: true,
+		}),
+		recover: flags.boolean({
+			default: true,
+			description: "Recover from compiler errors and display all detected compiler errors.",
+			allowNo: true,
+		}),
+		"abort-on-first-error": flags.boolean({
+			default: false,
+			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
+			allowNo: true,
+		}),
 	};
 
 	async run() {
 		const { args, flags } = this.parse(Run);
-		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.ERROR, flags["warnings"]);
-		const compiler = new KipperCompiler(logger);
 
-		// Fetch the file
-		let file: KipperParseFile | KipperParseStream;
-		if (args.file) {
-			file = await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
-		} else if (flags["string-code"]) {
-			file = await new KipperParseStream(flags["string-code"]);
-		} else {
-			throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
+		// If 'log-timestamp' is set, set the logger to use the timestamp
+		if (flags["log-timestamp"]) {
+			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
 		}
+
+		// Input data for this run
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
+		const compiler = new KipperCompiler(logger);
+		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
 
 		let result: KipperCompileResult;
 		try {
@@ -125,8 +134,15 @@ export default class Run extends Command {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],
 					},
+					recover: flags["recover"],
+					abortOnFirstError: flags["abort-on-first-error"],
 				},
 			);
+
+			// If the compilation failed, abort
+			if (!result.success) {
+				return;
+			}
 
 			await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
 
@@ -134,8 +150,7 @@ export default class Run extends Command {
 			const jsProgram = ts.transpileModule(result.write(), { compilerOptions: { module: ts.ModuleKind.CommonJS } });
 			executeKipperProgram(jsProgram.outputText);
 		} catch (e) {
-			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
-			// output of the error and traceback.
+			// In case the error is not a KipperError, throw it as an internal error (this should not happen)
 			if (!(e instanceof KipperError)) {
 				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
 			}

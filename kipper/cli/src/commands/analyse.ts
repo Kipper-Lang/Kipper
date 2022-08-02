@@ -5,15 +5,14 @@
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperError, KipperParseStream, LogLevel } from "@kipper/core";
-import { KipperLogger } from "@kipper/core";
+import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { defaultCliEmitHandler, defaultCliLogger } from "../logger";
+import { CLIEmitHandler, defaultCliLogger } from "../logger";
 import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 
 export default class Analyse extends Command {
-	static description = "Analyses a file and validates its syntax and semantic integrity.";
+	static description = "Analyse a Kipper file and validate its syntax and semantic integrity.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
@@ -47,7 +46,7 @@ export default class Analyse extends Command {
 
 	async run() {
 		const { args, flags } = this.parse(Analyse);
-		const logger = new KipperLogger(defaultCliEmitHandler, LogLevel.INFO, flags["warnings"]);
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Fetch the file

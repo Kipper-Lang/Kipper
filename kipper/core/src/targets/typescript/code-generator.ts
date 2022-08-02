@@ -242,9 +242,10 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = getTypeScriptType(semanticData.valueType);
+		const tsType = getTypeScriptType(typeData.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
@@ -425,12 +426,12 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link CastOrConvertExpression} into the typescript language.
 	 */
 	castOrConvertExpression = async (node: CastOrConvertExpression): Promise<TranslatedExpression> => {
-		// Get the semantic data
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
-		const originalType: KipperType = semanticData.exp.getSemanticData().evaluatedType;
-		const destType: KipperType = semanticData.type;
+		const originalType: KipperType = semanticData.exp.getTypeSemanticData().evaluatedType;
+		const destType: KipperType = typeData.castType;
 
 		if (originalType === destType) {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
@@ -448,8 +449,8 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
 
-		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
-		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 
@@ -460,8 +461,8 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
 
-		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
-		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 
@@ -472,14 +473,14 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.9.0
 	 */
 	private async translateOperatorExpressionWithOperands(
-		node: ComparativeExpression<any> | LogicalExpression<any>,
+		node: ComparativeExpression<any, any> | LogicalExpression<any, any>,
 	): Promise<TranslatedExpression> {
 		// Get the semantic data
 		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
 
 		// Generate the code for the operands
-		const exp1: TranslatedExpression = await semanticData.exp1.translateCtxAndChildren();
-		const exp2: TranslatedExpression = await semanticData.exp2.translateCtxAndChildren();
+		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
+		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 
 		let operator: string = semanticData.operator;
 
@@ -531,9 +532,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-
-		// Get the identifier of the reference
-		let identifier = semanticData.identifier.getSemanticData().identifier;
+		let identifier = semanticData.identifier;
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.

@@ -13,10 +13,11 @@ import type { KipperCompileTarget } from "./compile-target";
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
-import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
+import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { Reference } from "./reference";
 import { GlobalScope } from "./global-scope";
+import { EvaluatedCompileConfig } from "./compiler";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -27,7 +28,9 @@ export class KipperProgramContext {
 
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	private _warnings: Array<KipperError>;
+	private _errors: Array<KipperError>;
+
+	private _warnings: Array<KipperWarning>;
 
 	private _abstractSyntaxTree: RootASTNode | undefined;
 
@@ -107,6 +110,13 @@ export class KipperProgramContext {
 	public readonly lexer: KipperLexer;
 
 	/**
+	 * The compilation config for this program.
+	 * @private
+	 * @since 0.10.0
+	 */
+	public readonly compileConfig: EvaluatedCompileConfig;
+
+	/**
 	 * The logger that should be used to log warnings and errors.
 	 */
 	public logger: KipperLogger;
@@ -131,15 +141,6 @@ export class KipperProgramContext {
 	 */
 	public builtIns: Array<BuiltInFunction>;
 
-	/**
-	 * If set to true, the compiler will check for warnings and report them to the logger and store them in
-	 * {@link this.warnings}.
-	 *
-	 * If set to false, the warnings check will be skipped and {@link this.warnings} will be always empty.
-	 * @since 0.9.0
-	 */
-	public reportWarnings: boolean;
-
 	constructor(
 		stream: KipperParseStream,
 		parseTreeEntry: CompilationUnitContext,
@@ -148,10 +149,10 @@ export class KipperProgramContext {
 		logger: KipperLogger,
 		target: KipperCompileTarget,
 		internals: Array<InternalFunction>,
+		compileConfig: EvaluatedCompileConfig,
 		semanticChecker?: KipperSemanticChecker,
 		typeChecker?: KipperTypeChecker,
 		optimiser?: KipperOptimiser,
-		reportWarnings: boolean = true,
 	) {
 		this.logger = logger;
 		this.target = target;
@@ -162,7 +163,7 @@ export class KipperProgramContext {
 		this.parser = parser;
 		this.lexer = lexer;
 		this.builtIns = [];
-		this.reportWarnings = reportWarnings;
+		this.compileConfig = compileConfig;
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this._globalScope = new GlobalScope(this);
@@ -170,6 +171,7 @@ export class KipperProgramContext {
 		this._builtInReferences = [];
 		this._internalReferences = [];
 		this._warnings = [];
+		this._errors = [];
 	}
 
 	/**
@@ -178,7 +180,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
-	public semanticCheck(ctx: CompilableASTNode<any> | undefined): KipperSemanticChecker {
+	public semanticCheck(ctx: CompilableASTNode<any, any> | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
 		this.semanticChecker.setTracebackData({ ctx });
 		return this.semanticChecker;
@@ -190,7 +192,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */
-	public typeCheck(ctx: CompilableASTNode<any> | undefined): KipperTypeChecker {
+	public typeCheck(ctx: CompilableASTNode<any, any> | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
 		this.typeChecker.setTracebackData({ ctx });
 		return this.typeChecker;
@@ -285,8 +287,8 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the processed parse tree, which is a converted antlr4 parse tree in a customised Kipper form, which allows
-	 * it to be used for semantic analysis and translation to typescript.
+	 * Returns the abstract syntax tree, which is a converted antlr4 parse tree in a specialised Kipper form, which allows
+	 * it to be used for semantic analysis and translation to other languages.
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
@@ -301,24 +303,44 @@ export class KipperProgramContext {
 	 * problematic, which do not prevent the program from being compiled.
 	 * @since 0.9.0
 	 */
-	public get warnings(): Array<KipperError> {
+	public get warnings(): Array<KipperWarning> {
 		return this._warnings;
 	}
 
 	/**
 	 * Adds a new warning to the list of warnings for this file and reports the warning to the logger.
-	 * @param warning The warning to add.
-	 * @private
+	 * @param warning The warning to add to the list of reported warnings of this program.
 	 * @since 0.9.0
 	 */
-	public addWarning(warning: KipperError): void {
+	public addWarning(warning: KipperWarning): void {
 		// Only log warnings if they are enabled
-		if (this.reportWarnings) {
-			this._warnings.push(warning);
+		if (this.compileConfig.warnings) {
+			this.warnings.push(warning);
 			this.logger.reportWarning(warning);
 		} else {
 			throw new Error("Warnings are disabled for this file.");
 		}
+	}
+
+	/**
+	 * The list of errors that were raised during the compilation process.
+	 *
+	 * Errors are fatal errors, which are raised when the compiler encounters a situation that it considers to be
+	 * problematic, which prevents it from compiling the program.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		return this._errors;
+	}
+
+	/**
+	 * Adds a new error to the list of errors for this file and reports the error to the logger.
+	 * @param error The error to add to the list of reported errors of this program.
+	 * @since 0.10.0
+	 */
+	public addError(error: KipperError): void {
+		this.errors.push(error);
+		this.logger.reportError(LogLevel.ERROR, error);
 	}
 
 	/**
@@ -347,8 +369,6 @@ export class KipperProgramContext {
 				// Log the Kipper error
 				this.logger.reportError(LogLevel.ERROR, e);
 			}
-
-			// Re-throw the error
 			throw e;
 		}
 
@@ -381,16 +401,18 @@ export class KipperProgramContext {
 				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 			}
 
-			// Semantically analysing the AST starting from the root node
 			await this._abstractSyntaxTree.semanticAnalysis();
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
 				this.logger.reportError(LogLevel.ERROR, e);
 			}
-
-			// Re-throw the error
 			throw e;
+		}
+
+		// After finishing the semantic analysis, check whether errors were generated
+		if (this.errors) {
+			return;
 		}
 	}
 
@@ -417,8 +439,6 @@ export class KipperProgramContext {
 				// Log the Kipper error
 				this.logger.reportError(LogLevel.ERROR, e);
 			}
-
-			// Re-throw the error
 			throw e;
 		}
 	}
@@ -459,9 +479,8 @@ export class KipperProgramContext {
 	 * - Semantically analysing the AST - ({@link semanticAnalysis})
 	 * - Optimising the AST - ({@link optimise})
 	 * - Generating the final source code for the specified target - ({@link translate})
-	 * @param optimisationOptions The configuration for the {@link KipperOptimiser}.
 	 */
-	public async compileProgram(optimisationOptions?: OptimisationOptions): Promise<Array<TranslatedCodeLine>> {
+	public async compileProgram(): Promise<Array<TranslatedCodeLine> | undefined> {
 		// Getting the processed AST tree
 		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
@@ -469,9 +488,14 @@ export class KipperProgramContext {
 		this.logger.info(`Analysing semantics.`);
 		await this.semanticAnalysis();
 
+		// If the semantic analysis failed, return an empty array
+		if (this.errors.length > 0) {
+			return undefined;
+		}
+
 		// Optimising the AST
 		this.logger.info(`Optimising file content.`);
-		await this.optimise(optimisationOptions);
+		await this.optimise(this.compileConfig.optimisationOptions);
 
 		// Translating the context instances and children
 		this.logger.info(`Generating code for target '${this.target.targetName}'.`);
@@ -557,7 +581,7 @@ export class KipperProgramContext {
 	 * @param ref The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression<any>, ref: BuiltInFunction) {
+	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
 		this._builtInReferences.push({
 			ref: ref,
 			exp: exp,
@@ -570,7 +594,7 @@ export class KipperProgramContext {
 	 * @param ref The internal identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addInternalReference(exp: Expression<any>, ref: InternalFunction) {
+	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
 		this._internalReferences.push({
 			ref: ref,
 			exp: exp,

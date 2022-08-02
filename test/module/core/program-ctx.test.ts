@@ -1,7 +1,7 @@
 import { assert } from "chai";
-import { InvalidGlobalError, KipperCompiler, KipperParseStream, KipperProgramContext } from "@kipper/core";
+import { BuiltInFunction, InvalidGlobalError, KipperCompiler, KipperParseStream } from "@kipper/core";
 import { promises as fs } from "fs";
-import { EvaluatedCompileOptions } from "@kipper/core";
+import { EvaluatedCompileConfig } from "@kipper/core";
 import * as path from "path";
 
 const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -12,38 +12,68 @@ describe("KipperProgramContext", async () => {
 
 	describe("constructor", async () => {
 		it("Default config", async () => {
-			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+			let compiler = new KipperCompiler();
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			// No builtIns registered yet!
-			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
+			// Only the default built-in functions should be present
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 		});
 
 		it("Add single global", async () => {
-			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+			let compiler = new KipperCompiler();
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
+			// Only the default built-in functions should be present
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 
-			// Register builtIns
-			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
+			// Add a new built-in function
+			let func: BuiltInFunction = {
+				identifier: "test",
+				args: [],
+				returnType: "void",
+			};
+			programCtx.registerBuiltIns(func);
 
-			// Make sure a single global exists
-			assert(programCtx.builtIns.length == 1, "Expe`cted one global to exist");
-			assert(programCtx.builtIns[0] === EvaluatedCompileOptions.defaults.builtIns.print, "Expected global to match!");
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length + 1,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 		});
 
 		it("Expecting error with duplicate global", async () => {
-			let programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+			let compiler = new KipperCompiler();
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
+			// Only the default built-in functions should be present
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 
-			// Register already registered global again
-			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
+			// Register new built-in function
+			let func: BuiltInFunction = {
+				identifier: "test",
+				args: [],
+				returnType: "void",
+			};
+			programCtx.registerBuiltIns(func);
 
-			// Make sure a single global exists
-			assert(programCtx.builtIns.length == 1, "Expected one global to exist");
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length + 1,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 
 			try {
-				programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
+				programCtx.registerBuiltIns(func);
 			} catch (e) {
 				if (e instanceof InvalidGlobalError) {
 					return;
@@ -51,35 +81,55 @@ describe("KipperProgramContext", async () => {
 					assert(false, "Unexpected error!");
 				}
 			}
-			assert(false, "Expected error!");
+			assert(false, "Expected 'InvalidGlobalError'!");
 		});
 	});
 
 	// These tests are also made to validate the functionality in 'getGlobalFunction' and 'getGlobalVariable'
 	describe("getBuiltInFunction", () => {
 		it("Get undefined (invalid identifier)", async () => {
-			const programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+			let compiler = new KipperCompiler();
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			// No builtIns should be there
-			assert(programCtx.builtIns.length === 0, "Expected builtIns to be empty");
+			// Only the default built-in functions should be present
+			assert(
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length,
+				"Expected the program ctx built-ins to match the default built-ins",
+			);
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
 
-			// Register builtIns and check again
-			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
+			// Register new built-in function
+			let func: BuiltInFunction = {
+				identifier: "test",
+				args: [],
+				returnType: "void",
+			};
+			programCtx.registerBuiltIns(func);
+
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
 		});
 
 		it("Get built-in function", async () => {
-			const programCtx: KipperProgramContext = await new KipperCompiler().parse(stream);
+			let compiler = new KipperCompiler();
+			let parseData = await compiler.parse(stream);
+			let programCtx = await compiler.getProgramCtx(parseData, {});
 
-			// Register builtIns and check again
-			programCtx.registerBuiltIns(EvaluatedCompileOptions.defaults.builtIns.print);
+			// Register new built-in function
+			let func: BuiltInFunction = {
+				identifier: "test",
+				args: [],
+				returnType: "void",
+			};
+			programCtx.registerBuiltIns(func);
+
 			assert(
-				programCtx.getBuiltInFunction("print") === EvaluatedCompileOptions.defaults.builtIns.print,
-				"The built-in function 'print' should be returned.",
+				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtIns).length + 1,
+				"Expected one additional built-in function after registration",
 			);
+			assert(programCtx.getBuiltInFunction("test") === func, "The built-in function 'print' should be returned.");
 		});
 	});
 });
