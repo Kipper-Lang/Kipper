@@ -94,7 +94,7 @@ export default class Run extends Command {
 			description: "Show the timestamp of each log message.",
 			allowNo: true,
 		}),
-		"recover": flags.boolean({
+		recover: flags.boolean({
 			default: true,
 			description: "Recover from compiler errors and display all detected compiler errors.",
 			allowNo: true,
