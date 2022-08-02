@@ -26,7 +26,7 @@
 		"node_modules",
 		"lib",
 		"dist",
-		"**/*.spec.ts",
-		"**/*.d.ts"
+		// Ignore all spec files
+		"**/*.spec.ts"
 	]
 }

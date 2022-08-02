@@ -21,7 +21,9 @@
     "lib",
     "dist",
 		"test",
+		// Ignore all spec files
 		"**/*.spec.ts",
+		// Child modules should be ignored, as they compile themselves.
 		"kipper/core",
 		"kipper/cli",
 	],
