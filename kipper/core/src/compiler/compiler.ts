@@ -14,7 +14,7 @@ import { KipperCompileTarget } from "./compile-target";
 import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
 import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
-import type { KipperError } from "../errors";
+import { KipperError } from "../errors";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileConfig}
@@ -65,17 +65,21 @@ export interface CompileConfig {
 
 	/**
 	 * If set to true, the compiler will attempt to recover from compilation errors if they are encountered. This will
-	 * lead to more errors being reported and allowing for bigger more detailed compiler logs, but can in rare cases
-	 * lead to misleading errors that are caused as a result of another compilation errors.
+	 * mean the compiler can process multiple errors, without aborting on the first one encountered. This though can
+	 * result in invalid errors being generated, as a result of other errors.
 	 *
-	 * Generally though, it is considered a good practise to use compiler error recovery, which is why it is enabled per
-	 * default.
+	 * Generally though, it is good to use compiler error recovery, which is why it is enabled per default and should
+	 * rarely be disabled.
+	 *
+	 * If set to false, the compiler will stop processing on the first error that is encountered. Unlike
+	 * {@link abortOnFirstError} it will *not* throw the error, but instead simple store it in
+	 * {@link KipperProgramContext.errors} and {@link KipperCompileResult.errors}.
 	 * @since 0.10.0
 	 */
 	recover?: boolean;
 
 	/**
-	 * Throws an error and cancels the compilation on the first error that is encountered.
+	 * If set to true, the compiler will throw the first error that is encountered and cancel the compilation.
 	 *
 	 * This per default overwrites {@link recover}.
 	 * @since 0.10.0
@@ -397,11 +401,11 @@ export class KipperCompiler {
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		try {
-			// Initial parsing step -> New ctx instance for the program
-			const parseData = await this.parse(inStream);
-			const programCtx = await this.getProgramCtx(parseData, compilerOptions);
+		// Initial parsing step -> New ctx instance for the program
+		const parseData = await this.parse(inStream);
+		const programCtx = await this.getProgramCtx(parseData, compilerOptions);
 
+		try {
 			// Start compilation of the Kipper program
 			const code = await programCtx.compileProgram();
 
@@ -417,6 +421,15 @@ export class KipperCompiler {
 		} catch (e) {
 			// Report the failure of the compilation
 			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
+
+			if (e instanceof KipperError && compilerOptions.recover === false) {
+				// If an error was thrown and the user does not want to recover from it, simply abort the compilation
+				// (The internal semantic analysis algorithm in RootASTNode and CompilableASTNode will have thrown this error,
+				// as they noticed 'compilerOptions.recover' is false)
+				return new KipperCompileResult(programCtx, undefined);
+			}
+
+			// Re-throw the error in every other case
 			throw e;
 		}
 	}

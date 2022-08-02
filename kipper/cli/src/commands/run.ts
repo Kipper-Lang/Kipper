@@ -101,7 +101,7 @@ export default class Run extends Command {
 		}),
 		"abort-on-first-error": flags.boolean({
 			default: false,
-			description: "Abort on the first error the compiler encounters.",
+			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
 			allowNo: true,
 		}),
 	};
