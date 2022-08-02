@@ -10,25 +10,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
+- New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
+  evaluate during type checking.
+- New CLI flags for commands `run` and `compile`:
+  - `--log-timestamp`, which enables timestamps for the log messages.
+  - `--recover`, which enables error recovery for the Kipper compiler.
+  - `--abort-on-first-error`, which aborts the compilation on the first compiler error that is encountered.
+- New classes:
+  - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
+    This replaces the use of `KipperError` for warnings.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
+  - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
+    `UndefinedSemanticsError`.
+  - `CompilableASTNode.semanticTypeChecking`, which performs type checking for the AST node and its children nodes.
+    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
+  - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
+    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
 - New types:
+  - `TypeData`, which represents the type data of an `ASTNode`.
+  - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
   - `TargetSetUpCodeGenerator`, which represents a function that generates SetUp code for a Kipper file.
   - `TargetWrapUpCodeGenerator`, which represents a function that generates WrapUp code for a Kipper file.
 - New fields/properties:
+  - `CompileConfig.recover`, which if set enables compiler error recovery.
+  - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
+    abort on the first error encountered. This overwrites `recover` per default.
   - `RootASTNode.target`, which returns the `KipperCompileTarget` of the program ctx the root AST node is in.
   - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
   - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
+  - `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
+  - `ScopeFunctionDeclaration.typeData`, which returns the type data of the function AST node.
+  - `ScopeVariableDeclaration.typeData`, which returns the type data of the variable AST node.
 
 ### Changed
 
+- Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
+  ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
+- Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type checking and
+  target-specific semantic analysis into their own processing steps. (E.g. First, all AST nodes are semantically
+  analysed, then type checked and semantically analysed for the target language)
 - Updated the built-in functions' generation behaviour, by making every built-in function be defined inside the global
   variable `__kipper` and the global object property `globalThis.__kipper`. This means that the functions are directly
   bound to the JS runtime and any function definition in the generated file is placed after the initial evaluation
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+- Renamed:
+  - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
+  - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
+
+### Removed
+
+- `KipperError.isWarning`, which has been replaced by the new class `KipperWarning`.
 
 ## [0.9.2] - 2022-07-23
 
@@ -796,7 +831,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/0.9.2..HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2..HEAD
 [0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.3...v0.9.0

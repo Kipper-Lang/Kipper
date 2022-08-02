@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent, SemanticData } from "../../parser";
+import type { compilableNodeParent, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -22,7 +22,7 @@ import type { Expression, IdentifierTypeSpecifierExpression } from "./expression
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
 import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
-import { UnableToDetermineMetadataError } from "../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../errors";
 import { Scope } from "../../scope";
 
 /**
@@ -41,7 +41,7 @@ export class DefinitionASTNodeFactory {
 	 * @param parent The file context class that will be assigned to the instance.
 	 * @since 0.9.0
 	 */
-	public static create(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent): Declaration<any> {
+	public static create(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent): Declaration<any, any> {
 		if (antlrRuleCtx instanceof FunctionDeclarationContext) {
 			return new FunctionDeclaration(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
@@ -53,16 +53,22 @@ export class DefinitionASTNodeFactory {
 }
 
 /**
- * Semantics for AST Node {@link FunctionDeclaration}.
+ * Semantics for a {@link Declaration}.
  * @since 0.5.0
  */
-export interface DeclarationSemantics {
+export interface DeclarationSemantics extends SemanticData {
 	/**
 	 * The identifier of the declaration.
 	 * @since 0.5.0
 	 */
 	identifier: string;
 }
+
+/**
+ * Type data for a {@link Declaration}.
+ * @since 0.10.0
+ */
+export interface DeclarationTypeData extends TypeData {}
 
 /**
  * Base Declaration class that represents a value or function declaration or definition in Kipper.
@@ -72,7 +78,10 @@ export interface DeclarationSemantics {
  * and its local scope.
  * @since 0.1.0
  */
-export abstract class Declaration<Semantics extends DeclarationSemantics> extends CompilableASTNode<Semantics> {
+export abstract class Declaration<
+	Semantics extends DeclarationSemantics,
+	TypeData extends DeclarationTypeData,
+> extends CompilableASTNode<Semantics, TypeData> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -128,7 +137,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics> {
+export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -171,7 +180,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		// TODO!
 	}
 
@@ -185,7 +194,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-export interface FunctionDeclarationSemantics {
+export interface FunctionDeclarationSemantics extends SemanticData {
 	/**
 	 * The identifier of the function.
 	 * @since 0.5.0
@@ -195,7 +204,7 @@ export interface FunctionDeclarationSemantics {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: KipperReturnType;
+	returnType: string;
 	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
@@ -208,6 +217,18 @@ export interface FunctionDeclarationSemantics {
 }
 
 /**
+ * Type Semantics for AST Node {@link FunctionDeclaration}.
+ * @since 0.10.0
+ */
+export interface FunctionDeclarationTypeSemantics extends TypeData {
+	/**
+	 * The {@link KipperType return type} of the function.
+	 * @since 0.10.0
+	 */
+	returnType: KipperReturnType;
+}
+
+/**
  * Function definition class, which represents the definition of a function in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  *
@@ -216,7 +237,7 @@ export interface FunctionDeclarationSemantics {
  * @todo Implement support for arguments using {@link ParameterDeclaration}.
  * @since 0.1.2
  */
-export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics> {
+export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics, FunctionDeclarationTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -265,17 +286,17 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Ensure that the children are fully present and not undefined
 		if (!declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: KipperType = typeSpecifier.getSemanticData().type;
+		const type: string = typeSpecifier.getSemanticData().typeIdentifier;
 
 		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
 			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
-			returnType: <KipperReturnType>type,
+			returnType: type,
 			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
 		};
 
@@ -288,11 +309,17 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		// Ensure the return type is valid
 		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
 		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
+
+		// Set the return type data
+		this.typeSemantics = {
+			returnType: <KipperReturnType>semanticData.returnType,
+		};
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
@@ -317,10 +344,10 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 */
 	storageType: KipperStorageType;
 	/**
-	 * The type of the value.
+	 * The type of the value as a string.
 	 * @since 0.5.0
 	 */
-	valueType: KipperType;
+	valueType: string;
 	/**
 	 * If this is true then the variable has a defined value.
 	 * @since 0.5.0
@@ -335,7 +362,21 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
 	 * @since 0.7.0
 	 */
-	value: Expression<any> | undefined;
+	value: Expression<any, any> | undefined;
+}
+
+/**
+ * Type Semantics for AST Node {@link VariableDeclaration}.
+ * @since 0.10.0
+ */
+export interface VariableDeclarationTypeSemantics extends TypeData {
+	/**
+	 * The Kipper type that this declaration has.
+	 *
+	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}
+	 * @since 0.10.0
+	 */
+	valueType: KipperType;
 }
 
 /**
@@ -345,7 +386,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
  * In case that {@link scope} is of type {@link KipperProgramContext}, then the scope is defined as global
  * (accessible for the entire program).
  */
-export class VariableDeclaration extends Declaration<VariableDeclarationSemantics> {
+export class VariableDeclaration extends Declaration<VariableDeclarationSemantics, VariableDeclarationTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -353,7 +394,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
-	protected override _children: Array<Expression<any>>;
+	protected override _children: Array<Expression<any, any>>;
 
 	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -378,7 +419,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return this._antlrRuleCtx;
 	}
 
-	public get children(): Array<Expression<any>> {
+	public get children(): Array<Expression<any, any>> {
 		return this._children;
 	}
 
@@ -406,17 +447,17 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
-		const assignValue: Expression<any> | undefined = this.children[1];
+		const assignValue: Expression<any, any> | undefined = this.children[1];
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {
-			throw new UnableToDetermineMetadataError();
+			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType = typeSpecifier.getSemanticData().type;
+		const valueType: string = typeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: isDefined,
@@ -439,11 +480,16 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async semanticTypeChecking(): Promise<void> {
+	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Check whether the type of the variable even exists
 		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+
+		// Set the type of this variable declaration
+		this.typeSemantics = {
+			valueType: <KipperType>semanticData.valueType,
+		};
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {

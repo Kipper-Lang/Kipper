@@ -13,8 +13,8 @@ import { ParserRuleContext } from "antlr4ts";
  * @since 0.1.0
  */
 export abstract class KipperCLIError extends KipperError {
-	protected constructor(msg: string, isWarning?: boolean, token?: ParserRuleContext) {
-		super(msg, isWarning ?? false, token);
+	protected constructor(msg: string, token?: ParserRuleContext) {
+		super(msg, token);
 	}
 }
 

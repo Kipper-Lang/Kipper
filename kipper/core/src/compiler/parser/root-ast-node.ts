@@ -6,21 +6,23 @@
  */
 import { KipperProgramContext } from "../program-ctx";
 import { Declaration, KipperTargetSemanticAnalyser, Statement, TranslatedCodeLine } from "../semantics";
-import { NoSemantics, ParserASTNode } from "./ast-node";
+import { NoSemantics, NoTypeSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperTargetCodeGenerator, TargetSetUpCodeGenerator, TargetWrapUpCodeGenerator } from "../translation";
 import { KipperCompileTarget } from "../compile-target";
+import { KipperError, UndefinedSemanticsError } from "../../errors";
+import { EvaluatedCompileConfig } from "../compiler";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
-export class RootASTNode extends ParserASTNode<NoSemantics> {
+export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	protected _programCtx: KipperProgramContext;
 
 	protected readonly _parent: undefined;
 
-	protected readonly _children: Array<Declaration<any> | Statement<any>>;
+	protected readonly _children: Array<Declaration<any, any> | Statement<any, any>>;
 
 	constructor(programCtx: KipperProgramContext, antlrCtx: ParserRuleContext) {
 		super(antlrCtx, undefined);
@@ -50,7 +52,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	 * The children of this AST root node.
 	 * @since 0.8.0
 	 */
-	public get children(): Array<Declaration<any> | Statement<any>> {
+	public get children(): Array<Declaration<any, any> | Statement<any, any>> {
 		return this._children;
 	}
 
@@ -60,6 +62,15 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	 */
 	public get target(): KipperCompileTarget {
 		return this.programCtx.target;
+	}
+
+	/**
+	 * The compilation config for this program.
+	 * @private
+	 * @since 0.10.0
+	 */
+	public get compileConfig(): EvaluatedCompileConfig {
+		return this.programCtx.compileConfig;
 	}
 
 	/**
@@ -84,8 +95,23 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	 * Adds new child at the end of the tree.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: Declaration<any> | Statement<any>): void {
+	public addNewChild(newChild: Declaration<any, any> | Statement<any, any>): void {
 		this._children.push(newChild);
+	}
+
+	/**
+	 * Handles a semantic error that was thrown in the function {@link this.semanticAnalysis}.
+	 * @param e The error that was thrown.
+	 * @since 0.10.0
+	 */
+	async handleSemanticError(e: Error | UndefinedSemanticsError | KipperError): Promise<void> {
+		// If it's a compile error, add it to the list of errors
+		if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+			this.programCtx.addError(e);
+		} else {
+			// If we can't handle the error or the user wants to abort/avoid recovering, then re-throw the error
+			throw e;
+		}
 	}
 
 	/**
@@ -95,9 +121,54 @@ export class RootASTNode extends ParserASTNode<NoSemantics> {
 	 * @since 0.8.0
 	 */
 	public async semanticAnalysis(): Promise<void> {
-		// Run for every child the analysis
+		// Core semantic analysis
 		for (let child of this.children) {
-			await child.semanticAnalysis();
+			try {
+				await child.semanticAnalysis();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Perform type-checking based on the existing AST nodes and evaluated semantics
+		for (let child of this.children) {
+			try {
+				// If the child has failed to process, avoid type checking
+				if (!child.semanticData) {
+					continue;
+				}
+
+				await child.semanticTypeChecking();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Perform wrap-up semantic analysis for the specified target
+		for (let child of this.children) {
+			try {
+				// If the child has failed to process, avoid wrap-up semantic analysis
+				if (!child.semanticData || !child.typeSemantics) {
+					continue;
+				}
+
+				await child.wrapUpSemanticAnalysis();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
+		// Check for warnings, if they are enabled
+		if (this.compileConfig.warnings) {
+			for (let child of this.children) {
+				// If the child has failed to process, avoid checking for warnings
+				if (!child.semanticData || !child.typeSemantics) {
+					continue;
+				}
+
+				// TODO! Implement proper recursive handling for warnings
+				await child.checkForWarnings();
+			}
 		}
 	}
 

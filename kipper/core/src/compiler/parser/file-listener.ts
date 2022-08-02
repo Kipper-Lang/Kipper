@@ -107,14 +107,14 @@ export class KipperFileListener implements KipperListener {
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentPrimaryNode: CompilableASTNode<any> | undefined;
+	private _currentPrimaryNode: CompilableASTNode<any, any> | undefined;
 
 	/**
 	 * The current expression that is being walked through. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentExpression: Expression<any> | undefined;
+	private _currentExpression: Expression<any, any> | undefined;
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);
@@ -136,7 +136,7 @@ export class KipperFileListener implements KipperListener {
 	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryNode}.
 	 * @private
 	 */
-	private get getCurrentNode(): CompilableASTNode<any> | RootASTNode {
+	private get getCurrentNode(): CompilableASTNode<any, any> | RootASTNode {
 		if (this._currentExpression) {
 			return this._currentExpression;
 		} else if (this._currentPrimaryNode) {
