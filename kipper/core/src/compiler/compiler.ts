@@ -66,7 +66,8 @@ export interface CompileConfig {
 	/**
 	 * If set to true, the compiler will attempt to recover from compilation errors if they are encountered. This will
 	 * mean the compiler can process multiple errors, without aborting on the first one encountered. This though can
-	 * result in invalid errors being generated, as a result of other errors.
+	 * result in invalid errors being generated, as a result of other errors. (Error recovery does not include syntax
+	 * error recovery and if a syntax error is encountered, the compiler aborts immediately.)
 	 *
 	 * Generally though, it is good to use compiler error recovery, which is why it is enabled per default and should
 	 * rarely be disabled.
@@ -430,11 +431,17 @@ export class KipperCompiler {
 			// Report the failure of the compilation
 			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
 
-			if (e instanceof KipperError && compilerOptions.recover === false) {
-				// If an error was thrown and the user does not want to recover from it, simply abort the compilation
-				// (The internal semantic analysis algorithm in RootASTNode and CompilableASTNode will have thrown this error,
-				// as they noticed 'compilerOptions.recover' is false)
-				return new KipperCompileResult(programCtx, undefined);
+			if (e instanceof KipperError) {
+				// Add the error to the programCtx, as that should not have been done yet by the semantic analysis in the
+				// RootASTNode class and CompilableASTNode classes.
+				programCtx.addError(e);
+
+				if (compilerOptions.recover === false) {
+					// If an error was thrown and the user does not want to recover from it, simply abort the compilation
+					// (The internal semantic analysis algorithm in RootASTNode and CompilableASTNode will have thrown this error,
+					// as they noticed 'compilerOptions.recover' is false)
+					return new KipperCompileResult(programCtx, undefined);
+				}
 			}
 
 			// Re-throw the error in every other case
