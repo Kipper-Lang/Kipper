@@ -1212,4 +1212,39 @@ describe("Kipper errors", () => {
 			});
 		});
 	});
+
+	describe("Error recovery", () => {
+		it("Disabled", async () => {
+			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + "5";`), {
+				recover: false,
+			});
+
+			assert(result.errors.length === 1, "Expected one error");
+		});
+
+		it("One error", async () => {
+			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + 5;`), {
+				recover: true,
+			});
+
+			assert(result.errors.length === 1, "Expected one error");
+		});
+
+		it("Two errors", async () => {
+			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + "5";`), {
+				recover: true,
+			});
+
+			assert(result.errors.length === 2, "Expected two errors");
+		});
+
+		it("Three errors", async () => {
+			const result = await new KipperCompiler().compile(
+				new KipperParseStream(`const invalid: str; 5 + "5"; print as str;`),
+				{ recover: true },
+			);
+
+			assert(result.errors.length === 3, "Expected three errors");
+		});
+	});
 });
