@@ -401,8 +401,16 @@ export class KipperCompiler {
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		// Initial parsing step -> New ctx instance for the program
-		const parseData = await this.parse(inStream);
+		let parseData: ParseData;
+		try {
+			parseData = await this.parse(inStream);
+		} catch (e) {
+			// Report the failure of the compilation
+			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
+			throw e;
+		}
+
+		// Get the program context, which will store the meta-data of the program
 		const programCtx = await this.getProgramCtx(parseData, compilerOptions);
 
 		try {
