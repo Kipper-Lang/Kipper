@@ -41,6 +41,20 @@ git config --global core.eol lf
 
 Remove the `--global` tags if you want to keep using `CRLF` on other git repositories.
 
+## Start Kipper CLI
+
+Without any input:
+
+```bash
+pnpm start
+```
+
+With command input:
+
+```bash
+pnpm start [COMMAND] [ARGS...] [FLAGS...]
+```
+
 ## Other scripts for Development
 
 ### Rebuild the project
@@ -80,6 +94,23 @@ pnpm run antlr4ts
 ```
 
 If antlr4 is not installed, install it from here: https://www.antlr.org/
+
+### Generate standalone Browser bundle
+
+First build the whole project:
+
+```bash
+pnpm build
+```
+
+Run browserify using the following command:
+
+```bash
+pnpm run browserify
+```
+
+This will generate a `kipper-standalone.js` and `kipper-standalone.min.js` file located in the `kipper/core` directory,
+which can be included and used inside a browser without any dependencies.
 
 ## Making a new release
 
