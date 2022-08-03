@@ -10,7 +10,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CharacterPrimaryExpression,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -150,14 +149,6 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.
 	 */
 	public abstract numberPrimaryExpression: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
-
-	/**
-	 * Translates a {@link CharacterPrimaryExpression} into a specific language.
-	 */
-	public abstract characterPrimaryExpression: TargetASTNodeCodeGenerator<
-		CharacterPrimaryExpression,
-		TranslatedExpression
-	>;
 
 	/**
 	 * Translates a {@link ListPrimaryExpression} into a specific language.

@@ -10,7 +10,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CharacterPrimaryExpression,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
@@ -272,13 +271,6 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [
 			semanticData.value, // Simply get the constant value
 		];
-	};
-
-	/**
-	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
-	 */
-	characterPrimaryExpression = async (node: CharacterPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
 	};
 
 	/**

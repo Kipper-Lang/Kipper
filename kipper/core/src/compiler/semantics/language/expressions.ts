@@ -10,7 +10,6 @@ import {
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	CastOrConvertExpressionContext,
-	CharacterPrimaryExpressionContext,
 	CompilableASTNode,
 	ConditionalExpressionContext,
 	EqualityExpressionContext,
@@ -41,7 +40,6 @@ import {
 	type KipperArithmeticOperator,
 	KipperBoolType,
 	type KipperBoolTypeLiterals,
-	KipperCharType,
 	type KipperComparativeOperator,
 	type KipperEqualityOperator,
 	kipperEqualityOperators,
@@ -52,21 +50,21 @@ import {
 	type KipperLogicalAndOperator,
 	type KipperLogicalOrOperator,
 	kipperLogicalOrOperator,
-	KipperMetaType,
+	type KipperMetaType,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
-	KipperNegateOperator,
-	KipperNumType,
-	KipperRef,
+	type KipperNegateOperator,
+	type KipperNumType,
+	type KipperRef,
 	type KipperRelationalOperator,
 	kipperRelationalOperators,
-	KipperSignOperator,
+	type KipperSignOperator,
 	kipperStrType,
 	type KipperStrType,
 	type KipperType,
-	KipperUnaryModifierOperator,
+	type KipperUnaryModifierOperator,
 	kipperUnaryModifierOperators,
-	KipperUnaryOperator,
+	type KipperUnaryOperator,
 	type TranslatedExpression,
 } from "../const";
 import type { TargetASTNodeCodeGenerator } from "../../translation";
@@ -82,7 +80,6 @@ import { kipperInternalBuiltIns } from "../../runtime-built-ins";
  */
 export type antlrExpressionCtxType =
 	| NumberPrimaryExpressionContext
-	| CharacterPrimaryExpressionContext
 	| ListPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
 	| BoolPrimaryExpressionContext
@@ -124,8 +121,6 @@ export class ExpressionASTNodeFactory {
 	): Expression<ExpressionSemantics, ExpressionTypeSemantics> {
 		if (antlrRuleCtx instanceof NumberPrimaryExpressionContext) {
 			return new NumberPrimaryExpression(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof CharacterPrimaryExpressionContext) {
-			return new CharacterPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ListPrimaryExpressionContext) {
 			return new ListPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IdentifierPrimaryExpressionContext) {
@@ -386,99 +381,6 @@ export class NumberPrimaryExpression extends ConstantExpression<
 		this.semanticAnalyser.numberPrimaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.numberPrimaryExpression;
-}
-
-// TODO! Remove 'char' expression and type
-
-/**
- * Semantics for AST Node {@link CharacterPrimaryExpression}.
- * @since 0.5.0
- */
-export interface CharacterPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of the constant character expression.
-	 * @since 0.5.0
-	 */
-	value: string;
-}
-
-/**
- * Type Semantics for AST Node {@link CharacterPrimaryExpression}.
- * @since 0.10.0
- */
-export interface CharacterPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperCharType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperCharType;
-}
-
-/**
- * Character constant expression, which represents a character constant that was defined in the source code.
- * @since 0.1.0
- */
-export class CharacterPrimaryExpression extends ConstantExpression<
-	CharacterPrimaryExpressionSemantics,
-	CharacterPrimaryExpressionTypeSemantics
-> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: CharacterPrimaryExpressionContext;
-
-	constructor(antlrRuleCtx: CharacterPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		this.semanticData = {
-			value: this.sourceCode.slice(1, this.sourceCode.length - 1),
-			evaluatedType: "char",
-		};
-	}
-
-	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.7.0
-	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		// This will always be of type 'char'
-		this.typeSemantics = {
-			evaluatedType: "char",
-		};
-	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): CharacterPrimaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CharacterPrimaryExpression> =
-		this.semanticAnalyser.characterPrimaryExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<CharacterPrimaryExpression, TranslatedExpression> =
-		this.codeGenerator.characterPrimaryExpression;
 }
 
 /**

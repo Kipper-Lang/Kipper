@@ -10,7 +10,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CharacterPrimaryExpression,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -204,11 +203,6 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
 	numberPrimaryExpression = async (node: NumberPrimaryExpression) => {};
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
-	 */
-	characterPrimaryExpression = async (node: CharacterPrimaryExpression) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ListPrimaryExpression} instances.

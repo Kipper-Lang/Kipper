@@ -22,7 +22,8 @@ import {
 	type KipperFunction,
 	kipperPlusOperator,
 	kipperReturnTypes,
-	kipperStrLikeTypes,
+	kipperStrType,
+	KipperStrType,
 	kipperSupportedConversions,
 	type KipperType,
 	kipperTypes,
@@ -205,13 +206,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	): void {
 		const leftOpType = leftOp.getTypeSemanticData().evaluatedType;
 		const rightOpType = rightOp.getTypeSemanticData().evaluatedType;
-		if (leftOpType !== rightOpType || leftOpType !== "num" || rightOpType !== "num") {
-			// String-like types can use '+' to concat strings
-			if (
-				op === kipperPlusOperator &&
-				kipperStrLikeTypes.find((t: KipperType) => t === leftOpType) &&
-				kipperStrLikeTypes.find((t: KipperType) => t === rightOpType)
-			) {
+
+		// Numbers may use all arithmetic operators
+		if (leftOpType !== "num" || rightOpType !== "num") {
+			// Strings can use '+' to concat strings
+			if (op === kipperPlusOperator && leftOpType == kipperStrType && rightOpType == kipperStrType) {
 				return;
 			}
 

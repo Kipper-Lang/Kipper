@@ -18,7 +18,6 @@ import type {
 	ArraySpecifierPostfixExpressionContext,
 	AssignmentOperatorContext,
 	BoolPrimaryExpressionContext,
-	CharacterPrimaryExpressionContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -398,24 +397,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitNumberPrimaryExpression(ctx: NumberPrimaryExpressionContext): void {
-		this.handleExitingExpressionCtx();
-	}
-
-	/**
-	 * Enter a parse tree produced by the `characterPrimaryExpression`
-	 * labeled alternative in `KipperParser.PrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public enterCharacterPrimaryExpression(ctx: CharacterPrimaryExpressionContext): void {
-		this.handleIncomingExpressionCtx(ctx);
-	}
-
-	/**
-	 * Exit a parse tree produced by the `characterPrimaryExpression`
-	 * labeled alternative in `KipperParser.PrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public exitCharacterPrimaryExpression(ctx: CharacterPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 

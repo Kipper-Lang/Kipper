@@ -303,16 +303,6 @@ describe("Kipper errors", () => {
 					}
 				});
 
-				it("char", async () => {
-					try {
-						await new KipperCompiler().compile(new KipperParseStream("def x() -> char {}"), {
-							abortOnFirstError: true,
-						});
-					} catch (e) {
-						assert(false, "Expected no 'InvalidReturnTypeError'");
-					}
-				});
-
 				it("bool", async () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream("def x() -> bool {}"), {

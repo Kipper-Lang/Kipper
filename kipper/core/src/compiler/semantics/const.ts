@@ -77,22 +77,6 @@ export type KipperStrType = "str";
 export const kipperStrType: KipperStrType = "str";
 
 /**
- * Char type in Kipper.
- * @since 0.5.0
- * @example
- * char
- */
-export type KipperCharType = "char";
-
-/**
- * Char type in Kipper.
- * @since 0.5.0
- * @example
- * char
- */
-export const kipperCharType: KipperCharType = "char";
-
-/**
  * Boolean type in Kipper.
  * @since 0.5.0
  * @example
@@ -150,28 +134,16 @@ export type KipperMetaType = "type";
 export const kipperMetaType: KipperMetaType = "type";
 
 /**
- * String-like types that include both char and string.
+ * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperStrLikeTypes = KipperStrType | KipperCharType;
-
-/**
- * String-like types that include both char and string.
- * @since 0.6.0
- */
-export const kipperStrLikeTypes: Array<KipperStrLikeTypes> = [kipperStrType, kipperCharType];
+export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperBoolType;
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperCharType | KipperBoolType;
-
-/**
- * All primitive types inside Kipper.
- * @since 0.6.0
- */
-export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperCharType, kipperBoolType];
+export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperBoolType];
 
 /**
  * All available variable types inside Kipper.

@@ -30,7 +30,6 @@ primaryExpression
     :   '(' assignmentExpression ')' # tangledPrimaryExpression
     |   (True | False) #boolPrimaryExpression
     | 	Identifier # identifierPrimaryExpression
-    |   CharacterConstant #characterPrimaryExpression
     |   StringLiteral # stringPrimaryExpression
     |   FStringLiteral # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
@@ -437,10 +436,6 @@ DigitSequence
     :   Digit+
     ;
 
-CharacterConstant
-    :   '\'' CChar '\''
-    ;
-
 fragment
 CCharSequence
     :   CChar+
@@ -475,12 +470,19 @@ HexadecimalEscapeSequence
     ;
 
 FStringLiteral
-    :   'f' '"' SCharSequence? '"'
+    :   'f"' SCharSequence? '"'
+    |		'f\'' SCharSequence? '\''
     ;
 
 StringLiteral
-    :   '"' SCharSequence? '"'
+    :   StringQuotationMarks SCharSequence? StringQuotationMarks
     ;
+
+fragment
+StringQuotationMarks
+		: 	'"'
+		| 	'\''
+		;
 
 fragment
 SCharSequence
