@@ -64,9 +64,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - `KipperError.isWarning`, which has been replaced by the new class `KipperWarning`.
-- `KipperCharType` (`char`) and its grammar implementation, meaning all string types from now on will only be of type 
-	`str`. This also means that the single-quote character `'` can from now also be used for string literals and 
-	f-strings with the same behaviour as the regular double-quoted character `"`.
+- `KipperCharType` (`char`) and its grammar implementation, meaning all string types from now on will only be of type
+  `str`. This also means that the single-quote character `'` can from now also be used for string literals and
+  f-strings with the same behaviour as the regular double-quoted character `"`.
 
 ## [0.9.2] - 2022-07-23
 
