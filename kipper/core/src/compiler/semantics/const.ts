@@ -399,13 +399,16 @@ export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
  * All available multiplicative operators inside Kipper.
  * @since 0.6.0
  */
-export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
+export const kipperMultiplicativeOperators: Array<KipperMultiplicativeOperator> = ["*", "**", "/", "%"];
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperAdditiveOperators = [kipperMinusOperator, kipperPlusOperator];
+export const kipperAdditiveOperators: Array<KipperMinusOperator | KipperPlusOperator> = [
+	kipperMinusOperator,
+	kipperPlusOperator,
+];
 
 /**
  * All available arithmetic operations inside Kipper.
@@ -417,19 +420,49 @@ export type KipperArithmeticOperator = KipperAdditiveOperator | KipperMultiplica
  * All available arithmetic operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperArithmeticOperators = [...kipperMultiplicativeOperators, ...kipperAdditiveOperators];
+export const kipperArithmeticOperators: Array<KipperArithmeticOperator> = [
+	...kipperMultiplicativeOperators,
+	...kipperAdditiveOperators,
+];
 
 /**
  * All available arithmetic assignment operations inside Kipper.
  * @since 0.3.0
  */
-export type KipperArithmeticAssignOperator = "+=" | "-=" | "*=" | "/=";
+export type KipperArithmeticAssignOperator = "+=" | "-=" | "*=" | "/=" | "%=";
 
 /**
  * All available arithmetic assignment operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperArithmeticAssignOperators = ["+=", "-=", "*=", "/="];
+export const kipperArithmeticAssignOperators: Array<KipperArithmeticAssignOperator> = ["+=", "-=", "*=", "/=", "%="];
+
+/**
+ * Default assignment operator for assigning a value to a variable/reference.
+ * @since 0.10.0
+ */
+export type KipperEqualAssignOperator = "=";
+
+/**
+ * Default assignment operator for assigning a value to a variable/reference.
+ * @since 0.10.0
+ */
+export const kipperEqualAssignOperator: KipperEqualAssignOperator = "=";
+
+/**
+ * All available assignment operators inside Kipper, which can be used to assign a value to a variable/reference.
+ * @since 0.10.0
+ */
+export type KipperAssignOperator = KipperEqualAssignOperator | KipperArithmeticAssignOperator;
+
+/**
+ * All available assignment operators inside Kipper, which can be used to assign a value to a variable/reference.
+ * @since 0.10.0
+ */
+export const kipperAssignOperators: Array<KipperAssignOperator> = [
+	kipperEqualAssignOperator,
+	...kipperArithmeticAssignOperators,
+];
 
 /**
  * Represents a single token of translated Kipper code. This is usually used without a {@link TranslatedCodeLine}, which
