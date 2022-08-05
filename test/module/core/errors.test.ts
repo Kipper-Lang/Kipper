@@ -265,7 +265,7 @@ describe("Kipper errors", () => {
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "FunctionReturnTypeError", "Expected proper error");
-						assert((<KipperError>e).name === "FunctionReturnTypeError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -409,10 +409,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" + 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -427,10 +424,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" - 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -445,10 +439,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" * 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -463,10 +454,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" ** 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -481,10 +469,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" / 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -499,10 +484,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" % 4;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -517,10 +499,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 + "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -535,10 +514,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 - "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -553,10 +529,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 * "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -571,10 +544,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 ** "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -589,10 +559,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 / "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -607,10 +574,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('4 % "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -625,10 +589,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" + true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -643,10 +604,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" - true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -661,10 +619,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" * true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -679,10 +634,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" ** true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -697,10 +649,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" / true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -715,10 +664,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('"3" % true;'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -733,10 +679,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true + "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -751,10 +694,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true - "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -769,10 +709,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true * "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -787,10 +724,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true ** "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -805,10 +739,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true / "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
@@ -823,10 +754,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('true % "3";'), { abortOnFirstError: true });
 					} catch (e) {
-						assert(
-							(<KipperError>e).constructor.name === "ArithmeticOperationTypeError",
-							"Expected proper error",
-						);
+						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
