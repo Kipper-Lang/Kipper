@@ -313,7 +313,6 @@ export abstract class IdentifierError extends KipperError {
 export class UndefinedIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Invalid reference to undefined identifier '${identifier}'. `);
-		this.name = "UndefinedIdentifierError";
 	}
 }
 
@@ -324,7 +323,6 @@ export class UndefinedIdentifierError extends IdentifierError {
 export class UnknownIdentifierError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown identifier '${identifier}'.`);
-		this.name = "UnknownIdentifierError";
 	}
 }
 
@@ -403,10 +401,9 @@ export class TypeError extends KipperError {
  * Error that is thrown whenever a return type is used that may not be returned.
  * @since 0.6.0
  */
-export class InvalidReturnTypeError extends TypeError {
+export class FunctionReturnTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Type '${type}' can not be returned.`);
-		this.name = "InvalidReturnTypeError";
 	}
 }
 
@@ -415,7 +412,7 @@ export class InvalidReturnTypeError extends TypeError {
  * interact with one another.
  * @since 0.6.0
  */
-export class InvalidArithmeticOperationTypeError extends TypeError {
+export class ArithmeticOperationTypeError extends TypeError {
 	constructor(firstType: string, secondType: string) {
 		super(`Invalid arithmetic operation between operands of type '${firstType}' and '${secondType}'.`);
 	}
@@ -424,7 +421,7 @@ export class InvalidArithmeticOperationTypeError extends TypeError {
 /**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class InvalidArgumentTypeError extends TypeError {
+export class ArgumentTypeError extends TypeError {
 	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
 		super(`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`);
 	}
@@ -434,7 +431,7 @@ export class InvalidArgumentTypeError extends TypeError {
  * Error that is thrown whenever an assignments consists of invalid types.
  * @since 0.8.3
  */
-export class InvalidAssignmentTypeError extends TypeError {
+export class AssignmentTypeError extends TypeError {
 	constructor(leftExpType: string, rightExpType: string) {
 		super(`Type '${leftExpType}' is not assignable to type '${rightExpType}'.`);
 	}
@@ -444,7 +441,7 @@ export class InvalidAssignmentTypeError extends TypeError {
  * Error that is thrown whenever a read-only variable is being assigned to.
  * @since 0.8.3
  */
-export class ReadOnlyAssignmentTypeError extends TypeError {
+export class ReadOnlyTypeError extends TypeError {
 	constructor(identifier: string) {
 		super(`'${identifier}' is read-only and may not be assigned to.`);
 	}
