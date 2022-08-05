@@ -8,6 +8,7 @@
 
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import {
+	AssignmentExpression,
 	Expression,
 	ExpressionSemantics,
 	ExpressionTypeSemantics,
@@ -23,20 +24,19 @@ import {
 	kipperPlusOperator,
 	kipperReturnTypes,
 	kipperStrType,
-	KipperStrType,
 	kipperSupportedConversions,
 	type KipperType,
 	kipperTypes,
 } from "../const";
 import {
-	InvalidArgumentTypeError,
-	InvalidArithmeticOperationTypeError,
-	InvalidAssignmentTypeError,
+	ArgumentTypeError,
+	ArithmeticOperationTypeError,
+	AssignmentTypeError,
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
-	InvalidReturnTypeError,
+	FunctionReturnTypeError,
 	InvalidUnaryExpressionTypeError,
-	ReadOnlyAssignmentTypeError,
+	ReadOnlyTypeError,
 	TypeError,
 	UnknownTypeError,
 } from "../../../errors";
@@ -73,34 +73,35 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnType(type: string): void {
 		// If the type is not in the array of valid return types, throw an error
 		if (!kipperReturnTypes.find((t) => t === type)) {
-			throw this.assertError(new InvalidReturnTypeError(type));
+			throw this.assertError(new FunctionReturnTypeError(type));
 		}
 	}
 
 	/**
 	 * Asserts that the passed expression is valid and the assigned value is compatible with the identifier.
-	 * @param leftExp The left-hand side of the assignment.
-	 * @param rightExp The right-hand side of the assignment.
+	 * @param assignmentExp The assignment expression to check.
 	 * @since 0.7.0
 	 */
-	public validAssignment(
-		leftExp: IdentifierPrimaryExpression,
-		rightExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-	): void {
-		const leftExpTypeData = leftExp.getTypeSemanticData();
-		const rightExpTypeData = rightExp.getTypeSemanticData();
+	public validAssignment(assignmentExp: AssignmentExpression): void {
+		const semanticData = assignmentExp.getSemanticData();
+		const leftExpTypeData = semanticData.identifierCtx.getTypeSemanticData();
+		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
 		// Ensure that the types are matching
 		if (rightExpTypeData.evaluatedType !== leftExpTypeData.evaluatedType) {
-			throw this.assertError(
-				new InvalidAssignmentTypeError(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType),
-			);
+			throw this.assertError(new AssignmentTypeError(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType));
 		}
 
-		// Get the storage type of the variable
-		const ref = leftExp.getSemanticData().ref;
-		if (ref && "storageType" in ref && ref.storageType === "const") {
-			throw this.assertError(new ReadOnlyAssignmentTypeError(ref.identifier));
+		// Ensure that all arithmetic assignment operators except '+=' are only used on numbers
+		if (semanticData.operator !== "=" && rightExpTypeData.evaluatedType !== "num") {
+			if (!(semanticData.operator === "+=" && rightExpTypeData.evaluatedType === "str")) {
+				throw this.assertError(new ArithmeticOperationTypeError(rightExpTypeData.evaluatedType, semanticData.operator));
+			}
+		}
+
+		// Ensure that the left-hand side is not read-only
+		if (semanticData.ref && "storageType" in semanticData.ref && semanticData.ref.storageType === "const") {
+			throw this.assertError(new ReadOnlyTypeError(semanticData.ref.identifier));
 		}
 	}
 
@@ -136,7 +137,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
 
 		if (semanticData.type !== receivedType) {
-			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
 		}
 	}
 
@@ -215,7 +216,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			}
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationTypeError(leftOpType, rightOpType));
+			throw this.assertError(new ArithmeticOperationTypeError(leftOpType, rightOpType));
 		}
 	}
 

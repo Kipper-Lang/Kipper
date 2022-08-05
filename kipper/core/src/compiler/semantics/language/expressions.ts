@@ -38,7 +38,8 @@ import {
 	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	type KipperArithmeticOperator,
-	KipperBoolType,
+	type KipperAssignOperator,
+	type KipperBoolType,
 	type KipperBoolTypeLiterals,
 	type KipperComparativeOperator,
 	type KipperEqualityOperator,
@@ -72,8 +73,9 @@ import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser"
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
-import { getConversionFunctionIdentifier } from "../../../utils";
+import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
+import { ParserRuleContext } from "antlr4ts";
 
 /**
  * Every antlr4 expression ctx type
@@ -2969,6 +2971,11 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.7.0
 	 */
 	value: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	/**
+	 * The operator of the assignment expression.
+	 * @since 0.10.0
+	 */
+	operator: KipperAssignOperator;
 }
 
 /**
@@ -2985,6 +2992,11 @@ export interface AssignmentExpressionTypeSemantics extends ExpressionTypeSemanti
  * @since 0.1.0
  * @example
  * x = 4
+ * x += 5
+ * x -= 12
+ * x *= 2
+ * x /= 5
+ * x %= 55
  */
 export class AssignmentExpression extends Expression<AssignmentExpressionSemantics, AssignmentExpressionTypeSemantics> {
 	/**
@@ -3004,6 +3016,8 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const antlrRuleChildren = this.getAntlrRuleChildren();
+
 		// There will always be only two children, which are the identifier and expression assigned.
 		const identifier: IdentifierPrimaryExpression = (() => {
 			const exp = this.children[0];
@@ -3015,10 +3029,13 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		})();
 		const assignValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
-		// Throw an error if the children are incomplete
-		if (!assignValue) {
+		// Throw an error if the children are incomplete or the operator can not be determined
+		if (!assignValue || !(antlrRuleChildren[1] instanceof ParserRuleContext)) {
 			throw new UnableToDetermineSemanticDataError();
 		}
+
+		// Get the operator of the assignment
+		const operator = <KipperAssignOperator>getParseRuleSource(<ParserRuleContext>antlrRuleChildren[1]);
 
 		let identifierSemantics = identifier.getSemanticData();
 		this.semanticData = {
@@ -3026,6 +3043,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 			identifierCtx: identifier,
 			identifier: identifierSemantics.identifier,
 			ref: identifierSemantics.ref,
+			operator: operator,
 		};
 	}
 
@@ -3038,7 +3056,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		const semanticData = this.getSemanticData();
 
 		// Ensure the assignment is valid and the types match up
-		this.programCtx.typeCheck(this).validAssignment(semanticData.identifierCtx, semanticData.value);
+		this.programCtx.typeCheck(this).validAssignment(this);
 
 		// The evaluated type of an assignment expression is always the evaluated type assigned to the variable
 		this.typeSemantics = {
