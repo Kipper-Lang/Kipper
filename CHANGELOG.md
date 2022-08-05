@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
   - `TargetSetUpCodeGenerator`, which represents a function that generates SetUp code for a Kipper file.
   - `TargetWrapUpCodeGenerator`, which represents a function that generates WrapUp code for a Kipper file.
+  - `KipperEqualAssignOperator`, which represents the equal assignment operator (`=`).
+  - `KipperAssignOperator`, which represents all available assignment operators.
+  - `KipperArithmeticAssignOperator`, which represents all available arithmetic assignment operators.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -60,6 +63,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
+  - `ReadOnlyAssignmentTypeError` to `ReadOnlyTypeError`.
+  - `InvalidAssignmentTypeError` to `AssignmentTypeError`.
+  - `InvalidArgumentTypeError` to `ArgumentTypeError`.
+  - `InvalidArithmeticOperationTypeError` to `ArithmeticOperationTypeError`.
+  - `InvalidReturnTypeError` to `FunctionReturnTypeError`.
 
 ### Removed
 
