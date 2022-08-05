@@ -327,7 +327,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	stringPrimaryExpression = async (node: StringPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
-		return [`"${semanticData.value}"`];
+		return [`${semanticData.quotationMarks}${semanticData.value}${semanticData.quotationMarks}`];
 	};
 
 	/**

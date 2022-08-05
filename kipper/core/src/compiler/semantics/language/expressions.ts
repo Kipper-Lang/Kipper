@@ -485,6 +485,14 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.5.0
 	 */
 	value: string;
+	/**
+	 * The quotation marks that this string has used.
+	 *
+	 * This is important to keep track of, so that the translated string is valid and does not produce a syntax error
+	 * due to unescaped quotation marks inside it.
+	 * @since 0.10.0
+	 */
+	quotationMarks: `"` | `'`;
 }
 
 /**
@@ -527,6 +535,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: this.sourceCode.slice(1, this.sourceCode.length - 1), // Remove string quotation marks
+			quotationMarks: <`"` | `'`>this.sourceCode[0],
 		};
 	}
 
