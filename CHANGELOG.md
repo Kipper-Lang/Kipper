@@ -46,9 +46,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
   - `ScopeFunctionDeclaration.typeData`, which returns the type data of the function AST node.
   - `ScopeVariableDeclaration.typeData`, which returns the type data of the variable AST node.
+  - `ScopeVariableDeclaration.valueWasUpdated`, which returns true if the variable was updated after its initial
+    declaration.
+  - `ScopeDeclaration.isDefined`, which is an abstract field that returns whether the scope declaration was defined
+    during its declaration.
+  - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
 
 ### Changed
 
+- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
+  assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
   ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
 - Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type checking and
@@ -68,6 +75,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `InvalidArgumentTypeError` to `ArgumentTypeError`.
   - `InvalidArithmeticOperationTypeError` to `ArithmeticOperationTypeError`.
   - `InvalidReturnTypeError` to `FunctionReturnTypeError`.
+  - `UndefinedIdentifierError` to `UndefinedReferenceError`.
+  - `UnknownIdentifierError` to `UnknownReferenceError`.
 
 ### Removed
 
