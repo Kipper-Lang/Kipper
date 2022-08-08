@@ -413,8 +413,13 @@ export class FunctionReturnTypeError extends TypeError {
  * @since 0.6.0
  */
 export class ArithmeticOperationTypeError extends TypeError {
-	constructor(firstType: string, secondType: string) {
-		super(`Invalid arithmetic operation between operands of type '${firstType}' and '${secondType}'.`);
+	constructor(firstType?: string, secondType?: string) {
+		if (firstType && secondType) {
+			// If the types caused the error, specify them in the error message
+			super(`Invalid arithmetic operation between operands of type '${firstType}' and '${secondType}'.`);
+		} else {
+			super(`Invalid arithmetic operation.`);
+		}
 	}
 }
 
@@ -433,7 +438,7 @@ export class ArgumentTypeError extends TypeError {
  */
 export class AssignmentTypeError extends TypeError {
 	constructor(leftExpType: string, rightExpType: string) {
-		super(`Type '${leftExpType}' is not assignable to type '${rightExpType}'.`);
+		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`);
 	}
 }
 

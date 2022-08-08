@@ -12,7 +12,6 @@ import {
 	Expression,
 	ExpressionSemantics,
 	ExpressionTypeSemantics,
-	IdentifierPrimaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
 	UnaryExpression,
@@ -89,13 +88,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure that the types are matching
 		if (rightExpTypeData.evaluatedType !== leftExpTypeData.evaluatedType) {
-			throw this.assertError(new AssignmentTypeError(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType));
+			throw this.assertError(new AssignmentTypeError(leftExpTypeData.evaluatedType, rightExpTypeData.evaluatedType));
 		}
 
 		// Ensure that all arithmetic assignment operators except '+=' are only used on numbers
 		if (semanticData.operator !== "=" && rightExpTypeData.evaluatedType !== "num") {
 			if (!(semanticData.operator === "+=" && rightExpTypeData.evaluatedType === "str")) {
-				throw this.assertError(new ArithmeticOperationTypeError(rightExpTypeData.evaluatedType, semanticData.operator));
+				throw this.assertError(new ArithmeticOperationTypeError());
 			}
 		}
 
