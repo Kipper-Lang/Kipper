@@ -11,11 +11,11 @@ import type {
 	NoViableAltException,
 	ParserRuleContext,
 } from "antlr4ts";
-import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import type { RecognitionException } from "antlr4ts/RecognitionException";
-import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperParseStream } from "./compiler";
-import { getParseRuleSource } from "./utils";
+import type {FailedPredicateException} from "antlr4ts/FailedPredicateException";
+import type {RecognitionException} from "antlr4ts/RecognitionException";
+import type {Recognizer} from "antlr4ts/Recognizer";
+import type {KipperParseStream} from "./compiler";
+import {getParseRuleSource} from "./utils";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -308,11 +308,12 @@ export abstract class IdentifierError extends KipperError {
 }
 
 /**
- * Error that is thrown when a variable is used that is only declared and has no value set.
+ * Error that is thrown when a variable is used that is undefined/has not been assigned.
+ * @since 0.10.0
  */
-export class UndefinedIdentifierError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Invalid reference to undefined identifier '${identifier}'. `);
+export class UndefinedReferenceError extends IdentifierError {
+	constructor(reference: string) {
+		super(`Reference '${reference}' is used before being assigned.`);
 	}
 }
 
@@ -320,9 +321,9 @@ export class UndefinedIdentifierError extends IdentifierError {
  * Error that is thrown when an identifier is used that is unknown to the program.
  * @since 0.6.0
  */
-export class UnknownIdentifierError extends IdentifierError {
+export class UnknownReferenceError extends IdentifierError {
 	constructor(identifier: string) {
-		super(`Unknown identifier '${identifier}'.`);
+		super(`Unknown reference '${identifier}'.`);
 	}
 }
 
@@ -363,26 +364,6 @@ export class BuiltInOverwriteError extends IdentifierError {
 export class ReservedIdentifierOverwriteError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Redeclaration of reserved identifier '${identifier}'.`);
-	}
-}
-
-/**
- * Error that is thrown when a new function is defined or declared and the used identifier is
- * already in use by a previous function definition.
- */
-export class FunctionDefinitionAlreadyExistsError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Redeclaration of function '${identifier}'.`);
-	}
-}
-
-/**
- * Error that is thrown when a new variable is defined or declared and the used identifier is
- * already in use by a previous function definition.
- */
-export class VariableDefinitionAlreadyExistsError extends IdentifierError {
-	constructor(identifier: string) {
-		super(`Redeclaration of variable '${identifier}'.`);
 	}
 }
 

@@ -37,6 +37,7 @@ import {
 import {
 	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
+	kipperArithmeticAssignOperators,
 	type KipperArithmeticOperator,
 	type KipperAssignOperator,
 	type KipperBoolType,
@@ -68,14 +69,14 @@ import {
 	type KipperUnaryOperator,
 	type TranslatedExpression,
 } from "../const";
-import type { TargetASTNodeCodeGenerator } from "../../translation";
-import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
-import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { TerminalNode } from "antlr4ts/tree";
-import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
-import { kipperInternalBuiltIns } from "../../runtime-built-ins";
-import { ParserRuleContext } from "antlr4ts";
+import type {TargetASTNodeCodeGenerator} from "../../translation";
+import type {TargetASTNodeSemanticAnalyser} from "../target-semantic-analyser";
+import {ScopeDeclaration, ScopeVariableDeclaration} from "../../scope-declaration";
+import {KipperNotImplementedError, UnableToDetermineSemanticDataError} from "../../../errors";
+import {TerminalNode} from "antlr4ts/tree";
+import {getConversionFunctionIdentifier, getParseRuleSource} from "../../../utils";
+import {kipperInternalBuiltIns} from "../../runtime-built-ins";
+import {ParserRuleContext} from "antlr4ts";
 
 /**
  * Every antlr4 expression ctx type
@@ -834,6 +835,11 @@ export class IdentifierPrimaryExpression extends Expression<
 
 		if (!(ref instanceof ScopeDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
+		} else {
+			// Ensure that the reference is defined, if it's not used inside an assignment expression
+			if (!(this.parent instanceof AssignmentExpression)) {
+				this.programCtx.semanticCheck(this).referenceDefined(ref);
+			}
 		}
 	}
 
@@ -3043,10 +3049,10 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		// Get the operator of the assignment
 		const operator = <KipperAssignOperator>getParseRuleSource(<ParserRuleContext>antlrRuleChildren[1]);
+		const identifierSemantics = identifier.getSemanticData();
 
-		let identifierSemantics = identifier.getSemanticData();
+		// Semantics of the assignment
 		this.semanticData = {
 			value: assignValue,
 			identifierCtx: identifier,
@@ -3054,6 +3060,16 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 			ref: identifierSemantics.ref,
 			operator: operator,
 		};
+
+		// Ensure that the reference is defined and has a usable value if it's used with an arithmetic operator
+		if (kipperArithmeticAssignOperators.find((o) => o === operator)) {
+			this.programCtx.semanticCheck(identifier).referenceDefined(identifierSemantics.ref);
+		}
+
+		// If the reference was a variable, indicate that the value was updated
+		if (identifierSemantics.ref instanceof ScopeVariableDeclaration) {
+			identifierSemantics.ref.valueWasUpdated = true;
+		}
 	}
 
 	/**
@@ -3063,13 +3079,14 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		const valueTypeSemantics = semanticData.value.getTypeSemanticData();
 
 		// Ensure the assignment is valid and the types match up
 		this.programCtx.typeCheck(this).validAssignment(this);
 
 		// The evaluated type of an assignment expression is always the evaluated type assigned to the variable
 		this.typeSemantics = {
-			evaluatedType: semanticData.value.getTypeSemanticData().evaluatedType,
+			evaluatedType: valueTypeSemantics.evaluatedType,
 		};
 	}
 
