@@ -7,7 +7,7 @@ specifiers:
   '@oclif/parser': 3.8.7
   '@oclif/test': 2.1.0
   '@size-limit/preset-big-lib': 8.0.0
-  '@types/chai': 4.3.0
+  '@types/chai': 4.3.3
   '@types/mocha': 9.1.1
   '@types/node': 17.0.35
   '@typescript-eslint/eslint-plugin': 5.32.0
@@ -50,7 +50,7 @@ devDependencies:
   '@oclif/parser': 3.8.7
   '@oclif/test': 2.1.0
   '@size-limit/preset-big-lib': 8.0.0_wuhdfiprfkun4hq2uqy2dvyrde
-  '@types/chai': 4.3.0
+  '@types/chai': 4.3.3
   '@types/mocha': 9.1.1
   '@types/node': 17.0.35
   '@typescript-eslint/eslint-plugin': 5.32.0_mjxvp6vknbs6aake53neguzoxy
@@ -940,8 +940,8 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
-  /@types/chai/4.3.0:
-    resolution: {integrity: sha512-/ceqdqeRraGolFTcfoXNiqjyQhZzbINDngeoAq9GoHa8PPK1yNzTaxWjA6BFWp5Ua9JpXEMSS4s5i9tS0hOJtw==}
+  /@types/chai/4.3.3:
+    resolution: {integrity: sha512-hC7OMnszpxhZPduX+m+nrx+uFoLkWOMiR4oa/AZF3MuSETYTZmFfJAHqZEM8MVlvfG7BEUcgvtwoCTxBp6hm3g==}
     dev: true
 
   /@types/eslint-scope/3.7.3:
@@ -1661,9 +1661,9 @@ packages:
     resolution: {integrity: sha512-erYug8XoqzU3IfcU8fUgyHqyOXqIE4tUTTQ+7mqUjQlvnXkOO6OlT9c/ZoJVHYoAaqGxr09CN53G7XIsO4KtWA==}
     hasBin: true
     dependencies:
+      JSONStream: 1.3.5
       combine-source-map: 0.8.0
       defined: 1.0.0
-      JSONStream: 1.3.5
       safe-buffer: 5.2.1
       through2: 2.0.5
       umd: 3.0.3
@@ -1739,6 +1739,7 @@ packages:
     engines: {node: '>= 0.8'}
     hasBin: true
     dependencies:
+      JSONStream: 1.3.5
       assert: 1.5.0
       browser-pack: 6.1.0
       browser-resolve: 2.0.0
@@ -1760,7 +1761,6 @@ packages:
       https-browserify: 1.0.0
       inherits: 2.0.4
       insert-module-globals: 7.2.1
-      JSONStream: 1.3.5
       labeled-stream-splicer: 2.0.2
       mkdirp-classic: 0.5.3
       module-deps: 6.2.3
@@ -2912,7 +2912,7 @@ packages:
     resolution: {integrity: sha512-SFb2D/VX9SV+wNYXO1IIh1wyxUC1GS0mYCFJOWD1ia7MPj9yE2G8jaPkw4t/pg0Sj7/YJP56OzMY4nAuJSOugQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@types/chai': 4.3.0
+      '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
       '@types/node': 17.0.35
       '@types/sinon': 10.0.11
@@ -3649,11 +3649,11 @@ packages:
     resolution: {integrity: sha512-ufS5Qq9RZN+Bu899eA9QCAYThY+gGW7oRkmb0vC93Vlyu/CFGcH0OYPEjVkDXA5FEbTt1+VWzdoOD3Ny9N+8tg==}
     hasBin: true
     dependencies:
+      JSONStream: 1.3.5
       acorn-node: 1.8.2
       combine-source-map: 0.8.0
       concat-stream: 1.6.2
       is-buffer: 1.1.6
-      JSONStream: 1.3.5
       path-is-absolute: 1.0.1
       process: 0.11.10
       through2: 2.0.5
@@ -4524,6 +4524,7 @@ packages:
     engines: {node: '>= 0.8.0'}
     hasBin: true
     dependencies:
+      JSONStream: 1.3.5
       browser-resolve: 2.0.0
       cached-path-relative: 1.1.0
       concat-stream: 1.6.2
@@ -4531,7 +4532,6 @@ packages:
       detective: 5.2.0
       duplexer2: 0.1.4
       inherits: 2.0.4
-      JSONStream: 1.3.5
       parents: 1.0.1
       readable-stream: 2.3.7
       resolve: 1.22.0
