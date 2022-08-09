@@ -15,7 +15,9 @@
   - [Configuring the compiler](#configuring-the-compiler)
   - [How to add new compiler functionality](#how-to-add-new-compiler-functionality)
     - [Add or update semantics](#add-or-update-semantics)
-      - [Updating target specific semantic checks](#updating-target-specific-semantic-checks)
+      - [Primary Semantic Analysis](#primary-semantic-analysis)
+      - [Type Checking](#type-checking)
+      - [Target specific semantic checks](#target-specific-semantic-checks)
       - [Throwing semantic errors](#throwing-semantic-errors)
     - [Add or update translation](#add-or-update-translation)
   - [Testing](#testing)
@@ -25,7 +27,8 @@
 
 Welcome to the Kipper contribution guide!
 
-This guide will try to explain the basics of how to contribute to Kipper, how to use issues/PRs and how to modify the source code.
+This guide will try to explain the basics of how to contribute to Kipper, how to use issues/PRs and how to modify the
+source code.
 
 Before starting, thank you for showing interest in this guide! I ([@Luna-Klatzer](https://github.com/Luna-Klatzer))
 appreciate any help with this project and am happy to help if there are any questions left unanswered!
@@ -67,7 +70,8 @@ allow for a managed way to propose, document and merge changes into Kipper. That
 also make sure your PRs are organised, documented well and link related issues, docs or websites. The PR template will
 help with that.
 
-If you are new to GitHub and PRs, you can follow the guide from GitHub [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+If you are new to GitHub and PRs, you can follow the guide from GitHub 
+[here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 to learn how to create such a pull Request.
 
 If you created a new PR, please also update the CHANGELOG.md file and create a Changelog specifically for your
@@ -154,29 +158,37 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 ### Add or update semantics
 
-The semantics of a AST node is usually represented using an interface that defines what metadata must be present for an
-instance to be compilable. This semantic data interface is passed to the abstract generic class
-`CompilableASTNode<Semantics>` as a generic type parameter, which then defines the semantic data that must be
-present.
+The semantics of an AST node is usually represented using an interface that defines what metadata must be present for an
+instance to be compilable. The two generic parameters of the `CompilableASTNode<Semantics, TypeSemantics>` class, where
+each one is a type that represents the semantics of the AST node and the type of the type semantics, respectively,
+are used to define that metadata.
 
 Usually the semantic interfaces of a Kipper AST node are defined right above, like for example:
 
 ```ts
 export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
-	exp1: Expression<any, any>;
-	exp2: Expression<any, any>;
+	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	operator: KipperAdditiveOperator;
 }
 
-export class AdditiveExpression extends Expression<AdditiveExpressionSemantics> {
+export interface AdditiveExpressionTypeSemantics extends ArithmeticExpressionTypeSemantics {
+	evaluatedType: KipperType;
+}
+
+export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, AdditiveExpressionTypeSemantics> {
 	// ...
 }
 ```
 
-These semantics then are per default processed using the async function `primarySemanticAnalysis()`. This function
-should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. Though to
-avoid unexpected errors, when using the semantic data they should always be fetched using
-`CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined.
+#### Primary Semantic Analysis
+
+These semantics then are per default processed using the classes implementation of `primarySemanticAnalysis()`. This 
+function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. Though
+to avoid unexpected errors, when using the semantic data they should always be fetched using
+`CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined (This for example
+can happen if the child node of a node fails to process and as such the parent can not access the semantic data, since
+it was not defined/evaluated).
 
 To update how semantics are handled or what semantic data exists, either the semantics interface or the
 function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed. Avoid at all cost
@@ -188,14 +200,15 @@ semantics!
 As Kipper is a statically and strongly typed language, types must be checked at compile time to
 ensure the program can execute without issues.
 
-Kipper handles type checking for a single `CompilableASTNode` in its `semanticTypeChecking`
-function, which is called after the general semantic analysis function. There all possible type issues
-should be checked for to avoid issues during code generation or execution.
+Kipper handles type checking for a single `CompilableASTNode` in a nodes `primarySemanticTypeChecking()`
+function implementation, which is called after `primarySemanticAnalysis()`. There all possible type issues
+should be checked for to avoid issues during code generation or execution and the `CompilableASTNode.typeData` filled
+to ensure the correct type metadata is available to other nodes as well.
 
 To assert types and throw proper errors, you can easily do that using the `KipperTypeChecker`, which is
 explained more in-depth [here](#throwing-semantic-errors).
 
-#### Updating target specific semantic checks
+#### Target specific semantic checks
 
 In case that a target (targets are for example TypeScript) has specific semantic logic that must be upheld, a
 `KipperTargetSemanticAnalyser` is used, which can do additional checks on specific AST nodes. Each program
