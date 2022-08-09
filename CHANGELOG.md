@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=` ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
   evaluate during type checking.
