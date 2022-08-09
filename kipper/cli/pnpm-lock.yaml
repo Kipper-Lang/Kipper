@@ -10,7 +10,7 @@ specifiers:
   '@oclif/plugin-help': ^5.0.0
   '@oclif/plugin-update': ^3.0.0
   '@oclif/plugin-warn-if-update-available': ^2.0.4
-  '@oclif/test': 2.1.0
+  '@oclif/test': 2.1.1
   '@sinonjs/fake-timers': 9.1.2
   '@types/node': ^17.0.34
   '@types/sinon': 10.0.13
@@ -43,7 +43,7 @@ dependencies:
   typescript: 4.7.2
 
 devDependencies:
-  '@oclif/test': 2.1.0
+  '@oclif/test': 2.1.1
   '@sinonjs/fake-timers': 9.1.2
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
@@ -256,8 +256,8 @@ packages:
     resolution: {integrity: sha512-S/SF/XYJeevwIgHFmVDAFRUvM3m+OjhvCAYMk78ZJQCYCQ5wS7j+LTt1ZEv2jpEEGg2tx/F6TYYWxddNAYHrFQ==}
     engines: {node: '>=12.0.0'}
 
-  /@oclif/test/2.1.0:
-    resolution: {integrity: sha512-o+JTv3k28aMUxywJUlJY1/DORLqumoZFRII492phOmtXM16rD6Luy3z1qinT4BvEtPj2BzOPd2whr/VdYszaYw==}
+  /@oclif/test/2.1.1:
+    resolution: {integrity: sha512-vuBDXnXbnU073xNUqj+V4Fbrp+6Xhs1sgeWUIMj69SP9qC3pUBPfEPzIoK00ga6/WxZ+2qUgqCBAOPGz3nmTEg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 1.8.1
@@ -872,7 +872,7 @@ packages:
     dev: true
 
   /json-stringify-safe/5.0.1:
-    resolution: {integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=}
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: true
 
   /jsonfile/4.0.0:
@@ -889,7 +889,7 @@ packages:
       graceful-fs: 4.2.10
 
   /lodash.set/4.3.2:
-    resolution: {integrity: sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=}
+    resolution: {integrity: sha512-4hNPN5jlm/N/HLMCO43v8BXKq9Z7QdAGc/VGrRD61w8gN9g/6jF9A4L1pbUgBLCffi0w9VsXfTOij5x8iTyFvg==}
     dev: true
 
   /lodash.throttle/4.1.1:
