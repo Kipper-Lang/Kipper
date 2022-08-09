@@ -87,11 +87,13 @@ export class KipperParser extends Parser {
 	public static readonly IntegerConstant = 59;
 	public static readonly FloatingConstant = 60;
 	public static readonly DigitSequence = 61;
-	public static readonly FStringLiteral = 62;
-	public static readonly StringLiteral = 63;
-	public static readonly Whitespace = 64;
-	public static readonly BlockComment = 65;
-	public static readonly Newline = 66;
+	public static readonly SingleQuoteFStringLiteral = 62;
+	public static readonly DoubleQuoteFStringLiteral = 63;
+	public static readonly SingleQuoteStringLiteral = 64;
+	public static readonly DoubleQuoteStringLiteral = 65;
+	public static readonly Whitespace = 66;
+	public static readonly BlockComment = 67;
+	public static readonly Newline = 68;
 	public static readonly RULE_compilationUnit = 0;
 	public static readonly RULE_translationUnit = 1;
 	public static readonly RULE_externalItem = 2;
@@ -315,8 +317,10 @@ export class KipperParser extends Parser {
 		"IntegerConstant",
 		"FloatingConstant",
 		"DigitSequence",
-		"FStringLiteral",
-		"StringLiteral",
+		"SingleQuoteFStringLiteral",
+		"DoubleQuoteFStringLiteral",
+		"SingleQuoteStringLiteral",
+		"DoubleQuoteStringLiteral",
 		"Whitespace",
 		"BlockComment",
 		"Newline",
@@ -369,39 +373,41 @@ export class KipperParser extends Parser {
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.T__1) |
-								(1 << KipperParser.Const) |
-								(1 << KipperParser.Var) |
-								(1 << KipperParser.Switch) |
-								(1 << KipperParser.Break) |
-								(1 << KipperParser.Continue) |
-								(1 << KipperParser.Do) |
-								(1 << KipperParser.While) |
-								(1 << KipperParser.If) |
-								(1 << KipperParser.For) |
-								(1 << KipperParser.DefFunc) |
-								(1 << KipperParser.Return) |
-								(1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket) |
-								(1 << KipperParser.LeftBrace))) !==
+					(((_la - 2) & ~0x1f) === 0 &&
+						((1 << (_la - 2)) &
+							((1 << (KipperParser.T__1 - 2)) |
+								(1 << (KipperParser.Const - 2)) |
+								(1 << (KipperParser.Var - 2)) |
+								(1 << (KipperParser.Switch - 2)) |
+								(1 << (KipperParser.Break - 2)) |
+								(1 << (KipperParser.Continue - 2)) |
+								(1 << (KipperParser.Do - 2)) |
+								(1 << (KipperParser.While - 2)) |
+								(1 << (KipperParser.If - 2)) |
+								(1 << (KipperParser.For - 2)) |
+								(1 << (KipperParser.DefFunc - 2)) |
+								(1 << (KipperParser.Return - 2)) |
+								(1 << (KipperParser.CallFunc - 2)) |
+								(1 << (KipperParser.True - 2)) |
+								(1 << (KipperParser.False - 2)) |
+								(1 << (KipperParser.LeftParen - 2)) |
+								(1 << (KipperParser.LeftBracket - 2)) |
+								(1 << (KipperParser.LeftBrace - 2)) |
+								(1 << (KipperParser.Plus - 2)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 34) & ~0x1f) === 0 &&
+						((1 << (_la - 34)) &
+							((1 << (KipperParser.PlusPlus - 34)) |
+								(1 << (KipperParser.Minus - 34)) |
+								(1 << (KipperParser.MinusMinus - 34)) |
+								(1 << (KipperParser.Not - 34)) |
+								(1 << (KipperParser.Identifier - 34)) |
+								(1 << (KipperParser.IntegerConstant - 34)) |
+								(1 << (KipperParser.FloatingConstant - 34)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 34)))) !==
 							0)
 				) {
 					{
@@ -461,39 +467,41 @@ export class KipperParser extends Parser {
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				} while (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.T__1) |
-								(1 << KipperParser.Const) |
-								(1 << KipperParser.Var) |
-								(1 << KipperParser.Switch) |
-								(1 << KipperParser.Break) |
-								(1 << KipperParser.Continue) |
-								(1 << KipperParser.Do) |
-								(1 << KipperParser.While) |
-								(1 << KipperParser.If) |
-								(1 << KipperParser.For) |
-								(1 << KipperParser.DefFunc) |
-								(1 << KipperParser.Return) |
-								(1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket) |
-								(1 << KipperParser.LeftBrace))) !==
+					(((_la - 2) & ~0x1f) === 0 &&
+						((1 << (_la - 2)) &
+							((1 << (KipperParser.T__1 - 2)) |
+								(1 << (KipperParser.Const - 2)) |
+								(1 << (KipperParser.Var - 2)) |
+								(1 << (KipperParser.Switch - 2)) |
+								(1 << (KipperParser.Break - 2)) |
+								(1 << (KipperParser.Continue - 2)) |
+								(1 << (KipperParser.Do - 2)) |
+								(1 << (KipperParser.While - 2)) |
+								(1 << (KipperParser.If - 2)) |
+								(1 << (KipperParser.For - 2)) |
+								(1 << (KipperParser.DefFunc - 2)) |
+								(1 << (KipperParser.Return - 2)) |
+								(1 << (KipperParser.CallFunc - 2)) |
+								(1 << (KipperParser.True - 2)) |
+								(1 << (KipperParser.False - 2)) |
+								(1 << (KipperParser.LeftParen - 2)) |
+								(1 << (KipperParser.LeftBracket - 2)) |
+								(1 << (KipperParser.LeftBrace - 2)) |
+								(1 << (KipperParser.Plus - 2)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 34) & ~0x1f) === 0 &&
+						((1 << (_la - 34)) &
+							((1 << (KipperParser.PlusPlus - 34)) |
+								(1 << (KipperParser.Minus - 34)) |
+								(1 << (KipperParser.MinusMinus - 34)) |
+								(1 << (KipperParser.Not - 34)) |
+								(1 << (KipperParser.Identifier - 34)) |
+								(1 << (KipperParser.IntegerConstant - 34)) |
+								(1 << (KipperParser.FloatingConstant - 34)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 34)))) !==
 							0)
 				);
 			}
@@ -551,8 +559,10 @@ export class KipperParser extends Parser {
 				case KipperParser.Identifier:
 				case KipperParser.IntegerConstant:
 				case KipperParser.FloatingConstant:
-				case KipperParser.FStringLiteral:
-				case KipperParser.StringLiteral:
+				case KipperParser.SingleQuoteFStringLiteral:
+				case KipperParser.DoubleQuoteFStringLiteral:
+				case KipperParser.SingleQuoteStringLiteral:
+				case KipperParser.DoubleQuoteStringLiteral:
 					_localctx = new ExternalBlockItemContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
@@ -709,20 +719,42 @@ export class KipperParser extends Parser {
 						this.match(KipperParser.Identifier);
 					}
 					break;
-				case KipperParser.StringLiteral:
+				case KipperParser.SingleQuoteStringLiteral:
+				case KipperParser.DoubleQuoteStringLiteral:
 					_localctx = new StringPrimaryExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 4);
 					{
 						this.state = 132;
-						this.match(KipperParser.StringLiteral);
+						_la = this._input.LA(1);
+						if (!(_la === KipperParser.SingleQuoteStringLiteral || _la === KipperParser.DoubleQuoteStringLiteral)) {
+							this._errHandler.recoverInline(this);
+						} else {
+							if (this._input.LA(1) === Token.EOF) {
+								this.matchedEOF = true;
+							}
+
+							this._errHandler.reportMatch(this);
+							this.consume();
+						}
 					}
 					break;
-				case KipperParser.FStringLiteral:
+				case KipperParser.SingleQuoteFStringLiteral:
+				case KipperParser.DoubleQuoteFStringLiteral:
 					_localctx = new FStringPrimaryExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 5);
 					{
 						this.state = 133;
-						this.match(KipperParser.FStringLiteral);
+						_la = this._input.LA(1);
+						if (!(_la === KipperParser.SingleQuoteFStringLiteral || _la === KipperParser.DoubleQuoteFStringLiteral)) {
+							this._errHandler.recoverInline(this);
+						} else {
+							if (this._input.LA(1) === Token.EOF) {
+								this.matchedEOF = true;
+							}
+
+							this._errHandler.reportMatch(this);
+							this.consume();
+						}
 					}
 					break;
 				case KipperParser.IntegerConstant:
@@ -869,26 +901,28 @@ export class KipperParser extends Parser {
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						if (
-							((_la & ~0x1f) === 0 &&
-								((1 << _la) &
-									((1 << KipperParser.CallFunc) |
-										(1 << KipperParser.True) |
-										(1 << KipperParser.False) |
-										(1 << KipperParser.LeftParen) |
-										(1 << KipperParser.LeftBracket))) !==
+							(((_la - 22) & ~0x1f) === 0 &&
+								((1 << (_la - 22)) &
+									((1 << (KipperParser.CallFunc - 22)) |
+										(1 << (KipperParser.True - 22)) |
+										(1 << (KipperParser.False - 22)) |
+										(1 << (KipperParser.LeftParen - 22)) |
+										(1 << (KipperParser.LeftBracket - 22)) |
+										(1 << (KipperParser.Plus - 22)) |
+										(1 << (KipperParser.PlusPlus - 22)) |
+										(1 << (KipperParser.Minus - 22)) |
+										(1 << (KipperParser.MinusMinus - 22)) |
+										(1 << (KipperParser.Not - 22)))) !==
 									0) ||
-							(((_la - 33) & ~0x1f) === 0 &&
-								((1 << (_la - 33)) &
-									((1 << (KipperParser.Plus - 33)) |
-										(1 << (KipperParser.PlusPlus - 33)) |
-										(1 << (KipperParser.Minus - 33)) |
-										(1 << (KipperParser.MinusMinus - 33)) |
-										(1 << (KipperParser.Not - 33)) |
-										(1 << (KipperParser.Identifier - 33)) |
-										(1 << (KipperParser.IntegerConstant - 33)) |
-										(1 << (KipperParser.FloatingConstant - 33)) |
-										(1 << (KipperParser.FStringLiteral - 33)) |
-										(1 << (KipperParser.StringLiteral - 33)))) !==
+							(((_la - 58) & ~0x1f) === 0 &&
+								((1 << (_la - 58)) &
+									((1 << (KipperParser.Identifier - 58)) |
+										(1 << (KipperParser.IntegerConstant - 58)) |
+										(1 << (KipperParser.FloatingConstant - 58)) |
+										(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+										(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+										(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+										(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 									0)
 						) {
 							{
@@ -998,8 +1032,10 @@ export class KipperParser extends Parser {
 				case KipperParser.Identifier:
 				case KipperParser.IntegerConstant:
 				case KipperParser.FloatingConstant:
-				case KipperParser.FStringLiteral:
-				case KipperParser.StringLiteral:
+				case KipperParser.SingleQuoteFStringLiteral:
+				case KipperParser.DoubleQuoteFStringLiteral:
+				case KipperParser.SingleQuoteStringLiteral:
+				case KipperParser.DoubleQuoteStringLiteral:
 					_localctx = new PassOnUnaryExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
@@ -2282,8 +2318,10 @@ export class KipperParser extends Parser {
 				case KipperParser.Identifier:
 				case KipperParser.IntegerConstant:
 				case KipperParser.FloatingConstant:
-				case KipperParser.FStringLiteral:
-				case KipperParser.StringLiteral:
+				case KipperParser.SingleQuoteFStringLiteral:
+				case KipperParser.DoubleQuoteFStringLiteral:
+				case KipperParser.SingleQuoteStringLiteral:
+				case KipperParser.DoubleQuoteStringLiteral:
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 352;
@@ -2346,38 +2384,40 @@ export class KipperParser extends Parser {
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.T__1) |
-								(1 << KipperParser.Const) |
-								(1 << KipperParser.Var) |
-								(1 << KipperParser.Switch) |
-								(1 << KipperParser.Break) |
-								(1 << KipperParser.Continue) |
-								(1 << KipperParser.Do) |
-								(1 << KipperParser.While) |
-								(1 << KipperParser.If) |
-								(1 << KipperParser.For) |
-								(1 << KipperParser.Return) |
-								(1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket) |
-								(1 << KipperParser.LeftBrace))) !==
+					(((_la - 2) & ~0x1f) === 0 &&
+						((1 << (_la - 2)) &
+							((1 << (KipperParser.T__1 - 2)) |
+								(1 << (KipperParser.Const - 2)) |
+								(1 << (KipperParser.Var - 2)) |
+								(1 << (KipperParser.Switch - 2)) |
+								(1 << (KipperParser.Break - 2)) |
+								(1 << (KipperParser.Continue - 2)) |
+								(1 << (KipperParser.Do - 2)) |
+								(1 << (KipperParser.While - 2)) |
+								(1 << (KipperParser.If - 2)) |
+								(1 << (KipperParser.For - 2)) |
+								(1 << (KipperParser.Return - 2)) |
+								(1 << (KipperParser.CallFunc - 2)) |
+								(1 << (KipperParser.True - 2)) |
+								(1 << (KipperParser.False - 2)) |
+								(1 << (KipperParser.LeftParen - 2)) |
+								(1 << (KipperParser.LeftBracket - 2)) |
+								(1 << (KipperParser.LeftBrace - 2)) |
+								(1 << (KipperParser.Plus - 2)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 34) & ~0x1f) === 0 &&
+						((1 << (_la - 34)) &
+							((1 << (KipperParser.PlusPlus - 34)) |
+								(1 << (KipperParser.Minus - 34)) |
+								(1 << (KipperParser.MinusMinus - 34)) |
+								(1 << (KipperParser.Not - 34)) |
+								(1 << (KipperParser.Identifier - 34)) |
+								(1 << (KipperParser.IntegerConstant - 34)) |
+								(1 << (KipperParser.FloatingConstant - 34)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 34)))) !==
 							0)
 				) {
 					{
@@ -2424,38 +2464,40 @@ export class KipperParser extends Parser {
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				} while (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.T__1) |
-								(1 << KipperParser.Const) |
-								(1 << KipperParser.Var) |
-								(1 << KipperParser.Switch) |
-								(1 << KipperParser.Break) |
-								(1 << KipperParser.Continue) |
-								(1 << KipperParser.Do) |
-								(1 << KipperParser.While) |
-								(1 << KipperParser.If) |
-								(1 << KipperParser.For) |
-								(1 << KipperParser.Return) |
-								(1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket) |
-								(1 << KipperParser.LeftBrace))) !==
+					(((_la - 2) & ~0x1f) === 0 &&
+						((1 << (_la - 2)) &
+							((1 << (KipperParser.T__1 - 2)) |
+								(1 << (KipperParser.Const - 2)) |
+								(1 << (KipperParser.Var - 2)) |
+								(1 << (KipperParser.Switch - 2)) |
+								(1 << (KipperParser.Break - 2)) |
+								(1 << (KipperParser.Continue - 2)) |
+								(1 << (KipperParser.Do - 2)) |
+								(1 << (KipperParser.While - 2)) |
+								(1 << (KipperParser.If - 2)) |
+								(1 << (KipperParser.For - 2)) |
+								(1 << (KipperParser.Return - 2)) |
+								(1 << (KipperParser.CallFunc - 2)) |
+								(1 << (KipperParser.True - 2)) |
+								(1 << (KipperParser.False - 2)) |
+								(1 << (KipperParser.LeftParen - 2)) |
+								(1 << (KipperParser.LeftBracket - 2)) |
+								(1 << (KipperParser.LeftBrace - 2)) |
+								(1 << (KipperParser.Plus - 2)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 34) & ~0x1f) === 0 &&
+						((1 << (_la - 34)) &
+							((1 << (KipperParser.PlusPlus - 34)) |
+								(1 << (KipperParser.Minus - 34)) |
+								(1 << (KipperParser.MinusMinus - 34)) |
+								(1 << (KipperParser.Not - 34)) |
+								(1 << (KipperParser.Identifier - 34)) |
+								(1 << (KipperParser.IntegerConstant - 34)) |
+								(1 << (KipperParser.FloatingConstant - 34)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 34)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 34)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 34)))) !==
 							0)
 				);
 			}
@@ -2505,8 +2547,10 @@ export class KipperParser extends Parser {
 					case KipperParser.Identifier:
 					case KipperParser.IntegerConstant:
 					case KipperParser.FloatingConstant:
-					case KipperParser.FStringLiteral:
-					case KipperParser.StringLiteral:
+					case KipperParser.SingleQuoteFStringLiteral:
+					case KipperParser.DoubleQuoteFStringLiteral:
+					case KipperParser.SingleQuoteStringLiteral:
+					case KipperParser.DoubleQuoteStringLiteral:
 						{
 							this.state = 369;
 							this.statement();
@@ -2548,26 +2592,28 @@ export class KipperParser extends Parser {
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket))) !==
+					(((_la - 22) & ~0x1f) === 0 &&
+						((1 << (_la - 22)) &
+							((1 << (KipperParser.CallFunc - 22)) |
+								(1 << (KipperParser.True - 22)) |
+								(1 << (KipperParser.False - 22)) |
+								(1 << (KipperParser.LeftParen - 22)) |
+								(1 << (KipperParser.LeftBracket - 22)) |
+								(1 << (KipperParser.Plus - 22)) |
+								(1 << (KipperParser.PlusPlus - 22)) |
+								(1 << (KipperParser.Minus - 22)) |
+								(1 << (KipperParser.MinusMinus - 22)) |
+								(1 << (KipperParser.Not - 22)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 58) & ~0x1f) === 0 &&
+						((1 << (_la - 58)) &
+							((1 << (KipperParser.Identifier - 58)) |
+								(1 << (KipperParser.IntegerConstant - 58)) |
+								(1 << (KipperParser.FloatingConstant - 58)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 							0)
 				) {
 					{
@@ -2830,33 +2876,37 @@ export class KipperParser extends Parser {
 					case KipperParser.Identifier:
 					case KipperParser.IntegerConstant:
 					case KipperParser.FloatingConstant:
-					case KipperParser.FStringLiteral:
-					case KipperParser.StringLiteral:
+					case KipperParser.SingleQuoteFStringLiteral:
+					case KipperParser.DoubleQuoteFStringLiteral:
+					case KipperParser.SingleQuoteStringLiteral:
+					case KipperParser.DoubleQuoteStringLiteral:
 						{
 							this.state = 436;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (
-								((_la & ~0x1f) === 0 &&
-									((1 << _la) &
-										((1 << KipperParser.CallFunc) |
-											(1 << KipperParser.True) |
-											(1 << KipperParser.False) |
-											(1 << KipperParser.LeftParen) |
-											(1 << KipperParser.LeftBracket))) !==
+								(((_la - 22) & ~0x1f) === 0 &&
+									((1 << (_la - 22)) &
+										((1 << (KipperParser.CallFunc - 22)) |
+											(1 << (KipperParser.True - 22)) |
+											(1 << (KipperParser.False - 22)) |
+											(1 << (KipperParser.LeftParen - 22)) |
+											(1 << (KipperParser.LeftBracket - 22)) |
+											(1 << (KipperParser.Plus - 22)) |
+											(1 << (KipperParser.PlusPlus - 22)) |
+											(1 << (KipperParser.Minus - 22)) |
+											(1 << (KipperParser.MinusMinus - 22)) |
+											(1 << (KipperParser.Not - 22)))) !==
 										0) ||
-								(((_la - 33) & ~0x1f) === 0 &&
-									((1 << (_la - 33)) &
-										((1 << (KipperParser.Plus - 33)) |
-											(1 << (KipperParser.PlusPlus - 33)) |
-											(1 << (KipperParser.Minus - 33)) |
-											(1 << (KipperParser.MinusMinus - 33)) |
-											(1 << (KipperParser.Not - 33)) |
-											(1 << (KipperParser.Identifier - 33)) |
-											(1 << (KipperParser.IntegerConstant - 33)) |
-											(1 << (KipperParser.FloatingConstant - 33)) |
-											(1 << (KipperParser.FStringLiteral - 33)) |
-											(1 << (KipperParser.StringLiteral - 33)))) !==
+								(((_la - 58) & ~0x1f) === 0 &&
+									((1 << (_la - 58)) &
+										((1 << (KipperParser.Identifier - 58)) |
+											(1 << (KipperParser.IntegerConstant - 58)) |
+											(1 << (KipperParser.FloatingConstant - 58)) |
+											(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+											(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+											(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+											(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 										0)
 							) {
 								{
@@ -2875,26 +2925,28 @@ export class KipperParser extends Parser {
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket))) !==
+					(((_la - 22) & ~0x1f) === 0 &&
+						((1 << (_la - 22)) &
+							((1 << (KipperParser.CallFunc - 22)) |
+								(1 << (KipperParser.True - 22)) |
+								(1 << (KipperParser.False - 22)) |
+								(1 << (KipperParser.LeftParen - 22)) |
+								(1 << (KipperParser.LeftBracket - 22)) |
+								(1 << (KipperParser.Plus - 22)) |
+								(1 << (KipperParser.PlusPlus - 22)) |
+								(1 << (KipperParser.Minus - 22)) |
+								(1 << (KipperParser.MinusMinus - 22)) |
+								(1 << (KipperParser.Not - 22)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 58) & ~0x1f) === 0 &&
+						((1 << (_la - 58)) &
+							((1 << (KipperParser.Identifier - 58)) |
+								(1 << (KipperParser.IntegerConstant - 58)) |
+								(1 << (KipperParser.FloatingConstant - 58)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 							0)
 				) {
 					{
@@ -2909,26 +2961,28 @@ export class KipperParser extends Parser {
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket))) !==
+					(((_la - 22) & ~0x1f) === 0 &&
+						((1 << (_la - 22)) &
+							((1 << (KipperParser.CallFunc - 22)) |
+								(1 << (KipperParser.True - 22)) |
+								(1 << (KipperParser.False - 22)) |
+								(1 << (KipperParser.LeftParen - 22)) |
+								(1 << (KipperParser.LeftBracket - 22)) |
+								(1 << (KipperParser.Plus - 22)) |
+								(1 << (KipperParser.PlusPlus - 22)) |
+								(1 << (KipperParser.Minus - 22)) |
+								(1 << (KipperParser.MinusMinus - 22)) |
+								(1 << (KipperParser.Not - 22)))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)) |
-								(1 << (KipperParser.Identifier - 33)) |
-								(1 << (KipperParser.IntegerConstant - 33)) |
-								(1 << (KipperParser.FloatingConstant - 33)) |
-								(1 << (KipperParser.FStringLiteral - 33)) |
-								(1 << (KipperParser.StringLiteral - 33)))) !==
+					(((_la - 58) & ~0x1f) === 0 &&
+						((1 << (_la - 58)) &
+							((1 << (KipperParser.Identifier - 58)) |
+								(1 << (KipperParser.IntegerConstant - 58)) |
+								(1 << (KipperParser.FloatingConstant - 58)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 							0)
 				) {
 					{
@@ -3051,26 +3105,28 @@ export class KipperParser extends Parser {
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (
-								((_la & ~0x1f) === 0 &&
-									((1 << _la) &
-										((1 << KipperParser.CallFunc) |
-											(1 << KipperParser.True) |
-											(1 << KipperParser.False) |
-											(1 << KipperParser.LeftParen) |
-											(1 << KipperParser.LeftBracket))) !==
+								(((_la - 22) & ~0x1f) === 0 &&
+									((1 << (_la - 22)) &
+										((1 << (KipperParser.CallFunc - 22)) |
+											(1 << (KipperParser.True - 22)) |
+											(1 << (KipperParser.False - 22)) |
+											(1 << (KipperParser.LeftParen - 22)) |
+											(1 << (KipperParser.LeftBracket - 22)) |
+											(1 << (KipperParser.Plus - 22)) |
+											(1 << (KipperParser.PlusPlus - 22)) |
+											(1 << (KipperParser.Minus - 22)) |
+											(1 << (KipperParser.MinusMinus - 22)) |
+											(1 << (KipperParser.Not - 22)))) !==
 										0) ||
-								(((_la - 33) & ~0x1f) === 0 &&
-									((1 << (_la - 33)) &
-										((1 << (KipperParser.Plus - 33)) |
-											(1 << (KipperParser.PlusPlus - 33)) |
-											(1 << (KipperParser.Minus - 33)) |
-											(1 << (KipperParser.MinusMinus - 33)) |
-											(1 << (KipperParser.Not - 33)) |
-											(1 << (KipperParser.Identifier - 33)) |
-											(1 << (KipperParser.IntegerConstant - 33)) |
-											(1 << (KipperParser.FloatingConstant - 33)) |
-											(1 << (KipperParser.FStringLiteral - 33)) |
-											(1 << (KipperParser.StringLiteral - 33)))) !==
+								(((_la - 58) & ~0x1f) === 0 &&
+									((1 << (_la - 58)) &
+										((1 << (KipperParser.Identifier - 58)) |
+											(1 << (KipperParser.IntegerConstant - 58)) |
+											(1 << (KipperParser.FloatingConstant - 58)) |
+											(1 << (KipperParser.SingleQuoteFStringLiteral - 58)) |
+											(1 << (KipperParser.DoubleQuoteFStringLiteral - 58)) |
+											(1 << (KipperParser.SingleQuoteStringLiteral - 58)) |
+											(1 << (KipperParser.DoubleQuoteStringLiteral - 58)))) !==
 										0)
 							) {
 								{
@@ -3166,7 +3222,7 @@ export class KipperParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03D\u01D7\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03F\u01D7\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -3216,175 +3272,175 @@ export class KipperParser extends Parser {
 		'\x14\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02"\x02$\x02&\x02' +
 		"(\x02*\x02,\x02.\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02" +
 		"D\x02F\x02H\x02J\x02L\x02N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02" +
-		"`\x02\x02\r\x03\x02\x19\x1A\x03\x02=>\x04\x02$$&&\x05\x02##%%--\x03\x02" +
-		"'*\x04\x02##%%\x03\x027:\x03\x0256\x03\x02/4\x03\x02\x07\b\x03\x02\x0E" +
-		"\x0F\x02\u01E1\x02c\x03\x02\x02\x02\x04i\x03\x02\x02\x02\x06o\x03\x02" +
-		"\x02\x02\bq\x03\x02\x02\x02\n~\x03\x02\x02\x02\f\x94\x03\x02\x02\x02\x0E" +
-		"\xAA\x03\x02\x02\x02\x10\xAC\x03\x02\x02\x02\x12\xB0\x03\x02\x02\x02\x14" +
-		"\xBF\x03\x02\x02\x02\x16\xC1\x03\x02\x02\x02\x18\xC3\x03\x02\x02\x02\x1A" +
-		"\xCA\x03\x02\x02\x02\x1C\xCC\x03\x02\x02\x02\x1E\xD7\x03\x02\x02\x02 " +
-		'\xE2\x03\x02\x02\x02"\xED\x03\x02\x02\x02$\xF8\x03\x02\x02\x02&\u0103' +
-		"\x03\x02\x02\x02(\u0115\x03\x02\x02\x02*\u011C\x03\x02\x02\x02,\u011E" +
-		"\x03\x02\x02\x02.\u0120\x03\x02\x02\x020\u0128\x03\x02\x02\x022\u012A" +
-		"\x03\x02\x02\x024\u012E\x03\x02\x02\x026\u0131\x03\x02\x02\x028\u0135" +
-		"\x03\x02\x02\x02:\u0137\x03\x02\x02\x02<\u0147\x03\x02\x02\x02>\u0149" +
-		"\x03\x02\x02\x02@\u014B\x03\x02\x02\x02B\u014D\x03\x02\x02\x02D\u0153" +
-		"\x03\x02\x02\x02F\u015B\x03\x02\x02\x02H\u015F\x03\x02\x02\x02J\u0166" +
-		"\x03\x02\x02\x02L\u0168\x03\x02\x02\x02N\u016F\x03\x02\x02\x02P\u0175" +
-		"\x03\x02\x02\x02R\u0178\x03\x02\x02\x02T\u0192\x03\x02\x02\x02V\u019C" +
-		"\x03\x02\x02\x02X\u01B2\x03\x02\x02\x02Z\u01B8\x03\x02\x02\x02\\\u01C2" +
-		"\x03\x02\x02\x02^\u01C5\x03\x02\x02\x02`\u01D2\x03\x02\x02\x02bd\x05\x04" +
-		"\x03\x02cb\x03\x02\x02\x02cd\x03\x02\x02\x02de\x03\x02\x02\x02ef\x07\x02" +
-		"\x02\x03f\x03\x03\x02\x02\x02gj\x05\x06\x04\x02hj\x05\n\x06\x02ig\x03" +
-		"\x02\x02\x02ih\x03\x02\x02\x02jk\x03\x02\x02\x02ki\x03\x02\x02\x02kl\x03" +
-		"\x02\x02\x02l\x05\x03\x02\x02\x02mp\x05\b\x05\x02np\x05P)\x02om\x03\x02" +
-		"\x02\x02on\x03\x02\x02\x02p\x07\x03\x02\x02\x02qr\x07\x16\x02\x02rs\x05" +
-		'> \x02su\x07\x1D\x02\x02tv\x05B"\x02ut\x03\x02\x02\x02uv\x03\x02\x02' +
-		"\x02vw\x03\x02\x02\x02wx\x07\x1E\x02\x02xy\x07\x03\x02\x02y|\x05<\x1F" +
-		"\x02z}\x05L'\x02{}\x05\n\x06\x02|z\x03\x02\x02\x02|{\x03\x02\x02\x02" +
-		"}\t\x03\x02\x02\x02~\x7F\x07\x04\x02\x02\x7F\v\x03\x02\x02\x02\x80\x81" +
-		"\x07\x1D\x02\x02\x81\x82\x05*\x16\x02\x82\x83\x07\x1E\x02\x02\x83\x95" +
-		"\x03\x02\x02\x02\x84\x95\t\x02\x02\x02\x85\x95\x07<\x02\x02\x86\x95\x07" +
-		"A\x02\x02\x87\x95\x07@\x02\x02\x88\x95\t\x03\x02\x02\x89\x8A\x07\x1F\x02" +
-		"\x02\x8A\x8F\x050\x19\x02\x8B\x8C\x07.\x02\x02\x8C\x8E\x050\x19\x02\x8D" +
-		"\x8B\x03\x02\x02\x02\x8E\x91\x03\x02\x02\x02\x8F\x8D\x03\x02\x02\x02\x8F" +
-		"\x90\x03\x02\x02\x02\x90\x92\x03\x02\x02\x02\x91\x8F\x03\x02\x02\x02\x92" +
-		"\x93\x07 \x02\x02\x93\x95\x03\x02\x02\x02\x94\x80\x03\x02\x02\x02\x94" +
-		"\x84\x03\x02\x02\x02\x94\x85\x03\x02\x02\x02\x94\x86\x03\x02\x02\x02\x94" +
-		"\x87\x03\x02\x02\x02\x94\x88\x03\x02\x02\x02\x94\x89\x03\x02\x02\x02\x95" +
-		"\r\x03\x02\x02\x02\x96\xAB\x05\f\x07\x02\x97\x99\x05\f\x07\x02\x98\x9A" +
-		"\x05\x10\t\x02\x99\x98\x03\x02\x02\x02\x9A\x9B\x03\x02\x02\x02\x9B\x99" +
-		"\x03\x02\x02\x02\x9B\x9C\x03\x02\x02\x02\x9C\xAB\x03\x02\x02\x02\x9D\x9E" +
-		"\x05\f\x07\x02\x9E\x9F\x05\x16\f\x02\x9F\xAB\x03\x02\x02\x02\xA0\xA2\x07" +
-		"\x18\x02\x02\xA1\xA0\x03\x02\x02\x02\xA1\xA2\x03\x02\x02\x02\xA2\xA3\x03" +
-		"\x02\x02\x02\xA3\xA4\x05\f\x07\x02\xA4\xA6\x07\x1D\x02\x02\xA5\xA7\x05" +
-		"\x12\n\x02\xA6\xA5\x03\x02\x02\x02\xA6\xA7\x03\x02\x02\x02\xA7\xA8\x03" +
-		"\x02\x02\x02\xA8\xA9\x07\x1E\x02\x02\xA9\xAB\x03\x02\x02\x02\xAA\x96\x03" +
-		"\x02\x02\x02\xAA\x97\x03\x02\x02\x02\xAA\x9D\x03\x02\x02\x02\xAA\xA1\x03" +
-		"\x02\x02\x02\xAB\x0F\x03\x02\x02\x02\xAC\xAD\x07\x1F\x02\x02\xAD\xAE\x05" +
-		".\x18\x02\xAE\xAF\x07 \x02\x02\xAF\x11\x03\x02\x02\x02\xB0\xB5\x05*\x16" +
-		"\x02\xB1\xB2\x07.\x02\x02\xB2\xB4\x05*\x16\x02\xB3\xB1\x03\x02\x02\x02" +
-		"\xB4\xB7\x03\x02\x02\x02\xB5\xB3\x03\x02\x02\x02\xB5\xB6\x03\x02\x02\x02" +
-		"\xB6\x13\x03\x02\x02\x02\xB7\xB5\x03\x02\x02\x02\xB8\xC0\x05\x0E\b\x02" +
-		"\xB9\xBA\x05\x16\f\x02\xBA\xBB\x05\x0E\b\x02\xBB\xC0\x03\x02\x02\x02\xBC" +
-		"\xBD\x05\x18\r\x02\xBD\xBE\x05\x0E\b\x02\xBE\xC0\x03\x02\x02\x02\xBF\xB8" +
-		"\x03\x02\x02\x02\xBF\xB9\x03\x02\x02\x02\xBF\xBC\x03\x02\x02\x02\xC0\x15" +
-		"\x03\x02\x02\x02\xC1\xC2\t\x04\x02\x02\xC2\x17\x03\x02\x02\x02\xC3\xC4" +
-		"\t\x05\x02\x02\xC4\x19\x03\x02\x02\x02\xC5\xCB\x05\x14\v\x02\xC6\xC7\x05" +
-		"\x14\v\x02\xC7\xC8\x07\t\x02\x02\xC8\xC9\x05<\x1F\x02\xC9\xCB\x03\x02" +
-		"\x02\x02\xCA\xC5\x03\x02\x02\x02\xCA\xC6\x03\x02\x02\x02\xCB\x1B\x03\x02" +
-		"\x02\x02\xCC\xCD\b\x0F\x01\x02\xCD\xCE\x05\x1A\x0E\x02\xCE\xD4\x03\x02" +
-		"\x02\x02\xCF\xD0\f\x03\x02\x02\xD0\xD1\t\x06\x02\x02\xD1\xD3\x05\x1A\x0E" +
-		"\x02\xD2\xCF\x03\x02\x02\x02\xD3\xD6\x03\x02\x02\x02\xD4\xD2\x03\x02\x02" +
-		"\x02\xD4\xD5\x03\x02\x02\x02\xD5\x1D\x03\x02\x02\x02\xD6\xD4\x03\x02\x02" +
-		"\x02\xD7\xD8\b\x10\x01\x02\xD8\xD9\x05\x1C\x0F\x02\xD9\xDF\x03\x02\x02" +
-		"\x02\xDA\xDB\f\x03\x02\x02\xDB\xDC\t\x07\x02\x02\xDC\xDE\x05\x1C\x0F\x02" +
-		"\xDD\xDA\x03\x02\x02\x02\xDE\xE1\x03\x02\x02\x02\xDF\xDD\x03\x02\x02\x02" +
-		"\xDF\xE0\x03\x02\x02\x02\xE0\x1F\x03\x02\x02\x02\xE1\xDF\x03\x02\x02\x02" +
-		"\xE2\xE3\b\x11\x01\x02\xE3\xE4\x05\x1E\x10\x02\xE4\xEA\x03\x02\x02\x02" +
-		"\xE5\xE6\f\x03\x02\x02\xE6\xE7\t\b\x02\x02\xE7\xE9\x05\x1E\x10\x02\xE8" +
-		"\xE5\x03\x02\x02\x02\xE9\xEC\x03\x02\x02\x02\xEA\xE8\x03\x02\x02\x02\xEA" +
-		"\xEB\x03\x02\x02\x02\xEB!\x03\x02\x02\x02\xEC\xEA\x03\x02\x02\x02\xED" +
-		"\xEE\b\x12\x01\x02\xEE\xEF\x05 \x11\x02\xEF\xF5\x03\x02\x02\x02\xF0\xF1" +
-		"\f\x03\x02\x02\xF1\xF2\t\t\x02\x02\xF2\xF4\x05 \x11\x02\xF3\xF0\x03\x02" +
-		"\x02\x02\xF4\xF7\x03\x02\x02\x02\xF5\xF3\x03\x02\x02\x02\xF5\xF6\x03\x02" +
-		"\x02\x02\xF6#\x03\x02\x02\x02\xF7\xF5\x03\x02\x02\x02\xF8\xF9\b\x13\x01" +
-		'\x02\xF9\xFA\x05"\x12\x02\xFA\u0100\x03\x02\x02\x02\xFB\xFC\f\x03\x02' +
-		'\x02\xFC\xFD\x07+\x02\x02\xFD\xFF\x05"\x12\x02\xFE\xFB\x03\x02\x02\x02' +
-		"\xFF\u0102\x03\x02\x02\x02\u0100\xFE\x03\x02\x02\x02\u0100\u0101\x03\x02" +
-		"\x02\x02\u0101%\x03\x02\x02\x02\u0102\u0100\x03\x02\x02\x02\u0103\u0104" +
-		"\b\x14\x01\x02\u0104\u0105\x05$\x13\x02\u0105\u010B\x03\x02\x02\x02\u0106" +
-		"\u0107\f\x03\x02\x02\u0107\u0108\x07,\x02\x02\u0108\u010A\x05$\x13\x02" +
-		"\u0109\u0106\x03\x02\x02\x02\u010A\u010D\x03\x02\x02\x02\u010B\u0109\x03" +
-		"\x02\x02\x02\u010B\u010C\x03\x02\x02\x02\u010C'\x03\x02\x02\x02\u010D" +
-		"\u010B\x03\x02\x02\x02\u010E\u0116\x05&\x14\x02\u010F\u0110\x05&\x14\x02" +
-		"\u0110\u0111\x07\x05\x02\x02\u0111\u0112\x05(\x15\x02\u0112\u0113\x07" +
-		"\x06\x02\x02\u0113\u0114\x05(\x15\x02\u0114\u0116\x03\x02\x02\x02\u0115" +
-		"\u010E\x03\x02\x02\x02\u0115\u010F\x03\x02\x02\x02\u0116)\x03\x02\x02" +
-		"\x02\u0117\u011D\x05(\x15\x02\u0118\u0119\x05\f\x07\x02\u0119\u011A\x05" +
-		",\x17\x02\u011A\u011B\x05*\x16\x02\u011B\u011D\x03\x02\x02\x02\u011C\u0117" +
-		"\x03\x02\x02\x02\u011C\u0118\x03\x02\x02\x02\u011D+\x03\x02\x02\x02\u011E" +
-		"\u011F\t\n\x02\x02\u011F-\x03\x02\x02\x02\u0120\u0125\x05*\x16\x02\u0121" +
-		"\u0122\x07.\x02\x02\u0122\u0124\x05*\x16\x02\u0123\u0121\x03\x02\x02\x02" +
-		"\u0124\u0127\x03\x02\x02\x02\u0125\u0123\x03\x02\x02\x02\u0125\u0126\x03" +
-		"\x02\x02\x02\u0126/\x03\x02\x02\x02\u0127\u0125\x03\x02\x02\x02\u0128" +
-		"\u0129\x05(\x15\x02\u01291\x03\x02\x02\x02\u012A\u012B\x054\x1B\x02\u012B" +
-		"\u012C\x05:\x1E\x02\u012C\u012D\x05\n\x06\x02\u012D3\x03\x02\x02\x02\u012E" +
-		"\u012F\t\v\x02\x02\u012F5\x03\x02\x02\x02\u0130\u0132\x058\x1D\x02\u0131" +
-		"\u0130\x03\x02\x02\x02\u0132\u0133\x03\x02\x02\x02\u0133\u0131\x03\x02" +
-		"\x02\x02\u0133\u0134\x03\x02\x02\x02\u01347\x03\x02\x02\x02\u0135\u0136" +
-		"\x05<\x1F\x02\u01369\x03\x02\x02\x02\u0137\u0138\x05> \x02\u0138\u0139" +
-		"\x07\x06\x02\x02\u0139\u013C\x05<\x1F\x02\u013A\u013B\x07/\x02\x02\u013B" +
-		"\u013D\x05H%\x02\u013C\u013A\x03\x02\x02\x02\u013C\u013D\x03\x02\x02\x02" +
-		"\u013D;\x03\x02\x02\x02\u013E\u0148\x07<\x02\x02\u013F\u0140\x07<\x02" +
-		"\x02\u0140\u0141\x077\x02\x02\u0141\u0142\x07<\x02\x02\u0142\u0148\x07" +
-		"9\x02\x02\u0143\u0144\x07\x1C\x02\x02\u0144\u0145\x07\x1D\x02\x02\u0145" +
-		"\u0146\x07<\x02\x02\u0146\u0148\x07\x1E\x02\x02\u0147\u013E\x03\x02\x02" +
-		"\x02\u0147\u013F\x03\x02\x02\x02\u0147\u0143\x03\x02\x02\x02\u0148=\x03" +
-		"\x02\x02\x02\u0149\u014A\x05@!\x02\u014A?\x03\x02\x02\x02\u014B\u014C" +
-		"\x07<\x02\x02\u014CA\x03\x02\x02\x02\u014D\u0151\x05D#\x02\u014E\u014F" +
-		"\x07.\x02\x02\u014F\u0150\x07\n\x02\x02\u0150\u0152\x07<\x02\x02\u0151" +
-		"\u014E\x03\x02\x02\x02\u0151\u0152\x03\x02\x02\x02\u0152C\x03\x02\x02" +
-		"\x02\u0153\u0158\x05F$\x02\u0154\u0155\x07.\x02\x02\u0155\u0157\x05F$" +
-		"\x02\u0156\u0154\x03\x02\x02\x02\u0157\u015A\x03\x02\x02\x02\u0158\u0156" +
-		"\x03\x02\x02\x02\u0158\u0159\x03\x02\x02\x02\u0159E\x03\x02\x02\x02\u015A" +
-		"\u0158\x03\x02\x02\x02\u015B\u015C\x05> \x02\u015C\u015D\x07\x06\x02\x02" +
-		"\u015D\u015E\x056\x1C\x02\u015EG\x03\x02\x02\x02\u015F\u0160\x05*\x16" +
-		"\x02\u0160I\x03\x02\x02\x02\u0161\u0167\x05L'\x02\u0162\u0167\x05R*\x02" +
-		"\u0163\u0167\x05T+\x02\u0164\u0167\x05X-\x02\u0165\u0167\x05`1\x02\u0166" +
-		"\u0161\x03\x02\x02\x02\u0166\u0162\x03\x02\x02\x02\u0166\u0163\x03\x02" +
-		"\x02\x02\u0166\u0164\x03\x02\x02\x02\u0166\u0165\x03\x02\x02\x02\u0167" +
-		"K\x03\x02\x02\x02\u0168\u016A\x07!\x02\x02\u0169\u016B\x05N(\x02\u016A" +
-		"\u0169\x03\x02\x02\x02\u016A\u016B\x03\x02\x02\x02\u016B\u016C\x03\x02" +
-		'\x02\x02\u016C\u016D\x07"\x02\x02\u016DM\x03\x02\x02\x02\u016E\u0170' +
-		"\x05P)\x02\u016F\u016E\x03\x02\x02\x02\u0170\u0171\x03\x02\x02\x02\u0171" +
-		"\u016F\x03\x02\x02\x02\u0171\u0172\x03\x02\x02\x02\u0172O\x03\x02\x02" +
-		"\x02\u0173\u0176\x05J&\x02\u0174\u0176\x052\x1A\x02\u0175\u0173\x03\x02" +
-		"\x02\x02\u0175\u0174\x03\x02\x02\x02\u0176Q\x03\x02\x02\x02\u0177\u0179" +
-		"\x05.\x18\x02\u0178\u0177\x03\x02\x02\x02\u0178\u0179\x03\x02\x02\x02" +
-		"\u0179\u017A\x03\x02\x02\x02\u017A\u017B\x05\n\x06\x02\u017BS\x03\x02" +
-		"\x02\x02\u017C\u017D\x07\x12\x02\x02\u017D\u017E\x07\x1D\x02\x02\u017E" +
-		"\u017F\x05.\x18\x02\u017F\u0180\x07\x1E\x02\x02\u0180\u0183\x05J&\x02" +
-		"\u0181\u0182\x07\x13\x02\x02\u0182\u0184\x05J&\x02\u0183\u0181\x03\x02" +
-		"\x02\x02\u0183\u0184\x03\x02\x02\x02\u0184\u0193\x03\x02\x02\x02\u0185" +
-		"\u0186\x07\v\x02\x02\u0186\u0187\x07\x1D\x02\x02\u0187\u0188\x05.\x18" +
-		"\x02\u0188\u0189\x07\x1E\x02\x02\u0189\u018D\x07!\x02\x02\u018A\u018C" +
-		"\x05V,\x02\u018B\u018A\x03\x02\x02\x02\u018C\u018F\x03\x02\x02\x02\u018D" +
-		"\u018B\x03\x02\x02\x02\u018D\u018E\x03\x02\x02\x02\u018E\u0190\x03\x02" +
-		'\x02\x02\u018F\u018D\x03\x02\x02\x02\u0190\u0191\x07"\x02\x02\u0191\u0193' +
-		"\x03\x02\x02\x02\u0192\u017C\x03\x02\x02\x02\u0192\u0185\x03\x02\x02\x02" +
-		"\u0193U\x03\x02\x02\x02\u0194\u0195\x07\f\x02\x02\u0195\u0196\x050\x19" +
-		"\x02\u0196\u0197\x07\x06\x02\x02\u0197\u0198\x05J&\x02\u0198\u019D\x03" +
-		"\x02\x02\x02\u0199\u019A\x07\r\x02\x02\u019A\u019B\x07\x06\x02\x02\u019B" +
-		"\u019D\x05J&\x02\u019C\u0194\x03\x02\x02\x02\u019C\u0199\x03\x02\x02\x02" +
-		"\u019DW\x03\x02\x02\x02\u019E\u019F\x07\x14\x02\x02\u019F\u01A0\x07\x1D" +
-		"\x02\x02\u01A0\u01A1\x05Z.\x02\u01A1\u01A2\x07\x1E\x02\x02\u01A2\u01A3" +
-		"\x05J&\x02\u01A3\u01B3\x03\x02\x02\x02\u01A4\u01A5\x07\x11\x02\x02\u01A5" +
-		"\u01A6\x07\x1D\x02\x02\u01A6\u01A7\x05.\x18\x02\u01A7\u01A8\x07\x1E\x02" +
-		"\x02\u01A8\u01A9\x05J&\x02\u01A9\u01B3\x03\x02\x02\x02\u01AA\u01AB\x07" +
-		"\x10\x02\x02\u01AB\u01AC\x05J&\x02\u01AC\u01AD\x07\x11\x02\x02\u01AD\u01AE" +
-		"\x07\x1D\x02\x02\u01AE\u01AF\x05.\x18\x02\u01AF\u01B0\x07\x1E\x02\x02" +
-		"\u01B0\u01B1\x05\n\x06\x02\u01B1\u01B3\x03\x02\x02\x02\u01B2\u019E\x03" +
-		"\x02\x02\x02\u01B2\u01A4\x03\x02\x02\x02\u01B2\u01AA\x03\x02\x02\x02\u01B3" +
-		"Y\x03\x02\x02\x02\u01B4\u01B9\x05\\/\x02\u01B5\u01B7\x05.\x18\x02\u01B6" +
-		"\u01B5\x03\x02\x02\x02\u01B6\u01B7\x03\x02\x02\x02\u01B7\u01B9\x03\x02" +
-		"\x02\x02\u01B8\u01B4\x03\x02\x02\x02\u01B8\u01B6\x03\x02\x02\x02\u01B9" +
-		"\u01BA\x03\x02\x02\x02\u01BA\u01BC\x05\n\x06\x02\u01BB\u01BD\x05^0\x02" +
-		"\u01BC\u01BB\x03\x02\x02\x02\u01BC\u01BD\x03\x02\x02\x02\u01BD\u01BE\x03" +
-		"\x02\x02\x02\u01BE\u01C0\x05\n\x06\x02\u01BF\u01C1\x05^0\x02\u01C0\u01BF" +
-		"\x03\x02\x02\x02\u01C0\u01C1\x03\x02\x02\x02\u01C1[\x03\x02\x02\x02\u01C2" +
-		"\u01C3\x054\x1B\x02\u01C3\u01C4\x05:\x1E\x02\u01C4]\x03\x02\x02\x02\u01C5" +
-		"\u01CA\x05*\x16\x02\u01C6\u01C7\x07.\x02\x02\u01C7\u01C9\x05*\x16\x02" +
-		"\u01C8\u01C6\x03\x02\x02\x02\u01C9\u01CC\x03\x02\x02\x02\u01CA\u01C8\x03" +
-		"\x02\x02\x02\u01CA\u01CB\x03\x02\x02\x02\u01CB_\x03\x02\x02\x02\u01CC" +
-		"\u01CA\x03\x02\x02\x02\u01CD\u01D3\t\f\x02\x02\u01CE\u01D0\x07\x17\x02" +
-		"\x02\u01CF\u01D1\x05.\x18\x02\u01D0\u01CF\x03\x02\x02\x02\u01D0\u01D1" +
-		"\x03\x02\x02\x02\u01D1\u01D3\x03\x02\x02\x02\u01D2\u01CD\x03\x02\x02\x02" +
-		"\u01D2\u01CE\x03\x02\x02\x02\u01D3\u01D4\x03\x02\x02\x02\u01D4\u01D5\x05" +
-		"\n\x06\x02\u01D5a\x03\x02\x02\x020cikou|\x8F\x94\x9B\xA1\xA6\xAA\xB5\xBF" +
-		"\xCA\xD4\xDF\xEA\xF5\u0100\u010B\u0115\u011C\u0125\u0133\u013C\u0147\u0151" +
-		"\u0158\u0166\u016A\u0171\u0175\u0178\u0183\u018D\u0192\u019C\u01B2\u01B6" +
-		"\u01B8\u01BC\u01C0\u01CA\u01D0\u01D2";
+		"`\x02\x02\x0F\x03\x02\x19\x1A\x03\x02BC\x03\x02@A\x03\x02=>\x04\x02$$" +
+		"&&\x05\x02##%%--\x03\x02'*\x04\x02##%%\x03\x027:\x03\x0256\x03\x02/4" +
+		"\x03\x02\x07\b\x03\x02\x0E\x0F\x02\u01E1\x02c\x03\x02\x02\x02\x04i\x03" +
+		"\x02\x02\x02\x06o\x03\x02\x02\x02\bq\x03\x02\x02\x02\n~\x03\x02\x02\x02" +
+		"\f\x94\x03\x02\x02\x02\x0E\xAA\x03\x02\x02\x02\x10\xAC\x03\x02\x02\x02" +
+		"\x12\xB0\x03\x02\x02\x02\x14\xBF\x03\x02\x02\x02\x16\xC1\x03\x02\x02\x02" +
+		"\x18\xC3\x03\x02\x02\x02\x1A\xCA\x03\x02\x02\x02\x1C\xCC\x03\x02\x02\x02" +
+		'\x1E\xD7\x03\x02\x02\x02 \xE2\x03\x02\x02\x02"\xED\x03\x02\x02\x02$\xF8' +
+		"\x03\x02\x02\x02&\u0103\x03\x02\x02\x02(\u0115\x03\x02\x02\x02*\u011C" +
+		"\x03\x02\x02\x02,\u011E\x03\x02\x02\x02.\u0120\x03\x02\x02\x020\u0128" +
+		"\x03\x02\x02\x022\u012A\x03\x02\x02\x024\u012E\x03\x02\x02\x026\u0131" +
+		"\x03\x02\x02\x028\u0135\x03\x02\x02\x02:\u0137\x03\x02\x02\x02<\u0147" +
+		"\x03\x02\x02\x02>\u0149\x03\x02\x02\x02@\u014B\x03\x02\x02\x02B\u014D" +
+		"\x03\x02\x02\x02D\u0153\x03\x02\x02\x02F\u015B\x03\x02\x02\x02H\u015F" +
+		"\x03\x02\x02\x02J\u0166\x03\x02\x02\x02L\u0168\x03\x02\x02\x02N\u016F" +
+		"\x03\x02\x02\x02P\u0175\x03\x02\x02\x02R\u0178\x03\x02\x02\x02T\u0192" +
+		"\x03\x02\x02\x02V\u019C\x03\x02\x02\x02X\u01B2\x03\x02\x02\x02Z\u01B8" +
+		"\x03\x02\x02\x02\\\u01C2\x03\x02\x02\x02^\u01C5\x03\x02\x02\x02`\u01D2" +
+		"\x03\x02\x02\x02bd\x05\x04\x03\x02cb\x03\x02\x02\x02cd\x03\x02\x02\x02" +
+		"de\x03\x02\x02\x02ef\x07\x02\x02\x03f\x03\x03\x02\x02\x02gj\x05\x06\x04" +
+		"\x02hj\x05\n\x06\x02ig\x03\x02\x02\x02ih\x03\x02\x02\x02jk\x03\x02\x02" +
+		"\x02ki\x03\x02\x02\x02kl\x03\x02\x02\x02l\x05\x03\x02\x02\x02mp\x05\b" +
+		"\x05\x02np\x05P)\x02om\x03\x02\x02\x02on\x03\x02\x02\x02p\x07\x03\x02" +
+		'\x02\x02qr\x07\x16\x02\x02rs\x05> \x02su\x07\x1D\x02\x02tv\x05B"\x02' +
+		"ut\x03\x02\x02\x02uv\x03\x02\x02\x02vw\x03\x02\x02\x02wx\x07\x1E\x02\x02" +
+		"xy\x07\x03\x02\x02y|\x05<\x1F\x02z}\x05L'\x02{}\x05\n\x06\x02|z\x03\x02" +
+		"\x02\x02|{\x03\x02\x02\x02}\t\x03\x02\x02\x02~\x7F\x07\x04\x02\x02\x7F" +
+		"\v\x03\x02\x02\x02\x80\x81\x07\x1D\x02\x02\x81\x82\x05*\x16\x02\x82\x83" +
+		"\x07\x1E\x02\x02\x83\x95\x03\x02\x02\x02\x84\x95\t\x02\x02\x02\x85\x95" +
+		"\x07<\x02\x02\x86\x95\t\x03\x02\x02\x87\x95\t\x04\x02\x02\x88\x95\t\x05" +
+		"\x02\x02\x89\x8A\x07\x1F\x02\x02\x8A\x8F\x050\x19\x02\x8B\x8C\x07.\x02" +
+		"\x02\x8C\x8E\x050\x19\x02\x8D\x8B\x03\x02\x02\x02\x8E\x91\x03\x02\x02" +
+		"\x02\x8F\x8D\x03\x02\x02\x02\x8F\x90\x03\x02\x02\x02\x90\x92\x03\x02\x02" +
+		"\x02\x91\x8F\x03\x02\x02\x02\x92\x93\x07 \x02\x02\x93\x95\x03\x02\x02" +
+		"\x02\x94\x80\x03\x02\x02\x02\x94\x84\x03\x02\x02\x02\x94\x85\x03\x02\x02" +
+		"\x02\x94\x86\x03\x02\x02\x02\x94\x87\x03\x02\x02\x02\x94\x88\x03\x02\x02" +
+		"\x02\x94\x89\x03\x02\x02\x02\x95\r\x03\x02\x02\x02\x96\xAB\x05\f\x07\x02" +
+		"\x97\x99\x05\f\x07\x02\x98\x9A\x05\x10\t\x02\x99\x98\x03\x02\x02\x02\x9A" +
+		"\x9B\x03\x02\x02\x02\x9B\x99\x03\x02\x02\x02\x9B\x9C\x03\x02\x02\x02\x9C" +
+		"\xAB\x03\x02\x02\x02\x9D\x9E\x05\f\x07\x02\x9E\x9F\x05\x16\f\x02\x9F\xAB" +
+		"\x03\x02\x02\x02\xA0\xA2\x07\x18\x02\x02\xA1\xA0\x03\x02\x02\x02\xA1\xA2" +
+		"\x03\x02\x02\x02\xA2\xA3\x03\x02\x02\x02\xA3\xA4\x05\f\x07\x02\xA4\xA6" +
+		"\x07\x1D\x02\x02\xA5\xA7\x05\x12\n\x02\xA6\xA5\x03\x02\x02\x02\xA6\xA7" +
+		"\x03\x02\x02\x02\xA7\xA8\x03\x02\x02\x02\xA8\xA9\x07\x1E\x02\x02\xA9\xAB" +
+		"\x03\x02\x02\x02\xAA\x96\x03\x02\x02\x02\xAA\x97\x03\x02\x02\x02\xAA\x9D" +
+		"\x03\x02\x02\x02\xAA\xA1\x03\x02\x02\x02\xAB\x0F\x03\x02\x02\x02\xAC\xAD" +
+		"\x07\x1F\x02\x02\xAD\xAE\x05.\x18\x02\xAE\xAF\x07 \x02\x02\xAF\x11\x03" +
+		"\x02\x02\x02\xB0\xB5\x05*\x16\x02\xB1\xB2\x07.\x02\x02\xB2\xB4\x05*\x16" +
+		"\x02\xB3\xB1\x03\x02\x02\x02\xB4\xB7\x03\x02\x02\x02\xB5\xB3\x03\x02\x02" +
+		"\x02\xB5\xB6\x03\x02\x02\x02\xB6\x13\x03\x02\x02\x02\xB7\xB5\x03\x02\x02" +
+		"\x02\xB8\xC0\x05\x0E\b\x02\xB9\xBA\x05\x16\f\x02\xBA\xBB\x05\x0E\b\x02" +
+		"\xBB\xC0\x03\x02\x02\x02\xBC\xBD\x05\x18\r\x02\xBD\xBE\x05\x0E\b\x02\xBE" +
+		"\xC0\x03\x02\x02\x02\xBF\xB8\x03\x02\x02\x02\xBF\xB9\x03\x02\x02\x02\xBF" +
+		"\xBC\x03\x02\x02\x02\xC0\x15\x03\x02\x02\x02\xC1\xC2\t\x06\x02\x02\xC2" +
+		"\x17\x03\x02\x02\x02\xC3\xC4\t\x07\x02\x02\xC4\x19\x03\x02\x02\x02\xC5" +
+		"\xCB\x05\x14\v\x02\xC6\xC7\x05\x14\v\x02\xC7\xC8\x07\t\x02\x02\xC8\xC9" +
+		"\x05<\x1F\x02\xC9\xCB\x03\x02\x02\x02\xCA\xC5\x03\x02\x02\x02\xCA\xC6" +
+		"\x03\x02\x02\x02\xCB\x1B\x03\x02\x02\x02\xCC\xCD\b\x0F\x01\x02\xCD\xCE" +
+		"\x05\x1A\x0E\x02\xCE\xD4\x03\x02\x02\x02\xCF\xD0\f\x03\x02\x02\xD0\xD1" +
+		"\t\b\x02\x02\xD1\xD3\x05\x1A\x0E\x02\xD2\xCF\x03\x02\x02\x02\xD3\xD6\x03" +
+		"\x02\x02\x02\xD4\xD2\x03\x02\x02\x02\xD4\xD5\x03\x02\x02\x02\xD5\x1D\x03" +
+		"\x02\x02\x02\xD6\xD4\x03\x02\x02\x02\xD7\xD8\b\x10\x01\x02\xD8\xD9\x05" +
+		"\x1C\x0F\x02\xD9\xDF\x03\x02\x02\x02\xDA\xDB\f\x03\x02\x02\xDB\xDC\t\t" +
+		"\x02\x02\xDC\xDE\x05\x1C\x0F\x02\xDD\xDA\x03\x02\x02\x02\xDE\xE1\x03\x02" +
+		"\x02\x02\xDF\xDD\x03\x02\x02\x02\xDF\xE0\x03\x02\x02\x02\xE0\x1F\x03\x02" +
+		"\x02\x02\xE1\xDF\x03\x02\x02\x02\xE2\xE3\b\x11\x01\x02\xE3\xE4\x05\x1E" +
+		"\x10\x02\xE4\xEA\x03\x02\x02\x02\xE5\xE6\f\x03\x02\x02\xE6\xE7\t\n\x02" +
+		"\x02\xE7\xE9\x05\x1E\x10\x02\xE8\xE5\x03\x02\x02\x02\xE9\xEC\x03\x02\x02" +
+		"\x02\xEA\xE8\x03\x02\x02\x02\xEA\xEB\x03\x02\x02\x02\xEB!\x03\x02\x02" +
+		"\x02\xEC\xEA\x03\x02\x02\x02\xED\xEE\b\x12\x01\x02\xEE\xEF\x05 \x11\x02" +
+		"\xEF\xF5\x03\x02\x02\x02\xF0\xF1\f\x03\x02\x02\xF1\xF2\t\v\x02\x02\xF2" +
+		"\xF4\x05 \x11\x02\xF3\xF0\x03\x02\x02\x02\xF4\xF7\x03\x02\x02\x02\xF5" +
+		"\xF3\x03\x02\x02\x02\xF5\xF6\x03\x02\x02\x02\xF6#\x03\x02\x02\x02\xF7" +
+		'\xF5\x03\x02\x02\x02\xF8\xF9\b\x13\x01\x02\xF9\xFA\x05"\x12\x02\xFA\u0100' +
+		"\x03\x02\x02\x02\xFB\xFC\f\x03\x02\x02\xFC\xFD\x07+\x02\x02\xFD\xFF\x05" +
+		'"\x12\x02\xFE\xFB\x03\x02\x02\x02\xFF\u0102\x03\x02\x02\x02\u0100\xFE' +
+		"\x03\x02\x02\x02\u0100\u0101\x03\x02\x02\x02\u0101%\x03\x02\x02\x02\u0102" +
+		"\u0100\x03\x02\x02\x02\u0103\u0104\b\x14\x01\x02\u0104\u0105\x05$\x13" +
+		"\x02\u0105\u010B\x03\x02\x02\x02\u0106\u0107\f\x03\x02\x02\u0107\u0108" +
+		"\x07,\x02\x02\u0108\u010A\x05$\x13\x02\u0109\u0106\x03\x02\x02\x02\u010A" +
+		"\u010D\x03\x02\x02\x02\u010B\u0109\x03\x02\x02\x02\u010B\u010C\x03\x02" +
+		"\x02\x02\u010C'\x03\x02\x02\x02\u010D\u010B\x03\x02\x02\x02\u010E\u0116" +
+		"\x05&\x14\x02\u010F\u0110\x05&\x14\x02\u0110\u0111\x07\x05\x02\x02\u0111" +
+		"\u0112\x05(\x15\x02\u0112\u0113\x07\x06\x02\x02\u0113\u0114\x05(\x15\x02" +
+		"\u0114\u0116\x03\x02\x02\x02\u0115\u010E\x03\x02\x02\x02\u0115\u010F\x03" +
+		"\x02\x02\x02\u0116)\x03\x02\x02\x02\u0117\u011D\x05(\x15\x02\u0118\u0119" +
+		"\x05\f\x07\x02\u0119\u011A\x05,\x17\x02\u011A\u011B\x05*\x16\x02\u011B" +
+		"\u011D\x03\x02\x02\x02\u011C\u0117\x03\x02\x02\x02\u011C\u0118\x03\x02" +
+		"\x02\x02\u011D+\x03\x02\x02\x02\u011E\u011F\t\f\x02\x02\u011F-\x03\x02" +
+		"\x02\x02\u0120\u0125\x05*\x16\x02\u0121\u0122\x07.\x02\x02\u0122\u0124" +
+		"\x05*\x16\x02\u0123\u0121\x03\x02\x02\x02\u0124\u0127\x03\x02\x02\x02" +
+		"\u0125\u0123\x03\x02\x02\x02\u0125\u0126\x03\x02\x02\x02\u0126/\x03\x02" +
+		"\x02\x02\u0127\u0125\x03\x02\x02\x02\u0128\u0129\x05(\x15\x02\u01291\x03" +
+		"\x02\x02\x02\u012A\u012B\x054\x1B\x02\u012B\u012C\x05:\x1E\x02\u012C\u012D" +
+		"\x05\n\x06\x02\u012D3\x03\x02\x02\x02\u012E\u012F\t\r\x02\x02\u012F5\x03" +
+		"\x02\x02\x02\u0130\u0132\x058\x1D\x02\u0131\u0130\x03\x02\x02\x02\u0132" +
+		"\u0133\x03\x02\x02\x02\u0133\u0131\x03\x02\x02\x02\u0133\u0134\x03\x02" +
+		"\x02\x02\u01347\x03\x02\x02\x02\u0135\u0136\x05<\x1F\x02\u01369\x03\x02" +
+		"\x02\x02\u0137\u0138\x05> \x02\u0138\u0139\x07\x06\x02\x02\u0139\u013C" +
+		"\x05<\x1F\x02\u013A\u013B\x07/\x02\x02\u013B\u013D\x05H%\x02\u013C\u013A" +
+		"\x03\x02\x02\x02\u013C\u013D\x03\x02\x02\x02\u013D;\x03\x02\x02\x02\u013E" +
+		"\u0148\x07<\x02\x02\u013F\u0140\x07<\x02\x02\u0140\u0141\x077\x02\x02" +
+		"\u0141\u0142\x07<\x02\x02\u0142\u0148\x079\x02\x02\u0143\u0144\x07\x1C" +
+		"\x02\x02\u0144\u0145\x07\x1D\x02\x02\u0145\u0146\x07<\x02\x02\u0146\u0148" +
+		"\x07\x1E\x02\x02\u0147\u013E\x03\x02\x02\x02\u0147\u013F\x03\x02\x02\x02" +
+		"\u0147\u0143\x03\x02\x02\x02\u0148=\x03\x02\x02\x02\u0149\u014A\x05@!" +
+		"\x02\u014A?\x03\x02\x02\x02\u014B\u014C\x07<\x02\x02\u014CA\x03\x02\x02" +
+		"\x02\u014D\u0151\x05D#\x02\u014E\u014F\x07.\x02\x02\u014F\u0150\x07\n" +
+		"\x02\x02\u0150\u0152\x07<\x02\x02\u0151\u014E\x03\x02\x02\x02\u0151\u0152" +
+		"\x03\x02\x02\x02\u0152C\x03\x02\x02\x02\u0153\u0158\x05F$\x02\u0154\u0155" +
+		"\x07.\x02\x02\u0155\u0157\x05F$\x02\u0156\u0154\x03\x02\x02\x02\u0157" +
+		"\u015A\x03\x02\x02\x02\u0158\u0156\x03\x02\x02\x02\u0158\u0159\x03\x02" +
+		"\x02\x02\u0159E\x03\x02\x02\x02\u015A\u0158\x03\x02\x02\x02\u015B\u015C" +
+		"\x05> \x02\u015C\u015D\x07\x06\x02\x02\u015D\u015E\x056\x1C\x02\u015E" +
+		"G\x03\x02\x02\x02\u015F\u0160\x05*\x16\x02\u0160I\x03\x02\x02\x02\u0161" +
+		"\u0167\x05L'\x02\u0162\u0167\x05R*\x02\u0163\u0167\x05T+\x02\u0164\u0167" +
+		"\x05X-\x02\u0165\u0167\x05`1\x02\u0166\u0161\x03\x02\x02\x02\u0166\u0162" +
+		"\x03\x02\x02\x02\u0166\u0163\x03\x02\x02\x02\u0166\u0164\x03\x02\x02\x02" +
+		"\u0166\u0165\x03\x02\x02\x02\u0167K\x03\x02\x02\x02\u0168\u016A\x07!\x02" +
+		"\x02\u0169\u016B\x05N(\x02\u016A\u0169\x03\x02\x02\x02\u016A\u016B\x03" +
+		'\x02\x02\x02\u016B\u016C\x03\x02\x02\x02\u016C\u016D\x07"\x02\x02\u016D' +
+		"M\x03\x02\x02\x02\u016E\u0170\x05P)\x02\u016F\u016E\x03\x02\x02\x02\u0170" +
+		"\u0171\x03\x02\x02\x02\u0171\u016F\x03\x02\x02\x02\u0171\u0172\x03\x02" +
+		"\x02\x02\u0172O\x03\x02\x02\x02\u0173\u0176\x05J&\x02\u0174\u0176\x05" +
+		"2\x1A\x02\u0175\u0173\x03\x02\x02\x02\u0175\u0174\x03\x02\x02\x02\u0176" +
+		"Q\x03\x02\x02\x02\u0177\u0179\x05.\x18\x02\u0178\u0177\x03\x02\x02\x02" +
+		"\u0178\u0179\x03\x02\x02\x02\u0179\u017A\x03\x02\x02\x02\u017A\u017B\x05" +
+		"\n\x06\x02\u017BS\x03\x02\x02\x02\u017C\u017D\x07\x12\x02\x02\u017D\u017E" +
+		"\x07\x1D\x02\x02\u017E\u017F\x05.\x18\x02\u017F\u0180\x07\x1E\x02\x02" +
+		"\u0180\u0183\x05J&\x02\u0181\u0182\x07\x13\x02\x02\u0182\u0184\x05J&\x02" +
+		"\u0183\u0181\x03\x02\x02\x02\u0183\u0184\x03\x02\x02\x02\u0184\u0193\x03" +
+		"\x02\x02\x02\u0185\u0186\x07\v\x02\x02\u0186\u0187\x07\x1D\x02\x02\u0187" +
+		"\u0188\x05.\x18\x02\u0188\u0189\x07\x1E\x02\x02\u0189\u018D\x07!\x02\x02" +
+		"\u018A\u018C\x05V,\x02\u018B\u018A\x03\x02\x02\x02\u018C\u018F\x03\x02" +
+		"\x02\x02\u018D\u018B\x03\x02\x02\x02\u018D\u018E\x03\x02\x02\x02\u018E" +
+		'\u0190\x03\x02\x02\x02\u018F\u018D\x03\x02\x02\x02\u0190\u0191\x07"\x02' +
+		"\x02\u0191\u0193\x03\x02\x02\x02\u0192\u017C\x03\x02\x02\x02\u0192\u0185" +
+		"\x03\x02\x02\x02\u0193U\x03\x02\x02\x02\u0194\u0195\x07\f\x02\x02\u0195" +
+		"\u0196\x050\x19\x02\u0196\u0197\x07\x06\x02\x02\u0197\u0198\x05J&\x02" +
+		"\u0198\u019D\x03\x02\x02\x02\u0199\u019A\x07\r\x02\x02\u019A\u019B\x07" +
+		"\x06\x02\x02\u019B\u019D\x05J&\x02\u019C\u0194\x03\x02\x02\x02\u019C\u0199" +
+		"\x03\x02\x02\x02\u019DW\x03\x02\x02\x02\u019E\u019F\x07\x14\x02\x02\u019F" +
+		"\u01A0\x07\x1D\x02\x02\u01A0\u01A1\x05Z.\x02\u01A1\u01A2\x07\x1E\x02\x02" +
+		"\u01A2\u01A3\x05J&\x02\u01A3\u01B3\x03\x02\x02\x02\u01A4\u01A5\x07\x11" +
+		"\x02\x02\u01A5\u01A6\x07\x1D\x02\x02\u01A6\u01A7\x05.\x18\x02\u01A7\u01A8" +
+		"\x07\x1E\x02\x02\u01A8\u01A9\x05J&\x02\u01A9\u01B3\x03\x02\x02\x02\u01AA" +
+		"\u01AB\x07\x10\x02\x02\u01AB\u01AC\x05J&\x02\u01AC\u01AD\x07\x11\x02\x02" +
+		"\u01AD\u01AE\x07\x1D\x02\x02\u01AE\u01AF\x05.\x18\x02\u01AF\u01B0\x07" +
+		"\x1E\x02\x02\u01B0\u01B1\x05\n\x06\x02\u01B1\u01B3\x03\x02\x02\x02\u01B2" +
+		"\u019E\x03\x02\x02\x02\u01B2\u01A4\x03\x02\x02\x02\u01B2\u01AA\x03\x02" +
+		"\x02\x02\u01B3Y\x03\x02\x02\x02\u01B4\u01B9\x05\\/\x02\u01B5\u01B7\x05" +
+		".\x18\x02\u01B6\u01B5\x03\x02\x02\x02\u01B6\u01B7\x03\x02\x02\x02\u01B7" +
+		"\u01B9\x03\x02\x02\x02\u01B8\u01B4\x03\x02\x02\x02\u01B8\u01B6\x03\x02" +
+		"\x02\x02\u01B9\u01BA\x03\x02\x02\x02\u01BA\u01BC\x05\n\x06\x02\u01BB\u01BD" +
+		"\x05^0\x02\u01BC\u01BB\x03\x02\x02\x02\u01BC\u01BD\x03\x02\x02\x02\u01BD" +
+		"\u01BE\x03\x02\x02\x02\u01BE\u01C0\x05\n\x06\x02\u01BF\u01C1\x05^0\x02" +
+		"\u01C0\u01BF\x03\x02\x02\x02\u01C0\u01C1\x03\x02\x02\x02\u01C1[\x03\x02" +
+		"\x02\x02\u01C2\u01C3\x054\x1B\x02\u01C3\u01C4\x05:\x1E\x02\u01C4]\x03" +
+		"\x02\x02\x02\u01C5\u01CA\x05*\x16\x02\u01C6\u01C7\x07.\x02\x02\u01C7\u01C9" +
+		"\x05*\x16\x02\u01C8\u01C6\x03\x02\x02\x02\u01C9\u01CC\x03\x02\x02\x02" +
+		"\u01CA\u01C8\x03\x02\x02\x02\u01CA\u01CB\x03\x02\x02\x02\u01CB_\x03\x02" +
+		"\x02\x02\u01CC\u01CA\x03\x02\x02\x02\u01CD\u01D3\t\x0E\x02\x02\u01CE\u01D0" +
+		"\x07\x17\x02\x02\u01CF\u01D1\x05.\x18\x02\u01D0\u01CF\x03\x02\x02\x02" +
+		"\u01D0\u01D1\x03\x02\x02\x02\u01D1\u01D3\x03\x02\x02\x02\u01D2\u01CD\x03" +
+		"\x02\x02\x02\u01D2\u01CE\x03\x02\x02\x02\u01D3\u01D4\x03\x02\x02\x02\u01D4" +
+		"\u01D5\x05\n\x06\x02\u01D5a\x03\x02\x02\x020cikou|\x8F\x94\x9B\xA1\xA6" +
+		"\xAA\xB5\xBF\xCA\xD4\xDF\xEA\xF5\u0100\u010B\u0115\u011C\u0125\u0133\u013C" +
+		"\u0147\u0151\u0158\u0166\u016A\u0171\u0175\u0178\u0183\u018D\u0192\u019C" +
+		"\u01B2\u01B6\u01B8\u01BC\u01C0\u01CA\u01D0\u01D2";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!KipperParser.__ATN) {
@@ -3743,8 +3799,11 @@ export class IdentifierPrimaryExpressionContext extends PrimaryExpressionContext
 	}
 }
 export class StringPrimaryExpressionContext extends PrimaryExpressionContext {
-	public StringLiteral(): TerminalNode {
-		return this.getToken(KipperParser.StringLiteral, 0);
+	public SingleQuoteStringLiteral(): TerminalNode | undefined {
+		return this.tryGetToken(KipperParser.SingleQuoteStringLiteral, 0);
+	}
+	public DoubleQuoteStringLiteral(): TerminalNode | undefined {
+		return this.tryGetToken(KipperParser.DoubleQuoteStringLiteral, 0);
 	}
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -3772,8 +3831,11 @@ export class StringPrimaryExpressionContext extends PrimaryExpressionContext {
 	}
 }
 export class FStringPrimaryExpressionContext extends PrimaryExpressionContext {
-	public FStringLiteral(): TerminalNode {
-		return this.getToken(KipperParser.FStringLiteral, 0);
+	public SingleQuoteFStringLiteral(): TerminalNode | undefined {
+		return this.tryGetToken(KipperParser.SingleQuoteFStringLiteral, 0);
+	}
+	public DoubleQuoteFStringLiteral(): TerminalNode | undefined {
+		return this.tryGetToken(KipperParser.DoubleQuoteFStringLiteral, 0);
 	}
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);

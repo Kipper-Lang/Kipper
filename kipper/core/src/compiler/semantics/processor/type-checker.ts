@@ -6,12 +6,12 @@
  * @since 0.7.0
  */
 
-import { KipperSemanticsAsserter } from "../semantics-asserter";
+import {KipperSemanticsAsserter} from "../semantics-asserter";
 import {
+	AssignmentExpression,
 	Expression,
 	ExpressionSemantics,
 	ExpressionTypeSemantics,
-	IdentifierPrimaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
 	UnaryExpression,
@@ -23,26 +23,25 @@ import {
 	kipperPlusOperator,
 	kipperReturnTypes,
 	kipperStrType,
-	KipperStrType,
 	kipperSupportedConversions,
 	type KipperType,
 	kipperTypes,
 } from "../const";
 import {
-	InvalidArgumentTypeError,
-	InvalidArithmeticOperationTypeError,
-	InvalidAssignmentTypeError,
+	ArgumentTypeError,
+	ArithmeticOperationTypeError,
+	AssignmentTypeError,
+	FunctionReturnTypeError,
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
-	InvalidReturnTypeError,
 	InvalidUnaryExpressionTypeError,
-	ReadOnlyAssignmentTypeError,
+	ReadOnlyTypeError,
 	TypeError,
 	UnknownTypeError,
 } from "../../../errors";
-import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
-import type { KipperProgramContext } from "../../program-ctx";
+import type {ScopeVariableDeclaration} from "../../scope-declaration";
+import type {BuiltInFunctionArgument} from "../../runtime-built-ins";
+import type {KipperProgramContext} from "../../program-ctx";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -73,49 +72,50 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnType(type: string): void {
 		// If the type is not in the array of valid return types, throw an error
 		if (!kipperReturnTypes.find((t) => t === type)) {
-			throw this.assertError(new InvalidReturnTypeError(type));
+			throw this.assertError(new FunctionReturnTypeError(type));
 		}
 	}
 
 	/**
 	 * Asserts that the passed expression is valid and the assigned value is compatible with the identifier.
-	 * @param leftExp The left-hand side of the assignment.
-	 * @param rightExp The right-hand side of the assignment.
+	 * @param assignmentExp The assignment expression to check.
 	 * @since 0.7.0
 	 */
-	public validAssignment(
-		leftExp: IdentifierPrimaryExpression,
-		rightExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-	): void {
-		const leftExpTypeData = leftExp.getTypeSemanticData();
-		const rightExpTypeData = rightExp.getTypeSemanticData();
+	public validAssignment(assignmentExp: AssignmentExpression): void {
+		const semanticData = assignmentExp.getSemanticData();
+		const leftExpTypeData = semanticData.identifierCtx.getTypeSemanticData();
+		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
 		// Ensure that the types are matching
 		if (rightExpTypeData.evaluatedType !== leftExpTypeData.evaluatedType) {
-			throw this.assertError(
-				new InvalidAssignmentTypeError(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType),
-			);
+			throw this.assertError(new AssignmentTypeError(leftExpTypeData.evaluatedType, rightExpTypeData.evaluatedType));
 		}
 
-		// Get the storage type of the variable
-		const ref = leftExp.getSemanticData().ref;
-		if (ref && "storageType" in ref && ref.storageType === "const") {
-			throw this.assertError(new ReadOnlyAssignmentTypeError(ref.identifier));
+		// Ensure that all arithmetic assignment operators except '+=' are only used on numbers
+		if (semanticData.operator !== "=" && rightExpTypeData.evaluatedType !== "num") {
+			if (!(semanticData.operator === "+=" && rightExpTypeData.evaluatedType === "str")) {
+				throw this.assertError(new ArithmeticOperationTypeError());
+			}
+		}
+
+		// Ensure that the left-hand side is not read-only
+		if (semanticData.ref && "storageType" in semanticData.ref && semanticData.ref.storageType === "const") {
+			throw this.assertError(new ReadOnlyTypeError(semanticData.ref.identifier));
 		}
 	}
 
 	/**
 	 * Asserts that this variable definition is valid and the assigned value is compatible with the identifier.
 	 * @param scopeEntry The scope entry/variable being assigned to.
-	 * @param rightExp The right expression/value of the assignment.
+	 * @param value The right expression/value of the assignment.
 	 * @since 0.7.0
 	 */
 	public validVariableDefinition(
 		scopeEntry: ScopeVariableDeclaration,
-		rightExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+		value: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
 	): void {
 		const leftExpType = scopeEntry.type;
-		const rightExpType = rightExp.getTypeSemanticData().evaluatedType;
+		const rightExpType = value.getTypeSemanticData().evaluatedType;
 
 		// Ensure the value of the definition match the definition type
 		if (leftExpType !== rightExpType) {
@@ -125,7 +125,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Checks whether the argument type matches the type of the argument value passed.
-	 *
 	 * @param arg The parameter that the value was passed to.
 	 * @param receivedType The type that was received.
 	 * @example
@@ -136,7 +135,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
 
 		if (semanticData.type !== receivedType) {
-			throw this.assertError(new InvalidArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
 		}
 	}
 
@@ -177,11 +176,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Asserts that the passed unary expression is valid.
-	 * @param exp The expression to check.
+	 * @param operand The expression to check.
 	 * @since 0.9.0
 	 */
-	public validUnaryExpression(exp: UnaryExpression<UnaryExpressionSemantics, ExpressionTypeSemantics>): void {
-		const semanticData = exp.getSemanticData();
+	public validUnaryExpression(operand: UnaryExpression<UnaryExpressionSemantics, ExpressionTypeSemantics>): void {
+		const semanticData = operand.getSemanticData();
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 
 		// Ensure that the operator '+', '-', '++' and '--' are only used on numbers
@@ -215,18 +214,18 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			}
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
-			throw this.assertError(new InvalidArithmeticOperationTypeError(leftOpType, rightOpType));
+			throw this.assertError(new ArithmeticOperationTypeError(leftOpType, rightOpType));
 		}
 	}
 
 	/**
-	 * Asserts that the type conversion for the {@link exp} is valid.
-	 * @param exp The expression to convert.
+	 * Asserts that the type conversion for the {@link operand} is valid.
+	 * @param operand The expression to convert.
 	 * @param type The type to convert to.
 	 * @since 0.8.0
 	 */
-	public validConversion(exp: Expression<any, any>, type: KipperType): void {
-		const originalType: KipperType = exp.getTypeSemanticData().evaluatedType;
+	public validConversion(operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>, type: KipperType): void {
+		const originalType: KipperType = operand.getTypeSemanticData().evaluatedType;
 
 		const viableConversion = (() => {
 			// Check whether a supported pair of types exist.

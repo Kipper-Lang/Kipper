@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=` ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
   evaluate during type checking.
@@ -33,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
   - `TargetSetUpCodeGenerator`, which represents a function that generates SetUp code for a Kipper file.
   - `TargetWrapUpCodeGenerator`, which represents a function that generates WrapUp code for a Kipper file.
+  - `KipperEqualAssignOperator`, which represents the equal assignment operator (`=`).
+  - `KipperAssignOperator`, which represents all available assignment operators.
+  - `KipperArithmeticAssignOperator`, which represents all available arithmetic assignment operators.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -43,9 +47,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
   - `ScopeFunctionDeclaration.typeData`, which returns the type data of the function AST node.
   - `ScopeVariableDeclaration.typeData`, which returns the type data of the variable AST node.
+  - `ScopeVariableDeclaration.valueWasUpdated`, which returns true if the variable was updated after its initial
+    declaration.
+  - `ScopeDeclaration.isDefined`, which is an abstract field that returns whether the scope declaration was defined
+    during its declaration.
+  - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
 
 ### Changed
 
+- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
+  assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
   ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
 - Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type checking and
@@ -60,6 +71,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
+  - `ReadOnlyAssignmentTypeError` to `ReadOnlyTypeError`.
+  - `InvalidAssignmentTypeError` to `AssignmentTypeError`.
+  - `InvalidArgumentTypeError` to `ArgumentTypeError`.
+  - `InvalidArithmeticOperationTypeError` to `ArithmeticOperationTypeError`.
+  - `InvalidReturnTypeError` to `FunctionReturnTypeError`.
+  - `UndefinedIdentifierError` to `UndefinedReferenceError`.
+  - `UnknownIdentifierError` to `UnknownReferenceError`.
 
 ### Removed
 

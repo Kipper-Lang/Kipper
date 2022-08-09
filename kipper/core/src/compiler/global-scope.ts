@@ -5,11 +5,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { Scope } from "./scope";
-import { FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import type { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction } from "./runtime-built-ins";
+import {Scope} from "./scope";
+import {FunctionDeclaration, VariableDeclaration} from "./semantics";
+import {ScopeFunctionDeclaration, ScopeVariableDeclaration} from "./scope-declaration";
+import type {KipperProgramContext} from "./program-ctx";
+import {BuiltInFunction} from "./runtime-built-ins";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
@@ -50,7 +50,7 @@ export class GlobalScope extends Scope {
 		// Ensuring that the declaration does not overwrite other definitions
 		this.programCtx.semanticCheck(declaration).builtInNotDefined(identifier);
 		this.programCtx.semanticCheck(declaration).variableIdentifierNotDeclared(identifier);
-		this.programCtx.semanticCheck(declaration).functionIdentifierNotDefined(identifier);
+		this.programCtx.semanticCheck(declaration).functionIdentifierNotDeclared(identifier);
 
 		const scopeDeclaration = new ScopeFunctionDeclaration(declaration);
 		this.functions.push(scopeDeclaration);
