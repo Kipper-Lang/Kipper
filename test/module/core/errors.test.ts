@@ -1349,6 +1349,77 @@ describe("Kipper errors", () => {
 				}
 			});
 		});
+
+		describe("InvalidRelationalComparisonTypeError", () => {
+			it("Error", async () => {
+				try {
+					await new KipperCompiler().compile(new KipperParseStream(`"5" > 5;`), { abortOnFirstError: true });
+				} catch (e) {
+					assert((<KipperError>e).constructor.name === "InvalidRelationalComparisonTypeError", "Expected proper error");
+					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+					assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+					return;
+				}
+				assert(false, "Expected 'InvalidRelationalComparisonTypeError'");
+			});
+
+			it("NoError", async () => {
+				try {
+					await new KipperCompiler().compile('5 > 4;', {
+						abortOnFirstError: true,
+					});
+				} catch (e) {
+					assert(false, "Expected no 'InvalidRelationalComparisonTypeError'");
+				}
+			});
+		});
+
+		describe("InvalidUnaryExpressionTypeError", () => {
+			describe("Error",  () => {
+				it("+", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream(`+"5";`), { abortOnFirstError: true });
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidUnaryExpressionTypeError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidUnaryExpressionTypeError'");
+				});
+
+				it("-", async () => {
+					try {
+						await new KipperCompiler().compile(new KipperParseStream(`-"5";`), { abortOnFirstError: true });
+					} catch (e) {
+						assert((<KipperError>e).constructor.name === "InvalidUnaryExpressionTypeError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
+						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
+						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
+						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+						assert((<KipperError>e).filePath != undefined, "Expected existing 'filePath' meta field");
+						return;
+					}
+					assert(false, "Expected 'InvalidUnaryExpressionTypeError'");
+				});
+			});
+
+			it("NoError", async () => {
+				try {
+					await new KipperCompiler().compile('5 > 4;', {
+						abortOnFirstError: true,
+					});
+				} catch (e) {
+					assert(false, "Expected no 'InvalidUnaryExpressionTypeError'");
+				}
+			});
+		});
 	});
 
 	describe("Error recovery", () => {
