@@ -1,10 +1,11 @@
 {
   "coverage_file_path": "../../coverage/coverage-summary.json",
-  "badges": {
-    "coverage": {
-      "style": "flat",
-      "logoColor": "white",
-      "color": "blue"
-    }
-  }
+	"badges": {
+		"coverage": {
+			"style": "flat",
+			"logo": "github",
+			"logoColor": "white",
+			"color": "blue"
+		}
+	}
 }
