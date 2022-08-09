@@ -10,7 +10,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CharacterPrimaryExpression,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
@@ -275,13 +274,6 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link CharacterPrimaryExpression} into the typescript language.
-	 */
-	characterPrimaryExpression = async (node: CharacterPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
-	};
-
-	/**
 	 * Translates a {@link ListPrimaryExpression} into the typescript language.
 	 */
 	listPrimaryExpression = async (node: ListPrimaryExpression): Promise<TranslatedExpression> => {
@@ -335,7 +327,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	stringPrimaryExpression = async (node: StringPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
-		return [`"${semanticData.value}"`];
+		return [`${semanticData.quotationMarks}${semanticData.value}${semanticData.quotationMarks}`];
 	};
 
 	/**
@@ -544,6 +536,6 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		// Only add ' = EXP' if assignExpression is defined
-		return [identifier, " ", "=", " ", ...assignExp];
+		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 }

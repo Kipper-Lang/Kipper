@@ -77,22 +77,6 @@ export type KipperStrType = "str";
 export const kipperStrType: KipperStrType = "str";
 
 /**
- * Char type in Kipper.
- * @since 0.5.0
- * @example
- * char
- */
-export type KipperCharType = "char";
-
-/**
- * Char type in Kipper.
- * @since 0.5.0
- * @example
- * char
- */
-export const kipperCharType: KipperCharType = "char";
-
-/**
  * Boolean type in Kipper.
  * @since 0.5.0
  * @example
@@ -150,28 +134,16 @@ export type KipperMetaType = "type";
 export const kipperMetaType: KipperMetaType = "type";
 
 /**
- * String-like types that include both char and string.
+ * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperStrLikeTypes = KipperStrType | KipperCharType;
-
-/**
- * String-like types that include both char and string.
- * @since 0.6.0
- */
-export const kipperStrLikeTypes: Array<KipperStrLikeTypes> = [kipperStrType, kipperCharType];
+export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperBoolType;
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperCharType | KipperBoolType;
-
-/**
- * All primitive types inside Kipper.
- * @since 0.6.0
- */
-export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperCharType, kipperBoolType];
+export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperBoolType];
 
 /**
  * All available variable types inside Kipper.
@@ -427,13 +399,16 @@ export type KipperMultiplicativeOperator = "*" | "**" | "/" | "%";
  * All available multiplicative operators inside Kipper.
  * @since 0.6.0
  */
-export const kipperMultiplicativeOperators = ["*", "**", "/", "%"];
+export const kipperMultiplicativeOperators: Array<KipperMultiplicativeOperator> = ["*", "**", "/", "%"];
 
 /**
  * All available additive operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperAdditiveOperators = [kipperMinusOperator, kipperPlusOperator];
+export const kipperAdditiveOperators: Array<KipperMinusOperator | KipperPlusOperator> = [
+	kipperMinusOperator,
+	kipperPlusOperator,
+];
 
 /**
  * All available arithmetic operations inside Kipper.
@@ -445,19 +420,49 @@ export type KipperArithmeticOperator = KipperAdditiveOperator | KipperMultiplica
  * All available arithmetic operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperArithmeticOperators = [...kipperMultiplicativeOperators, ...kipperAdditiveOperators];
+export const kipperArithmeticOperators: Array<KipperArithmeticOperator> = [
+	...kipperMultiplicativeOperators,
+	...kipperAdditiveOperators,
+];
 
 /**
  * All available arithmetic assignment operations inside Kipper.
  * @since 0.3.0
  */
-export type KipperArithmeticAssignOperator = "+=" | "-=" | "*=" | "/=";
+export type KipperArithmeticAssignOperator = "+=" | "-=" | "*=" | "/=" | "%=";
 
 /**
  * All available arithmetic assignment operations inside Kipper.
  * @since 0.6.0
  */
-export const kipperArithmeticAssignOperators = ["+=", "-=", "*=", "/="];
+export const kipperArithmeticAssignOperators: Array<KipperArithmeticAssignOperator> = ["+=", "-=", "*=", "/=", "%="];
+
+/**
+ * Default assignment operator for assigning a value to a variable/reference.
+ * @since 0.10.0
+ */
+export type KipperEqualAssignOperator = "=";
+
+/**
+ * Default assignment operator for assigning a value to a variable/reference.
+ * @since 0.10.0
+ */
+export const kipperEqualAssignOperator: KipperEqualAssignOperator = "=";
+
+/**
+ * All available assignment operators inside Kipper, which can be used to assign a value to a variable/reference.
+ * @since 0.10.0
+ */
+export type KipperAssignOperator = KipperEqualAssignOperator | KipperArithmeticAssignOperator;
+
+/**
+ * All available assignment operators inside Kipper, which can be used to assign a value to a variable/reference.
+ * @since 0.10.0
+ */
+export const kipperAssignOperators: Array<KipperAssignOperator> = [
+	kipperEqualAssignOperator,
+	...kipperArithmeticAssignOperators,
+];
 
 /**
  * Represents a single token of translated Kipper code. This is usually used without a {@link TranslatedCodeLine}, which

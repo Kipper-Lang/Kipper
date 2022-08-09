@@ -4,7 +4,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CharacterPrimaryExpression,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -100,11 +99,6 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
 	public abstract numberPrimaryExpression: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
-
-	/**
-	 * Performs translation-specific semantic analysis for {@link CharacterPrimaryExpression} instances.
-	 */
-	public abstract characterPrimaryExpression: TargetASTNodeSemanticAnalyser<CharacterPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ListPrimaryExpression} instances.

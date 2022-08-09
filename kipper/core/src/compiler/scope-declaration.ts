@@ -35,6 +35,18 @@ export abstract class ScopeDeclaration {
 	public get programCtx(): KipperProgramContext {
 		return this.node.programCtx;
 	}
+
+	/**
+	 * Returns whether the scope declaration was defined during its declaration.
+	 * @since 0.10.0
+	 */
+	public abstract get isDefined(): boolean;
+
+	/**
+	 * Returns whether the declaration has a value.
+	 * @since 0.10.0
+	 */
+	public abstract get hasValue(): boolean;
 }
 
 /**
@@ -43,6 +55,12 @@ export abstract class ScopeDeclaration {
  */
 export class ScopeVariableDeclaration extends ScopeDeclaration {
 	private readonly _node: VariableDeclaration;
+
+	/**
+	 * Returns whether the variable has been updated after its initial declaration.
+	 * @since 0.10.0
+	 */
+	public valueWasUpdated: boolean = false;
 
 	public constructor(node: VariableDeclaration) {
 		super();
@@ -103,10 +121,21 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * Returns whether the variable declaration is defined and has a value set.
+	 * Returns whether the variable declaration is defined and has a value set during declaration.
 	 */
 	public get isDefined(): boolean {
 		return this.semanticData.isDefined;
+	}
+
+	/**
+	 * Returns whether the variable declaration has a value.
+	 *
+	 * This is different from {@link isDefined}, since this also considers variable assignments *after* the initial
+	 * declaration.
+	 * @since 0.10.0
+	 */
+	public get hasValue(): boolean {
+		return this.isDefined || this.valueWasUpdated;
 	}
 }
 
@@ -172,10 +201,18 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * Returns whether the function declaration is defined and has a function body.
+	 * Returns whether the function declaration is defined and has a function body set during declaration.
 	 * @since 0.3.0
 	 */
 	public get isDefined(): boolean {
 		return this.semanticData.isDefined;
+	}
+
+	/**
+	 * Returns whether the function declaration has a value.
+	 * @since 0.10.0
+	 */
+	public get hasValue(): boolean {
+		return this.isDefined;
 	}
 }

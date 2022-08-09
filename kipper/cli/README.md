@@ -8,7 +8,7 @@ Kipper is a simple strongly and statically typed programming language, which is 
 straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
 
 [![Version](https://img.shields.io/npm/v/@kipper/cli?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/cli)
-![](https://img.shields.io/badge/Coverage-81%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![Install size](https://packagephobia.com/badge?p=@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
@@ -36,7 +36,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.10.0-alpha.1 win32-x64 node-v16.16.0
+@kipper/cli/0.10.0-alpha.2 linux-x64 node-v16.15.1
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -76,7 +76,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -113,7 +113,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -130,7 +130,7 @@ OPTIONS
   -n, --nested-commands  Include all nested commands in the output.
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run [FILE]`
 
@@ -167,7 +167,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/run.ts)_
 
 ## `kipper update [CHANNEL]`
 
@@ -190,7 +190,7 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/update.ts)_
+_See code: [src/commands/update.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/update.ts)_
 
 ## `kipper version`
 
@@ -201,7 +201,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.1/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.2/kipper/cli/src/commands/version.ts)_
 
 <!-- commandsstop -->
 

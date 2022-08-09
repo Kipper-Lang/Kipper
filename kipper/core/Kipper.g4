@@ -30,9 +30,8 @@ primaryExpression
     :   '(' assignmentExpression ')' # tangledPrimaryExpression
     |   (True | False) #boolPrimaryExpression
     | 	Identifier # identifierPrimaryExpression
-    |   CharacterConstant #characterPrimaryExpression
-    |   StringLiteral # stringPrimaryExpression
-    |   FStringLiteral # fStringPrimaryExpression
+    |   (SingleQuoteStringLiteral | DoubleQuoteStringLiteral) # stringPrimaryExpression
+    |   (SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral) # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
     |   '[' constantExpression (',' constantExpression)* ']' #listPrimaryExpression
     ;
@@ -437,10 +436,6 @@ DigitSequence
     :   Digit+
     ;
 
-CharacterConstant
-    :   '\'' CChar '\''
-    ;
-
 fragment
 CCharSequence
     :   CChar+
@@ -474,25 +469,42 @@ HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit+
     ;
 
-FStringLiteral
-    :   'f' '"' SCharSequence? '"'
+SingleQuoteFStringLiteral
+    :   'f\'' SingleQuoteSCharSequence? '\''
     ;
 
-StringLiteral
-    :   '"' SCharSequence? '"'
+DoubleQuoteFStringLiteral
+    :   'f"' DoubleQuoteSCharSequence? '"'
+    ;
+
+SingleQuoteStringLiteral
+		:		'\'' SingleQuoteSCharSequence? '\''
+		;
+
+DoubleQuoteStringLiteral
+    :   '"' DoubleQuoteSCharSequence? '"'
     ;
 
 fragment
-SCharSequence
-    :   SChar+
+SingleQuoteSCharSequence
+    :   SingleQuoteSChar+
     ;
 
 fragment
-SChar
+SingleQuoteSChar
+    :   ~['\\\r\n]
+    |   EscapeSequence
+    ;
+
+fragment
+DoubleQuoteSCharSequence
+    :   DoubleQuoteSChar+
+    ;
+
+fragment
+DoubleQuoteSChar
     :   ~["\\\r\n]
     |   EscapeSequence
-    |   '\\\n'   // Added line
-    |   '\\\r\n' // Added line
     ;
 
 Whitespace

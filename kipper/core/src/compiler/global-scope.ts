@@ -50,7 +50,7 @@ export class GlobalScope extends Scope {
 		// Ensuring that the declaration does not overwrite other definitions
 		this.programCtx.semanticCheck(declaration).builtInNotDefined(identifier);
 		this.programCtx.semanticCheck(declaration).variableIdentifierNotDeclared(identifier);
-		this.programCtx.semanticCheck(declaration).functionIdentifierNotDefined(identifier);
+		this.programCtx.semanticCheck(declaration).functionIdentifierNotDeclared(identifier);
 
 		const scopeDeclaration = new ScopeFunctionDeclaration(declaration);
 		this.functions.push(scopeDeclaration);

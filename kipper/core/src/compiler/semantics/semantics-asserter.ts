@@ -7,11 +7,13 @@
  */
 import type { KipperProgramContext } from "../program-ctx";
 import type { KipperError } from "../../errors";
+import { UnknownReferenceError } from "../../errors";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../utils";
 import { CompoundStatement } from "./language";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
 import { BuiltInFunction } from "../runtime-built-ins";
+import { KipperRef } from "./const";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that
@@ -27,12 +29,12 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 	}
 
 	/**
-	 * Tries to
+	 * Tries to find a reference for the given identifier and scope.
 	 * @param identifier The identifier to search for.
-	 * @param scopeCtx The scopeCtx to search in.
+	 * @param scopeCtx The scopeCtx to search in. If undefined, the global scope is used.
 	 * @since 0.8.0
 	 */
-	protected getDeclaration(
+	public getReference(
 		identifier: string,
 		scopeCtx?: CompoundStatement,
 	): ScopeFunctionDeclaration | ScopeVariableDeclaration | BuiltInFunction | undefined {
@@ -43,6 +45,21 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 			this.programCtx.globalScope.getDeclaration(identifier) ?? // Fall back to looking globally
 			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
 		);
+	}
+
+	/**
+	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownReferenceError}.
+	 * @param identifier The identifier to fetch.
+	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
+	 * @since 0.7.0
+	 */
+	public getExistingReference(identifier: string, scopeCtx?: CompoundStatement): KipperRef {
+		const ref = this.getReference(identifier, scopeCtx);
+		if (ref === undefined) {
+			throw this.assertError(new UnknownReferenceError(identifier));
+		} else {
+			return ref;
+		}
 	}
 
 	/**

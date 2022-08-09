@@ -1,0 +1,12 @@
+{
+	"extends": "@istanbuljs/nyc-config-typescript",
+	"exclude": [
+		"**/test/module/cli/*.test.ts",
+		"**/test/module/core/*.test.ts",
+		"**/parser/antlr/*.*",
+		"**/*.spec.ts",
+		"**/*.d.ts",
+		"**/*.map",
+		"**/*.jsx"
+	]
+}
