@@ -70,7 +70,7 @@ allow for a managed way to propose, document and merge changes into Kipper. That
 also make sure your PRs are organised, documented well and link related issues, docs or websites. The PR template will
 help with that.
 
-If you are new to GitHub and PRs, you can follow the guide from GitHub 
+If you are new to GitHub and PRs, you can follow the guide from GitHub
 [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
 to learn how to create such a pull Request.
 
@@ -183,7 +183,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 
 #### Primary Semantic Analysis
 
-These semantics then are per default processed using the classes implementation of `primarySemanticAnalysis()`. This 
+These semantics then are per default processed using the classes implementation of `primarySemanticAnalysis()`. This
 function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. Though
 to avoid unexpected errors, when using the semantic data they should always be fetched using
 `CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined (This for example
