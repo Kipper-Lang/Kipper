@@ -5,15 +5,15 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
-import type {KipperProgramContext} from "../program-ctx";
-import type {KipperError} from "../../errors";
-import {UnknownReferenceError} from "../../errors";
-import {KipperSemanticErrorHandler} from "./semantics-error-handler";
-import {getParseRuleSource} from "../../utils";
-import {CompoundStatement} from "./language";
-import {ScopeFunctionDeclaration, ScopeVariableDeclaration} from "../scope-declaration";
-import {BuiltInFunction} from "../runtime-built-ins";
-import {KipperRef} from "./const";
+import type { KipperProgramContext } from "../program-ctx";
+import type { KipperError } from "../../errors";
+import { UnknownReferenceError } from "../../errors";
+import { KipperSemanticErrorHandler } from "./semantics-error-handler";
+import { getParseRuleSource } from "../../utils";
+import { CompoundStatement } from "./language";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
+import { BuiltInFunction } from "../runtime-built-ins";
+import { KipperRef } from "./const";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that

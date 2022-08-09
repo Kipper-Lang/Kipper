@@ -6,7 +6,7 @@
  * @since 0.7.0
  */
 
-import {type CompoundStatement, type Expression, IdentifierPrimaryExpression, VariableDeclaration} from "../language";
+import { type CompoundStatement, type Expression, IdentifierPrimaryExpression, VariableDeclaration } from "../language";
 import {
 	BuiltInOverwriteError,
 	IdentifierAlreadyUsedByFunctionError,
@@ -19,10 +19,10 @@ import {
 	UndefinedReferenceError,
 	UnknownReferenceError,
 } from "../../../errors";
-import {type KipperFunction, KipperRef} from "../const";
-import type {KipperProgramContext} from "../../program-ctx";
-import {ScopeDeclaration, ScopeVariableDeclaration} from "../../scope-declaration";
-import {KipperSemanticsAsserter} from "../semantics-asserter";
+import { type KipperFunction, KipperRef } from "../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an

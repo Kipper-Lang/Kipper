@@ -6,7 +6,7 @@
  * @since 0.7.0
  */
 
-import {KipperSemanticsAsserter} from "../semantics-asserter";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
 import {
 	AssignmentExpression,
 	Expression,
@@ -39,9 +39,9 @@ import {
 	TypeError,
 	UnknownTypeError,
 } from "../../../errors";
-import type {ScopeVariableDeclaration} from "../../scope-declaration";
-import type {BuiltInFunctionArgument} from "../../runtime-built-ins";
-import type {KipperProgramContext} from "../../program-ctx";
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
+import type { KipperProgramContext } from "../../program-ctx";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an

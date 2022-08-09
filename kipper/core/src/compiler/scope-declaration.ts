@@ -17,8 +17,8 @@ import type {
 	VariableDeclarationSemantics,
 	VariableDeclarationTypeSemantics,
 } from "./semantics";
-import type {KipperProgramContext} from "./program-ctx";
-import type {Scope} from "./scope";
+import type { KipperProgramContext } from "./program-ctx";
+import type { Scope } from "./scope";
 
 /**
  * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.

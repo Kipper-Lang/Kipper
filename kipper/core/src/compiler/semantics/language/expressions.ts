@@ -69,14 +69,14 @@ import {
 	type KipperUnaryOperator,
 	type TranslatedExpression,
 } from "../const";
-import type {TargetASTNodeCodeGenerator} from "../../translation";
-import type {TargetASTNodeSemanticAnalyser} from "../target-semantic-analyser";
-import {ScopeDeclaration, ScopeVariableDeclaration} from "../../scope-declaration";
-import {KipperNotImplementedError, UnableToDetermineSemanticDataError} from "../../../errors";
-import {TerminalNode} from "antlr4ts/tree";
-import {getConversionFunctionIdentifier, getParseRuleSource} from "../../../utils";
-import {kipperInternalBuiltIns} from "../../runtime-built-ins";
-import {ParserRuleContext} from "antlr4ts";
+import type { TargetASTNodeCodeGenerator } from "../../translation";
+import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
+import { TerminalNode } from "antlr4ts/tree";
+import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
+import { kipperInternalBuiltIns } from "../../runtime-built-ins";
+import { ParserRuleContext } from "antlr4ts";
 
 /**
  * Every antlr4 expression ctx type

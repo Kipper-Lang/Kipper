@@ -1368,7 +1368,7 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile('5 > 4;', {
+					await new KipperCompiler().compile("5 > 4;", {
 						abortOnFirstError: true,
 					});
 				} catch (e) {
@@ -1378,7 +1378,7 @@ describe("Kipper errors", () => {
 		});
 
 		describe("InvalidUnaryExpressionTypeError", () => {
-			describe("Error",  () => {
+			describe("Error", () => {
 				it("+", async () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream(`+"5";`), { abortOnFirstError: true });
@@ -1412,7 +1412,7 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile('5 > 4;', {
+					await new KipperCompiler().compile("5 > 4;", {
 						abortOnFirstError: true,
 					});
 				} catch (e) {
