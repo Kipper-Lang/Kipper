@@ -6,7 +6,7 @@ specifiers:
   '@kipper/core': workspace:~
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
-  '@oclif/test': 2.1.0
+  '@oclif/test': 2.1.1
   '@size-limit/preset-big-lib': 8.0.0
   '@types/chai': 4.3.0
   '@types/mocha': 9.1.1
@@ -50,7 +50,7 @@ devDependencies:
   '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
-  '@oclif/test': 2.1.0
+  '@oclif/test': 2.1.1
   '@size-limit/preset-big-lib': 8.0.0_wuhdfiprfkun4hq2uqy2dvyrde
   '@types/chai': 4.3.0
   '@types/mocha': 9.1.1
@@ -606,41 +606,6 @@ packages:
       - supports-color
     dev: true
 
-  /@oclif/core/1.8.1:
-    resolution: {integrity: sha512-6pNQnkL2Uk9SbRUb12BFminLPhrPab1euNzVl1eh+Q7+X8+JGMw8vgKUfQRlGZesmcd+8fByQMZBaoOAEozJsw==}
-    engines: {node: '>=12.0.0'}
-    dependencies:
-      '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.2
-      ansi-escapes: 4.3.2
-      ansi-styles: 4.3.0
-      cardinal: 2.1.1
-      chalk: 4.1.2
-      clean-stack: 3.0.1
-      cli-progress: 3.11.0
-      debug: 4.3.4_supports-color@8.1.1
-      ejs: 3.1.8
-      fs-extra: 9.1.0
-      get-package-type: 0.1.0
-      globby: 11.1.0
-      hyperlinker: 1.0.0
-      indent-string: 4.0.0
-      is-wsl: 2.2.0
-      js-yaml: 3.14.1
-      lodash: 4.17.21
-      natural-orderby: 2.0.3
-      object-treeify: 1.1.33
-      password-prompt: 1.1.2
-      semver: 7.3.7
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-      supports-color: 8.1.1
-      supports-hyperlinks: 2.2.0
-      tslib: 2.4.0
-      widest-line: 3.1.0
-      wrap-ansi: 7.0.0
-    dev: true
-
   /@oclif/core/1.9.10:
     resolution: {integrity: sha512-0b32MZw4O99/Pn8uFoVux8HQC35GHR+fbVkjuohwq9GI3oOCsKar+feQFTWoCiRf6XvKFBGcOHzKNB1dKHiIOg==}
     engines: {node: '>=12.0.0'}
@@ -737,11 +702,11 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: true
 
-  /@oclif/test/2.1.0:
-    resolution: {integrity: sha512-o+JTv3k28aMUxywJUlJY1/DORLqumoZFRII492phOmtXM16rD6Luy3z1qinT4BvEtPj2BzOPd2whr/VdYszaYw==}
+  /@oclif/test/2.1.1:
+    resolution: {integrity: sha512-vuBDXnXbnU073xNUqj+V4Fbrp+6Xhs1sgeWUIMj69SP9qC3pUBPfEPzIoK00ga6/WxZ+2qUgqCBAOPGz3nmTEg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.8.1
+      '@oclif/core': 1.9.10
       fancy-test: 2.0.0
     transitivePeerDependencies:
       - supports-color
@@ -4065,7 +4030,7 @@ packages:
     dev: true
 
   /json-stringify-safe/5.0.1:
-    resolution: {integrity: sha1-Epai1Y/UXxmg9s4B1lcB4sc1tus=}
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
     dev: true
 
   /json5/1.0.1:
@@ -4185,7 +4150,7 @@ packages:
     dev: true
 
   /lodash.set/4.3.2:
-    resolution: {integrity: sha1-2HV7HagH3eJIFrDWqEvqGnYjCyM=}
+    resolution: {integrity: sha512-4hNPN5jlm/N/HLMCO43v8BXKq9Z7QdAGc/VGrRD61w8gN9g/6jF9A4L1pbUgBLCffi0w9VsXfTOij5x8iTyFvg==}
     dev: true
 
   /lodash/4.17.21:
@@ -5500,7 +5465,7 @@ packages:
     dev: true
 
   /redeyed/2.1.1:
-    resolution: {integrity: sha1-iYS1gV2ZyyIEacme7v/jiRPmzAs=}
+    resolution: {integrity: sha512-FNpGGo1DycYAdnrKFxCMmKYgo/mILAqtRYbkdQD8Ep/Hk2PQ5+aEAEx+IU713RTDmuBaH0c8P5ZozurNu5ObRQ==}
     dependencies:
       esprima: 4.0.1
     dev: true
@@ -5864,7 +5829,7 @@ packages:
     dev: true
 
   /sprintf-js/1.0.3:
-    resolution: {integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=}
+    resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
     dev: true
 
   /ssri/8.0.1:
