@@ -1,6 +1,6 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# The Kipper programming language - `kipper`
+# Kipper 🦊 - `kipper`
 
 [![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 ![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
@@ -37,13 +37,16 @@ If you are using `pnpm` and `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 _Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
 
-## Packages
+## Packages 
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
-- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js. 
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
-  with the Kipper compiler! 🦊
-- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper Compiler! 🦊
+  with the Kipper compiler. 
+- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper 
+	Compiler. 
+- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper 
+	Compiler. 
 
 ## Kipper Docs
 
