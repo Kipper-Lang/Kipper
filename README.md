@@ -41,8 +41,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
-- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
-  with the Kipper compiler.
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI).
 - [`@kipper/web`](https://www.npmjs.com/package/@kipper/web): The standalone web-module for the Kipper compiler.
 - [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
 	compiler.
