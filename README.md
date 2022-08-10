@@ -45,9 +45,9 @@ _Kipper is still in an early development phase, as such not all features shown i
   with the Kipper compiler.
 - [`@kipper/web`](https://www.npmjs.com/package/@kipper/web): The standalone web-module for the Kipper compiler.
 - [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
-	compiler.
+  compiler.
 - [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
-	compiler.
+  compiler.
 
 ## Kipper Docs
 
