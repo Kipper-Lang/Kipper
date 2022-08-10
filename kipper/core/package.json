@@ -1,6 +1,6 @@
 {
   "name": "@kipper/core",
-  "description": "The Kipper programming language and compiler for the browser and Node.js! 🦊",
+  "description": "The core implementation of the Kipper compiler 🦊",
   "version": "0.10.0-alpha.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {

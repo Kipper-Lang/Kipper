@@ -1,6 +1,6 @@
 {
   "name": "@kipper/target-js",
-  "description": "The JavaScript target for the Kipper Compiler! 🦊",
+  "description": "The JavaScript target for the Kipper compiler 🦊",
   "version": "0.10.0-alpha.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
