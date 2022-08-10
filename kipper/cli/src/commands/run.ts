@@ -4,6 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
+import * as ts from "typescript";
 import { Command, flags } from "@oclif/command";
 import {
 	defaultOptimisationOptions,
@@ -14,13 +15,13 @@ import {
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
+import { IFlag } from "@oclif/command/lib/flags";
+import { spawn } from "child_process";
+import { Logger } from "tslog";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, writeCompilationResult } from "../compile";
-import { spawn } from "child_process";
-import * as ts from "typescript";
-import { IFlag } from "@oclif/command/lib/flags";
-import { Logger } from "tslog";
 
 /**
  * Run the Kipper program.
@@ -130,6 +131,7 @@ export default class Run extends Command {
 					file.charStream,
 				),
 				{
+					target: new KipperTypeScriptTarget(),
 					optimisationOptions: {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],

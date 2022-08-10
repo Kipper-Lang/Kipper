@@ -20,8 +20,8 @@ import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
-import type { TargetASTNodeCodeGenerator } from "../../translation";
-import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import type { TargetASTNodeCodeGenerator } from "../../target-presets";
+import type { TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { UnableToDetermineSemanticDataError } from "../../../errors";
 import { Scope } from "../../scope";
 

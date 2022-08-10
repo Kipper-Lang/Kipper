@@ -14,11 +14,12 @@ import {
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
+import { IFlag } from "@oclif/command/lib/flags";
+import { Logger } from "tslog";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, writeCompilationResult } from "../compile";
-import { IFlag } from "@oclif/command/lib/flags";
-import { Logger } from "tslog";
 
 export default class Compile extends Command {
 	static description = "Compile a Kipper program.";
@@ -115,6 +116,7 @@ export default class Compile extends Command {
 					file.charStream,
 				),
 				{
+					target: new KipperTypeScriptTarget(),
 					optimisationOptions: {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],

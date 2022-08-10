@@ -44,11 +44,11 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../compiler";
-import { CompoundStatement, IfStatement, KipperTargetCodeGenerator, ScopeFunctionDeclaration } from "../../compiler";
+} from "@kipper/core";
+import { CompoundStatement, IfStatement, KipperTargetCodeGenerator, ScopeFunctionDeclaration } from "@kipper/core";
 import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
-import { getConversionFunctionIdentifier, indentLines } from "../../utils";
-import { version } from "../../index";
+import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
+import { version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);

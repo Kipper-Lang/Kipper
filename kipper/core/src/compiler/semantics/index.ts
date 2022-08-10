@@ -10,4 +10,3 @@ export * from "./const";
 export * from "./processor";
 export * from "./semantics-asserter";
 export * from "./semantics-error-handler";
-export * from "./target-semantic-analyser";

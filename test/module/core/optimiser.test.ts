@@ -1,9 +1,11 @@
 import { CompileConfig, KipperCompiler, KipperCompileResult, KipperParseStream } from "@kipper/core";
 import { assert } from "chai";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperOptimiser", () => {
 	const compiler = new KipperCompiler();
 	const optimisationOptions: CompileConfig = {
+		target: new KipperTypeScriptTarget(),
 		optimisationOptions: {
 			optimiseInternals: true,
 			optimiseBuiltIns: true,

@@ -4,14 +4,13 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
  */
+import { KipperCompileTarget } from "./target-presets";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "./antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
-import { KipperCompileTarget } from "./compile-target";
-import { TypeScriptTarget } from "../targets/typescript";
 import type { TranslatedCodeLine } from "./semantics";
 import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
 import { KipperError } from "../errors";
@@ -48,7 +47,7 @@ export interface CompileConfig {
 	 * The translation languages for the compilation.
 	 * @since 0.5.0
 	 */
-	target?: KipperCompileTarget;
+	target: KipperCompileTarget;
 
 	/**
 	 * Options for the {@link KipperOptimiser}.
@@ -111,7 +110,6 @@ export class EvaluatedCompileConfig implements CompileConfig {
 		builtIns: kipperRuntimeBuiltIns, // Default built-in globals
 		extendGlobals: [], // Use no custom globals per default
 		fileName: "anonymous-script", // Default name if no name is specified
-		target: new TypeScriptTarget(), // Default target is TypeScript
 		optimisationOptions: defaultOptimisationOptions,
 		warnings: true, // Always generate warnings by default
 		recover: true, // Always try to recover from compilation errors
@@ -181,10 +179,10 @@ export class EvaluatedCompileConfig implements CompileConfig {
 		this.userOptions = options;
 
 		// Evaluate all config options
+		this.target = options.target;
 		this.builtIns = options.builtIns ?? Object.values(EvaluatedCompileConfig.defaults.builtIns);
 		this.extendBuiltIns = options.extendBuiltIns ?? EvaluatedCompileConfig.defaults.extendGlobals;
 		this.fileName = options.fileName ?? EvaluatedCompileConfig.defaults.fileName;
-		this.target = options.target ?? EvaluatedCompileConfig.defaults.target;
 		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileConfig.defaults.optimisationOptions;
 		this.warnings = options.warnings ?? EvaluatedCompileConfig.defaults.warnings;
 		this.recover = options.recover ?? EvaluatedCompileConfig.defaults.recover;
@@ -305,16 +303,9 @@ export class KipperCompiler {
 	}
 
 	/**
-	 * Parses a file and generates the antlr4 tree ({@link CompilationUnitContext}), using
-	 * {@link KipperParser.compilationUnit} (the highest item of the tree / entry point to the tree).
-	 *
-	 * This function is async to not render-block the browser and allow rendering to happen in-between the
-	 * async processing.
-	 * @param parseStream The {@link KipperParseStream} instance that contains the required string
-	 * content.
-	 * @param target The {@link KipperCompileTarget} which specifies the compilation translation for the
-	 * language. Per default this is {@link TypeScriptTarget}.
-	 * @returns The generated and parsed {@link CompilationUnitContext}.
+	 * Parses a file and generates a parse tree using the Antlr4 {@link KipperLexer} and {@link KipperParser}.
+	 * @param parseStream The {@link KipperParseStream} instance that contains the required file content.
+	 * @returns An object containing the parse data.
 	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
 	 */
 	public async parse(parseStream: KipperParseStream): Promise<ParseData> {
@@ -349,6 +340,8 @@ export class KipperCompiler {
 	 * Creates a new {@link KipperProgramContext} based on the passed {@link parseData} and {@link config configuration}.
 	 * @param parseData The parsing data of the file.
 	 * @param compilerOptions The compilation config.
+	 * @return The newly created {@link KipperProgramContext} instance, which contains the metadata of the compiled
+	 * program.
 	 * @since 0.10.0
 	 */
 	public async getProgramCtx(
@@ -394,7 +387,7 @@ export class KipperCompiler {
 	 */
 	public async compile(
 		stream: string | KipperParseStream,
-		compilerOptions: CompileConfig = new EvaluatedCompileConfig({}),
+		compilerOptions: CompileConfig,
 	): Promise<KipperCompileResult> {
 		// Handle the input and format it
 		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);

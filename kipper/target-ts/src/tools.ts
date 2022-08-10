@@ -13,8 +13,8 @@ import {
 	kipperStrType,
 	KipperType,
 	kipperVoidType,
-} from "../../compiler";
-import { KipperNotImplementedError } from "../../errors";
+} from "@kipper/core";
+import { KipperNotImplementedError } from "@kipper/core";
 
 /**
  * Fetches the typescript equivalent for a {@link KipperType}.

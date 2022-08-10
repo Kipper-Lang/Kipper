@@ -69,8 +69,7 @@ import {
 	type KipperUnaryOperator,
 	type TranslatedExpression,
 } from "../const";
-import type { TargetASTNodeCodeGenerator } from "../../translation";
-import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";

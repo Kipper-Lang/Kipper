@@ -37,9 +37,8 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../compiler";
-import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
-import { ReservedIdentifierOverwriteError } from "../../errors";
+} from "@kipper/core";
+import { IfStatement, KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { getTypeScriptBuiltInIdentifier } from "./tools";
 
 /**

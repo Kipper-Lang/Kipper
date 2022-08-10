@@ -53,9 +53,3 @@ To automatically fix such issues:
 ```sh
 pnpm run lint:fix
 ```
-
-### Tests
-
-```sh
-pnpm test
-```

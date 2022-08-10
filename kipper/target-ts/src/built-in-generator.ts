@@ -5,8 +5,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { BuiltInFunction, TranslatedCodeLine } from "../../compiler/";
-import { KipperTargetBuiltInGenerator } from "../../compiler";
+import type { BuiltInFunction, TranslatedCodeLine } from "@kipper/core";
+import { KipperTargetBuiltInGenerator } from "@kipper/core";
 import { getTypeScriptType } from "./tools";
 
 /**

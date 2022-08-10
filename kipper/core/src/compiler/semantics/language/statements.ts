@@ -22,8 +22,7 @@ import {
 } from "../../parser";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
-import type { TargetASTNodeCodeGenerator } from "../../translation";
-import type { TargetASTNodeSemanticAnalyser } from "../target-semantic-analyser";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 

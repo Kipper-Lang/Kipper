@@ -6,6 +6,7 @@
   "dependencies": {
     "@kipper/cli": "workspace:~",
     "@kipper/core": "workspace:~",
+		"@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
     "typescript": "~4.7.0"
@@ -55,9 +56,10 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
+		"kipper",
     "language",
     "compiler",
-    "backend"
+		"transpile"
   ],
   "files": [
     "LICENSE",
@@ -80,7 +82,7 @@
     }
   ],
   "scripts": {
-    "fastbuild": "pnpm run -r build && tsc",
+    "fastbuild": "pnpm run -r build",
     "build": "pnpm run fastbuild",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",

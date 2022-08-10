@@ -10,7 +10,7 @@ import {
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
-import { getTypeScriptBuiltInIdentifier } from "@kipper/core/lib/targets/typescript/tools";
+import { getTypeScriptBuiltInIdentifier, KipperTypeScriptTarget } from "@kipper/target-ts";
 
 function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
@@ -37,6 +37,8 @@ const tangledExpressionsFile = getFileName("tangled-expressions.kip");
 const ifStatementsFile = getFileName("if-statements.kip");
 
 describe("KipperCompiler", () => {
+	const defaultTarget = new KipperTypeScriptTarget();
+
 	describe("constructor", () => {
 		it("Empty Construction", () => {
 			let instance = new KipperCompiler();
@@ -177,7 +179,7 @@ describe("KipperCompiler", () => {
 			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
 			let stream = new KipperParseStream(fileContent);
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			assert(programCtx.stream === stream, "Expected streams to equal");
 			assert(programCtx.antlrParseTree !== null, "Parse tree must exist");
@@ -191,7 +193,7 @@ describe("KipperCompiler", () => {
 			const fileContent = "'\\r \\n \\r \\n';";
 			let stream = new KipperParseStream(fileContent);
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			assert(programCtx.stream === stream, "Expected streams to equal");
 			assert(programCtx.antlrParseTree !== null, "Parse tree must exist");
@@ -209,7 +211,7 @@ describe("KipperCompiler", () => {
 			it("Sample program", async () => {
 				const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -223,7 +225,7 @@ describe("KipperCompiler", () => {
 			it("Single Function call", async () => {
 				const fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -252,7 +254,7 @@ describe("KipperCompiler", () => {
 			it("Multi Function call", async () => {
 				const fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -280,7 +282,7 @@ describe("KipperCompiler", () => {
 			it("Nested scopes", async () => {
 				const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -293,7 +295,7 @@ describe("KipperCompiler", () => {
 			it("Single Function definition", async () => {
 				const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -306,7 +308,7 @@ describe("KipperCompiler", () => {
 			it("Multi Function definition", async () => {
 				const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -319,7 +321,7 @@ describe("KipperCompiler", () => {
 			it("Variable Declaration", async () => {
 				const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -333,7 +335,7 @@ describe("KipperCompiler", () => {
 				it("Expression statements", async () => {
 					const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
@@ -347,7 +349,7 @@ describe("KipperCompiler", () => {
 				it("Function call argument", async () => {
 					const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
@@ -376,7 +378,7 @@ describe("KipperCompiler", () => {
 				it("Variable assignment", async () => {
 					const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
@@ -405,7 +407,7 @@ describe("KipperCompiler", () => {
 			it("Assign", async () => {
 				const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -418,7 +420,7 @@ describe("KipperCompiler", () => {
 			it("Bool", async () => {
 				const fileContent = (await fs.readFile(boolFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -431,7 +433,7 @@ describe("KipperCompiler", () => {
 			it("Type conversion", async () => {
 				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -450,7 +452,7 @@ describe("KipperCompiler", () => {
 			it("Expression statements", async () => {
 				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -467,7 +469,7 @@ describe("KipperCompiler", () => {
 			it("Tangled expressions", async () => {
 				const fileContent = (await fs.readFile(tangledExpressionsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -495,7 +497,7 @@ describe("KipperCompiler", () => {
 			it("If statements", async () => {
 				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
 				const stream = new KipperParseStream(fileContent);
-				const instance: KipperCompileResult = await compiler.compile(stream);
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.internals);
@@ -530,7 +532,7 @@ describe("KipperCompiler", () => {
 			describe("Declaration", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -542,7 +544,7 @@ describe("KipperCompiler", () => {
 			describe("Definition", () => {
 				it("var", async () => {
 					const stream = new KipperParseStream("var x: num = 4;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -552,7 +554,7 @@ describe("KipperCompiler", () => {
 
 				it("const", async () => {
 					const stream = new KipperParseStream("const x: num = 4;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -564,7 +566,7 @@ describe("KipperCompiler", () => {
 			describe("Assignment", () => {
 				it("num", async () => {
 					const stream = new KipperParseStream("var x: num = 4;\nx = 5;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -574,7 +576,7 @@ describe("KipperCompiler", () => {
 
 				it("str", async () => {
 					const stream = new KipperParseStream('var x: str = "4";\nx = "5";');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -586,7 +588,7 @@ describe("KipperCompiler", () => {
 			describe("Expression Statements", () => {
 				it("one expression", async () => {
 					const stream = new KipperParseStream("print = print;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -596,7 +598,7 @@ describe("KipperCompiler", () => {
 
 				it("two expressions", async () => {
 					const stream = new KipperParseStream('12 * 93, "5" + "1";');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -607,7 +609,7 @@ describe("KipperCompiler", () => {
 
 				it("three expressions", async () => {
 					const stream = new KipperParseStream('call print("x"), call print("y"), call print("z");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -621,7 +623,7 @@ describe("KipperCompiler", () => {
 			describe("Unary Operators", () => {
 				it("unary plus", async () => {
 					const stream = new KipperParseStream("+4;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -631,7 +633,7 @@ describe("KipperCompiler", () => {
 
 				it("unary minus", async () => {
 					const stream = new KipperParseStream("-4;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -643,7 +645,7 @@ describe("KipperCompiler", () => {
 				// the value of the operand.
 				it("!", async () => {
 					const stream = new KipperParseStream("!true;");
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -656,7 +658,7 @@ describe("KipperCompiler", () => {
 				describe("Logical AND", () => {
 					it("true && true", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 && x < 5) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -686,7 +688,7 @@ describe("KipperCompiler", () => {
 
 					it("true && false", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 && x < 2) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -715,7 +717,7 @@ describe("KipperCompiler", () => {
 
 					it("false && true", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 && x < 3) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -744,7 +746,7 @@ describe("KipperCompiler", () => {
 
 					it("false && false", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 && x < 8) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -775,7 +777,7 @@ describe("KipperCompiler", () => {
 				describe("Logical OR", () => {
 					it("true || true", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 || x < 5) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -804,7 +806,7 @@ describe("KipperCompiler", () => {
 
 					it("true || false", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 3 || x < 2) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -833,7 +835,7 @@ describe("KipperCompiler", () => {
 
 					it("false || true", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 || x < 3) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -862,7 +864,7 @@ describe("KipperCompiler", () => {
 
 					it("false || false", async () => {
 						const stream = new KipperParseStream('var x: num = 4;\nif (x > 5 || x > 8) { call print("Works"); }');
-						const instance: KipperCompileResult = await compiler.compile(stream);
+						const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -894,7 +896,7 @@ describe("KipperCompiler", () => {
 			describe("comparisons", () => {
 				it("==", async () => {
 					const stream = new KipperParseStream('var x: num = 4;\nif (x == 4) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -923,7 +925,7 @@ describe("KipperCompiler", () => {
 
 				it("!=", async () => {
 					const stream = new KipperParseStream('var x: num = 4;\nif (x != 5) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -952,7 +954,7 @@ describe("KipperCompiler", () => {
 
 				it("<", async () => {
 					const stream = new KipperParseStream('var x: num = 4;\nif (x < 5) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -981,7 +983,7 @@ describe("KipperCompiler", () => {
 
 				it("<=", async () => {
 					const stream = new KipperParseStream('var x: num = 4;\nif (x <= 5) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -1010,7 +1012,7 @@ describe("KipperCompiler", () => {
 
 				it(">", async () => {
 					const stream = new KipperParseStream('var x: num = 5;\nif (x > 4) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -1039,7 +1041,7 @@ describe("KipperCompiler", () => {
 
 				it(">=", async () => {
 					const stream = new KipperParseStream('var x: num = 5;\nif (x >= 4) call print("Works");');
-					const instance: KipperCompileResult = await compiler.compile(stream);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
