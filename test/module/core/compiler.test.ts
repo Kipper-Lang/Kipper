@@ -10,7 +10,7 @@ import {
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
-import { getTypeScriptBuiltInIdentifier, KipperTypeScriptTarget } from "@kipper/target-ts";
+import { KipperTypeScriptTarget, getTypeScriptBuiltInIdentifier } from "@kipper/target-ts";
 
 function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
@@ -663,14 +663,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -693,14 +695,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -722,14 +726,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -751,14 +757,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -782,14 +790,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -811,14 +821,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -840,14 +852,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -869,14 +883,16 @@ describe("KipperCompiler", () => {
 						assert(instance.programCtx);
 						assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 						assert(instance.programCtx.stream === stream, "Expected matching streams");
-						assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+
+						const code = instance.write();
+						assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
 						assert(
-							instance.write().includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'),
+							code.includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'),
 							"Expected different TypeScript code",
 						);
 
 						// Compile the program to JavaScript and check the output.
-						const jsCode = ts.transpile(instance.write());
+						const jsCode = ts.transpile(code);
 
 						// Overwrite built-in to access output
 						const prevLog = console.log;
@@ -901,14 +917,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x === 4) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(code.includes('if (x === 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
@@ -930,14 +945,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x !== 5) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(code.includes('if (x !== 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
@@ -959,14 +973,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x < 5) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(code.includes('if (x < 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
@@ -988,14 +1001,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x <= 5) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
+					assert(code.includes('if (x <= 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
@@ -1017,14 +1029,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x > 4) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 5;"), "Expected different TypeScript code");
+					assert(code.includes('if (x > 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
@@ -1046,14 +1057,13 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.write().includes("let x: number = 5;"), "Expected different TypeScript code");
-					assert(
-						instance.write().includes('if (x >= 4) {\n  __kipper.print("Works");\n}'),
-						"Expected different TypeScript code",
-					);
+
+					const code = instance.write();
+					assert(code.includes("let x: number = 5;"), "Expected different TypeScript code");
+					assert(code.includes('if (x >= 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
 
 					// Compile the program to JavaScript and check the output.
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(code);
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;

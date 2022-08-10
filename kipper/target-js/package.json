@@ -1,10 +1,9 @@
 {
-  "name": "@kipper/target-ts",
-  "description": "The TypeScript target for the Kipper Compiler! 🦊",
+  "name": "@kipper/target-js",
+  "description": "The JavaScript target for the Kipper Compiler! 🦊",
   "version": "0.10.0-alpha.2",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
-		"@kipper/target-js": "workspace:~",
 		"@kipper/core": "workspace:~"
 	},
   "devDependencies": {

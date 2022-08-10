@@ -4,6 +4,7 @@ specifiers:
   '@istanbuljs/nyc-config-typescript': 1.0.2
   '@kipper/cli': workspace:~
   '@kipper/core': workspace:~
+  '@kipper/target-js': workspace:~
   '@kipper/target-ts': workspace:~
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
@@ -43,6 +44,7 @@ specifiers:
 dependencies:
   '@kipper/cli': link:kipper/cli
   '@kipper/core': link:kipper/core
+  '@kipper/target-js': link:kipper/target-js
   '@kipper/target-ts': link:kipper/target-ts
   antlr4ts: 0.5.0-alpha.4
   tslib: 2.4.0

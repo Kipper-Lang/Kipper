@@ -144,7 +144,7 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
-  		target: new KipperTypeScriptTarget()
+  		target: new KipperTypeScriptTarget(),
   	});
   	let tsCode = result.write();
 
@@ -175,7 +175,7 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
- 			target: new KipperTypeScriptTarget()
+  		target: new KipperTypeScriptTarget(),
   	});
   	let tsCode = result.write();
 

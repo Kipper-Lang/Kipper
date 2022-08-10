@@ -1,5 +1,5 @@
 /**
- * Tools for handling the translation of Kipper to TypeScript.
+ * Tools for handling the translation of Kipper code to TypeScript.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
@@ -9,12 +9,12 @@ import {
 	kipperFuncType,
 	kipperListType,
 	kipperMetaType,
+	KipperNotImplementedError,
 	kipperNumType,
 	kipperStrType,
 	KipperType,
 	kipperVoidType,
 } from "@kipper/core";
-import { KipperNotImplementedError } from "@kipper/core";
 
 /**
  * Fetches the typescript equivalent for a {@link KipperType}.
@@ -40,11 +40,4 @@ export function getTypeScriptType(kipperType: KipperType): string {
 	}
 }
 
-/**
- * Fetches the reserved identifier for the translated code.
- * @param identifier The identifier to translate to its TypeScript form.
- * @since 0.8.0
- */
-export function getTypeScriptBuiltInIdentifier(identifier: string): string {
-	return `__kipper.${identifier}`;
-}
+export { getJavaScriptBuiltInIdentifier as getTypeScriptBuiltInIdentifier } from "@kipper/target-js";
