@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@kipper/core': workspace:~
+  '@kipper/target-js': workspace:~
   '@kipper/target-ts': workspace:~
   '@oclif/command': ^1.8.0
   '@oclif/config': ^1.17.0
@@ -27,6 +28,7 @@ specifiers:
 
 dependencies:
   '@kipper/core': link:../core
+  '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
   '@oclif/command': 1.8.16
   '@oclif/config': 1.18.3

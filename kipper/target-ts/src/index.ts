@@ -19,7 +19,7 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 		codeGenerator: TypeScriptTargetCodeGenerator = new TypeScriptTargetCodeGenerator(),
 		builtInGenerator: TypeScriptTargetBuiltInGenerator = new TypeScriptTargetBuiltInGenerator(),
 	) {
-		super("typescript", semanticAnalyser, codeGenerator, builtInGenerator);
+		super("typescript", semanticAnalyser, codeGenerator, builtInGenerator, "ts");
 	}
 }
 

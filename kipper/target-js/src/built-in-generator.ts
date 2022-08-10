@@ -5,7 +5,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, TranslatedCodeLine } from "@kipper/core";
+import type { BuiltInFunction, BuiltInFunctionArgument, TranslatedCodeLine } from "@kipper/core";
 import { KipperTargetBuiltInGenerator } from "@kipper/core";
 
 /**
@@ -19,7 +19,7 @@ function getJSFunctionSignature(funcSpec: BuiltInFunction): {
 } {
 	// Translate the function signature into JavaScript
 	const identifier: string = funcSpec.identifier;
-	const args: Array<string> = funcSpec.args.map((arg) => arg.identifier);
+	const args: Array<string> = funcSpec.args.map((arg: BuiltInFunctionArgument) => arg.identifier);
 
 	return { identifier, args };
 }
@@ -42,7 +42,7 @@ function createJSFunctionSignature(signature: { identifier: string; args: Array<
 export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerator {
 	async numToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.args[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return [
@@ -61,7 +61,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async strToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.args[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return [
@@ -80,7 +80,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.args[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return [
@@ -99,7 +99,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async boolToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.args[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return [
@@ -118,7 +118,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const printArgIdentifier = signature.args[0][0];
+		const printArgIdentifier = signature.args[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return [

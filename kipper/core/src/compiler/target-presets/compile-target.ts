@@ -18,16 +18,19 @@ export abstract class KipperCompileTarget {
 	public readonly semanticAnalyser: KipperTargetSemanticAnalyser;
 	public readonly codeGenerator: KipperTargetCodeGenerator;
 	public readonly builtInGenerator: KipperTargetBuiltInGenerator;
+	public readonly fileExtension: string;
 
 	protected constructor(
 		targetName: string,
 		semanticAnalyser: KipperTargetSemanticAnalyser,
 		codeGenerator: KipperTargetCodeGenerator,
 		builtInGenerator: KipperTargetBuiltInGenerator,
+		fileExtension: string,
 	) {
 		this.targetName = targetName;
 		this.semanticAnalyser = semanticAnalyser;
 		this.codeGenerator = codeGenerator;
 		this.builtInGenerator = builtInGenerator;
+		this.fileExtension = fileExtension;
 	}
 }
