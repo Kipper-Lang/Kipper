@@ -10,18 +10,18 @@ import {
 	defaultOptimisationOptions,
 	KipperCompiler,
 	KipperCompileResult,
+	KipperCompileTarget,
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
-import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { IFlag } from "@oclif/command/lib/flags";
 import { spawn } from "child_process";
 import { Logger } from "tslog";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { getFile, writeCompilationResult } from "../compile";
+import { getFile, getTarget, writeCompilationResult } from "../compile";
 
 /**
  * Run the Kipper program.
@@ -56,6 +56,12 @@ export default class Run extends Command {
 	];
 
 	static flags: Record<string, IFlag<any>> = {
+		target: flags.string({
+			char: "t",
+			default: "js",
+			description: "The target language where the compiled program should be emitted to.",
+			options: ["js", "ts"],
+		}),
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
@@ -119,6 +125,7 @@ export default class Run extends Command {
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
+		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
 		let result: KipperCompileResult;
 		try {
@@ -131,7 +138,7 @@ export default class Run extends Command {
 					file.charStream,
 				),
 				{
-					target: new KipperTypeScriptTarget(),
+					target: target,
 					optimisationOptions: {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],
@@ -146,11 +153,21 @@ export default class Run extends Command {
 				return;
 			}
 
-			await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
+			// Write the file output for this compilation
+			await writeCompilationResult(result, file, flags["output-dir"], target, flags["encoding"] as KipperEncoding);
+
+			// Get the JS code that should be evaluated
+			let jsProgram: string;
+			if (target.targetName === "typescript") {
+				jsProgram = ts.transpileModule(result.write(), {
+					compilerOptions: { module: ts.ModuleKind.CommonJS },
+				}).outputText;
+			} else {
+				jsProgram = result.write();
+			}
 
 			// Execute the program
-			const jsProgram = ts.transpileModule(result.write(), { compilerOptions: { module: ts.ModuleKind.CommonJS } });
-			executeKipperProgram(jsProgram.outputText);
+			executeKipperProgram(jsProgram);
 		} catch (e) {
 			// In case the error is not a KipperError, throw it as an internal error (this should not happen)
 			if (!(e instanceof KipperError)) {
