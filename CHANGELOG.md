@@ -753,7 +753,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
   generated in the walking step.
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
-- General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
+- General namespace import of `kipper` in `index.ts`, which allows the usage of the entire library.
 - `KipperFileContext.translate()`, which walks through the listener and returns the generated code. The generated code
   will be cached inside `KipperFileContext.typescriptCode` to allow reusing code instead of unnecessarily generating
   code again.

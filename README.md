@@ -37,16 +37,16 @@ If you are using `pnpm` and `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 _Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
 
-## Packages 
+## Packages
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
-- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js. 
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js.
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
-  with the Kipper compiler. 
-- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper 
-	Compiler. 
-- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper 
-	Compiler. 
+  with the Kipper compiler.
+- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
+  Compiler.
+- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
+  Compiler.
 
 ## Kipper Docs
 
@@ -64,18 +64,13 @@ To use Kipper you have three options:
 ### In a browser
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
-provides the kipper compiler for the browser.
+provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
 
-As a dependency you will also have to include `babel.min.js`, which is needed to allow for a compilation
-from TS to JS in your browser, as Kipper compiles only to TypeScript.
-
-Simple example of running your code in your browser using Kipper and Babel:
+Simple example of compiling and running Kipper code in a browser:
 
 ```html
-<!-- Babel dependency -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency -->
-<script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js"></script>
 
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
@@ -87,15 +82,15 @@ Simple example of running your code in your browser using Kipper and Babel:
 	// Define your own compiler with your wanted configuration
 	const compiler = new Kipper.KipperCompiler(logger);
 
-	// Compile the code to Typescript
+	// Compile the code to JavaScript
 	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-	const result = (await compiler.compile(`call print("Hello world!");`)).write();
-
-	// Transpile the TS code into JS
-	const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+	const result = await compiler.compile(`call print("Hello world!");`, {
+		target: new KipperJS.KipperJavaScriptTarget(),
+	});
+	const jsCode = result.write();
 
 	// Finally, run your program
-	eval(jsCode.code);
+	eval(jsCode);
 </script>
 ```
 
