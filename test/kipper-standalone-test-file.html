@@ -47,7 +47,9 @@
 
 			// Compile the code to Typescript
 			// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-			const result = (await compiler.compile(`call print("Hello world!");`, {})).write();
+			const result = (await compiler.compile(`call print("Hello world!");`, { target: Kipper.KipperTypeScriptTarget })).write();
+
+			// TODO! Implement web-package for the standalone file to include the KipperTypeScriptTarget
 
 			// Transpile the TS code into JS
 			const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });

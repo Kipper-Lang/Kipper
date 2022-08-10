@@ -43,6 +43,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
 - [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
   with the Kipper compiler! 🦊
+- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper Compiler! 🦊
 
 ## Kipper Docs
 
@@ -130,6 +131,7 @@ Simple example of using the Kipper Compiler in Node.js:
   const ts = require("typescript");
   const fs = require("fs").promises;
   const kipper = require("@kipper/core");
+  const KipperTypeScriptTarget = require("@kipper/target-ts").KipperTypeScriptTarget;
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8").then(async (fileContent) => {
@@ -142,6 +144,7 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
+  		target: new KipperTypeScriptTarget()
   	});
   	let tsCode = result.write();
 
@@ -159,6 +162,7 @@ Simple example of using the Kipper Compiler in Node.js:
   import * as ts from "typescript";
   import { promises as fs } from "fs";
   import * as kipper from "@kipper/core";
+  import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
@@ -171,6 +175,7 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
+ 			target: new KipperTypeScriptTarget()
   	});
   	let tsCode = result.write();
 
