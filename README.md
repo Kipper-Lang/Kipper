@@ -19,7 +19,7 @@ To install the whole Kipper package with its CLI, run the following command:
 npm i kipper
 ```
 
-If you are using `pnpm` and `yarn`, use `pnpm i kipper` or `yarn add kipper`.
+If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Goals
 

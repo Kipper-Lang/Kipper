@@ -22,7 +22,7 @@ To install the whole Kipper package with its CLI, run the following command:
 npm i @kipper/target-js
 ```
 
-If you are using `pnpm` and `yarn`, use `pnpm i @kipper/target-js` or `yarn add @kipper/target-js`.
+If you are using `pnpm` or `yarn`, use `pnpm i @kipper/target-js` or `yarn add @kipper/target-js`.
 
 ## Kipper Docs
 
