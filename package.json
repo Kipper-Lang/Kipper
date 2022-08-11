@@ -1,12 +1,11 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language and compiler 🦊",
-  "version": "0.10.0-alpha.3",
+  "version": "0.10.0-alpha.4",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
     "@kipper/core": "workspace:~",
-    "@kipper/web": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
