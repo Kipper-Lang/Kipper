@@ -6,7 +6,6 @@
   "dependencies": {
     "@kipper/cli": "workspace:~",
     "@kipper/core": "workspace:~",
-    "@kipper/web": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",

@@ -18,12 +18,10 @@ specifiers:
   uuid: 8.3.2
   watchify: 4.0.0
 
-dependencies:
+devDependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-
-devDependencies:
   '@types/node': 17.0.35
   ansi-regex: 6.0.1
   browserify: 17.0.0
