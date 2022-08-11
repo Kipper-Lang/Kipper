@@ -63,7 +63,7 @@ To use Kipper you have three options:
 
 ### In a browser
 
-For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
+For running Kipper in the browser, you will have to include the `kipper-standalone.js` file, which
 provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
 
 Simple example of compiling and running Kipper code in a browser:
@@ -126,10 +126,9 @@ Simple example of using the Kipper Compiler in Node.js:
 - JavaScript:
 
   ```js
-  const ts = require("typescript");
   const fs = require("fs").promises;
   const kipper = require("@kipper/core");
-  const KipperTypeScriptTarget = require("@kipper/target-ts").KipperTypeScriptTarget;
+  const KipperJavaScriptTarget = require("@kipper/target-js").KipperJavaScriptTarget;
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8").then(async (fileContent) => {
@@ -142,12 +141,9 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
-  		target: new KipperTypeScriptTarget(),
+  		target: new KipperJavaScriptTarget(),
   	});
-  	let tsCode = result.write();
-
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
+  	let jsCode = result.write();
 
   	// Running the Kipper program
   	eval(jsCode);
@@ -157,10 +153,9 @@ Simple example of using the Kipper Compiler in Node.js:
 - TypeScript:
 
   ```ts
-  import * as ts from "typescript";
   import { promises as fs } from "fs";
   import * as kipper from "@kipper/core";
-  import { KipperTypeScriptTarget } from "@kipper/target-ts";
+  import { KipperJavaScriptTarget } from "@kipper/target-js";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
@@ -173,12 +168,9 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
-  		target: new KipperTypeScriptTarget(),
+  		target: new KipperJavaScriptTarget(),
   	});
-  	let tsCode = result.write();
-
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
+  	let jsCode = result.write();
 
   	// Running the Kipper program
   	eval(jsCode);

@@ -39,8 +39,8 @@ To use Kipper you have three options:
 
 ### In a browser
 
-For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
-provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript..
+For running Kipper in the browser, you will have to include the `kipper-standalone.js` file, which
+provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
 
 Simple example of compiling and running Kipper code in a browser:
 
@@ -78,13 +78,13 @@ kipper, without depending on a browser.
 For example:
 
 - Compiling a Kipper program:
-  ```bash
-  kipper compile file.kip
-  ```
+	```bash
+	kipper compile file.kip
+	```
 - Executing a Kipper program using Node.js:
-  ```bash
-  kipper run file.kip
-  ```
+	```bash
+	kipper run file.kip
+	```
 
 This also enables the usage of Kipper files with the `.kip` extension, which can be read and compiled to TypeScript,
 without having to configure anything yourself. This also allows the input of data over the
@@ -101,61 +101,57 @@ Simple example of using the Kipper Compiler in Node.js:
 
 - JavaScript:
 
-  ```js
-  const ts = require("typescript");
-  const fs = require("fs").promises;
-  const kipper = require("@kipper/core");
+	```js
+	const fs = require("fs").promises;
+	const kipper = require("@kipper/core");
+	const KipperJavaScriptTarget = require("@kipper/target-js").KipperJavaScriptTarget;
 
-  const path = "INSERT_PATH";
-  fs.readFile(path, "utf8").then(async (fileContent) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+	const path = "INSERT_PATH";
+	fs.readFile(path, "utf8").then(async (fileContent) => {
+		// Define your own logger and compiler, which will handle the compilation
+		const logger = new kipper.KipperLogger((level, msg) => {
+			console.log(`[${level}] ${msg}`);
+		});
+		const compiler = new kipper.KipperCompiler(logger);
 
-  	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  	});
-  	let tsCode = result.write();
+		// Compile the code string or stream
+		let result = await compiler.compile(fileContent, {
+			/* Config */
+			target: new KipperJavaScriptTarget(),
+		});
+		let jsCode = result.write();
 
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
-
-  	// Running the Kipper program
-  	eval(jsCode);
-  });
-  ```
+		// Running the Kipper program
+		eval(jsCode);
+	});
+	```
 
 - TypeScript:
 
-  ```ts
-  import * as ts from "typescript";
-  import { promises as fs } from "fs";
-  import * as kipper from "@kipper/core";
+	```ts
+	import { promises as fs } from "fs";
+	import * as kipper from "@kipper/core";
+	import { KipperJavaScriptTarget } from "@kipper/target-js";
 
-  const path = "INSERT_PATH";
-  fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+	const path = "INSERT_PATH";
+	fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
+		// Define your own logger and compiler, which will handle the compilation
+		const logger = new kipper.KipperLogger((level, msg) => {
+			console.log(`[${level}] ${msg}`);
+		});
+		const compiler = new kipper.KipperCompiler(logger);
 
-  	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  	});
-  	let tsCode = result.write();
+		// Compile the code string or stream
+		let result = await compiler.compile(fileContent, {
+			/* Config */
+			target: new KipperJavaScriptTarget(),
+		});
+		let jsCode = result.write();
 
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
-
-  	// Running the Kipper program
-  	eval(jsCode);
-  });
-  ```
+		// Running the Kipper program
+		eval(jsCode);
+	});
+	```
 
 ## Copyright and License
 
