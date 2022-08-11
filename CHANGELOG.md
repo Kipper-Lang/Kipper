@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
 - Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
   evaluate during type checking.
