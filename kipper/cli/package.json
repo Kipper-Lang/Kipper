@@ -1,15 +1,15 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.10.0-alpha.2",
+  "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
   },
   "dependencies": {
     "@kipper/core": "workspace:~",
-		"@kipper/target-js": "workspace:~",
-		"@kipper/target-ts": "workspace:~",
+    "@kipper/target-js": "workspace:~",
+    "@kipper/target-ts": "workspace:~",
     "@oclif/core": "^1.8.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
@@ -61,7 +61,7 @@
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
-	"types": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "kipper",

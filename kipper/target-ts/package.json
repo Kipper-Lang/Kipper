@@ -1,12 +1,12 @@
 {
   "name": "@kipper/target-ts",
   "description": "The TypeScript target for the Kipper compiler 🦊",
-  "version": "0.10.0-alpha.2",
+  "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
-		"@kipper/target-js": "workspace:~",
-		"@kipper/core": "workspace:~"
-	},
+    "@kipper/target-js": "workspace:~",
+    "@kipper/core": "workspace:~"
+  },
   "devDependencies": {
     "typescript": "4.7.4",
     "uuid": "8.3.2",
@@ -33,13 +33,13 @@
     "kipper",
     "language",
     "backend",
-		"transpile",
-		"target"
+    "transpile",
+    "target"
   ],
   "files": [
     "lib",
     "src",
-		"LICENSE"
+    "LICENSE"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",

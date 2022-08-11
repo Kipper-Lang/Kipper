@@ -1,14 +1,14 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language and compiler 🦊",
-  "version": "0.10.0-alpha.2",
+  "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
     "@kipper/core": "workspace:~",
-		"@kipper/web": "workspace:~",
-		"@kipper/target-js": "workspace:~",
-		"@kipper/target-ts": "workspace:~",
+    "@kipper/web": "workspace:~",
+    "@kipper/target-js": "workspace:~",
+    "@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
     "typescript": "~4.7.4"
@@ -58,10 +58,10 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
-		"kipper",
+    "kipper",
     "language",
     "compiler",
-		"transpile"
+    "transpile"
   ],
   "files": [
     "LICENSE",
