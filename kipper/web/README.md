@@ -1,13 +1,13 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper Web Module - `@kipper/target-ts`
+# Kipper Web Module - `@kipper/web`
 
-[![Version](https://img.shields.io/npm/v/@kipper/target-ts?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/target-ts)
+[![Version](https://img.shields.io/npm/v/@kipper/web?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/web)
 ![](https://img.shields.io/badge/Coverage-79%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
-[![Install size](https://packagephobia.com/badge?p=@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
-[![Publish size](https://badgen.net/packagephobia/publish/@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
+[![Install size](https://packagephobia.com/badge?p=@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
+[![Publish size](https://badgen.net/packagephobia/publish/@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
 
 The standalone web-module for the Kipper Compiler.
 
