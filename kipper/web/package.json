@@ -3,12 +3,10 @@
   "description": "The standalone web-module for the Kipper compiler 🦊",
   "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
-  "dependencies": {
-    "@kipper/target-js": "workspace:~",
-    "@kipper/target-ts": "workspace:~",
-    "@kipper/core": "workspace:~"
-  },
   "devDependencies": {
+		"@kipper/target-js": "workspace:~",
+		"@kipper/target-ts": "workspace:~",
+		"@kipper/core": "workspace:~",
     "typescript": "4.7.4",
     "uuid": "8.3.2",
     "mkdirp": "1.0.4",
