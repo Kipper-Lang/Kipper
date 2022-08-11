@@ -3,17 +3,17 @@
  * @since 0.8.0
  */
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import type { CompoundStatement, TranslatedCodeLine } from "../semantics";
 import type {
-	CompoundStatement,
+	KipperCompileTarget,
+	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
 	TargetASTNodeSemanticAnalyser,
-	TranslatedCodeLine,
-} from "../semantics";
+} from "../target-presets";
 import type { KipperParser, TypeData } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
-import type { KipperCompileTarget } from "../compile-target";
-import type { KipperTargetCodeGenerator, TargetASTNodeCodeGenerator } from "../translation";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
 import { ParserASTNode } from "./ast-node";

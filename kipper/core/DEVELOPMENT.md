@@ -59,19 +59,3 @@ pnpm run lint:fix
 ```sh
 pnpm test
 ```
-
-### Generate Antlr4 Files
-
-If you only want to generate the antlr4-files:
-
-```bash
-pnpm run antlr4ts
-```
-
-(If antlr4 is not installed, install it from here: https://www.antlr.org/)
-
-otherwise, run simply the default `build` script:
-
-```bash
-pnpm run build
-```

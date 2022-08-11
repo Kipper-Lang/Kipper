@@ -2,7 +2,7 @@
  * The TypeScript target-specific semantic analyser.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.8.0
+ * @since 0.10.0
  */
 import type {
 	AdditiveExpression,
@@ -37,16 +37,15 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../compiler";
-import { IfStatement, KipperTargetSemanticAnalyser } from "../../compiler";
-import { ReservedIdentifierOverwriteError } from "../../errors";
-import { getTypeScriptBuiltInIdentifier } from "./tools";
+} from "@kipper/core";
+import { IfStatement, KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
+import { getJavaScriptBuiltInIdentifier } from "./tools";
 
 /**
- * All reserved identifiers in TypeScript that may not be overwritten.
- * @since 0.8.0
+ * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.
+ * @since 0.10.0
  */
-export const tsReservedIdentifiers: Array<string> = [
+export const reservedIdentifiers: Array<string> = [
 	"break",
 	"case",
 	"catch",
@@ -115,22 +114,22 @@ let reservedIdentifiersCached: boolean = false;
 
 /**
  * The TypeScript target-specific semantic analyser.
- * @since 0.8.0
+ * @since 0.10.0
  */
-export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
+export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalyser {
 	/**
 	 * Checks whether the identifier of the {@link declaration} is viable for the TypeScript target
 	 * and does not overwrite any built-in or reserved identifiers.
 	 * @param declaration The variable, function or parameter declaration.
 	 * @private
 	 */
-	private checkViabilityOfIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
+	protected checkViabilityOfIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
 		const identifier = declaration.getSemanticData().identifier;
 
 		if (!reservedIdentifiersCached) {
 			reservedKipperIdentifiers = [
-				...declaration.programCtx.internals.map((v) => getTypeScriptBuiltInIdentifier(v.identifier)),
-				...declaration.programCtx.builtIns.map((v) => getTypeScriptBuiltInIdentifier(v.identifier)),
+				...declaration.programCtx.internals.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
+				...declaration.programCtx.builtIns.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
 			];
 		}
 
@@ -139,10 +138,7 @@ export class TypeScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 		// Error cases:
 		// 1. Identifiers starting with '__' are always reserved and may not be defined.
 		// 2. Identifiers may not overwrite TypeScript specific keywords.
-		if (
-			reservedKipperIdentifiers.find((i) => i === identifier) ||
-			tsReservedIdentifiers.find((i) => i === identifier)
-		) {
+		if (reservedKipperIdentifiers.find((i) => i === identifier) || reservedIdentifiers.find((i) => i === identifier)) {
 			this.setTracebackData({ ctx: declaration });
 			throw this.error(new ReservedIdentifierOverwriteError(identifier));
 		}

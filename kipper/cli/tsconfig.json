@@ -1,9 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "noImplicitAny": true
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noImplicitAny": true,
+		"strict": true,
+		"target": "es2020",
+		"lib": [
+			"ES7"
+		]
+		// ES7 -> ES2016
   },
   "include": [
     "./src/**/*"

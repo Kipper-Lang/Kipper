@@ -1,9 +1,9 @@
 /**
  * Generator for the Kipper built-ins that are specific for a target.
- * @since 0.8.0
+ * @since 0.10.0
  */
-import { TranslatedCodeLine } from "../semantics";
-import { BuiltInFunction } from "../runtime-built-ins";
+import type { TranslatedCodeLine } from "../../semantics";
+import type { BuiltInFunction } from "../../runtime-built-ins";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.
@@ -13,14 +13,14 @@ import { BuiltInFunction } from "../runtime-built-ins";
  *
  * The functions in this class are automatically called by {@link KipperProgramContext.generateRequirements} when used
  * inside a {@link KipperProgramContext}, so there is no need to call it yourself.
- * @since 0.8.0
+ * @since 0.10.0
  */
 export abstract class KipperTargetBuiltInGenerator {
 	/**
 	 * Conversion function which provides 'num' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
 	public abstract numToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
@@ -28,7 +28,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * Conversion function which provides 'str' to 'num' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
 	public abstract strToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
@@ -36,7 +36,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
 	public abstract boolToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
@@ -44,7 +44,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
 	public abstract boolToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 
@@ -52,7 +52,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * Print function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
 	public abstract print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 }

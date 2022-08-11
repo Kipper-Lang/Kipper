@@ -10,14 +10,18 @@
     "../kipper/*.ts",
     "../kipper/core/src/**/*.ts",
     "../kipper/cli/src/**/*.ts",
-  ],
+		"../kipper/target-ts/src/**/*.ts",
+		"../kipper/target-js/src/**/*.ts"
+	],
   "ts-node": {
     "files": true
   },
   "references": [
     {"path": "../kipper"},
     {"path": "../kipper/core"},
-    {"path": "../kipper/cli"}
+    {"path": "../kipper/cli"},
+		{"path": "../kipper/target-ts"},
+		{"path": "../kipper/target-js"}
   ],
   "include": [
     "./**/*.ts"

@@ -1,3 +1,10 @@
+/**
+ * Target-specific Semantic Analyser.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.10.0
+ */
+
 import type {
 	AdditiveExpression,
 	ArraySpecifierExpression,
@@ -14,6 +21,7 @@ import type {
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
+	IfStatement,
 	IncrementOrDecrementExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
@@ -31,23 +39,22 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "./language";
-import { IfStatement } from "./language";
+} from "../semantics";
 import type { CompilableASTNode } from "../parser";
-import { KipperSemanticErrorHandler } from "./semantics-error-handler";
+import { KipperSemanticErrorHandler } from "../semantics";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.
  *
  * This function does not interpret but only check the logical integrity of the AST node.
- * @since 0.5.0
+ * @since 0.10.0
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any, any>> = (node: T) => Promise<void>;
 
 /**
  * Represents a Semantic analyser that is specific for a {@link KipperCompileTarget}.
- * @since 0.5.0
+ * @since 0.10.0
  */
 export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHandler {
 	/**type

@@ -4,11 +4,31 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import { KipperCompileResult, KipperParseStream } from "@kipper/core";
+import { KipperCompileResult, KipperCompileTarget, KipperParseStream } from "@kipper/core";
 import { constants, promises as fs } from "fs";
 import { KipperFileWriteError, KipperInvalidInputError } from "./errors";
 import * as path from "path";
 import { KipperEncoding, KipperParseFile } from "./file-stream";
+import { KipperJavaScriptTarget } from "@kipper/target-js";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
+
+/**
+ * Fetches the target that the program will compile to based on the passed identifier.
+ * @param name The name of the target.
+ * @since 0.10.0
+ */
+export async function getTarget(name: string): Promise<KipperCompileTarget> {
+	switch (name) {
+		case "js": {
+			return new KipperJavaScriptTarget();
+		}
+		case "ts": {
+			return new KipperTypeScriptTarget();
+		}
+		default:
+			throw new KipperInvalidInputError(`Invalid target '${name}'.`);
+	}
+}
 
 /**
  * Evaluates the file or stream provided by the command arguments or flags.
@@ -34,6 +54,7 @@ export async function getFile(
  * @param result The result instance containing the program metadata.
  * @param srcFile The source parse file or stream.
  * @param outputDir The output dir where the files should be placed. This will be created if it does not exist.
+ * @param target The target that the program should compile to.
  * @param encoding The encoding to write the file with.
  * @returns The path to the output file.
  */
@@ -41,10 +62,13 @@ export async function writeCompilationResult(
 	result: KipperCompileResult,
 	srcFile: KipperParseFile | KipperParseStream,
 	outputDir: string,
+	target: KipperCompileTarget,
 	encoding: KipperEncoding,
 ): Promise<string> {
 	const buildPath = path.resolve(outputDir);
-	const outPath = `${buildPath}/${srcFile instanceof KipperParseFile ? srcFile.path.name : srcFile.name}.ts`;
+	const outPath = `${buildPath}/${srcFile instanceof KipperParseFile ? srcFile.path.name : srcFile.name}.${
+		target.fileExtension
+	}`;
 	try {
 		// Create the directory if it does not exist
 		try {

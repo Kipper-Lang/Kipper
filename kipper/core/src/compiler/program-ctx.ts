@@ -9,7 +9,7 @@ import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
 import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
-import type { KipperCompileTarget } from "./compile-target";
+import type { KipperCompileTarget } from "./target-presets";
 import { ParseTreeWalker } from "antlr4ts/tree";
 import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
@@ -28,9 +28,9 @@ export class KipperProgramContext {
 
 	private readonly _antlrParseTree: CompilationUnitContext;
 
-	private _errors: Array<KipperError>;
+	private readonly _errors: Array<KipperError>;
 
-	private _warnings: Array<KipperWarning>;
+	private readonly _warnings: Array<KipperWarning>;
 
 	private _abstractSyntaxTree: RootASTNode | undefined;
 

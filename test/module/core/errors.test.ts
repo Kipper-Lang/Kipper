@@ -6,13 +6,19 @@ import {
 	KipperSyntaxError,
 	ParseData,
 } from "@kipper/core";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { assert } from "chai";
 
 describe("Kipper errors", () => {
+	const defaultTarget = new KipperTypeScriptTarget();
+
 	describe("KipperSyntaxError", () => {
 		it("LexerError", async () => {
 			try {
-				await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5; \\\\D", { abortOnFirstError: true });
+				await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5; \\\\D", {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 			} catch (e) {
 				assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
 				assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
@@ -26,7 +32,10 @@ describe("Kipper errors", () => {
 
 		it("ParserError", async () => {
 			try {
-				await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5", { abortOnFirstError: true });
+				await new KipperCompiler().compile("var x: num = 4; \nvar x: num = 5", {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 			} catch (e) {
 				assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
 				assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
@@ -42,7 +51,10 @@ describe("Kipper errors", () => {
 	describe("Compilation errors", () => {
 		it("GetTraceback", async () => {
 			try {
-				await new KipperCompiler().compile('var i: str = "4";\n var i: str = "4";', { abortOnFirstError: true });
+				await new KipperCompiler().compile('var i: str = "4";\n var i: str = "4";', {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
 				assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
@@ -56,7 +68,10 @@ describe("Kipper errors", () => {
 
 		it("UnknownTypeError", async () => {
 			try {
-				await new KipperCompiler().compile("var invalid: UNKNOWN = 4;", { abortOnFirstError: true });
+				await new KipperCompiler().compile("var invalid: UNKNOWN = 4;", {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "UnknownTypeError", "Expected proper error");
 				assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
@@ -72,7 +87,10 @@ describe("Kipper errors", () => {
 			let compiler = new KipperCompiler();
 			try {
 				const parseData: ParseData = await compiler.parse(new KipperParseStream("var i: num = 4;"));
-				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, { abortOnFirstError: true });
+				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 
 				// Duplicate identifier
 				programCtx.registerBuiltIns({ identifier: "i", args: [], returnType: "void" });
@@ -94,7 +112,10 @@ describe("Kipper errors", () => {
 			let compiler = new KipperCompiler();
 			try {
 				const parseData: ParseData = await compiler.parse(new KipperParseStream("var i: num = 4;"));
-				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, { abortOnFirstError: true });
+				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
 
 				// Register new global
 				programCtx.registerBuiltIns({ identifier: "i", args: [], returnType: "void" });
@@ -115,6 +136,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream("def x() -> void; var x: num = 4;"), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
@@ -131,6 +153,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream("def x() -> void {} def x() -> void {}"), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
@@ -149,6 +172,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream("var x: num = 5; \nvar x: num = 5;"), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
@@ -165,6 +189,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream("var x: num; def x() -> void;"), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
@@ -181,7 +206,10 @@ describe("Kipper errors", () => {
 		describe("UnknownReferenceError", () => {
 			it("Simple reference", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("x;"), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream("x;"), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
 					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
@@ -198,6 +226,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream('var x: num = call pr("pr");'), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
@@ -213,7 +242,10 @@ describe("Kipper errors", () => {
 
 			it("Arithmetics", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("var x: num = y + y;"), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream("var x: num = y + y;"), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
 					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
@@ -228,7 +260,10 @@ describe("Kipper errors", () => {
 
 			it("Nested reference", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("{ { { { x; } } } }"), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream("{ { { { x; } } } }"), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
 					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
@@ -248,6 +283,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream("def x() -> func {}"), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "FunctionReturnTypeError", "Expected proper error");
@@ -267,6 +303,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream("def x() -> void {}"), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert(false, "Expected no 'FunctionReturnTypeError'");
@@ -275,7 +312,10 @@ describe("Kipper errors", () => {
 
 				it("num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("def x() -> num {}"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("def x() -> num {}"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert(false, "Expected no 'FunctionReturnTypeError'");
 					}
@@ -283,7 +323,10 @@ describe("Kipper errors", () => {
 
 				it("str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("def x() -> str {}"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("def x() -> str {}"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert(false, "Expected no 'FunctionReturnTypeError'");
 					}
@@ -293,6 +336,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream("def x() -> bool {}"), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert(false, "Expected no 'FunctionReturnTypeError'");
@@ -303,6 +347,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream("def x() -> list {}"), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert(false, "Expected no 'FunctionReturnTypeError'");
@@ -317,6 +362,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('call print("x", "x");'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
@@ -334,6 +380,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x");'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
@@ -351,6 +398,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('call print("x", "x", "x", "x");'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
@@ -366,7 +414,10 @@ describe("Kipper errors", () => {
 
 				it("Too little", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("call print();"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("call print();"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected proper error");
 						assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
@@ -382,7 +433,10 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream('call print("x");'), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream('call print("x");'), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert(false, "Expected no 'InvalidAmountOfArgumentsError'");
 				}
@@ -393,7 +447,10 @@ describe("Kipper errors", () => {
 			describe("Error", () => {
 				it("str+num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" + 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" + 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -408,7 +465,10 @@ describe("Kipper errors", () => {
 
 				it("str-num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" - 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" - 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -423,7 +483,10 @@ describe("Kipper errors", () => {
 
 				it("str*num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" * 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" * 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -438,7 +501,10 @@ describe("Kipper errors", () => {
 
 				it("str**num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" ** 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" ** 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -453,7 +519,10 @@ describe("Kipper errors", () => {
 
 				it("str/num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" / 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" / 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -468,7 +537,10 @@ describe("Kipper errors", () => {
 
 				it("str%num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" % 4;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" % 4;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -483,7 +555,10 @@ describe("Kipper errors", () => {
 
 				it("num+str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 + "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 + "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -498,7 +573,10 @@ describe("Kipper errors", () => {
 
 				it("num-str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 - "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 - "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -513,7 +591,10 @@ describe("Kipper errors", () => {
 
 				it("num*str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 * "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 * "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -528,7 +609,10 @@ describe("Kipper errors", () => {
 
 				it("num**str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 ** "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 ** "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -543,7 +627,10 @@ describe("Kipper errors", () => {
 
 				it("num/str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 / "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 / "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -558,7 +645,10 @@ describe("Kipper errors", () => {
 
 				it("num%str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('4 % "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('4 % "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -573,7 +663,10 @@ describe("Kipper errors", () => {
 
 				it("str+bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" + true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" + true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -588,7 +681,10 @@ describe("Kipper errors", () => {
 
 				it("str-bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" - true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" - true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -603,7 +699,10 @@ describe("Kipper errors", () => {
 
 				it("str*bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" * true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" * true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -618,7 +717,10 @@ describe("Kipper errors", () => {
 
 				it("str**bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" ** true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" ** true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -633,7 +735,10 @@ describe("Kipper errors", () => {
 
 				it("str/bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" / true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" / true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -648,7 +753,10 @@ describe("Kipper errors", () => {
 
 				it("str%bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"3" % true;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"3" % true;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -663,7 +771,10 @@ describe("Kipper errors", () => {
 
 				it("bool+str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true + "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true + "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -678,7 +789,10 @@ describe("Kipper errors", () => {
 
 				it("bool-str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true - "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true - "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -693,7 +807,10 @@ describe("Kipper errors", () => {
 
 				it("bool*str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true * "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true * "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -708,7 +825,10 @@ describe("Kipper errors", () => {
 
 				it("bool**str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true ** "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true ** "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -723,7 +843,10 @@ describe("Kipper errors", () => {
 
 				it("bool/str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true / "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true / "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -738,7 +861,10 @@ describe("Kipper errors", () => {
 
 				it("bool%str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('true % "3";'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('true % "3";'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -755,6 +881,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x -= "4";'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
@@ -772,6 +899,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x *= "4";'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
@@ -789,6 +917,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x /= "4";'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
@@ -806,6 +935,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x %= "4";'), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "ArithmeticOperationTypeError", "Expected proper error");
@@ -824,7 +954,7 @@ describe("Kipper errors", () => {
 				describe("+", () => {
 					it("str", async () => {
 						try {
-							await new KipperCompiler().compile('"3" + "3";', { abortOnFirstError: true });
+							await new KipperCompiler().compile('"3" + "3";', { abortOnFirstError: true, target: defaultTarget });
 						} catch (e) {
 							assert(false, "Expected no 'ArithmeticOperationTypeError'");
 						}
@@ -832,7 +962,7 @@ describe("Kipper errors", () => {
 
 					it("num", async () => {
 						try {
-							await new KipperCompiler().compile("3 + 3;", { abortOnFirstError: true });
+							await new KipperCompiler().compile("3 + 3;", { abortOnFirstError: true, target: defaultTarget });
 						} catch (e) {
 							assert(false, "Expected no 'ArithmeticOperationTypeError'");
 						}
@@ -842,7 +972,10 @@ describe("Kipper errors", () => {
 				describe("+=", () => {
 					it("str", async () => {
 						try {
-							await new KipperCompiler().compile('var x: str = "3"; x += "3";', { abortOnFirstError: true });
+							await new KipperCompiler().compile('var x: str = "3"; x += "3";', {
+								abortOnFirstError: true,
+								target: defaultTarget,
+							});
 						} catch (e) {
 							assert(false, "Expected no 'ArithmeticOperationTypeError'");
 						}
@@ -850,7 +983,10 @@ describe("Kipper errors", () => {
 
 					it("num", async () => {
 						try {
-							await new KipperCompiler().compile("var x: num = 3; x + 3;", { abortOnFirstError: true });
+							await new KipperCompiler().compile("var x: num = 3; x + 3;", {
+								abortOnFirstError: true,
+								target: defaultTarget,
+							});
 						} catch (e) {
 							assert(false, "Expected no 'ArithmeticOperationTypeError'");
 						}
@@ -863,7 +999,7 @@ describe("Kipper errors", () => {
 			describe("Error", () => {
 				it("NumberConstant", async () => {
 					try {
-						await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
 						assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
@@ -878,7 +1014,7 @@ describe("Kipper errors", () => {
 
 				it("StringConstant", async () => {
 					try {
-						await new KipperCompiler().compile('"4" = "4";', { abortOnFirstError: true });
+						await new KipperCompiler().compile('"4" = "4";', { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidAssignmentError", "Expected proper error");
 						assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
@@ -895,7 +1031,10 @@ describe("Kipper errors", () => {
 			describe("NoError", () => {
 				it("identifier", async () => {
 					try {
-						await new KipperCompiler().compile("var x: num = 0; x = 3 + 3;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("var x: num = 0; x = 3 + 3;", {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert(false, "Expected no 'InvalidAssignmentError'");
 					}
@@ -910,6 +1049,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: num = "5";'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
@@ -925,7 +1065,10 @@ describe("Kipper errors", () => {
 
 					it("str = num", async () => {
 						try {
-							await new KipperCompiler().compile(new KipperParseStream("var x: str = 5;"), { abortOnFirstError: true });
+							await new KipperCompiler().compile(new KipperParseStream("var x: str = 5;"), {
+								abortOnFirstError: true,
+								target: defaultTarget,
+							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "TypeError", "Expected proper error");
 							assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -944,6 +1087,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: num; x = "5";'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -961,6 +1105,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream("var x: str; x = 5;"), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -978,6 +1123,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x += 4;'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -995,6 +1141,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x -= 4;'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -1012,6 +1159,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x *= 4;'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -1029,6 +1177,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x /= 4;'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -1046,6 +1195,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile(new KipperParseStream('var x: str = "3"; x %= 4;'), {
 								abortOnFirstError: true,
+								target: defaultTarget,
 							});
 						} catch (e) {
 							assert((<KipperError>e).constructor.name === "AssignmentTypeError", "Expected proper error");
@@ -1064,7 +1214,7 @@ describe("Kipper errors", () => {
 			describe("NoError", () => {
 				it("str = str", async () => {
 					try {
-						await new KipperCompiler().compile('var x: str = "3";', { abortOnFirstError: true });
+						await new KipperCompiler().compile('var x: str = "3";', { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'TypeError'");
 					}
@@ -1072,7 +1222,7 @@ describe("Kipper errors", () => {
 
 				it("num = num", async () => {
 					try {
-						await new KipperCompiler().compile("var x: num = 3;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("var x: num = 3;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'TypeError'");
 					}
@@ -1084,7 +1234,10 @@ describe("Kipper errors", () => {
 			describe("Error", () => {
 				it("str as func", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream('"5" as func;'), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream('"5" as func;'), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1099,7 +1252,10 @@ describe("Kipper errors", () => {
 
 				it("num as func", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("5 as func;"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("5 as func;"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1114,7 +1270,10 @@ describe("Kipper errors", () => {
 
 				it("bool as func", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("true as func;"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("true as func;"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1129,7 +1288,10 @@ describe("Kipper errors", () => {
 
 				it("func as str", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("print as str;"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("print as str;"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1144,7 +1306,10 @@ describe("Kipper errors", () => {
 
 				it("func as num", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("print as bool;"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("print as bool;"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1159,7 +1324,10 @@ describe("Kipper errors", () => {
 
 				it("func as bool", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream("print as bool;"), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream("print as bool;"), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidConversionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1176,7 +1344,7 @@ describe("Kipper errors", () => {
 			describe("NoError", () => {
 				it("num as str", async () => {
 					try {
-						await new KipperCompiler().compile("5 as str;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("5 as str;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'InvalidConversionTypeError'");
 					}
@@ -1184,7 +1352,7 @@ describe("Kipper errors", () => {
 
 				it("str as num", async () => {
 					try {
-						await new KipperCompiler().compile('"5" as num;', { abortOnFirstError: true });
+						await new KipperCompiler().compile('"5" as num;', { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'InvalidConversionTypeError'");
 					}
@@ -1192,7 +1360,7 @@ describe("Kipper errors", () => {
 
 				it("bool as str", async () => {
 					try {
-						await new KipperCompiler().compile("true as str;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("true as str;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'InvalidConversionTypeError'");
 					}
@@ -1200,7 +1368,7 @@ describe("Kipper errors", () => {
 
 				it("bool as num", async () => {
 					try {
-						await new KipperCompiler().compile("true as num;", { abortOnFirstError: true });
+						await new KipperCompiler().compile("true as num;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
 						assert(false, "Expected no 'InvalidConversionTypeError'");
 					}
@@ -1213,6 +1381,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream("var instanceof: str;"), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "ReservedIdentifierOverwriteError", "Expected proper error");
@@ -1228,7 +1397,10 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile('var valid: str = "3";', { abortOnFirstError: true });
+					await new KipperCompiler().compile('var valid: str = "3";', {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert(false, "Expected no 'ReservedIdentifierOverwriteError'");
 				}
@@ -1240,6 +1412,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile(new KipperParseStream(`const invalid: str = "3"; invalid = "5";`), {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "ReadOnlyTypeError", "Expected proper error");
@@ -1255,7 +1428,10 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile('var valid: str = "3"; valid = "5";', { abortOnFirstError: true });
+					await new KipperCompiler().compile('var valid: str = "3"; valid = "5";', {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert(false, "Expected no 'ReadOnlyTypeError'");
 				}
@@ -1265,7 +1441,10 @@ describe("Kipper errors", () => {
 		describe("UndefinedConstantError", () => {
 			it("Error", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream(`const invalid: str;`), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream(`const invalid: str;`), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UndefinedConstantError", "Expected proper error");
 					assert((<KipperError>e).name === "UndefinedConstantError", "Expected proper error");
@@ -1280,7 +1459,10 @@ describe("Kipper errors", () => {
 
 			it("NoError", async () => {
 				try {
-					await new KipperCompiler().compile('const valid: str = "3";', { abortOnFirstError: true });
+					await new KipperCompiler().compile('const valid: str = "3";', {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert(false, "Expected no 'UndefinedConstantError'");
 				}
@@ -1293,6 +1475,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream(`var x: str; x += "5";`), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
@@ -1310,6 +1493,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile(new KipperParseStream(`var x: num; x + 5;`), {
 							abortOnFirstError: true,
+							target: defaultTarget,
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
@@ -1325,7 +1509,10 @@ describe("Kipper errors", () => {
 
 				it("Identifier reference", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream(`var x: str; x;`), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream(`var x: str; x;`), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
 						assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
@@ -1343,6 +1530,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile('var str1: str = "3"; str1 += "5"; str1 = str1 + "5";', {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert(false, "Expected no 'UndefinedReferenceError'");
@@ -1353,7 +1541,10 @@ describe("Kipper errors", () => {
 		describe("InvalidRelationalComparisonTypeError", () => {
 			it("Error", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream(`"5" > 5;`), { abortOnFirstError: true });
+					await new KipperCompiler().compile(new KipperParseStream(`"5" > 5;`), {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "InvalidRelationalComparisonTypeError", "Expected proper error");
 					assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1370,6 +1561,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile("5 > 4;", {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert(false, "Expected no 'InvalidRelationalComparisonTypeError'");
@@ -1381,7 +1573,10 @@ describe("Kipper errors", () => {
 			describe("Error", () => {
 				it("+", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream(`+"5";`), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream(`+"5";`), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidUnaryExpressionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1396,7 +1591,10 @@ describe("Kipper errors", () => {
 
 				it("-", async () => {
 					try {
-						await new KipperCompiler().compile(new KipperParseStream(`-"5";`), { abortOnFirstError: true });
+						await new KipperCompiler().compile(new KipperParseStream(`-"5";`), {
+							abortOnFirstError: true,
+							target: defaultTarget,
+						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "InvalidUnaryExpressionTypeError", "Expected proper error");
 						assert((<KipperError>e).name === "TypeError", "Expected proper error");
@@ -1414,6 +1612,7 @@ describe("Kipper errors", () => {
 				try {
 					await new KipperCompiler().compile("5 > 4;", {
 						abortOnFirstError: true,
+						target: defaultTarget,
 					});
 				} catch (e) {
 					assert(false, "Expected no 'InvalidUnaryExpressionTypeError'");
@@ -1426,6 +1625,7 @@ describe("Kipper errors", () => {
 		it("Disabled", async () => {
 			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + "5";`), {
 				recover: false,
+				target: defaultTarget,
 			});
 
 			assert(result.errors.length === 1, "Expected one error");
@@ -1434,6 +1634,7 @@ describe("Kipper errors", () => {
 		it("One error", async () => {
 			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + 5;`), {
 				recover: true,
+				target: defaultTarget,
 			});
 
 			assert(result.errors.length === 1, "Expected one error");
@@ -1442,6 +1643,7 @@ describe("Kipper errors", () => {
 		it("Two errors", async () => {
 			const result = await new KipperCompiler().compile(new KipperParseStream(`const invalid: str; 5 + "5";`), {
 				recover: true,
+				target: defaultTarget,
 			});
 
 			assert(result.errors.length === 2, "Expected two errors");
@@ -1450,7 +1652,7 @@ describe("Kipper errors", () => {
 		it("Three errors", async () => {
 			const result = await new KipperCompiler().compile(
 				new KipperParseStream(`const invalid: str; 5 + "5"; print as str;`),
-				{ recover: true },
+				{ recover: true, target: defaultTarget },
 			);
 
 			assert(result.errors.length === 3, "Expected three errors");

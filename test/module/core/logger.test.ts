@@ -1,7 +1,10 @@
 import { assert } from "chai";
 import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperLogger", () => {
+	const defaultTarget = new KipperTypeScriptTarget();
+
 	describe("constructor", () => {
 		it("Construction with empty emit handler", () => {
 			const emitHandler = () => {};
@@ -72,7 +75,9 @@ describe("KipperLogger", () => {
 			}, LogLevel.ERROR);
 
 			try {
-				await new KipperCompiler(logger).compile(new KipperParseStream("var x: num = 4; \nvar x: num = 5"));
+				await new KipperCompiler(logger).compile(new KipperParseStream("var x: num = 4; \nvar x: num = 5"), {
+					target: defaultTarget,
+				});
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "KipperSyntaxError", "Expected proper error");
 

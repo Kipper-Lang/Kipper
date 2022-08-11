@@ -5,11 +5,16 @@
  * @since 0.8.0
  */
 import { KipperProgramContext } from "../program-ctx";
-import { Declaration, KipperTargetSemanticAnalyser, Statement, TranslatedCodeLine } from "../semantics";
+import { Declaration, Statement, TranslatedCodeLine } from "../semantics";
 import { NoSemantics, NoTypeSemantics, ParserASTNode } from "./ast-node";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { KipperTargetCodeGenerator, TargetSetUpCodeGenerator, TargetWrapUpCodeGenerator } from "../translation";
-import { KipperCompileTarget } from "../compile-target";
+import {
+	KipperCompileTarget,
+	KipperTargetCodeGenerator,
+	KipperTargetSemanticAnalyser,
+	TargetSetUpCodeGenerator,
+	TargetWrapUpCodeGenerator,
+} from "../target-presets";
 import { KipperError, UndefinedSemanticsError } from "../../errors";
 import { EvaluatedCompileConfig } from "../compiler";
 

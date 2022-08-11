@@ -26,6 +26,9 @@
 		// Child modules should be ignored, as they compile themselves.
 		"kipper/core",
 		"kipper/cli",
+		"kipper/web",
+		"kipper/target-js",
+		"kipper/target-ts",
 	],
 	"files": [
 		"./kipper/index.ts"

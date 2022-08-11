@@ -7,18 +7,17 @@
 
 export * as parser from "./parser";
 export * as semantics from "./semantics";
-export * as translation from "./translation";
 export * as optimiser from "./optimiser";
-export * from "./runtime-built-ins";
+export * as targetPresets from "./target-presets";
 export * from "./parser";
+export * from "./semantics";
+export * from "./optimiser";
+export * from "./target-presets";
+export * from "./runtime-built-ins";
 export * from "./scope";
 export * from "./local-scope";
 export * from "./scope-declaration";
-export * from "./semantics";
-export * from "./translation";
 export * from "./antlr-error-listener";
 export * from "./program-ctx";
-export * from "./compile-target";
 export * from "./compiler";
-export * from "./optimiser";
 export * from "./reference";

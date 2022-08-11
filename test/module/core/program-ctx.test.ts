@@ -2,6 +2,7 @@ import { assert } from "chai";
 import { BuiltInFunction, InvalidGlobalError, KipperCompiler, KipperParseStream } from "@kipper/core";
 import { promises as fs } from "fs";
 import { EvaluatedCompileConfig } from "@kipper/core";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import * as path from "path";
 
 const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -9,12 +10,13 @@ const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 describe("KipperProgramContext", async () => {
 	const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
 	const stream: KipperParseStream = new KipperParseStream(fileContent);
+	const defaultTarget = new KipperTypeScriptTarget();
 
 	describe("constructor", async () => {
 		it("Default config", async () => {
 			let compiler = new KipperCompiler();
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
 			assert(
@@ -26,7 +28,7 @@ describe("KipperProgramContext", async () => {
 		it("Add single global", async () => {
 			let compiler = new KipperCompiler();
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
 			assert(
@@ -51,7 +53,7 @@ describe("KipperProgramContext", async () => {
 		it("Expecting error with duplicate global", async () => {
 			let compiler = new KipperCompiler();
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
 			assert(
@@ -90,7 +92,7 @@ describe("KipperProgramContext", async () => {
 		it("Get undefined (invalid identifier)", async () => {
 			let compiler = new KipperCompiler();
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
 			assert(
@@ -115,7 +117,7 @@ describe("KipperProgramContext", async () => {
 		it("Get built-in function", async () => {
 			let compiler = new KipperCompiler();
 			let parseData = await compiler.parse(stream);
-			let programCtx = await compiler.getProgramCtx(parseData, {});
+			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Register new built-in function
 			let func: BuiltInFunction = {
