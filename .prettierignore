@@ -1,5 +1,4 @@
 lib
-dist
 build
 node_modules
 bin
@@ -11,5 +10,6 @@ bin
 .prettierignore
 kipper-standalone.js
 kipper-standalone.min.js
+kipper/web/src/
 *.yaml
 *.json

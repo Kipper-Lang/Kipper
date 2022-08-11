@@ -1,6 +1,6 @@
 /**
  * Translation tools for the Kipper language.
- * @since 0.7.0
+ * @since 0.10.0
  */
 
 export * from "./code-generator";

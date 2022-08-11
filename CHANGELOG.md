@@ -9,7 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=` ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
+  analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget`, which can be sed as the
+  target in the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
+- Standalone web-module package called `@kipper/web`, which from now on will provide the `kipper-standalone.js` script
+  that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
+  also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
+  ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
+- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
+  ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
   evaluate during type checking.
@@ -55,6 +64,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Moved TypeScript target from the core package to a new monorepo package called `@kipper/target-ts`, which implements
+  the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`, which
+  can be sed as the target in the `CompileConfig`.
 - Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
   assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
@@ -753,7 +765,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `KipperFileListener.itemBuffer`, which will contain the generated TypeScript code-lines, that were
   generated in the walking step.
 - Basic `KipperFileContext`, which will serve as the base class, where the compilation data is stored.
-- General namespace import of `kipper` in `kipper-standalone.ts`, which allows the usage of the entire library.
+- General namespace import of `kipper` in `index.ts`, which allows the usage of the entire library.
 - `KipperFileContext.translate()`, which walks through the listener and returns the generated code. The generated code
   will be cached inside `KipperFileContext.typescriptCode` to allow reusing code instead of unnecessarily generating
   code again.

@@ -1,13 +1,15 @@
 {
   "name": "@kipper/cli",
-  "description": "The Kipper Command Line Interface (CLI) to interact with the Kipper compiler.",
-  "version": "0.10.0-alpha.2",
+  "description": "The Kipper Command Line Interface (CLI).",
+  "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
   },
   "dependencies": {
     "@kipper/core": "workspace:~",
+    "@kipper/target-js": "workspace:~",
+    "@kipper/target-ts": "workspace:~",
     "@oclif/core": "^1.8.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
@@ -19,16 +21,14 @@
     "tslog": "^3.3.0",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
-    "typescript": "~4.7.0",
-    "ts-node": "^10.7.0",
+    "typescript": "~4.7.4",
+    "ts-node": "^10.9.1",
     "@types/node": "^17.0.34",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@oclif/test": "2.1.1",
-    "typescript": "4.7.4",
     "@types/sinon": "10.0.13",
-    "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "9.1.2",
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
@@ -61,6 +61,7 @@
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "kipper",
@@ -85,6 +86,5 @@
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
     "start": "node ./bin/run"
-  },
-  "types": "lib/index.d.ts"
+  }
 }

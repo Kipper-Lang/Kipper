@@ -2,7 +2,7 @@
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.5.0
+ * @since 0.10.0
  */
 import type {
 	AdditiveExpression,
@@ -40,9 +40,9 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../semantics";
-import type { CompilableASTNode } from "../parser";
-import type { KipperProgramContext } from "../program-ctx";
+} from "../../semantics";
+import type { KipperProgramContext } from "../../program-ctx";
+import type { CompilableASTNode } from "../../parser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -50,7 +50,7 @@ import type { KipperProgramContext } from "../program-ctx";
  *
  * The return may only be of type {@link TranslatedExpression}, {@link TranslatedCodeLine} or
  * {@link TranslatedCodeLine Array<TranslatedCodeLine>}.
- * @since 0.5.0
+ * @since 0.10.0
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeCodeGenerator<
@@ -77,7 +77,7 @@ export type TargetWrapUpCodeGenerator = (programCtx: KipperProgramContext) => Pr
 
 /**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
- * @since 0.5.0
+ * @since 0.10.0
  */
 export abstract class KipperTargetCodeGenerator {
 	/**

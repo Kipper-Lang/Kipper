@@ -9,19 +9,20 @@ import {
 	defaultOptimisationOptions,
 	KipperCompiler,
 	KipperCompileResult,
+	KipperCompileTarget,
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
-import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
-import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { getFile, writeCompilationResult } from "../compile";
 import { IFlag } from "@oclif/command/lib/flags";
 import { Logger } from "tslog";
+import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
+import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
+import { getFile, getTarget, writeCompilationResult } from "../compile";
 
 export default class Compile extends Command {
-	static description = "Compile a Kipper program.";
+	static description = "Compile a Kipper program into the specified target language.";
 
 	// TODO! Add examples when the command moves out of development
 	static examples = [];
@@ -35,6 +36,12 @@ export default class Compile extends Command {
 	];
 
 	static flags: Record<string, IFlag<any>> = {
+		target: flags.string({
+			char: "t",
+			default: "js",
+			description: "The target language where the compiled program should be emitted to.",
+			options: ["js", "ts"],
+		}),
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
@@ -99,6 +106,7 @@ export default class Compile extends Command {
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
+		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
 		// Start timer for processing
 		const startTime: number = new Date().getTime();
@@ -115,6 +123,7 @@ export default class Compile extends Command {
 					file.charStream,
 				),
 				{
+					target: target,
 					optimisationOptions: {
 						optimiseInternals: flags["optimise-internals"],
 						optimiseBuiltIns: flags["optimise-builtins"],
@@ -129,7 +138,14 @@ export default class Compile extends Command {
 				return;
 			}
 
-			const out = await writeCompilationResult(result, file, flags["output-dir"], flags["encoding"] as KipperEncoding);
+			// Write the file output for this compilation
+			const out = await writeCompilationResult(
+				result,
+				file,
+				flags["output-dir"],
+				target,
+				flags["encoding"] as KipperEncoding,
+			);
 			logger.debug(`Generated file '${out}'.`);
 
 			// Finished!

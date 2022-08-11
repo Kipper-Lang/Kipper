@@ -6,17 +6,16 @@
 export * from "./compiler";
 export * from "./errors";
 export * from "./logger";
+export * from "./utils";
 export * as compiler from "./compiler";
 export * as logger from "./logger";
 export * as errors from "./errors";
 export * as utils from "./utils";
 
-// Global variables to identify the project
-
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/core";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.10.0-alpha.2";
+export const version = "0.10.0-alpha.3";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

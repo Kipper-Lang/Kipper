@@ -3,7 +3,7 @@
 # The Kipper programming language - `kipper`
 
 [![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
-![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-79%25-5A7302.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
@@ -19,7 +19,7 @@ To install the whole Kipper package with its CLI, run the following command:
 npm i kipper
 ```
 
-If you are using `pnpm` and `yarn`, use `pnpm i kipper` or `yarn add kipper`.
+If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Goals
 
@@ -40,9 +40,13 @@ _Kipper is still in an early development phase, as such not all features shown i
 ## Packages
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
-- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The Kipper compiler for the browser and Node.js! 🦊
-- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI) to interact
-  with the Kipper compiler! 🦊
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI).
+- [`@kipper/web`](https://www.npmjs.com/package/@kipper/web): The standalone web-module for the Kipper compiler.
+- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
+  compiler.
+- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
+  compiler.
 
 ## Kipper Docs
 
@@ -59,19 +63,14 @@ To use Kipper you have three options:
 
 ### In a browser
 
-For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
-provides the kipper compiler for the browser.
+For running Kipper in the browser, you will have to include the `kipper-standalone.js` file, which
+provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
 
-As a dependency you will also have to include `babel.min.js`, which is needed to allow for a compilation
-from TS to JS in your browser, as Kipper compiles only to TypeScript.
-
-Simple example of running your code in your browser using Kipper and Babel:
+Simple example of compiling and running Kipper code in a browser:
 
 ```html
-<!-- Babel dependency -->
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <!-- Kipper dependency -->
-<script src="https://cdn.jsdelivr.net/npm/@kipper/core@latest/kipper-standalone.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js"></script>
 
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
@@ -83,15 +82,15 @@ Simple example of running your code in your browser using Kipper and Babel:
 	// Define your own compiler with your wanted configuration
 	const compiler = new Kipper.KipperCompiler(logger);
 
-	// Compile the code to Typescript
+	// Compile the code to JavaScript
 	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-	const result = (await compiler.compile(`call print("Hello world!");`)).write();
-
-	// Transpile the TS code into JS
-	const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+	const result = await compiler.compile(`call print("Hello world!");`, {
+		target: new KipperJS.KipperJavaScriptTarget(),
+	});
+	const jsCode = result.write();
 
 	// Finally, run your program
-	eval(jsCode.code);
+	eval(jsCode);
 </script>
 ```
 
@@ -127,9 +126,9 @@ Simple example of using the Kipper Compiler in Node.js:
 - JavaScript:
 
   ```js
-  const ts = require("typescript");
   const fs = require("fs").promises;
   const kipper = require("@kipper/core");
+  const KipperJavaScriptTarget = require("@kipper/target-js").KipperJavaScriptTarget;
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8").then(async (fileContent) => {
@@ -142,11 +141,9 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
+  		target: new KipperJavaScriptTarget(),
   	});
-  	let tsCode = result.write();
-
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
+  	let jsCode = result.write();
 
   	// Running the Kipper program
   	eval(jsCode);
@@ -156,9 +153,9 @@ Simple example of using the Kipper Compiler in Node.js:
 - TypeScript:
 
   ```ts
-  import * as ts from "typescript";
   import { promises as fs } from "fs";
   import * as kipper from "@kipper/core";
+  import { KipperJavaScriptTarget } from "@kipper/target-js";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
@@ -171,11 +168,9 @@ Simple example of using the Kipper Compiler in Node.js:
   	// Compile the code string or stream
   	let result = await compiler.compile(fileContent, {
   		/* Config */
+  		target: new KipperJavaScriptTarget(),
   	});
-  	let tsCode = result.write();
-
-  	// Compiling down to JS using the typescript node module
-  	let jsCode = ts.transpile(tsCode);
+  	let jsCode = result.write();
 
   	// Running the Kipper program
   	eval(jsCode);

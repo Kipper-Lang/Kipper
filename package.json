@@ -1,14 +1,17 @@
 {
   "name": "kipper",
-  "description": "The Kipper programming language! 🦊",
-  "version": "0.10.0-alpha.2",
+  "description": "The Kipper programming language and compiler 🦊",
+  "version": "0.10.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
     "@kipper/core": "workspace:~",
+    "@kipper/web": "workspace:~",
+    "@kipper/target-js": "workspace:~",
+    "@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
     "tslib": "~2.4.0",
-    "typescript": "~4.7.0"
+    "typescript": "~4.7.4"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
@@ -55,9 +58,10 @@
     "url": "https://github.com/Luna-Klatzer/Kipper"
   },
   "keywords": [
+    "kipper",
     "language",
     "compiler",
-    "backend"
+    "transpile"
   ],
   "files": [
     "LICENSE",
@@ -71,16 +75,16 @@
   },
   "size-limit": [
     {
-      "path": "./kipper/core/kipper-standalone.min.js",
+      "path": "./kipper/web/kipper-standalone.min.js",
       "limit": "200 kB"
     },
     {
-      "path": "./kipper/core/kipper-standalone.js",
+      "path": "./kipper/web/kipper-standalone.js",
       "limit": "400 kB"
     }
   ],
   "scripts": {
-    "fastbuild": "pnpm run -r build && tsc",
+    "fastbuild": "pnpm run -r build",
     "build": "pnpm run fastbuild",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
@@ -96,7 +100,7 @@
     "lint:fix": "pnpm run tslint:fix",
     "tslint": "eslint ./test/ --ext .ts --config ./.eslintrc && pnpm run -r tslint",
     "tslint:fix": "eslint ./test/ --ext .ts --config ./.eslintrc --fix && pnpm run -r tslint:fix",
-    "browserify": "pnpm --filter \"@kipper/core\" run browserify",
+    "browserify": "pnpm --filter \"@kipper/web\" run browserify",
     "start": "node ./kipper/cli/bin/run",
     "bump": "run-script-os",
     "bump:linux:macos:default": "./bump.sh",

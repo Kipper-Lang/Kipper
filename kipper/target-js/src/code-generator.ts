@@ -1,8 +1,8 @@
 /**
- * The TypeScript target-specific code generator for translating Kipper into TypeScript.
+ * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
- * @since 0.8.0
+ * @since 0.10.0
  */
 import type {
 	AdditiveExpression,
@@ -14,7 +14,9 @@ import type {
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
+	ExpressionSemantics,
 	ExpressionStatement,
+	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
@@ -44,21 +46,22 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../compiler";
-import { CompoundStatement, IfStatement, KipperTargetCodeGenerator, ScopeFunctionDeclaration } from "../../compiler";
-import { getTypeScriptBuiltInIdentifier, getTypeScriptType } from "./tools";
-import { getConversionFunctionIdentifier, indentLines } from "../../utils";
-import { version } from "../../index";
+	Expression,
+} from "@kipper/core";
+import { KipperTargetCodeGenerator, CompoundStatement, IfStatement, ScopeFunctionDeclaration } from "@kipper/core";
+import { getJavaScriptBuiltInIdentifier } from "./tools";
+import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
+import { version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
 }
 
 /**
- * The TypeScript target-specific code generator for translating Kipper into TypeScript.
- * @since 0.8.0
+ * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
+ * @since 0.10.0
  */
-export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
+export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Code generation function, which is called at the start of a translation and generates
 	 * the dependencies for a file in the target language.
@@ -101,18 +104,19 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link CompoundStatement} into the typescript language.
+	 * Translates a {@link CompoundStatement} into the JavaScript language.
 	 */
 	compoundStatement = async (node: CompoundStatement): Promise<Array<TranslatedCodeLine>> => {
-		let childCode: Array<TranslatedCodeLine> = [];
+		let blockItem: Array<TranslatedCodeLine> = [];
 		for (let child of node.children) {
-			childCode = [...childCode, ...(await child.translateCtxAndChildren())];
+			const childCode = await child.translateCtxAndChildren();
+			blockItem = blockItem.concat(childCode);
 		}
-		return [["{"], ...indentLines(childCode), ["}"]];
+		return [["{"], ...indentLines(blockItem), ["}"]];
 	};
 
 	/**
-	 * Translates a {@link IfStatement} into the typescript language.
+	 * Translates a {@link IfStatement} into the JavaScript language.
 	 *
 	 * Implementation notes:
 	 * - This algorithm is indirectly recursive, as else-if statements are handling like else statements with an immediate
@@ -121,7 +125,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 *   First the starting 'if' will be formatted, and afterwards the alternative branches are processed if they exists.
 	 *   If they do, it is also formatted like with a regular starting 'if', unless there is another nested if-statement
 	 *   in which case it will pass that job down to the child if-statement.
-	 * @since 0.9.0
+	 * @since 0.10.0
 	 */
 	ifStatement = async (node: IfStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -187,83 +191,73 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link SwitchStatement} into the typescript language.
+	 * Translates a {@link SwitchStatement} into the JavaScript language.
 	 *
-	 * @since 0.9.0
+	 * @since 0.10.0
 	 */
 	switchStatement = async (node: SwitchStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link ExpressionStatement} into the typescript language.
+	 * Translates a {@link ExpressionStatement} into the JavaScript language.
 	 */
 	expressionStatement = async (node: ExpressionStatement): Promise<Array<TranslatedCodeLine>> => {
-		let childCode: Array<TranslatedCodeLine> = [];
+		let exprCode: Array<TranslatedCodeLine> = [];
 		for (let child of node.children) {
 			// Expression lists (expression statements) will be evaluated per each expression, meaning every expression
 			// can be considered a single line of code.
-			childCode = [...childCode, [...(await child.translateCtxAndChildren()), ";"]];
+			const childCode = await child.translateCtxAndChildren();
+			exprCode.push(childCode.concat(";"));
 		}
-		return childCode;
+		return exprCode;
 	};
 
 	/**
-	 * Translates a {@link IterationStatement} into the typescript language.
+	 * Translates a {@link IterationStatement} into the JavaScript language.
 	 */
 	iterationStatement = async (node: IterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link JumpStatement} into the typescript language.
+	 * Translates a {@link JumpStatement} into the JavaScript language.
 	 */
 	jumpStatement = async (node: JumpStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link ParameterDeclaration} into the typescript language.
+	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link FunctionDeclaration} into the typescript language.
+	 * Translates a {@link FunctionDeclaration} into the JavaScript language.
 	 */
 	functionDeclaration = async (node: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link VariableDeclaration} into the typescript language.
+	 * Translates a {@link VariableDeclaration} into the JavaScript language.
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const typeData = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = getTypeScriptType(typeData.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
 		return [
-			[
-				storage,
-				" ",
-				semanticData.identifier,
-				":",
-				" ",
-				tsType,
-				...(assign.length > 0 ? [" ", "=", " ", ...assign] : []),
-				";",
-			],
+			[storage, " ", semanticData.identifier, " ", ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"],
 		];
 	};
 
 	/**
-	 * Translates a {@link NumberPrimaryExpression} into the typescript language.
+	 * Translates a {@link NumberPrimaryExpression} into the JavaScript language.
 	 */
 	numberPrimaryExpression = async (node: NumberPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
@@ -274,32 +268,32 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ListPrimaryExpression} into the typescript language.
+	 * Translates a {@link ListPrimaryExpression} into the JavaScript language.
 	 */
 	listPrimaryExpression = async (node: ListPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link IdentifierPrimaryExpression} into the typescript language.
+	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
 		// Get the identifier of the reference
-		let identifier = semanticData.identifier;
+		let identifier: string = semanticData.identifier;
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
-			identifier = getTypeScriptBuiltInIdentifier(identifier);
+			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 
 		return [identifier];
 	};
 
 	/**
-	 * Translates a {@link IdentifierTypeSpecifierExpression} into the typescript language.
+	 * Translates a {@link IdentifierTypeSpecifierExpression} into the JavaScript language.
 	 */
 	identifierTypeSpecifierExpression = async (
 		node: IdentifierTypeSpecifierExpression,
@@ -308,21 +302,21 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link GenericTypeSpecifierExpression} into the typescript language.
+	 * Translates a {@link GenericTypeSpecifierExpression} into the JavaScript language.
 	 */
 	genericTypeSpecifierExpression = async (node: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link TypeofTypeSpecifierExpression} into the typescript language.
+	 * Translates a {@link TypeofTypeSpecifierExpression} into the JavaScript language.
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link StringPrimaryExpression} into the typescript language.
+	 * Translates a {@link StringPrimaryExpression} into the JavaScript language.
 	 */
 	stringPrimaryExpression = async (node: StringPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
@@ -331,21 +325,21 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link FStringPrimaryExpression} into the typescript language.
+	 * Translates a {@link FStringPrimaryExpression} into the JavaScript language.
 	 */
 	fStringPrimaryExpression = async (node: FStringPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link BoolPrimaryExpression} into the typescript language.
+	 * Translates a {@link BoolPrimaryExpression} into the JavaScript language.
 	 */
 	boolPrimaryExpression = async (node: BoolPrimaryExpression): Promise<TranslatedExpression> => {
 		return [node.getSemanticData().value];
 	};
 
 	/**
-	 * Translates a {@link TangledPrimaryExpression} into the typescript language.
+	 * Translates a {@link TangledPrimaryExpression} into the JavaScript language.
 	 */
 	tangledPrimaryExpression = async (node: TangledPrimaryExpression): Promise<TranslatedExpression> => {
 		// Tangled expressions always contain only a single child (Enforced by Parser)
@@ -353,21 +347,21 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into the typescript language.
+	 * Translates a {@link ArraySpecifierExpression} into the JavaScript language.
 	 */
 	arraySpecifierExpression = async (node: ArraySpecifierExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link IncrementOrDecrementExpression} into the typescript language.
+	 * Translates a {@link IncrementOrDecrementExpression} into the JavaScript language.
 	 */
 	incrementOrDecrementExpression = async (node: IncrementOrDecrementExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into the typescript language.
+	 * Translates a {@link FunctionCallPostfixExpression} into the JavaScript language.
 	 */
 	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
@@ -376,13 +370,14 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Get the proper identifier for the function
 		const identifier =
-			func instanceof ScopeFunctionDeclaration ? func.identifier : getTypeScriptBuiltInIdentifier(func.identifier);
+			func instanceof ScopeFunctionDeclaration ? func.identifier : getJavaScriptBuiltInIdentifier(func.identifier);
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
 		for (const i of semanticData.args) {
 			// TODO! Rework this generation once function arguments are properly supported
-			args = [...args, ...(await i.translateCtxAndChildren()), " "];
+			const arg = await i.translateCtxAndChildren();
+			args = args.concat(arg.concat(" "));
 		}
 		args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
 
@@ -391,7 +386,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the typescript language.
+	 * Translates a {@link IncrementOrDecrementUnaryExpression} into the JavaScript language.
 	 */
 	incrementOrDecrementUnaryExpression = async (
 		node: IncrementOrDecrementUnaryExpression,
@@ -400,22 +395,22 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link OperatorModifiedUnaryExpression} into the typescript language.
+	 * Translates a {@link OperatorModifiedUnaryExpression} into the JavaScript language.
 	 */
 	operatorModifiedUnaryExpression = async (node: OperatorModifiedUnaryExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
 
 		// Get the operator and the operand
-		const operator = semanticData.operator;
-		const operand = semanticData.operand;
+		const operator: string = semanticData.operator;
+		const operand: Expression<ExpressionSemantics, ExpressionTypeSemantics> = semanticData.operand;
 
 		// Return the generated unary expression
-		return [operator, ...(await operand.translateCtxAndChildren())];
+		return [operator].concat(await operand.translateCtxAndChildren());
 	};
 
 	/**
-	 * Translates a {@link CastOrConvertExpression} into the typescript language.
+	 * Translates a {@link CastOrConvertExpression} into the JavaScript language.
 	 */
 	castOrConvertExpression = async (node: CastOrConvertExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
@@ -429,13 +424,13 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
 			return exp;
 		} else {
-			const func: string = getTypeScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			const func: string = getJavaScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
 			return [func, "(", ...exp, ")"];
 		}
 	};
 
 	/**
-	 * Translates a {@link MultiplicativeExpression} into the typescript language.
+	 * Translates a {@link MultiplicativeExpression} into the JavaScript language.
 	 */
 	multiplicativeExpression = async (node: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
@@ -447,7 +442,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link AdditiveExpression} into the typescript language.
+	 * Translates a {@link AdditiveExpression} into the JavaScript language.
 	 */
 	additiveExpression = async (node: AdditiveExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
@@ -459,14 +454,14 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates any form of operator-based expression with two operands into the typescript language.
+	 * Translates any form of operator-based expression with two operands into the JavaScript language.
 	 * @param node The node to translate.
 	 * @private
-	 * @since 0.9.0
+	 * @since 0.10.0
 	 */
-	private async translateOperatorExpressionWithOperands(
+	protected translateOperatorExpressionWithOperands = async (
 		node: ComparativeExpression<any, any> | LogicalExpression<any, any>,
-	): Promise<TranslatedExpression> {
+	): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
 
@@ -482,45 +477,45 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		}
 
 		return [...exp1, " ", operator, " ", ...exp2];
-	}
+	};
 
 	/**
-	 * Translates a {@link RelationalExpression} into the typescript language.
+	 * Translates a {@link RelationalExpression} into the JavaScript language.
 	 */
 	relationalExpression = async (node: RelationalExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
-	 * Translates a {@link EqualityExpression} into the typescript language.
+	 * Translates a {@link EqualityExpression} into the JavaScript language.
 	 */
 	equalityExpression = async (node: EqualityExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
-	 * Translates a {@link LogicalAndExpression} into the typescript language.
+	 * Translates a {@link LogicalAndExpression} into the JavaScript language.
 	 */
 	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
-	 * Translates a {@link LogicalOrExpression} into the typescript language.
+	 * Translates a {@link LogicalOrExpression} into the JavaScript language.
 	 */
 	logicalOrExpression = async (node: LogicalOrExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
 	/**
-	 * Translates a {@link ConditionalExpression} into the typescript language.
+	 * Translates a {@link ConditionalExpression} into the JavaScript language.
 	 */
 	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link AssignmentExpression} into the typescript language.
+	 * Translates a {@link AssignmentExpression} into the JavaScript language.
 	 */
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
@@ -529,7 +524,7 @@ export class TypeScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
-			identifier = getTypeScriptBuiltInIdentifier(identifier);
+			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 
 		// The expression that is assigned to the reference

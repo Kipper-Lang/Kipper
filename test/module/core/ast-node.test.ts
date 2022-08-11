@@ -10,10 +10,13 @@ import { TargetASTNodeSemanticAnalyser } from "@kipper/core";
 import { compilableNodeParent } from "@kipper/core";
 import { ParserRuleContext } from "antlr4ts";
 import * as path from "path";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("Parse-Tokens", () => {
+	const defaultTarget = new KipperTypeScriptTarget();
+
 	describe("CompilableASTNode", () => {
 		// Example class for testing purposes
 		class ExampleNode extends CompilableASTNode<any, any> {
@@ -47,7 +50,9 @@ describe("Parse-Tokens", () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
 				let stream: KipperParseStream = new KipperParseStream(fileContent);
 				let parseData: ParseData = await new KipperCompiler().parse(stream);
-				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {});
+				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
+					target: defaultTarget,
+				});
 
 				assert(stream.name === "anonymous-script");
 				assert(stream.stringContent === fileContent);

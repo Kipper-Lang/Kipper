@@ -3,6 +3,7 @@
   "badges": {
     "coverage": {
       "style": "flat",
+			"logo": "github",
       "logoColor": "white",
       "color": "blue"
     }

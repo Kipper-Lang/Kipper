@@ -6,9 +6,10 @@ import * as ts from "typescript";
 
 const filePath = path.resolve(`${__dirname}/../../kipper-files/hello-world.kip`);
 const utf16filePath = path.resolve(`${__dirname}/../../kipper-files/hello-world-utf16.kip`);
-const compiledPath = path.resolve(`build/hello-world.ts`);
-const utf16CompiledPath = path.resolve("build/hello-world-utf16.ts");
-const anonymousCompiledPath = path.resolve("build/anonymous-script.ts");
+const compiledPath = path.resolve(`build/hello-world.js`);
+const utf16CompiledPath = path.resolve("build/hello-world-utf16.js");
+const anonymousJSCompiledPath = path.resolve("build/anonymous-script.js");
+const anonymousTSCompiledPath = path.resolve("build/anonymous-script.ts");
 
 describe("compile", async () => {
 	describe("primary", () => {
@@ -78,11 +79,11 @@ describe("compile", async () => {
 					expect(ctx.stdout).to.contain("Parsing file content.");
 					expect(ctx.stdout).to.contain("Done in");
 					try {
-						await fs.access(anonymousCompiledPath, constants.R_OK);
+						await fs.access(anonymousJSCompiledPath, constants.R_OK);
 					} catch (e) {
-						assert(false, `Expected file '${anonymousCompiledPath}' to exist.`);
+						assert(false, `Expected file '${anonymousJSCompiledPath}' to exist.`);
 					}
-					await fs.rm(anonymousCompiledPath);
+					await fs.rm(anonymousJSCompiledPath);
 				});
 
 			test
@@ -93,11 +94,11 @@ describe("compile", async () => {
 
 					// Read the created file
 					try {
-						await fs.access(anonymousCompiledPath, constants.R_OK);
+						await fs.access(anonymousJSCompiledPath, constants.R_OK);
 					} catch (e) {
-						assert(false, `Expected file '${anonymousCompiledPath}' to exist.`);
+						assert(false, `Expected file '${anonymousJSCompiledPath}' to exist.`);
 					}
-					const fileContent = await fs.readFile(anonymousCompiledPath, "utf8" as BufferEncoding);
+					const fileContent = await fs.readFile(anonymousJSCompiledPath, "utf8" as BufferEncoding);
 					stringFlagTestOutput = fileContent;
 
 					// Compile the program to JavaScript and evaluate it
@@ -117,7 +118,7 @@ describe("compile", async () => {
 					console.log = prevLog;
 
 					// Remove unneeded file
-					await fs.rm(anonymousCompiledPath);
+					await fs.rm(anonymousJSCompiledPath);
 				});
 		});
 
@@ -179,53 +180,105 @@ describe("compile", async () => {
 
 		// Setting the encoding should not change the output whatsoever when using the '-s' flag
 		describe("using '-s'", () => {
-			test
-				.stdout()
-				.command(["compile", "-s", `call print("Hello world!");`, "-e", "ascii"])
-				.it("Compile using encoding 'ascii'", async (ctx) => {
-					expect(ctx.stdout).to.length.greaterThan(0);
-					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing file content.");
-					expect(ctx.stdout).to.contain("Done in");
-					try {
-						await fs.access(anonymousCompiledPath, constants.R_OK);
-					} catch (e) {
-						assert(false, `Expected file '${anonymousCompiledPath}' to exist.`);
-					}
-					await fs.rm(anonymousCompiledPath);
-				});
+			describe("javascript", () => {
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "ascii"])
+					.it("Compile using encoding 'ascii'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousJSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousJSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousJSCompiledPath);
+					});
 
-			test
-				.stdout()
-				.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf8"])
-				.it("Compile using encoding 'utf8'", async (ctx) => {
-					expect(ctx.stdout).to.length.greaterThan(0);
-					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing file content.");
-					expect(ctx.stdout).to.contain("Done in");
-					try {
-						await fs.access(anonymousCompiledPath, constants.R_OK);
-					} catch (e) {
-						assert(false, `Expected file '${anonymousCompiledPath}' to exist.`);
-					}
-					await fs.rm(anonymousCompiledPath);
-				});
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf8"])
+					.it("Compile using encoding 'utf8'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousJSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousJSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousJSCompiledPath);
+					});
 
-			test
-				.stdout()
-				.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf16le"])
-				.it("Compile using encoding 'utf16le'", async (ctx) => {
-					expect(ctx.stdout).to.length.greaterThan(0);
-					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
-					expect(ctx.stdout).to.contain("Parsing file content.");
-					expect(ctx.stdout).to.contain("Done in");
-					try {
-						await fs.access(anonymousCompiledPath, constants.R_OK);
-					} catch (e) {
-						assert(false, `Expected file '${anonymousCompiledPath}' to exist.`);
-					}
-					await fs.rm(anonymousCompiledPath);
-				});
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf16le"])
+					.it("Compile using encoding 'utf16le'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousJSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousJSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousJSCompiledPath);
+					});
+			});
+
+			describe("typescript", () => {
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "ascii", "-t", "ts"])
+					.it("Compile using encoding 'ascii'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousTSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousTSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousTSCompiledPath);
+					});
+
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf8", "-t", "ts"])
+					.it("Compile using encoding 'utf8'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousTSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousTSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousTSCompiledPath);
+					});
+
+				test
+					.stdout()
+					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf16le", "-t", "ts"])
+					.it("Compile using encoding 'utf16le'", async (ctx) => {
+						expect(ctx.stdout).to.length.greaterThan(0);
+						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
+						expect(ctx.stdout).to.contain("Parsing file content.");
+						expect(ctx.stdout).to.contain("Done in");
+						try {
+							await fs.access(anonymousTSCompiledPath, constants.R_OK);
+						} catch (e) {
+							assert(false, `Expected file '${anonymousTSCompiledPath}' to exist.`);
+						}
+						await fs.rm(anonymousTSCompiledPath);
+					});
+			});
 		});
 	});
 });

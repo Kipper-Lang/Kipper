@@ -1,34 +1,24 @@
 /**
- * Standalone implementation, which makes the kipper module available globally using browserify.
- *
- * This file depends on the DOM!
+ * The standalone web-module for the Kipper Compiler.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
+ * @since 0.10.0
  */
-// Including the core kipper module
-import * as kipper from "../src";
+import * as kipper from "@kipper/core";
+import * as kipperTS from "@kipper/target-ts";
+import * as kipperJS from "@kipper/target-js";
 
 // Try to determine the global scope
 // @ts-ignore
 // eslint-disable-next-line no-undef
-const globalScope =
-	typeof globalThis !== "undefined"
-		? // eslint-disable-next-line no-undef
-		  globalThis
-		: // @ts-ignore
-		typeof window !== "undefined"
-		? // @ts-ignore
-		  window
-		: typeof global !== "undefined"
-		? global
-		: // @ts-ignore
-		typeof self !== "undefined"
-		? // @ts-ignore
-		  self
-		: {};
+const globalScope = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 
 // @ts-ignore
 (<any>globalScope.Kipper) = (<any>globalScope).Kipper || kipper;
+// @ts-ignore
+(<any>globalScope.KipperTS) = (<any>globalScope).KipperTS || kipperTS;
+// @ts-ignore
+(<any>globalScope.KipperJS) = (<any>globalScope).KipperJS || kipperJS;
 
 // Validating integrity of the module
 (() => {

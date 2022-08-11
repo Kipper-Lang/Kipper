@@ -8,13 +8,13 @@ export { run } from "@oclif/command";
 export * from "./file-stream";
 export * from "./logger";
 export * from "./errors";
-export * as compile from "./compile";
-export * as help from "./help";
+export * from "./compile";
+export * from "./help";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/cli";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.10.0-alpha.2";
+export const version = "0.10.0-alpha.3";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

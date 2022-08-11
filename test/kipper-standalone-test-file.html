@@ -36,24 +36,24 @@
 		</header>
 
 		<!-- Tests here-->
-		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-		<script type="module" src="../kipper/core/kipper-standalone.min.js"></script>
+		<script type="module" src="../kipper/web/kipper-standalone.js"></script>
 		<script type="module">
+			// Define your own logger and compiler, which will handle the compilation
 			const logger = new Kipper.KipperLogger((level, msg) => {
 				console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
 			});
 			// Define your own compiler with your wanted configuration
 			const compiler = new Kipper.KipperCompiler(logger);
 
-			// Compile the code to Typescript
+			// Compile the code to JavaScript
 			// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-			const result = (await compiler.compile(`call print("Hello world!");`, {})).write();
-
-			// Transpile the TS code into JS
-			const jsCode = Babel.transform(result, { filename: "kipper-web-script.ts", presets: ["env", "typescript"] });
+			const result = await compiler.compile(`call print("Hello world!");`, {
+				target: new KipperJS.KipperJavaScriptTarget(),
+			});
+			const jsCode = result.write();
 
 			// Finally, run your program
-			eval(jsCode.code);
+			eval(jsCode);
 		</script>
 	</body>
 </html>
