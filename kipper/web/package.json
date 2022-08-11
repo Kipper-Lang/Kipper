@@ -1,12 +1,12 @@
 {
   "name": "@kipper/web",
   "description": "The standalone web-module for the Kipper compiler 🦊",
-  "version": "0.10.0-alpha.3",
+  "version": "0.10.0-alpha.4",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "devDependencies": {
-		"@kipper/target-js": "workspace:~",
-		"@kipper/target-ts": "workspace:~",
-		"@kipper/core": "workspace:~",
+    "@kipper/target-js": "workspace:~",
+    "@kipper/target-ts": "workspace:~",
+    "@kipper/core": "workspace:~",
     "typescript": "4.7.4",
     "uuid": "8.3.2",
     "mkdirp": "1.0.4",
