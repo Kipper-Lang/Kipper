@@ -1,6 +1,6 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# Kipper - `kipper`
+# The Kipper programming language - `kipper`
 
 [![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 ![](https://img.shields.io/badge/Coverage-78%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
