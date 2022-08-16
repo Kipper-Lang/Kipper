@@ -10,12 +10,9 @@ import { KipperSemanticsAsserter } from "../semantics-asserter";
 import {
 	AssignmentExpression,
 	Expression,
-	ExpressionSemantics,
-	ExpressionTypeSemantics,
 	ParameterDeclaration,
 	RelationalExpression,
 	UnaryExpression,
-	UnaryExpressionSemantics,
 } from "../language";
 import {
 	KipperArithmeticOperator,
@@ -42,6 +39,8 @@ import {
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
+import { ExpressionSemantics, UnaryExpressionSemantics } from "../semantic-data";
+import { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an

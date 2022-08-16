@@ -40,9 +40,8 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../semantics";
-import type { CompilableASTNode } from "../parser";
 import { KipperSemanticErrorHandler, VoidOrNullOrUndefinedPrimaryExpression } from "../semantics";
-import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../parser";
+import type { CompilableASTNode } from "../parser";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.

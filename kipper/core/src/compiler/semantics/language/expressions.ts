@@ -24,51 +24,36 @@ import {
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	RelationalExpressionContext,
-	SemanticData,
 	StringPrimaryExpressionContext,
 	TangledPrimaryExpressionContext,
-	TypeData,
 	TypeofTypeSpecifierContext,
 	UnaryOperatorContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
 	kipperAdditiveOperators,
 	kipperArithmeticAssignOperators,
-	type KipperArithmeticOperator,
 	type KipperAssignOperator,
-	type KipperBoolType,
 	type KipperBoolTypeLiterals,
-	type KipperComparativeOperator,
 	type KipperEqualityOperator,
 	kipperEqualityOperators,
 	type KipperFunction,
-	KipperIncrementOrDecrementOperator,
-	type KipperListType,
 	kipperLogicalAndOperator,
-	type KipperLogicalAndOperator,
-	type KipperLogicalOrOperator,
 	kipperLogicalOrOperator,
-	type KipperMetaType,
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	type KipperNegateOperator,
 	KipperNullType,
-	type KipperNumType,
-	type KipperRef,
 	type KipperRelationalOperator,
 	kipperRelationalOperators,
 	type KipperSignOperator,
 	kipperStrType,
-	type KipperStrType,
 	type KipperType,
-	type KipperUnaryModifierOperator,
 	kipperUnaryModifierOperators,
-	type KipperUnaryOperator,
 	KipperUndefinedType,
 	KipperVoidType,
 	type TranslatedExpression,
@@ -80,6 +65,71 @@ import { TerminalNode } from "antlr4ts/tree";
 import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 import { ParserRuleContext } from "antlr4ts";
+import {
+	AdditiveExpressionSemantics,
+	ArraySpecifierExpressionSemantics,
+	AssignmentExpressionSemantics,
+	BoolPrimaryExpressionSemantics,
+	CastOrConvertExpressionSemantics,
+	ComparativeExpressionSemantics,
+	ConditionalExpressionSemantics,
+	ConstantExpressionSemantics,
+	EqualityExpressionSemantics,
+	ExpressionSemantics,
+	FStringPrimaryExpressionSemantics,
+	FunctionCallPostfixExpressionSemantics,
+	GenericTypeSpecifierExpressionSemantics,
+	IdentifierPrimaryExpressionSemantics,
+	IdentifierTypeSpecifierExpressionSemantics,
+	IncrementOrDecrementPostfixExpressionSemantics,
+	IncrementOrDecrementUnaryExpressionSemantics,
+	ListPrimaryExpressionSemantics,
+	LogicalAndExpressionSemantics,
+	LogicalExpressionSemantics,
+	LogicalOrExpressionSemantics,
+	MultiplicativeExpressionSemantics,
+	NumberPrimaryExpressionSemantics,
+	OperatorModifiedUnaryExpressionSemantics,
+	RelationalExpressionSemantics,
+	StringPrimaryExpressionSemantics,
+	TangledPrimaryExpressionSemantics,
+	TypeofTypeSpecifierExpressionSemantics,
+	TypeSpecifierExpressionSemantics,
+	UnaryExpressionSemantics,
+	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
+} from "../semantic-data";
+import {
+	AdditiveExpressionTypeSemantics,
+	ArraySpecifierTypeSemantics,
+	AssignmentExpressionTypeSemantics,
+	BoolPrimaryExpressionTypeSemantics,
+	CastOrConvertExpressionTypeSemantics,
+	ComparativeExpressionTypeSemantics,
+	ConditionalExpressionTypeSemantics,
+	EqualityExpressionTypeSemantics,
+	ExpressionTypeSemantics,
+	FStringPrimaryExpressionTypeSemantics,
+	FunctionCallPostfixTypeSemantics,
+	GenericTypeSpecifierTypeSemantics,
+	IdentifierPrimaryExpressionTypeSemantics,
+	IdentifierTypeSpecifierTypeSemantics,
+	IncrementOrDecrementPostfixExpressionTypeSemantics,
+	IncrementOrDecrementUnaryTypeSemantics,
+	ListPrimaryExpressionTypeSemantics,
+	LogicalAndExpressionTypeSemantics,
+	LogicalExpressionTypeSemantics,
+	LogicalOrExpressionTypeSemantics,
+	MultiplicativeTypeSemantics,
+	NumberPrimaryExpressionTypeSemantics,
+	OperatorModifiedUnaryTypeSemantics,
+	RelationalExpressionTypeSemantics,
+	StringPrimaryExpressionTypeSemantics,
+	TangledPrimaryTypeSemantics,
+	TypeofTypeSpecifierTypeSemantics,
+	TypeSpecifierTypeSemantics,
+	UnaryExpressionTypeSemantics,
+	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
+} from "../type-data";
 
 /**
  * Every antlr4 expression ctx type
@@ -182,25 +232,6 @@ export class ExpressionASTNodeFactory {
 }
 
 /**
- * Static semantics for an expression class that must be evaluated during the Semantic Analysis.
- * @since 0.10.0
- */
-export interface ExpressionSemantics extends SemanticData {}
-
-/**
- * Type semantics for an expression class that must be evaluated during Type Checking.
- * @since 0.10.0
- */
-export interface ExpressionTypeSemantics extends TypeData {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Expression class, which represents any expression in the Kipper language that is able to evaluate to a value with
  * a specific {@link evaluatedType type}.
  *
@@ -271,18 +302,6 @@ export abstract class Expression<
 }
 
 /**
- * Semantics for AST Node {@link ConstantExpression}.
- * @since 0.5.0
- */
-export interface ConstantExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of the constant expression. This is usually either a {@link String} or {@link Number}.
-	 * @since 0.5.0
-	 */
-	value: any;
-}
-
-/**
  * Abstract constant expression class representing a constant expression, which was defined in the source code. This
  * abstract class only exists to provide the commonality between the different constant expressions.
  */
@@ -290,40 +309,6 @@ export abstract class ConstantExpression<
 	Semantics extends ConstantExpressionSemantics,
 	TypeSemantics extends ExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
-
-/**
- * Semantics for AST Node {@link NumberPrimaryExpression}.
- * @since 0.5.0
- */
-export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of the constant number expression.
-	 *
-	 * This can be either:
-	 * - A Default 10-base number (N)
-	 * - A Float 10-base number (N.N)
-	 * - A Hex 16-base number (0xN)
-	 * - A Octal 8-base number (0oN)
-	 * - A Binary 2-base number (0bN)
-	 * - An Exponent 10-base number (NeN)
-	 * - An Exponent Float 10-base number (N.NeN)
-	 * @since 0.5.0
-	 */
-	value: string;
-}
-
-/**
- * Type Semantics for AST Node {@link NumberPrimaryExpression}.
- * @since 0.10.0
- */
-export interface NumberPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperNumType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperNumType;
-}
 
 /**
  * Integer constant expression, which represents a number constant that was defined in the source code.
@@ -393,31 +378,6 @@ export class NumberPrimaryExpression extends ConstantExpression<
 }
 
 /**
- * Semantics for AST Node {@link ListPrimaryExpression}.
- * @since 0.5.0
- */
-export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of the constant list expression.
-	 * @since 0.5.0
-	 */
-	value: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
-}
-
-/**
- * Type Semantics for AST Node {@link ListPrimaryExpression}.
- * @since 0.10.0
- */
-export interface ListPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperListType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperListType<KipperType>;
-}
-
-/**
  * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
@@ -480,39 +440,6 @@ export class ListPrimaryExpression extends ConstantExpression<
 		this.semanticAnalyser.listPrimaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<ListPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.listPrimaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link StringPrimaryExpression}.
- * @since 0.5.0
- */
-export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of the constant string expression.
-	 * @since 0.5.0
-	 */
-	value: string;
-	/**
-	 * The quotation marks that this string has used.
-	 *
-	 * This is important to keep track of, so that the translated string is valid and does not produce a syntax error
-	 * due to unescaped quotation marks inside it.
-	 * @since 0.10.0
-	 */
-	quotationMarks: `"` | `'`;
-}
-
-/**
- * Type Semantics for AST Node {@link StringPrimaryExpression}.
- * @since 0.10.0
- */
-export interface StringPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperStrType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperStrType;
 }
 
 /**
@@ -582,31 +509,6 @@ export class StringPrimaryExpression extends ConstantExpression<
 }
 
 /**
- * Semantics for AST Node {@link BoolPrimaryExpression}.
- * @since 0.8.0
- */
-export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The value of this boolean constant expression.
-	 * @since 0.8.0
-	 */
-	value: KipperBoolTypeLiterals;
-}
-
-/**
- * Type Semantics for AST Node {@link BoolPrimaryExpression}.
- * @since 0.10.0
- */
-export interface BoolPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperBoolType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperBoolType;
-}
-
-/**
  * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
  * @since 0.8.0
  */
@@ -669,32 +571,6 @@ export class BoolPrimaryExpression extends Expression<
 		this.semanticAnalyser.boolPrimaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<BoolPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.boolPrimaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link FStringPrimaryExpression}.
- * @since 0.5.0
- */
-export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * Returns the items of the f-strings, where each item represents one section of the string. The section may either be
-	 * a {@link StringPrimaryExpression constant string} or {@link Expression evaluable runtime expression}.
-	 * @since 0.5.0
-	 */
-	items: Array<string | Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
-}
-
-/**
- * Type Semantics for AST Node {@link FStringPrimaryExpression}.
- * @since 0.10.0
- */
-export interface FStringPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. Since a constant expression always evaluates to the same
-	 * type, this will always be of type {@link KipperStrType}.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperStrType;
 }
 
 /**
@@ -762,42 +638,6 @@ export class FStringPrimaryExpression extends Expression<
 		this.semanticAnalyser.fStringPrimaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<FStringPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.fStringPrimaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link IdentifierPrimaryExpression}.
- * @since 0.5.0
- */
-export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The identifier of the {@link IdentifierPrimaryExpressionSemantics.ref reference}.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The reference that the {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
-	 *
-	 * This reference may either be a {@link BuiltInFunction built-in function},
-	 * {@link ScopeVariableDeclaration user-defined variable} or
-	 * {@link ScopeFunctionDeclaration user-defined function}.
-	 * @since 0.10.0
-	 */
-	ref: KipperRef;
-}
-
-/**
- * Type Semantics for AST Node {@link IdentifierPrimaryExpression}.
- * @since 0.10.0
- */
-export interface IdentifierPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to.
-	 *
-	 * This will always be the value type of the reference that the
-	 * {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -896,24 +736,6 @@ export class IdentifierPrimaryExpression extends Expression<
 }
 
 /**
- * Semantics for AST Node {@link TypeSpecifierExpression}.
- */
-export interface TypeSpecifierExpressionSemantics extends ExpressionSemantics {}
-
-/**
- * Type Semantics for AST Node {@link TypeSpecifierExpression}.
- * @since 0.10.0
- */
-export interface TypeSpecifierTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperMetaType;
-}
-
-/**
  * Abstract type class representing a type specifier. This abstract class only exists to provide the commonality between the
  * different type specifier expressions.
  */
@@ -921,31 +743,6 @@ export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics,
 	TypeSemantics extends TypeSpecifierTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
-
-/**
- * Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	/**
-	 * The type specified by this expression.
-	 * @since 0.8.0
-	 */
-	typeIdentifier: string;
-}
-
-/**
- * Type Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
- * @since 0.10.0
- */
-export interface IdentifierTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperMetaType;
-}
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.
@@ -1023,22 +820,6 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 }
 
 /**
- * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface GenericTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	// Not implemented.
-}
-
-/**
- * Semantics for AST Node {@link GenericTypeSpecifierExpression}.
- * @since 0.10.0
- */
-export interface GenericTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
-	// Not implemented.
-}
-
-/**
  * Generic type specifier expression, which represents a generic type specifier.
  * @example
  * list<num> // List type with number as generic type
@@ -1105,22 +886,6 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 }
 
 /**
- * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	// Not implemented.
-}
-
-/**
- * Type Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
- * @since 0.8.0
- */
-export interface TypeofTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
-	// Not implemented.
-}
-
-/**
  * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
  * @since 0.8.0
  */
@@ -1182,31 +947,6 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 		this.semanticAnalyser.typeofTypeSpecifierExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<TypeofTypeSpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.typeofTypeSpecifierExpression;
-}
-
-/**
- * Semantics for AST Node {@link TangledPrimaryExpression}.
- * @since 0.5.0
- */
-export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The child expression contained in this tangled expression.
-	 * @since 0.10.0
-	 */
-	childExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link TangledPrimaryExpression}.
- * @since 0.5.0
- */
-export interface TangledPrimaryTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -1287,32 +1027,6 @@ export class TangledPrimaryExpression extends Expression<
 		this.codeGenerator.tangledPrimaryExpression;
 }
 
-/**
- * Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
- * @since 0.10.0
- */
-export interface VoidOrNullOrUndefinedPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The constant identifier of this expression.
-	 * @since 0.10.0
-	 */
-	constantIdentifier: KipperVoidType | KipperNullType | KipperUndefinedType;
-}
-
-/**
- * Type Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
- * @since 0.10.0
- */
-export interface VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to.
-	 *
-	 * This will always be 'void', 'null' or 'undefined', due to the limitations of this expression's syntax.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperVoidType | KipperNullType | KipperUndefinedType;
-}
-
 export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
@@ -1376,25 +1090,6 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 		this.semanticAnalyser.voidOrNullOrUndefinedPrimaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<VoidOrNullOrUndefinedPrimaryExpression, TranslatedExpression> =
 		this.codeGenerator.voidOrNullOrUndefinedPrimaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
- * @since 0.5.0
- */
-export interface IncrementOrDecrementPostfixExpressionSemantics extends ExpressionSemantics {}
-
-/**
- * Type Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
- * @since 0.10.0
- */
-export interface IncrementOrDecrementPostfixExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -1469,25 +1164,6 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 }
 
 /**
- * Semantics for AST Node {@link ArraySpecifierExpression}.
- * @since 0.5.0
- */
-export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {}
-
-/**
- * Type Semantics for AST Node {@link ArraySpecifierExpression}.
- * @since 0.5.0
- */
-export interface ArraySpecifierTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Array Specifier expression, which accesses a list/array based on its index.
  * @since 0.1.0
  * @example
@@ -1551,41 +1227,6 @@ export class ArraySpecifierExpression extends Expression<
 		this.semanticAnalyser.arraySpecifierExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression> =
 		this.codeGenerator.arraySpecifierExpression;
-}
-
-/**
- * Semantics for AST Node {@link FunctionCallPostfixExpression}.
- * @since 0.5.0
- */
-export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The identifier of the function that is called.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The function that is called.
-	 * @since 0.5.0
-	 */
-	function: KipperFunction;
-	/**
-	 * The arguments that were passed to this function.
-	 * @since 0.6.0
-	 */
-	args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
-}
-
-/**
- * Type Semantics for AST Node {@link FunctionCallPostfixExpression}.
- * @since 0.5.0
- */
-export interface FunctionCallPostfixTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -1686,38 +1327,6 @@ export class FunctionCallPostfixExpression extends Expression<
 }
 
 /**
- * Semantics for unary expressions, which can be used to modify an expression with
- * a specified operator.
- * @since 0.9.0
- */
-export interface UnaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The operator that is used to modify the {@link operand}.
-	 * @since 0.9.0
-	 */
-	operator: KipperUnaryOperator;
-	/**
-	 * The operand that is modified by the operator.
-	 * @since 0.9.0
-	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Semantics for unary expressions, which can be used to modify an expression with
- * a specified operator.
- * @since 0.10.0
- */
-export interface UnaryExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Abstract unary expression class representing a unary expression, which can be used to modify an expression with
  * a specified operator. This abstract class only exists to provide the commonality between the different comparative
  * expressions.
@@ -1727,36 +1336,6 @@ export abstract class UnaryExpression<
 	Semantics extends UnaryExpressionSemantics,
 	TypeSemantics extends UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
-
-/**
- * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
- * @since 0.5.0
- */
-export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpressionSemantics {
-	/**
-	 * The operator that is used to modify the {@link operand}.
-	 * @since 0.9.0
-	 */
-	operator: KipperIncrementOrDecrementOperator;
-	/**
-	 * The operand that is modified by the operator.
-	 * @since 0.9.0
-	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
- * @since 0.10.0
- */
-export interface IncrementOrDecrementUnaryTypeSemantics extends UnaryExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
@@ -1827,36 +1406,6 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 		this.semanticAnalyser.incrementOrDecrementUnaryExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementUnaryExpression, TranslatedExpression> =
 		this.codeGenerator.incrementOrDecrementUnaryExpression;
-}
-
-/**
- * Semantics for AST Node {@link OperatorModifiedUnaryExpression}.
- * @since 0.5.0
- */
-export interface OperatorModifiedUnaryExpressionSemantics extends UnaryExpressionSemantics {
-	/**
-	 * The operator that is used to modify the {@link operand}.
-	 * @since 0.9.0
-	 */
-	operator: KipperUnaryModifierOperator;
-	/**
-	 * The operand that is modified by the {@link operator}.
-	 * @since 0.9.0
-	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link OperatorModifiedUnaryExpression}.
- * @since 0.10.0
- */
-export interface OperatorModifiedUnaryTypeSemantics extends UnaryExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -1955,41 +1504,6 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 }
 
 /**
- * Semantics for AST Node {@link CastOrConvertExpression}.
- * @since 0.5.0
- */
-export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The expression to convert.
-	 * @since 0.8.0
-	 */
-	exp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The type the {@link exp} should be converted to.
-	 * @since 0.10.0
-	 */
-	castType: string;
-}
-
-/**
- * Type Semantics for AST Node {@link CastOrConvertExpression}.
- * @since 0.10.0
- */
-export interface CastOrConvertExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-	/**
-	 * The type the {@link CastOrConvertExpressionSemantics.exp} should be converted to.
-	 * @since 0.10.0
-	 */
-	castType: KipperType;
-}
-
-/**
  * Convert expressions, which are used to convert a value to a different type.
  *
  * For now only conversions are supported, but this will be extended to conversions and casts in the future.
@@ -2082,76 +1596,6 @@ export class CastOrConvertExpression extends Expression<
 		this.semanticAnalyser.castOrConvertExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<CastOrConvertExpression, TranslatedExpression> =
 		this.codeGenerator.castOrConvertExpression;
-}
-
-/**
- * Semantics for arithmetic expressions ({@link MultiplicativeExpression} and {@link AdditiveExpression}).
- * @since 0.6.0
- */
-export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The left operand of the expression.
-	 * @since 0.10.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The right operand of the expression.
-	 * @since 0.10.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
-	 * @since 0.6.0
-	 */
-	operator: KipperArithmeticOperator;
-}
-
-/**
- * Type Semantics for arithmetic expressions ({@link MultiplicativeExpression} and {@link AdditiveExpression}).
- * @since 0.10.0
- */
-export interface ArithmeticExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
- * Semantics for AST Node {@link MultiplicativeExpression}.
- * @since 0.5.0
- */
-export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionSemantics {
-	/**
-	 * The first expression. The left side of the expression.
-	 * @since 0.6.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression. The right side of the expression.
-	 * @since 0.6.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
-	 * @since 0.6.0
-	 */
-	operator: KipperMultiplicativeOperator;
-}
-
-/**
- * Type Semantics for AST Node {@link MultiplicativeExpression}.
- * @since 0.10.0
- */
-export interface MultiplicativeTypeSemantics extends ArithmeticExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -2254,41 +1698,6 @@ export class MultiplicativeExpression extends Expression<
 		this.semanticAnalyser.multiplicativeExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<MultiplicativeExpression, TranslatedExpression> =
 		this.codeGenerator.multiplicativeExpression;
-}
-
-/**
- * Semantics for AST Node {@link AdditiveExpression}.
- * @since 0.5.0
- */
-export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
-	/**
-	 * The first expression. The left side of the expression.
-	 * @since 0.6.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression. The right side of the expression.
-	 * @since 0.6.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
-	 * @since 0.6.0
-	 */
-	operator: KipperAdditiveOperator;
-}
-
-/**
- * Type Semantics for AST Node {@link AdditiveExpression}.
- * @since 0.10.0
- */
-export interface AdditiveExpressionTypeSemantics extends ArithmeticExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -2395,43 +1804,6 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 }
 
 /**
- * Semantics for a comparative expression, which compares two operands against each other using a specified
- * operator.
- * @since 0.9.0
- */
-export interface ComparativeExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The operator used to compare the two expressions of this comparative expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperComparativeOperator;
-	/**
-	 * The left expression (left-hand side) used in this comparative expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The right expression (right-hand side) used in this comparative expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for a comparative expression, which compares two operands against each other using a specified
- * operator.
- * @since 0.10.0
- */
-export interface ComparativeExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Abstract comparative expression class representing a comparative expression, which can be used to compare two
  * expressions. This abstract class only exists to provide the commonality between the different comparative expressions.
  * @since 0.9.0
@@ -2440,41 +1812,6 @@ export abstract class ComparativeExpression<
 	Semantics extends ComparativeExpressionSemantics,
 	TypeSemantics extends ComparativeExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
-
-/**
- * Semantics for AST Node {@link RelationalExpression}.
- * @since 0.5.0
- */
-export interface RelationalExpressionSemantics extends ComparativeExpressionSemantics {
-	/**
-	 * The operator used to compare the two expressions of this relational expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperRelationalOperator;
-	/**
-	 * The first expression (left-hand side) used in this relational expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression (right-hand side) used in this relational expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link RelationalExpression}.
- * @since 0.10.0
- */
-export interface RelationalExpressionTypeSemantics extends ComparativeExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
 
 /**
  * Relational expression, which can be used to compare two numeric expressions.
@@ -2575,41 +1912,6 @@ export class RelationalExpression extends ComparativeExpression<
 }
 
 /**
- * Semantics for AST Node {@link EqualityExpressionSemantics}.
- * @since 0.5.0
- */
-export interface EqualityExpressionSemantics extends ComparativeExpressionSemantics {
-	/**
-	 * The operator used to compare the two expressions of this equality expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperEqualityOperator;
-	/**
-	 * The first expression (left-hand side) used in this equality expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression (right-hand side) used in this equality expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link EqualityExpressionSemantics}.
- * @since 0.10.0
- */
-export interface EqualityExpressionTypeSemantics extends ComparativeExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Equality expression, which can be used to compare two expressions for equality.
  * @since 0.1.0
  * @example
@@ -2698,43 +2000,6 @@ export class EqualityExpression extends ComparativeExpression<
 }
 
 /**
- * Semantics for logical expressions, which combine two expressions/conditions and evaluate based on the input to a
- * boolean value.
- * @since 0.9.0
- */
-export interface LogicalExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The operator used to combine the two expressions of this logical expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperLogicalAndOperator | KipperLogicalOrOperator;
-	/**
-	 * The first expression (left-hand side) used in this logical expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression (right-hand side) used in this logical expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for logical expressions, which combine two expressions/conditions and evaluate based on the input to a
- * boolean value.
- * @since 0.10.0
- */
-export interface LogicalExpressionTypeSemantics extends ExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
-
-/**
  * Logical expression, representing an expression which can be used to combine two expressions/conditions using
  * {@link LogicalAndExpression logical AND} or {@link LogicalOrExpression logical OR}. This
  * abstract class only exists to provide the commonality between the different logical expressions.
@@ -2744,41 +2009,6 @@ export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics,
 	TypeSemantics extends LogicalExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
-
-/**
- * Semantics for AST Node {@link LogicalAndExpression}.
- * @since 0.5.0
- */
-export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantics {
-	/**
-	 * The operator used to combine the two expressions of this logical-and expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperLogicalAndOperator;
-	/**
-	 * The first expression (left-hand side) used in this logical-and expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression (right-hand side) used in this logical-and expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link LogicalAndExpression}.
- * @since 0.10.0
- */
-export interface LogicalAndExpressionTypeSemantics extends LogicalExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
-}
 
 /**
  * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will
@@ -2860,41 +2090,6 @@ export class LogicalAndExpression extends LogicalExpression<
 		this.semanticAnalyser.logicalAndExpression;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<LogicalAndExpression, TranslatedExpression> =
 		this.codeGenerator.logicalAndExpression;
-}
-
-/**
- * Semantics for AST Node {@link LogicalOrExpression}.
- * @since 0.5.0
- */
-export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics {
-	/**
-	 * The operator used to combine the two expressions of this logical-or expression.
-	 * @since 0.9.0
-	 */
-	operator: KipperLogicalOrOperator;
-	/**
-	 * The first expression (left-hand side) used in this logical-or expression.
-	 * @since 0.9.0
-	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The second expression (right-hand side) used in this logical-or expression.
-	 * @since 0.9.0
-	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Type Semantics for AST Node {@link LogicalOrExpression}.
- * @since 0.10.0
- */
-export interface LogicalOrExpressionTypeSemantics extends LogicalExpressionTypeSemantics {
-	/**
-	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
-	 * expressions that do not explicitly show their type.
-	 * @since 0.10.0
-	 */
-	evaluatedType: KipperType;
 }
 
 /**
@@ -2980,18 +2175,6 @@ export class LogicalOrExpression extends LogicalExpression<
 }
 
 /**
- * Semantics for AST Node {@link ConditionalExpression}.
- * @since 0.5.0
- */
-export interface ConditionalExpressionSemantics extends ExpressionSemantics {}
-
-/**
- * Type Semantics for AST Node {@link ConditionalExpression}.
- * @since 0.10.0
- */
-export interface ConditionalExpressionTypeSemantics extends ExpressionTypeSemantics {}
-
-/**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
  * expression if it is false.
  * @since 0.1.0
@@ -3058,44 +2241,6 @@ export class ConditionalExpression extends Expression<
 	targetCodeGenerator: TargetASTNodeCodeGenerator<ConditionalExpression, TranslatedExpression> =
 		this.codeGenerator.conditionalExpression;
 }
-
-/**
- * Semantics for AST Node {@link AssignmentExpression}.
- * @since 0.5.0
- */
-export interface AssignmentExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The identifier expression that is being assigned to.
-	 * @since 0.7.0
-	 */
-	identifier: string;
-	/**
-	 * The identifier AST node context that the {@link AssignmentExpressionSemantics.identifier identifier} points to.
-	 * @since 0.10.0
-	 */
-	identifierCtx: IdentifierPrimaryExpression;
-	/**
-	 * The reference that is being assigned to.
-	 * @since 0.10.0
-	 */
-	ref: KipperRef;
-	/**
-	 * The assigned value to this variable.
-	 * @since 0.7.0
-	 */
-	value: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The operator of the assignment expression.
-	 * @since 0.10.0
-	 */
-	operator: KipperAssignOperator;
-}
-
-/**
- * Type Semantics for AST Node {@link AssignmentExpression}.
- * @since 0.10.0
- */
-export interface AssignmentExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
  * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to

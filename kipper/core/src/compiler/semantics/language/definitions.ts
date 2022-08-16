@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
+import type { compilableNodeParent, NoTypeSemantics } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -20,10 +20,15 @@ import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
-import type { TargetASTNodeCodeGenerator } from "../../target-presets";
-import type { TargetASTNodeSemanticAnalyser } from "../../target-presets";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { UnableToDetermineSemanticDataError } from "../../../errors";
-import { Scope } from "../../scope";
+import {
+	DeclarationSemantics,
+	FunctionDeclarationSemantics,
+	ParameterDeclarationSemantics,
+	VariableDeclarationSemantics,
+} from "../semantic-data";
+import { DeclarationTypeData, FunctionDeclarationTypeSemantics, VariableDeclarationTypeSemantics } from "../type-data";
 
 /**
  * Every antlr4 definition ctx type
@@ -51,24 +56,6 @@ export class DefinitionASTNodeFactory {
 		}
 	}
 }
-
-/**
- * Semantics for a {@link Declaration}.
- * @since 0.5.0
- */
-export interface DeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of the declaration.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-}
-
-/**
- * Type data for a {@link Declaration}.
- * @since 0.10.0
- */
-export interface DeclarationTypeData extends TypeData {}
 
 /**
  * Base Declaration class that represents a value or function declaration or definition in Kipper.
@@ -114,23 +101,6 @@ export abstract class Declaration<
 
 	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
 	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
-}
-
-/**
- * Semantics for AST Node {@link ParameterDeclaration}.
- * @since 0.5.0
- */
-export interface ParameterDeclarationSemantics extends DeclarationSemantics {
-	/**
-	 * The identifier of the declaration.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The {@link KipperType variable type} of the declaration.
-	 * @since 0.5.0
-	 */
-	type: KipperType;
 }
 
 /**
@@ -188,44 +158,6 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 		this.semanticAnalyser.parameterDeclaration;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.parameterDeclaration;
-}
-
-/**
- * Semantics for AST Node {@link FunctionDeclaration}.
- * @since 0.3.0
- */
-export interface FunctionDeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of the function.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The {@link KipperType return type} of the function.
-	 * @since 0.5.0
-	 */
-	returnType: string;
-	/**
-	 * Returns true if this declaration defines the function body for the function.
-	 * @since 0.5.0
-	 */
-	isDefined: boolean;
-	/**
-	 * The {@link ParameterDeclaration arguments} for the function.
-	 */
-	args: Array<ParameterDeclaration>;
-}
-
-/**
- * Type Semantics for AST Node {@link FunctionDeclaration}.
- * @since 0.10.0
- */
-export interface FunctionDeclarationTypeSemantics extends TypeData {
-	/**
-	 * The {@link KipperType return type} of the function.
-	 * @since 0.10.0
-	 */
-	returnType: KipperReturnType;
 }
 
 /**
@@ -326,57 +258,6 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		this.semanticAnalyser.functionDeclaration;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.functionDeclaration;
-}
-
-/**
- * Semantics for AST Node {@link VariableDeclaration}.
- * @since 0.3.0
- */
-export interface VariableDeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of this variable.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The storage type option for this variable.
-	 * @since 0.5.0
-	 */
-	storageType: KipperStorageType;
-	/**
-	 * The type of the value as a string.
-	 * @since 0.5.0
-	 */
-	valueType: string;
-	/**
-	 * If this is true then the variable has a defined value.
-	 * @since 0.5.0
-	 */
-	isDefined: boolean;
-	/**
-	 * The scope of this variable.
-	 * @since 0.5.0
-	 */
-	scope: Scope;
-	/**
-	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
-	 * @since 0.7.0
-	 */
-	value: Expression<any, any> | undefined;
-}
-
-/**
- * Type Semantics for AST Node {@link VariableDeclaration}.
- * @since 0.10.0
- */
-export interface VariableDeclarationTypeSemantics extends TypeData {
-	/**
-	 * The Kipper type that this declaration has.
-	 *
-	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}
-	 * @since 0.10.0
-	 */
-	valueType: KipperType;
 }
 
 /**
