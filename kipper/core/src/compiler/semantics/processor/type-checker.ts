@@ -120,7 +120,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// Ensure the value of the definition match the definition type
 		if (leftExpType !== rightExpType) {
 			// 'void' is compatible with 'undefined'
-			if (leftExpType === "void" && rightExpType === "undefined") {
+			let interchangeableTypes = ["void", "undefined"];
+			if (interchangeableTypes.includes(leftExpType) && interchangeableTypes.includes(rightExpType)) {
 				return;
 			}
 
@@ -141,7 +142,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		if (semanticData.type !== receivedType) {
 			// 'void' is compatible with 'undefined'
-			if (semanticData.type === "void" && receivedType === "undefined") {
+			let interchangeableTypes = ["void", "undefined"];
+			if (interchangeableTypes.includes(semanticData.type) && interchangeableTypes.includes(receivedType)) {
 				return;
 			}
 
