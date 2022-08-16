@@ -17,6 +17,30 @@ import type { BuiltInFunction } from "../runtime-built-ins";
 export const isBrowser = typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
 
 /**
+ * Null type in Kipper.
+ * @since 0.10.0
+ */
+export type KipperNullType = "null";
+
+/**
+ * Null type in Kipper.
+ * @since 0.10.0
+ */
+export const kipperNullType: KipperNullType = "null";
+
+/**
+ * Undefined type in Kipper.
+ * @since 0.10.0
+ */
+export type KipperUndefinedType = "undefined";
+
+/**
+ * Undefined type in Kipper.
+ * @since 0.10.0
+ */
+export const kipperUndefinedType: KipperUndefinedType = "undefined";
+
+/**
  * Function type in Kipper.
  * @since 0.6.0
  */
@@ -137,13 +161,26 @@ export const kipperMetaType: KipperMetaType = "type";
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperBoolType;
+export type KipperPrimitiveType =
+	| KipperVoidType
+	| KipperNullType
+	| KipperUndefinedType
+	| KipperNumType
+	| KipperStrType
+	| KipperBoolType;
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperBoolType];
+export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
+	kipperVoidType,
+	kipperNullType,
+	kipperUndefinedType,
+	kipperNumType,
+	kipperStrType,
+	kipperBoolType,
+];
 
 /**
  * All available variable types inside Kipper.
@@ -153,7 +190,7 @@ export type KipperType = KipperMetaType | KipperFuncType | KipperPrimitiveType |
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
+export const kipperTypes: Array<KipperType> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
 
 /**
  * Types that may be returned by a function.

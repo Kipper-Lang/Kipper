@@ -24,6 +24,7 @@ import {
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	RelationalExpressionContext,
@@ -56,6 +57,7 @@ import {
 	type KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	type KipperNegateOperator,
+	KipperNullType,
 	type KipperNumType,
 	type KipperRef,
 	type KipperRelationalOperator,
@@ -67,6 +69,8 @@ import {
 	type KipperUnaryModifierOperator,
 	kipperUnaryModifierOperators,
 	type KipperUnaryOperator,
+	KipperUndefinedType,
+	KipperVoidType,
 	type TranslatedExpression,
 } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
@@ -84,6 +88,7 @@ export type antlrExpressionCtxType =
 	| NumberPrimaryExpressionContext
 	| ListPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
+	| VoidOrNullOrUndefinedPrimaryExpressionContext
 	| BoolPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
@@ -142,7 +147,7 @@ export class ExpressionASTNodeFactory {
 		} else if (antlrRuleCtx instanceof ArraySpecifierPostfixExpressionContext) {
 			return new ArraySpecifierExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IncrementOrDecrementPostfixExpressionContext) {
-			return new IncrementOrDecrementExpression(antlrRuleCtx, parent);
+			return new IncrementOrDecrementPostfixExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof FunctionCallPostfixExpressionContext) {
 			return new FunctionCallPostfixExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
@@ -167,6 +172,8 @@ export class ExpressionASTNodeFactory {
 			return new ConditionalExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof BoolPrimaryExpressionContext) {
 			return new BoolPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof VoidOrNullOrUndefinedPrimaryExpressionContext) {
+			return new VoidOrNullOrUndefinedPrimaryExpression(antlrRuleCtx, parent);
 		} else {
 			// Last remaining possible type {@link AssignmentExpression}
 			return new AssignmentExpression(antlrRuleCtx, parent);
@@ -929,6 +936,7 @@ export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifie
 
 /**
  * Type Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
+ * @since 0.10.0
  */
 export interface IdentifierTypeSpecifierTypeSemantics extends TypeSpecifierTypeSemantics {
 	/**
@@ -1280,16 +1288,107 @@ export class TangledPrimaryExpression extends Expression<
 }
 
 /**
- * Semantics for AST Node {@link IncrementOrDecrementExpression}.
- * @since 0.5.0
- */
-export interface IncrementOrDecrementExpressionSemantics extends ExpressionSemantics {}
-
-/**
- * Type Semantics for AST Node {@link IncrementOrDecrementExpression}.
+ * Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
  * @since 0.10.0
  */
-export interface IncrementOrDecrementTypeSemantics extends ExpressionTypeSemantics {
+export interface VoidOrNullOrUndefinedPrimaryExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The constant identifier of this expression.
+	 * @since 0.10.0
+	 */
+	constantIdentifier: KipperVoidType | KipperNullType | KipperUndefinedType;
+}
+
+/**
+ * Type Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The value type that this expression evaluates to.
+	 *
+	 * This will always be 'void', 'null' or 'undefined', due to the limitations of this expression's syntax.
+	 * @since 0.10.0
+	 */
+	evaluatedType: KipperVoidType | KipperNullType | KipperUndefinedType;
+}
+
+export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
+	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
+	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
+> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext;
+
+	constructor(antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		this.semanticData = {
+			// Syntactically there can only be 'void', 'null' or 'undefined' stored in this expression
+			constantIdentifier: <KipperVoidType | KipperNullType | KipperUndefinedType>this.sourceCode,
+		};
+	}
+
+	/**
+	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.10.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		// The evaluated type of this expression will always be equal to the constant identifier that this expression
+		// contains e.g. either 'void', 'null' or 'undefined'.
+		this.typeSemantics = {
+			evaluatedType: semanticData.constantIdentifier,
+		};
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): VoidOrNullOrUndefinedPrimaryExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression> =
+		this.semanticAnalyser.voidOrNullOrUndefinedPrimaryExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<VoidOrNullOrUndefinedPrimaryExpression, TranslatedExpression> =
+		this.codeGenerator.voidOrNullOrUndefinedPrimaryExpression;
+}
+
+/**
+ * Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
+ * @since 0.5.0
+ */
+export interface IncrementOrDecrementPostfixExpressionSemantics extends ExpressionSemantics {}
+
+/**
+ * Type Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
+ * @since 0.10.0
+ */
+export interface IncrementOrDecrementPostfixExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
 	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
 	 * expressions that do not explicitly show their type.
@@ -1305,9 +1404,9 @@ export interface IncrementOrDecrementTypeSemantics extends ExpressionTypeSemanti
  * 49++; // 49 will be incremented by 1
  * 11--; // 11 will be decremented by 1
  */
-export class IncrementOrDecrementExpression extends Expression<
-	IncrementOrDecrementExpressionSemantics,
-	IncrementOrDecrementTypeSemantics
+export class IncrementOrDecrementPostfixExpression extends Expression<
+	IncrementOrDecrementPostfixExpressionSemantics,
+	IncrementOrDecrementPostfixExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1363,10 +1462,10 @@ export class IncrementOrDecrementExpression extends Expression<
 		return this._antlrRuleCtx;
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementExpression> =
-		this.semanticAnalyser.incrementOrDecrementExpression;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementExpression, TranslatedExpression> =
-		this.codeGenerator.incrementOrDecrementExpression;
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression> =
+		this.semanticAnalyser.incrementOrDecrementPostfixExpression;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<IncrementOrDecrementPostfixExpression, TranslatedExpression> =
+		this.codeGenerator.incrementOrDecrementPostfixExpression;
 }
 
 /**

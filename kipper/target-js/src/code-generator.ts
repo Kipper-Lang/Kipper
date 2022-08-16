@@ -23,7 +23,7 @@ import type {
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
-	IncrementOrDecrementExpression,
+	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
@@ -48,7 +48,13 @@ import type {
 	VariableDeclaration,
 	Expression,
 } from "@kipper/core";
-import { KipperTargetCodeGenerator, CompoundStatement, IfStatement, ScopeFunctionDeclaration } from "@kipper/core";
+import {
+	KipperTargetCodeGenerator,
+	CompoundStatement,
+	IfStatement,
+	ScopeFunctionDeclaration,
+	VoidOrNullOrUndefinedPrimaryExpression,
+} from "@kipper/core";
 import { getJavaScriptBuiltInIdentifier } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
 import { version } from "./index";
@@ -251,9 +257,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
-		return [
-			[storage, " ", semanticData.identifier, " ", ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"],
-		];
+		return [[storage, " ", semanticData.identifier, ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"]];
 	};
 
 	/**
@@ -354,9 +358,22 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link IncrementOrDecrementExpression} into the JavaScript language.
+	 * Translates a {@link IncrementOrDecrementPostfixExpression} into the JavaScript language.
 	 */
-	incrementOrDecrementExpression = async (node: IncrementOrDecrementExpression): Promise<TranslatedExpression> => {
+	voidOrNullOrUndefinedPrimaryExpression = async (
+		node: VoidOrNullOrUndefinedPrimaryExpression,
+	): Promise<TranslatedExpression> => {
+		const constantIdentifier = node.getSemanticData().constantIdentifier;
+
+		return [constantIdentifier === "void" ? "void(0)" : constantIdentifier];
+	};
+
+	/**
+	 * Translates a {@link IncrementOrDecrementPostfixExpression} into the JavaScript language.
+	 */
+	incrementOrDecrementPostfixExpression = async (
+		node: IncrementOrDecrementPostfixExpression,
+	): Promise<TranslatedExpression> => {
 		return [];
 	};
 

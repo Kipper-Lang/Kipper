@@ -21,7 +21,7 @@ import type {
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
 	IfStatement,
-	IncrementOrDecrementExpression,
+	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
@@ -43,6 +43,7 @@ import type {
 } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableASTNode } from "../../parser";
+import { VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -213,10 +214,18 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract arraySpecifierExpression: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link IncrementOrDecrementExpression} into a specific language.
+	 * Translates a {@link VoidOrNullOrUndefinedPrimaryExpression} into a specific language.
 	 */
-	public abstract incrementOrDecrementExpression: TargetASTNodeCodeGenerator<
-		IncrementOrDecrementExpression,
+	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeCodeGenerator<
+		VoidOrNullOrUndefinedPrimaryExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link incrementOrDecrementPostfixExpression} into a specific language.
+	 */
+	public abstract incrementOrDecrementPostfixExpression: TargetASTNodeCodeGenerator<
+		IncrementOrDecrementPostfixExpression,
 		TranslatedExpression
 	>;
 

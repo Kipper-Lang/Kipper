@@ -119,6 +119,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure the value of the definition match the definition type
 		if (leftExpType !== rightExpType) {
+			// 'void' is compatible with 'undefined'
+			if (leftExpType === "void" && rightExpType === "undefined") {
+				return;
+			}
+
 			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
 		}
 	}
@@ -135,6 +140,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
 
 		if (semanticData.type !== receivedType) {
+			// 'void' is compatible with 'undefined'
+			if (semanticData.type === "void" && receivedType === "undefined") {
+				return;
+			}
+
 			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
 		}
 	}

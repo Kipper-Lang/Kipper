@@ -10,9 +10,11 @@ import {
 	kipperListType,
 	kipperMetaType,
 	KipperNotImplementedError,
+	kipperNullType,
 	kipperNumType,
 	kipperStrType,
 	KipperType,
+	kipperUndefinedType,
 	kipperVoidType,
 } from "@kipper/core";
 
@@ -25,6 +27,10 @@ export function getTypeScriptType(kipperType: KipperType): string {
 	switch (kipperType) {
 		case kipperVoidType:
 			return "void";
+		case kipperNullType:
+			return "null";
+		case kipperUndefinedType:
+			return "undefined";
 		case kipperFuncType:
 			throw new KipperNotImplementedError("Lambda functions have not been implemented for TypeScript translation yet.");
 		case kipperBoolType:
