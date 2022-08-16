@@ -226,6 +226,46 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.builtIns.length === 1, "Expected a single global function");
 				});
 
+				it(`Arithmetics (${target.fileExtension})`, async () => {
+					const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
+					const stream = new KipperParseStream(fileContent);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.write().includes(fileContent), "Expected compiled code to not change");
+				});
+
+				it(`Variable Declaration (${target.fileExtension})`, async () => {
+					const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
+					const stream = new KipperParseStream(fileContent);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
+					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
+				});
+
+				it(`Nested scopes (${target.fileExtension})`, async () => {
+					const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
+					const stream = new KipperParseStream(fileContent);
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.internals);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
+					assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
+				});
+
 				it(`Single Function call (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
@@ -283,19 +323,6 @@ describe("KipperCompiler", () => {
 					console.log = prevLog;
 				});
 
-				it(`Nested scopes (${target.fileExtension})`, async () => {
-					const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
-
-					assert(instance.programCtx);
-					assert(instance.programCtx.internals);
-					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
-					assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
-				});
-
 				it(`Single Function definition (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
 					const stream = new KipperParseStream(fileContent);
@@ -320,33 +347,6 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
 					assert(instance.programCtx.globalScope.functions.length === 3, "Expected three global functions");
 					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
-				});
-
-				it(`Variable Declaration (${target.fileExtension})`, async () => {
-					const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
-
-					assert(instance.programCtx);
-					assert(instance.programCtx.internals);
-					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
-				});
-
-				it(`Arithmetics (${target.fileExtension})`, async () => {
-					const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
-					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
-
-					assert(instance.programCtx);
-					assert(instance.programCtx.internals);
-					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
-					assert(instance.write().includes(fileContent), "Expected compiled code to not change");
 				});
 
 				it(`Function call argument (${target.fileExtension})`, async () => {
@@ -620,6 +620,40 @@ describe("KipperCompiler", () => {
 					assert(instance.write().includes('__kipper.print("x");'), "Expected different TypeScript code");
 					assert(instance.write().includes('__kipper.print("y");'), "Expected different TypeScript code");
 					assert(instance.write().includes('__kipper.print("z");'), "Expected different TypeScript code");
+				});
+			});
+
+			describe("Constant identifiers", () => {
+				it("void", async () => {
+					const stream = new KipperParseStream("var x: void = void; var y: void = undefined;");
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: void = void(0);"), "Expected different TypeScript code");
+					assert(instance.write().includes("let y: void = undefined;"), "Expected different TypeScript code");
+				});
+
+				it("null", async () => {
+					const stream = new KipperParseStream("var x: null = null;");
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: null = null;"), "Expected different TypeScript code");
+				});
+
+				it("undefined", async () => {
+					const stream = new KipperParseStream("var x: undefined = undefined; var y: void = undefined;");
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+					assert(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream === stream, "Expected matching streams");
+					assert(instance.write().includes("let x: undefined = undefined;"), "Expected different TypeScript code");
+					assert(instance.write().includes("let y: void = undefined;"), "Expected different TypeScript code");
 				});
 			});
 
