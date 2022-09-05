@@ -38,7 +38,7 @@ specifiers:
   tslib: ~2.4.0
   typescript: ~4.7.4
   uglify-js: 3.17.0
-  uuid: 8.3.2
+  uuid: 9.0.0
   watchify: 4.0.0
 
 dependencies:
@@ -81,7 +81,7 @@ devDependencies:
   ts-node: 10.9.1_zgusdg2syqzg2kik2gzyf5b6di
   tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
   uglify-js: 3.17.0
-  uuid: 8.3.2
+  uuid: 9.0.0
   watchify: 4.0.0
 
 packages:
@@ -6514,6 +6514,11 @@ packages:
 
   /uuid/8.3.2:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+    dev: true
+
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
     hasBin: true
     dev: true
 
