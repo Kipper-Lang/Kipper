@@ -91,7 +91,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `InvalidReturnTypeError` to `FunctionReturnTypeError`.
   - `UndefinedIdentifierError` to `UndefinedReferenceError`.
   - `UnknownIdentifierError` to `UnknownReferenceError`.
-  - `FunctionDeclarationSemantics.args` to `params`. 
+  - `FunctionDeclarationSemantics.args` to `params`.
 
 ### Removed
 
