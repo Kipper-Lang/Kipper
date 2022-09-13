@@ -10,5 +10,11 @@
   },
   "lockFileMaintenance": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+		{
+      "matchDepTypes": ["devDependencies"],
+      "addLabels": ["Skip Changelog"]
+    }
+  ]
 }
