@@ -26,6 +26,18 @@ export interface FunctionDeclarationTypeSemantics extends TypeData {
 }
 
 /**
+ * Type Semantics for AST Node {@link ParameterDeclaration}.
+ * @since 0.10.0
+ */
+export interface ParameterDeclarationTypeSemantics extends TypeData {
+	/**
+	 * The {@link KipperType type} of the parameter.
+	 * @since 0.10.0
+	 */
+	valueType: KipperType;
+}
+
+/**
  * Type Semantics for AST Node {@link VariableDeclaration}.
  * @since 0.10.0
  */

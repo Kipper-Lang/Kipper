@@ -197,7 +197,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * array maps to the first argument inside the function.
 	 */
 	public get args(): Array<ParameterDeclaration> {
-		return this.semanticData.args;
+		return this.semanticData.params;
 	}
 
 	/**

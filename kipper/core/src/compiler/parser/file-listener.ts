@@ -1314,7 +1314,7 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 
-	// -- VariableDeclaration section --
+	// -- Declaration section --
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
@@ -1345,6 +1345,23 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitFunctionDeclaration(ctx: FunctionDeclarationContext): void {
+		this.handleExitingStatementOrDefinitionCtx();
+	}
+
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public enterParameterDeclaration(ctx: ParameterDeclarationContext): void {
+		this.handleIncomingDefinitionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public exitParameterDeclaration(ctx: ParameterDeclarationContext): void {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 
@@ -1511,18 +1528,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitParameterList(ctx: ParameterListContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public enterParameterDeclaration(ctx: ParameterDeclarationContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public exitParameterDeclaration(ctx: ParameterDeclarationContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initializer`.

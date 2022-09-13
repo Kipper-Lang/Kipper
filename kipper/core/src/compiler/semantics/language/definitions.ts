@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent, NoTypeSemantics } from "../../parser";
+import type { compilableNodeParent } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -28,7 +28,13 @@ import {
 	ParameterDeclarationSemantics,
 	VariableDeclarationSemantics,
 } from "../semantic-data";
-import { DeclarationTypeData, FunctionDeclarationTypeSemantics, VariableDeclarationTypeSemantics } from "../type-data";
+import {
+	DeclarationTypeData,
+	FunctionDeclarationTypeSemantics,
+	ParameterDeclarationTypeSemantics,
+	VariableDeclarationTypeSemantics
+} from "../type-data";
+import { getParseTreeSource } from "../../../utils";
 
 /**
  * Every antlr4 definition ctx type
@@ -107,7 +113,7 @@ export abstract class Declaration<
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, NoTypeSemantics> {
+export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, ParameterDeclarationTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -142,16 +148,27 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		const parseTreeChildren = this.getAntlrRuleChildren();
+
+		this.semanticData = {
+			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
+			valueType: this.children[0].sourceCode
+		};
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+
+		this.typeSemantics = {
+			valueType: <KipperType>semanticData.valueType,
+		};
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
@@ -204,40 +221,49 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getAntlrRuleChildren();
+		const parseTreeChildren = this.getAntlrRuleChildren();
 
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
+		let declaratorCtx = <DeclaratorContext | undefined>parseTreeChildren.find((val) => val instanceof DeclaratorContext);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
-			children.find((val) => val instanceof ParameterTypeListContext)
+			parseTreeChildren.find((val) => val instanceof ParameterTypeListContext)
 		);
 
-		// The type of this declaration, which should always be present, since the parser requires it during the parsing
-		// step.
-		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
+		// The return type of the function
+		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
+		let params: Array<ParameterDeclaration> = [];
+		for (let child of this.children) {
+			if (child instanceof ParameterDeclaration) {
+				params.push(child);
+			} else {
+				// Once the return type has been reached, stop, since the last child will always be a statement that we can
+				// ignore.
+				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
+				break;
+			}
+		}
 
 		// Ensure that the children are fully present and not undefined
-		if (!declaratorCtx || !typeSpecifier) {
+		if (!declaratorCtx || !retTypeSpecifier || !params) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: string = typeSpecifier.getSemanticData().typeIdentifier;
+		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
 
-		// Fetching the metadata from the antlr4 context
 		this.semanticData = {
-			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnType: type,
-			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
+			params: paramListCtx ? params : [],
 		};
 
-		// Add function definition to the global scope
+		// Add function definition to the current scope
 		await this.scope.addFunction(this);
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -357,7 +383,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */

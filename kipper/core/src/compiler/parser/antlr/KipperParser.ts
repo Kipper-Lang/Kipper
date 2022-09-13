@@ -2269,25 +2269,11 @@ export class KipperParser extends Parser {
 	public parameterTypeList(): ParameterTypeListContext {
 		let _localctx: ParameterTypeListContext = new ParameterTypeListContext(this._ctx, this.state);
 		this.enterRule(_localctx, 66, KipperParser.RULE_parameterTypeList);
-		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
 				this.state = 338;
 				this.parameterList();
-				this.state = 342;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === KipperParser.Comma) {
-					{
-						this.state = 339;
-						this.match(KipperParser.Comma);
-						this.state = 340;
-						this.match(KipperParser.Spread);
-						this.state = 341;
-						this.match(KipperParser.Identifier);
-					}
-				}
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -2306,29 +2292,27 @@ export class KipperParser extends Parser {
 	public parameterList(): ParameterListContext {
 		let _localctx: ParameterListContext = new ParameterListContext(this._ctx, this.state);
 		this.enterRule(_localctx, 68, KipperParser.RULE_parameterList);
+		let _la: number;
 		try {
-			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 344;
+				this.state = 340;
 				this.parameterDeclaration();
-				this.state = 349;
+				this.state = 345;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 28, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
+				_la = this._input.LA(1);
+				while (_la === KipperParser.Comma) {
+					{
 						{
-							{
-								this.state = 345;
-								this.match(KipperParser.Comma);
-								this.state = 346;
-								this.parameterDeclaration();
-							}
+							this.state = 341;
+							this.match(KipperParser.Comma);
+							this.state = 342;
+							this.parameterDeclaration();
 						}
 					}
-					this.state = 351;
+					this.state = 347;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 28, this._ctx);
+					_la = this._input.LA(1);
 				}
 			}
 		} catch (re) {
@@ -2351,11 +2335,11 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 352;
+				this.state = 348;
 				this.declarator();
-				this.state = 353;
+				this.state = 349;
 				this.match(KipperParser.T__4);
-				this.state = 354;
+				this.state = 350;
 				this.declarationSpecifiers();
 			}
 		} catch (re) {
@@ -2378,7 +2362,7 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 356;
+				this.state = 352;
 				this.assignmentExpression();
 			}
 		} catch (re) {
@@ -2399,13 +2383,13 @@ export class KipperParser extends Parser {
 		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 74, KipperParser.RULE_statement);
 		try {
-			this.state = 363;
+			this.state = 359;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.LeftBrace:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 358;
+						this.state = 354;
 						this.compoundStatement();
 					}
 					break;
@@ -2432,7 +2416,7 @@ export class KipperParser extends Parser {
 				case KipperParser.DoubleQuoteStringLiteral:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 359;
+						this.state = 355;
 						this.expressionStatement();
 					}
 					break;
@@ -2440,7 +2424,7 @@ export class KipperParser extends Parser {
 				case KipperParser.If:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 360;
+						this.state = 356;
 						this.selectionStatement();
 					}
 					break;
@@ -2449,7 +2433,7 @@ export class KipperParser extends Parser {
 				case KipperParser.For:
 					this.enterOuterAlt(_localctx, 4);
 					{
-						this.state = 361;
+						this.state = 357;
 						this.iterationStatement();
 					}
 					break;
@@ -2458,7 +2442,7 @@ export class KipperParser extends Parser {
 				case KipperParser.Return:
 					this.enterOuterAlt(_localctx, 5);
 					{
-						this.state = 362;
+						this.state = 358;
 						this.jumpStatement();
 					}
 					break;
@@ -2486,9 +2470,9 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 365;
+				this.state = 361;
 				this.match(KipperParser.LeftBrace);
-				this.state = 367;
+				this.state = 363;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
@@ -2535,12 +2519,12 @@ export class KipperParser extends Parser {
 							0)
 				) {
 					{
-						this.state = 366;
+						this.state = 362;
 						this.blockItemList();
 					}
 				}
 
-				this.state = 369;
+				this.state = 365;
 				this.match(KipperParser.RightBrace);
 			}
 		} catch (re) {
@@ -2564,17 +2548,17 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 372;
+				this.state = 368;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				do {
 					{
 						{
-							this.state = 371;
+							this.state = 367;
 							this.blockItem();
 						}
 					}
-					this.state = 374;
+					this.state = 370;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				} while (
@@ -2641,7 +2625,7 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 378;
+				this.state = 374;
 				this._errHandler.sync(this);
 				switch (this._input.LA(1)) {
 					case KipperParser.T__1:
@@ -2675,14 +2659,14 @@ export class KipperParser extends Parser {
 					case KipperParser.SingleQuoteStringLiteral:
 					case KipperParser.DoubleQuoteStringLiteral:
 						{
-							this.state = 376;
+							this.state = 372;
 							this.statement();
 						}
 						break;
 					case KipperParser.Const:
 					case KipperParser.Var:
 						{
-							this.state = 377;
+							this.state = 373;
 							this.declaration();
 						}
 						break;
@@ -2711,7 +2695,7 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 381;
+				this.state = 377;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
@@ -2743,12 +2727,12 @@ export class KipperParser extends Parser {
 					_la === KipperParser.DoubleQuoteStringLiteral
 				) {
 					{
-						this.state = 380;
+						this.state = 376;
 						this.expression();
 					}
 				}
 
-				this.state = 383;
+				this.state = 379;
 				this.endOfLine();
 			}
 		} catch (re) {
@@ -2770,31 +2754,31 @@ export class KipperParser extends Parser {
 		this.enterRule(_localctx, 84, KipperParser.RULE_selectionStatement);
 		let _la: number;
 		try {
-			this.state = 407;
+			this.state = 403;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.If:
 					_localctx = new IfStatementContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 385;
+						this.state = 381;
 						this.match(KipperParser.If);
-						this.state = 386;
+						this.state = 382;
 						this.match(KipperParser.LeftParen);
-						this.state = 387;
+						this.state = 383;
 						this.expression();
-						this.state = 388;
+						this.state = 384;
 						this.match(KipperParser.RightParen);
-						this.state = 389;
+						this.state = 385;
 						this.statement();
-						this.state = 392;
+						this.state = 388;
 						this._errHandler.sync(this);
-						switch (this.interpreter.adaptivePredict(this._input, 34, this._ctx)) {
+						switch (this.interpreter.adaptivePredict(this._input, 33, this._ctx)) {
 							case 1:
 								{
-									this.state = 390;
+									this.state = 386;
 									this.match(KipperParser.Else);
-									this.state = 391;
+									this.state = 387;
 									this.statement();
 								}
 								break;
@@ -2805,31 +2789,31 @@ export class KipperParser extends Parser {
 					_localctx = new SwitchStatementContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 394;
+						this.state = 390;
 						this.match(KipperParser.Switch);
-						this.state = 395;
+						this.state = 391;
 						this.match(KipperParser.LeftParen);
-						this.state = 396;
+						this.state = 392;
 						this.expression();
-						this.state = 397;
+						this.state = 393;
 						this.match(KipperParser.RightParen);
-						this.state = 398;
+						this.state = 394;
 						this.match(KipperParser.LeftBrace);
-						this.state = 402;
+						this.state = 398;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						while (_la === KipperParser.Case || _la === KipperParser.Default) {
 							{
 								{
-									this.state = 399;
+									this.state = 395;
 									this.switchLabeledStatement();
 								}
 							}
-							this.state = 404;
+							this.state = 400;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 						}
-						this.state = 405;
+						this.state = 401;
 						this.match(KipperParser.RightBrace);
 					}
 					break;
@@ -2854,30 +2838,30 @@ export class KipperParser extends Parser {
 		let _localctx: SwitchLabeledStatementContext = new SwitchLabeledStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 86, KipperParser.RULE_switchLabeledStatement);
 		try {
-			this.state = 417;
+			this.state = 413;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.Case:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 409;
+						this.state = 405;
 						this.match(KipperParser.Case);
-						this.state = 410;
+						this.state = 406;
 						this.constantExpression();
-						this.state = 411;
+						this.state = 407;
 						this.match(KipperParser.T__4);
-						this.state = 412;
+						this.state = 408;
 						this.statement();
 					}
 					break;
 				case KipperParser.Default:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 414;
+						this.state = 410;
 						this.match(KipperParser.Default);
-						this.state = 415;
+						this.state = 411;
 						this.match(KipperParser.T__4);
-						this.state = 416;
+						this.state = 412;
 						this.statement();
 					}
 					break;
@@ -2902,55 +2886,55 @@ export class KipperParser extends Parser {
 		let _localctx: IterationStatementContext = new IterationStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 88, KipperParser.RULE_iterationStatement);
 		try {
-			this.state = 439;
+			this.state = 435;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.For:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 419;
+						this.state = 415;
 						this.match(KipperParser.For);
-						this.state = 420;
+						this.state = 416;
 						this.match(KipperParser.LeftParen);
-						this.state = 421;
+						this.state = 417;
 						this.forCondition();
-						this.state = 422;
+						this.state = 418;
 						this.match(KipperParser.RightParen);
-						this.state = 423;
+						this.state = 419;
 						this.statement();
 					}
 					break;
 				case KipperParser.While:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 425;
+						this.state = 421;
 						this.match(KipperParser.While);
-						this.state = 426;
+						this.state = 422;
 						this.match(KipperParser.LeftParen);
-						this.state = 427;
+						this.state = 423;
 						this.expression();
-						this.state = 428;
+						this.state = 424;
 						this.match(KipperParser.RightParen);
-						this.state = 429;
+						this.state = 425;
 						this.statement();
 					}
 					break;
 				case KipperParser.Do:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 431;
+						this.state = 427;
 						this.match(KipperParser.Do);
-						this.state = 432;
+						this.state = 428;
 						this.statement();
-						this.state = 433;
+						this.state = 429;
 						this.match(KipperParser.While);
-						this.state = 434;
+						this.state = 430;
 						this.match(KipperParser.LeftParen);
-						this.state = 435;
+						this.state = 431;
 						this.expression();
-						this.state = 436;
+						this.state = 432;
 						this.match(KipperParser.RightParen);
-						this.state = 437;
+						this.state = 433;
 						this.endOfLine();
 					}
 					break;
@@ -2978,13 +2962,13 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 445;
+				this.state = 441;
 				this._errHandler.sync(this);
 				switch (this._input.LA(1)) {
 					case KipperParser.Const:
 					case KipperParser.Var:
 						{
-							this.state = 441;
+							this.state = 437;
 							this.forDeclaration();
 						}
 						break;
@@ -3010,7 +2994,7 @@ export class KipperParser extends Parser {
 					case KipperParser.SingleQuoteStringLiteral:
 					case KipperParser.DoubleQuoteStringLiteral:
 						{
-							this.state = 443;
+							this.state = 439;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (
@@ -3042,7 +3026,7 @@ export class KipperParser extends Parser {
 								_la === KipperParser.DoubleQuoteStringLiteral
 							) {
 								{
-									this.state = 442;
+									this.state = 438;
 									this.expression();
 								}
 							}
@@ -3051,6 +3035,45 @@ export class KipperParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 				}
+				this.state = 443;
+				this.endOfLine();
+				this.state = 445;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (
+					((_la & ~0x1f) === 0 &&
+						((1 << _la) &
+							((1 << KipperParser.T__2) |
+								(1 << KipperParser.CallFunc) |
+								(1 << KipperParser.True) |
+								(1 << KipperParser.False) |
+								(1 << KipperParser.Null) |
+								(1 << KipperParser.Undefined) |
+								(1 << KipperParser.LeftParen) |
+								(1 << KipperParser.LeftBracket))) !==
+							0) ||
+					(((_la - 35) & ~0x1f) === 0 &&
+						((1 << (_la - 35)) &
+							((1 << (KipperParser.Plus - 35)) |
+								(1 << (KipperParser.PlusPlus - 35)) |
+								(1 << (KipperParser.Minus - 35)) |
+								(1 << (KipperParser.MinusMinus - 35)) |
+								(1 << (KipperParser.Not - 35)) |
+								(1 << (KipperParser.Identifier - 35)) |
+								(1 << (KipperParser.IntegerConstant - 35)) |
+								(1 << (KipperParser.FloatingConstant - 35)) |
+								(1 << (KipperParser.SingleQuoteFStringLiteral - 35)) |
+								(1 << (KipperParser.DoubleQuoteFStringLiteral - 35)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 35)))) !==
+							0) ||
+					_la === KipperParser.DoubleQuoteStringLiteral
+				) {
+					{
+						this.state = 444;
+						this.forExpression();
+					}
+				}
+
 				this.state = 447;
 				this.endOfLine();
 				this.state = 449;
@@ -3089,45 +3112,6 @@ export class KipperParser extends Parser {
 						this.forExpression();
 					}
 				}
-
-				this.state = 451;
-				this.endOfLine();
-				this.state = 453;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (
-					((_la & ~0x1f) === 0 &&
-						((1 << _la) &
-							((1 << KipperParser.T__2) |
-								(1 << KipperParser.CallFunc) |
-								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.Null) |
-								(1 << KipperParser.Undefined) |
-								(1 << KipperParser.LeftParen) |
-								(1 << KipperParser.LeftBracket))) !==
-							0) ||
-					(((_la - 35) & ~0x1f) === 0 &&
-						((1 << (_la - 35)) &
-							((1 << (KipperParser.Plus - 35)) |
-								(1 << (KipperParser.PlusPlus - 35)) |
-								(1 << (KipperParser.Minus - 35)) |
-								(1 << (KipperParser.MinusMinus - 35)) |
-								(1 << (KipperParser.Not - 35)) |
-								(1 << (KipperParser.Identifier - 35)) |
-								(1 << (KipperParser.IntegerConstant - 35)) |
-								(1 << (KipperParser.FloatingConstant - 35)) |
-								(1 << (KipperParser.SingleQuoteFStringLiteral - 35)) |
-								(1 << (KipperParser.DoubleQuoteFStringLiteral - 35)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 35)))) !==
-							0) ||
-					_la === KipperParser.DoubleQuoteStringLiteral
-				) {
-					{
-						this.state = 452;
-						this.forExpression();
-					}
-				}
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -3149,9 +3133,9 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 455;
+				this.state = 451;
 				this.storageTypeSpecifier();
-				this.state = 456;
+				this.state = 452;
 				this.initDeclarator();
 			}
 		} catch (re) {
@@ -3175,21 +3159,21 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 458;
+				this.state = 454;
 				this.assignmentExpression();
-				this.state = 463;
+				this.state = 459;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Comma) {
 					{
 						{
-							this.state = 459;
+							this.state = 455;
 							this.match(KipperParser.Comma);
-							this.state = 460;
+							this.state = 456;
 							this.assignmentExpression();
 						}
 					}
-					this.state = 465;
+					this.state = 461;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
@@ -3215,13 +3199,13 @@ export class KipperParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 471;
+				this.state = 467;
 				this._errHandler.sync(this);
 				switch (this._input.LA(1)) {
 					case KipperParser.Break:
 					case KipperParser.Continue:
 						{
-							this.state = 466;
+							this.state = 462;
 							_la = this._input.LA(1);
 							if (!(_la === KipperParser.Break || _la === KipperParser.Continue)) {
 								this._errHandler.recoverInline(this);
@@ -3237,9 +3221,9 @@ export class KipperParser extends Parser {
 						break;
 					case KipperParser.Return:
 						{
-							this.state = 467;
+							this.state = 463;
 							this.match(KipperParser.Return);
-							this.state = 469;
+							this.state = 465;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (
@@ -3271,7 +3255,7 @@ export class KipperParser extends Parser {
 								_la === KipperParser.DoubleQuoteStringLiteral
 							) {
 								{
-									this.state = 468;
+									this.state = 464;
 									this.expression();
 								}
 							}
@@ -3280,7 +3264,7 @@ export class KipperParser extends Parser {
 					default:
 						throw new NoViableAltException(this);
 				}
-				this.state = 473;
+				this.state = 469;
 				this.endOfLine();
 			}
 		} catch (re) {
@@ -3363,7 +3347,7 @@ export class KipperParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03H\u01DE\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03H\u01DA\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -3398,93 +3382,93 @@ export class KipperParser extends Parser {
 		"\x1C\x0E\x1C\u0136\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03" +
 		"\x1E\x05\x1E\u0140\n\x1E\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F" +
 		"\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x05\x1F\u014D\n\x1F\x03 \x03" +
-		' \x03!\x03!\x03"\x03"\x03#\x03#\x03#\x03#\x05#\u0159\n#\x03$\x03$\x03' +
-		"$\x07$\u015E\n$\f$\x0E$\u0161\v$\x03%\x03%\x03%\x03%\x03&\x03&\x03'\x03" +
-		"'\x03'\x03'\x03'\x05'\u016E\n'\x03(\x03(\x05(\u0172\n(\x03(\x03" +
-		"(\x03)\x06)\u0177\n)\r)\x0E)\u0178\x03*\x03*\x05*\u017D\n*\x03+\x05+\u0180" +
-		"\n+\x03+\x03+\x03,\x03,\x03,\x03,\x03,\x03,\x03,\x05,\u018B\n,\x03,\x03" +
-		",\x03,\x03,\x03,\x03,\x07,\u0193\n,\f,\x0E,\u0196\v,\x03,\x03,\x05,\u019A" +
-		"\n,\x03-\x03-\x03-\x03-\x03-\x03-\x03-\x03-\x05-\u01A4\n-\x03.\x03.\x03" +
+		' \x03!\x03!\x03"\x03"\x03#\x03#\x03$\x03$\x03$\x07$\u015A\n$\f$\x0E' +
+		"$\u015D\v$\x03%\x03%\x03%\x03%\x03&\x03&\x03'\x03'\x03'\x03'\x03'" +
+		"\x05'\u016A\n'\x03(\x03(\x05(\u016E\n(\x03(\x03(\x03)\x06)\u0173\n)" +
+		"\r)\x0E)\u0174\x03*\x03*\x05*\u0179\n*\x03+\x05+\u017C\n+\x03+\x03+\x03" +
+		",\x03,\x03,\x03,\x03,\x03,\x03,\x05,\u0187\n,\x03,\x03,\x03,\x03,\x03" +
+		",\x03,\x07,\u018F\n,\f,\x0E,\u0192\v,\x03,\x03,\x05,\u0196\n,\x03-\x03" +
+		"-\x03-\x03-\x03-\x03-\x03-\x03-\x05-\u01A0\n-\x03.\x03.\x03.\x03.\x03" +
 		".\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03.\x03" +
-		".\x03.\x03.\x03.\x05.\u01BA\n.\x03/\x03/\x05/\u01BE\n/\x05/\u01C0\n/\x03" +
-		"/\x03/\x05/\u01C4\n/\x03/\x03/\x05/\u01C8\n/\x030\x030\x030\x031\x031" +
-		"\x031\x071\u01D0\n1\f1\x0E1\u01D3\v1\x032\x032\x032\x052\u01D8\n2\x05" +
-		'2\u01DA\n2\x032\x032\x032\x02\x02\b\x1C\x1E "$&3\x02\x02\x04\x02\x06' +
-		"\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02" +
-		'\x1A\x02\x1C\x02\x1E\x02 \x02"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x02' +
-		"2\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02" +
-		"N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02\x02\x11\x03\x02" +
-		"\x1A\x1B\x03\x02DE\x03\x02BC\x03\x02?@\x04\x02\x05\x05\x1D\x1E\x04\x02" +
-		"&&((\x05\x02%%''//\x03\x02),\x04\x02%%''\x03\x029<\x03\x0278\x03\x02" +
-		"16\x03\x02\b\t\x05\x02\x05\x05\x1D\x1E>>\x03\x02\x0F\x10\x02\u01E8\x02" +
-		"e\x03\x02\x02\x02\x04k\x03\x02\x02\x02\x06q\x03\x02\x02\x02\bs\x03\x02" +
-		"\x02\x02\n\x80\x03\x02\x02\x02\f\x97\x03\x02\x02\x02\x0E\xAD\x03\x02\x02" +
-		"\x02\x10\xAF\x03\x02\x02\x02\x12\xB3\x03\x02\x02\x02\x14\xC2\x03\x02\x02" +
-		"\x02\x16\xC4\x03\x02\x02\x02\x18\xC6\x03\x02\x02\x02\x1A\xCD\x03\x02\x02" +
-		"\x02\x1C\xCF\x03\x02\x02\x02\x1E\xDA\x03\x02\x02\x02 \xE5\x03\x02\x02" +
-		'\x02"\xF0\x03\x02\x02\x02$\xFB\x03\x02\x02\x02&\u0106\x03\x02\x02\x02' +
-		"(\u0118\x03\x02\x02\x02*\u011F\x03\x02\x02\x02,\u0121\x03\x02\x02\x02" +
-		".\u0123\x03\x02\x02\x020\u012B\x03\x02\x02\x022\u012D\x03\x02\x02\x02" +
-		"4\u0131\x03\x02\x02\x026\u0134\x03\x02\x02\x028\u0138\x03\x02\x02\x02" +
-		":\u013A\x03\x02\x02\x02<\u014C\x03\x02\x02\x02>\u014E\x03\x02\x02\x02" +
-		"@\u0150\x03\x02\x02\x02B\u0152\x03\x02\x02\x02D\u0154\x03\x02\x02\x02" +
-		"F\u015A\x03\x02\x02\x02H\u0162\x03\x02\x02\x02J\u0166\x03\x02\x02\x02" +
-		"L\u016D\x03\x02\x02\x02N\u016F\x03\x02\x02\x02P\u0176\x03\x02\x02\x02" +
-		"R\u017C\x03\x02\x02\x02T\u017F\x03\x02\x02\x02V\u0199\x03\x02\x02\x02" +
-		"X\u01A3\x03\x02\x02\x02Z\u01B9\x03\x02\x02\x02\\\u01BF\x03\x02\x02\x02" +
-		"^\u01C9\x03\x02\x02\x02`\u01CC\x03\x02\x02\x02b\u01D9\x03\x02\x02\x02" +
-		"df\x05\x04\x03\x02ed\x03\x02\x02\x02ef\x03\x02\x02\x02fg\x03\x02\x02\x02" +
-		"gh\x07\x02\x02\x03h\x03\x03\x02\x02\x02il\x05\x06\x04\x02jl\x05\n\x06" +
-		"\x02ki\x03\x02\x02\x02kj\x03\x02\x02\x02lm\x03\x02\x02\x02mk\x03\x02\x02" +
-		"\x02mn\x03\x02\x02\x02n\x05\x03\x02\x02\x02or\x05\b\x05\x02pr\x05R*\x02" +
-		"qo\x03\x02\x02\x02qp\x03\x02\x02\x02r\x07\x03\x02\x02\x02st\x07\x17\x02" +
-		"\x02tu\x05@!\x02uw\x07\x1F\x02\x02vx\x05D#\x02wv\x03\x02\x02\x02wx\x03" +
-		"\x02\x02\x02xy\x03\x02\x02\x02yz\x07 \x02\x02z{\x07\x03\x02\x02{~\x05" +
-		"<\x1F\x02|\x7F\x05N(\x02}\x7F\x05\n\x06\x02~|\x03\x02\x02\x02~}\x03\x02" +
-		"\x02\x02\x7F\t\x03\x02\x02\x02\x80\x81\x07\x04\x02\x02\x81\v\x03\x02\x02" +
-		"\x02\x82\x83\x07\x1F\x02\x02\x83\x84\x05*\x16\x02\x84\x85\x07 \x02\x02" +
-		"\x85\x98\x03\x02\x02\x02\x86\x98\t\x02\x02\x02\x87\x98\x07>\x02\x02\x88" +
-		"\x98\t\x03\x02\x02\x89\x98\t\x04\x02\x02\x8A\x98\t\x05\x02\x02\x8B\x8C" +
-		"\x07!\x02\x02\x8C\x91\x050\x19\x02\x8D\x8E\x070\x02\x02\x8E\x90\x050\x19" +
-		"\x02\x8F\x8D\x03\x02\x02\x02\x90\x93\x03\x02\x02\x02\x91\x8F\x03\x02\x02" +
-		"\x02\x91\x92\x03\x02\x02\x02\x92\x94\x03\x02\x02\x02\x93\x91\x03\x02\x02" +
-		'\x02\x94\x95\x07"\x02\x02\x95\x98\x03\x02\x02\x02\x96\x98\t\x06\x02\x02' +
-		"\x97\x82\x03\x02\x02\x02\x97\x86\x03\x02\x02\x02\x97\x87\x03\x02\x02\x02" +
-		"\x97\x88\x03\x02\x02\x02\x97\x89\x03\x02\x02\x02\x97\x8A\x03\x02\x02\x02" +
-		"\x97\x8B\x03\x02\x02\x02\x97\x96\x03\x02\x02\x02\x98\r\x03\x02\x02\x02" +
-		"\x99\xAE\x05\f\x07\x02\x9A\x9C\x05\f\x07\x02\x9B\x9D\x05\x10\t\x02\x9C" +
-		"\x9B\x03\x02\x02\x02\x9D\x9E\x03\x02\x02\x02\x9E\x9C\x03\x02\x02\x02\x9E" +
-		"\x9F\x03\x02\x02\x02\x9F\xAE\x03\x02\x02\x02\xA0\xA1\x05\f\x07\x02\xA1" +
-		"\xA2\x05\x16\f\x02\xA2\xAE\x03\x02\x02\x02\xA3\xA5\x07\x19\x02\x02\xA4" +
-		"\xA3\x03\x02\x02\x02\xA4\xA5\x03\x02\x02\x02\xA5\xA6\x03\x02\x02\x02\xA6" +
-		"\xA7\x05\f\x07\x02\xA7\xA9\x07\x1F\x02\x02\xA8\xAA\x05\x12\n\x02\xA9\xA8" +
-		"\x03\x02\x02\x02\xA9\xAA\x03\x02\x02\x02\xAA\xAB\x03\x02\x02\x02\xAB\xAC" +
-		"\x07 \x02\x02\xAC\xAE\x03\x02\x02\x02\xAD\x99\x03\x02\x02\x02\xAD\x9A" +
-		"\x03\x02\x02\x02\xAD\xA0\x03\x02\x02\x02\xAD\xA4\x03\x02\x02\x02\xAE\x0F" +
-		"\x03\x02\x02\x02\xAF\xB0\x07!\x02\x02\xB0\xB1\x05.\x18\x02\xB1\xB2\x07" +
-		'"\x02\x02\xB2\x11\x03\x02\x02\x02\xB3\xB8\x05*\x16\x02\xB4\xB5\x070\x02' +
-		"\x02\xB5\xB7\x05*\x16\x02\xB6\xB4\x03\x02\x02\x02\xB7\xBA\x03\x02\x02" +
-		"\x02\xB8\xB6\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\x13\x03\x02\x02" +
-		"\x02\xBA\xB8\x03\x02\x02\x02\xBB\xC3\x05\x0E\b\x02\xBC\xBD\x05\x16\f\x02" +
-		"\xBD\xBE\x05\x0E\b\x02\xBE\xC3\x03\x02\x02\x02\xBF\xC0\x05\x18\r\x02\xC0" +
-		"\xC1\x05\x0E\b\x02\xC1\xC3\x03\x02\x02\x02\xC2\xBB\x03\x02\x02\x02\xC2" +
-		"\xBC\x03\x02\x02\x02\xC2\xBF\x03\x02\x02\x02\xC3\x15\x03\x02\x02\x02\xC4" +
-		"\xC5\t\x07\x02\x02\xC5\x17\x03\x02\x02\x02\xC6\xC7\t\b\x02\x02\xC7\x19" +
-		"\x03\x02\x02\x02\xC8\xCE\x05\x14\v\x02\xC9\xCA\x05\x14\v\x02\xCA\xCB\x07" +
-		"\n\x02\x02\xCB\xCC\x05<\x1F\x02\xCC\xCE\x03\x02\x02\x02\xCD\xC8\x03\x02" +
-		"\x02\x02\xCD\xC9\x03\x02\x02\x02\xCE\x1B\x03\x02\x02\x02\xCF\xD0\b\x0F" +
-		"\x01\x02\xD0\xD1\x05\x1A\x0E\x02\xD1\xD7\x03\x02\x02\x02\xD2\xD3\f\x03" +
-		"\x02\x02\xD3\xD4\t\t\x02\x02\xD4\xD6\x05\x1A\x0E\x02\xD5\xD2\x03\x02\x02" +
-		"\x02\xD6\xD9\x03\x02\x02\x02\xD7\xD5\x03\x02\x02\x02\xD7\xD8\x03\x02\x02" +
-		"\x02\xD8\x1D\x03\x02\x02\x02\xD9\xD7\x03\x02\x02\x02\xDA\xDB\b\x10\x01" +
-		"\x02\xDB\xDC\x05\x1C\x0F\x02\xDC\xE2\x03\x02\x02\x02\xDD\xDE\f\x03\x02" +
-		"\x02\xDE\xDF\t\n\x02\x02\xDF\xE1\x05\x1C\x0F\x02\xE0\xDD\x03\x02\x02\x02" +
-		"\xE1\xE4\x03\x02\x02\x02\xE2\xE0\x03\x02\x02\x02\xE2\xE3\x03\x02\x02\x02" +
-		"\xE3\x1F\x03\x02\x02\x02\xE4\xE2\x03\x02\x02\x02\xE5\xE6\b\x11\x01\x02" +
-		"\xE6\xE7\x05\x1E\x10\x02\xE7\xED\x03\x02\x02\x02\xE8\xE9\f\x03\x02\x02" +
-		"\xE9\xEA\t\v\x02\x02\xEA\xEC\x05\x1E\x10\x02\xEB\xE8\x03\x02\x02\x02\xEC" +
-		"\xEF\x03\x02\x02\x02\xED\xEB\x03\x02\x02\x02\xED\xEE\x03\x02\x02\x02\xEE" +
-		"!\x03\x02\x02\x02\xEF\xED\x03\x02\x02\x02\xF0\xF1\b\x12\x01\x02\xF1\xF2" +
+		".\x03.\x05.\u01B6\n.\x03/\x03/\x05/\u01BA\n/\x05/\u01BC\n/\x03/\x03/\x05" +
+		"/\u01C0\n/\x03/\x03/\x05/\u01C4\n/\x030\x030\x030\x031\x031\x031\x071" +
+		"\u01CC\n1\f1\x0E1\u01CF\v1\x032\x032\x032\x052\u01D4\n2\x052\u01D6\n2" +
+		'\x032\x032\x032\x02\x02\b\x1C\x1E "$&3\x02\x02\x04\x02\x06\x02\b\x02' +
+		"\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C" +
+		'\x02\x1E\x02 \x02"\x02$\x02&\x02(\x02*\x02,\x02.\x020\x022\x024\x026' +
+		"\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02J\x02L\x02N\x02P\x02" +
+		"R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02\x02\x11\x03\x02\x1A\x1B" +
+		"\x03\x02DE\x03\x02BC\x03\x02?@\x04\x02\x05\x05\x1D\x1E\x04\x02&&((\x05" +
+		"\x02%%''//\x03\x02),\x04\x02%%''\x03\x029<\x03\x0278\x03\x0216\x03" +
+		"\x02\b\t\x05\x02\x05\x05\x1D\x1E>>\x03\x02\x0F\x10\x02\u01E3\x02e\x03" +
+		"\x02\x02\x02\x04k\x03\x02\x02\x02\x06q\x03\x02\x02\x02\bs\x03\x02\x02" +
+		"\x02\n\x80\x03\x02\x02\x02\f\x97\x03\x02\x02\x02\x0E\xAD\x03\x02\x02\x02" +
+		"\x10\xAF\x03\x02\x02\x02\x12\xB3\x03\x02\x02\x02\x14\xC2\x03\x02\x02\x02" +
+		"\x16\xC4\x03\x02\x02\x02\x18\xC6\x03\x02\x02\x02\x1A\xCD\x03\x02\x02\x02" +
+		"\x1C\xCF\x03\x02\x02\x02\x1E\xDA\x03\x02\x02\x02 \xE5\x03\x02\x02\x02" +
+		'"\xF0\x03\x02\x02\x02$\xFB\x03\x02\x02\x02&\u0106\x03\x02\x02\x02(\u0118' +
+		"\x03\x02\x02\x02*\u011F\x03\x02\x02\x02,\u0121\x03\x02\x02\x02.\u0123" +
+		"\x03\x02\x02\x020\u012B\x03\x02\x02\x022\u012D\x03\x02\x02\x024\u0131" +
+		"\x03\x02\x02\x026\u0134\x03\x02\x02\x028\u0138\x03\x02\x02\x02:\u013A" +
+		"\x03\x02\x02\x02<\u014C\x03\x02\x02\x02>\u014E\x03\x02\x02\x02@\u0150" +
+		"\x03\x02\x02\x02B\u0152\x03\x02\x02\x02D\u0154\x03\x02\x02\x02F\u0156" +
+		"\x03\x02\x02\x02H\u015E\x03\x02\x02\x02J\u0162\x03\x02\x02\x02L\u0169" +
+		"\x03\x02\x02\x02N\u016B\x03\x02\x02\x02P\u0172\x03\x02\x02\x02R\u0178" +
+		"\x03\x02\x02\x02T\u017B\x03\x02\x02\x02V\u0195\x03\x02\x02\x02X\u019F" +
+		"\x03\x02\x02\x02Z\u01B5\x03\x02\x02\x02\\\u01BB\x03\x02\x02\x02^\u01C5" +
+		"\x03\x02\x02\x02`\u01C8\x03\x02\x02\x02b\u01D5\x03\x02\x02\x02df\x05\x04" +
+		"\x03\x02ed\x03\x02\x02\x02ef\x03\x02\x02\x02fg\x03\x02\x02\x02gh\x07\x02" +
+		"\x02\x03h\x03\x03\x02\x02\x02il\x05\x06\x04\x02jl\x05\n\x06\x02ki\x03" +
+		"\x02\x02\x02kj\x03\x02\x02\x02lm\x03\x02\x02\x02mk\x03\x02\x02\x02mn\x03" +
+		"\x02\x02\x02n\x05\x03\x02\x02\x02or\x05\b\x05\x02pr\x05R*\x02qo\x03\x02" +
+		"\x02\x02qp\x03\x02\x02\x02r\x07\x03\x02\x02\x02st\x07\x17\x02\x02tu\x05" +
+		"@!\x02uw\x07\x1F\x02\x02vx\x05D#\x02wv\x03\x02\x02\x02wx\x03\x02\x02\x02" +
+		"xy\x03\x02\x02\x02yz\x07 \x02\x02z{\x07\x03\x02\x02{~\x05<\x1F\x02|\x7F" +
+		"\x05N(\x02}\x7F\x05\n\x06\x02~|\x03\x02\x02\x02~}\x03\x02\x02\x02\x7F" +
+		"\t\x03\x02\x02\x02\x80\x81\x07\x04\x02\x02\x81\v\x03\x02\x02\x02\x82\x83" +
+		"\x07\x1F\x02\x02\x83\x84\x05*\x16\x02\x84\x85\x07 \x02\x02\x85\x98\x03" +
+		"\x02\x02\x02\x86\x98\t\x02\x02\x02\x87\x98\x07>\x02\x02\x88\x98\t\x03" +
+		"\x02\x02\x89\x98\t\x04\x02\x02\x8A\x98\t\x05\x02\x02\x8B\x8C\x07!\x02" +
+		"\x02\x8C\x91\x050\x19\x02\x8D\x8E\x070\x02\x02\x8E\x90\x050\x19\x02\x8F" +
+		"\x8D\x03\x02\x02\x02\x90\x93\x03\x02\x02\x02\x91\x8F\x03\x02\x02\x02\x91" +
+		"\x92\x03\x02\x02\x02\x92\x94\x03\x02\x02\x02\x93\x91\x03\x02\x02\x02\x94" +
+		'\x95\x07"\x02\x02\x95\x98\x03\x02\x02\x02\x96\x98\t\x06\x02\x02\x97\x82' +
+		"\x03\x02\x02\x02\x97\x86\x03\x02\x02\x02\x97\x87\x03\x02\x02\x02\x97\x88" +
+		"\x03\x02\x02\x02\x97\x89\x03\x02\x02\x02\x97\x8A\x03\x02\x02\x02\x97\x8B" +
+		"\x03\x02\x02\x02\x97\x96\x03\x02\x02\x02\x98\r\x03\x02\x02\x02\x99\xAE" +
+		"\x05\f\x07\x02\x9A\x9C\x05\f\x07\x02\x9B\x9D\x05\x10\t\x02\x9C\x9B\x03" +
+		"\x02\x02\x02\x9D\x9E\x03\x02\x02\x02\x9E\x9C\x03\x02\x02\x02\x9E\x9F\x03" +
+		"\x02\x02\x02\x9F\xAE\x03\x02\x02\x02\xA0\xA1\x05\f\x07\x02\xA1\xA2\x05" +
+		"\x16\f\x02\xA2\xAE\x03\x02\x02\x02\xA3\xA5\x07\x19\x02\x02\xA4\xA3\x03" +
+		"\x02\x02\x02\xA4\xA5\x03\x02\x02\x02\xA5\xA6\x03\x02\x02\x02\xA6\xA7\x05" +
+		"\f\x07\x02\xA7\xA9\x07\x1F\x02\x02\xA8\xAA\x05\x12\n\x02\xA9\xA8\x03\x02" +
+		"\x02\x02\xA9\xAA\x03\x02\x02\x02\xAA\xAB\x03\x02\x02\x02\xAB\xAC\x07 " +
+		"\x02\x02\xAC\xAE\x03\x02\x02\x02\xAD\x99\x03\x02\x02\x02\xAD\x9A\x03\x02" +
+		"\x02\x02\xAD\xA0\x03\x02\x02\x02\xAD\xA4\x03\x02\x02\x02\xAE\x0F\x03\x02" +
+		'\x02\x02\xAF\xB0\x07!\x02\x02\xB0\xB1\x05.\x18\x02\xB1\xB2\x07"\x02\x02' +
+		"\xB2\x11\x03\x02\x02\x02\xB3\xB8\x05*\x16\x02\xB4\xB5\x070\x02\x02\xB5" +
+		"\xB7\x05*\x16\x02\xB6\xB4\x03\x02\x02\x02\xB7\xBA\x03\x02\x02\x02\xB8" +
+		"\xB6\x03\x02\x02\x02\xB8\xB9\x03\x02\x02\x02\xB9\x13\x03\x02\x02\x02\xBA" +
+		"\xB8\x03\x02\x02\x02\xBB\xC3\x05\x0E\b\x02\xBC\xBD\x05\x16\f\x02\xBD\xBE" +
+		"\x05\x0E\b\x02\xBE\xC3\x03\x02\x02\x02\xBF\xC0\x05\x18\r\x02\xC0\xC1\x05" +
+		"\x0E\b\x02\xC1\xC3\x03\x02\x02\x02\xC2\xBB\x03\x02\x02\x02\xC2\xBC\x03" +
+		"\x02\x02\x02\xC2\xBF\x03\x02\x02\x02\xC3\x15\x03\x02\x02\x02\xC4\xC5\t" +
+		"\x07\x02\x02\xC5\x17\x03\x02\x02\x02\xC6\xC7\t\b\x02\x02\xC7\x19\x03\x02" +
+		"\x02\x02\xC8\xCE\x05\x14\v\x02\xC9\xCA\x05\x14\v\x02\xCA\xCB\x07\n\x02" +
+		"\x02\xCB\xCC\x05<\x1F\x02\xCC\xCE\x03\x02\x02\x02\xCD\xC8\x03\x02\x02" +
+		"\x02\xCD\xC9\x03\x02\x02\x02\xCE\x1B\x03\x02\x02\x02\xCF\xD0\b\x0F\x01" +
+		"\x02\xD0\xD1\x05\x1A\x0E\x02\xD1\xD7\x03\x02\x02\x02\xD2\xD3\f\x03\x02" +
+		"\x02\xD3\xD4\t\t\x02\x02\xD4\xD6\x05\x1A\x0E\x02\xD5\xD2\x03\x02\x02\x02" +
+		"\xD6\xD9\x03\x02\x02\x02\xD7\xD5\x03\x02\x02\x02\xD7\xD8\x03\x02\x02\x02" +
+		"\xD8\x1D\x03\x02\x02\x02\xD9\xD7\x03\x02\x02\x02\xDA\xDB\b\x10\x01\x02" +
+		"\xDB\xDC\x05\x1C\x0F\x02\xDC\xE2\x03\x02\x02\x02\xDD\xDE\f\x03\x02\x02" +
+		"\xDE\xDF\t\n\x02\x02\xDF\xE1\x05\x1C\x0F\x02\xE0\xDD\x03\x02\x02\x02\xE1" +
+		"\xE4\x03\x02\x02\x02\xE2\xE0\x03\x02\x02\x02\xE2\xE3\x03\x02\x02\x02\xE3" +
+		"\x1F\x03\x02\x02\x02\xE4\xE2\x03\x02\x02\x02\xE5\xE6\b\x11\x01\x02\xE6" +
+		"\xE7\x05\x1E\x10\x02\xE7\xED\x03\x02\x02\x02\xE8\xE9\f\x03\x02\x02\xE9" +
+		"\xEA\t\v\x02\x02\xEA\xEC\x05\x1E\x10\x02\xEB\xE8\x03\x02\x02\x02\xEC\xEF" +
+		"\x03\x02\x02\x02\xED\xEB\x03\x02\x02\x02\xED\xEE\x03\x02\x02\x02\xEE!" +
+		"\x03\x02\x02\x02\xEF\xED\x03\x02\x02\x02\xF0\xF1\b\x12\x01\x02\xF1\xF2" +
 		"\x05 \x11\x02\xF2\xF8\x03\x02\x02\x02\xF3\xF4\f\x03\x02\x02\xF4\xF5\t" +
 		"\f\x02\x02\xF5\xF7\x05 \x11\x02\xF6\xF3\x03\x02\x02\x02\xF7\xFA\x03\x02" +
 		"\x02\x02\xF8\xF6\x03\x02\x02\x02\xF8\xF9\x03\x02\x02\x02\xF9#\x03\x02" +
@@ -3523,69 +3507,67 @@ export class KipperParser extends Parser {
 		"\x02\x02\x02\u014C\u0141\x03\x02\x02\x02\u014C\u0142\x03\x02\x02\x02\u014C" +
 		"\u0147\x03\x02\x02\x02\u014D=\x03\x02\x02\x02\u014E\u014F\t\x0F\x02\x02" +
 		'\u014F?\x03\x02\x02\x02\u0150\u0151\x05B"\x02\u0151A\x03\x02\x02\x02' +
-		"\u0152\u0153\x07>\x02\x02\u0153C\x03\x02\x02\x02\u0154\u0158\x05F$\x02" +
-		"\u0155\u0156\x070\x02\x02\u0156\u0157\x07\v\x02\x02\u0157\u0159\x07>\x02" +
-		"\x02\u0158\u0155\x03\x02\x02\x02\u0158\u0159\x03\x02\x02\x02\u0159E\x03" +
-		"\x02\x02\x02\u015A\u015F\x05H%\x02\u015B\u015C\x070\x02\x02\u015C\u015E" +
-		"\x05H%\x02\u015D\u015B\x03\x02\x02\x02\u015E\u0161\x03\x02\x02\x02\u015F" +
-		"\u015D\x03\x02\x02\x02\u015F\u0160\x03\x02\x02\x02\u0160G\x03\x02\x02" +
-		"\x02\u0161\u015F\x03\x02\x02\x02\u0162\u0163\x05@!\x02\u0163\u0164\x07" +
-		"\x07\x02\x02\u0164\u0165\x056\x1C\x02\u0165I\x03\x02\x02\x02\u0166\u0167" +
-		"\x05*\x16\x02\u0167K\x03\x02\x02\x02\u0168\u016E\x05N(\x02\u0169\u016E" +
-		"\x05T+\x02\u016A\u016E\x05V,\x02\u016B\u016E\x05Z.\x02\u016C\u016E\x05" +
-		"b2\x02\u016D\u0168\x03\x02\x02\x02\u016D\u0169\x03\x02\x02\x02\u016D\u016A" +
-		"\x03\x02\x02\x02\u016D\u016B\x03\x02\x02\x02\u016D\u016C\x03\x02\x02\x02" +
-		"\u016EM\x03\x02\x02\x02\u016F\u0171\x07#\x02\x02\u0170\u0172\x05P)\x02" +
-		"\u0171\u0170\x03\x02\x02\x02\u0171\u0172\x03\x02\x02\x02\u0172\u0173\x03" +
-		"\x02\x02\x02\u0173\u0174\x07$\x02\x02\u0174O\x03\x02\x02\x02\u0175\u0177" +
-		"\x05R*\x02\u0176\u0175\x03\x02\x02\x02\u0177\u0178\x03\x02\x02\x02\u0178" +
-		"\u0176\x03\x02\x02\x02\u0178\u0179\x03\x02\x02\x02\u0179Q\x03\x02\x02" +
-		"\x02\u017A\u017D\x05L'\x02\u017B\u017D\x052\x1A\x02\u017C\u017A\x03\x02" +
-		"\x02\x02\u017C\u017B\x03\x02\x02\x02\u017DS\x03\x02\x02\x02\u017E\u0180" +
-		"\x05.\x18\x02\u017F\u017E\x03\x02\x02\x02\u017F\u0180\x03\x02\x02\x02" +
-		"\u0180\u0181\x03\x02\x02\x02\u0181\u0182\x05\n\x06\x02\u0182U\x03\x02" +
-		"\x02\x02\u0183\u0184\x07\x13\x02\x02\u0184\u0185\x07\x1F\x02\x02\u0185" +
-		"\u0186\x05.\x18\x02\u0186\u0187\x07 \x02\x02\u0187\u018A\x05L'\x02\u0188" +
-		"\u0189\x07\x14\x02\x02\u0189\u018B\x05L'\x02\u018A\u0188\x03\x02\x02" +
-		"\x02\u018A\u018B\x03\x02\x02\x02\u018B\u019A\x03\x02\x02\x02\u018C\u018D" +
-		"\x07\f\x02\x02\u018D\u018E\x07\x1F\x02\x02\u018E\u018F\x05.\x18\x02\u018F" +
-		"\u0190\x07 \x02\x02\u0190\u0194\x07#\x02\x02\u0191\u0193\x05X-\x02\u0192" +
-		"\u0191\x03\x02\x02\x02\u0193\u0196\x03\x02\x02\x02\u0194\u0192\x03\x02" +
-		"\x02\x02\u0194\u0195\x03\x02\x02\x02\u0195\u0197\x03\x02\x02\x02\u0196" +
-		"\u0194\x03\x02\x02\x02\u0197\u0198\x07$\x02\x02\u0198\u019A\x03\x02\x02" +
-		"\x02\u0199\u0183\x03\x02\x02\x02\u0199\u018C\x03\x02\x02\x02\u019AW\x03" +
-		"\x02\x02\x02\u019B\u019C\x07\r\x02\x02\u019C\u019D\x050\x19\x02\u019D" +
-		"\u019E\x07\x07\x02\x02\u019E\u019F\x05L'\x02\u019F\u01A4\x03\x02\x02" +
-		"\x02\u01A0\u01A1\x07\x0E\x02\x02\u01A1\u01A2\x07\x07\x02\x02\u01A2\u01A4" +
-		"\x05L'\x02\u01A3\u019B\x03\x02\x02\x02\u01A3\u01A0\x03\x02\x02\x02\u01A4" +
-		"Y\x03\x02\x02\x02\u01A5\u01A6\x07\x15\x02\x02\u01A6\u01A7\x07\x1F\x02" +
-		"\x02\u01A7\u01A8\x05\\/\x02\u01A8\u01A9\x07 \x02\x02\u01A9\u01AA\x05L" +
-		"'\x02\u01AA\u01BA\x03\x02\x02\x02\u01AB\u01AC\x07\x12\x02\x02\u01AC\u01AD" +
-		"\x07\x1F\x02\x02\u01AD\u01AE\x05.\x18\x02\u01AE\u01AF\x07 \x02\x02\u01AF" +
-		"\u01B0\x05L'\x02\u01B0\u01BA\x03\x02\x02\x02\u01B1\u01B2\x07\x11\x02" +
-		"\x02\u01B2\u01B3\x05L'\x02\u01B3\u01B4\x07\x12\x02\x02\u01B4\u01B5\x07" +
-		"\x1F\x02\x02\u01B5\u01B6\x05.\x18\x02\u01B6\u01B7\x07 \x02\x02\u01B7\u01B8" +
-		"\x05\n\x06\x02\u01B8\u01BA\x03\x02\x02\x02\u01B9\u01A5\x03\x02\x02\x02" +
-		"\u01B9\u01AB\x03\x02\x02\x02\u01B9\u01B1\x03\x02\x02\x02\u01BA[\x03\x02" +
-		"\x02\x02\u01BB\u01C0\x05^0\x02\u01BC\u01BE\x05.\x18\x02\u01BD\u01BC\x03" +
-		"\x02\x02\x02\u01BD\u01BE\x03\x02\x02\x02\u01BE\u01C0\x03\x02\x02\x02\u01BF" +
-		"\u01BB\x03\x02\x02\x02\u01BF\u01BD\x03\x02\x02\x02\u01C0\u01C1\x03\x02" +
-		"\x02\x02\u01C1\u01C3\x05\n\x06\x02\u01C2\u01C4\x05`1\x02\u01C3\u01C2\x03" +
-		"\x02\x02\x02\u01C3\u01C4\x03\x02\x02\x02\u01C4\u01C5\x03\x02\x02\x02\u01C5" +
-		"\u01C7\x05\n\x06\x02\u01C6\u01C8\x05`1\x02\u01C7\u01C6\x03\x02\x02\x02" +
-		"\u01C7\u01C8\x03\x02\x02\x02\u01C8]\x03\x02\x02\x02\u01C9\u01CA\x054\x1B" +
-		"\x02\u01CA\u01CB\x05:\x1E\x02\u01CB_\x03\x02\x02\x02\u01CC\u01D1\x05*" +
-		"\x16\x02\u01CD\u01CE\x070\x02\x02\u01CE\u01D0\x05*\x16\x02\u01CF\u01CD" +
-		"\x03\x02\x02\x02\u01D0\u01D3\x03\x02\x02\x02\u01D1\u01CF\x03\x02\x02\x02" +
-		"\u01D1\u01D2\x03\x02\x02\x02\u01D2a\x03\x02\x02\x02\u01D3\u01D1\x03\x02" +
-		"\x02\x02\u01D4\u01DA\t\x10\x02\x02\u01D5\u01D7\x07\x18\x02\x02\u01D6\u01D8" +
-		"\x05.\x18\x02\u01D7\u01D6\x03\x02\x02\x02\u01D7\u01D8\x03\x02\x02\x02" +
-		"\u01D8\u01DA\x03\x02\x02\x02\u01D9\u01D4\x03\x02\x02\x02\u01D9\u01D5\x03" +
-		"\x02\x02\x02\u01DA\u01DB\x03\x02\x02\x02\u01DB\u01DC\x05\n\x06\x02\u01DC" +
-		"c\x03\x02\x02\x020ekmqw~\x91\x97\x9E\xA4\xA9\xAD\xB8\xC2\xCD\xD7\xE2\xED" +
-		"\xF8\u0103\u010E\u0118\u011F\u0128\u0136\u013F\u014C\u0158\u015F\u016D" +
-		"\u0171\u0178\u017C\u017F\u018A\u0194\u0199\u01A3\u01B9\u01BD\u01BF\u01C3" +
-		"\u01C7\u01D1\u01D7\u01D9";
+		"\u0152\u0153\x07>\x02\x02\u0153C\x03\x02\x02\x02\u0154\u0155\x05F$\x02" +
+		"\u0155E\x03\x02\x02\x02\u0156\u015B\x05H%\x02\u0157\u0158\x070\x02\x02" +
+		"\u0158\u015A\x05H%\x02\u0159\u0157\x03\x02\x02\x02\u015A\u015D\x03\x02" +
+		"\x02\x02\u015B\u0159\x03\x02\x02\x02\u015B\u015C\x03\x02\x02\x02\u015C" +
+		"G\x03\x02\x02\x02\u015D\u015B\x03\x02\x02\x02\u015E\u015F\x05@!\x02\u015F" +
+		"\u0160\x07\x07\x02\x02\u0160\u0161\x056\x1C\x02\u0161I\x03\x02\x02\x02" +
+		"\u0162\u0163\x05*\x16\x02\u0163K\x03\x02\x02\x02\u0164\u016A\x05N(\x02" +
+		"\u0165\u016A\x05T+\x02\u0166\u016A\x05V,\x02\u0167\u016A\x05Z.\x02\u0168" +
+		"\u016A\x05b2\x02\u0169\u0164\x03\x02\x02\x02\u0169\u0165\x03\x02\x02\x02" +
+		"\u0169\u0166\x03\x02\x02\x02\u0169\u0167\x03\x02\x02\x02\u0169\u0168\x03" +
+		"\x02\x02\x02\u016AM\x03\x02\x02\x02\u016B\u016D\x07#\x02\x02\u016C\u016E" +
+		"\x05P)\x02\u016D\u016C\x03\x02\x02\x02\u016D\u016E\x03\x02\x02\x02\u016E" +
+		"\u016F\x03\x02\x02\x02\u016F\u0170\x07$\x02\x02\u0170O\x03\x02\x02\x02" +
+		"\u0171\u0173\x05R*\x02\u0172\u0171\x03\x02\x02\x02\u0173\u0174\x03\x02" +
+		"\x02\x02\u0174\u0172\x03\x02\x02\x02\u0174\u0175\x03\x02\x02\x02\u0175" +
+		"Q\x03\x02\x02\x02\u0176\u0179\x05L'\x02\u0177\u0179\x052\x1A\x02\u0178" +
+		"\u0176\x03\x02\x02\x02\u0178\u0177\x03\x02\x02\x02\u0179S\x03\x02\x02" +
+		"\x02\u017A\u017C\x05.\x18\x02\u017B\u017A\x03\x02\x02\x02\u017B\u017C" +
+		"\x03\x02\x02\x02\u017C\u017D\x03\x02\x02\x02\u017D\u017E\x05\n\x06\x02" +
+		"\u017EU\x03\x02\x02\x02\u017F\u0180\x07\x13\x02\x02\u0180\u0181\x07\x1F" +
+		"\x02\x02\u0181\u0182\x05.\x18\x02\u0182\u0183\x07 \x02\x02\u0183\u0186" +
+		"\x05L'\x02\u0184\u0185\x07\x14\x02\x02\u0185\u0187\x05L'\x02\u0186\u0184" +
+		"\x03\x02\x02\x02\u0186\u0187\x03\x02\x02\x02\u0187\u0196\x03\x02\x02\x02" +
+		"\u0188\u0189\x07\f\x02\x02\u0189\u018A\x07\x1F\x02\x02\u018A\u018B\x05" +
+		".\x18\x02\u018B\u018C\x07 \x02\x02\u018C\u0190\x07#\x02\x02\u018D\u018F" +
+		"\x05X-\x02\u018E\u018D\x03\x02\x02\x02\u018F\u0192\x03\x02\x02\x02\u0190" +
+		"\u018E\x03\x02\x02\x02\u0190\u0191\x03\x02\x02\x02\u0191\u0193\x03\x02" +
+		"\x02\x02\u0192\u0190\x03\x02\x02\x02\u0193\u0194\x07$\x02\x02\u0194\u0196" +
+		"\x03\x02\x02\x02\u0195\u017F\x03\x02\x02\x02\u0195\u0188\x03\x02\x02\x02" +
+		"\u0196W\x03\x02\x02\x02\u0197\u0198\x07\r\x02\x02\u0198\u0199\x050\x19" +
+		"\x02\u0199\u019A\x07\x07\x02\x02\u019A\u019B\x05L'\x02\u019B\u01A0\x03" +
+		"\x02\x02\x02\u019C\u019D\x07\x0E\x02\x02\u019D\u019E\x07\x07\x02\x02\u019E" +
+		"\u01A0\x05L'\x02\u019F\u0197\x03\x02\x02\x02\u019F\u019C\x03\x02\x02" +
+		"\x02\u01A0Y\x03\x02\x02\x02\u01A1\u01A2\x07\x15\x02\x02\u01A2\u01A3\x07" +
+		"\x1F\x02\x02\u01A3\u01A4\x05\\/\x02\u01A4\u01A5\x07 \x02\x02\u01A5\u01A6" +
+		"\x05L'\x02\u01A6\u01B6\x03\x02\x02\x02\u01A7\u01A8\x07\x12\x02\x02\u01A8" +
+		"\u01A9\x07\x1F\x02\x02\u01A9\u01AA\x05.\x18\x02\u01AA\u01AB\x07 \x02\x02" +
+		"\u01AB\u01AC\x05L'\x02\u01AC\u01B6\x03\x02\x02\x02\u01AD\u01AE\x07\x11" +
+		"\x02\x02\u01AE\u01AF\x05L'\x02\u01AF\u01B0\x07\x12\x02\x02\u01B0\u01B1" +
+		"\x07\x1F\x02\x02\u01B1\u01B2\x05.\x18\x02\u01B2\u01B3\x07 \x02\x02\u01B3" +
+		"\u01B4\x05\n\x06\x02\u01B4\u01B6\x03\x02\x02\x02\u01B5\u01A1\x03\x02\x02" +
+		"\x02\u01B5\u01A7\x03\x02\x02\x02\u01B5\u01AD\x03\x02\x02\x02\u01B6[\x03" +
+		"\x02\x02\x02\u01B7\u01BC\x05^0\x02\u01B8\u01BA\x05.\x18\x02\u01B9\u01B8" +
+		"\x03\x02\x02\x02\u01B9\u01BA\x03\x02\x02\x02\u01BA\u01BC\x03\x02\x02\x02" +
+		"\u01BB\u01B7\x03\x02\x02\x02\u01BB\u01B9\x03\x02\x02\x02\u01BC\u01BD\x03" +
+		"\x02\x02\x02\u01BD\u01BF\x05\n\x06\x02\u01BE\u01C0\x05`1\x02\u01BF\u01BE" +
+		"\x03\x02\x02\x02\u01BF\u01C0\x03\x02\x02\x02\u01C0\u01C1\x03\x02\x02\x02" +
+		"\u01C1\u01C3\x05\n\x06\x02\u01C2\u01C4\x05`1\x02\u01C3\u01C2\x03\x02\x02" +
+		"\x02\u01C3\u01C4\x03\x02\x02\x02\u01C4]\x03\x02\x02\x02\u01C5\u01C6\x05" +
+		"4\x1B\x02\u01C6\u01C7\x05:\x1E\x02\u01C7_\x03\x02\x02\x02\u01C8\u01CD" +
+		"\x05*\x16\x02\u01C9\u01CA\x070\x02\x02\u01CA\u01CC\x05*\x16\x02\u01CB" +
+		"\u01C9\x03\x02\x02\x02\u01CC\u01CF\x03\x02\x02\x02\u01CD\u01CB\x03\x02" +
+		"\x02\x02\u01CD\u01CE\x03\x02\x02\x02\u01CEa\x03\x02\x02\x02\u01CF\u01CD" +
+		"\x03\x02\x02\x02\u01D0\u01D6\t\x10\x02\x02\u01D1\u01D3\x07\x18\x02\x02" +
+		"\u01D2\u01D4\x05.\x18\x02\u01D3\u01D2\x03\x02\x02\x02\u01D3\u01D4\x03" +
+		"\x02\x02\x02\u01D4\u01D6\x03\x02\x02\x02\u01D5\u01D0\x03\x02\x02\x02\u01D5" +
+		"\u01D1\x03\x02\x02\x02\u01D6\u01D7\x03\x02\x02\x02\u01D7\u01D8\x05\n\x06" +
+		"\x02\u01D8c\x03\x02\x02\x02/ekmqw~\x91\x97\x9E\xA4\xA9\xAD\xB8\xC2\xCD" +
+		"\xD7\xE2\xED\xF8\u0103\u010E\u0118\u011F\u0128\u0136\u013F\u014C\u015B" +
+		"\u0169\u016D\u0174\u0178\u017B\u0186\u0190\u0195\u019F\u01B5\u01B9\u01BB" +
+		"\u01BF\u01C3\u01CD\u01D3\u01D5";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!KipperParser.__ATN) {
@@ -5810,15 +5792,6 @@ export class DirectDeclaratorContext extends ParserRuleContext {
 export class ParameterTypeListContext extends ParserRuleContext {
 	public parameterList(): ParameterListContext {
 		return this.getRuleContext(0, ParameterListContext);
-	}
-	public Comma(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.Comma, 0);
-	}
-	public Spread(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.Spread, 0);
-	}
-	public Identifier(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.Identifier, 0);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);

@@ -343,7 +343,7 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -408,7 +408,7 @@ export class ListPrimaryExpression extends ConstantExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -474,7 +474,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -539,7 +539,7 @@ export class BoolPrimaryExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -606,7 +606,7 @@ export class FStringPrimaryExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -690,7 +690,7 @@ export class IdentifierPrimaryExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -780,7 +780,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
@@ -852,7 +852,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
@@ -916,7 +916,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.8.0
 	 */
@@ -991,7 +991,7 @@ export class TangledPrimaryExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1055,7 +1055,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.10.0
 	 */
@@ -1128,7 +1128,7 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1196,7 +1196,7 @@ export class ArraySpecifierExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1287,7 +1287,7 @@ export class FunctionCallPostfixExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1373,7 +1373,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1465,7 +1465,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1549,7 +1549,7 @@ export class CastOrConvertExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1659,7 +1659,7 @@ export class MultiplicativeExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1753,7 +1753,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1874,7 +1874,7 @@ export class RelationalExpression extends ComparativeExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -1966,7 +1966,7 @@ export class EqualityExpression extends ComparativeExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -2058,7 +2058,7 @@ export class LogicalAndExpression extends LogicalExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -2140,7 +2140,7 @@ export class LogicalOrExpression extends LogicalExpression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -2209,7 +2209,7 @@ export class ConditionalExpression extends Expression<
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -2316,7 +2316,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */

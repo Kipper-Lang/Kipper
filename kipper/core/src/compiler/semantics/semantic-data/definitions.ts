@@ -5,7 +5,7 @@
  * @since 0.10.0
  */
 import type { SemanticData } from "../../parser";
-import type { KipperStorageType, KipperType } from "../const";
+import type { KipperStorageType } from "../const";
 import type { Scope } from "../../scope";
 import type { Expression, ParameterDeclaration } from "../language";
 
@@ -42,9 +42,10 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 */
 	isDefined: boolean;
 	/**
-	 * The {@link ParameterDeclaration arguments} for the function.
+	 * The available {@link ParameterDeclaration parameter} for the function invocation.
+	 * @since 0.10.0
 	 */
-	args: Array<ParameterDeclaration>;
+	params: Array<ParameterDeclaration>;
 }
 
 /**
@@ -90,13 +91,13 @@ export interface VariableDeclarationSemantics extends SemanticData {
  */
 export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	/**
-	 * The identifier of the declaration.
+	 * The identifier of the parameter.
 	 * @since 0.5.0
 	 */
 	identifier: string;
 	/**
-	 * The {@link KipperType variable type} of the declaration.
+	 * The {@link KipperType type} of the parameter.
 	 * @since 0.5.0
 	 */
-	type: KipperType;
+	valueType: string;
 }

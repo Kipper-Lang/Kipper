@@ -164,7 +164,7 @@ directDeclarator
     ;
 
 parameterTypeList
-    :   parameterList (',' '...' Identifier)? /* Kipper should allow for a sequence of arguments */
+    :   parameterList /* Args and Kwargs, like in Python will be added later */
     ;
 
 parameterList

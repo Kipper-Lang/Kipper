@@ -164,7 +164,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -249,7 +249,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -316,7 +316,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -382,7 +382,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -452,7 +452,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -520,7 +520,7 @@ export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
