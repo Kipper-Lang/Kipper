@@ -55,7 +55,7 @@ import {
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
-import { getJavaScriptBuiltInIdentifier } from "./tools";
+import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
 import { version } from "./index";
 
@@ -244,7 +244,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link FunctionDeclaration} into the JavaScript language.
 	 */
 	functionDeclaration = async (node: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		// Function signature and body
+		const signature = getJSFunctionSignature(node);
+		const functionBody = await semanticData.functionBody.translateCtxAndChildren();
+
+		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
+		return [
+			[createJSFunctionSignature(signature)],
+			...functionBody,
+		];
 	};
 
 	/**

@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent } from "../../parser";
+import type { compilableNodeParent, SemanticData, TypeData } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -32,9 +32,10 @@ import {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
-	VariableDeclarationTypeSemantics
+	VariableDeclarationTypeSemantics,
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
+import { CompoundStatement, Statement } from "./statements";
 
 /**
  * Every antlr4 definition ctx type
@@ -113,7 +114,10 @@ export abstract class Declaration<
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, ParameterDeclarationTypeSemantics> {
+export class ParameterDeclaration extends Declaration<
+	ParameterDeclarationSemantics,
+	ParameterDeclarationTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -152,7 +156,7 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 
 		this.semanticData = {
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
-			valueType: this.children[0].sourceCode
+			valueType: this.children[0].sourceCode,
 		};
 	}
 
@@ -224,27 +228,30 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		const parseTreeChildren = this.getAntlrRuleChildren();
 
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>parseTreeChildren.find((val) => val instanceof DeclaratorContext);
+		let declaratorCtx = <DeclaratorContext | undefined>(
+			parseTreeChildren.find((val) => val instanceof DeclaratorContext)
+		);
 		let paramListCtx = <ParameterTypeListContext | undefined>(
 			parseTreeChildren.find((val) => val instanceof ParameterTypeListContext)
 		);
 
 		// The return type of the function
+		let body: Statement<SemanticData, TypeData> | undefined;
 		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
 		let params: Array<ParameterDeclaration> = [];
 		for (let child of this.children) {
 			if (child instanceof ParameterDeclaration) {
 				params.push(child);
 			} else {
-				// Once the return type has been reached, stop, since the last child will always be a statement that we can
-				// ignore.
+				// Once the return type has been reached, stop, as the last two items will be the return type and function body
 				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
+				body = <Statement<SemanticData, TypeData>>this.children[this.children.length - 1];
 				break;
 			}
 		}
 
 		// Ensure that the children are fully present and not undefined
-		if (!declaratorCtx || !retTypeSpecifier || !params) {
+		if (!declaratorCtx || !retTypeSpecifier || !params || !body) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
@@ -256,6 +263,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			identifier: identifier,
 			returnType: type,
 			params: paramListCtx ? params : [],
+			functionBody: <CompoundStatement>body // Will always syntactically be a compound statement
 		};
 
 		// Add function definition to the current scope

@@ -4,10 +4,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { SemanticData } from "../../parser";
+import type { NoSemantics, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
 import type { KipperStorageType } from "../const";
 import type { Scope } from "../../scope";
 import type { Expression, ParameterDeclaration } from "../language";
+import { CompoundStatement, Statement } from "../language";
 
 /**
  * Semantics for a {@link Declaration}.
@@ -46,6 +47,11 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	params: Array<ParameterDeclaration>;
+	/**
+	 * The body of the function.
+	 * @since 0.10.0
+	 */
+	functionBody: CompoundStatement;
 }
 
 /**

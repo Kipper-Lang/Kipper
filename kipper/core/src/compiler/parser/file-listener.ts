@@ -1348,7 +1348,6 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 
-
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
