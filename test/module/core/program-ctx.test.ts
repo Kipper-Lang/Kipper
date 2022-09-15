@@ -39,7 +39,7 @@ describe("KipperProgramContext", async () => {
 			// Add a new built-in function
 			let func: BuiltInFunction = {
 				identifier: "test",
-				args: [],
+				params: [],
 				returnType: "void",
 			};
 			programCtx.registerBuiltIns(func);
@@ -64,7 +64,7 @@ describe("KipperProgramContext", async () => {
 			// Register new built-in function
 			let func: BuiltInFunction = {
 				identifier: "test",
-				args: [],
+				params: [],
 				returnType: "void",
 			};
 			programCtx.registerBuiltIns(func);
@@ -105,7 +105,7 @@ describe("KipperProgramContext", async () => {
 			// Register new built-in function
 			let func: BuiltInFunction = {
 				identifier: "test",
-				args: [],
+				params: [],
 				returnType: "void",
 			};
 			programCtx.registerBuiltIns(func);
@@ -122,7 +122,7 @@ describe("KipperProgramContext", async () => {
 			// Register new built-in function
 			let func: BuiltInFunction = {
 				identifier: "test",
-				args: [],
+				params: [],
 				returnType: "void",
 			};
 			programCtx.registerBuiltIns(func);

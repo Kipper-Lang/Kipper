@@ -160,8 +160,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression<any, any>>): void {
-		if (func.args.length != args.length) {
-			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.args.length, args.length));
+		if (func.params.length != args.length) {
+			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
 		}
 	}
 

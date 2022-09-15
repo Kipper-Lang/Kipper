@@ -25,11 +25,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const functionBody = await semanticData.functionBody.translateCtxAndChildren();
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[createTSFunctionSignature(signature), " ", "{"],
-			...functionBody.slice(1, -1),
-			["}"]
-		];
+		return [[createTSFunctionSignature(signature), " ", "{"], ...functionBody.slice(1, -1), ["}"]];
 	};
 
 	/**

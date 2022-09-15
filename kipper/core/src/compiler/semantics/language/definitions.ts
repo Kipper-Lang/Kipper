@@ -263,7 +263,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			identifier: identifier,
 			returnType: type,
 			params: paramListCtx ? params : [],
-			functionBody: <CompoundStatement>body // Will always syntactically be a compound statement
+			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};
 
 		// Add function definition to the current scope

@@ -5,7 +5,9 @@
  * @since 0.8.0
  */
 import {
-	BuiltInFunction, BuiltInFunctionArgument, FunctionDeclaration,
+	BuiltInFunction,
+	BuiltInFunctionArgument,
+	FunctionDeclaration,
 	kipperBoolType,
 	kipperFuncType,
 	kipperListType,
@@ -16,7 +18,7 @@ import {
 	kipperStrType,
 	KipperType,
 	kipperUndefinedType,
-	kipperVoidType
+	kipperVoidType,
 } from "@kipper/core";
 
 /**
@@ -51,10 +53,10 @@ export function getTypeScriptType(kipperType: KipperType): string {
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.
  * @param funcSpec The function spec object containing the metadata of the function.
  * @since 0.10.0
-*/
+ */
 export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string, type: KipperType }>;
+	params: Array<{ identifier: string; type: KipperType }>;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -68,9 +70,9 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 	} else {
 		return {
 			identifier: funcSpec.identifier,
-			params: funcSpec.args.map((arg: BuiltInFunctionArgument) => {
-				return { identifier: arg.identifier, type: arg.type };
-			})
+			params: funcSpec.params.map((arg: BuiltInFunctionArgument) => {
+				return { identifier: arg.identifier, type: arg.valueType };
+			}),
 		};
 	}
 }
@@ -80,9 +82,12 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
  * @param signature The function signature metadata.
  * @since 0.10.0
  */
-export function createTSFunctionSignature(signature: { identifier: string; params: Array<{ identifier: string, type: KipperType }> }): string {
+export function createTSFunctionSignature(signature: {
+	identifier: string;
+	params: Array<{ identifier: string; type: KipperType }>;
+}): string {
 	const { identifier, params } = signature;
-	const argsSignature = `${params.map(p => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;
+	const argsSignature = `${params.map((p) => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;
 
 	return `function ${identifier}(${argsSignature})`;
 }

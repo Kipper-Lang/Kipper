@@ -139,14 +139,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public argumentTypesMatch(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
 		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
 
-		if (semanticData.type !== receivedType) {
+		if (semanticData.valueType !== receivedType) {
 			// 'void' is compatible with 'undefined'
 			let interchangeableTypes = ["void", "undefined"];
-			if (interchangeableTypes.includes(semanticData.type) && interchangeableTypes.includes(receivedType)) {
+			if (interchangeableTypes.includes(semanticData.valueType) && interchangeableTypes.includes(receivedType)) {
 				return;
 			}
 
-			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.type, receivedType));
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.valueType, receivedType));
 		}
 	}
 
@@ -163,7 +163,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
 			const typeData = arg.getTypeSemanticData();
-			this.argumentTypesMatch(func.args[index], typeData.evaluatedType);
+
+			this.setTracebackData({ ctx: arg });
+			this.argumentTypesMatch(func.params[index], typeData.evaluatedType);
 		});
 	}
 

@@ -251,10 +251,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const functionBody = await semanticData.functionBody.translateCtxAndChildren();
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[createJSFunctionSignature(signature)],
-			...functionBody,
-		];
+		return [[createJSFunctionSignature(signature)], ...functionBody];
 	};
 
 	/**
@@ -402,11 +399,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Generate the arguments
 		let args: TranslatedExpression = [];
 		for (const i of semanticData.args) {
-			// TODO! Rework this generation once function arguments are properly supported
 			const arg = await i.translateCtxAndChildren();
-			args = args.concat(arg.concat(" "));
+			args = args.concat(arg.concat(", "));
 		}
-		args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
+		args = args.slice(0, -1); // Removing last whitespace and comma before the closing parenthesis
 
 		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];

@@ -191,12 +191,12 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The args that are accepted inside this function. These are represented using {@link ParameterDeclaration}.
+	 * The parameters that are accepted inside this function. These are represented using {@link ParameterDeclaration}.
 	 *
 	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
 	 * array maps to the first argument inside the function.
 	 */
-	public get args(): Array<ParameterDeclaration> {
+	public get params(): Array<ParameterDeclaration> {
 		return this.semanticData.params;
 	}
 

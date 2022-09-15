@@ -93,8 +93,8 @@ describe("Kipper errors", () => {
 				});
 
 				// Duplicate identifier
-				programCtx.registerBuiltIns({ identifier: "i", args: [], returnType: "void" });
-				programCtx.registerBuiltIns({ identifier: "i", args: [], returnType: "void" });
+				programCtx.registerBuiltIns({ identifier: "i", params: [], returnType: "void" });
+				programCtx.registerBuiltIns({ identifier: "i", params: [], returnType: "void" });
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "InvalidGlobalError", "Expected proper error");
 				assert((<KipperError>e).line !== undefined, "Expected existing 'line' meta field");
@@ -118,7 +118,7 @@ describe("Kipper errors", () => {
 				});
 
 				// Register new global
-				programCtx.registerBuiltIns({ identifier: "i", args: [], returnType: "void" });
+				programCtx.registerBuiltIns({ identifier: "i", params: [], returnType: "void" });
 				await programCtx.compileProgram();
 			} catch (e) {
 				assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");

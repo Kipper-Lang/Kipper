@@ -27,7 +27,7 @@ export function getJSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 	} else {
 		return {
 			identifier: funcSpec.identifier,
-			params: funcSpec.args.map((arg: BuiltInFunctionArgument) => arg.identifier)
+			params: funcSpec.params.map((arg: BuiltInFunctionArgument) => arg.identifier),
 		};
 	}
 }
