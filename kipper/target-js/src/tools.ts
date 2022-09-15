@@ -5,8 +5,7 @@
  * @since 0.10.0
  */
 
-import type { BuiltInFunction, BuiltInFunctionArgument } from "@kipper/core";
-import type { FunctionDeclaration } from "@kipper/core";
+import type { BuiltInFunction, BuiltInFunctionArgument, FunctionDeclaration } from "@kipper/core";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an JavaScript env.

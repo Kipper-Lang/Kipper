@@ -5,7 +5,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInFunctionArgument, TranslatedCodeLine } from "@kipper/core";
+import type { BuiltInFunction, TranslatedCodeLine } from "@kipper/core";
 import { KipperTargetBuiltInGenerator } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature } from "./tools";
 

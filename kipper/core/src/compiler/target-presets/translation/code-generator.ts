@@ -41,9 +41,9 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../semantics";
+import { VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableASTNode } from "../../parser";
-import { VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

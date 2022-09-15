@@ -14,6 +14,7 @@ import type {
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
+	Expression,
 	ExpressionSemantics,
 	ExpressionStatement,
 	ExpressionTypeSemantics,
@@ -46,12 +47,11 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	Expression,
 } from "@kipper/core";
 import {
-	KipperTargetCodeGenerator,
 	CompoundStatement,
 	IfStatement,
+	KipperTargetCodeGenerator,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";

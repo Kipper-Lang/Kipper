@@ -5,9 +5,9 @@
  * @since 0.8.0
  */
 import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";
-import { createTSFunctionSignature, getTSFunctionSignature, getTypeScriptType } from "./tools";
-import { createJSFunctionSignature, getJSFunctionSignature, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { FunctionDeclaration } from "@kipper/core";
+import { createTSFunctionSignature, getTSFunctionSignature, getTypeScriptType } from "./tools";
+import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.

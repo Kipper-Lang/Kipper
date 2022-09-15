@@ -4,11 +4,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { NoSemantics, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
+import type { SemanticData } from "../../parser";
 import type { KipperStorageType } from "../const";
 import type { Scope } from "../../scope";
 import type { Expression, ParameterDeclaration } from "../language";
-import { CompoundStatement, Statement } from "../language";
+import { CompoundStatement } from "../language";
 
 /**
  * Semantics for a {@link Declaration}.

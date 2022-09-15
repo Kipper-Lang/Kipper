@@ -55,7 +55,7 @@ import type {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 } from "./index";
-import { IfStatementContext, VoidOrNullOrUndefinedPrimaryExpressionContext, SwitchStatementContext } from "./index";
+import { IfStatementContext, SwitchStatementContext, VoidOrNullOrUndefinedPrimaryExpressionContext } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
