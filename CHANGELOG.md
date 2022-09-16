@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
   - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
+  - `KipperSemanticChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -81,6 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+- Default error identifier is now just `Error` instead of `KipperError`.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -100,7 +102,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   `str`. This also means that the single-quote character `'` can from now also be used for string literals and
   f-strings with the same behaviour as the regular double-quoted character `"`.
 - `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
-	respectively. 
+  respectively.
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 
 ## [0.9.2] - 2022-07-23
