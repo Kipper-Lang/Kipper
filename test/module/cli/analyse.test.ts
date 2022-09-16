@@ -28,7 +28,7 @@ describe("analyse", () => {
 				expect(ctx.stdout).to.contain("Parsing");
 				expect(ctx.stderr).to.contain("Traceback:");
 				expect(ctx.stderr).to.contain(`File '${invalidFilePath}'`);
-				expect(ctx.stderr).to.contain("KipperSyntaxError: Missing ';' at 'is'");
+				expect(ctx.stderr).to.contain("SyntaxError: Missing ';' at 'is'");
 			});
 	});
 

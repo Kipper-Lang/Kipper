@@ -61,7 +61,7 @@ describe("Parse-Tokens", () => {
 
 				let parenToken = new RootASTNode(programCtx, programCtx.antlrParseTree);
 				let node = new ExampleNode(programCtx.antlrParseTree, parenToken);
-				assert(node.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
+				assert(node.sourceCode === fileContent, "Source code and fileContent must match!");
 				assert(node.programCtx === programCtx, "Expected 'programCtx' to match");
 				assert(node.parent === parenToken, "Expected 'parent' to match");
 				assert(node.parent.programCtx === programCtx, "Expected 'parent' to match");
