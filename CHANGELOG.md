@@ -99,6 +99,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `KipperCharType` (`char`) and its grammar implementation, meaning all string types from now on will only be of type
   `str`. This also means that the single-quote character `'` can from now also be used for string literals and
   f-strings with the same behaviour as the regular double-quoted character `"`.
+- `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
+	respectively. 
+- `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 
 ## [0.9.2] - 2022-07-23
 

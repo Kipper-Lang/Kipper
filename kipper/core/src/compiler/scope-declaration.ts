@@ -9,7 +9,6 @@ import type {
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,
-	KipperReturnType,
 	KipperStorageType,
 	KipperType,
 	ParameterDeclaration,
@@ -186,7 +185,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): KipperReturnType {
+	public get returnType(): KipperType {
 		return this.typeData.returnType;
 	}
 

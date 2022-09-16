@@ -193,18 +193,6 @@ export type KipperType = KipperMetaType | KipperFuncType | KipperPrimitiveType |
 export const kipperTypes: Array<KipperType> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
 
 /**
- * Types that may be returned by a function.
- * @since 0.6.0
- */
-export type KipperReturnType = KipperPrimitiveType | KipperListType<any>;
-
-/**
- * Types that may be returned by a function.
- * @since 0.6.0
- */
-export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"];
-
-/**
  * List of all supported variable type conversions that can be performed in a Kipper program.
  *
  * For each translation, there will have to be a corresponding {@link KipperTargetBuiltInGenerator generator function},

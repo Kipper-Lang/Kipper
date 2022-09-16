@@ -18,7 +18,6 @@ import {
 	KipperArithmeticOperator,
 	type KipperFunction,
 	kipperPlusOperator,
-	kipperReturnTypes,
 	kipperStrType,
 	kipperSupportedConversions,
 	type KipperType,
@@ -60,18 +59,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public typeExists(type: string): void {
 		if (kipperTypes.find((val) => val === type) === undefined) {
 			throw this.assertError(new UnknownTypeError(type));
-		}
-	}
-
-	/**
-	 * Asserts that the argument type is valid.
-	 * @param type
-	 * @since 0.7.0
-	 */
-	public validReturnType(type: string): void {
-		// If the type is not in the array of valid return types, throw an error
-		if (!kipperReturnTypes.find((t) => t === type)) {
-			throw this.assertError(new FunctionReturnTypeError(type));
 		}
 	}
 

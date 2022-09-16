@@ -19,7 +19,7 @@ import {
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
-import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { UnableToDetermineSemanticDataError } from "../../../errors";
 import {
@@ -280,11 +280,10 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Ensure the return type is valid
 		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
-		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
 
 		// Set the return type data
 		this.typeSemantics = {
-			returnType: <KipperReturnType>semanticData.returnType,
+			returnType: <KipperType>semanticData.returnType,
 		};
 	}
 

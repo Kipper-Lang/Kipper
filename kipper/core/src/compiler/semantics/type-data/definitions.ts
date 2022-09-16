@@ -5,7 +5,7 @@
  * @since 0.10.0
  */
 import type { TypeData } from "../../parser";
-import type { KipperReturnType, KipperType } from "../const";
+import type { KipperType } from "../const";
 
 /**
  * Type data for a {@link Declaration}.
@@ -22,7 +22,7 @@ export interface FunctionDeclarationTypeSemantics extends TypeData {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.10.0
 	 */
-	returnType: KipperReturnType;
+	returnType: KipperType;
 }
 
 /**
