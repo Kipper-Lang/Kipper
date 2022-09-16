@@ -64,7 +64,7 @@ export class KipperError extends Error {
 
 	constructor(msg: string, token?: ParserRuleContext) {
 		super(msg);
-		this.name = this.constructor.name;
+		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
 			location: { line: undefined, col: undefined },
 			filePath: undefined,
@@ -188,7 +188,28 @@ export class KipperWarning extends KipperError {
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
 		super(`Internal error: ${msg} - Report this bug to the developer using the traceback!`);
-		this.name = this.constructor.name;
+		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
+	}
+}
+
+/**
+ * Error that is thrown whenever an {@link ParserASTNode} can not determine its own metadata and fails to process
+ * itself during {@link CompilableASTNode.semanticAnalysis semantic analysis}.
+ * @since 0.6.0
+ */
+export class UnableToDetermineSemanticDataError extends KipperInternalError {
+	constructor() {
+		super(`Failed to determine metadata for one or more AST nodes.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever the {@link CompilableASTNode.semanticData} field of a token is undefined.
+ * @since 0.6.0
+ */
+export class UndefinedSemanticsError extends KipperInternalError {
+	constructor() {
+		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
 	}
 }
 
@@ -240,6 +261,7 @@ export class KipperSyntaxError<Token> extends KipperError {
 			| undefined,
 	) {
 		super(msg);
+		this.name = "SyntaxError";
 
 		this._recognizer = recognizer;
 		this._offendingSymbol = offendingSymbol;
@@ -516,22 +538,12 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
 }
 
 /**
- * Error that is thrown whenever an {@link ParserASTNode} can not determine its own metadata and fails to process
- * itself during {@link CompilableASTNode.semanticAnalysis semantic analysis}.
- * @since 0.6.0
+ * Error that is thrown when a return statement is used outside a function.
+ * @since 0.10.0
  */
-export class UnableToDetermineSemanticDataError extends KipperInternalError {
+export class ReturnStatementError extends KipperError {
 	constructor() {
-		super(`Failed to determine metadata for one or more AST nodes.`);
-	}
-}
-
-/**
- * Error that is thrown whenever the {@link CompilableASTNode.semanticData} field of a token is undefined.
- * @since 0.6.0
- */
-export class UndefinedSemanticsError extends KipperInternalError {
-	constructor() {
-		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
+		super("The return statement can only be used in a function.");
+		this.name = "SyntaxError"; // Counts as a syntax error, since it's logically and syntactically invalid
 	}
 }
