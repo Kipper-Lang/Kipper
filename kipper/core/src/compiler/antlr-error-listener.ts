@@ -40,7 +40,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 		let stop = symbol.stopIndex;
 
 		// Get the source line
-		return symbol.inputStream?.getText(new Interval(start, stop)).trim();
+		return symbol.inputStream?.getText(new Interval(start, stop));
 	}
 
 	/**

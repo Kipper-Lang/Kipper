@@ -119,7 +119,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public get sourceCode(): string {
-		return getParseRuleSource(this.antlrRuleCtx).trim();
+		return getParseRuleSource(this.antlrRuleCtx);
 	}
 
 	/**

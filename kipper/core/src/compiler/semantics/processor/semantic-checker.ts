@@ -6,7 +6,14 @@
  * @since 0.7.0
  */
 
-import { type CompoundStatement, type Expression, IdentifierPrimaryExpression, VariableDeclaration } from "../language";
+import {
+	type CompoundStatement,
+	type Expression,
+	FunctionDeclaration,
+	IdentifierPrimaryExpression,
+	JumpStatement,
+	VariableDeclaration,
+} from "../language";
 import {
 	BuiltInOverwriteError,
 	IdentifierAlreadyUsedByFunctionError,
@@ -15,12 +22,14 @@ import {
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
+	ReturnStatementError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
 	UnknownReferenceError,
 } from "../../../errors";
-import { type KipperFunction, KipperRef } from "../const";
+import type { KipperFunction, KipperRef } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import type { compilableNodeParent } from "../../parser";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 
@@ -119,6 +128,23 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
 			);
+		}
+	}
+
+	/**
+	 * Asserts that the passed {@link JumpStatement return statement} is used in a valid context.
+	 * @since 0.10.0
+	 */
+	public validReturnStatement(retStatement: JumpStatement): void {
+		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
+		// declaration. This is to ensure a return statement is always used inside a function.
+		let currentParent: compilableNodeParent | undefined = retStatement.parent;
+		while (!(currentParent instanceof FunctionDeclaration) && currentParent) {
+			currentParent = currentParent.parent;
+		}
+
+		if (currentParent === undefined) {
+			throw this.assertError(new ReturnStatementError());
 		}
 	}
 

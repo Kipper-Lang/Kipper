@@ -6,6 +6,9 @@
  */
 import type { SemanticData } from "../../parser";
 import type { Expression, IfStatement, Statement } from "../language";
+import { JmpStatementType } from "../const";
+import { ExpressionSemantics } from "./expressions";
+import { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Semantics for AST Node {@link IfStatement}.
@@ -30,4 +33,21 @@ export interface IfStatementSemantics extends SemanticData {
 	 * @since 0.9.0
 	 */
 	alternativeBranch?: IfStatement | Statement<any, any>;
+}
+
+/**
+ * Semantics for AST Node {@link JumpStatement}.
+ * @since 0.10.0
+ */
+export interface JumpStatementSemantics extends SemanticData {
+	/**
+	 * The type of the {@link JumpStatement jump statement}.
+	 * @since 0.10.0
+	 */
+	jmpType: JmpStatementType;
+	/**
+	 * The value of the {@link JumpStatement jump statement}, which is only present if the {@link jmpType} is "return".
+	 * @since 0.10.0
+	 */
+	jmpValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined;
 }

@@ -25,7 +25,8 @@ import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { IfStatementSemantics } from "../semantic-data";
+import { ExpressionSemantics, IfStatementSemantics, JumpStatementSemantics } from "../semantic-data";
+import { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Every antlr4 statement ctx type
@@ -479,7 +480,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
+export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -514,9 +515,28 @@ export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Jump statements have not been implemented yet."));
+		const jmpType = this.sourceCode.startsWith("return")
+			? "return"
+			: this.sourceCode.startsWith("break")
+			? "break"
+			: "continue";
+		const jmpValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
+
+		this.semanticData = {
+			jmpType: jmpType,
+			jmpValue: jmpValue,
+		};
+
+		// Check whether the jump statement is in the proper environment
+		if (jmpType === "return") {
+			this.programCtx.semanticCheck(this).validReturnStatement(this);
+		} else {
+			throw this.programCtx
+				.semanticCheck(this)
+				.notImplementedError(
+					new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
+				);
+		}
 	}
 
 	/**

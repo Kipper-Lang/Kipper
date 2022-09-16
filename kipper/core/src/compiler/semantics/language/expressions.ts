@@ -1441,14 +1441,12 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the operator
-		const unaryOperator = <KipperNegateOperator | KipperSignOperator | undefined>children
-			.find((token) => {
-				return (
-					token instanceof UnaryOperatorContext &&
-					kipperUnaryModifierOperators.find((op) => op === token.text) !== undefined
-				);
-			})
-			?.text.trim();
+		const unaryOperator = <KipperNegateOperator | KipperSignOperator | undefined>children.find((token) => {
+			return (
+				token instanceof UnaryOperatorContext &&
+				kipperUnaryModifierOperators.find((op) => op === token.text) !== undefined
+			);
+		})?.text;
 
 		// Get the expression of this unary expression
 		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
@@ -1634,13 +1632,11 @@ export class MultiplicativeExpression extends Expression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the operator
-		const operator = <KipperMultiplicativeOperator | undefined>children
-			.find((token) => {
-				return (
-					token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
-				);
-			})
-			?.text.trim();
+		const operator = <KipperMultiplicativeOperator | undefined>children.find((token) => {
+			return (
+				token instanceof TerminalNode && kipperMultiplicativeOperators.find((op) => op === token.text) !== undefined
+			);
+		})?.text;
 
 		// Get the expressions of this multiplicative expression
 		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
@@ -1730,11 +1726,9 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 		// Get the raw antlr4 parse-tree children, which should store the operator
 		const children = this.getAntlrRuleChildren();
 
-		const operator = <KipperAdditiveOperator | undefined>children
-			.find((token) => {
-				return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
-			})
-			?.text.trim();
+		const operator = <KipperAdditiveOperator | undefined>children.find((token) => {
+			return token instanceof TerminalNode && kipperAdditiveOperators.find((op) => op === token.text) !== undefined;
+		})?.text;
 
 		// Get the expressions of this additive expression
 		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
@@ -1855,11 +1849,9 @@ export class RelationalExpression extends ComparativeExpression<
 		// Get the expressions of this relational expression
 		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
 		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
-		const operator = <KipperRelationalOperator | undefined>children
-			.find((token) => {
-				return token instanceof TerminalNode && kipperRelationalOperators.find((op) => op === token.text) !== undefined;
-			})
-			?.text.trim();
+		const operator = <KipperRelationalOperator | undefined>children.find((token) => {
+			return token instanceof TerminalNode && kipperRelationalOperators.find((op) => op === token.text) !== undefined;
+		})?.text;
 
 		// Ensure that the children are fully present and not undefined
 		if (!leftOp || !rightOp || !operator) {
@@ -1947,11 +1939,9 @@ export class EqualityExpression extends ComparativeExpression<
 		// Get the expressions of this relational expression
 		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
 		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
-		const operator = <KipperEqualityOperator | undefined>children
-			.find((token) => {
-				return token instanceof TerminalNode && kipperEqualityOperators.find((op) => op === token.text) !== undefined;
-			})
-			?.text.trim();
+		const operator = <KipperEqualityOperator | undefined>children.find((token) => {
+			return token instanceof TerminalNode && kipperEqualityOperators.find((op) => op === token.text) !== undefined;
+		})?.text;
 
 		// Ensure that the children are fully present and not undefined
 		if (!leftOp || !rightOp || !operator) {

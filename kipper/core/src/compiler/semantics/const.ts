@@ -524,3 +524,9 @@ export type KipperVariable = ScopeVariableDeclaration;
  * @since 0.6.0
  */
 export type KipperRef = KipperFunction | KipperVariable;
+
+/**
+ * Represents all possible jump statements inside Kipper.
+ * @since 0.10.0
+ */
+export type JmpStatementType = "return" | "continue" | "break";
