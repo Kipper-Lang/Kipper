@@ -401,16 +401,6 @@ export class TypeError extends KipperError {
 }
 
 /**
- * Error that is thrown whenever a return type is used that may not be returned.
- * @since 0.6.0
- */
-export class FunctionReturnTypeError extends TypeError {
-	constructor(type: string) {
-		super(`Type '${type}' can not be returned.`);
-	}
-}
-
-/**
  * Error that is thrown whenever an invalid arithmetic operation is used, where the types are conflicting or can not
  * interact with one another.
  * @since 0.6.0

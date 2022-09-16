@@ -27,7 +27,6 @@ import {
 	ArgumentTypeError,
 	ArithmeticOperationTypeError,
 	AssignmentTypeError,
-	FunctionReturnTypeError,
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionTypeError,

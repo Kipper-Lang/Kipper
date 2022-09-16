@@ -104,6 +104,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
   respectively.
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
+- `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
 
 ## [0.9.2] - 2022-07-23
 
