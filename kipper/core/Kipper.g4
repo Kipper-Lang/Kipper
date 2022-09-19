@@ -185,6 +185,7 @@ statement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
+    | 	returnStatement
     ;
 
 compoundStatement
@@ -232,11 +233,12 @@ forExpression
     ;
 
 jumpStatement
-    :   (('continue' | 'break')
-    |   'return' expression?
-    )
-    endOfLine
+    :   ('continue' | 'break') endOfLine
     ;
+
+returnStatement
+		: 	'return' expression? endOfLine
+		;
 
 // Lexer Rules (tokens / token rules)
 

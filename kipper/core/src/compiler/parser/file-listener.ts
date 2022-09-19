@@ -55,7 +55,12 @@ import type {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 } from "./index";
-import { IfStatementContext, SwitchStatementContext, VoidOrNullOrUndefinedPrimaryExpressionContext } from "./index";
+import {
+	IfStatementContext,
+	ReturnStatementContext,
+	SwitchStatementContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
+} from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
@@ -71,6 +76,7 @@ import {
 } from "../semantics";
 import { RootASTNode } from "./root-ast-node";
 import { CompilableASTNode } from "./compilable-ast-node";
+import { KipperInternalError } from "../../errors";
 
 const passOnHandler = undefined;
 
@@ -158,7 +164,7 @@ export class KipperFileListener implements KipperListener {
 	 */
 	private handleIncomingExpressionCtx(ctx: antlrExpressionCtxType) {
 		if (this.getCurrentNode instanceof RootASTNode) {
-			throw new Error(
+			throw new KipperInternalError(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
 					" definition.",
 			);
@@ -1311,6 +1317,22 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitJumpStatement(ctx: JumpStatementContext): void {
+		this.handleExitingStatementOrDefinitionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public enterReturnStatement(ctx: ReturnStatementContext): void {
+		this.handleIncomingStatementCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public exitReturnStatement(ctx: ReturnStatementContext): void {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 

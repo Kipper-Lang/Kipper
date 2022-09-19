@@ -11,7 +11,7 @@ import {
 	type Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
-	JumpStatement,
+	ReturnStatement,
 	VariableDeclaration,
 } from "../language";
 import {
@@ -132,10 +132,10 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Asserts that the passed {@link JumpStatement return statement} is used in a valid context.
+	 * Asserts that the passed {@link ReturnStatement} is used in a valid context.
 	 * @since 0.10.0
 	 */
-	public validReturnStatement(retStatement: JumpStatement): void {
+	public validReturnStatement(retStatement: ReturnStatement): void {
 		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
 		// declaration. This is to ensure a return statement is always used inside a function.
 		let currentParent: compilableNodeParent | undefined = retStatement.parent;

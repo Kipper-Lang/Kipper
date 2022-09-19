@@ -40,8 +40,14 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../semantics";
-import { KipperSemanticErrorHandler, VoidOrNullOrUndefinedPrimaryExpression } from "../semantics";
+import {
+	KipperSemanticErrorHandler,
+	ReturnStatement,
+	TranslatedCodeLine,
+	VoidOrNullOrUndefinedPrimaryExpression,
+} from "../semantics";
 import type { CompilableASTNode } from "../parser";
+import { TargetASTNodeCodeGenerator } from "./translation";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.
@@ -86,6 +92,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
 	 */
 	public abstract jumpStatement: TargetASTNodeSemanticAnalyser<JumpStatement>;
+
+	/**
+	 * Translates a {@link JumpStatement} into a specific language.
+	 */
+	public abstract returnStatement: TargetASTNodeSemanticAnalyser<ReturnStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ParameterDeclaration} instances.

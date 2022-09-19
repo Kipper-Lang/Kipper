@@ -5,6 +5,17 @@
  * @since 0.10.0
  */
 
-// No type data required for currently implemented statements.
-// This will likely change in the future though.
-export {};
+import { TypeData } from "../../parser";
+import { KipperType } from "../const";
+
+/**
+ * Type Semantics for a {@link ReturnStatement}.
+ * @since 0.10.0
+ */
+export interface ReturnStatementTypeSemantics extends TypeData {
+	/**
+	 * The type of value returned by this return statement.
+	 * @since 0.10.0
+	 */
+	returnType: KipperType | undefined;
+}

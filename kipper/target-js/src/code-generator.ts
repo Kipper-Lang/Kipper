@@ -52,6 +52,7 @@ import {
 	CompoundStatement,
 	IfStatement,
 	KipperTargetCodeGenerator,
+	ReturnStatement,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
@@ -231,6 +232,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	jumpStatement = async (node: JumpStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
+	};
+
+	/**
+	 * Translates a {@link ReturnStatement} into the JavaScript language.
+	 */
+	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
+		return []; // TODO! Implement return statement
 	};
 
 	/**

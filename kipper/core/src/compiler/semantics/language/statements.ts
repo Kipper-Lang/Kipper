@@ -12,7 +12,7 @@
  * @since 0.1.0
  */
 import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
-import { IfStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import { IfStatementContext, ReturnStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -25,8 +25,13 @@ import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { ExpressionSemantics, IfStatementSemantics, JumpStatementSemantics } from "../semantic-data";
-import { ExpressionTypeSemantics } from "../type-data";
+import {
+	ExpressionSemantics,
+	IfStatementSemantics,
+	JumpStatementSemantics,
+	ReturnStatementSemantics,
+} from "../semantic-data";
+import { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
 
 /**
  * Every antlr4 statement ctx type
@@ -37,7 +42,8 @@ export type antlrStatementCtxType =
 	| SwitchStatementContext
 	| ExpressionStatementContext
 	| IterationStatementContext
-	| JumpStatementContext;
+	| JumpStatementContext
+	| ReturnStatementContext;
 
 /**
  * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
@@ -61,6 +67,8 @@ export class StatementASTNodeFactory {
 			return new ExpressionStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IterationStatementContext) {
 			return new IterationStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ReturnStatementContext) {
+			return new ReturnStatement(antlrRuleCtx, parent);
 		} else {
 			// Can only be {@link JumpStatementContext}
 			return new JumpStatement(antlrRuleCtx, parent);
@@ -515,28 +523,17 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const jmpType = this.sourceCode.startsWith("return")
-			? "return"
-			: this.sourceCode.startsWith("break")
-			? "break"
-			: "continue";
-		const jmpValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
+		const jmpType = this.sourceCode.startsWith("break") ? "break" : "continue";
 
 		this.semanticData = {
 			jmpType: jmpType,
-			jmpValue: jmpValue,
 		};
 
-		// Check whether the jump statement is in the proper environment
-		if (jmpType === "return") {
-			this.programCtx.semanticCheck(this).validReturnStatement(this);
-		} else {
-			throw this.programCtx
-				.semanticCheck(this)
-				.notImplementedError(
-					new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
-				);
-		}
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
+			);
 	}
 
 	/**
@@ -545,7 +542,7 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		this.typeSemantics = {};
 	}
 
 	/**
@@ -561,4 +558,85 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.jumpStatement;
+}
+
+/**
+ * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
+ */
+export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnStatementTypeSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: ReturnStatementContext;
+
+	protected readonly _children: Array<Expression<any, any>>;
+
+	constructor(antlrRuleCtx: ReturnStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Expression<any, any>> {
+		return this._children;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this statement.
+	 */
+	public override get antlrRuleCtx(): ReturnStatementContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics>>this.children[0];
+
+		// Ensure a return value exists
+		if (!returnValue) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		this.programCtx.semanticCheck(this).validReturnStatement(this);
+
+		this.semanticData = {
+			returnValue: returnValue,
+		};
+	}
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		this.typeSemantics = {
+			returnType: semanticData.returnValue.getTypeSemanticData().type,
+		};
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ReturnStatement> = this.semanticAnalyser.returnStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.returnStatement;
 }

@@ -8,7 +8,7 @@ import type { TypeData } from "../../parser";
 import type { KipperType } from "../const";
 
 /**
- * Type data for a {@link Declaration}.
+ * Type Semantics for a {@link Declaration}.
  * @since 0.10.0
  */
 export interface DeclarationTypeData extends TypeData {}

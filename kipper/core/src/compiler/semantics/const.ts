@@ -529,4 +529,4 @@ export type KipperRef = KipperFunction | KipperVariable;
  * Represents all possible jump statements inside Kipper.
  * @since 0.10.0
  */
-export type JmpStatementType = "return" | "continue" | "break";
+export type JmpStatementType = "continue" | "break";

@@ -45,9 +45,16 @@ export interface JumpStatementSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	jmpType: JmpStatementType;
+}
+
+/**
+ * Semantics for AST Node {@link ReturnStatement}.
+ * @since 0.10.0
+ */
+export interface ReturnStatementSemantics extends SemanticData {
 	/**
 	 * The value of the {@link JumpStatement jump statement}, which is only present if the {@link jmpType} is "return".
 	 * @since 0.10.0
 	 */
-	jmpValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined;
+	returnValue: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 }
