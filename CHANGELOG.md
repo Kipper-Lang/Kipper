@@ -30,8 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
-  - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore 
-		included in the `JumpStatement` class.
+  - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
+    included in the `JumpStatement` class.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
