@@ -255,5 +255,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param returnStatement The return statement to check.
 	 * @since 0.10.0
 	 */
-	public validReturnStatement(returnStatement: ReturnStatement): void {}
+	public validReturnStatement(returnStatement: ReturnStatement): void {
+		const returnValueType = returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType;
+		const functionSemanticData = returnStatement.getSemanticData().function.getSemanticData();
+
+		if (returnValueType && !this.checkMatchingTypes(returnValueType, <KipperType>functionSemanticData.returnType)) {
+			throw this.assertError(
+				new TypeError(`Type '${returnValueType}' is not assignable to type '${functionSemanticData.returnType}'.`),
+			);
+		}
+	}
 }
