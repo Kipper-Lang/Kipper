@@ -40,6 +40,7 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -52,7 +53,6 @@ import {
 	CompoundStatement,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	ReturnStatement,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
@@ -238,7 +238,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ReturnStatement} into the JavaScript language.
 	 */
 	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
-		return []; // TODO! Implement return statement
+		const semanticData = node.getSemanticData();
+		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+
+		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};
 
 	/**

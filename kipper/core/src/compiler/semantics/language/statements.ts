@@ -601,11 +601,6 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	public async primarySemanticAnalysis(): Promise<void> {
 		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
 
-		// Ensure a return value exists
-		if (!returnValue) {
-			throw new UnableToDetermineSemanticDataError();
-		}
-
 		// Getting the function of the return statement
 		const func = this.programCtx.semanticCheck(this).getValidFunctionOfReturn(this);
 
