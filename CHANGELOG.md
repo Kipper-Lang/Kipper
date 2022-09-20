@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
   - `KipperSemanticChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -96,6 +97,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `UndefinedIdentifierError` to `UndefinedReferenceError`.
   - `UnknownIdentifierError` to `UnknownReferenceError`.
   - `FunctionDeclarationSemantics.args` to `params`.
+  - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
 
 ### Removed
 
