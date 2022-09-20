@@ -599,17 +599,19 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics>>this.children[0];
+		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
 
 		// Ensure a return value exists
 		if (!returnValue) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		this.programCtx.semanticCheck(this).validReturnStatement(this);
+		// Getting the function of the return statement
+		const func = this.programCtx.semanticCheck(this).getValidFunctionOfReturn(this);
 
 		this.semanticData = {
 			returnValue: returnValue,
+			function: func,
 		};
 	}
 
@@ -621,8 +623,11 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		// Ensure that the types of the return match the function's return.
+		this.programCtx.typeCheck(this).validReturnStatement(this);
+
 		this.typeSemantics = {
-			returnType: semanticData.returnValue.getTypeSemanticData().type,
+			returnType: semanticData.returnValue?.getTypeSemanticData().type ?? "void",
 		};
 	}
 

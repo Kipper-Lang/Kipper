@@ -12,6 +12,7 @@ import {
 	Expression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
 	UnaryExpression,
 } from "../language";
 import {
@@ -37,7 +38,7 @@ import {
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import { ExpressionSemantics, UnaryExpressionSemantics } from "../semantic-data";
+import { ExpressionSemantics, ParameterDeclarationSemantics, UnaryExpressionSemantics } from "../semantic-data";
 import { ExpressionTypeSemantics } from "../type-data";
 
 /**
@@ -62,6 +63,25 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
+	 * Checks whether the passed types are matching.
+	 * @param type1 The first type that is given.
+	 * @param type2 The second type that is given.
+	 * @returns True if the types are matching, otherwise false.
+	 */
+	public checkMatchingTypes(type1: KipperType, type2: KipperType): boolean {
+		if (type1 !== type2) {
+			// 'void' is compatible with 'undefined'
+			let interchangeableTypes = ["void", "undefined"];
+			if (interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2)) {
+				return true;
+			}
+
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Asserts that the passed expression is valid and the assigned value is compatible with the identifier.
 	 * @param assignmentExp The assignment expression to check.
 	 * @since 0.7.0
@@ -72,7 +92,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
 		// Ensure that the types are matching
-		if (rightExpTypeData.evaluatedType !== leftExpTypeData.evaluatedType) {
+		if (!this.checkMatchingTypes(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType)) {
 			throw this.assertError(new AssignmentTypeError(leftExpTypeData.evaluatedType, rightExpTypeData.evaluatedType));
 		}
 
@@ -103,36 +123,32 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const rightExpType = value.getTypeSemanticData().evaluatedType;
 
 		// Ensure the value of the definition match the definition type
-		if (leftExpType !== rightExpType) {
-			// 'void' is compatible with 'undefined'
-			let interchangeableTypes = ["void", "undefined"];
-			if (interchangeableTypes.includes(leftExpType) && interchangeableTypes.includes(rightExpType)) {
-				return;
-			}
-
+		if (!this.checkMatchingTypes(leftExpType, rightExpType)) {
 			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
 		}
 	}
 
 	/**
-	 * Checks whether the argument type matches the type of the argument value passed.
+	 * Asserts that the argument type matches the type of the argument value passed.
 	 * @param arg The parameter that the value was passed to.
 	 * @param receivedType The type that was received.
 	 * @example
 	 * call print("x"); // <-- Parameter type 'str' must match type of argument "x"
 	 * @since 0.7.0
 	 */
-	public argumentTypesMatch(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
-		const semanticData = arg instanceof ParameterDeclaration ? arg.getSemanticData() : arg;
+	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
+		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
+		let valueType: KipperType;
+		if (arg instanceof ParameterDeclaration) {
+			semanticData = arg.getSemanticData();
+			valueType = arg.getTypeSemanticData().valueType;
+		} else {
+			semanticData = arg;
+			valueType = arg.valueType;
+		}
 
-		if (semanticData.valueType !== receivedType) {
-			// 'void' is compatible with 'undefined'
-			let interchangeableTypes = ["void", "undefined"];
-			if (interchangeableTypes.includes(semanticData.valueType) && interchangeableTypes.includes(receivedType)) {
-				return;
-			}
-
-			throw this.assertError(new ArgumentTypeError(semanticData.identifier, semanticData.valueType, receivedType));
+		if (!this.checkMatchingTypes(valueType, receivedType)) {
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, valueType, receivedType));
 		}
 	}
 
@@ -151,7 +167,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			const typeData = arg.getTypeSemanticData();
 
 			this.setTracebackData({ ctx: arg });
-			this.argumentTypesMatch(func.params[index], typeData.evaluatedType);
+			this.validArgumentValue(func.params[index], typeData.evaluatedType);
 		});
 	}
 
@@ -225,14 +241,21 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validConversion(operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>, type: KipperType): void {
 		const originalType: KipperType = operand.getTypeSemanticData().evaluatedType;
-
 		const viableConversion = (() => {
 			// Check whether a supported pair of types exist.
 			return kipperSupportedConversions.find((types) => types[0] === originalType && types[1] === type) !== undefined;
 		})();
+
 		// In case that the type are not the same and no conversion is possible, throw an error!
 		if (!(originalType === type) && !viableConversion) {
 			throw this.assertError(new InvalidConversionTypeError(originalType, type));
 		}
 	}
+
+	/**
+	 * Asserts that the passed return statement is valid.
+	 * @param returnStatement The return statement to check.
+	 * @since 0.10.0
+	 */
+	public validReturnStatement(returnStatement: ReturnStatement): void {}
 }

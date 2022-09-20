@@ -184,10 +184,6 @@ export class ParameterDeclaration extends Declaration<
 /**
  * Function definition class, which represents the definition of a function in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
- *
- * Functions will always be global and unlike {@link VariableDeclaration variables} therefore have no scope.
- *
- * @todo Implement support for arguments using {@link ParameterDeclaration}.
  * @since 0.1.2
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics, FunctionDeclarationTypeSemantics> {
