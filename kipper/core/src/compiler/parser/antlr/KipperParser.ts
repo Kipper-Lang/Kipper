@@ -3,14 +3,10 @@
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -346,6 +342,7 @@ export class KipperParser extends Parser {
 	public get vocabulary(): Vocabulary {
 		return KipperParser.VOCABULARY;
 	}
+
 	// tslint:enable:no-trailing-whitespace
 
 	// @Override
@@ -371,6 +368,7 @@ export class KipperParser extends Parser {
 		super(input);
 		this._interp = new ParserATNSimulator(KipperParser._ATN, this);
 	}
+
 	// @RuleVersion(0)
 	public compilationUnit(): CompilationUnitContext {
 		let _localctx: CompilationUnitContext = new CompilationUnitContext(this._ctx, this.state);
@@ -448,6 +446,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public translationUnit(): TranslationUnitContext {
 		let _localctx: TranslationUnitContext = new TranslationUnitContext(this._ctx, this.state);
@@ -540,6 +539,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public externalItem(): ExternalItemContext {
 		let _localctx: ExternalItemContext = new ExternalItemContext(this._ctx, this.state);
@@ -611,6 +611,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public functionDeclaration(): FunctionDeclarationContext {
 		let _localctx: FunctionDeclarationContext = new FunctionDeclarationContext(this._ctx, this.state);
@@ -673,6 +674,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public endOfLine(): EndOfLineContext {
 		let _localctx: EndOfLineContext = new EndOfLineContext(this._ctx, this.state);
@@ -696,6 +698,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public primaryExpression(): PrimaryExpressionContext {
 		let _localctx: PrimaryExpressionContext = new PrimaryExpressionContext(this._ctx, this.state);
@@ -871,6 +874,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public postfixExpression(): PostfixExpressionContext {
 		let _localctx: PostfixExpressionContext = new PostfixExpressionContext(this._ctx, this.state);
@@ -1003,6 +1007,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public arraySpecifier(): ArraySpecifierContext {
 		let _localctx: ArraySpecifierContext = new ArraySpecifierContext(this._ctx, this.state);
@@ -1030,6 +1035,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public argumentExpressionList(): ArgumentExpressionListContext {
 		let _localctx: ArgumentExpressionListContext = new ArgumentExpressionListContext(this._ctx, this.state);
@@ -1070,6 +1076,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public unaryExpression(): UnaryExpressionContext {
 		let _localctx: UnaryExpressionContext = new UnaryExpressionContext(this._ctx, this.state);
@@ -1139,6 +1146,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public incrementOrDecrementOperator(): IncrementOrDecrementOperatorContext {
 		let _localctx: IncrementOrDecrementOperatorContext = new IncrementOrDecrementOperatorContext(this._ctx, this.state);
@@ -1173,6 +1181,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public unaryOperator(): UnaryOperatorContext {
 		let _localctx: UnaryOperatorContext = new UnaryOperatorContext(this._ctx, this.state);
@@ -1214,6 +1223,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public castOrConvertExpression(): CastOrConvertExpressionContext {
 		let _localctx: CastOrConvertExpressionContext = new CastOrConvertExpressionContext(this._ctx, this.state);
@@ -1753,6 +1763,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public conditionalExpression(): ConditionalExpressionContext {
 		let _localctx: ConditionalExpressionContext = new ConditionalExpressionContext(this._ctx, this.state);
@@ -1800,6 +1811,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public assignmentExpression(): AssignmentExpressionContext {
 		let _localctx: AssignmentExpressionContext = new AssignmentExpressionContext(this._ctx, this.state);
@@ -1843,6 +1855,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public assignmentOperator(): AssignmentOperatorContext {
 		let _localctx: AssignmentOperatorContext = new AssignmentOperatorContext(this._ctx, this.state);
@@ -1889,6 +1902,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public expression(): ExpressionContext {
 		let _localctx: ExpressionContext = new ExpressionContext(this._ctx, this.state);
@@ -1929,6 +1943,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public constantExpression(): ConstantExpressionContext {
 		let _localctx: ConstantExpressionContext = new ConstantExpressionContext(this._ctx, this.state);
@@ -1952,6 +1967,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public declaration(): DeclarationContext {
 		let _localctx: DeclarationContext = new DeclarationContext(this._ctx, this.state);
@@ -1979,6 +1995,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public storageTypeSpecifier(): StorageTypeSpecifierContext {
 		let _localctx: StorageTypeSpecifierContext = new StorageTypeSpecifierContext(this._ctx, this.state);
@@ -2013,6 +2030,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public declarationSpecifiers(): DeclarationSpecifiersContext {
 		let _localctx: DeclarationSpecifiersContext = new DeclarationSpecifiersContext(this._ctx, this.state);
@@ -2058,6 +2076,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public declarationSpecifier(): DeclarationSpecifierContext {
 		let _localctx: DeclarationSpecifierContext = new DeclarationSpecifierContext(this._ctx, this.state);
@@ -2081,6 +2100,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public initDeclarator(): InitDeclaratorContext {
 		let _localctx: InitDeclaratorContext = new InitDeclaratorContext(this._ctx, this.state);
@@ -2120,6 +2140,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public typeSpecifier(): TypeSpecifierContext {
 		let _localctx: TypeSpecifierContext = new TypeSpecifierContext(this._ctx, this.state);
@@ -2180,6 +2201,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
 		let _localctx: TypeSpecifierIdentifierContext = new TypeSpecifierIdentifierContext(this._ctx, this.state);
@@ -2221,6 +2243,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public declarator(): DeclaratorContext {
 		let _localctx: DeclaratorContext = new DeclaratorContext(this._ctx, this.state);
@@ -2244,6 +2267,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public directDeclarator(): DirectDeclaratorContext {
 		let _localctx: DirectDeclaratorContext = new DirectDeclaratorContext(this._ctx, this.state);
@@ -2267,6 +2291,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public parameterTypeList(): ParameterTypeListContext {
 		let _localctx: ParameterTypeListContext = new ParameterTypeListContext(this._ctx, this.state);
@@ -2290,6 +2315,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public parameterList(): ParameterListContext {
 		let _localctx: ParameterListContext = new ParameterListContext(this._ctx, this.state);
@@ -2330,6 +2356,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public parameterDeclaration(): ParameterDeclarationContext {
 		let _localctx: ParameterDeclarationContext = new ParameterDeclarationContext(this._ctx, this.state);
@@ -2357,6 +2384,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public initializer(): InitializerContext {
 		let _localctx: InitializerContext = new InitializerContext(this._ctx, this.state);
@@ -2380,6 +2408,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public statement(): StatementContext {
 		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
@@ -2470,6 +2499,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public compoundStatement(): CompoundStatementContext {
 		let _localctx: CompoundStatementContext = new CompoundStatementContext(this._ctx, this.state);
@@ -2548,6 +2578,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public blockItemList(): BlockItemListContext {
 		let _localctx: BlockItemListContext = new BlockItemListContext(this._ctx, this.state);
@@ -2626,6 +2657,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public blockItem(): BlockItemContext {
 		let _localctx: BlockItemContext = new BlockItemContext(this._ctx, this.state);
@@ -2695,6 +2727,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public expressionStatement(): ExpressionStatementContext {
 		let _localctx: ExpressionStatementContext = new ExpressionStatementContext(this._ctx, this.state);
@@ -2756,6 +2789,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public selectionStatement(): SelectionStatementContext {
 		let _localctx: SelectionStatementContext = new SelectionStatementContext(this._ctx, this.state);
@@ -2841,6 +2875,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public switchLabeledStatement(): SwitchLabeledStatementContext {
 		let _localctx: SwitchLabeledStatementContext = new SwitchLabeledStatementContext(this._ctx, this.state);
@@ -2889,6 +2924,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public iterationStatement(): IterationStatementContext {
 		let _localctx: IterationStatementContext = new IterationStatementContext(this._ctx, this.state);
@@ -2962,6 +2998,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public forCondition(): ForConditionContext {
 		let _localctx: ForConditionContext = new ForConditionContext(this._ctx, this.state);
@@ -3134,6 +3171,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public forDeclaration(): ForDeclarationContext {
 		let _localctx: ForDeclarationContext = new ForDeclarationContext(this._ctx, this.state);
@@ -3159,6 +3197,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public forExpression(): ForExpressionContext {
 		let _localctx: ForExpressionContext = new ForExpressionContext(this._ctx, this.state);
@@ -3199,6 +3238,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public jumpStatement(): JumpStatementContext {
 		let _localctx: JumpStatementContext = new JumpStatementContext(this._ctx, this.state);
@@ -3235,6 +3275,7 @@ export class KipperParser extends Parser {
 		}
 		return _localctx;
 	}
+
 	// @RuleVersion(0)
 	public returnStatement(): ReturnStatementContext {
 		let _localctx: ReturnStatementContext = new ReturnStatementContext(this._ctx, this.state);
@@ -3321,6 +3362,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private multiplicativeExpression_sempred(_localctx: MultiplicativeExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 0:
@@ -3328,6 +3370,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private additiveExpression_sempred(_localctx: AdditiveExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 1:
@@ -3335,6 +3378,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private relationalExpression_sempred(_localctx: RelationalExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 2:
@@ -3342,6 +3386,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private equalityExpression_sempred(_localctx: EqualityExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 3:
@@ -3349,6 +3394,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private logicalAndExpression_sempred(_localctx: LogicalAndExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 4:
@@ -3356,6 +3402,7 @@ export class KipperParser extends Parser {
 		}
 		return true;
 	}
+
 	private logicalOrExpression_sempred(_localctx: LogicalOrExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 5:
@@ -3601,28 +3648,34 @@ export class CompilationUnitContext extends ParserRuleContext {
 	public EOF(): TerminalNode {
 		return this.getToken(KipperParser.EOF, 0);
 	}
+
 	public translationUnit(): TranslationUnitContext | undefined {
 		return this.tryGetRuleContext(0, TranslationUnitContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_compilationUnit;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterCompilationUnit) {
 			listener.enterCompilationUnit(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitCompilationUnit) {
 			listener.exitCompilationUnit(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitCompilationUnit) {
@@ -3643,6 +3696,7 @@ export class TranslationUnitContext extends ParserRuleContext {
 			return this.getRuleContext(i, ExternalItemContext);
 		}
 	}
+
 	public endOfLine(): EndOfLineContext[];
 	public endOfLine(i: number): EndOfLineContext;
 	public endOfLine(i?: number): EndOfLineContext | EndOfLineContext[] {
@@ -3652,25 +3706,30 @@ export class TranslationUnitContext extends ParserRuleContext {
 			return this.getRuleContext(i, EndOfLineContext);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_translationUnit;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterTranslationUnit) {
 			listener.enterTranslationUnit(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitTranslationUnit) {
 			listener.exitTranslationUnit(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitTranslationUnit) {
@@ -3685,34 +3744,41 @@ export class ExternalItemContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_externalItem;
 	}
+
 	public copyFrom(ctx: ExternalItemContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class ExternalFunctionDeclarationContext extends ExternalItemContext {
 	public functionDeclaration(): FunctionDeclarationContext {
 		return this.getRuleContext(0, FunctionDeclarationContext);
 	}
+
 	constructor(ctx: ExternalItemContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterExternalFunctionDeclaration) {
 			listener.enterExternalFunctionDeclaration(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitExternalFunctionDeclaration) {
 			listener.exitExternalFunctionDeclaration(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitExternalFunctionDeclaration) {
@@ -3722,26 +3788,31 @@ export class ExternalFunctionDeclarationContext extends ExternalItemContext {
 		}
 	}
 }
+
 export class ExternalBlockItemContext extends ExternalItemContext {
 	public blockItem(): BlockItemContext {
 		return this.getRuleContext(0, BlockItemContext);
 	}
+
 	constructor(ctx: ExternalItemContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterExternalBlockItem) {
 			listener.enterExternalBlockItem(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitExternalBlockItem) {
 			listener.exitExternalBlockItem(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitExternalBlockItem) {
@@ -3756,46 +3827,58 @@ export class FunctionDeclarationContext extends ParserRuleContext {
 	public DefFunc(): TerminalNode {
 		return this.getToken(KipperParser.DefFunc, 0);
 	}
+
 	public declarator(): DeclaratorContext {
 		return this.getRuleContext(0, DeclaratorContext);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	public typeSpecifier(): TypeSpecifierContext {
 		return this.getRuleContext(0, TypeSpecifierContext);
 	}
+
 	public compoundStatement(): CompoundStatementContext | undefined {
 		return this.tryGetRuleContext(0, CompoundStatementContext);
 	}
+
 	public endOfLine(): EndOfLineContext | undefined {
 		return this.tryGetRuleContext(0, EndOfLineContext);
 	}
+
 	public parameterTypeList(): ParameterTypeListContext | undefined {
 		return this.tryGetRuleContext(0, ParameterTypeListContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_functionDeclaration;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterFunctionDeclaration) {
 			listener.enterFunctionDeclaration(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitFunctionDeclaration) {
 			listener.exitFunctionDeclaration(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitFunctionDeclaration) {
@@ -3810,22 +3893,26 @@ export class EndOfLineContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_endOfLine;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterEndOfLine) {
 			listener.enterEndOfLine(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitEndOfLine) {
 			listener.exitEndOfLine(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitEndOfLine) {
@@ -3840,40 +3927,49 @@ export class PrimaryExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_primaryExpression;
 	}
+
 	public copyFrom(ctx: PrimaryExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class TangledPrimaryExpressionContext extends PrimaryExpressionContext {
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public assignmentExpression(): AssignmentExpressionContext {
 		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterTangledPrimaryExpression) {
 			listener.enterTangledPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitTangledPrimaryExpression) {
 			listener.exitTangledPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitTangledPrimaryExpression) {
@@ -3883,29 +3979,35 @@ export class TangledPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class BoolPrimaryExpressionContext extends PrimaryExpressionContext {
 	public True(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.True, 0);
 	}
+
 	public False(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.False, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterBoolPrimaryExpression) {
 			listener.enterBoolPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitBoolPrimaryExpression) {
 			listener.exitBoolPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitBoolPrimaryExpression) {
@@ -3915,26 +4017,31 @@ export class BoolPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class IdentifierPrimaryExpressionContext extends PrimaryExpressionContext {
 	public Identifier(): TerminalNode {
 		return this.getToken(KipperParser.Identifier, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIdentifierPrimaryExpression) {
 			listener.enterIdentifierPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIdentifierPrimaryExpression) {
 			listener.exitIdentifierPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIdentifierPrimaryExpression) {
@@ -3944,29 +4051,35 @@ export class IdentifierPrimaryExpressionContext extends PrimaryExpressionContext
 		}
 	}
 }
+
 export class StringPrimaryExpressionContext extends PrimaryExpressionContext {
 	public SingleQuoteStringLiteral(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.SingleQuoteStringLiteral, 0);
 	}
+
 	public DoubleQuoteStringLiteral(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.DoubleQuoteStringLiteral, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterStringPrimaryExpression) {
 			listener.enterStringPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitStringPrimaryExpression) {
 			listener.exitStringPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitStringPrimaryExpression) {
@@ -3976,29 +4089,35 @@ export class StringPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class FStringPrimaryExpressionContext extends PrimaryExpressionContext {
 	public SingleQuoteFStringLiteral(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.SingleQuoteFStringLiteral, 0);
 	}
+
 	public DoubleQuoteFStringLiteral(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.DoubleQuoteFStringLiteral, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterFStringPrimaryExpression) {
 			listener.enterFStringPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitFStringPrimaryExpression) {
 			listener.exitFStringPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitFStringPrimaryExpression) {
@@ -4008,29 +4127,35 @@ export class FStringPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class NumberPrimaryExpressionContext extends PrimaryExpressionContext {
 	public IntegerConstant(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.IntegerConstant, 0);
 	}
+
 	public FloatingConstant(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.FloatingConstant, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterNumberPrimaryExpression) {
 			listener.enterNumberPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitNumberPrimaryExpression) {
 			listener.exitNumberPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitNumberPrimaryExpression) {
@@ -4040,10 +4165,12 @@ export class NumberPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class ListPrimaryExpressionContext extends PrimaryExpressionContext {
 	public LeftBracket(): TerminalNode {
 		return this.getToken(KipperParser.LeftBracket, 0);
 	}
+
 	public constantExpression(): ConstantExpressionContext[];
 	public constantExpression(i: number): ConstantExpressionContext;
 	public constantExpression(i?: number): ConstantExpressionContext | ConstantExpressionContext[] {
@@ -4053,9 +4180,11 @@ export class ListPrimaryExpressionContext extends PrimaryExpressionContext {
 			return this.getRuleContext(i, ConstantExpressionContext);
 		}
 	}
+
 	public RightBracket(): TerminalNode {
 		return this.getToken(KipperParser.RightBracket, 0);
 	}
+
 	public Comma(): TerminalNode[];
 	public Comma(i: number): TerminalNode;
 	public Comma(i?: number): TerminalNode | TerminalNode[] {
@@ -4065,22 +4194,26 @@ export class ListPrimaryExpressionContext extends PrimaryExpressionContext {
 			return this.getToken(KipperParser.Comma, i);
 		}
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterListPrimaryExpression) {
 			listener.enterListPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitListPrimaryExpression) {
 			listener.exitListPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitListPrimaryExpression) {
@@ -4090,29 +4223,35 @@ export class ListPrimaryExpressionContext extends PrimaryExpressionContext {
 		}
 	}
 }
+
 export class VoidOrNullOrUndefinedPrimaryExpressionContext extends PrimaryExpressionContext {
 	public Null(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Null, 0);
 	}
+
 	public Undefined(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Undefined, 0);
 	}
+
 	constructor(ctx: PrimaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterVoidOrNullOrUndefinedPrimaryExpression) {
 			listener.enterVoidOrNullOrUndefinedPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitVoidOrNullOrUndefinedPrimaryExpression) {
 			listener.exitVoidOrNullOrUndefinedPrimaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitVoidOrNullOrUndefinedPrimaryExpression) {
@@ -4127,34 +4266,41 @@ export class PostfixExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_postfixExpression;
 	}
+
 	public copyFrom(ctx: PostfixExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnPostfixExpressionContext extends PostfixExpressionContext {
 	public primaryExpression(): PrimaryExpressionContext {
 		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
+
 	constructor(ctx: PostfixExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnPostfixExpression) {
 			listener.enterPassOnPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnPostfixExpression) {
 			listener.exitPassOnPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnPostfixExpression) {
@@ -4164,10 +4310,12 @@ export class PassOnPostfixExpressionContext extends PostfixExpressionContext {
 		}
 	}
 }
+
 export class ArraySpecifierPostfixExpressionContext extends PostfixExpressionContext {
 	public primaryExpression(): PrimaryExpressionContext {
 		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
+
 	public arraySpecifier(): ArraySpecifierContext[];
 	public arraySpecifier(i: number): ArraySpecifierContext;
 	public arraySpecifier(i?: number): ArraySpecifierContext | ArraySpecifierContext[] {
@@ -4177,22 +4325,26 @@ export class ArraySpecifierPostfixExpressionContext extends PostfixExpressionCon
 			return this.getRuleContext(i, ArraySpecifierContext);
 		}
 	}
+
 	constructor(ctx: PostfixExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterArraySpecifierPostfixExpression) {
 			listener.enterArraySpecifierPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitArraySpecifierPostfixExpression) {
 			listener.exitArraySpecifierPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitArraySpecifierPostfixExpression) {
@@ -4202,29 +4354,35 @@ export class ArraySpecifierPostfixExpressionContext extends PostfixExpressionCon
 		}
 	}
 }
+
 export class IncrementOrDecrementPostfixExpressionContext extends PostfixExpressionContext {
 	public primaryExpression(): PrimaryExpressionContext {
 		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
+
 	public incrementOrDecrementOperator(): IncrementOrDecrementOperatorContext {
 		return this.getRuleContext(0, IncrementOrDecrementOperatorContext);
 	}
+
 	constructor(ctx: PostfixExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIncrementOrDecrementPostfixExpression) {
 			listener.enterIncrementOrDecrementPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIncrementOrDecrementPostfixExpression) {
 			listener.exitIncrementOrDecrementPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIncrementOrDecrementPostfixExpression) {
@@ -4234,38 +4392,47 @@ export class IncrementOrDecrementPostfixExpressionContext extends PostfixExpress
 		}
 	}
 }
+
 export class FunctionCallPostfixExpressionContext extends PostfixExpressionContext {
 	public primaryExpression(): PrimaryExpressionContext {
 		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	public CallFunc(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.CallFunc, 0);
 	}
+
 	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
 		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
 	}
+
 	constructor(ctx: PostfixExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterFunctionCallPostfixExpression) {
 			listener.enterFunctionCallPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitFunctionCallPostfixExpression) {
 			listener.exitFunctionCallPostfixExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitFunctionCallPostfixExpression) {
@@ -4280,31 +4447,38 @@ export class ArraySpecifierContext extends ParserRuleContext {
 	public LeftBracket(): TerminalNode {
 		return this.getToken(KipperParser.LeftBracket, 0);
 	}
+
 	public expression(): ExpressionContext {
 		return this.getRuleContext(0, ExpressionContext);
 	}
+
 	public RightBracket(): TerminalNode {
 		return this.getToken(KipperParser.RightBracket, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_arraySpecifier;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterArraySpecifier) {
 			listener.enterArraySpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitArraySpecifier) {
 			listener.exitArraySpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitArraySpecifier) {
@@ -4325,6 +4499,7 @@ export class ArgumentExpressionListContext extends ParserRuleContext {
 			return this.getRuleContext(i, AssignmentExpressionContext);
 		}
 	}
+
 	public Comma(): TerminalNode[];
 	public Comma(i: number): TerminalNode;
 	public Comma(i?: number): TerminalNode | TerminalNode[] {
@@ -4334,25 +4509,30 @@ export class ArgumentExpressionListContext extends ParserRuleContext {
 			return this.getToken(KipperParser.Comma, i);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_argumentExpressionList;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterArgumentExpressionList) {
 			listener.enterArgumentExpressionList(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitArgumentExpressionList) {
 			listener.exitArgumentExpressionList(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitArgumentExpressionList) {
@@ -4367,34 +4547,41 @@ export class UnaryExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_unaryExpression;
 	}
+
 	public copyFrom(ctx: UnaryExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnUnaryExpressionContext extends UnaryExpressionContext {
 	public postfixExpression(): PostfixExpressionContext {
 		return this.getRuleContext(0, PostfixExpressionContext);
 	}
+
 	constructor(ctx: UnaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnUnaryExpression) {
 			listener.enterPassOnUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnUnaryExpression) {
 			listener.exitPassOnUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnUnaryExpression) {
@@ -4404,29 +4591,35 @@ export class PassOnUnaryExpressionContext extends UnaryExpressionContext {
 		}
 	}
 }
+
 export class IncrementOrDecrementUnaryExpressionContext extends UnaryExpressionContext {
 	public incrementOrDecrementOperator(): IncrementOrDecrementOperatorContext {
 		return this.getRuleContext(0, IncrementOrDecrementOperatorContext);
 	}
+
 	public postfixExpression(): PostfixExpressionContext {
 		return this.getRuleContext(0, PostfixExpressionContext);
 	}
+
 	constructor(ctx: UnaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIncrementOrDecrementUnaryExpression) {
 			listener.enterIncrementOrDecrementUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIncrementOrDecrementUnaryExpression) {
 			listener.exitIncrementOrDecrementUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIncrementOrDecrementUnaryExpression) {
@@ -4436,29 +4629,35 @@ export class IncrementOrDecrementUnaryExpressionContext extends UnaryExpressionC
 		}
 	}
 }
+
 export class OperatorModifiedUnaryExpressionContext extends UnaryExpressionContext {
 	public unaryOperator(): UnaryOperatorContext {
 		return this.getRuleContext(0, UnaryOperatorContext);
 	}
+
 	public postfixExpression(): PostfixExpressionContext {
 		return this.getRuleContext(0, PostfixExpressionContext);
 	}
+
 	constructor(ctx: UnaryExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterOperatorModifiedUnaryExpression) {
 			listener.enterOperatorModifiedUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitOperatorModifiedUnaryExpression) {
 			listener.exitOperatorModifiedUnaryExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitOperatorModifiedUnaryExpression) {
@@ -4473,28 +4672,34 @@ export class IncrementOrDecrementOperatorContext extends ParserRuleContext {
 	public PlusPlus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.PlusPlus, 0);
 	}
+
 	public MinusMinus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.MinusMinus, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_incrementOrDecrementOperator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIncrementOrDecrementOperator) {
 			listener.enterIncrementOrDecrementOperator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIncrementOrDecrementOperator) {
 			listener.exitIncrementOrDecrementOperator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIncrementOrDecrementOperator) {
@@ -4509,31 +4714,38 @@ export class UnaryOperatorContext extends ParserRuleContext {
 	public Plus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Plus, 0);
 	}
+
 	public Minus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Minus, 0);
 	}
+
 	public Not(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Not, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_unaryOperator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterUnaryOperator) {
 			listener.enterUnaryOperator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitUnaryOperator) {
 			listener.exitUnaryOperator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitUnaryOperator) {
@@ -4548,34 +4760,41 @@ export class CastOrConvertExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_castOrConvertExpression;
 	}
+
 	public copyFrom(ctx: CastOrConvertExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnCastOrConvertExpressionContext extends CastOrConvertExpressionContext {
 	public unaryExpression(): UnaryExpressionContext {
 		return this.getRuleContext(0, UnaryExpressionContext);
 	}
+
 	constructor(ctx: CastOrConvertExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnCastOrConvertExpression) {
 			listener.enterPassOnCastOrConvertExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnCastOrConvertExpression) {
 			listener.exitPassOnCastOrConvertExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnCastOrConvertExpression) {
@@ -4585,32 +4804,39 @@ export class PassOnCastOrConvertExpressionContext extends CastOrConvertExpressio
 		}
 	}
 }
+
 export class ActualCastOrConvertExpressionContext extends CastOrConvertExpressionContext {
 	public unaryExpression(): UnaryExpressionContext {
 		return this.getRuleContext(0, UnaryExpressionContext);
 	}
+
 	public As(): TerminalNode {
 		return this.getToken(KipperParser.As, 0);
 	}
+
 	public typeSpecifier(): TypeSpecifierContext {
 		return this.getRuleContext(0, TypeSpecifierContext);
 	}
+
 	constructor(ctx: CastOrConvertExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualCastOrConvertExpression) {
 			listener.enterActualCastOrConvertExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualCastOrConvertExpression) {
 			listener.exitActualCastOrConvertExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualCastOrConvertExpression) {
@@ -4625,34 +4851,41 @@ export class MultiplicativeExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_multiplicativeExpression;
 	}
+
 	public copyFrom(ctx: MultiplicativeExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnMultiplicativeExpressionContext extends MultiplicativeExpressionContext {
 	public castOrConvertExpression(): CastOrConvertExpressionContext {
 		return this.getRuleContext(0, CastOrConvertExpressionContext);
 	}
+
 	constructor(ctx: MultiplicativeExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnMultiplicativeExpression) {
 			listener.enterPassOnMultiplicativeExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnMultiplicativeExpression) {
 			listener.exitPassOnMultiplicativeExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnMultiplicativeExpression) {
@@ -4662,41 +4895,51 @@ export class PassOnMultiplicativeExpressionContext extends MultiplicativeExpress
 		}
 	}
 }
+
 export class ActualMultiplicativeExpressionContext extends MultiplicativeExpressionContext {
 	public multiplicativeExpression(): MultiplicativeExpressionContext {
 		return this.getRuleContext(0, MultiplicativeExpressionContext);
 	}
+
 	public castOrConvertExpression(): CastOrConvertExpressionContext {
 		return this.getRuleContext(0, CastOrConvertExpressionContext);
 	}
+
 	public Star(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Star, 0);
 	}
+
 	public Div(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Div, 0);
 	}
+
 	public Mod(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Mod, 0);
 	}
+
 	public PowerTo(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.PowerTo, 0);
 	}
+
 	constructor(ctx: MultiplicativeExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualMultiplicativeExpression) {
 			listener.enterActualMultiplicativeExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualMultiplicativeExpression) {
 			listener.exitActualMultiplicativeExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualMultiplicativeExpression) {
@@ -4711,34 +4954,41 @@ export class AdditiveExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_additiveExpression;
 	}
+
 	public copyFrom(ctx: AdditiveExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnAdditiveExpressionContext extends AdditiveExpressionContext {
 	public multiplicativeExpression(): MultiplicativeExpressionContext {
 		return this.getRuleContext(0, MultiplicativeExpressionContext);
 	}
+
 	constructor(ctx: AdditiveExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnAdditiveExpression) {
 			listener.enterPassOnAdditiveExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnAdditiveExpression) {
 			listener.exitPassOnAdditiveExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnAdditiveExpression) {
@@ -4748,35 +4998,43 @@ export class PassOnAdditiveExpressionContext extends AdditiveExpressionContext {
 		}
 	}
 }
+
 export class ActualAdditiveExpressionContext extends AdditiveExpressionContext {
 	public additiveExpression(): AdditiveExpressionContext {
 		return this.getRuleContext(0, AdditiveExpressionContext);
 	}
+
 	public multiplicativeExpression(): MultiplicativeExpressionContext {
 		return this.getRuleContext(0, MultiplicativeExpressionContext);
 	}
+
 	public Plus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Plus, 0);
 	}
+
 	public Minus(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Minus, 0);
 	}
+
 	constructor(ctx: AdditiveExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualAdditiveExpression) {
 			listener.enterActualAdditiveExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualAdditiveExpression) {
 			listener.exitActualAdditiveExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualAdditiveExpression) {
@@ -4791,34 +5049,41 @@ export class RelationalExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_relationalExpression;
 	}
+
 	public copyFrom(ctx: RelationalExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnRelationalExpressionContext extends RelationalExpressionContext {
 	public additiveExpression(): AdditiveExpressionContext {
 		return this.getRuleContext(0, AdditiveExpressionContext);
 	}
+
 	constructor(ctx: RelationalExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnRelationalExpression) {
 			listener.enterPassOnRelationalExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnRelationalExpression) {
 			listener.exitPassOnRelationalExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnRelationalExpression) {
@@ -4828,41 +5093,51 @@ export class PassOnRelationalExpressionContext extends RelationalExpressionConte
 		}
 	}
 }
+
 export class ActualRelationalExpressionContext extends RelationalExpressionContext {
 	public relationalExpression(): RelationalExpressionContext {
 		return this.getRuleContext(0, RelationalExpressionContext);
 	}
+
 	public additiveExpression(): AdditiveExpressionContext {
 		return this.getRuleContext(0, AdditiveExpressionContext);
 	}
+
 	public Less(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Less, 0);
 	}
+
 	public Greater(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Greater, 0);
 	}
+
 	public LessEqual(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.LessEqual, 0);
 	}
+
 	public GreaterEqual(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.GreaterEqual, 0);
 	}
+
 	constructor(ctx: RelationalExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualRelationalExpression) {
 			listener.enterActualRelationalExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualRelationalExpression) {
 			listener.exitActualRelationalExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualRelationalExpression) {
@@ -4877,34 +5152,41 @@ export class EqualityExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_equalityExpression;
 	}
+
 	public copyFrom(ctx: EqualityExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnEqualityExpressionContext extends EqualityExpressionContext {
 	public relationalExpression(): RelationalExpressionContext {
 		return this.getRuleContext(0, RelationalExpressionContext);
 	}
+
 	constructor(ctx: EqualityExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnEqualityExpression) {
 			listener.enterPassOnEqualityExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnEqualityExpression) {
 			listener.exitPassOnEqualityExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnEqualityExpression) {
@@ -4914,35 +5196,43 @@ export class PassOnEqualityExpressionContext extends EqualityExpressionContext {
 		}
 	}
 }
+
 export class ActualEqualityExpressionContext extends EqualityExpressionContext {
 	public equalityExpression(): EqualityExpressionContext {
 		return this.getRuleContext(0, EqualityExpressionContext);
 	}
+
 	public relationalExpression(): RelationalExpressionContext {
 		return this.getRuleContext(0, RelationalExpressionContext);
 	}
+
 	public Equal(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Equal, 0);
 	}
+
 	public NotEqual(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.NotEqual, 0);
 	}
+
 	constructor(ctx: EqualityExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualEqualityExpression) {
 			listener.enterActualEqualityExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualEqualityExpression) {
 			listener.exitActualEqualityExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualEqualityExpression) {
@@ -4957,34 +5247,41 @@ export class LogicalAndExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_logicalAndExpression;
 	}
+
 	public copyFrom(ctx: LogicalAndExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnLogicalAndExpressionContext extends LogicalAndExpressionContext {
 	public equalityExpression(): EqualityExpressionContext {
 		return this.getRuleContext(0, EqualityExpressionContext);
 	}
+
 	constructor(ctx: LogicalAndExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnLogicalAndExpression) {
 			listener.enterPassOnLogicalAndExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnLogicalAndExpression) {
 			listener.exitPassOnLogicalAndExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnLogicalAndExpression) {
@@ -4994,32 +5291,39 @@ export class PassOnLogicalAndExpressionContext extends LogicalAndExpressionConte
 		}
 	}
 }
+
 export class ActualLogicalAndExpressionContext extends LogicalAndExpressionContext {
 	public logicalAndExpression(): LogicalAndExpressionContext {
 		return this.getRuleContext(0, LogicalAndExpressionContext);
 	}
+
 	public AndAnd(): TerminalNode {
 		return this.getToken(KipperParser.AndAnd, 0);
 	}
+
 	public equalityExpression(): EqualityExpressionContext {
 		return this.getRuleContext(0, EqualityExpressionContext);
 	}
+
 	constructor(ctx: LogicalAndExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualLogicalAndExpression) {
 			listener.enterActualLogicalAndExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualLogicalAndExpression) {
 			listener.exitActualLogicalAndExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualLogicalAndExpression) {
@@ -5034,34 +5338,41 @@ export class LogicalOrExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_logicalOrExpression;
 	}
+
 	public copyFrom(ctx: LogicalOrExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnLogicalOrExpressionContext extends LogicalOrExpressionContext {
 	public logicalAndExpression(): LogicalAndExpressionContext {
 		return this.getRuleContext(0, LogicalAndExpressionContext);
 	}
+
 	constructor(ctx: LogicalOrExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnLogicalOrExpression) {
 			listener.enterPassOnLogicalOrExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnLogicalOrExpression) {
 			listener.exitPassOnLogicalOrExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnLogicalOrExpression) {
@@ -5071,32 +5382,39 @@ export class PassOnLogicalOrExpressionContext extends LogicalOrExpressionContext
 		}
 	}
 }
+
 export class ActualLogicalOrExpressionContext extends LogicalOrExpressionContext {
 	public logicalOrExpression(): LogicalOrExpressionContext {
 		return this.getRuleContext(0, LogicalOrExpressionContext);
 	}
+
 	public OrOr(): TerminalNode {
 		return this.getToken(KipperParser.OrOr, 0);
 	}
+
 	public logicalAndExpression(): LogicalAndExpressionContext {
 		return this.getRuleContext(0, LogicalAndExpressionContext);
 	}
+
 	constructor(ctx: LogicalOrExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualLogicalOrExpression) {
 			listener.enterActualLogicalOrExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualLogicalOrExpression) {
 			listener.exitActualLogicalOrExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualLogicalOrExpression) {
@@ -5111,34 +5429,41 @@ export class ConditionalExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_conditionalExpression;
 	}
+
 	public copyFrom(ctx: ConditionalExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnConditionalExpressionContext extends ConditionalExpressionContext {
 	public logicalOrExpression(): LogicalOrExpressionContext {
 		return this.getRuleContext(0, LogicalOrExpressionContext);
 	}
+
 	constructor(ctx: ConditionalExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnConditionalExpression) {
 			listener.enterPassOnConditionalExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnConditionalExpression) {
 			listener.exitPassOnConditionalExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnConditionalExpression) {
@@ -5148,10 +5473,12 @@ export class PassOnConditionalExpressionContext extends ConditionalExpressionCon
 		}
 	}
 }
+
 export class ActualConditionalExpressionContext extends ConditionalExpressionContext {
 	public logicalOrExpression(): LogicalOrExpressionContext {
 		return this.getRuleContext(0, LogicalOrExpressionContext);
 	}
+
 	public conditionalExpression(): ConditionalExpressionContext[];
 	public conditionalExpression(i: number): ConditionalExpressionContext;
 	public conditionalExpression(i?: number): ConditionalExpressionContext | ConditionalExpressionContext[] {
@@ -5161,22 +5488,26 @@ export class ActualConditionalExpressionContext extends ConditionalExpressionCon
 			return this.getRuleContext(i, ConditionalExpressionContext);
 		}
 	}
+
 	constructor(ctx: ConditionalExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualConditionalExpression) {
 			listener.enterActualConditionalExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualConditionalExpression) {
 			listener.exitActualConditionalExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualConditionalExpression) {
@@ -5191,34 +5522,41 @@ export class AssignmentExpressionContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_assignmentExpression;
 	}
+
 	public copyFrom(ctx: AssignmentExpressionContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class PassOnAssignmentExpressionContext extends AssignmentExpressionContext {
 	public conditionalExpression(): ConditionalExpressionContext {
 		return this.getRuleContext(0, ConditionalExpressionContext);
 	}
+
 	constructor(ctx: AssignmentExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterPassOnAssignmentExpression) {
 			listener.enterPassOnAssignmentExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitPassOnAssignmentExpression) {
 			listener.exitPassOnAssignmentExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitPassOnAssignmentExpression) {
@@ -5228,32 +5566,39 @@ export class PassOnAssignmentExpressionContext extends AssignmentExpressionConte
 		}
 	}
 }
+
 export class ActualAssignmentExpressionContext extends AssignmentExpressionContext {
 	public primaryExpression(): PrimaryExpressionContext {
 		return this.getRuleContext(0, PrimaryExpressionContext);
 	}
+
 	public assignmentOperator(): AssignmentOperatorContext {
 		return this.getRuleContext(0, AssignmentOperatorContext);
 	}
+
 	public assignmentExpression(): AssignmentExpressionContext {
 		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
+
 	constructor(ctx: AssignmentExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterActualAssignmentExpression) {
 			listener.enterActualAssignmentExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitActualAssignmentExpression) {
 			listener.exitActualAssignmentExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitActualAssignmentExpression) {
@@ -5268,40 +5613,50 @@ export class AssignmentOperatorContext extends ParserRuleContext {
 	public Assign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Assign, 0);
 	}
+
 	public StarAssign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.StarAssign, 0);
 	}
+
 	public DivAssign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.DivAssign, 0);
 	}
+
 	public ModAssign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.ModAssign, 0);
 	}
+
 	public PlusAssign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.PlusAssign, 0);
 	}
+
 	public MinusAssign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.MinusAssign, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_assignmentOperator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterAssignmentOperator) {
 			listener.enterAssignmentOperator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitAssignmentOperator) {
 			listener.exitAssignmentOperator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitAssignmentOperator) {
@@ -5322,6 +5677,7 @@ export class ExpressionContext extends ParserRuleContext {
 			return this.getRuleContext(i, AssignmentExpressionContext);
 		}
 	}
+
 	public Comma(): TerminalNode[];
 	public Comma(i: number): TerminalNode;
 	public Comma(i?: number): TerminalNode | TerminalNode[] {
@@ -5331,25 +5687,30 @@ export class ExpressionContext extends ParserRuleContext {
 			return this.getToken(KipperParser.Comma, i);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_expression;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterExpression) {
 			listener.enterExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitExpression) {
 			listener.exitExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitExpression) {
@@ -5364,25 +5725,30 @@ export class ConstantExpressionContext extends ParserRuleContext {
 	public conditionalExpression(): ConditionalExpressionContext {
 		return this.getRuleContext(0, ConditionalExpressionContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_constantExpression;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterConstantExpression) {
 			listener.enterConstantExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitConstantExpression) {
 			listener.exitConstantExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitConstantExpression) {
@@ -5397,31 +5763,38 @@ export class DeclarationContext extends ParserRuleContext {
 	public storageTypeSpecifier(): StorageTypeSpecifierContext {
 		return this.getRuleContext(0, StorageTypeSpecifierContext);
 	}
+
 	public initDeclarator(): InitDeclaratorContext {
 		return this.getRuleContext(0, InitDeclaratorContext);
 	}
+
 	public endOfLine(): EndOfLineContext {
 		return this.getRuleContext(0, EndOfLineContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_declaration;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterDeclaration) {
 			listener.enterDeclaration(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitDeclaration) {
 			listener.exitDeclaration(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitDeclaration) {
@@ -5436,28 +5809,34 @@ export class StorageTypeSpecifierContext extends ParserRuleContext {
 	public Var(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Var, 0);
 	}
+
 	public Const(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Const, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_storageTypeSpecifier;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterStorageTypeSpecifier) {
 			listener.enterStorageTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitStorageTypeSpecifier) {
 			listener.exitStorageTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitStorageTypeSpecifier) {
@@ -5478,25 +5857,30 @@ export class DeclarationSpecifiersContext extends ParserRuleContext {
 			return this.getRuleContext(i, DeclarationSpecifierContext);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_declarationSpecifiers;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterDeclarationSpecifiers) {
 			listener.enterDeclarationSpecifiers(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitDeclarationSpecifiers) {
 			listener.exitDeclarationSpecifiers(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitDeclarationSpecifiers) {
@@ -5511,25 +5895,30 @@ export class DeclarationSpecifierContext extends ParserRuleContext {
 	public typeSpecifier(): TypeSpecifierContext {
 		return this.getRuleContext(0, TypeSpecifierContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_declarationSpecifier;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterDeclarationSpecifier) {
 			listener.enterDeclarationSpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitDeclarationSpecifier) {
 			listener.exitDeclarationSpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitDeclarationSpecifier) {
@@ -5544,34 +5933,42 @@ export class InitDeclaratorContext extends ParserRuleContext {
 	public declarator(): DeclaratorContext {
 		return this.getRuleContext(0, DeclaratorContext);
 	}
+
 	public typeSpecifier(): TypeSpecifierContext {
 		return this.getRuleContext(0, TypeSpecifierContext);
 	}
+
 	public Assign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Assign, 0);
 	}
+
 	public initializer(): InitializerContext | undefined {
 		return this.tryGetRuleContext(0, InitializerContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_initDeclarator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterInitDeclarator) {
 			listener.enterInitDeclarator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitInitDeclarator) {
 			listener.exitInitDeclarator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitInitDeclarator) {
@@ -5586,34 +5983,41 @@ export class TypeSpecifierContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_typeSpecifier;
 	}
+
 	public copyFrom(ctx: TypeSpecifierContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class IdentifierTypeSpecifierContext extends TypeSpecifierContext {
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
 		return this.getRuleContext(0, TypeSpecifierIdentifierContext);
 	}
+
 	constructor(ctx: TypeSpecifierContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIdentifierTypeSpecifier) {
 			listener.enterIdentifierTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIdentifierTypeSpecifier) {
 			listener.exitIdentifierTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIdentifierTypeSpecifier) {
@@ -5623,6 +6027,7 @@ export class IdentifierTypeSpecifierContext extends TypeSpecifierContext {
 		}
 	}
 }
+
 export class GenericTypeSpecifierContext extends TypeSpecifierContext {
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext[];
 	public typeSpecifierIdentifier(i: number): TypeSpecifierIdentifierContext;
@@ -5633,28 +6038,34 @@ export class GenericTypeSpecifierContext extends TypeSpecifierContext {
 			return this.getRuleContext(i, TypeSpecifierIdentifierContext);
 		}
 	}
+
 	public Less(): TerminalNode {
 		return this.getToken(KipperParser.Less, 0);
 	}
+
 	public Greater(): TerminalNode {
 		return this.getToken(KipperParser.Greater, 0);
 	}
+
 	constructor(ctx: TypeSpecifierContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterGenericTypeSpecifier) {
 			listener.enterGenericTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitGenericTypeSpecifier) {
 			listener.exitGenericTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitGenericTypeSpecifier) {
@@ -5664,35 +6075,43 @@ export class GenericTypeSpecifierContext extends TypeSpecifierContext {
 		}
 	}
 }
+
 export class TypeofTypeSpecifierContext extends TypeSpecifierContext {
 	public Typeof(): TerminalNode {
 		return this.getToken(KipperParser.Typeof, 0);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
 		return this.getRuleContext(0, TypeSpecifierIdentifierContext);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	constructor(ctx: TypeSpecifierContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterTypeofTypeSpecifier) {
 			listener.enterTypeofTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitTypeofTypeSpecifier) {
 			listener.exitTypeofTypeSpecifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitTypeofTypeSpecifier) {
@@ -5707,31 +6126,38 @@ export class TypeSpecifierIdentifierContext extends ParserRuleContext {
 	public Identifier(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Identifier, 0);
 	}
+
 	public Null(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Null, 0);
 	}
+
 	public Undefined(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Undefined, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_typeSpecifierIdentifier;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterTypeSpecifierIdentifier) {
 			listener.enterTypeSpecifierIdentifier(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitTypeSpecifierIdentifier) {
 			listener.exitTypeSpecifierIdentifier(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitTypeSpecifierIdentifier) {
@@ -5746,25 +6172,30 @@ export class DeclaratorContext extends ParserRuleContext {
 	public directDeclarator(): DirectDeclaratorContext {
 		return this.getRuleContext(0, DirectDeclaratorContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_declarator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterDeclarator) {
 			listener.enterDeclarator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitDeclarator) {
 			listener.exitDeclarator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitDeclarator) {
@@ -5779,25 +6210,30 @@ export class DirectDeclaratorContext extends ParserRuleContext {
 	public Identifier(): TerminalNode {
 		return this.getToken(KipperParser.Identifier, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_directDeclarator;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterDirectDeclarator) {
 			listener.enterDirectDeclarator(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitDirectDeclarator) {
 			listener.exitDirectDeclarator(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitDirectDeclarator) {
@@ -5812,25 +6248,30 @@ export class ParameterTypeListContext extends ParserRuleContext {
 	public parameterList(): ParameterListContext {
 		return this.getRuleContext(0, ParameterListContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_parameterTypeList;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterParameterTypeList) {
 			listener.enterParameterTypeList(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitParameterTypeList) {
 			listener.exitParameterTypeList(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitParameterTypeList) {
@@ -5851,6 +6292,7 @@ export class ParameterListContext extends ParserRuleContext {
 			return this.getRuleContext(i, ParameterDeclarationContext);
 		}
 	}
+
 	public Comma(): TerminalNode[];
 	public Comma(i: number): TerminalNode;
 	public Comma(i?: number): TerminalNode | TerminalNode[] {
@@ -5860,25 +6302,30 @@ export class ParameterListContext extends ParserRuleContext {
 			return this.getToken(KipperParser.Comma, i);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_parameterList;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterParameterList) {
 			listener.enterParameterList(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitParameterList) {
 			listener.exitParameterList(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitParameterList) {
@@ -5893,28 +6340,34 @@ export class ParameterDeclarationContext extends ParserRuleContext {
 	public declarator(): DeclaratorContext {
 		return this.getRuleContext(0, DeclaratorContext);
 	}
+
 	public declarationSpecifiers(): DeclarationSpecifiersContext {
 		return this.getRuleContext(0, DeclarationSpecifiersContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_parameterDeclaration;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterParameterDeclaration) {
 			listener.enterParameterDeclaration(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitParameterDeclaration) {
 			listener.exitParameterDeclaration(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitParameterDeclaration) {
@@ -5929,25 +6382,30 @@ export class InitializerContext extends ParserRuleContext {
 	public assignmentExpression(): AssignmentExpressionContext {
 		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_initializer;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterInitializer) {
 			listener.enterInitializer(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitInitializer) {
 			listener.exitInitializer(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitInitializer) {
@@ -5962,40 +6420,50 @@ export class StatementContext extends ParserRuleContext {
 	public compoundStatement(): CompoundStatementContext | undefined {
 		return this.tryGetRuleContext(0, CompoundStatementContext);
 	}
+
 	public expressionStatement(): ExpressionStatementContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionStatementContext);
 	}
+
 	public selectionStatement(): SelectionStatementContext | undefined {
 		return this.tryGetRuleContext(0, SelectionStatementContext);
 	}
+
 	public iterationStatement(): IterationStatementContext | undefined {
 		return this.tryGetRuleContext(0, IterationStatementContext);
 	}
+
 	public jumpStatement(): JumpStatementContext | undefined {
 		return this.tryGetRuleContext(0, JumpStatementContext);
 	}
+
 	public returnStatement(): ReturnStatementContext | undefined {
 		return this.tryGetRuleContext(0, ReturnStatementContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_statement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterStatement) {
 			listener.enterStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitStatement) {
 			listener.exitStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitStatement) {
@@ -6010,31 +6478,38 @@ export class CompoundStatementContext extends ParserRuleContext {
 	public LeftBrace(): TerminalNode {
 		return this.getToken(KipperParser.LeftBrace, 0);
 	}
+
 	public RightBrace(): TerminalNode {
 		return this.getToken(KipperParser.RightBrace, 0);
 	}
+
 	public blockItemList(): BlockItemListContext | undefined {
 		return this.tryGetRuleContext(0, BlockItemListContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_compoundStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterCompoundStatement) {
 			listener.enterCompoundStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitCompoundStatement) {
 			listener.exitCompoundStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitCompoundStatement) {
@@ -6055,25 +6530,30 @@ export class BlockItemListContext extends ParserRuleContext {
 			return this.getRuleContext(i, BlockItemContext);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_blockItemList;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterBlockItemList) {
 			listener.enterBlockItemList(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitBlockItemList) {
 			listener.exitBlockItemList(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitBlockItemList) {
@@ -6088,28 +6568,34 @@ export class BlockItemContext extends ParserRuleContext {
 	public statement(): StatementContext | undefined {
 		return this.tryGetRuleContext(0, StatementContext);
 	}
+
 	public declaration(): DeclarationContext | undefined {
 		return this.tryGetRuleContext(0, DeclarationContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_blockItem;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterBlockItem) {
 			listener.enterBlockItem(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitBlockItem) {
 			listener.exitBlockItem(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitBlockItem) {
@@ -6124,28 +6610,34 @@ export class ExpressionStatementContext extends ParserRuleContext {
 	public endOfLine(): EndOfLineContext {
 		return this.getRuleContext(0, EndOfLineContext);
 	}
+
 	public expression(): ExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_expressionStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterExpressionStatement) {
 			listener.enterExpressionStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitExpressionStatement) {
 			listener.exitExpressionStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitExpressionStatement) {
@@ -6160,27 +6652,34 @@ export class SelectionStatementContext extends ParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_selectionStatement;
 	}
+
 	public copyFrom(ctx: SelectionStatementContext): void {
 		super.copyFrom(ctx);
 	}
 }
+
 export class IfStatementContext extends SelectionStatementContext {
 	public If(): TerminalNode {
 		return this.getToken(KipperParser.If, 0);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public expression(): ExpressionContext {
 		return this.getRuleContext(0, ExpressionContext);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	public statement(): StatementContext[];
 	public statement(i: number): StatementContext;
 	public statement(i?: number): StatementContext | StatementContext[] {
@@ -6190,25 +6689,30 @@ export class IfStatementContext extends SelectionStatementContext {
 			return this.getRuleContext(i, StatementContext);
 		}
 	}
+
 	public Else(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Else, 0);
 	}
+
 	constructor(ctx: SelectionStatementContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIfStatement) {
 			listener.enterIfStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIfStatement) {
 			listener.exitIfStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIfStatement) {
@@ -6218,25 +6722,32 @@ export class IfStatementContext extends SelectionStatementContext {
 		}
 	}
 }
+
 export class SwitchStatementContext extends SelectionStatementContext {
 	public Switch(): TerminalNode {
 		return this.getToken(KipperParser.Switch, 0);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public expression(): ExpressionContext {
 		return this.getRuleContext(0, ExpressionContext);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	public LeftBrace(): TerminalNode {
 		return this.getToken(KipperParser.LeftBrace, 0);
 	}
+
 	public RightBrace(): TerminalNode {
 		return this.getToken(KipperParser.RightBrace, 0);
 	}
+
 	public switchLabeledStatement(): SwitchLabeledStatementContext[];
 	public switchLabeledStatement(i: number): SwitchLabeledStatementContext;
 	public switchLabeledStatement(i?: number): SwitchLabeledStatementContext | SwitchLabeledStatementContext[] {
@@ -6246,22 +6757,26 @@ export class SwitchStatementContext extends SelectionStatementContext {
 			return this.getRuleContext(i, SwitchLabeledStatementContext);
 		}
 	}
+
 	constructor(ctx: SelectionStatementContext) {
 		super(ctx.parent, ctx.invokingState);
 		this.copyFrom(ctx);
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterSwitchStatement) {
 			listener.enterSwitchStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitSwitchStatement) {
 			listener.exitSwitchStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitSwitchStatement) {
@@ -6276,34 +6791,42 @@ export class SwitchLabeledStatementContext extends ParserRuleContext {
 	public Case(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Case, 0);
 	}
+
 	public constantExpression(): ConstantExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ConstantExpressionContext);
 	}
+
 	public statement(): StatementContext {
 		return this.getRuleContext(0, StatementContext);
 	}
+
 	public Default(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Default, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_switchLabeledStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterSwitchLabeledStatement) {
 			listener.enterSwitchLabeledStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitSwitchLabeledStatement) {
 			listener.exitSwitchLabeledStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitSwitchLabeledStatement) {
@@ -6318,49 +6841,62 @@ export class IterationStatementContext extends ParserRuleContext {
 	public For(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.For, 0);
 	}
+
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
+
 	public forCondition(): ForConditionContext | undefined {
 		return this.tryGetRuleContext(0, ForConditionContext);
 	}
+
 	public RightParen(): TerminalNode {
 		return this.getToken(KipperParser.RightParen, 0);
 	}
+
 	public statement(): StatementContext {
 		return this.getRuleContext(0, StatementContext);
 	}
+
 	public While(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.While, 0);
 	}
+
 	public expression(): ExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionContext);
 	}
+
 	public Do(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Do, 0);
 	}
+
 	public endOfLine(): EndOfLineContext | undefined {
 		return this.tryGetRuleContext(0, EndOfLineContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_iterationStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterIterationStatement) {
 			listener.enterIterationStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitIterationStatement) {
 			listener.exitIterationStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitIterationStatement) {
@@ -6381,9 +6917,11 @@ export class ForConditionContext extends ParserRuleContext {
 			return this.getRuleContext(i, EndOfLineContext);
 		}
 	}
+
 	public forDeclaration(): ForDeclarationContext | undefined {
 		return this.tryGetRuleContext(0, ForDeclarationContext);
 	}
+
 	public forExpression(): ForExpressionContext[];
 	public forExpression(i: number): ForExpressionContext;
 	public forExpression(i?: number): ForExpressionContext | ForExpressionContext[] {
@@ -6393,28 +6931,34 @@ export class ForConditionContext extends ParserRuleContext {
 			return this.getRuleContext(i, ForExpressionContext);
 		}
 	}
+
 	public expression(): ExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_forCondition;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterForCondition) {
 			listener.enterForCondition(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitForCondition) {
 			listener.exitForCondition(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitForCondition) {
@@ -6429,28 +6973,34 @@ export class ForDeclarationContext extends ParserRuleContext {
 	public storageTypeSpecifier(): StorageTypeSpecifierContext {
 		return this.getRuleContext(0, StorageTypeSpecifierContext);
 	}
+
 	public initDeclarator(): InitDeclaratorContext {
 		return this.getRuleContext(0, InitDeclaratorContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_forDeclaration;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterForDeclaration) {
 			listener.enterForDeclaration(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitForDeclaration) {
 			listener.exitForDeclaration(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitForDeclaration) {
@@ -6471,6 +7021,7 @@ export class ForExpressionContext extends ParserRuleContext {
 			return this.getRuleContext(i, AssignmentExpressionContext);
 		}
 	}
+
 	public Comma(): TerminalNode[];
 	public Comma(i: number): TerminalNode;
 	public Comma(i?: number): TerminalNode | TerminalNode[] {
@@ -6480,25 +7031,30 @@ export class ForExpressionContext extends ParserRuleContext {
 			return this.getToken(KipperParser.Comma, i);
 		}
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_forExpression;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterForExpression) {
 			listener.enterForExpression(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitForExpression) {
 			listener.exitForExpression(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitForExpression) {
@@ -6513,31 +7069,38 @@ export class JumpStatementContext extends ParserRuleContext {
 	public endOfLine(): EndOfLineContext {
 		return this.getRuleContext(0, EndOfLineContext);
 	}
+
 	public Continue(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Continue, 0);
 	}
+
 	public Break(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Break, 0);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_jumpStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterJumpStatement) {
 			listener.enterJumpStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitJumpStatement) {
 			listener.exitJumpStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitJumpStatement) {
@@ -6552,31 +7115,38 @@ export class ReturnStatementContext extends ParserRuleContext {
 	public Return(): TerminalNode {
 		return this.getToken(KipperParser.Return, 0);
 	}
+
 	public endOfLine(): EndOfLineContext {
 		return this.getRuleContext(0, EndOfLineContext);
 	}
+
 	public expression(): ExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ExpressionContext);
 	}
+
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
+
 	// @Override
 	public get ruleIndex(): number {
 		return KipperParser.RULE_returnStatement;
 	}
+
 	// @Override
 	public enterRule(listener: KipperListener): void {
 		if (listener.enterReturnStatement) {
 			listener.enterReturnStatement(this);
 		}
 	}
+
 	// @Override
 	public exitRule(listener: KipperListener): void {
 		if (listener.exitReturnStatement) {
 			listener.exitReturnStatement(this);
 		}
 	}
+
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
 		if (visitor.visitReturnStatement) {

@@ -32,7 +32,9 @@ Proper documentation for the Kipper language is available [here](https://luna-kl
 
 To use Kipper you have three options:
 
-- Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js) file, which bundles the entire compiler
+- Run it in the browser using the
+  CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js) file, which
+  bundles the entire compiler
   for your browser.
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
 - Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.

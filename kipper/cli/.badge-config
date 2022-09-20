@@ -1,5 +1,5 @@
 {
-  "coverage_file_path": "../../coverage/coverage-summary.json",
+	"coverage_file_path": "../../coverage/coverage-summary.json",
 	"badges": {
 		"coverage": {
 			"style": "flat",

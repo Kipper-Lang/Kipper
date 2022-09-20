@@ -6,10 +6,10 @@
  */
 import type { SemanticData } from "../../parser";
 import type { Expression, IfStatement, Statement } from "../language";
+import { FunctionDeclaration } from "../language";
 import { JmpStatementType } from "../const";
 import { ExpressionSemantics } from "./expressions";
 import { ExpressionTypeSemantics } from "../type-data";
-import { FunctionDeclaration } from "../language";
 
 /**
  * Semantics for AST Node {@link IfStatement}.

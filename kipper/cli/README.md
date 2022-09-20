@@ -21,6 +21,7 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 - [Kipper Docs](#kipper-docs)
 - [Usage](#usage)
 - [Commands](#commands)
+
 <!-- tocstop -->
 
 # Kipper Docs
@@ -76,7 +77,8 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [lib/commands/analyse.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/analyse.js)_
+_See
+code: [lib/commands/analyse.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/analyse.js)_
 
 ## `kipper compile [FILE]`
 
@@ -115,7 +117,8 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [lib/commands/compile.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/compile.js)_
+_See
+code: [lib/commands/compile.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/compile.js)_
 
 ## `kipper help [COMMAND]`
 
@@ -132,7 +135,8 @@ OPTIONS
   -n, --nested-commands  Include all nested commands in the output.
 ```
 
-_See code: [lib/commands/help.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/help.js)_
+_See
+code: [lib/commands/help.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/help.js)_
 
 ## `kipper run [FILE]`
 
@@ -171,7 +175,8 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [lib/commands/run.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/run.js)_
+_See
+code: [lib/commands/run.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/run.js)_
 
 ## `kipper update [CHANNEL]`
 
@@ -194,7 +199,8 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [lib/commands/update.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/update.js)_
+_See
+code: [lib/commands/update.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/update.js)_
 
 ## `kipper version`
 
@@ -205,7 +211,8 @@ USAGE
   $ kipper version
 ```
 
-_See code: [lib/commands/version.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/version.js)_
+_See
+code: [lib/commands/version.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.4/kipper/cli/lib/commands/version.js)_
 
 <!-- commandsstop -->
 

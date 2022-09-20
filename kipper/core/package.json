@@ -1,76 +1,76 @@
 {
-  "name": "@kipper/core",
-  "description": "The core implementation of the Kipper compiler 🦊",
-  "version": "0.10.0-alpha.4",
-  "author": "Luna-Klatzer @Luna-Klatzer",
-  "dependencies": {
-    "antlr4ts": "^0.5.0-alpha.4",
-    "tslib": "~2.4.0"
-  },
-  "devDependencies": {
-    "typescript": "4.7.4",
-    "uuid": "9.0.0",
-    "mkdirp": "1.0.4",
-    "ansi-regex": "6.0.1",
-    "minimist": "1.2.6",
-    "prettier": "2.7.1",
-    "tsify": "5.0.4",
-    "browserify": "17.0.0",
-    "watchify": "4.0.0",
-    "antlr4ts-cli": "0.5.0-alpha.4",
-    "json-parse-even-better-errors": "2.3.1",
-    "run-script-os": "1.1.6",
-    "ts-node": "10.9.1",
-    "@types/node": "17.0.35",
-    "size-limit": "8.1.0",
-    "@size-limit/preset-big-lib": "8.1.0"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "homepage": "https://luna-klatzer.github.io/Kipper/",
-  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper"
-  },
-  "keywords": [
-    "kipper",
-    "language",
-    "compiler"
-  ],
-  "files": [
-    "lib",
-    "src",
-    "LICENSE",
-    "Kipper.g4"
-  ],
-  "size-limit": [
-    {
-      "path": "./kipper-standalone.min.js",
-      "limit": "200 kB"
-    },
-    {
-      "path": "./kipper-standalone.js",
-      "limit": "400 kB"
-    }
-  ],
-  "license": "GPL-3.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "prepack": "pnpm run build",
-    "build": "tsc",
-    "version": "pnpm version",
-    "antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./Kipper.g4",
-    "postantlr4ts": "run-script-os && pnpm run build",
-    "postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/",
-    "postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\",
-    "cov-badge": "coverage-badge-creator",
-    "lint": "pnpm run tslint",
-    "lint:fix": "pnpm run tslint:fix",
-    "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
-    "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
-    "size-limit": "size-limit"
-  }
+	"name": "@kipper/core",
+	"description": "The core implementation of the Kipper compiler 🦊",
+	"version": "0.10.0-alpha.4",
+	"author": "Luna-Klatzer @Luna-Klatzer",
+	"dependencies": {
+		"antlr4ts": "^0.5.0-alpha.4",
+		"tslib": "~2.4.0"
+	},
+	"devDependencies": {
+		"typescript": "4.7.4",
+		"uuid": "9.0.0",
+		"mkdirp": "1.0.4",
+		"ansi-regex": "6.0.1",
+		"minimist": "1.2.6",
+		"prettier": "2.7.1",
+		"tsify": "5.0.4",
+		"browserify": "17.0.0",
+		"watchify": "4.0.0",
+		"antlr4ts-cli": "0.5.0-alpha.4",
+		"json-parse-even-better-errors": "2.3.1",
+		"run-script-os": "1.1.6",
+		"ts-node": "10.9.1",
+		"@types/node": "17.0.35",
+		"size-limit": "8.1.0",
+		"@size-limit/preset-big-lib": "8.1.0"
+	},
+	"engines": {
+		"node": ">=14.0.0"
+	},
+	"homepage": "https://luna-klatzer.github.io/Kipper/",
+	"bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Luna-Klatzer/Kipper"
+	},
+	"keywords": [
+		"kipper",
+		"language",
+		"compiler"
+	],
+	"files": [
+		"lib",
+		"src",
+		"LICENSE",
+		"Kipper.g4"
+	],
+	"size-limit": [
+		{
+			"path": "./kipper-standalone.min.js",
+			"limit": "200 kB"
+		},
+		{
+			"path": "./kipper-standalone.js",
+			"limit": "400 kB"
+		}
+	],
+	"license": "GPL-3.0",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"scripts": {
+		"prepack": "pnpm run build",
+		"build": "tsc",
+		"version": "pnpm version",
+		"antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./Kipper.g4",
+		"postantlr4ts": "run-script-os && pnpm run build",
+		"postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/",
+		"postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\",
+		"cov-badge": "coverage-badge-creator",
+		"lint": "pnpm run tslint",
+		"lint:fix": "pnpm run tslint:fix",
+		"tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
+		"tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
+		"size-limit": "size-limit"
+	}
 }

@@ -72,11 +72,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		if (type1 !== type2) {
 			// 'void' is compatible with 'undefined'
 			let interchangeableTypes = ["void", "undefined"];
-			if (interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2)) {
-				return true;
-			}
 
-			return false;
+			// Ensure that 'true' is still returned when type1 and type2 are compatible
+			return interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2);
 		}
 		return true;
 	}

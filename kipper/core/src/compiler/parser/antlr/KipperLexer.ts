@@ -5,9 +5,6 @@ import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { CharStream } from "antlr4ts/CharStream";
 import { Lexer } from "antlr4ts/Lexer";
 import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
-import { NotNull } from "antlr4ts/Decorators";
-import { Override } from "antlr4ts/Decorators";
-import { RuleContext } from "antlr4ts/RuleContext";
 import { Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
@@ -336,6 +333,7 @@ export class KipperLexer extends Lexer {
 	public get vocabulary(): Vocabulary {
 		return KipperLexer.VOCABULARY;
 	}
+
 	// tslint:enable:no-trailing-whitespace
 
 	constructor(input: CharStream) {
