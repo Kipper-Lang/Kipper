@@ -610,7 +610,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
 
 		// Getting the function of the return statement
-		const func = this.programCtx.semanticCheck(this).getParentFunctionOfReturn(this);
+		const func = this.programCtx.semanticCheck(this).getReturnStatementParent(this);
 
 		this.semanticData = {
 			returnValue: returnValue,
