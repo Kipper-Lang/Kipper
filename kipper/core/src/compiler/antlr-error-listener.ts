@@ -6,7 +6,7 @@
  */
 import { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
 import { KipperLogger, LogLevel } from "../logger";
-import { KipperSyntaxError } from "../errors";
+import { LexerOrParserSyntaxError } from "../errors";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
 import type { KipperParseStream } from "./parser";
@@ -85,7 +85,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 		})();
 
 		// Create new error and add traceback metadata
-		const err = new KipperSyntaxError<T>(recognizer, offendingSymbol, `${msg}.`, e);
+		const err = new LexerOrParserSyntaxError<T>(recognizer, offendingSymbol, `${msg}.`, e);
 		err.setTracebackData({
 			location: { line: line, col: charPositionInLine },
 			filePath: this.parseStream.filePath,

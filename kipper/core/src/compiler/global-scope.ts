@@ -1,6 +1,6 @@
 /**
- * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
- * Kipper program.
+ * File containing the definition for a global scope of a {@link KipperProgramContext}, which contains the global
+ * variables and functions of a Kipper program.
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0

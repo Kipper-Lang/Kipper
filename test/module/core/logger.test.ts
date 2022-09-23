@@ -1,5 +1,12 @@
 import { assert } from "chai";
-import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
+import {
+	KipperCompiler,
+	KipperError,
+	KipperLogger,
+	KipperParseStream,
+	LexerOrParserSyntaxError,
+	LogLevel,
+} from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperLogger", () => {
@@ -79,7 +86,10 @@ describe("KipperLogger", () => {
 					target: defaultTarget,
 				});
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "KipperSyntaxError", "Expected proper error");
+				assert(
+					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
+					"Expected proper error",
+				);
 
 				// Check logging errors
 				assert(errors > 0, "Expected at least 0 errors");

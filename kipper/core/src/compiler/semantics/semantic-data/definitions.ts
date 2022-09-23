@@ -7,8 +7,8 @@
 import type { SemanticData } from "../../parser";
 import type { KipperStorageType } from "../const";
 import type { Scope } from "../../scope";
-import type { Expression, ParameterDeclaration } from "../language";
-import { CompoundStatement } from "../language";
+import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../language";
+import { FunctionScope } from "../../function-scope";
 
 /**
  * Semantics for a {@link Declaration}.
@@ -52,6 +52,11 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	functionBody: CompoundStatement;
+	/**
+	 * The scope of this {@link functionBody}.
+	 * @since 0.5.0
+	 */
+	innerScope: FunctionScope;
 }
 
 /**
@@ -106,4 +111,9 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * @since 0.5.0
 	 */
 	valueType: string;
+	/**
+	 * Parent function declaration.
+	 * @since 0.10.0
+	 */
+	func: FunctionDeclaration;
 }

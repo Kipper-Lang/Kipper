@@ -13,8 +13,7 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	ParameterTypeListContext,
-	StorageTypeSpecifierContext,
+``	StorageTypeSpecifierContext,
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
@@ -36,6 +35,7 @@ import {
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
+import { FunctionScope } from "../../function-scope";
 
 /**
  * Every antlr4 definition ctx type
@@ -157,6 +157,7 @@ export class ParameterDeclaration extends Declaration<
 		this.semanticData = {
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
 			valueType: this.children[0].sourceCode,
+			func: <FunctionDeclaration>this.parent,
 		};
 	}
 
@@ -227,29 +228,36 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		let declaratorCtx = <DeclaratorContext | undefined>(
 			parseTreeChildren.find((val) => val instanceof DeclaratorContext)
 		);
-		let paramListCtx = <ParameterTypeListContext | undefined>(
-			parseTreeChildren.find((val) => val instanceof ParameterTypeListContext)
-		);
 
-		// The return type of the function
 		let body: Statement<SemanticData, TypeData> | undefined;
 		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
 		let params: Array<ParameterDeclaration> = [];
-		for (let child of this.children) {
+
+		// Create shallow copy of the children
+		let children = [...this.children];
+
+		// Evaluate the primary semantic data for the function
+		while (children.length > 0) {
+			let child = children.shift();
+
 			if (child instanceof ParameterDeclaration) {
 				params.push(child);
 			} else {
 				// Once the return type has been reached, stop, as the last two items will be the return type and function body
 				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
-				body = <Statement<SemanticData, TypeData>>this.children[this.children.length - 1];
+				body = <any>children.pop();
 				break;
 			}
 		}
 
 		// Ensure that the children are fully present and not undefined
-		if (!declaratorCtx || !retTypeSpecifier || !params || !body) {
+		// Also make sure the scope has the required argument field for the function (is of type 'FunctionScope')
+		if (!declaratorCtx || !retTypeSpecifier) {
 			throw new UnableToDetermineSemanticDataError();
 		}
+
+		// Check the function body and ensure it exists/and is valid
+		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
@@ -258,12 +266,18 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnType: type,
-			params: paramListCtx ? params : [],
+			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
+			innerScope: <FunctionScope>(<CompoundStatement>body).localScope, // Should always be a 'FunctionScope'
 		};
 
 		// Add function definition to the current scope
 		await this.scope.addFunction(this);
+
+		// Add the function parameters to the function scope
+		for (let param of params) {
+			this.semanticData.innerScope.addArgument(param);
+		}
 	}
 
 	/**
@@ -379,7 +393,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		};
 
 		// If the storage type is 'const' ensure that the variable has a value set.
-		this.programCtx.semanticCheck(this).validDeclaration(this);
+		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
 
 		// Add scope variable entry
 		await this.scope.addVariable(this);

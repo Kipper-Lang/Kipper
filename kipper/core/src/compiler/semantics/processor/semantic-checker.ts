@@ -7,11 +7,12 @@
  */
 
 import {
-	type CompoundStatement,
+	CompoundStatement,
 	type Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	ReturnStatement,
+	Statement,
 	VariableDeclaration,
 } from "../language";
 import {
@@ -22,6 +23,7 @@ import {
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	KipperNotImplementedError,
+	MissingFunctionBodyError,
 	ReturnStatementError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
@@ -196,10 +198,21 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * Asserts that the variable declaration is valid.
 	 * @param decl The variable declaration.
 	 */
-	public validDeclaration(decl: VariableDeclaration): void {
-		const declSemanticData = decl.getSemanticData();
-		if (declSemanticData.storageType === "const" && !declSemanticData.isDefined) {
+	public validVariableDeclaration(decl: VariableDeclaration): void {
+		const semanticData = decl.getSemanticData();
+		if (semanticData.storageType === "const" && !semanticData.isDefined) {
 			throw this.assertError(new UndefinedConstantError("Constant declarations must have a value."));
+		}
+	}
+
+	/**
+	 * Asserts that the passed function body is valid.
+	 * @param body The function body.
+	 * @since 0.10.0
+	 */
+	public validFunctionBody(body: Statement<any, any> | undefined): void {
+		if (!body || !(body instanceof CompoundStatement)) {
+			throw this.assertError(new MissingFunctionBodyError());
 		}
 	}
 }

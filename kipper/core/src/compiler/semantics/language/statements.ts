@@ -13,6 +13,16 @@
  */
 import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
 import { IfStatementContext, ReturnStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import type { TranslatedCodeLine } from "../const";
+import type { Expression } from "./expressions";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
+import type {
+	ExpressionSemantics,
+	IfStatementSemantics,
+	JumpStatementSemantics,
+	ReturnStatementSemantics,
+} from "../semantic-data";
+import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -20,18 +30,10 @@ import {
 	IterationStatementContext,
 	JumpStatementContext,
 } from "../../parser";
-import type { TranslatedCodeLine } from "../const";
-import type { Expression } from "./expressions";
-import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import {
-	ExpressionSemantics,
-	IfStatementSemantics,
-	JumpStatementSemantics,
-	ReturnStatementSemantics,
-} from "../semantic-data";
-import { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
+import { FunctionScope } from "../../function-scope";
+import { FunctionDeclaration } from "./definitions";
 
 /**
  * Every antlr4 statement ctx type
@@ -133,13 +135,19 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 
 	protected readonly _children: Array<Statement<any, any>>;
 
-	private readonly _localScope: LocalScope;
+	private readonly _localScope: LocalScope | FunctionScope;
 
 	constructor(antlrRuleCtx: CompoundStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
-		this._localScope = new LocalScope(this);
 		this._children = [];
+
+		// Make the local scope a function scope if the parent is a function
+		if (parent instanceof FunctionDeclaration) {
+			this._localScope = new FunctionScope(this);
+		} else {
+			this._localScope = new LocalScope(this);
+		}
 	}
 
 	/**
@@ -159,7 +167,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * Returns the local scope of this {@link CompoundStatement}.
 	 */
-	public get localScope(): LocalScope {
+	public get localScope(): LocalScope | FunctionScope {
 		return this._localScope;
 	}
 

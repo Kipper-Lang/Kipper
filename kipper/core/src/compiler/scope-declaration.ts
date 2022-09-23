@@ -12,12 +12,15 @@ import type {
 	KipperStorageType,
 	KipperType,
 	ParameterDeclaration,
+	ParameterDeclarationSemantics,
+	ParameterDeclarationTypeSemantics,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
 	VariableDeclarationTypeSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";
+import type { LocalScope } from "./local-scope";
 
 /**
  * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
@@ -139,7 +142,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 }
 
 /**
- * Represents the definition of a function inside a {@link KipperProgramContext program}.
+ * Represents the definition of a function inside a {@link Scope}.
  * @since 0.1.2
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
@@ -213,5 +216,100 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 */
 	public get hasValue(): boolean {
 		return this.isDefined;
+	}
+}
+
+/**
+ * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
+ * @since 0.10.0
+ */
+export class ScopeParameterDeclaration extends ScopeDeclaration {
+	private readonly _node: ParameterDeclaration;
+
+	public constructor(node: ParameterDeclaration) {
+		super();
+		this._node = node;
+	}
+
+	/**
+	 * The semantic data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
+	 * @private
+	 * @since 0.10.0
+	 */
+	private get semanticData(): ParameterDeclarationSemantics {
+		return this._node.getSemanticData();
+	}
+
+	/**
+	 * The type data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
+	 * @private
+	 * @since 0.10.0
+	 */
+	private get typeData(): ParameterDeclarationTypeSemantics {
+		return this._node.getTypeSemanticData();
+	}
+
+	/**
+	 * Returns the {@link ParameterDeclaration AST node} this scope parameter declaration bases on.
+	 * @since 0.10.0
+	 */
+	public get node(): ParameterDeclaration {
+		return this._node;
+	}
+
+	/**
+	 * The identifier of this parameter.
+	 * @since 0.10.0
+	 */
+	public get identifier(): string {
+		return this.semanticData.identifier;
+	}
+
+	/**
+	 * The type of this parameter.
+	 * @since 0.10.0
+	 */
+	public get type(): KipperType {
+		return this.typeData.valueType;
+	}
+
+	/**
+	 * Returns the scope associated with this {@link ScopeDeclaration}.
+	 * @since 0.10.0
+	 */
+	public get scope(): LocalScope {
+		return this.func.getSemanticData().innerScope;
+	}
+
+	/**
+	 * Returns the function this parameter is defined in.
+	 * @since 0.10.0
+	 */
+	public get func(): FunctionDeclaration {
+		return this.semanticData.func;
+	}
+
+	/**
+	 * Returns whether the parameter declaration is defined and has a value set during declaration.
+	 *
+	 * This will always be true, since a parameter declaration always has a value, even if it is not set or is set to
+	 * 'undefined'.
+	 * @since 0.10.0
+	 */
+	public get isDefined(): boolean {
+		return true;
+	}
+
+	/**
+	 * Returns whether the parameter declaration has a value.
+	 *
+	 * This is always true, since a parameter declaration always has a value, even if it is not set or is set to
+	 * 'undefined'.
+	 * @since 0.10.0
+	 */
+	public get hasValue(): boolean {
+		return true;
 	}
 }

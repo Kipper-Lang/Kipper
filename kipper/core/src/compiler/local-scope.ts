@@ -1,3 +1,10 @@
+/**
+ * File containing the definition for a local scope that is bound to a {@link CompoundStatement} and not the global
+ * namespace.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.8.0
+ */
 import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "./semantics";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { KipperNotImplementedError } from "../errors";

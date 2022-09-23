@@ -220,13 +220,45 @@ export class UndefinedSemanticsError extends KipperInternalError {
 export class KipperNotImplementedError extends KipperError {
 	constructor(msg: string) {
 		super(`${msg} Update Kipper or watch out for future releases.`);
+		this.name = "NotImplementedError";
 	}
 }
 
 /**
- * SyntaxError that is used to indicate a syntax error detected by the antlr4 lexer
+ * Syntax error indicating a generic syntax error.
  */
-export class KipperSyntaxError<Token> extends KipperError {
+export class KipperSyntaxError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+		this.name = "SyntaxError";
+	}
+}
+
+/**
+ * Error that is thrown when a return statement is used outside a function.
+ * @since 0.10.0
+ */
+export class ReturnStatementError extends KipperSyntaxError {
+	constructor() {
+		super("The return statement can only be used in a function.");
+	}
+}
+
+/**
+ * Error that is thrown whenever a function is defined without a body.
+ * @since 0.10.0
+ */
+export class MissingFunctionBodyError extends KipperSyntaxError {
+	constructor() {
+		super("Missing declaration body of function.");
+	}
+}
+
+/**
+ * Error that is thrown whenever the parser or lexer report a syntax error.
+ * @since 0.10.0
+ */
+export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 	private readonly _recognizer: Recognizer<Token, any>;
 
 	private readonly _offendingSymbol: Token | undefined;
@@ -261,7 +293,6 @@ export class KipperSyntaxError<Token> extends KipperError {
 			| undefined,
 	) {
 		super(msg);
-		this.name = "SyntaxError";
 
 		this._recognizer = recognizer;
 		this._offendingSymbol = offendingSymbol;
@@ -524,16 +555,5 @@ export class ArgumentError extends KipperError {
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
 		super(`Function '${func}' only accepts ${expected} argument${expected === 1 ? "" : "s"}, received ${received}.`);
-	}
-}
-
-/**
- * Error that is thrown when a return statement is used outside a function.
- * @since 0.10.0
- */
-export class ReturnStatementError extends KipperError {
-	constructor() {
-		super("The return statement can only be used in a function.");
-		this.name = "SyntaxError"; // Counts as a syntax error, since it's logically and syntactically invalid
 	}
 }

@@ -4,6 +4,7 @@ import {
 	KipperParseStream,
 	KipperProgramContext,
 	KipperSyntaxError,
+	LexerOrParserSyntaxError,
 	ParseData,
 } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
@@ -20,14 +21,17 @@ describe("Kipper errors", () => {
 					target: defaultTarget,
 				});
 			} catch (e) {
-				assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
-				assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
-				assert((<KipperSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
-				assert((<KipperSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-				assert((<KipperSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
+				assert(
+					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
+					"Expected proper error",
+				);
+				assert((<LexerOrParserSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
 				return;
 			}
-			assert(false, "Expected 'KipperSyntaxError'");
+			assert(false, "Expected 'LexerOrParserSyntaxError'");
 		});
 
 		it("ParserError", async () => {
@@ -37,11 +41,32 @@ describe("Kipper errors", () => {
 					target: defaultTarget,
 				});
 			} catch (e) {
-				assert((<KipperSyntaxError<any>>e).constructor.name === "KipperSyntaxError", "Expected proper error");
-				assert((<KipperSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
-				assert((<KipperSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
-				assert((<KipperSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
-				assert((<KipperSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
+				assert(
+					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
+					"Expected proper error",
+				);
+				assert((<LexerOrParserSyntaxError<any>>e).line != undefined, "Expected existing 'line' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).col != undefined, "Expected existing 'col' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+				assert((<LexerOrParserSyntaxError<any>>e).filePath != undefined, "Expected existing 'filePath' meta field");
+				return;
+			}
+			assert(false, "Expected 'KipperSyntaxError'");
+		});
+
+		it("Other", async () => {
+			try {
+				await new KipperCompiler().compile("def x() -> num;", {
+					abortOnFirstError: true,
+					target: defaultTarget,
+				});
+			} catch (e) {
+				assert((<KipperSyntaxError>e).constructor.name === "MissingFunctionBodyError", "Expected proper error");
+				assert((<KipperSyntaxError>e).name === "SyntaxError", "Expected proper error");
+				assert((<KipperSyntaxError>e).line != undefined, "Expected existing 'line' meta field");
+				assert((<KipperSyntaxError>e).col != undefined, "Expected existing 'col' meta field");
+				assert((<KipperSyntaxError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
+				assert((<KipperSyntaxError>e).filePath != undefined, "Expected existing 'filePath' meta field");
 				return;
 			}
 			assert(false, "Expected 'KipperSyntaxError'");
@@ -134,7 +159,7 @@ describe("Kipper errors", () => {
 		describe("IdentifierAlreadyUsedByFunctionError", () => {
 			it("Redeclaration by variable", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("def x() -> void; var x: num = 4;"), {
+					await new KipperCompiler().compile(new KipperParseStream("def x() -> void {}; var x: num = 4;"), {
 						abortOnFirstError: true,
 						target: defaultTarget,
 					});
@@ -187,7 +212,7 @@ describe("Kipper errors", () => {
 
 			it("Redeclaration by function", async () => {
 				try {
-					await new KipperCompiler().compile(new KipperParseStream("var x: num; def x() -> void;"), {
+					await new KipperCompiler().compile(new KipperParseStream("var x: num; def x() -> void {};"), {
 						abortOnFirstError: true,
 						target: defaultTarget,
 					});
