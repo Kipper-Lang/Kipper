@@ -27,11 +27,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `--log-timestamp`, which enables timestamps for the log messages.
   - `--recover`, which enables error recovery for the Kipper compiler.
   - `--abort-on-first-error`, which aborts the compilation on the first compiler error that is encountered.
+- New errors:
+  - `MissingFunctionBodyError`, which is thrown when a function declaration is missing a body (compound statement).
+  - `LexerOrParserSyntaxError`, which is thrown when the lexer or parser encounters a syntax error.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
   - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
     included in the `JumpStatement` class.
+  - `FunctionScope`, which is a subclass of `Scope` that represents a function scope with registered parameters.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
