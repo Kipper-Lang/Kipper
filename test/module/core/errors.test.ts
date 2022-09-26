@@ -5,7 +5,7 @@ import {
 	KipperProgramContext,
 	KipperSyntaxError,
 	LexerOrParserSyntaxError,
-	ParseData
+	ParseData,
 } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { assert } from "chai";

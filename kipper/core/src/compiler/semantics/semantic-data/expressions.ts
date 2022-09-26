@@ -21,7 +21,7 @@ import type {
 	KipperUnaryModifierOperator,
 	KipperUnaryOperator,
 	KipperUndefinedType,
-	KipperVoidType
+	KipperVoidType,
 } from "../const";
 import type { SemanticData } from "../../parser";
 import type { Expression, IdentifierPrimaryExpression } from "../language";

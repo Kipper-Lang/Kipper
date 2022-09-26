@@ -14,7 +14,7 @@ import type {
 	KipperStrType,
 	KipperType,
 	KipperUndefinedType,
-	KipperVoidType
+	KipperVoidType,
 } from "../const";
 import type { TypeData } from "../../parser";
 

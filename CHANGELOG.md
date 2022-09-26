@@ -30,12 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New errors:
   - `MissingFunctionBodyError`, which is thrown when a function declaration is missing a body (compound statement).
   - `LexerOrParserSyntaxError`, which is thrown when the lexer or parser encounters a syntax error.
-	- `IdentifierAlreadyUsedByParameterError`, which is thrown when an identifier is already used by a parameter in
-		the same scope or any parent scope.
+  - `IdentifierAlreadyUsedByParameterError`, which is thrown when an identifier is already used by a parameter in
+    the same scope or any parent scope.
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
-  	expression.
+    expression.
   - `UndefinedDeclarationCtx`, which is thrown when the declaration context of a declaration is undefined. (This is
-     an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -113,7 +113,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
-	- Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
+  - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
 
 ### Removed
 

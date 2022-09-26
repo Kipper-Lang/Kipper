@@ -31,7 +31,7 @@ import {
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
 	UnaryOperatorContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
@@ -57,7 +57,7 @@ import {
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
-	type TranslatedExpression
+	type TranslatedExpression,
 } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
@@ -97,7 +97,7 @@ import {
 	TypeofTypeSpecifierExpressionSemantics,
 	TypeSpecifierExpressionSemantics,
 	UnaryExpressionSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionSemantics
+	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 } from "../semantic-data";
 import {
 	AdditiveExpressionTypeSemantics,
@@ -129,7 +129,7 @@ import {
 	TypeofTypeSpecifierTypeSemantics,
 	TypeSpecifierTypeSemantics,
 	UnaryExpressionTypeSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
+	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
 } from "../type-data";
 
 /**

@@ -9,7 +9,7 @@ import {
 	ParseData,
 	RootASTNode,
 	TargetASTNodeSemanticAnalyser,
-	TranslatedCodeLine
+	TranslatedCodeLine,
 } from "@kipper/core";
 import { TargetASTNodeCodeGenerator } from "@kipper/core/";
 import { ParserRuleContext } from "antlr4ts";

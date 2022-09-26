@@ -47,7 +47,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "@kipper/core";
 import {
 	CompoundStatement,
@@ -55,7 +55,7 @@ import {
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression
+	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";

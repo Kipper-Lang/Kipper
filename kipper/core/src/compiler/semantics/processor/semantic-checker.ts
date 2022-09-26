@@ -13,7 +13,7 @@ import {
 	IdentifierPrimaryExpression,
 	ReturnStatement,
 	Statement,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../language";
 import {
 	BuiltInOverwriteError,
@@ -26,7 +26,7 @@ import {
 	ReturnStatementError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
-	UnknownReferenceError
+	UnknownReferenceError,
 } from "../../../errors";
 import type { KipperRef } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -35,7 +35,7 @@ import {
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
-	ScopeVariableDeclaration
+	ScopeVariableDeclaration,
 } from "../../scope-declaration";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import { BuiltInFunction } from "../../runtime-built-ins";

@@ -13,7 +13,7 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	StorageTypeSpecifierContext
+	StorageTypeSpecifierContext,
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
@@ -26,13 +26,13 @@ import {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
 	ParameterDeclarationSemantics,
-	VariableDeclarationSemantics
+	VariableDeclarationSemantics,
 } from "../semantic-data";
 import {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
-	VariableDeclarationTypeSemantics
+	VariableDeclarationTypeSemantics,
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";

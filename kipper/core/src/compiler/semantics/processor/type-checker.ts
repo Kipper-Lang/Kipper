@@ -18,7 +18,7 @@ import type {
 	Expression,
 	RelationalExpression,
 	ReturnStatement,
-	UnaryExpression
+	UnaryExpression,
 } from "../language";
 import { ParameterDeclaration } from "../language";
 import {
@@ -29,7 +29,7 @@ import {
 	kipperStrType,
 	kipperSupportedConversions,
 	KipperType,
-	kipperTypes
+	kipperTypes,
 } from "../const";
 import {
 	ArgumentTypeError,
@@ -43,7 +43,7 @@ import {
 	KipperNotImplementedError,
 	ReadOnlyTypeError,
 	TypeError,
-	UnknownTypeError
+	UnknownTypeError,
 } from "../../../errors";
 
 /**

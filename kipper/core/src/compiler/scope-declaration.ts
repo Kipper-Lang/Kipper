@@ -16,7 +16,7 @@ import type {
 	ParameterDeclarationTypeSemantics,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
-	VariableDeclarationTypeSemantics
+	VariableDeclarationTypeSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";

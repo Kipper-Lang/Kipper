@@ -4,7 +4,7 @@ import {
 	EvaluatedCompileConfig,
 	InvalidGlobalError,
 	KipperCompiler,
-	KipperParseStream
+	KipperParseStream,
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
