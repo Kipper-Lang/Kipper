@@ -6,9 +6,6 @@
  * @since 0.7.0
  */
 
-import { KipperSemanticsAsserter } from "../semantics-asserter";
-import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import { ScopeDeclaration } from "../../scope-declaration";
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { ExpressionSemantics, ParameterDeclarationSemantics, UnaryExpressionSemantics } from "../semantic-data";
@@ -21,6 +18,8 @@ import type {
 	UnaryExpression,
 } from "../language";
 import { ParameterDeclaration } from "../language";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
+import { ScopeDeclaration, ScopeVariableDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
 import {
 	KipperArithmeticOperator,
 	KipperFunction,
@@ -93,7 +92,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		if (ref instanceof ScopeDeclaration) {
 			if (!ref.isCallable) {
 				throw this.assertError(new ExpressionNotCallableError(ref.type));
-			} else {
+			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
 				throw this.notImplementedError(
 					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
 				);

@@ -1268,7 +1268,10 @@ export class FunctionCallPostfixExpression extends Expression<
 		}
 
 		// Fetching the called function and its semantic data
-		const ref: KipperRef = this.programCtx.semanticCheck(this).getExistingReference(identifierSemantics.identifier);
+		const ref: KipperRef = this.programCtx.semanticCheck(this).getExistingReference(
+			identifierSemantics.identifier,
+			("ctx" in this.scope ? this.scope.ctx : undefined)
+		);
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
