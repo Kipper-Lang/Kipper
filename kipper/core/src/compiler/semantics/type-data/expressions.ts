@@ -6,6 +6,7 @@
  */
 import type {
 	KipperBoolType,
+	KipperFunction,
 	KipperListType,
 	KipperMetaType,
 	KipperNullType,
@@ -13,7 +14,7 @@ import type {
 	KipperStrType,
 	KipperType,
 	KipperUndefinedType,
-	KipperVoidType,
+	KipperVoidType
 } from "../const";
 import type { TypeData } from "../../parser";
 
@@ -216,6 +217,12 @@ export interface FunctionCallPostfixTypeSemantics extends ExpressionTypeSemantic
 	 * @since 0.10.0
 	 */
 	evaluatedType: KipperType;
+	/**
+	 * The function that this expression calls. Can be either a {@link ScopeFunctionDeclaration function declaration} or
+	 * a {@link ScopeVariableDeclaration function in a variable}.
+	 * @since 0.10.0
+	 */
+	func: KipperFunction;
 }
 
 /**

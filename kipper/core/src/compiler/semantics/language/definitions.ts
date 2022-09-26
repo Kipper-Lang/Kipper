@@ -13,25 +13,26 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	StorageTypeSpecifierContext,
+	StorageTypeSpecifierContext
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
-import { UnableToDetermineSemanticDataError } from "../../../errors";
+import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtx } from "../../../errors";
 import {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
 	ParameterDeclarationSemantics,
-	VariableDeclarationSemantics,
+	VariableDeclarationSemantics
 } from "../semantic-data";
 import {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
-	VariableDeclarationTypeSemantics,
+	VariableDeclarationTypeSemantics
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
@@ -83,6 +84,13 @@ export abstract class Declaration<
 	 */
 	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeDeclaration | undefined;
+
 	protected constructor(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -96,6 +104,32 @@ export abstract class Declaration<
 	 */
 	public override get antlrRuleCtx(): antlrDefinitionCtxType {
 		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
+	public get scopeDeclaration(): ScopeDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	/**
+	 * Returns the {@link scopeDeclaration scope declaration ctx} of this declaration and throws an error in case
+	 * it is undefined.
+	 * @throws UndefinedDeclarationCtx If {@link scopeDeclaration} is undefined.
+	 * @since 0.10.0
+	 */
+	public getScopeDeclaration(): ScopeDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtx();
+		}
+		return this.scopeDeclaration;
 	}
 
 	/**
@@ -125,9 +159,50 @@ export class ParameterDeclaration extends Declaration<
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeParameterDeclaration | undefined;
+
 	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): ParameterDeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected override set scopeDeclaration(declaration: ScopeParameterDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public override getScopeDeclaration(): ScopeParameterDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtx();
+		}
+		return this.scopeDeclaration;
+	}
+
+	/**
+	 * Registers this parameter in the {@link semanticData.func.semanticData.innerScope scope} of the
+	 * {@link this.semanticData.func parent function}.
+	 *
+	 * This will also populate the {@link scopeDeclaration} field, since only after the parameter is registered in the
+	 * scope the {@link scopeDeclaration} is created.
+	 * @since 0.10.0
+	 */
+	public async addParamToFunctionScope(): Promise<void> {
+		this.scopeDeclaration = this.getSemanticData().func.getSemanticData().innerScope.addArgument(this);
 	}
 
 	/**
@@ -138,13 +213,6 @@ export class ParameterDeclaration extends Declaration<
 	 */
 	public async checkForWarnings(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ParameterDeclarationContext {
-		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -195,9 +263,38 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeFunctionDeclaration | undefined;
+
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): FunctionDeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public getScopeDeclaration(): ScopeFunctionDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtx();
+		}
+		return this.scopeDeclaration;
 	}
 
 	/**
@@ -208,13 +305,6 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 */
 	public async checkForWarnings(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): FunctionDeclarationContext {
-		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -272,11 +362,11 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		};
 
 		// Add function definition to the current scope
-		await this.scope.addFunction(this);
+		this.scopeDeclaration = this.scope.addFunction(this);
 
 		// Add the function parameters to the function scope
 		for (let param of params) {
-			this.semanticData.innerScope.addArgument(param);
+			await param.addParamToFunctionScope();
 		}
 	}
 
@@ -318,12 +408,50 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
+	/**
+	 * The private field '_children' that actually stores the variable data,
+	 * which is returned inside the {@link this.children}.
+	 * @private
+	 */
 	protected override _children: Array<Expression<any, any>>;
+
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): DeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public override get children(): Array<Expression<any, any>> {
+		return this._children;
+	}
+
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public getScopeDeclaration(): ScopeVariableDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtx();
+		}
+		return this.scopeDeclaration;
 	}
 
 	/**
@@ -334,17 +462,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	public async checkForWarnings(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): DeclarationContext {
-		return this._antlrRuleCtx;
-	}
-
-	public get children(): Array<Expression<any, any>> {
-		return this._children;
 	}
 
 	/**
@@ -396,7 +513,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
 
 		// Add scope variable entry
-		await this.scope.addVariable(this);
+		this.scopeDeclaration = this.scope.addVariable(this);
 	}
 
 	/**
@@ -417,8 +534,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
-			const scopeEntry = <ScopeVariableDeclaration>semanticData.scope.getVariable(semanticData.identifier);
-			this.programCtx.typeCheck(this).validVariableDefinition(scopeEntry, semanticData.value);
+			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
 

@@ -5,7 +5,7 @@ import {
 	KipperProgramContext,
 	KipperSyntaxError,
 	LexerOrParserSyntaxError,
-	ParseData,
+	ParseData
 } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { assert } from "chai";
@@ -237,7 +237,7 @@ describe("Kipper errors", () => {
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
-					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+					assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -255,7 +255,7 @@ describe("Kipper errors", () => {
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
-					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+					assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -273,7 +273,7 @@ describe("Kipper errors", () => {
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
-					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+					assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -291,7 +291,7 @@ describe("Kipper errors", () => {
 					});
 				} catch (e) {
 					assert((<KipperError>e).constructor.name === "UnknownReferenceError", "Expected proper error");
-					assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+					assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 					assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 					assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 					assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -1425,7 +1425,7 @@ describe("Kipper errors", () => {
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
-						assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+						assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -1443,7 +1443,7 @@ describe("Kipper errors", () => {
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
-						assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+						assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");
@@ -1461,7 +1461,7 @@ describe("Kipper errors", () => {
 						});
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "UndefinedReferenceError", "Expected proper error");
-						assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+						assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
 						assert((<KipperError>e).line != undefined, "Expected existing 'line' meta field");
 						assert((<KipperError>e).col != undefined, "Expected existing 'col' meta field");
 						assert((<KipperError>e).tokenSrc != undefined, "Expected existing 'tokenSrc' meta field");

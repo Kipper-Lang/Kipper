@@ -5,9 +5,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompoundStatement } from "./semantics";
-import { ParameterDeclaration } from "./semantics";
-import { ScopeParameterDeclaration } from "./scope-declaration";
+import type { CompoundStatement, ParameterDeclaration } from "./semantics";
+import { ScopeDeclaration, ScopeParameterDeclaration } from "./scope-declaration";
 import { LocalScope } from "./local-scope";
 
 /**
@@ -30,6 +29,12 @@ export class FunctionScope extends LocalScope {
 		return this._arguments;
 	}
 
+	/**
+	 * Adds a new argument declaration to the {@link arguments list of arguments}.
+	 * @param declaration The argument declaration to add.
+	 * @returns The generated {@link ScopeParameterDeclaration scope declaration}.
+	 * @since 0.10.0
+	 */
 	public addArgument(declaration: ParameterDeclaration): ScopeParameterDeclaration {
 		const scopeDeclaration = new ScopeParameterDeclaration(declaration);
 		this.arguments.push(scopeDeclaration);
@@ -43,5 +48,23 @@ export class FunctionScope extends LocalScope {
 	 */
 	public getArgument(identifier: string): ScopeParameterDeclaration | undefined {
 		return this.arguments.find((i) => i.identifier === identifier);
+	}
+
+	public override getReference(identifier: string): ScopeDeclaration | undefined {
+		return this.getArgument(identifier) ?? this.getVariable(identifier) ?? this.getFunction(identifier);
+	}
+
+	public override getReferenceRecursively(identifier: string): ScopeDeclaration | undefined {
+		const localRef = this.getReference(identifier);
+		if (!localRef) {
+			// If the scope of the ctx (Compound statement) is another local scope, then go upwards recursively again.
+			if (this.ctx.scope instanceof LocalScope) {
+				return this.ctx.scope.getReferenceRecursively(identifier);
+			} else {
+				// Fetching from the global scope
+				return this.ctx.scope.getReference(identifier);
+			}
+		}
+		return localRef;
 	}
 }

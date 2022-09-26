@@ -1,7 +1,12 @@
 import { assert } from "chai";
-import { BuiltInFunction, InvalidGlobalError, KipperCompiler, KipperParseStream } from "@kipper/core";
+import {
+	BuiltInFunction,
+	EvaluatedCompileConfig,
+	InvalidGlobalError,
+	KipperCompiler,
+	KipperParseStream
+} from "@kipper/core";
 import { promises as fs } from "fs";
-import { EvaluatedCompileConfig } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import * as path from "path";
 

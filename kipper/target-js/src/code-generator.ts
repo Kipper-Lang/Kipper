@@ -47,14 +47,15 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
+	VariableDeclaration
 } from "@kipper/core";
 import {
 	CompoundStatement,
 	IfStatement,
 	KipperTargetCodeGenerator,
+	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression,
+	VoidOrNullOrUndefinedPrimaryExpression
 } from "@kipper/core";
 import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
@@ -301,16 +302,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-
-		// Get the identifier of the reference
 		let identifier: string = semanticData.identifier;
 
-		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
+		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+		if (!(semanticData.ref instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
-
 		return [identifier];
 	};
 
@@ -401,7 +399,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
 		const semanticData = node.getSemanticData();
-		const func = node.programCtx.semanticCheck(node).getExistingFunction(semanticData.identifier);
+		const func = node.getTypeSemanticData().func;
 
 		// Get the proper identifier for the function
 		const identifier =
@@ -557,7 +555,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+		if (!(semanticData.ref instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 

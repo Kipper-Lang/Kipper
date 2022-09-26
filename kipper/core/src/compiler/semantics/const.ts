@@ -5,8 +5,8 @@
  * @since 0.3.0
  */
 import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
+import { ScopeDeclaration } from "../scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
-import type { ScopeParameterDeclaration } from "../scope-declaration";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -524,7 +524,7 @@ export type KipperVariable = ScopeVariableDeclaration;
  * Represents a reference that can be used as an identifier.
  * @since 0.6.0
  */
-export type KipperRef = KipperFunction | KipperVariable | ScopeParameterDeclaration;
+export type KipperRef = BuiltInFunction | KipperFunction | KipperVariable | ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.

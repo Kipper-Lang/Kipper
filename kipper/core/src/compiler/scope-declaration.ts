@@ -16,14 +16,17 @@ import type {
 	ParameterDeclarationTypeSemantics,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
-	VariableDeclarationTypeSemantics,
+	VariableDeclarationTypeSemantics
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";
 import type { LocalScope } from "./local-scope";
 
 /**
- * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
+ * Represents a general declaration of a variable, parameter or function inside a Kipper program.
+ *
+ * Abstract base class for {@link ScopeVariableDeclaration}, {@link ScopeParameterDeclaration} and
+ * {@link ScopeFunctionDeclaration}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
@@ -39,6 +42,12 @@ export abstract class ScopeDeclaration {
 	}
 
 	/**
+	 * The value type of this declaration.
+	 * @since 0.10.0
+	 */
+	public abstract get type(): KipperType;
+
+	/**
 	 * Returns whether the scope declaration was defined during its declaration.
 	 * @since 0.10.0
 	 */
@@ -49,6 +58,12 @@ export abstract class ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public abstract get hasValue(): boolean;
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public abstract get isCallable(): boolean;
 }
 
 /**
@@ -102,7 +117,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The variable type or return type of this variable.
+	 * The value type of this variable.
 	 */
 	public get type(): KipperType {
 		return this.typeData.valueType;
@@ -138,6 +153,14 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 */
 	public get hasValue(): boolean {
 		return this.isDefined || this.valueWasUpdated;
+	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return this.type === "func";
 	}
 }
 
@@ -186,6 +209,14 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
+	 * The type of this function. This is always "func".
+	 * @since 0.10.0
+	 */
+	public get type(): KipperType {
+		return "func";
+	}
+
+	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
 	public get returnType(): KipperType {
@@ -216,6 +247,14 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 */
 	public get hasValue(): boolean {
 		return this.isDefined;
+	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return true;
 	}
 }
 
@@ -311,5 +350,13 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 */
 	public get hasValue(): boolean {
 		return true;
+	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return this.type === "func";
 	}
 }

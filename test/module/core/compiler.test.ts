@@ -5,12 +5,12 @@ import {
 	KipperLogger,
 	KipperParseStream,
 	KipperSyntaxError,
-	LogLevel,
+	LogLevel
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
-import { KipperTypeScriptTarget, getTypeScriptBuiltInIdentifier } from "@kipper/target-ts";
+import { getTypeScriptBuiltInIdentifier, KipperTypeScriptTarget } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 
 function getFileName(pathString: string): string {

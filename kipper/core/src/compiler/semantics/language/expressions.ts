@@ -31,7 +31,7 @@ import {
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
 	UnaryOperatorContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext
 } from "../../parser";
 import {
 	type KipperAdditiveOperator,
@@ -48,6 +48,7 @@ import {
 	kipperMultiplicativeOperators,
 	type KipperNegateOperator,
 	KipperNullType,
+	KipperRef,
 	type KipperRelationalOperator,
 	kipperRelationalOperators,
 	type KipperSignOperator,
@@ -56,7 +57,7 @@ import {
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
-	type TranslatedExpression,
+	type TranslatedExpression
 } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
@@ -96,7 +97,7 @@ import {
 	TypeofTypeSpecifierExpressionSemantics,
 	TypeSpecifierExpressionSemantics,
 	UnaryExpressionSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
+	VoidOrNullOrUndefinedPrimaryExpressionSemantics
 } from "../semantic-data";
 import {
 	AdditiveExpressionTypeSemantics,
@@ -128,7 +129,7 @@ import {
 	TypeofTypeSpecifierTypeSemantics,
 	TypeSpecifierTypeSemantics,
 	UnaryExpressionTypeSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
+	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
 } from "../type-data";
 
 /**
@@ -1267,22 +1268,17 @@ export class FunctionCallPostfixExpression extends Expression<
 		}
 
 		// Fetching the called function and its semantic data
-		const calledFunc: KipperFunction = this.programCtx
-			.semanticCheck(this)
-			.getExistingFunction(identifierSemantics.identifier);
+		const ref: KipperRef = this.programCtx.semanticCheck(this).getExistingReference(identifierSemantics.identifier);
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
 		const args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>> =
 			this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
-		// Ensure that the arguments provided are valid
-		this.programCtx.semanticCheck(this).validFunctionCallArguments(calledFunc, args);
-
 		this.semanticData = {
-			identifier: calledFunc.identifier,
+			identifier: ref.identifier,
 			args: args,
-			function: calledFunc,
+			callExpr: ref,
 		};
 	}
 
@@ -1294,12 +1290,17 @@ export class FunctionCallPostfixExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		// Ensure that the reference is a callable function
+		this.programCtx.typeCheck(this).referenceCallable(semanticData.callExpr);
+		const calledFunc = <KipperFunction>semanticData.callExpr;
+
 		// Ensure valid arguments are passed
-		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.function, semanticData.args);
+		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
 
 		// The evaluated type is always equal to the return of the function
 		this.typeSemantics = {
-			evaluatedType: semanticData.function.returnType,
+			evaluatedType: calledFunc.returnType,
+			func: calledFunc,
 		};
 	}
 

@@ -9,7 +9,7 @@ import type {
 	InputMismatchException,
 	LexerNoViableAltException,
 	NoViableAltException,
-	ParserRuleContext,
+	ParserRuleContext
 } from "antlr4ts";
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
@@ -199,17 +199,32 @@ export class KipperInternalError extends Error {
  */
 export class UnableToDetermineSemanticDataError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine metadata for one or more AST nodes.`);
+		super("Failed to determine metadata for one or more AST nodes.");
+		this.name = "InternalError";
 	}
 }
 
 /**
- * Error that is thrown whenever the {@link CompilableASTNode.semanticData} field of a token is undefined.
+ * Error that is thrown whenever the {@link CompilableASTNode.semanticData} field of an AST node is undefined.
  * @since 0.6.0
  */
 export class UndefinedSemanticsError extends KipperInternalError {
 	constructor() {
-		super(`Failed to determine semantics for one or more tokens. Did you forget to run 'semanticAnalysis'?`);
+		super("Failed to determine semantics for one or more AST nodes. Did you forget to run 'semanticAnalysis'?");
+		this.name = "InternalError";
+	}
+}
+
+/**
+ * Error that is thrown whenever the {@link Declaration.scopeDeclaration} field of an AST Node is undefined.
+ * @since 0.10.0
+ */
+export class UndefinedDeclarationCtx extends KipperInternalError {
+	constructor() {
+		super(
+			"Failed to determine the declaration context for a declaration. Most likely the property was accessed too early during semantic analysis.",
+		);
+		this.name = "InternalError";
 	}
 }
 
@@ -367,6 +382,7 @@ export abstract class IdentifierError extends KipperError {
 export class UndefinedReferenceError extends IdentifierError {
 	constructor(reference: string) {
 		super(`Reference '${reference}' is used before being assigned.`);
+		this.name = "ReferenceError";
 	}
 }
 
@@ -377,6 +393,7 @@ export class UndefinedReferenceError extends IdentifierError {
 export class UnknownReferenceError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Unknown reference '${identifier}'.`);
+		this.name = "ReferenceError";
 	}
 }
 
@@ -401,8 +418,18 @@ export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 }
 
 /**
- * Error that is thrown whenever an identifier is declared that interferes with a built-in function or variable.
- * No double definitions or overwrites of global built-in definitions allowed!
+ * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
+ * a parameter declaration.
+ * @since 0.10.0
+ */
+export class IdentifierAlreadyUsedByParameterError extends IdentifierError {
+	constructor(identifier: string) {
+		super(`Redeclaration of parameter '${identifier}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever an identifier is declared that would overwrite a built-in function or variable.
  */
 export class BuiltInOverwriteError extends IdentifierError {
 	constructor(identifier: string) {
@@ -512,6 +539,16 @@ export class InvalidRelationalComparisonTypeError extends TypeError {
 export class InvalidUnaryExpressionTypeError extends TypeError {
 	constructor(operator: string, type: string) {
 		super(`Unary operator '${operator}' is not allowed for type '${type}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever an expression is called that is not a function or a variable storing a function.
+ * @since 0.10.0
+ */
+export class ExpressionNotCallableError extends TypeError {
+	constructor(type: string) {
+		super(`Expression of type '${type}' is not callable.`);
 	}
 }
 

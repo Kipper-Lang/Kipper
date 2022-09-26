@@ -1,13 +1,17 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { CompilableASTNode, KipperParseStream, ParseData } from "@kipper/core";
-import { KipperProgramContext } from "@kipper/core";
-import { KipperCompiler } from "@kipper/core";
-import { RootASTNode } from "@kipper/core";
-import { TranslatedCodeLine } from "@kipper/core";
+import {
+	CompilableASTNode,
+	compilableNodeParent,
+	KipperCompiler,
+	KipperParseStream,
+	KipperProgramContext,
+	ParseData,
+	RootASTNode,
+	TargetASTNodeSemanticAnalyser,
+	TranslatedCodeLine
+} from "@kipper/core";
 import { TargetASTNodeCodeGenerator } from "@kipper/core/";
-import { TargetASTNodeSemanticAnalyser } from "@kipper/core";
-import { compilableNodeParent } from "@kipper/core";
 import { ParserRuleContext } from "antlr4ts";
 import * as path from "path";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";

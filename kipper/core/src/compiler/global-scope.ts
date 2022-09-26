@@ -7,9 +7,9 @@
  */
 import { Scope } from "./scope";
 import { FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { KipperProgramContext } from "./program-ctx";
-import { BuiltInFunction } from "./runtime-built-ins";
+import type { BuiltInFunction } from "./runtime-built-ins";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
@@ -76,5 +76,14 @@ export class GlobalScope extends Scope {
 
 	public getVariable(identifier: string): ScopeVariableDeclaration | undefined {
 		return this.variables.find((i) => i.identifier === identifier);
+	}
+
+	public getReference(identifier: string): ScopeDeclaration | undefined {
+		return this.getVariable(identifier) ?? this.getFunction(identifier);
+	}
+
+	public getReferenceRecursively(identifier: string): ScopeDeclaration | undefined {
+		// No recursion, since the global scope is the top-most scope
+		return this.getReference(identifier);
 	}
 }

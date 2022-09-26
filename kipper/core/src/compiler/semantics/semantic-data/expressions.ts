@@ -11,7 +11,6 @@ import type {
 	KipperBoolTypeLiterals,
 	KipperComparativeOperator,
 	KipperEqualityOperator,
-	KipperFunction,
 	KipperIncrementOrDecrementOperator,
 	KipperLogicalAndOperator,
 	KipperLogicalOrOperator,
@@ -22,7 +21,7 @@ import type {
 	KipperUnaryModifierOperator,
 	KipperUnaryOperator,
 	KipperUndefinedType,
-	KipperVoidType,
+	KipperVoidType
 } from "../const";
 import type { SemanticData } from "../../parser";
 import type { Expression, IdentifierPrimaryExpression } from "../language";
@@ -225,10 +224,10 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
 	 */
 	identifier: string;
 	/**
-	 * The function that is called.
+	 * The function that is called by this expression.
 	 * @since 0.5.0
 	 */
-	function: KipperFunction;
+	callExpr: KipperRef;
 	/**
 	 * The arguments that were passed to this function.
 	 * @since 0.6.0

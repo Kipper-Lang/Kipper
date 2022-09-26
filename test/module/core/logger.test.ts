@@ -1,12 +1,5 @@
 import { assert } from "chai";
-import {
-	KipperCompiler,
-	KipperError,
-	KipperLogger,
-	KipperParseStream,
-	LexerOrParserSyntaxError,
-	LogLevel,
-} from "@kipper/core";
+import { KipperCompiler, KipperLogger, KipperParseStream, LexerOrParserSyntaxError, LogLevel } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperLogger", () => {

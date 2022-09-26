@@ -7,39 +7,44 @@
  */
 
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import {
+import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration } from "../../scope-declaration";
+import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
+import type { KipperProgramContext } from "../../program-ctx";
+import type { ExpressionSemantics, ParameterDeclarationSemantics, UnaryExpressionSemantics } from "../semantic-data";
+import type { ExpressionTypeSemantics } from "../type-data";
+import type {
 	AssignmentExpression,
 	Expression,
-	ParameterDeclaration,
 	RelationalExpression,
 	ReturnStatement,
-	UnaryExpression,
+	UnaryExpression
 } from "../language";
+import { ParameterDeclaration } from "../language";
 import {
 	KipperArithmeticOperator,
-	type KipperFunction,
+	KipperFunction,
 	kipperPlusOperator,
+	KipperRef,
 	kipperStrType,
 	kipperSupportedConversions,
-	type KipperType,
-	kipperTypes,
+	KipperType,
+	kipperTypes
 } from "../const";
 import {
 	ArgumentTypeError,
 	ArithmeticOperationTypeError,
 	AssignmentTypeError,
+	ExpressionNotCallableError,
+	InvalidAmountOfArgumentsError,
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionTypeError,
+	KipperNotImplementedError,
 	ReadOnlyTypeError,
 	TypeError,
-	UnknownTypeError,
+	UnknownTypeError
 } from "../../../errors";
-import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
-import type { KipperProgramContext } from "../../program-ctx";
-import { ExpressionSemantics, ParameterDeclarationSemantics, UnaryExpressionSemantics } from "../semantic-data";
-import { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -77,6 +82,23 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2);
 		}
 		return true;
+	}
+
+	/**
+	 * Asserts that the passed {@link ref} is callable.
+	 * @param ref The reference to check.
+	 * @since 0.10.0
+	 */
+	public referenceCallable(ref: KipperRef): void {
+		if (ref instanceof ScopeDeclaration) {
+			if (!ref.isCallable) {
+				throw this.assertError(new ExpressionNotCallableError(ref.type));
+			} else {
+				throw this.notImplementedError(
+					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
+				);
+			}
+		}
 	}
 
 	/**
@@ -132,11 +154,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param receivedType The type that was received.
 	 * @example
 	 * call print("x"); // <-- Parameter type 'str' must match type of argument "x"
+	 * @throws {ArgumentTypeError} If the given argument type does not match the parameter type.
 	 * @since 0.7.0
 	 */
 	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
 		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
 		let valueType: KipperType;
+
+		// Get the proper semantic data and value type
 		if (arg instanceof ParameterDeclaration) {
 			semanticData = arg.getSemanticData();
 			valueType = arg.getTypeSemanticData().valueType;
@@ -154,12 +179,18 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * Asserts that the passed function arguments are valid.
 	 * @param func The function that is called.
 	 * @param args The arguments for the call expression.
+	 * @throws {InvalidAmountOfArgumentsError} If the amount of arguments is invalid e.g. too many or too few.
+	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
 	public validFunctionCallArguments(
 		func: KipperFunction,
 		args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>,
 	): void {
+		if (func.params.length != args.length) {
+			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
+		}
+
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
 			const typeData = arg.getTypeSemanticData();
