@@ -30,6 +30,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New errors:
   - `MissingFunctionBodyError`, which is thrown when a function declaration is missing a body (compound statement).
   - `LexerOrParserSyntaxError`, which is thrown when the lexer or parser encounters a syntax error.
+	- `IdentifierAlreadyUsedByParameterError`, which is thrown when an identifier is already used by a parameter in
+		the same scope or any parent scope.
+  - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
+  	expression.
+  - `UndefinedDeclarationCtx`, which is thrown when the declaration context of a declaration is undefined. (This is
+     an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -47,6 +53,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
   - `KipperSemanticChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
   - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
+  - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
+  - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
+  - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -102,6 +111,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `UnknownIdentifierError` to `UnknownReferenceError`.
   - `FunctionDeclarationSemantics.args` to `params`.
   - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
+- Moved:
+  - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
+	- Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
 
 ### Removed
 
