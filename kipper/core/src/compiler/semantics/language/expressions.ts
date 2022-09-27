@@ -675,6 +675,7 @@ export class IdentifierPrimaryExpression extends Expression<
 			.semanticCheck(this)
 			.getExistingReference(identifier, "localScope" in this.scopeCtx ? this.scopeCtx : undefined);
 
+		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {
 			identifier: identifier,
 			ref: ref,
@@ -698,18 +699,8 @@ export class IdentifierPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Get the type of the reference
-		let evaluatedType: KipperType;
-		if (semanticData.ref instanceof ScopeVariableDeclaration) {
-			evaluatedType = semanticData.ref.type;
-		} else {
-			// If the type is not a variable declaration, then it must always be a function. Since the other possible
-			// references are built-in functions and user-defined functions, which if not called will always be of type 'func'
-			evaluatedType = "func";
-		}
-
 		this.typeSemantics = {
-			evaluatedType: evaluatedType,
+			evaluatedType: "type" in semanticData.ref ? semanticData.ref.type : "func",
 		};
 	}
 
@@ -1263,15 +1254,9 @@ export class FunctionCallPostfixExpression extends Expression<
 		const identifierSemantics = <IdentifierPrimaryExpressionSemantics>this.children[0].getSemanticData();
 
 		// Ensure that the identifier is present
-		if (!identifierSemantics) {
+		if (!identifierSemantics || !identifierSemantics.ref) {
 			throw new UnableToDetermineSemanticDataError();
 		}
-
-		// Fetching the called function and its semantic data
-		const ref: KipperRef = this.programCtx.semanticCheck(this).getExistingReference(
-			identifierSemantics.identifier,
-			("ctx" in this.scope ? this.scope.ctx : undefined)
-		);
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
@@ -1279,9 +1264,9 @@ export class FunctionCallPostfixExpression extends Expression<
 			this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		this.semanticData = {
-			identifier: ref.identifier,
+			identifier: identifierSemantics.ref.identifier,
 			args: args,
-			callExpr: ref,
+			callExpr: identifierSemantics.ref,
 		};
 	}
 

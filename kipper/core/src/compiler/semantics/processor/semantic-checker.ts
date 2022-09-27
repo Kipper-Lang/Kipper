@@ -6,13 +6,23 @@
  * @since 0.7.0
  */
 
+import type { KipperRef } from "../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import type { compilableNodeChild, compilableNodeParent } from "../../parser";
+import { KipperSemanticsAsserter } from "../semantics-asserter";
+import { BuiltInFunction } from "../../runtime-built-ins";
+import {
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "../../scope-declaration";
 import {
 	CompoundStatement,
-	type Expression,
+	Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	ReturnStatement,
-	Statement,
 	VariableDeclaration,
 } from "../language";
 import {
@@ -28,17 +38,6 @@ import {
 	UndefinedReferenceError,
 	UnknownReferenceError,
 } from "../../../errors";
-import type { KipperRef } from "../const";
-import type { KipperProgramContext } from "../../program-ctx";
-import type { compilableNodeParent } from "../../parser";
-import {
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
-	ScopeParameterDeclaration,
-	ScopeVariableDeclaration,
-} from "../../scope-declaration";
-import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { BuiltInFunction } from "../../runtime-built-ins";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
@@ -209,7 +208,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {MissingFunctionBodyError} If the function body is missing or invalid.
 	 * @since 0.10.0
 	 */
-	public validFunctionBody(body: Statement<any, any> | undefined): void {
+	public validFunctionBody(body: compilableNodeChild | undefined): void {
 		if (!body || !(body instanceof CompoundStatement)) {
 			throw this.assertError(new MissingFunctionBodyError());
 		}

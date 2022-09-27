@@ -5,7 +5,7 @@
  * @since 0.3.0
  */
 import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
-import { ScopeDeclaration } from "../scope-declaration";
+import type { ScopeDeclaration, ScopeParameterDeclaration } from "../scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
 
 /**
@@ -521,10 +521,24 @@ export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
 export type KipperVariable = ScopeVariableDeclaration;
 
 /**
+ * Represents a Kipper parameter inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
+ * @since 0.10.0
+ */
+export type KipperParam = ScopeParameterDeclaration;
+
+/**
+ * Represents a Kipper argument inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
+ *
+ * @alias KipperParam
+ * @since 0.10.0
+ */
+export type KipperArg = KipperParam;
+
+/**
  * Represents a reference that can be used as an identifier.
  * @since 0.6.0
  */
-export type KipperRef = BuiltInFunction | KipperFunction | KipperVariable | ScopeDeclaration;
+export type KipperRef = BuiltInFunction | KipperFunction | KipperVariable | KipperParam | KipperArg | ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.

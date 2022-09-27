@@ -199,10 +199,12 @@ export class ParameterDeclaration extends Declaration<
 	 *
 	 * This will also populate the {@link scopeDeclaration} field, since only after the parameter is registered in the
 	 * scope the {@link scopeDeclaration} is created.
+	 * @param scopeToUse The scope to register the parameter in. Should match
+	 * {@link this.semantic.func.innerScope the scope of the parent function}.
 	 * @since 0.10.0
 	 */
-	public async addParamToFunctionScope(): Promise<void> {
-		this.scopeDeclaration = this.getSemanticData().func.getSemanticData().innerScope.addArgument(this);
+	public async addParamToFunctionScope(scopeToUse: FunctionScope): Promise<void> {
+		this.scopeDeclaration = scopeToUse.addArgument(this);
 	}
 
 	/**
@@ -227,6 +229,14 @@ export class ParameterDeclaration extends Declaration<
 			valueType: this.children[0].sourceCode,
 			func: <FunctionDeclaration>this.parent,
 		};
+
+		// Register this parameter in the function scope
+		if (this.semanticData.func.innerScope) {
+			await this.addParamToFunctionScope(this.semanticData.func.innerScope);
+		}
+
+		// IMPORTANT! If 'innerScope' returns undefined, then the function has an error and the parameter should not be
+		// registered in the scope. For now, we will ignore the error, since the function will throw an error anyway.
 	}
 
 	/**
@@ -298,6 +308,27 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	}
 
 	/**
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be stored.
+	 * @returns The inner scope of this function, or undefined if the function is invalid and the scope can't be
+	 * determined.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): FunctionScope | undefined {
+		const body = this.children[this.children.length - 1];
+		try {
+			// Check whether the function body is valid, and if it is not, return undefined
+			// IMPORTANT! If an error occurs, we will ignore it, since the function will throw an error anyway during
+			// semantic analysis.
+			this.programCtx.semanticCheck(this).validFunctionBody(body);
+		} catch {
+			return undefined;
+		}
+
+		// The semantic check should ensure that the body is a 'CompoundStatement' and the inner scope is a function scope.
+		return <FunctionScope>(<CompoundStatement>body).localScope;
+	}
+
+	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
@@ -348,6 +379,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Check the function body and ensure it exists/and is valid
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
+		const innerScope = <FunctionScope>this.innerScope;
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
@@ -358,16 +390,11 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			returnType: type,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
-			innerScope: <FunctionScope>(<CompoundStatement>body).localScope, // Should always be a 'FunctionScope'
+			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
 		};
 
 		// Add function definition to the current scope
 		this.scopeDeclaration = this.scope.addFunction(this);
-
-		// Add the function parameters to the function scope
-		for (let param of params) {
-			await param.addParamToFunctionScope();
-		}
 	}
 
 	/**
