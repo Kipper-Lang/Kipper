@@ -79,6 +79,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ScopeDeclaration.isDefined`, which is an abstract field that returns whether the scope declaration was defined
     during its declaration.
   - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
+  - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
+    semantic analysis, though will return undefined if it encounters any error.
 
 ### Changed
 
