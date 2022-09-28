@@ -11,7 +11,7 @@ specifiers:
   '@oclif/test': 2.1.1
   '@size-limit/preset-big-lib': 8.1.0
   '@types/chai': 4.3.0
-  '@types/mocha': 9.1.1
+  '@types/mocha': 10.0.0
   '@types/node': 17.0.35
   '@typescript-eslint/eslint-plugin': 5.38.0
   '@typescript-eslint/parser': 5.38.0
@@ -57,7 +57,7 @@ devDependencies:
   '@oclif/test': 2.1.1
   '@size-limit/preset-big-lib': 8.1.0_nraqsfzt34eeod7q4nkpxgzluy
   '@types/chai': 4.3.0
-  '@types/mocha': 9.1.1
+  '@types/mocha': 10.0.0
   '@types/node': 17.0.35
   '@typescript-eslint/eslint-plugin': 5.38.0_gl4g3tss5phduo5kw3bd5pm54i
   '@typescript-eslint/parser': 5.38.0_4brgkhw6cq4me3drk3kxrpb2mm
@@ -1014,8 +1014,8 @@ packages:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
 
-  /@types/mocha/9.1.1:
-    resolution: {integrity: sha512-Z61JK7DKDtdKTWwLeElSEBcWGRLY8g95ic5FoQqI9CMx0ns/Ghep3B4DfcEimiKMvtamNVULVNKEsiwV3aQmXw==}
+  /@types/mocha/10.0.0:
+    resolution: {integrity: sha512-rADY+HtTOA52l9VZWtgQfn4p+UDVM2eDVkMZT1I6syp0YKxW2F9v+0pbRZLsvskhQv/vMb6ZfCay81GHbz5SHg==}
     dev: true
 
   /@types/node/15.14.9:
