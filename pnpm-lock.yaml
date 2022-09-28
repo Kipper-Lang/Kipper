@@ -8,7 +8,7 @@ specifiers:
   '@kipper/target-ts': workspace:~
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
-  '@oclif/test': 2.1.1
+  '@oclif/test': 2.2.0
   '@size-limit/preset-big-lib': 8.1.0
   '@types/chai': 4.3.0
   '@types/mocha': 10.0.0
@@ -54,7 +54,7 @@ devDependencies:
   '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
-  '@oclif/test': 2.1.1
+  '@oclif/test': 2.2.0
   '@size-limit/preset-big-lib': 8.1.0_nraqsfzt34eeod7q4nkpxgzluy
   '@types/chai': 4.3.0
   '@types/mocha': 10.0.0
@@ -619,8 +619,8 @@ packages:
       - supports-color
     dev: true
 
-  /@oclif/core/1.13.11:
-    resolution: {integrity: sha512-4b/S/Sr9Kj/uA5NDP4iBwCcgAGvMyICJUZ+Dp3S5397Hhe1Q3mhgI3GKb8N12s2inbx9CbhxSkWjS+vN6Q0xyw==}
+  /@oclif/core/1.16.1:
+    resolution: {integrity: sha512-MfzgqcWzWymndd934pd52JAwy0RIgWWYnC0Ed7bxUVYWF4HFb3KmsE7x9/QBP9392Q14vxXi2GNLHboM/5vaDA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
@@ -653,8 +653,8 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /@oclif/core/1.16.1:
-    resolution: {integrity: sha512-MfzgqcWzWymndd934pd52JAwy0RIgWWYnC0Ed7bxUVYWF4HFb3KmsE7x9/QBP9392Q14vxXi2GNLHboM/5vaDA==}
+  /@oclif/core/1.16.4:
+    resolution: {integrity: sha512-l+xHtVMteJWeTZZ+f2yLyNjf69X0mhAH8GILXnmoAGAemXbc1DVstvloxOouarvm9xyHHhquzO1Qg5l6xa1VIw==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
@@ -716,7 +716,7 @@ packages:
     resolution: {integrity: sha512-HvH/RubJxqCinP0vUWQLTOboT+SfjfL8h40s+PymkWaldIcXlpoRaJX50vz+SjZIs7uewZwEk8fzLqpF/BWXlg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.16.1
+      '@oclif/core': 1.16.4
     dev: true
 
   /@oclif/plugin-not-found/2.3.1:
@@ -724,7 +724,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.1
-      '@oclif/core': 1.16.1
+      '@oclif/core': 1.16.4
       fast-levenshtein: 3.0.0
       lodash: 4.17.21
     dev: true
@@ -733,7 +733,7 @@ packages:
     resolution: {integrity: sha512-9dprC1CWPjesg0Vf/rDSQH2tzJXhP1ow84cb2My1kj6e6ESulPKpctiCFSZ1WaCQFfq+crKhzlNoP/vRaXNUAg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.16.1
+      '@oclif/core': 1.16.4
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
@@ -749,11 +749,11 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: true
 
-  /@oclif/test/2.1.1:
-    resolution: {integrity: sha512-vuBDXnXbnU073xNUqj+V4Fbrp+6Xhs1sgeWUIMj69SP9qC3pUBPfEPzIoK00ga6/WxZ+2qUgqCBAOPGz3nmTEg==}
+  /@oclif/test/2.2.0:
+    resolution: {integrity: sha512-hykwoXt8Ml+J+mwr9cJ+xl+84gSKdF+S7MKCjM5cPGMg6uhXBuzXtMlVK91s4bZh0uPYUioYJWAeptAgTHfgHQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.13.11
+      '@oclif/core': 1.16.4
       fancy-test: 2.0.0
     transitivePeerDependencies:
       - supports-color
