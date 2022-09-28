@@ -27,7 +27,7 @@ specifiers:
   mkdirp: 1.0.4
   mocha: 10.0.0
   nyc: 15.1.0
-  oclif: 3.2.2
+  oclif: 3.2.5
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -72,7 +72,7 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.0.0
   nyc: 15.1.0
-  oclif: 3.2.2
+  oclif: 3.2.5
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -4851,8 +4851,8 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /oclif/3.2.2:
-    resolution: {integrity: sha512-0H239NO9WR/QdmOnYJSbBGJkrW/VoQ3q5/kvdZgOJ71rRSNbcBQxK/7CSldpMpa6gxHoMBckWDNaxCaEzEqXuQ==}
+  /oclif/3.2.5:
+    resolution: {integrity: sha512-NFYay4FY/oa1hiRfnF1IFOfy0v7W2z9tl7NrTu6ZDQa4wiQEeJDa//l6OWQBx3xuzMUwtE4avF/ZoTdm2OuoeQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
