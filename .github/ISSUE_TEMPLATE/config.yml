@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Project Docs
-    url: https://luna-klatzer.github.io/Kipper/
-    about: Please go here for info before creating an issue
+  - name: Project Documentation
+    url: https://luna-klatzer.github.io/Kipper/docs/
+    about: If you have any general question about the Kipper project or language, you will likely find your answer here.
