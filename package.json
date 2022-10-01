@@ -1,7 +1,7 @@
 {
   "name": "kipperweb",
   "version": "0.3.0",
-  "description": "The website for the Kipper programming lang",
+  "description": "The website and documentation for the Kipper programming language",
   "keywords": [
     "website",
     "language",
@@ -9,7 +9,7 @@
     "kipper"
   ],
   "license": "GPL-3.0",
-  "author": "Luna Klatzer & Maxmilian Seebacher",
+  "author": "Luna Klatzer",
   "engines": {
     "node": ">= 16.0.0",
     "pnpm": ">=7"
@@ -115,6 +115,8 @@
     "any-promise": "1.3.0"
   },
   "dependencies": {
-    "@kipper/core": "latest"
+    "kipper": "latest",
+    "@kipper/core": "latest",
+    "@kipper/cli": "latest"
   }
 }
