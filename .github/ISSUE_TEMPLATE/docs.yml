@@ -1,4 +1,4 @@
-name: Docs Update Request
+name: Docs Request
 description: File a bug/issue for the core language
 title: "[Docs] <title>"
 labels: [docs, question]
