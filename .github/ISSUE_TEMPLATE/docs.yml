@@ -1,5 +1,5 @@
 name: Docs Request
-description: File a bug/issue for the core language
+description: File a request for changes of the Kipper Docs
 title: "[Docs] <title>"
 labels: [docs, question]
 assignees: Luna-Klatzer
@@ -14,13 +14,13 @@ body:
   - type: textarea
     attributes:
       label: Current State & Issue
-      description: A short description of what is lacking, incomplete or problematic on the docs.
+      description: A short description of what is lacking, incomplete or problematic on the docs page.
     validations:
       required: false
   - type: textarea
     attributes:
       label: Expected Changes & Improvements
-      description: A clear & concise description of what you expected to change on the docs.
+      description: A clear & concise description of what you expected to change on the docs page.
     validations:
       required: false
   - type: textarea
