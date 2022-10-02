@@ -1,6 +1,6 @@
 # Developer's Guide
 
-We recommend Visual Studio Code or Web-Storm for developing on Kipper. 
+We recommend Visual Studio Code or Web-Storm for developing on Kipper.
 
 ## General Setup
 
