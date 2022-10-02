@@ -1,6 +1,6 @@
 # Developer's Guide
 
-We recommend Visual Studio Code or Web-Storm for developing on Kipper.
+We recommend Visual Studio Code or Web-Storm for developing on Kipper. 
 
 ## General Setup
 
@@ -8,6 +8,17 @@ We recommend Visual Studio Code or Web-Storm for developing on Kipper.
 
 - [Download page of TypeScript](https://www.typescriptlang.org/download)
 - [Download page of Node.js](https://nodejs.org/en/download/)
+
+### Install PNPM for the monorepo management
+
+Before working on Kipper, it's important to install pnpm and *not* stick with npm, since Kipper is a monorepo with 
+many child packages in a single branch and repo.
+
+For how to install pnpm please refer to the pnpm website, or if you have npm just run:
+
+```sh
+npm i -g pnpm
+```
 
 ### VSCode setup
 
@@ -24,7 +35,7 @@ Whenever dependencies in `package.json` are changed, run the following command:
 pnpm install
 ```
 
-To only install resolved dependencies in `package-lock.json`:
+To only install resolved dependencies in `pnpm-lock.yaml`:
 
 ```sh
 pnpm install --frozen-lockfile
@@ -109,7 +120,7 @@ Run browserify using the following command:
 pnpm run browserify
 ```
 
-This will generate a `kipper-standalone.js` and `kipper-standalone.min.js` file located in the `kipper/core` directory,
+This will generate a `kipper-standalone.js` and `kipper-standalone.min.js` file located in the `kipper/web` directory,
 which can be included and used inside a browser without any dependencies.
 
 ## Making a new release
