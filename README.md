@@ -17,3 +17,8 @@ of merging all EJS files and Markdown files into a finished build that can be th
 Here's also a simplified flowchart showing the entire process:
 
 ![](https://github.com/Luna-Klatzer/Kipper/blob/docs/src/img/Docs-Workflow.png?raw=true)
+
+# Development Guide
+
+For the Development Guide for Kipper, please go to [DEVELOPMENT.md](./DEVELOPMENT.md) and read through the guide
+provided there.
