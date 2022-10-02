@@ -34,8 +34,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     the same scope or any parent scope.
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
     expression.
-  - `UndefinedDeclarationCtx`, which is thrown when the declaration context of a declaration is undefined. (This is
+  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
     an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+  - `IncompleteReturnsInCodePaths`, which is thrown whenever a non-void function has code paths that do not return a
+    value.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -51,11 +53,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
   - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
-  - `KipperSemanticChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
   - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
   - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
   - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
   - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
+  - `KipperSemanticChecker.referenceDefined`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.validFunctionBody`, which ensures the body of a function is a compound statement.
+  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody`, which ensures that all code paths of a non-void
+    function return a proper value.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
