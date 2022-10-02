@@ -112,7 +112,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   such as `print("Hello world!");`.
 - Default error identifier is now just `Error` instead of `KipperError`.
 - Made the following functions protected, as a way to enforce the use of `Scope.getReferenceRecursively`:
-	- `Scope.getVariable`
+  - `Scope.getVariable`
   - `Scope.getFunction`
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
