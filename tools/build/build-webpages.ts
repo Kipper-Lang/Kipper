@@ -161,7 +161,7 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 	showdown.setOption("simplifiedAutoLink", true);
 	showdown.setOption("simpleLineBreaks", false);
 	showdown.setOption("parseImgDimensions", true);
-	showdown.setOption("openLinksInNewWindow", true);
+	showdown.setOption("openLinksInNewWindow", false);
 	showdown.setOption("ghCompatibleHeaderId", true);
 	showdown.setOption("disableForced4SpacesIndentedSublists", true);
 	showdown.setOption("customizedHeaderId", true);
