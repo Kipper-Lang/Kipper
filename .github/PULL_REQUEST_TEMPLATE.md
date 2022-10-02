@@ -34,7 +34,9 @@ Closes # <!-- Remove this if this is not related to an issue -->
 
 <!-- Remove example text! -->
 
-## Detailed Changelog
+## Detailed Changelog 
+
+*Not present for website/docs changes*
 
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added and remove any header with no item.). -->
 
