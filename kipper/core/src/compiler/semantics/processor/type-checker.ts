@@ -71,6 +71,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param type1 The first type that is given.
 	 * @param type2 The second type that is given.
 	 * @returns True if the types are matching, otherwise false.
+	 * @since 0.10.0
 	 */
 	public checkMatchingTypes(type1: KipperType, type2: KipperType): boolean {
 		if (type1 !== type2) {

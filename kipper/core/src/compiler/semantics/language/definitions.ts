@@ -21,7 +21,7 @@ import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration }
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
-import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtx } from "../../../errors";
+import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
 import {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
@@ -127,7 +127,7 @@ export abstract class Declaration<
 	 */
 	public getScopeDeclaration(): ScopeDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -188,7 +188,7 @@ export class ParameterDeclaration extends Declaration<
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -302,7 +302,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -394,7 +394,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		};
 
 		// Ensure that all code paths return a value
-		this.programCtx.semanticCheck(this).validReturnInFunctionBody(this);
+		this.programCtx.semanticCheck(this).validReturnCodePathsInFunctionBody(this);
 
 		// Add function definition to the current scope
 		this.scopeDeclaration = this.scope.addFunction(this);
@@ -479,7 +479,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}

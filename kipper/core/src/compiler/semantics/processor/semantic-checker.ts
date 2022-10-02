@@ -32,7 +32,7 @@ import {
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByParameterError,
 	IdentifierAlreadyUsedByVariableError,
-	IncompleteReturnsInCodePaths,
+	IncompleteReturnsInCodePathsError,
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	MissingFunctionBodyError,
@@ -220,8 +220,9 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Ensures that the body of the {@link func} has valid return statements and all code paths return a value.
 	 * @param func The function where the body should be checked.
+	 * @since 0.10.0
 	 */
-	public validReturnInFunctionBody(func: FunctionDeclaration): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
 		const semanticData = func.getSemanticData();
 
 		// If the function return type is not 'void' then there must be a return statement in all code paths
@@ -281,7 +282,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 
 			// If not all code paths return a value, throw an error
 			if (!returnPathsCovered) {
-				throw this.assertError(new IncompleteReturnsInCodePaths());
+				throw this.assertError(new IncompleteReturnsInCodePathsError());
 			}
 		}
 	}
