@@ -20,5 +20,5 @@ Here's also a simplified flowchart showing the entire process:
 
 # Development Guide
 
-For the Development Guide for Kipper, please go to [DEVELOPMENT.md](./DEVELOPMENT.md) and read through the guide
-provided there.
+For the development guide for the Kipper Website and Docs, please refer to [DEVELOPMENT.md](./DEVELOPMENT.md) file and
+read through the guide provided there.
