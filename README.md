@@ -11,7 +11,7 @@ The build process for the website is seperated into two different processes, whe
 such as the homepage and playground are rendered from EJS files and in the other the docs content is generated from
 Markdown and then inserted into a EJS template, which is then also rendered into HTML.
 
-This build process is done using build-webpages.ts (/tools/build/build-webpages.ts), which handles the entire process
+This build process is done using [build-webpages.ts](/tools/build/build-webpages.ts), which handles the entire process
 of merging all EJS files and Markdown files into a finished build that can be then built and shipped with Parcel.
 
 Here's also a simplified flowchart showing the entire process:
