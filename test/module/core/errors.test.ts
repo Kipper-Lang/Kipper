@@ -1442,9 +1442,9 @@ describe("Kipper errors", () => {
 						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
 					});
 
-					it("Second branch", () => {
+					it("Second branch", async () => {
 						try {
-							new KipperCompiler().compile(
+							await new KipperCompiler().compile(
 								`def x() -> num { if (true) { return 1; } else { if (true) { } else { return 1; } } };`,
 								{
 									abortOnFirstError: true,
