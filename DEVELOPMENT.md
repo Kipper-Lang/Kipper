@@ -11,8 +11,8 @@ We recommend Visual Studio Code or Web-Storm for developing on Kipper.
 
 ### Install PNPM for the monorepo management
 
-Before working on Kipper, it's important to install pnpm and *not* stick with npm, since Kipper is a monorepo with 
-many child packages in a single branch and repo.
+Before working on Kipper, it's important to install pnpm, since Kipper is a monorepo with many child packages in a 
+single branch and repo, and therefore depends on the monorepo tools of pnpm.
 
 For how to install pnpm please refer to the pnpm website, or if you have npm just run:
 
