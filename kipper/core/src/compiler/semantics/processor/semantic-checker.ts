@@ -260,16 +260,21 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 							// statement)
 							if (ifSemantics.elseBranch) {
 								returnPathsCovered = returnPathsCovered && checkChildrenCodePaths(ifSemantics.elseBranch);
+							} else {
+								// If there is no else branch, then this code path is not covered (since it will not return a value)
+								returnPathsCovered = false;
 							}
-						} else if (child instanceof ReturnStatement) {
-							// If the child is a return statement, then this entire code path is covered
-							returnPathsCovered = true;
-							break;
 						} else if (child instanceof CompoundStatement) {
 							// If the child is a compound statement, we need to check it as well
 							// (This is for compatibility of nested compound statements that appear directly under another compound
 							// statement, like for example { { } })
 							returnPathsCovered = checkChildrenCodePaths(child);
+						} else if (child instanceof ReturnStatement) {
+							// If the child is a return statement, then this entire code path is covered
+							// (We don't need to check anything else after this point, since the return statement will always
+							// be the last statement in the code path)
+							returnPathsCovered = true;
+							break;
 						}
 					}
 				}
