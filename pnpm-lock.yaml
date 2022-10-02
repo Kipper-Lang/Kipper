@@ -37,7 +37,7 @@ specifiers:
   tsify: 5.0.4
   tslib: ~2.4.0
   typescript: ~4.7.4
-  uglify-js: 3.17.1
+  uglify-js: 3.17.2
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -55,7 +55,7 @@ devDependencies:
   '@oclif/config': 1.18.3
   '@oclif/parser': 3.8.7
   '@oclif/test': 2.2.0
-  '@size-limit/preset-big-lib': 8.1.0_nraqsfzt34eeod7q4nkpxgzluy
+  '@size-limit/preset-big-lib': 8.1.0_qzrrreykpq2rucnxkjvtqcnf2e
   '@types/chai': 4.3.0
   '@types/mocha': 10.0.0
   '@types/node': 17.0.35
@@ -80,7 +80,7 @@ devDependencies:
   ts-mocha: 10.0.0_mocha@10.0.0
   ts-node: 10.9.1_zgusdg2syqzg2kik2gzyf5b6di
   tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
-  uglify-js: 3.17.1
+  uglify-js: 3.17.2
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -885,14 +885,14 @@ packages:
       size-limit: 8.1.0
     dev: true
 
-  /@size-limit/preset-big-lib/8.1.0_nraqsfzt34eeod7q4nkpxgzluy:
+  /@size-limit/preset-big-lib/8.1.0_qzrrreykpq2rucnxkjvtqcnf2e:
     resolution: {integrity: sha512-onkwmJt+gXzoRXOkcmvAX2mGyAoS6vXltqZsQHKpqYENJDghi5o4XuIZhYoEdsAYeP/vrM7u9jGGB7a0PGXR+Q==}
     peerDependencies:
       size-limit: 8.1.0
     dependencies:
       '@size-limit/file': 8.1.0_size-limit@8.1.0
       '@size-limit/time': 8.1.0_size-limit@8.1.0
-      '@size-limit/webpack': 8.1.0_nraqsfzt34eeod7q4nkpxgzluy
+      '@size-limit/webpack': 8.1.0_qzrrreykpq2rucnxkjvtqcnf2e
       size-limit: 8.1.0
     transitivePeerDependencies:
       - '@swc/core'
@@ -921,7 +921,7 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@size-limit/webpack/8.1.0_nraqsfzt34eeod7q4nkpxgzluy:
+  /@size-limit/webpack/8.1.0_qzrrreykpq2rucnxkjvtqcnf2e:
     resolution: {integrity: sha512-TLego57hQbR0dmYZzIa9KZecebGMJoxZaqJTx9v3NDllxt6kJTljVXWghEvsGLpdKQfZTqraZ6nRm38+lG3sNw==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     peerDependencies:
@@ -930,7 +930,7 @@ packages:
       escape-string-regexp: 4.0.0
       nanoid: 3.3.4
       size-limit: 8.1.0
-      webpack: 5.74.0_uglify-js@3.17.1
+      webpack: 5.74.0_uglify-js@3.17.2
     transitivePeerDependencies:
       - '@swc/core'
       - esbuild
@@ -6132,7 +6132,7 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /terser-webpack-plugin/5.3.5_chaxfmcvn3jrbxacrt3nynsyvi:
+  /terser-webpack-plugin/5.3.5_qtit4y2sddsrkmuuigkm77t6uq:
     resolution: {integrity: sha512-AOEDLDxD2zylUGf/wxHxklEkOe2/r+seuyOWujejFrIxHf11brA1/dWQNIgXa1c6/Wkxgu7zvv0JhOWfc2ELEA==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -6153,8 +6153,8 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.14.2
-      uglify-js: 3.17.1
-      webpack: 5.74.0_uglify-js@3.17.1
+      uglify-js: 3.17.2
+      webpack: 5.74.0_uglify-js@3.17.2
     dev: true
 
   /terser/5.14.2:
@@ -6419,8 +6419,8 @@ packages:
     engines: {node: '>=4.2.0'}
     hasBin: true
 
-  /uglify-js/3.17.1:
-    resolution: {integrity: sha512-+juFBsLLw7AqMaqJ0GFvlsGZwdQfI2ooKQB39PSBgMnMakcFosi9O8jCwE+2/2nMNcc0z63r9mwjoDG8zr+q0Q==}
+  /uglify-js/3.17.2:
+    resolution: {integrity: sha512-bbxglRjsGQMchfvXZNusUcYgiB9Hx2K4AHYXQy2DITZ9Rd+JzhX7+hoocE5Winr7z2oHvPsekkBwXtigvxevXg==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: true
@@ -6640,7 +6640,7 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack/5.74.0_uglify-js@3.17.1:
+  /webpack/5.74.0_uglify-js@3.17.2:
     resolution: {integrity: sha512-A2InDwnhhGN4LYctJj6M1JEaGL7Luj6LOmyBHjcI8529cm5p6VXiTIW2sn6ffvEAKmveLzvu4jrihwXtPojlAA==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -6671,7 +6671,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.1.1
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.5_chaxfmcvn3jrbxacrt3nynsyvi
+      terser-webpack-plugin: 5.3.5_qtit4y2sddsrkmuuigkm77t6uq
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     transitivePeerDependencies:
