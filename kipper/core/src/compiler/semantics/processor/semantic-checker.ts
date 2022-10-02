@@ -8,7 +8,7 @@
 
 import type { KipperRef } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { compilableNodeChild, compilableNodeParent } from "../../parser";
+import type { compilableNodeChild, compilableNodeParent, SemanticData, TypeData } from "../../parser";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import { BuiltInFunction } from "../../runtime-built-ins";
 import {
@@ -22,7 +22,9 @@ import {
 	Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
+	IfStatement,
 	ReturnStatement,
+	Statement,
 	VariableDeclaration,
 } from "../language";
 import {
@@ -30,6 +32,7 @@ import {
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByParameterError,
 	IdentifierAlreadyUsedByVariableError,
+	IncompleteReturnsInCodePaths,
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	MissingFunctionBodyError,
@@ -211,6 +214,75 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	public validFunctionBody(body: compilableNodeChild | undefined): void {
 		if (!body || !(body instanceof CompoundStatement)) {
 			throw this.assertError(new MissingFunctionBodyError());
+		}
+	}
+
+	/**
+	 * Ensures that the body of the {@link func} has valid return statements and all code paths return a value.
+	 * @param func The function where the body should be checked.
+	 */
+	public validReturnInFunctionBody(func: FunctionDeclaration): void {
+		const semanticData = func.getSemanticData();
+
+		// If the function return type is not 'void' then there must be a return statement in all code paths
+		// Note: We will ignore types here, since the return statements themselves with check later if they have the proper
+		// return type.
+		if (semanticData.returnType !== "void") {
+			// Recursively check all code paths to ensure all return a value.
+			const checkChildrenCodePaths = (parent: Statement<SemanticData, TypeData>): boolean => {
+				let returnPathsCovered = false;
+
+				// If the parent is an if statement, we have to check the if and else branches directly
+				// (Note: This won't ignore any other children, since an if statement will always only have one
+				// if and one else branch, and never any other direct children)
+				if (parent instanceof IfStatement) {
+					const ifSemantics = parent.getSemanticData();
+
+					// First check the if statement
+					returnPathsCovered = checkChildrenCodePaths(ifSemantics.ifBranch);
+
+					// Afterwards check the else branch (if it exists and is not undefined)
+					if (ifSemantics.elseBranch) {
+						returnPathsCovered = returnPathsCovered && checkChildrenCodePaths(ifSemantics.elseBranch);
+					}
+				} else {
+					// If it's not an if-statement, check regularly all children if they are covered
+					for (const child of parent.children) {
+						if (child instanceof IfStatement) {
+							// Only if both branches return a value, then this code path is covered
+							const ifSemantics = child.getSemanticData();
+
+							// First check the if branch (this one is always present)
+							returnPathsCovered = checkChildrenCodePaths(ifSemantics.ifBranch);
+
+							// Secondly check the else branch (this may be undefined, another if statement or an ending compound
+							// statement)
+							if (ifSemantics.elseBranch) {
+								returnPathsCovered = returnPathsCovered && checkChildrenCodePaths(ifSemantics.elseBranch);
+							}
+						} else if (child instanceof ReturnStatement) {
+							// If the child is a return statement, then this entire code path is covered
+							returnPathsCovered = true;
+							break;
+						} else if (child instanceof CompoundStatement) {
+							// If the child is a compound statement, we need to check it as well
+							// (This is for compatibility of nested compound statements that appear directly under another compound
+							// statement, like for example { { } })
+							returnPathsCovered = checkChildrenCodePaths(child);
+						}
+					}
+				}
+
+				return returnPathsCovered;
+			};
+
+			// Check all children starting with the function body (compound statement) itself
+			let returnPathsCovered = checkChildrenCodePaths(semanticData.functionBody);
+
+			// If not all code paths return a value, throw an error
+			if (!returnPathsCovered) {
+				throw this.assertError(new IncompleteReturnsInCodePaths());
+			}
 		}
 	}
 

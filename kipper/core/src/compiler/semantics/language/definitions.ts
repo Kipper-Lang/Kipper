@@ -364,7 +364,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			if (child instanceof ParameterDeclaration) {
 				params.push(child);
 			} else {
-				// Once the return type has been reached, stop, as the last two items will be the return type and function body
+				// Once the return type has been reached, stop, as the last two items should be the return type and func body
 				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
 				body = <any>children.pop();
 				break;
@@ -392,6 +392,9 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
 		};
+
+		// Ensure that all code paths return a value
+		this.programCtx.semanticCheck(this).validReturnInFunctionBody(this);
 
 		// Add function definition to the current scope
 		this.scopeDeclaration = this.scope.addFunction(this);

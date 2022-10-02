@@ -684,7 +684,7 @@ export class IdentifierPrimaryExpression extends Expression<
 		if (!(ref instanceof ScopeDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
 		} else {
-			// Ensure that the reference is defined, if it's not used inside an assignment expression
+			// If the reference is not used inside an assignment expression, ensure that the reference is defined
 			if (!(this.parent instanceof AssignmentExpression)) {
 				this.programCtx.semanticCheck(this).referenceDefined(ref);
 			}

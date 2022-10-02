@@ -594,3 +594,13 @@ export class InvalidAmountOfArgumentsError extends ArgumentError {
 		super(`Function '${func}' only accepts ${expected} argument${expected === 1 ? "" : "s"}, received ${received}.`);
 	}
 }
+
+/**
+ * Error that is thrown when not all code paths of a function return a value.
+ * @since 0.10.0
+ */
+export class IncompleteReturnsInCodePaths extends KipperSyntaxError {
+	constructor() {
+		super("Not all code paths return a value.");
+	}
+}

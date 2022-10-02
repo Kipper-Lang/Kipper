@@ -287,7 +287,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validReturnStatement(returnStatement: ReturnStatement): void {
 		// If the return statement has no return value, then the value is automatically 'void'
-		const returnValueType = returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType ?? "void";
+		const returnValueType =
+			returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType ?? "void";
 		const functionSemanticData = returnStatement.getSemanticData().function.getSemanticData();
 
 		// We need to check whether the types are matching, but *not* if the function return type is valid, since that

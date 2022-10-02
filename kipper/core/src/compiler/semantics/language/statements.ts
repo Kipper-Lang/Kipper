@@ -260,8 +260,8 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 
 		this.semanticData = {
 			condition: condition,
-			statementBody: body,
-			alternativeBranch: alternativeBranch ?? undefined,
+			ifBranch: body,
+			elseBranch: alternativeBranch ?? undefined,
 		};
 	}
 
@@ -630,7 +630,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		this.programCtx.typeCheck(this).validReturnStatement(this);
 
 		this.typeSemantics = {
-			returnType: semanticData.returnValue?.getTypeSemanticData().type ?? "void",
+			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? "void",
 		};
 	}
 
