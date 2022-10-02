@@ -28,7 +28,6 @@ version-resolver:
       - "bug"
       - "fix"
       - "maintenance"
-      - "documentation"
       - "dependencies"
       - "other"
 template: |
