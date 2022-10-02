@@ -27,7 +27,7 @@ specifiers:
   mkdirp: 1.0.4
   mocha: 10.0.0
   nyc: 15.1.0
-  oclif: 3.2.5
+  oclif: 3.2.13
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -72,7 +72,7 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.0.0
   nyc: 15.1.0
-  oclif: 3.2.5
+  oclif: 3.2.13
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -619,40 +619,6 @@ packages:
       - supports-color
     dev: true
 
-  /@oclif/core/1.16.1:
-    resolution: {integrity: sha512-MfzgqcWzWymndd934pd52JAwy0RIgWWYnC0Ed7bxUVYWF4HFb3KmsE7x9/QBP9392Q14vxXi2GNLHboM/5vaDA==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.2
-      ansi-escapes: 4.3.2
-      ansi-styles: 4.3.0
-      cardinal: 2.1.1
-      chalk: 4.1.2
-      clean-stack: 3.0.1
-      cli-progress: 3.11.2
-      debug: 4.3.4_supports-color@8.1.1
-      ejs: 3.1.8
-      fs-extra: 9.1.0
-      get-package-type: 0.1.0
-      globby: 11.1.0
-      hyperlinker: 1.0.0
-      indent-string: 4.0.0
-      is-wsl: 2.2.0
-      js-yaml: 3.14.1
-      natural-orderby: 2.0.3
-      object-treeify: 1.1.33
-      password-prompt: 1.1.2
-      semver: 7.3.7
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-      supports-color: 8.1.1
-      supports-hyperlinks: 2.2.0
-      tslib: 2.4.0
-      widest-line: 3.1.0
-      wrap-ansi: 7.0.0
-    dev: true
-
   /@oclif/core/1.16.4:
     resolution: {integrity: sha512-l+xHtVMteJWeTZZ+f2yLyNjf69X0mhAH8GILXnmoAGAemXbc1DVstvloxOouarvm9xyHHhquzO1Qg5l6xa1VIw==}
     engines: {node: '>=14.0.0'}
@@ -712,15 +678,15 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /@oclif/plugin-help/5.1.12:
-    resolution: {integrity: sha512-HvH/RubJxqCinP0vUWQLTOboT+SfjfL8h40s+PymkWaldIcXlpoRaJX50vz+SjZIs7uewZwEk8fzLqpF/BWXlg==}
+  /@oclif/plugin-help/5.1.14:
+    resolution: {integrity: sha512-jhpD0a2bEp3YW93sQcUM3b15DH+svQqC9pMXNp1m1VyAPoskdaELgt5P/5SjmNuFwqws8scxpbYKlr2/lvvkGQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 1.16.4
     dev: true
 
-  /@oclif/plugin-not-found/2.3.1:
-    resolution: {integrity: sha512-AeNBw+zSkRpePmpXO8xlL072VF2/R2yK3qsVs/JF26Yw1w77TWuRTdFR+hFotJtFCJ4QYqhNtKSjdryCO9AXsA==}
+  /@oclif/plugin-not-found/2.3.3:
+    resolution: {integrity: sha512-SIrSQmZAkxkje5XSHLQRj5cwUrJkPlMLil5Raqq7LGIskMWufsq5y3WzOb0kcFq4aKzzjtYDRdB+HP4670suiQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.1
@@ -729,8 +695,8 @@ packages:
       lodash: 4.17.21
     dev: true
 
-  /@oclif/plugin-warn-if-update-available/2.0.4:
-    resolution: {integrity: sha512-9dprC1CWPjesg0Vf/rDSQH2tzJXhP1ow84cb2My1kj6e6ESulPKpctiCFSZ1WaCQFfq+crKhzlNoP/vRaXNUAg==}
+  /@oclif/plugin-warn-if-update-available/2.0.6:
+    resolution: {integrity: sha512-9PSerV/jz3Mq5P8+bfLhr4UrTNOLmhUo8tGsv/CzJ0c/QffjYONZ8pCNsrVDO+wWzzuYHedXPZjDpOCmMcTTag==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 1.16.4
@@ -1586,8 +1552,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /aws-sdk/2.1195.0:
-    resolution: {integrity: sha512-xU7177JhKM+4SsLnoA6/r3qGzSXmbLgw/YC1KRHvZyJCbuTY+vdAGLaldbtNXjjwmE3a6EeoCREANv8GY62VdQ==}
+  /aws-sdk/2.1227.0:
+    resolution: {integrity: sha512-L6vnopVXVXKEqi0R4i54F6xSemczd/aRy4UscqnfpyvNYr9yLL3jVApFo7OX8hxompe/tgxdQFXvMiNzhkSrwQ==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -2234,8 +2200,8 @@ packages:
       typedarray: 0.0.6
     dev: true
 
-  /concurrently/7.3.0:
-    resolution: {integrity: sha512-IiDwm+8DOcFEInca494A8V402tNTQlJaYq78RF2rijOrKEk/AOHTxhN4U1cp7GYKYX5Q6Ymh1dLTBlzIMN0ikA==}
+  /concurrently/7.4.0:
+    resolution: {integrity: sha512-M6AfrueDt/GEna/Vg9BqQ+93yuvzkSKmoTixnwEJkH0LlcGrRC2eCmjeG1tLLHIYfpYJABokqSGyMcXjm96AFA==}
     engines: {node: ^12.20.0 || ^14.13.0 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -4851,17 +4817,17 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /oclif/3.2.5:
-    resolution: {integrity: sha512-NFYay4FY/oa1hiRfnF1IFOfy0v7W2z9tl7NrTu6ZDQa4wiQEeJDa//l6OWQBx3xuzMUwtE4avF/ZoTdm2OuoeQ==}
+  /oclif/3.2.13:
+    resolution: {integrity: sha512-B6ahAuoZKf4oolE75n/PXCEcV1sACDhD6c4RJwzSXhpUEwiCJMPLbbVM9qrLzqqee+PbFgJtIKA8Aiv6jWi7BA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
-      '@oclif/core': 1.16.1
-      '@oclif/plugin-help': 5.1.12
-      '@oclif/plugin-not-found': 2.3.1
-      '@oclif/plugin-warn-if-update-available': 2.0.4
-      aws-sdk: 2.1195.0
-      concurrently: 7.3.0
+      '@oclif/core': 1.16.4
+      '@oclif/plugin-help': 5.1.14
+      '@oclif/plugin-not-found': 2.3.3
+      '@oclif/plugin-warn-if-update-available': 2.0.6
+      aws-sdk: 2.1227.0
+      concurrently: 7.4.0
       debug: 4.3.4
       find-yarn-workspace-root: 2.0.0
       fs-extra: 8.1.0
@@ -4871,8 +4837,8 @@ packages:
       qqjs: 0.3.11
       semver: 7.3.7
       tslib: 2.4.0
-      yeoman-environment: 3.10.0
-      yeoman-generator: 5.7.0_yeoman-environment@3.10.0
+      yeoman-environment: 3.11.1
+      yeoman-generator: 5.7.0_yeoman-environment@3.11.1
       yosay: 2.0.2
     transitivePeerDependencies:
       - bluebird
@@ -6938,8 +6904,8 @@ packages:
       fd-slicer: 1.1.0
     dev: true
 
-  /yeoman-environment/3.10.0:
-    resolution: {integrity: sha512-sYtSxBK9daq21QjoskJTHKLQ1xEsRPURkmFV/aM8HS8ZlQVzwx57Rz1zCs8EGPhK4vqsmTE8H92Gp1jg1fT3EA==}
+  /yeoman-environment/3.11.1:
+    resolution: {integrity: sha512-WxPntJFhdJiBtkaJOmkv/v5siWVJvLX2GB26TXMPaIgxHGhreKUwACI2jzjnsFcHv1F8Uayp668NZsz8ygalvg==}
     engines: {node: '>=12.10.0'}
     hasBin: true
     dependencies:
@@ -6984,7 +6950,7 @@ packages:
       - supports-color
     dev: true
 
-  /yeoman-generator/5.7.0_yeoman-environment@3.10.0:
+  /yeoman-generator/5.7.0_yeoman-environment@3.11.1:
     resolution: {integrity: sha512-z9ZwgKoDOd+llPDCwn8Ax2l4In5FMhlslxdeByW4AMxhT+HbTExXKEAahsClHSbwZz1i5OzRwLwRIUdOJBr5Bw==}
     engines: {node: '>=12.10.0'}
     peerDependencies:
@@ -7006,7 +6972,7 @@ packages:
       shelljs: 0.8.5
       sort-keys: 4.2.0
       text-table: 0.2.0
-      yeoman-environment: 3.10.0
+      yeoman-environment: 3.11.1
     transitivePeerDependencies:
       - encoding
       - supports-color
