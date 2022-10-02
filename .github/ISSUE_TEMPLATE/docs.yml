@@ -1,0 +1,35 @@
+name: Docs Request
+description: File a request for changes of the Kipper Docs
+title: "[Docs] <title>"
+labels: [docs, question]
+assignees: Luna-Klatzer
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please [search here](https://github.com/Luna-Klatzer/Kipper/issues) to see if an issue already exists for your problem.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: Current State & Issue
+      description: A short description of what is lacking, incomplete or problematic on the docs page.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Expected Changes & Improvements
+      description: A clear & concise description of what you expected to change on the docs page.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Referenced sites
+      description: Please add a list of all sites that need updating. (If entire sections contain the issue, simply mention them once)
+      value: |
+        - https://luna-klatzer.github.io/Kipper/docs/.../...
+        - ...
+        - ... 
+    validations:
+      required: false
