@@ -46,7 +46,7 @@ Closes # <!-- Remove this if this is not related to an issue -->
 
 None.
 
-## Linked other issues or PRs
+## Linked issues or PRs
 
 <!-- Include other issues and PRs related to this if any exist.  Use this format: - [ ] #ISSUE_OR_PR -->
 
