@@ -43,4 +43,7 @@ template: |
 
 exclude-labels:
   - "release"
+  - "docs"
+  - "spam"
+  - "invalid"
   - "skip changelog"
