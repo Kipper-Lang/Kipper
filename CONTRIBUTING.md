@@ -11,6 +11,9 @@
     - [Monorepo structure using pnpm](#monorepo-structure-using-pnpm)
     - [`@kipper/core` package](#kippercore-package)
     - [`@kipper/cli` package](#kippercli-package)
+    - [`@kipper/web` package](#kipperweb-package)
+    - [`@kipper/target-ts` package](#kippertarget-ts-package)
+    - [`@kipper/target-js` package](#kippertarget-js-package)
   - [Kipper compilation targets](#kipper-compilation-targets)
   - [Configuring the compiler](#configuring-the-compiler)
   - [How to add new compiler functionality](#how-to-add-new-compiler-functionality)
@@ -112,15 +115,38 @@ with Kipper. It allows the parsing, semantic analysis and compilation of files.
 
 ### `@kipper/cli` package
 
-The CLI package is the command line interface for interacting with the Kipper compiler using pre-defined commands. It
-is not as customisable as if someone would write TypeScript code using `@kipper/core`, but it provides a lot of simple
-and easy to use functionality over the command line.
+The cli package is the command line interface for interacting with the Kipper compiler using pre-defined commands. It
+is not as customisable as if someone would compile code using an imported `@kipper/core` package, but it provides an
+easy interface to use Kipper and compile code.
 
-To run the Kipper cli, you can simply run:
+To run the Kipper cli in a development environment, you can simply run:
 
 ```bash
 pnpm start ...
 ```
+
+### `@kipper/web` package
+
+The web package is the web interface for interacting with the Kipper compiler. It provides a simple web bundle that
+can be included in an HTML file and used to generate JavaScript code from Kipper source code.
+
+To generate the bundle file, simply run:
+
+```bash
+pnpm run browserify
+```
+
+The bundle file will be located in the root folder of the `@kipper/web` package (`kipper/web`).
+
+### `@kipper/target-ts` package
+
+The target-ts package is the TypeScript target package for Kipper. It provides the code for translating a Kipper AST
+into TypeScript code.
+
+### `@kipper/target-js` package
+
+The target-js package is the JavaScript target package for Kipper. It provides the code for translating a Kipper AST
+into JavaScript code.
 
 ## Kipper compilation targets
 
@@ -158,12 +184,13 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 ### Add or update semantics
 
-The semantics of an AST node is usually represented using an interface that defines what metadata must be present for an
-instance to be compilable. The two generic parameters of the `CompilableASTNode<Semantics, TypeSemantics>` class, where
-each one is a type that represents the semantics of the AST node and the type of the type semantics, respectively,
-are used to define that metadata.
+The semantics of an AST node are represented using an interface that defines what semantic metadata must be present 
+for an instance to be translatable. 
 
-Usually the semantic interfaces of a Kipper AST node are defined right above, like for example:
+The two generic parameters of the `CompilableASTNode<Semantics, TypeSemantics>` class are the semantics and type 
+semantic interfaces, which will hint the type of `CompilableASTNode.semanticData` and `CompilableASTNode.typeData`.
+
+Usually the semantic interfaces of a Kipper AST node are like this:
 
 ```ts
 export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
@@ -175,35 +202,33 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 export interface AdditiveExpressionTypeSemantics extends ArithmeticExpressionTypeSemantics {
 	evaluatedType: KipperType;
 }
-
-export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, AdditiveExpressionTypeSemantics> {
-	// ...
-}
 ```
 
 #### Primary Semantic Analysis
 
 These semantics then are per default processed using the classes implementation of `primarySemanticAnalysis()`. This
-function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. Though
-to avoid unexpected errors, when using the semantic data they should always be fetched using
+function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. 
+
+Though to avoid unexpected errors, when using semantic data of an AST node they should always be fetched using
 `CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined (This for example
 can happen if the child node of a node fails to process and as such the parent can not access the semantic data, since
 it was not defined/evaluated).
 
 To update how semantics are handled or what semantic data exists, either the semantics interface or the
-function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed. Avoid at all cost
-checking semantic data and performing semantic analysis anywhere outside those functions and the target specific
-semantics!
+function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed. 
+
+To assert specific semantics and throw proper errors, you can easily do that using the `KipperSemanticChecker`, which is
+explained more in-depth [here](#throwing-semantic-errors).
 
 #### Type checking
 
 As Kipper is a statically and strongly typed language, types must be checked at compile time to
 ensure the program can execute without issues.
 
-Kipper handles type checking for a single `CompilableASTNode` in a nodes `primarySemanticTypeChecking()`
-function implementation, which is called after `primarySemanticAnalysis()`. There all possible type issues
-should be checked for to avoid issues during code generation or execution and the `CompilableASTNode.typeData` filled
-to ensure the correct type metadata is available to other nodes as well.
+Kipper handles type checking for a single `CompilableASTNode` with its `primarySemanticTypeChecking()`
+function implementation, which is called after `primarySemanticAnalysis()`. In the function all possible type issues
+should be checked for to avoid issues during code generation or execution, as well the `CompilableASTNode.typeData` 
+populated to ensure the correct type data is available to other nodes as well that might depend on it.
 
 To assert types and throw proper errors, you can easily do that using the `KipperTypeChecker`, which is
 explained more in-depth [here](#throwing-semantic-errors).
@@ -213,7 +238,7 @@ explained more in-depth [here](#throwing-semantic-errors).
 In case that a target (targets are for example TypeScript) has specific semantic logic that must be upheld, a
 `KipperTargetSemanticAnalyser` is used, which can do additional checks on specific AST nodes. Each program
 (`KipperProgramContext`) has one `KipperCompileTarget` set, which defines how Kipper should be translated. This class
-also defines a `KipperTargetSemanticAnalyser`, where target-specific semantic can be checked.
+also defines a `KipperTargetSemanticAnalyser`, where target-specific semantics may be checked.
 
 To update or add target specific semantic checks, you can update the corresponding functions for the AST node class.
 For example `KipperTargetSemanticAnalyser.compoundStatement`, which handles the semantic analysis for `{ }` blocks.
@@ -261,7 +286,6 @@ These tests are categorised into sub-folders per package in the following scheme
 
 ```markdown
 module/
-
 - cli/
 - core/
 ```
