@@ -10,10 +10,5 @@
 	],
 	"spec": [
 		"**/*.test.ts"
-	],
-  "watch-files": [
-    "test/**/*.ts",
-    "kipper/cli/src/**/*.ts",
-    "kipper/core/src/**/*.ts"
-  ]
+	]
 }
