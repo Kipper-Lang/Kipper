@@ -25,15 +25,16 @@ export interface IfStatementSemantics extends SemanticData {
 	 * The body of the if-statement.
 	 * @since 0.9.0
 	 */
-	statementBody: Statement<any, any>;
+	ifBranch: Statement<any, any>;
 	/**
-	 * The alternative branch of the if-statement, which is optional. This alternative branch can either be:
+	 * The alternative (optional) branch of the if-statement. This alternative branch can either be:
 	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
-	 * evaluated in the else branch)
-	 * - Or an else-if branch, if the type is another {@link IfStatement}.
+	 * evaluated in the else branch).
+	 * - An else-if branch, if the type is another {@link IfStatement}.
+	 * - Nothing (undefined), if it wasn't specified and the if statement does not have any more branches.
 	 * @since 0.9.0
 	 */
-	alternativeBranch?: IfStatement | Statement<any, any>;
+	elseBranch?: IfStatement | Statement<any, any>;
 }
 
 /**

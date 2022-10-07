@@ -3,7 +3,7 @@
 # Kipper JavaScript Target - `@kipper/target-js`
 
 [![Version](https://img.shields.io/npm/v/@kipper/target-js?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/target-js)
-![](https://img.shields.io/badge/Coverage-75%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-77%25-5A7302.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/target-js)](https://packagephobia.com/result?p=@kipper/target-js)

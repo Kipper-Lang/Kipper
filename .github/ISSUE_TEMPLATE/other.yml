@@ -1,0 +1,19 @@
+name: Other Issue/Request
+description: File a general request for something to be changed or udpated
+title: "[Other] <title>"
+labels: [other, question]
+assignees: Luna-Klatzer
+body:
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please [search here](https://github.com/Luna-Klatzer/Kipper/issues) to see if an issue already exists for your problem.
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: textarea
+    attributes:
+      label: Current State & Issue
+      description: A short description of what issue you are experiencing and what should be changed.
+    validations:
+      required: false

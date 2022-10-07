@@ -500,6 +500,7 @@ export type TranslatedCodeToken = string;
 /**
  * Represents a single translated Kipper expression. This is usually used to represent multiple expression inside a
  * single {@link TranslatedCodeLine}.
+ * @since 0.5.0
  */
 export type TranslatedExpression = Array<TranslatedCodeToken>;
 
@@ -517,6 +518,7 @@ export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
 
 /**
  * Represents a Kipper variable that can be either declared or defined.
+ * @since 0.6.0
  */
 export type KipperVariable = ScopeVariableDeclaration;
 

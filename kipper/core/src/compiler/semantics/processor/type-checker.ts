@@ -71,6 +71,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param type1 The first type that is given.
 	 * @param type2 The second type that is given.
 	 * @returns True if the types are matching, otherwise false.
+	 * @since 0.10.0
 	 */
 	public checkMatchingTypes(type1: KipperType, type2: KipperType): boolean {
 		if (type1 !== type2) {
@@ -286,9 +287,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public validReturnStatement(returnStatement: ReturnStatement): void {
-		const returnValueType = returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType;
+		// If the return statement has no return value, then the value is automatically 'void'
+		const returnValueType =
+			returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType ?? "void";
 		const functionSemanticData = returnStatement.getSemanticData().function.getSemanticData();
 
+		// We need to check whether the types are matching, but *not* if the function return type is valid, since that
+		// will be done later by the function itself during the type checking.
 		if (returnValueType && !this.checkMatchingTypes(returnValueType, <KipperType>functionSemanticData.returnType)) {
 			throw this.assertError(
 				new TypeError(`Type '${returnValueType}' is not assignable to type '${functionSemanticData.returnType}'.`),

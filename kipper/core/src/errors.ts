@@ -219,7 +219,7 @@ export class UndefinedSemanticsError extends KipperInternalError {
  * Error that is thrown whenever the {@link Declaration.scopeDeclaration} field of an AST Node is undefined.
  * @since 0.10.0
  */
-export class UndefinedDeclarationCtx extends KipperInternalError {
+export class UndefinedDeclarationCtxError extends KipperInternalError {
 	constructor() {
 		super(
 			"Failed to determine the declaration context for a declaration. Most likely the property was accessed too early during semantic analysis.",
@@ -592,5 +592,15 @@ export class ArgumentError extends KipperError {
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
 		super(`Function '${func}' only accepts ${expected} argument${expected === 1 ? "" : "s"}, received ${received}.`);
+	}
+}
+
+/**
+ * Error that is thrown when not all code paths of a function return a value.
+ * @since 0.10.0
+ */
+export class IncompleteReturnsInCodePathsError extends KipperSyntaxError {
+	constructor() {
+		super("Not all code paths return a value.");
 	}
 }

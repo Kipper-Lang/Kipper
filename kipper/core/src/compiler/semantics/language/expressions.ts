@@ -4,69 +4,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import {
-	AdditiveExpressionContext,
-	ArraySpecifierPostfixExpressionContext,
-	AssignmentExpressionContext,
-	BoolPrimaryExpressionContext,
-	CastOrConvertExpressionContext,
-	CompilableASTNode,
-	ConditionalExpressionContext,
-	EqualityExpressionContext,
-	FStringPrimaryExpressionContext,
-	FunctionCallPostfixExpressionContext,
-	GenericTypeSpecifierContext,
-	IdentifierPrimaryExpressionContext,
-	IdentifierTypeSpecifierContext,
-	IncrementOrDecrementPostfixExpressionContext,
-	IncrementOrDecrementUnaryExpressionContext,
-	ListPrimaryExpressionContext,
-	LogicalAndExpressionContext,
-	LogicalOrExpressionContext,
-	MultiplicativeExpressionContext,
-	NumberPrimaryExpressionContext,
-	OperatorModifiedUnaryExpressionContext,
-	RelationalExpressionContext,
-	StringPrimaryExpressionContext,
-	TangledPrimaryExpressionContext,
-	TypeofTypeSpecifierContext,
-	UnaryOperatorContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext,
-} from "../../parser";
-import {
-	type KipperAdditiveOperator,
-	kipperAdditiveOperators,
-	kipperArithmeticAssignOperators,
-	type KipperAssignOperator,
-	type KipperBoolTypeLiterals,
-	type KipperEqualityOperator,
-	kipperEqualityOperators,
-	type KipperFunction,
-	kipperLogicalAndOperator,
-	kipperLogicalOrOperator,
-	type KipperMultiplicativeOperator,
-	kipperMultiplicativeOperators,
-	type KipperNegateOperator,
-	KipperNullType,
-	KipperRef,
-	type KipperRelationalOperator,
-	kipperRelationalOperators,
-	type KipperSignOperator,
-	kipperStrType,
-	type KipperType,
-	kipperUnaryModifierOperators,
-	KipperUndefinedType,
-	KipperVoidType,
-	type TranslatedExpression,
-} from "../const";
+
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
-import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { TerminalNode } from "antlr4ts/tree";
-import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
-import { kipperInternalBuiltIns } from "../../runtime-built-ins";
-import { ParserRuleContext } from "antlr4ts";
-import {
+import type {
 	AdditiveExpressionSemantics,
 	ArraySpecifierExpressionSemantics,
 	AssignmentExpressionSemantics,
@@ -99,7 +39,7 @@ import {
 	UnaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 } from "../semantic-data";
-import {
+import type {
 	AdditiveExpressionTypeSemantics,
 	ArraySpecifierTypeSemantics,
 	AssignmentExpressionTypeSemantics,
@@ -131,6 +71,66 @@ import {
 	UnaryExpressionTypeSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
 } from "../type-data";
+import {
+	KipperAdditiveOperator,
+	kipperAdditiveOperators,
+	kipperArithmeticAssignOperators,
+	KipperAssignOperator,
+	KipperBoolTypeLiterals,
+	KipperEqualityOperator,
+	kipperEqualityOperators,
+	KipperFunction,
+	kipperLogicalAndOperator,
+	kipperLogicalOrOperator,
+	KipperMultiplicativeOperator,
+	kipperMultiplicativeOperators,
+	KipperNegateOperator,
+	KipperNullType,
+	KipperRelationalOperator,
+	kipperRelationalOperators,
+	KipperSignOperator,
+	kipperStrType,
+	KipperType,
+	kipperUnaryModifierOperators,
+	KipperUndefinedType,
+	KipperVoidType,
+	TranslatedExpression,
+} from "../const";
+import { kipperInternalBuiltIns } from "../../runtime-built-ins";
+import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
+import { TerminalNode } from "antlr4ts/tree";
+import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
+import {
+	AdditiveExpressionContext,
+	ArraySpecifierPostfixExpressionContext,
+	AssignmentExpressionContext,
+	BoolPrimaryExpressionContext,
+	CastOrConvertExpressionContext,
+	CompilableASTNode,
+	ConditionalExpressionContext,
+	EqualityExpressionContext,
+	FStringPrimaryExpressionContext,
+	FunctionCallPostfixExpressionContext,
+	GenericTypeSpecifierContext,
+	IdentifierPrimaryExpressionContext,
+	IdentifierTypeSpecifierContext,
+	IncrementOrDecrementPostfixExpressionContext,
+	IncrementOrDecrementUnaryExpressionContext,
+	ListPrimaryExpressionContext,
+	LogicalAndExpressionContext,
+	LogicalOrExpressionContext,
+	MultiplicativeExpressionContext,
+	NumberPrimaryExpressionContext,
+	OperatorModifiedUnaryExpressionContext,
+	RelationalExpressionContext,
+	StringPrimaryExpressionContext,
+	TangledPrimaryExpressionContext,
+	TypeofTypeSpecifierContext,
+	UnaryOperatorContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
+} from "../../parser";
+import { ParserRuleContext } from "antlr4ts";
 
 /**
  * Every antlr4 expression ctx type
@@ -684,7 +684,7 @@ export class IdentifierPrimaryExpression extends Expression<
 		if (!(ref instanceof ScopeDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
 		} else {
-			// Ensure that the reference is defined, if it's not used inside an assignment expression
+			// If the reference is not used inside an assignment expression, ensure that the reference is defined
 			if (!(this.parent instanceof AssignmentExpression)) {
 				this.programCtx.semanticCheck(this).referenceDefined(ref);
 			}

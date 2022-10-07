@@ -21,7 +21,7 @@ import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration }
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
-import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtx } from "../../../errors";
+import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
 import {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
@@ -127,7 +127,7 @@ export abstract class Declaration<
 	 */
 	public getScopeDeclaration(): ScopeDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -188,7 +188,7 @@ export class ParameterDeclaration extends Declaration<
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -302,7 +302,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}
@@ -364,7 +364,7 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			if (child instanceof ParameterDeclaration) {
 				params.push(child);
 			} else {
-				// Once the return type has been reached, stop, as the last two items will be the return type and function body
+				// Once the return type has been reached, stop, as the last two items should be the return type and func body
 				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
 				body = <any>children.pop();
 				break;
@@ -392,6 +392,9 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
 		};
+
+		// Ensure that all code paths return a value
+		this.programCtx.semanticCheck(this).validReturnCodePathsInFunctionBody(this);
 
 		// Add function definition to the current scope
 		this.scopeDeclaration = this.scope.addFunction(this);
@@ -476,7 +479,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {
 		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtx();
+			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
 	}

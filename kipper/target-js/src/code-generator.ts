@@ -140,9 +140,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Core items, which will be always present
 		let condition = await semanticData.condition.translateCtxAndChildren();
-		let statement = await semanticData.statementBody.translateCtxAndChildren();
+		let statement = await semanticData.ifBranch.translateCtxAndChildren();
 
-		if (semanticData.statementBody instanceof CompoundStatement) {
+		if (semanticData.ifBranch instanceof CompoundStatement) {
 			statement = removeBrackets(statement);
 		} else {
 			statement = indentLines(statement); // Apply indent to the single statement
@@ -155,19 +155,19 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 
 		// If there is no alternative branch, return with this code
-		if (!semanticData.alternativeBranch) {
+		if (!semanticData.elseBranch) {
 			return baseCode;
 		}
 
-		let secondBranchIsCompoundStatement = semanticData.alternativeBranch instanceof CompoundStatement;
-		let secondBranchIsElseIf = semanticData.alternativeBranch instanceof IfStatement;
+		let secondBranchIsCompoundStatement = semanticData.elseBranch instanceof CompoundStatement;
+		let secondBranchIsElseIf = semanticData.elseBranch instanceof IfStatement;
 		let secondBranchIsElse = !secondBranchIsElseIf;
 		let secondCondition: Array<string> | null = null;
 		let secondBranch: Array<TranslatedCodeLine> | null = null;
 
 		// Evaluate the alternative branch if it exists
-		if (semanticData.alternativeBranch) {
-			secondBranch = await semanticData.alternativeBranch.translateCtxAndChildren();
+		if (semanticData.elseBranch) {
+			secondBranch = await semanticData.elseBranch.translateCtxAndChildren();
 
 			if (secondBranchIsElseIf) {
 				// Else if statement
@@ -179,8 +179,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				secondCondition = ["else"];
 			}
 
-			// Format code and remove brackets from compound statements if they exist
 			if (secondBranchIsCompoundStatement) {
+				// Format code and remove brackets from compound statements if they exist
 				secondBranch = removeBrackets(secondBranch);
 			} else if (secondBranchIsElse) {
 				// If the second branch is else, then the end of this branch of the AST was reached
