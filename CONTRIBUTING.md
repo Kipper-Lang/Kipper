@@ -184,10 +184,10 @@ If you want to add new functionality for the Kipper compiler, you can easily do 
 
 ### Add or update semantics
 
-The semantics of an AST node are represented using an interface that defines what semantic metadata must be present 
-for an instance to be translatable. 
+The semantics of an AST node are represented using an interface that defines what semantic metadata must be present
+for an instance to be translatable.
 
-The two generic parameters of the `CompilableASTNode<Semantics, TypeSemantics>` class are the semantics and type 
+The two generic parameters of the `CompilableASTNode<Semantics, TypeSemantics>` class are the semantics and type
 semantic interfaces, which will hint the type of `CompilableASTNode.semanticData` and `CompilableASTNode.typeData`.
 
 Usually the semantic interfaces of a Kipper AST node are like this:
@@ -207,7 +207,7 @@ export interface AdditiveExpressionTypeSemantics extends ArithmeticExpressionTyp
 #### Primary Semantic Analysis
 
 These semantics then are per default processed using the classes implementation of `primarySemanticAnalysis()`. This
-function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`. 
+function should always evaluate and define the semantics by setting the field `CompilableASTNode.semanticData`.
 
 Though to avoid unexpected errors, when using semantic data of an AST node they should always be fetched using
 `CompilableASTNode.ensureSemanticDataExists()`, which throws an error in case they are undefined (This for example
@@ -215,7 +215,7 @@ can happen if the child node of a node fails to process and as such the parent c
 it was not defined/evaluated).
 
 To update how semantics are handled or what semantic data exists, either the semantics interface or the
-function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed. 
+function `CompilableASTNode.primarySemanticAnalysis()` should be updated and changed.
 
 To assert specific semantics and throw proper errors, you can easily do that using the `KipperSemanticChecker`, which is
 explained more in-depth [here](#throwing-semantic-errors).
@@ -227,7 +227,7 @@ ensure the program can execute without issues.
 
 Kipper handles type checking for a single `CompilableASTNode` with its `primarySemanticTypeChecking()`
 function implementation, which is called after `primarySemanticAnalysis()`. In the function all possible type issues
-should be checked for to avoid issues during code generation or execution, as well the `CompilableASTNode.typeData` 
+should be checked for to avoid issues during code generation or execution, as well the `CompilableASTNode.typeData`
 populated to ensure the correct type data is available to other nodes as well that might depend on it.
 
 To assert types and throw proper errors, you can easily do that using the `KipperTypeChecker`, which is
@@ -286,6 +286,7 @@ These tests are categorised into sub-folders per package in the following scheme
 
 ```markdown
 module/
+
 - cli/
 - core/
 ```
