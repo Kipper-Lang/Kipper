@@ -5,13 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# oclif .gitignore ttttt
+# oclif .gitignore
 *-debug.log
 *-error.log
 /.nyc_output
 /tmp
 /yarn.lock
-node_modules
 
 # Web builds
 kipper-standalone.js
