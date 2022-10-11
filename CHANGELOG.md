@@ -2,8 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -18,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
 - Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
+  `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
@@ -26,9 +27,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `--log-timestamp`, which enables timestamps for the log messages.
   - `--recover`, which enables error recovery for the Kipper compiler.
   - `--abort-on-first-error`, which aborts the compilation on the first compiler error that is encountered.
+- New errors:
+  - `MissingFunctionBodyError`, which is thrown when a function declaration is missing a body (compound statement).
+  - `LexerOrParserSyntaxError`, which is thrown when the lexer or parser encounters a syntax error.
+  - `IdentifierAlreadyUsedByParameterError`, which is thrown when an identifier is already used by a parameter in
+    the same scope or any parent scope.
+  - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
+    expression.
+  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
+    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+  - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return a
+    value.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
+  - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
+    included in the `JumpStatement` class.
+  - `FunctionScope`, which is a subclass of `Scope` that represents a function scope with registered parameters.
 - New functions:
   - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
@@ -38,6 +53,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
   - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
+  - `Scope.getReferenceRecursively`, which tries to evaluate a reference recursively in the scope and its parent scopes.
+  - `KipperTypeChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
+  - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
+  - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
+  - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
+  - `KipperSemanticChecker.referenceDefined`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.validFunctionBody`, which ensures the body of a function is a compound statement.
+  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody`, which ensures that all code paths of a non-void
+    function return a proper value.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -46,6 +71,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `KipperEqualAssignOperator`, which represents the equal assignment operator (`=`).
   - `KipperAssignOperator`, which represents all available assignment operators.
   - `KipperArithmeticAssignOperator`, which represents all available arithmetic assignment operators.
+  - `KipperArg`, which represents a function argument. Alias for `KipperParam`.
+  - `KipperParam`, which represents a function parameter.
+  - `JmpStatementType`, which represents all possible jump statement types e.g. `break` and `continue`.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -61,6 +89,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ScopeDeclaration.isDefined`, which is an abstract field that returns whether the scope declaration was defined
     during its declaration.
   - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
+  - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
+    semantic analysis, though will return undefined if it encounters any error.
 
 ### Changed
 
@@ -80,6 +110,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+- Default error identifier is now just `Error` instead of `KipperError`.
+- Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
+- Made the following functions protected, as a way to enforce the use of `Scope.getReferenceRecursively`:
+  - `Scope.getVariable`
+  - `Scope.getFunction`
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -90,6 +125,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `InvalidReturnTypeError` to `FunctionReturnTypeError`.
   - `UndefinedIdentifierError` to `UndefinedReferenceError`.
   - `UnknownIdentifierError` to `UnknownReferenceError`.
+  - `FunctionDeclarationSemantics.args` to `params`.
+  - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
+- Moved:
+  - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
+  - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
 
 ### Removed
 
@@ -97,6 +137,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `KipperCharType` (`char`) and its grammar implementation, meaning all string types from now on will only be of type
   `str`. This also means that the single-quote character `'` can from now also be used for string literals and
   f-strings with the same behaviour as the regular double-quoted character `"`.
+- `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
+  respectively.
+- `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
+- `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
 
 ## [0.9.2] - 2022-07-23
 

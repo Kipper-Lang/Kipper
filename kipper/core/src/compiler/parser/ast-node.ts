@@ -119,7 +119,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public get sourceCode(): string {
-		return getParseRuleSource(this.antlrRuleCtx).trim();
+		return getParseRuleSource(this.antlrRuleCtx);
 	}
 
 	/**
@@ -143,7 +143,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 
 	/**
 	 * Returns the children of the {@link antlrRuleCtx} and throws an error in case they are undefined.
-	 * @throws UndefinedSemanticsError if {@link antlrRuleCtx.children} is undefined.
+	 * @throws {UnableToDetermineSemanticDataError} If {@link antlrRuleCtx.children} is undefined.
 	 * @since 0.8.0
 	 */
 	public getAntlrRuleChildren(): Array<ParseTree> {
@@ -155,7 +155,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 
 	/**
 	 * Returns the semantic data of this AST node and throws an error in case it is undefined.
-	 * @throws UndefinedSemanticsError If {@link semanticData} is undefined.
+	 * @throws {UndefinedSemanticsError} If {@link semanticData} is undefined.
 	 * @since 0.8.0
 	 */
 	public getSemanticData(): Semantics {

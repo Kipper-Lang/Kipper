@@ -29,7 +29,7 @@ export interface BuiltInFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	type: KipperType;
+	valueType: KipperType;
 }
 
 /**
@@ -52,7 +52,7 @@ export interface BuiltInFunction {
 	 * The index in the array also represents the argument position inside the function. Meaning the first item in the
 	 * array maps to the first argument inside the function.
 	 */
-	args: Array<BuiltInFunctionArgument>;
+	params: Array<BuiltInFunctionArgument>;
 	/**
 	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
 	 * return anything.
@@ -82,7 +82,7 @@ export interface InternalFunction extends BuiltInFunction {
 	 * array maps to the first argument inside the function.
 	 * @since 0.8.0
 	 */
-	args: Array<BuiltInFunctionArgument>;
+	params: Array<BuiltInFunctionArgument>;
 	/**
 	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
 	 * return anything.
@@ -100,10 +100,10 @@ export interface InternalFunction extends BuiltInFunction {
 export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
 	print: {
 		identifier: "print",
-		args: [
+		params: [
 			{
 				identifier: "msg",
-				type: "str",
+				valueType: "str",
 			},
 		],
 		returnType: "void",
@@ -120,40 +120,40 @@ export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
 export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 	numToStr: {
 		identifier: "numToStr",
-		args: [
+		params: [
 			{
 				identifier: "value",
-				type: "num",
+				valueType: "num",
 			},
 		],
 		returnType: "str",
 	},
 	strToNum: {
 		identifier: "strToNum",
-		args: [
+		params: [
 			{
 				identifier: "value",
-				type: "str",
+				valueType: "str",
 			},
 		],
 		returnType: "num",
 	},
 	boolToStr: {
 		identifier: "boolToStr",
-		args: [
+		params: [
 			{
 				identifier: "value",
-				type: "bool",
+				valueType: "bool",
 			},
 		],
 		returnType: "str",
 	},
 	boolToNum: {
 		identifier: "boolToNum",
-		args: [
+		params: [
 			{
 				identifier: "value",
-				type: "bool",
+				valueType: "bool",
 			},
 		],
 		returnType: "num",

@@ -3,7 +3,7 @@
 # Kipper Core Package - `@kipper/core`
 
 [![Version](https://img.shields.io/npm/v/@kipper/core?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/core)
-![](https://img.shields.io/badge/Coverage-79%25-5A7302.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-83%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
@@ -32,7 +32,9 @@ Proper documentation for the Kipper language is available [here](https://luna-kl
 
 To use Kipper you have three options:
 
-- Run it in the browser using the CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js) file, which bundles the entire compiler
+- Run it in the browser using the
+  CDN [`kipper-standalone.min.js`](https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js) file, which
+  bundles the entire compiler
   for your browser.
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
 - Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.

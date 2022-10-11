@@ -22,7 +22,7 @@ import type {
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
 	IfStatement,
-	IncrementOrDecrementExpression,
+	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
@@ -40,8 +40,8 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../semantics";
+import { KipperSemanticErrorHandler, ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../semantics";
 import type { CompilableASTNode } from "../parser";
-import { KipperSemanticErrorHandler } from "../semantics";
 
 /**
  * Represents a function that checks the semantics for a {@link CompilableASTNode}.
@@ -86,6 +86,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
 	 */
 	public abstract jumpStatement: TargetASTNodeSemanticAnalyser<JumpStatement>;
+
+	/**
+	 * Translates a {@link JumpStatement} into a specific language.
+	 */
+	public abstract returnStatement: TargetASTNodeSemanticAnalyser<ReturnStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ParameterDeclaration} instances.
@@ -158,9 +163,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract arraySpecifierExpression: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
-	public abstract incrementOrDecrementExpression: TargetASTNodeSemanticAnalyser<IncrementOrDecrementExpression>;
+	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link incrementOrDecrementPostfixExpression} instances.
+	 */
+	public abstract incrementOrDecrementPostfixExpression: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.

@@ -21,7 +21,7 @@ import type {
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
 	IfStatement,
-	IncrementOrDecrementExpression,
+	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
@@ -41,6 +41,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../semantics";
+import { ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableASTNode } from "../../parser";
 
@@ -131,6 +132,11 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract jumpStatement: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
 
 	/**
+	 * Translates a {@link JumpStatement} into a specific language.
+	 */
+	public abstract returnStatement: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>>;
+
+	/**
 	 * Translates a {@link ParameterDeclaration} into a specific language.
 	 */
 	public abstract parameterDeclaration: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>>;
@@ -213,10 +219,18 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract arraySpecifierExpression: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link IncrementOrDecrementExpression} into a specific language.
+	 * Translates a {@link VoidOrNullOrUndefinedPrimaryExpression} into a specific language.
 	 */
-	public abstract incrementOrDecrementExpression: TargetASTNodeCodeGenerator<
-		IncrementOrDecrementExpression,
+	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeCodeGenerator<
+		VoidOrNullOrUndefinedPrimaryExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link incrementOrDecrementPostfixExpression} into a specific language.
+	 */
+	public abstract incrementOrDecrementPostfixExpression: TargetASTNodeCodeGenerator<
+		IncrementOrDecrementPostfixExpression,
 		TranslatedExpression
 	>;
 

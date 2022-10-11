@@ -33,7 +33,8 @@ primaryExpression
     |   (SingleQuoteStringLiteral | DoubleQuoteStringLiteral) # stringPrimaryExpression
     |   (SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral) # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
-    |   '[' constantExpression (',' constantExpression)* ']' #listPrimaryExpression
+    |   '[' (constantExpression (',' constantExpression)*)? ']' #listPrimaryExpression
+    |		('void' | 'null' | 'undefined') #voidOrNullOrUndefinedPrimaryExpression
     ;
 
 postfixExpression
@@ -145,10 +146,14 @@ initDeclarator
 
 // TODO! Implement the following type specifiers as expressions
 typeSpecifier
-    :   Identifier # identifierTypeSpecifier // for simple type identifiers, like 'num'
-    |   Identifier '<' Identifier '>' # genericTypeSpecifier // for lists
-    |   'typeof' '('  Identifier  ')' # typeofTypeSpecifier // typeof another variable
+    :   typeSpecifierIdentifier # identifierTypeSpecifier // for simple type identifiers, like 'num'
+    |   typeSpecifierIdentifier '<' typeSpecifierIdentifier '>' # genericTypeSpecifier // for lists
+    |   'typeof' '('  typeSpecifierIdentifier  ')' # typeofTypeSpecifier // typeof another variable
     ;
+
+typeSpecifierIdentifier
+		:		(Identifier | 'null' | 'undefined' | 'void')
+		;
 
 declarator
     :   directDeclarator
@@ -159,7 +164,7 @@ directDeclarator
     ;
 
 parameterTypeList
-    :   parameterList (',' '...' Identifier)? /* Kipper should allow for a sequence of arguments */
+    :   parameterList /* Args and Kwargs, like in Python will be added later */
     ;
 
 parameterList
@@ -180,6 +185,7 @@ statement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
+    | 	returnStatement
     ;
 
 compoundStatement
@@ -227,11 +233,12 @@ forExpression
     ;
 
 jumpStatement
-    :   (('continue' | 'break')
-    |   'return' expression?
-    )
-    endOfLine
+    :   ('continue' | 'break') endOfLine
     ;
+
+returnStatement
+		: 	'return' expression? endOfLine
+		;
 
 // Lexer Rules (tokens / token rules)
 
@@ -279,11 +286,12 @@ CallFunc : 'call';
 True: 'true';
 False: 'false';
 
-// struct specifier - not implemented in core lang
-Struct : 'struct';
-
 // typeof operator
 Typeof : 'typeof';
+
+// Constant undefined type and null object
+Null : 'null';
+Undefined : 'undefined';
 
 // Punctuators
 LeftParen : '(';

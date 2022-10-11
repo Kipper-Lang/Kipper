@@ -10,9 +10,9 @@
     "rootDir": "./kipper",
 		"outDir": "./lib",
 		"strict": true,
-    "target": "es2020",
+    "target": "es2016",
     "lib": [
-      "ES7"
+      "ES2016"
     ]
     // ES7 -> ES2016
   },
@@ -32,5 +32,5 @@
 	],
 	"files": [
 		"./kipper/index.ts"
-	],
+	]
 }

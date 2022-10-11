@@ -5,6 +5,7 @@
  * @since 0.3.0
  */
 import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
+import type { ScopeDeclaration, ScopeParameterDeclaration } from "../scope-declaration";
 import type { BuiltInFunction } from "../runtime-built-ins";
 
 /**
@@ -15,6 +16,30 @@ import type { BuiltInFunction } from "../runtime-built-ins";
 // @ts-ignore
 // eslint-disable-next-line no-undef
 export const isBrowser = typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
+
+/**
+ * Null type in Kipper.
+ * @since 0.10.0
+ */
+export type KipperNullType = "null";
+
+/**
+ * Null type in Kipper.
+ * @since 0.10.0
+ */
+export const kipperNullType: KipperNullType = "null";
+
+/**
+ * Undefined type in Kipper.
+ * @since 0.10.0
+ */
+export type KipperUndefinedType = "undefined";
+
+/**
+ * Undefined type in Kipper.
+ * @since 0.10.0
+ */
+export const kipperUndefinedType: KipperUndefinedType = "undefined";
 
 /**
  * Function type in Kipper.
@@ -137,13 +162,26 @@ export const kipperMetaType: KipperMetaType = "type";
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType = KipperVoidType | KipperNumType | KipperStrType | KipperBoolType;
+export type KipperPrimitiveType =
+	| KipperVoidType
+	| KipperNullType
+	| KipperUndefinedType
+	| KipperNumType
+	| KipperStrType
+	| KipperBoolType;
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export const kipperPrimitiveTypes = [kipperVoidType, kipperNumType, kipperStrType, kipperBoolType];
+export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
+	kipperVoidType,
+	kipperNullType,
+	kipperUndefinedType,
+	kipperNumType,
+	kipperStrType,
+	kipperBoolType,
+];
 
 /**
  * All available variable types inside Kipper.
@@ -153,19 +191,7 @@ export type KipperType = KipperMetaType | KipperFuncType | KipperPrimitiveType |
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<string> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
-
-/**
- * Types that may be returned by a function.
- * @since 0.6.0
- */
-export type KipperReturnType = KipperPrimitiveType | KipperListType<any>;
-
-/**
- * Types that may be returned by a function.
- * @since 0.6.0
- */
-export const kipperReturnTypes: Array<string> = [...kipperPrimitiveTypes, "list"];
+export const kipperTypes: Array<KipperType> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
 
 /**
  * List of all supported variable type conversions that can be performed in a Kipper program.
@@ -474,6 +500,7 @@ export type TranslatedCodeToken = string;
 /**
  * Represents a single translated Kipper expression. This is usually used to represent multiple expression inside a
  * single {@link TranslatedCodeLine}.
+ * @since 0.5.0
  */
 export type TranslatedExpression = Array<TranslatedCodeToken>;
 
@@ -491,11 +518,32 @@ export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
 
 /**
  * Represents a Kipper variable that can be either declared or defined.
+ * @since 0.6.0
  */
 export type KipperVariable = ScopeVariableDeclaration;
+
+/**
+ * Represents a Kipper parameter inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
+ * @since 0.10.0
+ */
+export type KipperParam = ScopeParameterDeclaration;
+
+/**
+ * Represents a Kipper argument inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
+ *
+ * @alias KipperParam
+ * @since 0.10.0
+ */
+export type KipperArg = KipperParam;
 
 /**
  * Represents a reference that can be used as an identifier.
  * @since 0.6.0
  */
-export type KipperRef = KipperFunction | KipperVariable;
+export type KipperRef = BuiltInFunction | KipperFunction | KipperVariable | KipperParam | KipperArg | ScopeDeclaration;
+
+/**
+ * Represents all possible jump statements inside Kipper.
+ * @since 0.10.0
+ */
+export type JmpStatementType = "continue" | "break";

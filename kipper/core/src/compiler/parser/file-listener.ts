@@ -55,7 +55,12 @@ import type {
 	TypeSpecifierContext,
 	UnaryOperatorContext,
 } from "./index";
-import { IfStatementContext, SwitchStatementContext } from "./index";
+import {
+	IfStatementContext,
+	ReturnStatementContext,
+	SwitchStatementContext,
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
+} from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
@@ -71,6 +76,7 @@ import {
 } from "../semantics";
 import { RootASTNode } from "./root-ast-node";
 import { CompilableASTNode } from "./compilable-ast-node";
+import { KipperInternalError } from "../../errors";
 
 const passOnHandler = undefined;
 
@@ -158,7 +164,7 @@ export class KipperFileListener implements KipperListener {
 	 */
 	private handleIncomingExpressionCtx(ctx: antlrExpressionCtxType) {
 		if (this.getCurrentNode instanceof RootASTNode) {
-			throw new Error(
+			throw new KipperInternalError(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
 					" definition.",
 			);
@@ -184,7 +190,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Handles an incoming statement context. The handling algorithm is:
+	 * Handles an incoming statement context. The handling algorithm is as following:
 	 * - If {@link _currentPrimaryNode} is undefined, then it will be created and set as a child of
 	 * {@link _rootNode}
 	 * - Otherwise, generate a new {@link Statement} instance, which will be added to the {@link _currentPrimaryNode} as
@@ -198,7 +204,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Handles an incoming statement context. The handling algorithm is:
+	 * Handles an incoming statement context. The handling algorithm is as following:
 	 * - If {@link _currentPrimaryNode} is undefined, then it will be created and set as a child of
 	 * {@link _rootNode}
 	 * - Otherwise, generate a new {@link Declaration} instance, which will be added to the {@link _currentPrimaryNode} as
@@ -212,7 +218,7 @@ export class KipperFileListener implements KipperListener {
 	}
 
 	/**
-	 * Handles an exiting statement or definition context. The handling algorithm is:
+	 * Handles an exiting statement or definition context. The handling algorithm is as following:
 	 * - If {@link _currentPrimaryNode.parent} is of type {@link _currentPrimaryNode} or {@link Statement}, then set
 	 * {@link _currentPrimaryNode} to that parent.
 	 * - Otherwise set {@link _currentPrimaryNode} to {@link undefined} again. If
@@ -433,6 +439,24 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitBoolPrimaryExpression(ctx: BoolPrimaryExpressionContext): void {
+		this.handleExitingExpressionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by the `VoidOrNullOrUndefinedPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public enterVoidOrNullOrUndefinedPrimaryExpression(ctx: VoidOrNullOrUndefinedPrimaryExpressionContext): void {
+		this.handleIncomingExpressionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by the `VoidOrNullOrUndefinedPrimaryExpression`
+	 * labeled alternative in `KipperParser.primaryExpression`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public exitVoidOrNullOrUndefinedPrimaryExpression(ctx: VoidOrNullOrUndefinedPrimaryExpressionContext): void {
 		this.handleExitingExpressionCtx();
 	}
 
@@ -1296,7 +1320,23 @@ export class KipperFileListener implements KipperListener {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 
-	// -- VariableDeclaration section --
+	/**
+	 * Enter a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public enterReturnStatement(ctx: ReturnStatementContext): void {
+		this.handleIncomingStatementCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public exitReturnStatement(ctx: ReturnStatementContext): void {
+		this.handleExitingStatementOrDefinitionCtx();
+	}
+
+	// -- Declaration section --
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
@@ -1327,6 +1367,22 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitFunctionDeclaration(ctx: FunctionDeclarationContext): void {
+		this.handleExitingStatementOrDefinitionCtx();
+	}
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public enterParameterDeclaration(ctx: ParameterDeclarationContext): void {
+		this.handleIncomingDefinitionCtx(ctx);
+	}
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
+	 */
+	public exitParameterDeclaration(ctx: ParameterDeclarationContext): void {
 		this.handleExitingStatementOrDefinitionCtx();
 	}
 
@@ -1493,18 +1549,6 @@ export class KipperFileListener implements KipperListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitParameterList(ctx: ParameterListContext): void {}
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public enterParameterDeclaration(ctx: ParameterDeclarationContext): void {}
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public exitParameterDeclaration(ctx: ParameterDeclarationContext): void {}
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initializer`.

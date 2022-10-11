@@ -9,19 +9,24 @@ import type {
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,
-	KipperReturnType,
 	KipperStorageType,
 	KipperType,
 	ParameterDeclaration,
+	ParameterDeclarationSemantics,
+	ParameterDeclarationTypeSemantics,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
 	VariableDeclarationTypeSemantics,
 } from "./semantics";
 import type { KipperProgramContext } from "./program-ctx";
 import type { Scope } from "./scope";
+import type { LocalScope } from "./local-scope";
 
 /**
- * Abstract class as a parent for {@link ScopeVariableDeclaration} and {@link ScopeFunctionDeclaration}.
+ * Represents a general declaration of a variable, parameter or function inside a Kipper program.
+ *
+ * Abstract base class for {@link ScopeVariableDeclaration}, {@link ScopeParameterDeclaration} and
+ * {@link ScopeFunctionDeclaration}.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
@@ -37,6 +42,12 @@ export abstract class ScopeDeclaration {
 	}
 
 	/**
+	 * The value type of this declaration.
+	 * @since 0.10.0
+	 */
+	public abstract get type(): KipperType;
+
+	/**
 	 * Returns whether the scope declaration was defined during its declaration.
 	 * @since 0.10.0
 	 */
@@ -47,6 +58,12 @@ export abstract class ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public abstract get hasValue(): boolean;
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public abstract get isCallable(): boolean;
 }
 
 /**
@@ -100,7 +117,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	}
 
 	/**
-	 * The variable type or return type of this variable.
+	 * The value type of this variable.
 	 */
 	public get type(): KipperType {
 		return this.typeData.valueType;
@@ -137,10 +154,18 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	public get hasValue(): boolean {
 		return this.isDefined || this.valueWasUpdated;
 	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return this.type === "func";
+	}
 }
 
 /**
- * Represents the definition of a function inside a {@link KipperProgramContext program}.
+ * Represents the definition of a function inside a {@link Scope}.
  * @since 0.1.2
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
@@ -184,20 +209,29 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
+	 * The type of this function. This is always "func".
+	 * @since 0.10.0
+	 */
+	public get type(): KipperType {
+		return "func";
+	}
+
+	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): KipperReturnType {
+	public get returnType(): KipperType {
 		return this.typeData.returnType;
 	}
 
 	/**
-	 * The args that are accepted inside this function. These are represented using {@link ParameterDeclaration}.
+	 * The parameters that are accepted inside this function. These are represented using the {@link ParameterDeclaration}
+	 * class.
 	 *
-	 * The index in the array also represent the argument position inside the function. Meaning the first item in the
-	 * array maps to the first argument inside the function.
+	 * The index in the array represents the position inside the function. Meaning the first item in the array maps to
+	 * the first parameter inside the function.
 	 */
-	public get args(): Array<ParameterDeclaration> {
-		return this.semanticData.args;
+	public get params(): Array<ParameterDeclaration> {
+		return this.semanticData.params;
 	}
 
 	/**
@@ -214,5 +248,116 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 */
 	public get hasValue(): boolean {
 		return this.isDefined;
+	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return true;
+	}
+}
+
+/**
+ * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
+ * @since 0.10.0
+ */
+export class ScopeParameterDeclaration extends ScopeDeclaration {
+	private readonly _node: ParameterDeclaration;
+
+	public constructor(node: ParameterDeclaration) {
+		super();
+		this._node = node;
+	}
+
+	/**
+	 * The semantic data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
+	 * @private
+	 * @since 0.10.0
+	 */
+	private get semanticData(): ParameterDeclarationSemantics {
+		return this._node.getSemanticData();
+	}
+
+	/**
+	 * The type data of this declaration.
+	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
+	 * @private
+	 * @since 0.10.0
+	 */
+	private get typeData(): ParameterDeclarationTypeSemantics {
+		return this._node.getTypeSemanticData();
+	}
+
+	/**
+	 * Returns the {@link ParameterDeclaration AST node} this scope parameter declaration bases on.
+	 * @since 0.10.0
+	 */
+	public get node(): ParameterDeclaration {
+		return this._node;
+	}
+
+	/**
+	 * The identifier of this parameter.
+	 * @since 0.10.0
+	 */
+	public get identifier(): string {
+		return this.semanticData.identifier;
+	}
+
+	/**
+	 * The type of this parameter.
+	 * @since 0.10.0
+	 */
+	public get type(): KipperType {
+		return this.typeData.valueType;
+	}
+
+	/**
+	 * Returns the scope associated with this {@link ScopeDeclaration}.
+	 * @since 0.10.0
+	 */
+	public get scope(): LocalScope {
+		return this.func.getSemanticData().innerScope;
+	}
+
+	/**
+	 * Returns the function this parameter is defined in.
+	 * @since 0.10.0
+	 */
+	public get func(): FunctionDeclaration {
+		return this.semanticData.func;
+	}
+
+	/**
+	 * Returns whether the parameter declaration is defined and has a value set during declaration.
+	 *
+	 * This will always be true, since a parameter declaration always has a value, even if it is not set or is set to
+	 * 'undefined'.
+	 * @since 0.10.0
+	 */
+	public get isDefined(): boolean {
+		return true;
+	}
+
+	/**
+	 * Returns whether the parameter declaration has a value.
+	 *
+	 * This is always true, since a parameter declaration always has a value, even if it is not set or is set to
+	 * 'undefined'.
+	 * @since 0.10.0
+	 */
+	public get hasValue(): boolean {
+		return true;
+	}
+
+	/**
+	 * Returns whether the declaration has a callable value (function).
+	 * @since 0.10.0
+	 */
+	public get isCallable(): boolean {
+		return this.type === "func";
 	}
 }

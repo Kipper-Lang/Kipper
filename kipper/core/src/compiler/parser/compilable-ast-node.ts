@@ -17,8 +17,9 @@ import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
 import { ParserASTNode } from "./ast-node";
-import type { Scope } from "../scope";
 import type { EvaluatedCompileConfig } from "../compiler";
+import type { GlobalScope } from "../global-scope";
+import type { LocalScope } from "../local-scope";
 import { KipperError } from "../../errors";
 
 /**
@@ -151,7 +152,7 @@ export abstract class CompilableASTNode<
 	 * The {@link scope} of this AST node.
 	 * @since 0.8.0
 	 */
-	public get scope(): Scope {
+	public get scope(): LocalScope | GlobalScope {
 		if ("localScope" in this.scopeCtx) {
 			return this.scopeCtx.localScope;
 		} else {

@@ -5,6 +5,8 @@
  * @since 0.7.0
  */
 
+export * from "./semantic-data";
+export * from "./type-data";
 export * from "./language";
 export * from "./const";
 export * from "./processor";

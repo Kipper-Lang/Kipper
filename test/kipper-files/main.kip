@@ -3,8 +3,13 @@ var x: num = 4;
 const z: num = 3333 + x + y;
 
 def func() -> num {
+		/* Basic definitions of variables */
     var localX: str = "string";
     var localY: str = localX + localX;
 
+		/* Printing the value of 'localY' */
     call print(localY);
+
+    /* Return statement required */
+    return 1;
 }

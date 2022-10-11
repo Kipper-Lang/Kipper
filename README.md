@@ -3,7 +3,7 @@
 # The Kipper programming language - `kipper`
 
 [![Version](https://img.shields.io/npm/v/kipper?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
-![](https://img.shields.io/badge/Coverage-79%25-5A7302.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-83%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
@@ -21,15 +21,18 @@ npm i kipper
 
 If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
-## Goals
+## Goals & Planned Features
 
-- Full type safety to ensure errors occur on compile time, not runtime.
+- Full type safety to ensure if possible that all errors occur on compile time, not runtime.
 - Runtime types and type checking, which allow variable types to be checked during runtime, if their type can not be
   evaluated during compile time. For example when using `JSON.parse()` and the object type is
   unknown.
+- Full translation to/and integration with JavaScript and TypeScript.
+- Custom Operator Overload Methods for specifying custom behaviour for specific operators.
+  These will be similar to the Python dunder methods.
+- Type Conversion Overloading to customise conversion behaviour.
 - Runtime errors for invalid operations. No hidden errors like in JavaScript.
 - Null safety, by enforcing non-null types unless explicitly allowed.
-- Full translation to/and integration with JavaScript and TypeScript.
 
 ## Example Code Snippet
 

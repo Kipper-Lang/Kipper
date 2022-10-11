@@ -20,7 +20,7 @@ import type {
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
 	IdentifierTypeSpecifierExpression,
-	IncrementOrDecrementExpression,
+	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	IterationStatement,
 	JumpStatement,
@@ -38,7 +38,13 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
-import { IfStatement, KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
+import {
+	IfStatement,
+	KipperTargetSemanticAnalyser,
+	ReservedIdentifierOverwriteError,
+	ReturnStatement,
+	VoidOrNullOrUndefinedPrimaryExpression,
+} from "@kipper/core";
 import { getJavaScriptBuiltInIdentifier } from "./tools";
 
 /**
@@ -175,6 +181,11 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	jumpStatement = async (node: JumpStatement) => {};
 
 	/**
+	 * Performs typescript-specific semantic analysis for {@link ReturnStatement} instances.
+	 */
+	returnStatement = async (node: ReturnStatement) => {};
+
+	/**
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration) => {
@@ -251,9 +262,14 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	arraySpecifierExpression = async (node: ArraySpecifierExpression) => {};
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
-	incrementOrDecrementExpression = async (node: IncrementOrDecrementExpression) => {};
+	voidOrNullOrUndefinedPrimaryExpression = async (node: VoidOrNullOrUndefinedPrimaryExpression) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementPostfixExpression} instances.
+	 */
+	incrementOrDecrementPostfixExpression = async (node: IncrementOrDecrementPostfixExpression) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.

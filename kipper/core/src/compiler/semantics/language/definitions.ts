@@ -4,7 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeParent, NoTypeSemantics, SemanticData, TypeData } from "../../parser";
+import type { compilableNodeParent, SemanticData, TypeData } from "../../parser";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -13,17 +13,30 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	ParameterTypeListContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
 import type { ScopeVariableDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
-import type { KipperReturnType, KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
-import type { TargetASTNodeCodeGenerator } from "../../target-presets";
-import type { TargetASTNodeSemanticAnalyser } from "../../target-presets";
-import { UnableToDetermineSemanticDataError } from "../../../errors";
-import { Scope } from "../../scope";
+import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
+import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
+import {
+	DeclarationSemantics,
+	FunctionDeclarationSemantics,
+	ParameterDeclarationSemantics,
+	VariableDeclarationSemantics,
+} from "../semantic-data";
+import {
+	DeclarationTypeData,
+	FunctionDeclarationTypeSemantics,
+	ParameterDeclarationTypeSemantics,
+	VariableDeclarationTypeSemantics,
+} from "../type-data";
+import { getParseTreeSource } from "../../../utils";
+import { CompoundStatement, Statement } from "./statements";
+import { FunctionScope } from "../../function-scope";
 
 /**
  * Every antlr4 definition ctx type
@@ -53,24 +66,6 @@ export class DefinitionASTNodeFactory {
 }
 
 /**
- * Semantics for a {@link Declaration}.
- * @since 0.5.0
- */
-export interface DeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of the declaration.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-}
-
-/**
- * Type data for a {@link Declaration}.
- * @since 0.10.0
- */
-export interface DeclarationTypeData extends TypeData {}
-
-/**
  * Base Declaration class that represents a value or function declaration or definition in Kipper.
  *
  * Any function or variable declaration in Kipper will be registered in a {@link Scope}, which will define the
@@ -89,6 +84,13 @@ export abstract class Declaration<
 	 */
 	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeDeclaration | undefined;
+
 	protected constructor(antlrRuleCtx: antlrDefinitionCtxType, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -105,6 +107,32 @@ export abstract class Declaration<
 	}
 
 	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
+	public get scopeDeclaration(): ScopeDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	/**
+	 * Returns the {@link scopeDeclaration scope declaration ctx} of this declaration and throws an error in case
+	 * it is undefined.
+	 * @throws UndefinedDeclarationCtx If {@link scopeDeclaration} is undefined.
+	 * @since 0.10.0
+	 */
+	public getScopeDeclaration(): ScopeDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtxError();
+		}
+		return this.scopeDeclaration;
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 * @since 0.8.0
 	 */
@@ -117,27 +145,13 @@ export abstract class Declaration<
 }
 
 /**
- * Semantics for AST Node {@link ParameterDeclaration}.
- * @since 0.5.0
- */
-export interface ParameterDeclarationSemantics extends DeclarationSemantics {
-	/**
-	 * The identifier of the declaration.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The {@link KipperType variable type} of the declaration.
-	 * @since 0.5.0
-	 */
-	type: KipperType;
-}
-
-/**
  * Declaration of a parameter inside a {@link FunctionDeclaration}.
  * @since 0.1.2
  */
-export class ParameterDeclaration extends Declaration<ParameterDeclarationSemantics, NoTypeSemantics> {
+export class ParameterDeclaration extends Declaration<
+	ParameterDeclarationSemantics,
+	ParameterDeclarationTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -145,9 +159,52 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeParameterDeclaration | undefined;
+
 	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): ParameterDeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected override set scopeDeclaration(declaration: ScopeParameterDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public override getScopeDeclaration(): ScopeParameterDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtxError();
+		}
+		return this.scopeDeclaration;
+	}
+
+	/**
+	 * Registers this parameter in the {@link semanticData.func.semanticData.innerScope scope} of the
+	 * {@link this.semanticData.func parent function}.
+	 *
+	 * This will also populate the {@link scopeDeclaration} field, since only after the parameter is registered in the
+	 * scope the {@link scopeDeclaration} is created.
+	 * @param scopeToUse The scope to register the parameter in. Should match
+	 * {@link this.semantic.func.innerScope the scope of the parent function}.
+	 * @since 0.10.0
+	 */
+	public async addParamToFunctionScope(scopeToUse: FunctionScope): Promise<void> {
+		this.scopeDeclaration = scopeToUse.addArgument(this);
 	}
 
 	/**
@@ -161,27 +218,40 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ParameterDeclarationContext {
-		return this._antlrRuleCtx;
-	}
-
-	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// TODO!
+		const parseTreeChildren = this.getAntlrRuleChildren();
+
+		this.semanticData = {
+			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
+			valueType: this.children[0].sourceCode,
+			func: <FunctionDeclaration>this.parent,
+		};
+
+		// Register this parameter in the function scope
+		if (this.semanticData.func.innerScope) {
+			await this.addParamToFunctionScope(this.semanticData.func.innerScope);
+		}
+
+		// IMPORTANT! If 'innerScope' returns undefined, then the function has an error and the parameter should not be
+		// registered in the scope. For now, we will ignore the error, since the function will throw an error anyway.
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+
+		this.typeSemantics = {
+			valueType: <KipperType>semanticData.valueType,
+		};
 	}
 
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
@@ -191,50 +261,8 @@ export class ParameterDeclaration extends Declaration<ParameterDeclarationSemant
 }
 
 /**
- * Semantics for AST Node {@link FunctionDeclaration}.
- * @since 0.3.0
- */
-export interface FunctionDeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of the function.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The {@link KipperType return type} of the function.
-	 * @since 0.5.0
-	 */
-	returnType: string;
-	/**
-	 * Returns true if this declaration defines the function body for the function.
-	 * @since 0.5.0
-	 */
-	isDefined: boolean;
-	/**
-	 * The {@link ParameterDeclaration arguments} for the function.
-	 */
-	args: Array<ParameterDeclaration>;
-}
-
-/**
- * Type Semantics for AST Node {@link FunctionDeclaration}.
- * @since 0.10.0
- */
-export interface FunctionDeclarationTypeSemantics extends TypeData {
-	/**
-	 * The {@link KipperType return type} of the function.
-	 * @since 0.10.0
-	 */
-	returnType: KipperReturnType;
-}
-
-/**
  * Function definition class, which represents the definition of a function in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
- *
- * Functions will always be global and unlike {@link VariableDeclaration variables} therefore have no scope.
- *
- * @todo Implement support for arguments using {@link ParameterDeclaration}.
  * @since 0.1.2
  */
 export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics, FunctionDeclarationTypeSemantics> {
@@ -245,9 +273,59 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeFunctionDeclaration | undefined;
+
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): FunctionDeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public getScopeDeclaration(): ScopeFunctionDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtxError();
+		}
+		return this.scopeDeclaration;
+	}
+
+	/**
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be stored.
+	 * @returns The inner scope of this function, or undefined if the function is invalid and the scope can't be
+	 * determined.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): FunctionScope | undefined {
+		const body = this.children[this.children.length - 1];
+		try {
+			// Check whether the function body is valid, and if it is not, return undefined
+			// IMPORTANT! If an error occurs, we will ignore it, since the function will throw an error anyway during
+			// semantic analysis.
+			this.programCtx.semanticCheck(this).validFunctionBody(body);
+		} catch {
+			return undefined;
+		}
+
+		// The semantic check should ensure that the body is a 'CompoundStatement' and the inner scope is a function scope.
+		return <FunctionScope>(<CompoundStatement>body).localScope;
 	}
 
 	/**
@@ -261,51 +339,69 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	}
 
 	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): FunctionDeclarationContext {
-		return this._antlrRuleCtx;
-	}
-
-	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = this.getAntlrRuleChildren();
+		const parseTreeChildren = this.getAntlrRuleChildren();
 
 		// Fetch context instances
-		let declaratorCtx = <DeclaratorContext | undefined>children.find((val) => val instanceof DeclaratorContext);
-		let paramListCtx = <ParameterTypeListContext | undefined>(
-			children.find((val) => val instanceof ParameterTypeListContext)
+		let declaratorCtx = <DeclaratorContext | undefined>(
+			parseTreeChildren.find((val) => val instanceof DeclaratorContext)
 		);
 
-		// The type of this declaration, which should always be present, since the parser requires it during the parsing
-		// step.
-		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
+		let body: Statement<SemanticData, TypeData> | undefined;
+		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
+		let params: Array<ParameterDeclaration> = [];
+
+		// Create shallow copy of the children
+		let children = [...this.children];
+
+		// Evaluate the primary semantic data for the function
+		while (children.length > 0) {
+			let child = children.shift();
+
+			if (child instanceof ParameterDeclaration) {
+				params.push(child);
+			} else {
+				// Once the return type has been reached, stop, as the last two items should be the return type and func body
+				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
+				body = <any>children.pop();
+				break;
+			}
+		}
 
 		// Ensure that the children are fully present and not undefined
-		if (!declaratorCtx || !typeSpecifier) {
+		// Also make sure the scope has the required argument field for the function (is of type 'FunctionScope')
+		if (!declaratorCtx || !retTypeSpecifier) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: string = typeSpecifier.getSemanticData().typeIdentifier;
+		// Check the function body and ensure it exists/and is valid
+		this.programCtx.semanticCheck(this).validFunctionBody(body);
+		const innerScope = <FunctionScope>this.innerScope;
 
-		// Fetching the metadata from the antlr4 context
+		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
+		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
+
 		this.semanticData = {
-			isDefined: children.find((val) => val instanceof CompoundStatementContext) !== undefined,
+			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnType: type,
-			args: paramListCtx ? [] : [], // TODO! Implement arg fetching
+			params: params,
+			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
+			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
 		};
 
-		// Add function definition to the global scope
-		await this.scope.addFunction(this);
+		// Ensure that all code paths return a value
+		this.programCtx.semanticCheck(this).validReturnCodePathsInFunctionBody(this);
+
+		// Add function definition to the current scope
+		this.scopeDeclaration = this.scope.addFunction(this);
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -314,11 +410,10 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Ensure the return type is valid
 		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
-		this.programCtx.typeCheck(this).validReturnType(semanticData.returnType);
 
 		// Set the return type data
 		this.typeSemantics = {
-			returnType: <KipperReturnType>semanticData.returnType,
+			returnType: <KipperType>semanticData.returnType,
 		};
 	}
 
@@ -326,57 +421,6 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		this.semanticAnalyser.functionDeclaration;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.functionDeclaration;
-}
-
-/**
- * Semantics for AST Node {@link VariableDeclaration}.
- * @since 0.3.0
- */
-export interface VariableDeclarationSemantics extends SemanticData {
-	/**
-	 * The identifier of this variable.
-	 * @since 0.5.0
-	 */
-	identifier: string;
-	/**
-	 * The storage type option for this variable.
-	 * @since 0.5.0
-	 */
-	storageType: KipperStorageType;
-	/**
-	 * The type of the value as a string.
-	 * @since 0.5.0
-	 */
-	valueType: string;
-	/**
-	 * If this is true then the variable has a defined value.
-	 * @since 0.5.0
-	 */
-	isDefined: boolean;
-	/**
-	 * The scope of this variable.
-	 * @since 0.5.0
-	 */
-	scope: Scope;
-	/**
-	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
-	 * @since 0.7.0
-	 */
-	value: Expression<any, any> | undefined;
-}
-
-/**
- * Type Semantics for AST Node {@link VariableDeclaration}.
- * @since 0.10.0
- */
-export interface VariableDeclarationTypeSemantics extends TypeData {
-	/**
-	 * The Kipper type that this declaration has.
-	 *
-	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}
-	 * @since 0.10.0
-	 */
-	valueType: KipperType;
 }
 
 /**
@@ -394,12 +438,50 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override readonly _antlrRuleCtx: DeclarationContext;
 
+	/**
+	 * The private field '_children' that actually stores the variable data,
+	 * which is returned inside the {@link this.children}.
+	 * @private
+	 */
 	protected override _children: Array<Expression<any, any>>;
+
+	/**
+	 * The private field '_scopeDeclaration' that actually stores the variable data,
+	 * which is returned inside the {@link this.scopeDeclaration}.
+	 * @private
+	 */
+	protected _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): DeclarationContext {
+		return this._antlrRuleCtx;
+	}
+
+	public override get children(): Array<Expression<any, any>> {
+		return this._children;
+	}
+
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
+
+	public getScopeDeclaration(): ScopeVariableDeclaration {
+		if (!this.scopeDeclaration) {
+			throw new UndefinedDeclarationCtxError();
+		}
+		return this.scopeDeclaration;
 	}
 
 	/**
@@ -410,17 +492,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	public async checkForWarnings(): Promise<void> {
 		// TODO!
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): DeclarationContext {
-		return this._antlrRuleCtx;
-	}
-
-	public get children(): Array<Expression<any, any>> {
-		return this._children;
 	}
 
 	/**
@@ -469,14 +540,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		};
 
 		// If the storage type is 'const' ensure that the variable has a value set.
-		this.programCtx.semanticCheck(this).validDeclaration(this);
+		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
 
 		// Add scope variable entry
-		await this.scope.addVariable(this);
+		this.scopeDeclaration = this.scope.addVariable(this);
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -493,8 +564,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
-			const scopeEntry = <ScopeVariableDeclaration>semanticData.scope.getVariable(semanticData.identifier);
-			this.programCtx.typeCheck(this).validVariableDefinition(scopeEntry, semanticData.value);
+			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
 
