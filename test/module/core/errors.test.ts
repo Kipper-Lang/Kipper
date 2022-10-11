@@ -35,7 +35,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'LexerOrParserSyntaxError'");
+			assert.fail("Expected 'LexerOrParserSyntaxError'");
 		});
 
 		it("ParserError", async () => {
@@ -52,7 +52,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'KipperSyntaxError'");
+			assert.fail("Expected 'KipperSyntaxError'");
 		});
 
 		it("Other", async () => {
@@ -67,7 +67,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'KipperSyntaxError'");
+			assert.fail("Expected 'KipperSyntaxError'");
 		});
 	});
 
@@ -83,7 +83,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
+			assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
 		});
 
 		it("UnknownTypeError", async () => {
@@ -97,7 +97,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'UnknownTypeError'");
+			assert.fail("Expected 'UnknownTypeError'");
 		});
 
 		it("InvalidGlobalError", async () => {
@@ -121,7 +121,7 @@ describe("Kipper errors", () => {
 				assert((<KipperError>e).tokenSrc === undefined, "Expected non-existing 'tokenSrc' meta field");
 				return;
 			}
-			assert(false, "Expected 'InvalidGlobalError'");
+			assert.fail("Expected 'InvalidGlobalError'");
 		});
 
 		it("BuiltInOverwriteError", async () => {
@@ -141,7 +141,7 @@ describe("Kipper errors", () => {
 				await ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert(false, "Expected 'BuiltInOverwriteError'");
+			assert.fail("Expected 'BuiltInOverwriteError'");
 		});
 
 		describe("IdentifierAlreadyUsedByFunctionError", () => {
@@ -156,7 +156,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
+				assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
 			});
 
 			it("Redeclaration by function", async () => {
@@ -170,7 +170,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'IdentifierAlreadyUsedByFunctionError'");
+				assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
 			});
 		});
 
@@ -186,7 +186,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
+				assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
 			});
 
 			it("Redeclaration by function", async () => {
@@ -200,7 +200,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'IdentifierAlreadyUsedByVariableError'");
+				assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
 			});
 		});
 
@@ -217,7 +217,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'UnknownReferenceError'");
+				assert.fail("Expected 'UnknownReferenceError'");
 			});
 
 			it("Function Call", async () => {
@@ -232,7 +232,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'UnknownReferenceError'");
+				assert.fail("Expected 'UnknownReferenceError'");
 			});
 
 			it("Arithmetics", async () => {
@@ -247,7 +247,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'UnknownReferenceError'");
+				assert.fail("Expected 'UnknownReferenceError'");
 			});
 
 			it("Nested reference", async () => {
@@ -262,7 +262,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'UnknownReferenceError'");
+				assert.fail("Expected 'UnknownReferenceError'");
 			});
 		});
 
@@ -280,7 +280,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
 				});
 
 				it("Two too many", async () => {
@@ -295,7 +295,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
 				});
 
 				it("Three too many", async () => {
@@ -310,7 +310,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
 				});
 
 				it("Too little", async () => {
@@ -325,7 +325,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAmountOfArgumentsError'");
+					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
 				});
 			});
 
@@ -336,7 +336,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'InvalidAmountOfArgumentsError'");
+					assert.fail("Expected no 'InvalidAmountOfArgumentsError'");
 				}
 			});
 		});
@@ -355,7 +355,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str-num", async () => {
@@ -370,7 +370,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str*num", async () => {
@@ -385,7 +385,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str**num", async () => {
@@ -400,7 +400,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str/num", async () => {
@@ -415,7 +415,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str%num", async () => {
@@ -430,7 +430,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num+str", async () => {
@@ -445,7 +445,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num-str", async () => {
@@ -460,7 +460,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num*str", async () => {
@@ -475,7 +475,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num**str", async () => {
@@ -490,7 +490,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num/str", async () => {
@@ -505,7 +505,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("num%str", async () => {
@@ -520,7 +520,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str+bool", async () => {
@@ -535,7 +535,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str-bool", async () => {
@@ -550,7 +550,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str*bool", async () => {
@@ -565,7 +565,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str**bool", async () => {
@@ -580,7 +580,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str/bool", async () => {
@@ -595,7 +595,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str%bool", async () => {
@@ -610,7 +610,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool+str", async () => {
@@ -625,7 +625,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool-str", async () => {
@@ -640,7 +640,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool*str", async () => {
@@ -655,7 +655,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool**str", async () => {
@@ -670,7 +670,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool/str", async () => {
@@ -685,7 +685,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("bool%str", async () => {
@@ -700,7 +700,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str-=str", async () => {
@@ -715,7 +715,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str*=str", async () => {
@@ -730,7 +730,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str/=str", async () => {
@@ -745,7 +745,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 
 				it("str%=str", async () => {
@@ -760,7 +760,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'ArithmeticOperationTypeError'");
+					assert.fail("Expected 'ArithmeticOperationTypeError'");
 				});
 			});
 
@@ -770,7 +770,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile('"3" + "3";', { abortOnFirstError: true, target: defaultTarget });
 						} catch (e) {
-							assert(false, "Expected no 'ArithmeticOperationTypeError'");
+							assert.fail("Expected no 'ArithmeticOperationTypeError'");
 						}
 					});
 
@@ -778,7 +778,7 @@ describe("Kipper errors", () => {
 						try {
 							await new KipperCompiler().compile("3 + 3;", { abortOnFirstError: true, target: defaultTarget });
 						} catch (e) {
-							assert(false, "Expected no 'ArithmeticOperationTypeError'");
+							assert.fail("Expected no 'ArithmeticOperationTypeError'");
 						}
 					});
 				});
@@ -791,7 +791,7 @@ describe("Kipper errors", () => {
 								target: defaultTarget,
 							});
 						} catch (e) {
-							assert(false, "Expected no 'ArithmeticOperationTypeError'");
+							assert.fail("Expected no 'ArithmeticOperationTypeError'");
 						}
 					});
 
@@ -802,7 +802,7 @@ describe("Kipper errors", () => {
 								target: defaultTarget,
 							});
 						} catch (e) {
-							assert(false, "Expected no 'ArithmeticOperationTypeError'");
+							assert.fail("Expected no 'ArithmeticOperationTypeError'");
 						}
 					});
 				});
@@ -820,7 +820,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAssignmentError'");
+					assert.fail("Expected 'InvalidAssignmentError'");
 				});
 
 				it("StringConstant", async () => {
@@ -832,7 +832,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidAssignmentError'");
+					assert.fail("Expected 'InvalidAssignmentError'");
 				});
 			});
 
@@ -844,7 +844,7 @@ describe("Kipper errors", () => {
 							target: defaultTarget,
 						});
 					} catch (e) {
-						assert(false, "Expected no 'InvalidAssignmentError'");
+						assert.fail("Expected no 'InvalidAssignmentError'");
 					}
 				});
 			});
@@ -865,7 +865,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'TypeError'");
+						assert.fail("Expected 'TypeError'");
 					});
 
 					it("str = num", async () => {
@@ -880,7 +880,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'TypeError'");
+						assert.fail("Expected 'TypeError'");
 					});
 				});
 
@@ -897,7 +897,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'TypeError'");
+						assert.fail("Expected 'TypeError'");
 					});
 
 					it("str = num", async () => {
@@ -912,7 +912,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'TypeError'");
+						assert.fail("Expected 'TypeError'");
 					});
 
 					it("str+=num", async () => {
@@ -927,7 +927,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'ArithmeticOperationTypeError'");
+						assert.fail("Expected 'ArithmeticOperationTypeError'");
 					});
 
 					it("str-=num", async () => {
@@ -942,7 +942,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'ArithmeticOperationTypeError'");
+						assert.fail("Expected 'ArithmeticOperationTypeError'");
 					});
 
 					it("str*=num", async () => {
@@ -957,7 +957,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'ArithmeticOperationTypeError'");
+						assert.fail("Expected 'ArithmeticOperationTypeError'");
 					});
 
 					it("str/=num", async () => {
@@ -972,7 +972,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'ArithmeticOperationTypeError'");
+						assert.fail("Expected 'ArithmeticOperationTypeError'");
 					});
 
 					it("str%=num", async () => {
@@ -987,7 +987,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'ArithmeticOperationTypeError'");
+						assert.fail("Expected 'ArithmeticOperationTypeError'");
 					});
 				});
 			});
@@ -997,7 +997,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile('var x: str = "3";', { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'TypeError'");
+						assert.fail("Expected no 'TypeError'");
 					}
 				});
 
@@ -1005,7 +1005,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("var x: num = 3;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'TypeError'");
+						assert.fail("Expected no 'TypeError'");
 					}
 				});
 			});
@@ -1025,7 +1025,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 
 				it("num as func", async () => {
@@ -1040,7 +1040,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 
 				it("bool as func", async () => {
@@ -1055,7 +1055,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 
 				it("func as str", async () => {
@@ -1070,7 +1070,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 
 				it("func as num", async () => {
@@ -1085,7 +1085,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 
 				it("func as bool", async () => {
@@ -1100,7 +1100,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidConversionTypeError'");
+					assert.fail("Expected 'InvalidConversionTypeError'");
 				});
 			});
 
@@ -1109,7 +1109,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("5 as str;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'InvalidConversionTypeError'");
+						assert.fail("Expected no 'InvalidConversionTypeError'");
 					}
 				});
 
@@ -1117,7 +1117,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile('"5" as num;', { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'InvalidConversionTypeError'");
+						assert.fail("Expected no 'InvalidConversionTypeError'");
 					}
 				});
 
@@ -1125,7 +1125,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("true as str;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'InvalidConversionTypeError'");
+						assert.fail("Expected no 'InvalidConversionTypeError'");
 					}
 				});
 
@@ -1133,7 +1133,7 @@ describe("Kipper errors", () => {
 					try {
 						await new KipperCompiler().compile("true as num;", { abortOnFirstError: true, target: defaultTarget });
 					} catch (e) {
-						assert(false, "Expected no 'InvalidConversionTypeError'");
+						assert.fail("Expected no 'InvalidConversionTypeError'");
 					}
 				});
 			});
@@ -1152,7 +1152,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'ReservedIdentifierOverwriteError'");
+				assert.fail("Expected 'ReservedIdentifierOverwriteError'");
 			});
 
 			it("NoError", async () => {
@@ -1162,7 +1162,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'ReservedIdentifierOverwriteError'");
+					assert.fail("Expected no 'ReservedIdentifierOverwriteError'");
 				}
 			});
 		});
@@ -1180,7 +1180,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'ReadOnlyTypeError'");
+				assert.fail("Expected 'ReadOnlyTypeError'");
 			});
 
 			it("NoError", async () => {
@@ -1190,7 +1190,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'ReadOnlyTypeError'");
+					assert.fail("Expected no 'ReadOnlyTypeError'");
 				}
 			});
 		});
@@ -1208,7 +1208,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'UndefinedConstantError'");
+				assert.fail("Expected 'UndefinedConstantError'");
 			});
 
 			it("NoError", async () => {
@@ -1218,7 +1218,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'UndefinedConstantError'");
+					assert.fail("Expected no 'UndefinedConstantError'");
 				}
 			});
 		});
@@ -1237,7 +1237,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'UndefinedReferenceError'");
+					assert.fail("Expected 'UndefinedReferenceError'");
 				});
 
 				it("Arithmetic expression", async () => {
@@ -1252,7 +1252,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'UndefinedReferenceError'");
+					assert.fail("Expected 'UndefinedReferenceError'");
 				});
 
 				it("Identifier reference", async () => {
@@ -1267,7 +1267,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'UndefinedReferenceError'");
+					assert.fail("Expected 'UndefinedReferenceError'");
 				});
 			});
 
@@ -1278,7 +1278,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'UndefinedReferenceError'");
+					assert.fail("Expected no 'UndefinedReferenceError'");
 				}
 			});
 		});
@@ -1296,7 +1296,7 @@ describe("Kipper errors", () => {
 					await ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
-				assert(false, "Expected 'InvalidRelationalComparisonTypeError'");
+				assert.fail("Expected 'InvalidRelationalComparisonTypeError'");
 			});
 
 			it("NoError", async () => {
@@ -1306,7 +1306,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'InvalidRelationalComparisonTypeError'");
+					assert.fail("Expected no 'InvalidRelationalComparisonTypeError'");
 				}
 			});
 		});
@@ -1325,7 +1325,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidUnaryExpressionTypeError'");
+					assert.fail("Expected 'InvalidUnaryExpressionTypeError'");
 				});
 
 				it("-", async () => {
@@ -1340,7 +1340,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'InvalidUnaryExpressionTypeError'");
+					assert.fail("Expected 'InvalidUnaryExpressionTypeError'");
 				});
 			});
 
@@ -1351,7 +1351,7 @@ describe("Kipper errors", () => {
 						target: defaultTarget,
 					});
 				} catch (e) {
-					assert(false, "Expected no 'InvalidUnaryExpressionTypeError'");
+					assert.fail("Expected no 'InvalidUnaryExpressionTypeError'");
 				}
 			});
 		});
@@ -1370,7 +1370,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+					assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 				});
 
 				it("Simple One-Branch If (Else missing)", async () => {
@@ -1387,7 +1387,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+					assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 				});
 
 				it("Simple Two-Branch If (If empty)", async () => {
@@ -1402,7 +1402,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+					assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 				});
 
 				it("Simple Two-Branch If (Else empty)", async () => {
@@ -1417,7 +1417,7 @@ describe("Kipper errors", () => {
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
-					assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+					assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 				});
 
 				describe("Nested Multi-Branch If (Nested If Empty)", () => {
@@ -1439,7 +1439,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 
 					it("Second branch", async () => {
@@ -1459,7 +1459,7 @@ describe("Kipper errors", () => {
 							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 				});
 
@@ -1482,7 +1482,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 
 					it("Second branch", async () => {
@@ -1503,7 +1503,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 				});
 
@@ -1526,7 +1526,7 @@ describe("Kipper errors", () => {
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 
 					it("Second branch", async () => {
@@ -1546,7 +1546,7 @@ describe("Kipper errors", () => {
 							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
 							return;
 						}
-						assert(false, "Expected 'IncompleteReturnsInCodePaths'");
+						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
 					});
 				});
 			});
