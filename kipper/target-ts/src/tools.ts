@@ -57,15 +57,18 @@ export function getTypeScriptType(kipperType: KipperType): string {
 export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
 	params: Array<{ identifier: string; type: KipperType }>;
+	returnType: KipperType;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
+		const typeData = funcSpec.getTypeSemanticData();
 
 		return {
 			identifier: semanticData.identifier,
 			params: semanticData.params.map((param) => {
 				return { identifier: param.getSemanticData().identifier, type: param.getTypeSemanticData().valueType };
 			}),
+			returnType: typeData.returnType,
 		};
 	} else {
 		return {
@@ -73,6 +76,7 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 			params: funcSpec.params.map((arg: BuiltInFunctionArgument) => {
 				return { identifier: arg.identifier, type: arg.valueType };
 			}),
+			returnType: funcSpec.returnType,
 		};
 	}
 }
@@ -85,11 +89,12 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 export function createTSFunctionSignature(signature: {
 	identifier: string;
 	params: Array<{ identifier: string; type: KipperType }>;
+	returnType: KipperType;
 }): string {
 	const { identifier, params } = signature;
 	const argsSignature = `${params.map((p) => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;
 
-	return `function ${identifier}(${argsSignature})`;
+	return `function ${identifier}(${argsSignature}): ${getTypeScriptType(signature.returnType)}`;
 }
 
 export { getJavaScriptBuiltInIdentifier as getTypeScriptBuiltInIdentifier } from "@kipper/target-js";
