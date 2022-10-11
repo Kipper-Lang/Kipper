@@ -1,24 +1,24 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
+import * as path from "path";
+import { ParserRuleContext } from "antlr4ts";
 import {
 	CompilableASTNode,
-	compilableNodeParent,
 	KipperCompiler,
 	KipperParseStream,
 	KipperProgramContext,
-	ParseData,
 	RootASTNode,
+	ParseData,
 	TargetASTNodeSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
+	compilableNodeParent,
 } from "@kipper/core";
-import { TargetASTNodeCodeGenerator } from "@kipper/core/";
-import { ParserRuleContext } from "antlr4ts";
-import * as path from "path";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
-describe("Parse-Tokens", () => {
+describe("AST Nodes", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
 
 	describe("CompilableASTNode", () => {

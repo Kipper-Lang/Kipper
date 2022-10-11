@@ -11,7 +11,7 @@ const utf16CompiledPath = path.resolve("build/hello-world-utf16.js");
 const anonymousJSCompiledPath = path.resolve("build/anonymous-script.js");
 const anonymousTSCompiledPath = path.resolve("build/anonymous-script.ts");
 
-describe("compile", async () => {
+describe("kipper compile", async () => {
 	describe("primary", () => {
 		let fileArgTestOutput: string;
 		let stringFlagTestOutput: string;
