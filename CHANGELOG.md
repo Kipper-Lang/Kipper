@@ -111,6 +111,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
 - Default error identifier is now just `Error` instead of `KipperError`.
+- Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
 - Made the following functions protected, as a way to enforce the use of `Scope.getReferenceRecursively`:
   - `Scope.getVariable`
   - `Scope.getFunction`
