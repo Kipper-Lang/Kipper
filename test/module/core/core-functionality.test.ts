@@ -647,5 +647,36 @@ describe("Core functionality", () => {
 			// Restore old console.log
 			console.log = prevLog;
 		});
+
+		it("Parameters", async () => {
+			const stream = new KipperParseStream(
+				'def test(x: num, y: str) -> num { return x + y as num; }; print(test(1, "5") as str);',
+			);
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert(
+				code.includes("function test(x: number, y: string): number {\n  return x + __kipper.strToNum(y);\n}"),
+				"Expected different TypeScript code",
+			);
+
+			let jsCode = ts.transpile(code);
+
+			// Overwrite built-in to access output
+			const prevLog = console.log;
+			console.log = (message: any) => {
+				assert(message === "6", "Expected different result");
+			};
+
+			// Evaluate expression
+			eval(jsCode);
+
+			// Restore old console.log
+			console.log = prevLog;
+		});
 	});
 });
