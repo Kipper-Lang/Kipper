@@ -33,7 +33,7 @@ primaryExpression
     |   (SingleQuoteStringLiteral | DoubleQuoteStringLiteral) # stringPrimaryExpression
     |   (SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral) # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
-    |   '[' constantExpression (',' constantExpression)* ']' #listPrimaryExpression
+    |   '[' (constantExpression (',' constantExpression)*)? ']' #listPrimaryExpression
     |		('void' | 'null' | 'undefined') #voidOrNullOrUndefinedPrimaryExpression
     ;
 
