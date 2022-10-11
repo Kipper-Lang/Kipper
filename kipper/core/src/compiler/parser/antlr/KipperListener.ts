@@ -91,6 +91,7 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
+import { ReturnStatementContext } from "./KipperParser";
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -1155,4 +1156,15 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitJumpStatement?: (ctx: JumpStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterReturnStatement?: (ctx: ReturnStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitReturnStatement?: (ctx: ReturnStatementContext) => void;
 }

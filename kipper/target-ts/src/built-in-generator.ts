@@ -21,7 +21,10 @@ function getTSFunctionSignature(funcSpec: BuiltInFunction): {
 	// Translate the function signature into TypeScript
 	const identifier: string = funcSpec.identifier;
 	const type: string = getTypeScriptType(funcSpec.returnType);
-	const args: Array<[string, string]> = funcSpec.args.map((arg) => [arg.identifier, getTypeScriptType(arg.type)]);
+	const args: Array<[string, string]> = funcSpec.params.map((param) => [
+		param.identifier,
+		getTypeScriptType(param.valueType),
+	]);
 
 	return { type, identifier, args };
 }

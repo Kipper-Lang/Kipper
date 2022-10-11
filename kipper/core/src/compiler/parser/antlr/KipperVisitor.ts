@@ -91,6 +91,7 @@ import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
+import { ReturnStatementContext } from "./KipperParser";
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -762,4 +763,11 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitJumpStatement?: (ctx: JumpStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitReturnStatement?: (ctx: ReturnStatementContext) => Result;
 }

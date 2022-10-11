@@ -16,6 +16,8 @@ export * from "./target-presets";
 export * from "./runtime-built-ins";
 export * from "./scope";
 export * from "./local-scope";
+export * from "./global-scope";
+export * from "./function-scope";
 export * from "./scope-declaration";
 export * from "./antlr-error-listener";
 export * from "./program-ctx";

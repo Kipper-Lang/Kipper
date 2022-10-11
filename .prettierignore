@@ -2,11 +2,13 @@ lib
 build
 node_modules
 bin
+coverage
 .editorconfig
 .eslintrc
 .gitignore
 .npmrc
 .npmignore
+.nyc_output
 .prettierignore
 kipper-standalone.js
 kipper-standalone.min.js

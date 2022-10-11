@@ -14,6 +14,7 @@ import type {
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
+	Expression,
 	ExpressionSemantics,
 	ExpressionStatement,
 	ExpressionTypeSemantics,
@@ -39,6 +40,7 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -46,16 +48,16 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	Expression,
 } from "@kipper/core";
 import {
-	KipperTargetCodeGenerator,
 	CompoundStatement,
 	IfStatement,
+	KipperTargetCodeGenerator,
+	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
-import { getJavaScriptBuiltInIdentifier } from "./tools";
+import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
 import { version } from "./index";
 
@@ -138,9 +140,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Core items, which will be always present
 		let condition = await semanticData.condition.translateCtxAndChildren();
-		let statement = await semanticData.statementBody.translateCtxAndChildren();
+		let statement = await semanticData.ifBranch.translateCtxAndChildren();
 
-		if (semanticData.statementBody instanceof CompoundStatement) {
+		if (semanticData.ifBranch instanceof CompoundStatement) {
 			statement = removeBrackets(statement);
 		} else {
 			statement = indentLines(statement); // Apply indent to the single statement
@@ -153,19 +155,19 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 
 		// If there is no alternative branch, return with this code
-		if (!semanticData.alternativeBranch) {
+		if (!semanticData.elseBranch) {
 			return baseCode;
 		}
 
-		let secondBranchIsCompoundStatement = semanticData.alternativeBranch instanceof CompoundStatement;
-		let secondBranchIsElseIf = semanticData.alternativeBranch instanceof IfStatement;
+		let secondBranchIsCompoundStatement = semanticData.elseBranch instanceof CompoundStatement;
+		let secondBranchIsElseIf = semanticData.elseBranch instanceof IfStatement;
 		let secondBranchIsElse = !secondBranchIsElseIf;
 		let secondCondition: Array<string> | null = null;
 		let secondBranch: Array<TranslatedCodeLine> | null = null;
 
 		// Evaluate the alternative branch if it exists
-		if (semanticData.alternativeBranch) {
-			secondBranch = await semanticData.alternativeBranch.translateCtxAndChildren();
+		if (semanticData.elseBranch) {
+			secondBranch = await semanticData.elseBranch.translateCtxAndChildren();
 
 			if (secondBranchIsElseIf) {
 				// Else if statement
@@ -177,8 +179,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				secondCondition = ["else"];
 			}
 
-			// Format code and remove brackets from compound statements if they exist
 			if (secondBranchIsCompoundStatement) {
+				// Format code and remove brackets from compound statements if they exist
 				secondBranch = removeBrackets(secondBranch);
 			} else if (secondBranchIsElse) {
 				// If the second branch is else, then the end of this branch of the AST was reached
@@ -234,6 +236,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates a {@link ReturnStatement} into the JavaScript language.
+	 */
+	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+
+		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
+	};
+
+	/**
 	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
@@ -244,7 +256,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link FunctionDeclaration} into the JavaScript language.
 	 */
 	functionDeclaration = async (node: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		// Function signature and body
+		const signature = getJSFunctionSignature(node);
+		const functionBody = await semanticData.functionBody.translateCtxAndChildren();
+
+		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
+		return [[createJSFunctionSignature(signature)], ...functionBody];
 	};
 
 	/**
@@ -283,16 +302,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-
-		// Get the identifier of the reference
 		let identifier: string = semanticData.identifier;
 
-		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
+		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+		if (!(semanticData.ref instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
-
 		return [identifier];
 	};
 
@@ -383,7 +399,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
 		const semanticData = node.getSemanticData();
-		const func = node.programCtx.semanticCheck(node).getExistingFunction(semanticData.identifier);
+		const func = node.getTypeSemanticData().func;
 
 		// Get the proper identifier for the function
 		const identifier =
@@ -392,11 +408,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Generate the arguments
 		let args: TranslatedExpression = [];
 		for (const i of semanticData.args) {
-			// TODO! Rework this generation once function arguments are properly supported
 			const arg = await i.translateCtxAndChildren();
-			args = args.concat(arg.concat(" "));
+			args = args.concat(arg.concat(", "));
 		}
-		args = args.slice(0, args.length - 1); // Removing last whitespace before ')'
+		args = args.slice(0, -1); // Removing last whitespace and comma before the closing parenthesis
 
 		// Return the compiled function call
 		return [identifier, "(", ...args, ")"];
@@ -540,7 +555,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!node.programCtx.globalScope.getDeclaration(identifier)) {
+		if (!(semanticData.ref instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 

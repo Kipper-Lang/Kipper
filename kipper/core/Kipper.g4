@@ -33,7 +33,7 @@ primaryExpression
     |   (SingleQuoteStringLiteral | DoubleQuoteStringLiteral) # stringPrimaryExpression
     |   (SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral) # fStringPrimaryExpression
     |   (IntegerConstant | FloatingConstant) #numberPrimaryExpression
-    |   '[' constantExpression (',' constantExpression)* ']' #listPrimaryExpression
+    |   '[' (constantExpression (',' constantExpression)*)? ']' #listPrimaryExpression
     |		('void' | 'null' | 'undefined') #voidOrNullOrUndefinedPrimaryExpression
     ;
 
@@ -164,7 +164,7 @@ directDeclarator
     ;
 
 parameterTypeList
-    :   parameterList (',' '...' Identifier)? /* Kipper should allow for a sequence of arguments */
+    :   parameterList /* Args and Kwargs, like in Python will be added later */
     ;
 
 parameterList
@@ -185,6 +185,7 @@ statement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
+    | 	returnStatement
     ;
 
 compoundStatement
@@ -232,11 +233,12 @@ forExpression
     ;
 
 jumpStatement
-    :   (('continue' | 'break')
-    |   'return' expression?
-    )
-    endOfLine
+    :   ('continue' | 'break') endOfLine
     ;
+
+returnStatement
+		: 	'return' expression? endOfLine
+		;
 
 // Lexer Rules (tokens / token rules)
 

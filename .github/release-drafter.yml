@@ -4,33 +4,32 @@ tag-prefix: "v"
 categories:
   - title: "New Features"
     labels:
-      - "Feature"
+      - "feature"
   - title: "Bug Fixes"
     labels:
-      - "Fix"
+      - "fix"
   - title: "Other Changes"
     labels:
-      - "Other"
-      - "Maintenance"
+      - "other"
+      - "maintenance"
   - title: "Dependency Updates"
     label:
-      - "Dependencies"
+      - "dependencies"
     collapse-after: 4
 version-resolver:
   major:
     labels:
-      - "Breaking Change"
+      - "breaking change"
   minor:
     labels:
-      - "Feature"
+      - "feature"
   patch:
     labels:
-      - "Bug"
-      - "Fix"
-      - "Maintenance"
-      - "Documentation"
-      - "Dependencies"
-      - "Other"
+      - "bug"
+      - "fix"
+      - "maintenance"
+      - "dependencies"
+      - "other"
 template: |
   # {INSERT_NAME} Update
   ## v$RESOLVED_VERSION - {YEAR-MONTH-DAY}
@@ -43,5 +42,8 @@ template: |
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
 
 exclude-labels:
-  - "Release"
-  - "Skip Changelog"
+  - "release"
+  - "docs"
+  - "spam"
+  - "invalid"
+  - "skip changelog"

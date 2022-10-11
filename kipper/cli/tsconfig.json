@@ -1,6 +1,6 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
 		"noImplicitAny": true,
@@ -10,10 +10,10 @@
 			"ES7"
 		]
 		// ES7 -> ES2016
-  },
-  "include": [
-    "./src/**/*"
-  ],
+	},
+	"include": [
+		"./src/**/*"
+	],
 	"exclude": [
 		"node_modules",
 		"lib",

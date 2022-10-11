@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Project Website
-    url: https://github.com/WMC-AHIF-2021/Kipper-Web/
-    about: Please go here for proposals regarding the project website
+  - name: Project Documentation
+    url: https://luna-klatzer.github.io/Kipper/docs/
+    about: If you have any general question about the Kipper project or language, you will likely find your answer here

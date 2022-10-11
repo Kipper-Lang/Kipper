@@ -5,12 +5,14 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
 
 /**
- * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables} and
- * {@link ScopeFunctionDeclaration functions}.
+ * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},
+ * {@link ScopeFunctionDeclaration functions} and {@link ScopeParameterDeclaration function arguments}.
+ *
+ * A scope can be a child of another scope or the global scope of a {@link KipperProgramContext program}.
  * @since 0.8.0
  */
 export abstract class Scope {
@@ -42,19 +44,7 @@ export abstract class Scope {
 	}
 
 	/**
-	 * Searches for a function or variable with the specific identifier from the {@link variables} and
-	 * {@link functions}.
-	 *
-	 * If the identifier is unknown, this function will return undefined.
-	 * @param identifier The identifier to search for.
-	 * @since 0.8.0
-	 */
-	public getDeclaration(identifier: string): ScopeFunctionDeclaration | ScopeVariableDeclaration | undefined {
-		return this.getFunction(identifier) ?? this.getVariable(identifier);
-	}
-
-	/**
-	 * Adds a new variable declaration to the {@link variables}.
+	 * Adds a new variable declaration to the {@link variables list of variables}.
 	 * @param declaration The declaration to add.
 	 * @returns The generated {@link ScopeVariableDeclaration scope declaration}.
 	 * @since 0.8.0
@@ -62,16 +52,7 @@ export abstract class Scope {
 	public abstract addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration;
 
 	/**
-	 * Searches for a variable with the specific {@link identifier} from the {@link variables}.
-	 *
-	 * If the identifier is unknown, this function will return undefined.
-	 * @param identifier The identifier to search for.
-	 * @since 0.8.0
-	 */
-	public abstract getVariable(identifier: string): ScopeVariableDeclaration | undefined;
-
-	/**
-	 * Adds a new function declaration to the {@link functions}.
+	 * Adds a new function declaration to the {@link functions list of functions}.
 	 * @param declaration The declaration to add.
 	 * @returns The generated {@link ScopeFunctionDeclaration scope declaration}.
 	 * @since 0.8.0
@@ -79,11 +60,42 @@ export abstract class Scope {
 	public abstract addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration;
 
 	/**
-	 * Searches for a function with the specific {@link identifier} from the {@link functions}.
+	 * Searches for a variable with the specific {@link identifier} from the {@link variables list of variables}.
 	 *
-	 * If the identifier is unknown, this function will return undefined.
+	 * If no reference is found, undefined will be returned.
 	 * @param identifier The identifier to search for.
+	 * @returns The found variable or undefined.
 	 * @since 0.8.0
 	 */
-	public abstract getFunction(identifier: string): ScopeFunctionDeclaration | undefined;
+	protected abstract getVariable(identifier: string): ScopeVariableDeclaration | undefined;
+
+	/**
+	 * Searches for a function with the specific {@link identifier} from the {@link functions list of functions}.
+	 *
+	 * If no reference is found, undefined will be returned.
+	 * @param identifier The identifier to search for.
+	 * @returns The found function or undefined.
+	 * @since 0.8.0
+	 */
+	protected abstract getFunction(identifier: string): ScopeFunctionDeclaration | undefined;
+
+	/**
+	 * Searches for a reference with the specific identifier from the local scope.
+	 *
+	 * If no reference is found, undefined will be returned.
+	 * @param identifier The identifier to search for.
+	 * @returns The found reference or undefined.
+	 * @since 0.8.0
+	 */
+	public abstract getReference(identifier: string): ScopeDeclaration | undefined;
+
+	/**
+	 * Searches for a reference with the specific {@link identifier} from the local scope and all parent scopes.
+	 *
+	 * If no reference is found, undefined will be returned.
+	 * @param identifier The identifier to search for.
+	 * @returns The found reference or undefined.
+	 * @since 0.10.0
+	 */
+	public abstract getReferenceRecursively(identifier: string): ScopeDeclaration | undefined;
 }

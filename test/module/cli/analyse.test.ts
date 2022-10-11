@@ -5,7 +5,7 @@ const validFilePath = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 const invalidFilePath = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
 const utf16filePath = path.resolve(`${__dirname}/../../kipper-files/hello-world-utf16.kip`);
 
-describe("analyse", () => {
+describe("kipper analyse", () => {
 	describe("primary", () => {
 		test
 			.stdout()
@@ -28,7 +28,7 @@ describe("analyse", () => {
 				expect(ctx.stdout).to.contain("Parsing");
 				expect(ctx.stderr).to.contain("Traceback:");
 				expect(ctx.stderr).to.contain(`File '${invalidFilePath}'`);
-				expect(ctx.stderr).to.contain("KipperSyntaxError: Missing ';' at 'is'");
+				expect(ctx.stderr).to.contain("SyntaxError: Missing ';' at 'is'");
 			});
 	});
 

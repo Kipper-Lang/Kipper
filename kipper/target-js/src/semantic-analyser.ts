@@ -42,6 +42,7 @@ import {
 	IfStatement,
 	KipperTargetSemanticAnalyser,
 	ReservedIdentifierOverwriteError,
+	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
 import { getJavaScriptBuiltInIdentifier } from "./tools";
@@ -178,6 +179,11 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
 	 */
 	jumpStatement = async (node: JumpStatement) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ReturnStatement} instances.
+	 */
+	returnStatement = async (node: ReturnStatement) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.

@@ -12,7 +12,17 @@
  * @since 0.1.0
  */
 import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
-import { IfStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import { IfStatementContext, ReturnStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import type { TranslatedCodeLine } from "../const";
+import type { Expression } from "./expressions";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
+import type {
+	ExpressionSemantics,
+	IfStatementSemantics,
+	JumpStatementSemantics,
+	ReturnStatementSemantics,
+} from "../semantic-data";
+import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
 import {
 	CompilableASTNode,
 	CompoundStatementContext,
@@ -20,11 +30,10 @@ import {
 	IterationStatementContext,
 	JumpStatementContext,
 } from "../../parser";
-import type { TranslatedCodeLine } from "../const";
-import type { Expression } from "./expressions";
-import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
+import { FunctionScope } from "../../function-scope";
+import { FunctionDeclaration } from "./definitions";
 
 /**
  * Every antlr4 statement ctx type
@@ -35,7 +44,8 @@ export type antlrStatementCtxType =
 	| SwitchStatementContext
 	| ExpressionStatementContext
 	| IterationStatementContext
-	| JumpStatementContext;
+	| JumpStatementContext
+	| ReturnStatementContext;
 
 /**
  * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
@@ -59,6 +69,8 @@ export class StatementASTNodeFactory {
 			return new ExpressionStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IterationStatementContext) {
 			return new IterationStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ReturnStatementContext) {
+			return new ReturnStatement(antlrRuleCtx, parent);
 		} else {
 			// Can only be {@link JumpStatementContext}
 			return new JumpStatement(antlrRuleCtx, parent);
@@ -123,13 +135,19 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 
 	protected readonly _children: Array<Statement<any, any>>;
 
-	private readonly _localScope: LocalScope;
+	private readonly _localScope: LocalScope | FunctionScope;
 
 	constructor(antlrRuleCtx: CompoundStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
-		this._localScope = new LocalScope(this);
 		this._children = [];
+
+		// Make the local scope a function scope if the parent is a function
+		if (parent instanceof FunctionDeclaration) {
+			this._localScope = new FunctionScope(this);
+		} else {
+			this._localScope = new LocalScope(this);
+		}
 	}
 
 	/**
@@ -149,7 +167,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * Returns the local scope of this {@link CompoundStatement}.
 	 */
-	public get localScope(): LocalScope {
+	public get localScope(): LocalScope | FunctionScope {
 		return this._localScope;
 	}
 
@@ -163,7 +181,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -185,31 +203,6 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CompoundStatement> = this.semanticAnalyser.compoundStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.compoundStatement;
-}
-
-/**
- * Semantics for AST Node {@link IfStatement}.
- * @since 0.9.0
- */
-export interface IfStatementSemantics extends SemanticData {
-	/**
-	 * The condition of the if-statement.
-	 * @since 0.9.0
-	 */
-	condition: Expression<any, any>;
-	/**
-	 * The body of the if-statement.
-	 * @since 0.9.0
-	 */
-	statementBody: Statement<any, any>;
-	/**
-	 * The alternative branch of the if-statement, which is optional. This alternative branch can either be:
-	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
-	 * evaluated in the else branch)
-	 * - Or an else-if branch, if the type is another {@link IfStatement}.
-	 * @since 0.9.0
-	 */
-	alternativeBranch?: IfStatement | Statement<any, any>;
 }
 
 /**
@@ -267,13 +260,13 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 
 		this.semanticData = {
 			condition: condition,
-			statementBody: body,
-			alternativeBranch: alternativeBranch ?? undefined,
+			ifBranch: body,
+			elseBranch: alternativeBranch ?? undefined,
 		};
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -340,7 +333,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -406,7 +399,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -476,7 +469,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
@@ -503,7 +496,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
+export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -538,18 +531,26 @@ export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const jmpType = this.sourceCode.startsWith("break") ? "break" : "continue";
+
+		this.semanticData = {
+			jmpType: jmpType,
+		};
+
 		throw this.programCtx
 			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Jump statements have not been implemented yet."));
+			.notImplementedError(
+				new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
+			);
 	}
 
 	/**
-	 * Performs type checking for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		this.typeSemantics = {};
 	}
 
 	/**
@@ -565,4 +566,85 @@ export class JumpStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
 	targetCodeGenerator: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
 		this.codeGenerator.jumpStatement;
+}
+
+/**
+ * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
+ * {@link translateCtxAndChildren}.
+ */
+export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnStatementTypeSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: ReturnStatementContext;
+
+	protected readonly _children: Array<Expression<any, any>>;
+
+	constructor(antlrRuleCtx: ReturnStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<Expression<any, any>> {
+		return this._children;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this statement.
+	 */
+	public override get antlrRuleCtx(): ReturnStatementContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
+
+		// Getting the function of the return statement
+		const func = this.programCtx.semanticCheck(this).getReturnStatementParent(this);
+
+		this.semanticData = {
+			returnValue: returnValue,
+			function: func,
+		};
+	}
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		// Ensure that the types of the return match the function's return.
+		this.programCtx.typeCheck(this).validReturnStatement(this);
+
+		this.typeSemantics = {
+			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? "void",
+		};
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ReturnStatement> = this.semanticAnalyser.returnStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.returnStatement;
 }

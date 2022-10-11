@@ -1,10 +1,10 @@
 {
-  "coverage_file_path": "../../coverage/coverage-summary.json",
-  "badges": {
-    "coverage": {
-      "style": "flat",
-      "logoColor": "white",
-      "color": "blue"
-    }
-  }
+	"coverage_file_path": "../../coverage/coverage-summary.json",
+	"badges": {
+		"coverage": {
+			"style": "flat",
+			"logoColor": "white",
+			"color": "blue"
+		}
+	}
 }

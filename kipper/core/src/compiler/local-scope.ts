@@ -1,5 +1,12 @@
+/**
+ * File containing the definition for a local scope that is bound to a {@link CompoundStatement} and not the global
+ * namespace.
+ * @author Luna Klatzer
+ * @copyright 2021-2022 Luna Klatzer
+ * @since 0.8.0
+ */
 import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
 import { KipperNotImplementedError } from "../errors";
 import { Scope } from "./scope";
 
@@ -31,30 +38,28 @@ export class LocalScope extends Scope {
 	}
 
 	public getFunction(identifier: string): ScopeFunctionDeclaration | undefined {
-		throw this.ctx.programCtx
-			.semanticCheck(this.ctx)
-			.notImplementedError(new KipperNotImplementedError("Local functions have not been implemented yet."));
+		return this.functions.find((i) => i.identifier === identifier);
 	}
 
 	public getVariable(identifier: string): ScopeVariableDeclaration | undefined {
 		return this.variables.find((i) => i.identifier === identifier);
 	}
 
-	/**
-	 * Tries to fetch the passed identifier in the current scope and all parent scopes recursively.
-	 * @since 0.6.0
-	 */
-	public getVariableRecursively(identifier: string): ScopeVariableDeclaration | undefined {
-		const localVar = this.getVariable(identifier);
-		if (!localVar) {
+	public getReference(identifier: string): ScopeDeclaration | undefined {
+		return this.getFunction(identifier) ?? this.getVariable(identifier);
+	}
+
+	public getReferenceRecursively(identifier: string): ScopeDeclaration | undefined {
+		const localRef = this.getReference(identifier);
+		if (!localRef) {
 			// If the scope of the ctx (Compound statement) is another local scope, then go upwards recursively again.
 			if (this.ctx.scope instanceof LocalScope) {
-				return this.ctx.scope.getVariableRecursively(identifier);
+				return this.ctx.scope.getReferenceRecursively(identifier);
 			} else {
 				// Fetching from the global scope
-				return this.ctx.scope.getVariable(identifier);
+				return this.ctx.scope.getReference(identifier);
 			}
 		}
-		return localVar;
+		return localRef;
 	}
 }

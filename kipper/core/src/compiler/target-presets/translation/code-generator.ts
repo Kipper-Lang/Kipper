@@ -41,9 +41,9 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../semantics";
+import { ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableASTNode } from "../../parser";
-import { VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -130,6 +130,11 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link JumpStatement} into a specific language.
 	 */
 	public abstract jumpStatement: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link JumpStatement} into a specific language.
+	 */
+	public abstract returnStatement: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ParameterDeclaration} into a specific language.

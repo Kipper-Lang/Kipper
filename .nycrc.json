@@ -1,12 +1,17 @@
 {
 	"extends": "@istanbuljs/nyc-config-typescript",
+	"reporter": [
+		"json-summary",
+		"lcov"
+	],
+	"extension": [
+		"ts"
+	],
 	"exclude": [
-		"**/test/module/cli/*.test.ts",
-		"**/test/module/core/*.test.ts",
 		"**/parser/antlr/*.*",
+		"**/*.test.ts",
 		"**/*.spec.ts",
 		"**/*.d.ts",
-		"**/*.map",
-		"**/*.jsx"
+		"**/*.map"
 	]
 }

@@ -11,7 +11,7 @@ const utf16CompiledPath = path.resolve("build/hello-world-utf16.js");
 const anonymousJSCompiledPath = path.resolve("build/anonymous-script.js");
 const anonymousTSCompiledPath = path.resolve("build/anonymous-script.ts");
 
-describe("compile", async () => {
+describe("kipper compile", async () => {
 	describe("primary", () => {
 		let fileArgTestOutput: string;
 		let stringFlagTestOutput: string;
@@ -53,7 +53,7 @@ describe("compile", async () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};
@@ -106,7 +106,7 @@ describe("compile", async () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};

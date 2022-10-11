@@ -1,20 +1,24 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
-import { CompilableASTNode, KipperParseStream, ParseData } from "@kipper/core";
-import { KipperProgramContext } from "@kipper/core";
-import { KipperCompiler } from "@kipper/core";
-import { RootASTNode } from "@kipper/core";
-import { TranslatedCodeLine } from "@kipper/core";
-import { TargetASTNodeCodeGenerator } from "@kipper/core/";
-import { TargetASTNodeSemanticAnalyser } from "@kipper/core";
-import { compilableNodeParent } from "@kipper/core";
-import { ParserRuleContext } from "antlr4ts";
 import * as path from "path";
+import { ParserRuleContext } from "antlr4ts";
+import {
+	CompilableASTNode,
+	KipperCompiler,
+	KipperParseStream,
+	KipperProgramContext,
+	RootASTNode,
+	ParseData,
+	TargetASTNodeSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
+	TranslatedCodeLine,
+	compilableNodeParent,
+} from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
-describe("Parse-Tokens", () => {
+describe("AST Nodes", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
 
 	describe("CompilableASTNode", () => {
@@ -61,7 +65,7 @@ describe("Parse-Tokens", () => {
 
 				let parenToken = new RootASTNode(programCtx, programCtx.antlrParseTree);
 				let node = new ExampleNode(programCtx.antlrParseTree, parenToken);
-				assert(node.sourceCode === fileContent.trim(), "Source code and fileContent must match!");
+				assert(node.sourceCode === fileContent, "Source code and fileContent must match!");
 				assert(node.programCtx === programCtx, "Expected 'programCtx' to match");
 				assert(node.parent === parenToken, "Expected 'parent' to match");
 				assert(node.parent.programCtx === programCtx, "Expected 'parent' to match");
