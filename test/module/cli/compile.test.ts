@@ -53,7 +53,7 @@ describe("kipper compile", async () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};
@@ -106,7 +106,7 @@ describe("kipper compile", async () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};

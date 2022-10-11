@@ -283,7 +283,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};
@@ -311,7 +311,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(["Hello", "World", "!"].find((val) => val === message) !== undefined);
 					};
@@ -366,7 +366,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						// Assert that the output is "Hello world!"
 						assert(message === "Hello world!");
 					};
@@ -395,7 +395,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						assert(message === "45678");
 					};
 
@@ -485,7 +485,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						assert(["Hello world!", "485", "72", "955"].find((val) => val === message));
 					};
 
@@ -518,7 +518,7 @@ describe("KipperCompiler", () => {
 
 					// Overwrite built-in to access output
 					const prevLog = console.log;
-					console.log = (message: string) => {
+					console.log = (message: any) => {
 						assert("Hello world!" === message, "Expected 'Hello world!'");
 					};
 
