@@ -92,9 +92,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
     semantic analysis, though will return undefined if it encounters any error.
   - `TracebackMetadata.errorNode`, which contains the error node that caused the error.
-  - `CompilableASTNode.errors`, which returns all errors caused by this node and its children.
-  - `CompilableASTNode.hasFailed`, which returns true if the node or any of its children have failed to be processed
-     during semantic analysis or type checking.
+  - `CompilableASTNode.errors` and `RootASTNode.errors`, which returns all errors caused by this node and or its 
+		children.
+  - `CompilableASTNode.hasFailed` and `RootASTNode.hasFailed`, which returns true if the node or any of its children 
+		have failed to be processed during semantic analysis or type checking. 
 
 ### Changed
 
