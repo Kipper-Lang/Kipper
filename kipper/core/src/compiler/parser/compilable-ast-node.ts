@@ -48,10 +48,13 @@ export abstract class CompilableASTNode<
 
 	protected _children: Array<compilableNodeChild>;
 
+	protected _errors: Array<KipperError>;
+
 	protected constructor(antlrCtx: ParserRuleContext, parent: compilableNodeParent) {
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];
+		this._errors = [];
 	}
 
 	/**
@@ -79,6 +82,18 @@ export abstract class CompilableASTNode<
 	 */
 	public addNewChild(newChild: compilableNodeChild): void {
 		this._children.push(newChild);
+	}
+
+	/**
+	 * The errors that were caused by this node. Includes all errors from children.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		const errors = this._errors;
+		for (const child of this._children) {
+			errors.push(...child.errors);
+		}
+		return errors;
 	}
 
 	/**

@@ -92,6 +92,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 			streamSrc: this.parseStream,
 			tokenSrc: src, // Explicitly set the tokenSrc, since syntax errors should be handled differently than
 			// compilation errors.
+			errorNode: undefined,
 		});
 
 		// Log the error

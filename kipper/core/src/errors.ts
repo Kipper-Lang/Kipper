@@ -5,17 +5,13 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import type {
-	InputMismatchException,
-	LexerNoViableAltException,
-	NoViableAltException,
-	ParserRuleContext,
-} from "antlr4ts";
+import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperParseStream } from "./compiler";
+import type { KipperParseStream, SemanticData, TypeData } from "./compiler";
 import { getParseRuleSource } from "./utils";
+import { CompilableASTNode } from "./compiler";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -42,6 +38,11 @@ export interface TracebackMetadata {
 	 * @since 0.8.0
 	 */
 	streamSrc: KipperParseStream | undefined;
+	/**
+	 * The AST Node that caused the error.
+	 * @since 0.10.0
+	 */
+	errorNode: CompilableASTNode<SemanticData, TypeData> | undefined;
 }
 
 /**
@@ -56,13 +57,7 @@ export class KipperError extends Error {
 	 */
 	public tracebackData: TracebackMetadata;
 
-	/**
-	 * The {@link ParserRuleContext antlr4 context} instance, which is the context in which the error occurred.
-	 * @since 0.3.0
-	 */
-	public antlrCtx?: ParserRuleContext;
-
-	constructor(msg: string, token?: ParserRuleContext) {
+	constructor(msg: string) {
 		super(msg);
 		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
@@ -70,21 +65,16 @@ export class KipperError extends Error {
 			filePath: undefined,
 			tokenSrc: undefined,
 			streamSrc: undefined,
+			errorNode: undefined,
 		};
-		this.antlrCtx = token;
 	}
 
 	/**
-	 * Update traceback context data.
+	 * Update traceback context data that are associated with this error.
 	 * @param traceback The traceback data.
 	 * @since 0.3.0
 	 */
-	public setTracebackData(traceback: {
-		location: { line: number | undefined; col: number | undefined };
-		filePath: string | undefined;
-		tokenSrc: string | undefined;
-		streamSrc: KipperParseStream | undefined;
-	}) {
+	public setTracebackData(traceback: TracebackMetadata) {
 		this.tracebackData = traceback;
 	}
 
@@ -164,7 +154,12 @@ export class KipperError extends Error {
 	public get tokenSrc(): string | undefined {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
-		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
+		return (
+			this.tracebackData.tokenSrc ??
+			(this.tracebackData.errorNode?.antlrRuleCtx
+				? getParseRuleSource(this.tracebackData.errorNode.antlrRuleCtx)
+				: undefined)
+		);
 	}
 }
 
@@ -176,8 +171,8 @@ export class KipperError extends Error {
  * @since 0.10.0
  */
 export class KipperWarning extends KipperError {
-	constructor(msg: string, token?: ParserRuleContext) {
-		super(msg, token);
+	constructor(msg: string) {
+		super(msg);
 	}
 }
 
