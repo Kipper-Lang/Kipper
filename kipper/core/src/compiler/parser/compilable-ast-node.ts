@@ -97,6 +97,17 @@ export abstract class CompilableASTNode<
 	}
 
 	/**
+	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} or
+	 * {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node} failed.
+	 *
+	 * This indicates that the node is not valid and can not be translated.
+	 * @since 0.10.0
+	 */
+	public get hasFailed(): boolean {
+		return this.errors.length > 0;
+	}
+
+	/**
 	 * Returns the semantic data of this token.
 	 * @since 0.8.0
 	 */
