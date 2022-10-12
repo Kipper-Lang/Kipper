@@ -98,7 +98,8 @@ export abstract class CompilableASTNode<
 
 	/**
 	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} or
-	 * {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node} failed.
+	 * {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node} or any
+	 * {@link children children nodes} failed.
 	 *
 	 * This indicates that the node is not valid and can not be translated.
 	 * @since 0.10.0
