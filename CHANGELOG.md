@@ -91,6 +91,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
   - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
     semantic analysis, though will return undefined if it encounters any error.
+  - `TracebackMetadata.errorNode`, which contains the error node that caused the error.
 
 ### Changed
 
@@ -141,6 +142,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   respectively.
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
+- Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
 
 ## [0.9.2] - 2022-07-23
 
