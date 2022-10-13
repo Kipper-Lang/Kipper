@@ -26,7 +26,8 @@ import type { LocalScope } from "./local-scope";
  * Represents a general declaration of a variable, parameter or function inside a Kipper program.
  *
  * Abstract base class for {@link ScopeVariableDeclaration}, {@link ScopeParameterDeclaration} and
- * {@link ScopeFunctionDeclaration}.
+ * {@link ScopeFunctionDeclaration}. This is used like an entry for a symbol table, where the important information
+ * about a variable, parameter or function is stored.
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
