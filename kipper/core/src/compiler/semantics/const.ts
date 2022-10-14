@@ -4,9 +4,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.3.0
  */
-import type { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../scope-declaration";
-import type { ScopeDeclaration, ScopeParameterDeclaration } from "../scope-declaration";
+import type { ScopeDeclaration } from "../symbol-table/";
 import type { BuiltInFunction } from "../runtime-built-ins";
+import { ScopeVariableDeclaration } from "../symbol-table/entry/scope-variable-declaration";
+import { ScopeFunctionDeclaration } from "../symbol-table/entry/scope-function-declaration";
+import { ScopeParameterDeclaration } from "../symbol-table/entry/scope-parameter-declaration";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -537,10 +539,16 @@ export type KipperParam = ScopeParameterDeclaration;
 export type KipperArg = KipperParam;
 
 /**
- * Represents a reference that can be used as an identifier.
+ * Represents a item that can be referenced.
  * @since 0.6.0
  */
-export type KipperRef = BuiltInFunction | KipperFunction | KipperVariable | KipperParam | KipperArg | ScopeDeclaration;
+export type KipperReferenceable =
+	| BuiltInFunction
+	| KipperFunction
+	| KipperVariable
+	| KipperParam
+	| KipperArg
+	| ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.

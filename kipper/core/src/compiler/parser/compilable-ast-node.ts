@@ -16,10 +16,9 @@ import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode } from "./root-ast-node";
 import type { SemanticData } from "./ast-node";
-import { ParserASTNode } from "./ast-node";
 import type { EvaluatedCompileConfig } from "../compiler";
-import type { GlobalScope } from "../global-scope";
-import type { LocalScope } from "../local-scope";
+import type { GlobalScope, LocalScope } from "../symbol-table";
+import { ParserASTNode } from "./ast-node";
 import { KipperError } from "../../errors";
 
 /**

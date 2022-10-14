@@ -15,8 +15,8 @@ import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLin
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { Reference } from "./reference";
-import { GlobalScope } from "./global-scope";
+import { Reference } from "./symbol-table/reference";
+import { GlobalScope } from "./symbol-table/scope/global-scope";
 import { EvaluatedCompileConfig } from "./compiler";
 
 /**
@@ -583,8 +583,8 @@ export class KipperProgramContext {
 	 */
 	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
 		this._builtInReferences.push({
-			ref: ref,
-			exp: exp,
+			refTarget: ref,
+			srcExpr: exp,
 		});
 	}
 
@@ -596,8 +596,8 @@ export class KipperProgramContext {
 	 */
 	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
 		this._internalReferences.push({
-			ref: ref,
-			exp: exp,
+			refTarget: ref,
+			srcExpr: exp,
 		});
 	}
 }

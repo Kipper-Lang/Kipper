@@ -19,12 +19,12 @@ import type {
 } from "../language";
 import { ParameterDeclaration } from "../language";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { ScopeDeclaration, ScopeVariableDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration, ScopeVariableDeclaration, ScopeParameterDeclaration } from "../../symbol-table";
 import {
 	KipperArithmeticOperator,
 	KipperFunction,
 	kipperPlusOperator,
-	KipperRef,
+	KipperReferenceable,
 	kipperStrType,
 	kipperSupportedConversions,
 	KipperType,
@@ -89,11 +89,15 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param ref The reference to check.
 	 * @since 0.10.0
 	 */
-	public referenceCallable(ref: KipperRef): void {
+	public refTargetCallable(ref: KipperReferenceable): void {
+		// The only type other than 'ScopeDeclaration' is 'BuiltInFunction', which always is callable, which means
+		// we only need to check scope declarations
 		if (ref instanceof ScopeDeclaration) {
+			// If the reference is not callable, throw an error
 			if (!ref.isCallable) {
 				throw this.assertError(new ExpressionNotCallableError(ref.type));
 			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
+				// Calling a function stored in a variable or parameter is not implemented yet
 				throw this.notImplementedError(
 					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
 				);
@@ -111,21 +115,25 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const leftExpTypeData = semanticData.identifierCtx.getTypeSemanticData();
 		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
-		// Ensure that the types are matching
+		// Ensure that the types are matching - if not, throw an error
 		if (!this.checkMatchingTypes(rightExpTypeData.evaluatedType, leftExpTypeData.evaluatedType)) {
 			throw this.assertError(new AssignmentTypeError(leftExpTypeData.evaluatedType, rightExpTypeData.evaluatedType));
 		}
 
 		// Ensure that all arithmetic assignment operators except '+=' are only used on numbers
 		if (semanticData.operator !== "=" && rightExpTypeData.evaluatedType !== "num") {
+			// Strings may use the '+=' operator to concatenate (e.g. 'str += str')
 			if (!(semanticData.operator === "+=" && rightExpTypeData.evaluatedType === "str")) {
 				throw this.assertError(new ArithmeticOperationTypeError());
 			}
 		}
 
 		// Ensure that the left-hand side is not read-only
-		if (semanticData.ref && "storageType" in semanticData.ref && semanticData.ref.storageType === "const") {
-			throw this.assertError(new ReadOnlyTypeError(semanticData.ref.identifier));
+		if (
+			"storageType" in semanticData.assignTarget.refTarget &&
+			semanticData.assignTarget.refTarget.storageType === "const"
+		) {
+			throw this.assertError(new ReadOnlyTypeError(semanticData.assignTarget.refTarget.identifier));
 		}
 	}
 

@@ -6,17 +6,16 @@
  * @since 0.7.0
  */
 
-import type { KipperRef } from "../const";
+import type { KipperReferenceable } from "../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { compilableNodeChild, compilableNodeParent, SemanticData, TypeData } from "../../parser";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { BuiltInFunction } from "../../runtime-built-ins";
 import {
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
-} from "../../scope-declaration";
+} from "../../symbol-table";
 import {
 	CompoundStatement,
 	Expression,
@@ -58,10 +57,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param scopeCtx The scopeCtx to search in. If undefined, the global scope is used.
 	 * @since 0.8.0
 	 */
-	protected getReference(
-		identifier: string,
-		scopeCtx?: CompoundStatement,
-	): ScopeDeclaration | BuiltInFunction | undefined {
+	protected getReference(identifier: string, scopeCtx?: CompoundStatement): KipperReferenceable | undefined {
 		return (
 			(scopeCtx // First try to fetch from the local scope if it is defined
 				? scopeCtx.localScope.getReferenceRecursively(identifier)
@@ -77,7 +73,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public getExistingReference(identifier: string, scopeCtx?: CompoundStatement): KipperRef {
+	public getExistingReference(identifier: string, scopeCtx?: CompoundStatement): KipperReferenceable {
 		const ref = this.getReference(identifier, scopeCtx);
 		if (!ref) {
 			throw this.assertError(new UnknownReferenceError(identifier));
@@ -91,7 +87,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {UndefinedReferenceError} If the reference is undefined.
 	 * @since 0.10.0
 	 */
-	public referenceDefined(ref: KipperRef): void {
+	public refTargetDefined(ref: KipperReferenceable): void {
 		if (ref instanceof ScopeDeclaration && !ref.hasValue) {
 			throw this.assertError(new UndefinedReferenceError(ref.identifier));
 		}

@@ -16,7 +16,7 @@ import type {
 	KipperLogicalOrOperator,
 	KipperMultiplicativeOperator,
 	KipperNullType,
-	KipperRef,
+	KipperReferenceable,
 	KipperRelationalOperator,
 	KipperUnaryModifierOperator,
 	KipperUnaryOperator,
@@ -26,6 +26,7 @@ import type {
 import type { SemanticData } from "../../parser";
 import type { Expression, IdentifierPrimaryExpression } from "../language";
 import type { ExpressionTypeSemantics } from "../type-data";
+import { Reference } from "../../symbol-table";
 
 /**
  * Static semantics for an expression class that must be evaluated during the Semantic Analysis.
@@ -135,13 +136,9 @@ export interface IdentifierPrimaryExpressionSemantics extends ExpressionSemantic
 	identifier: string;
 	/**
 	 * The reference that the {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
-	 *
-	 * This reference may either be a {@link BuiltInFunction built-in function},
-	 * {@link ScopeVariableDeclaration user-defined variable} or
-	 * {@link ScopeFunctionDeclaration user-defined function}.
 	 * @since 0.10.0
 	 */
-	ref: KipperRef;
+	ref: Reference<KipperReferenceable>;
 }
 
 /**
@@ -227,7 +224,7 @@ export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemant
 	 * The function that is called by this expression.
 	 * @since 0.5.0
 	 */
-	callExpr: KipperRef;
+	callTarget: Reference<KipperReferenceable>;
 	/**
 	 * The arguments that were passed to this function.
 	 * @since 0.6.0
@@ -529,7 +526,7 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	 * The reference that is being assigned to.
 	 * @since 0.10.0
 	 */
-	ref: KipperRef;
+	assignTarget: Reference<KipperReferenceable>;
 	/**
 	 * The assigned value to this variable.
 	 * @since 0.7.0

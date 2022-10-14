@@ -16,8 +16,12 @@ import {
 	StorageTypeSpecifierContext,
 } from "../../parser";
 import type { ParseTree } from "antlr4ts/tree";
-import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
+import {
+	ScopeDeclaration,
+	ScopeVariableDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+} from "../../symbol-table";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
@@ -36,7 +40,7 @@ import {
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
-import { FunctionScope } from "../../function-scope";
+import { FunctionScope } from "../../symbol-table/scope/function-scope";
 
 /**
  * Every antlr4 definition ctx type

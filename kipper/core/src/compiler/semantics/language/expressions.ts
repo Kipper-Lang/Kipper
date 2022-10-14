@@ -97,7 +97,7 @@ import {
 	TranslatedExpression,
 } from "../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
-import { ScopeDeclaration, ScopeVariableDeclaration } from "../../scope-declaration";
+import { ScopeDeclaration, ScopeVariableDeclaration } from "../../symbol-table";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { TerminalNode } from "antlr4ts/tree";
 import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
@@ -678,15 +678,20 @@ export class IdentifierPrimaryExpression extends Expression<
 		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {
 			identifier: identifier,
-			ref: ref,
+			ref: {
+				refTarget: ref,
+				srcExpr: this,
+			},
 		};
 
 		if (!(ref instanceof ScopeDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
 		} else {
 			// If the reference is not used inside an assignment expression, ensure that the reference is defined
+			// (This is due to the fact that assignments to undefined variables must always be valid, unless it's a
+			// modifier assignment operator)
 			if (!(this.parent instanceof AssignmentExpression)) {
-				this.programCtx.semanticCheck(this).referenceDefined(ref);
+				this.programCtx.semanticCheck(this).refTargetDefined(ref);
 			}
 		}
 	}
@@ -700,7 +705,7 @@ export class IdentifierPrimaryExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		this.typeSemantics = {
-			evaluatedType: "type" in semanticData.ref ? semanticData.ref.type : "func",
+			evaluatedType: "type" in semanticData.ref.refTarget ? semanticData.ref.refTarget.type : "func",
 		};
 	}
 
@@ -1264,9 +1269,9 @@ export class FunctionCallPostfixExpression extends Expression<
 			this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		this.semanticData = {
-			identifier: identifierSemantics.ref.identifier,
+			identifier: identifierSemantics.identifier,
 			args: args,
-			callExpr: identifierSemantics.ref,
+			callTarget: identifierSemantics.ref,
 		};
 	}
 
@@ -1279,8 +1284,8 @@ export class FunctionCallPostfixExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		// Ensure that the reference is a callable function
-		this.programCtx.typeCheck(this).referenceCallable(semanticData.callExpr);
-		const calledFunc = <KipperFunction>semanticData.callExpr;
+		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
+		const calledFunc = <KipperFunction>semanticData.callTarget.refTarget;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
@@ -1543,7 +1548,7 @@ export class CastOrConvertExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the type can be casted/converted into the target type
+		// Ensure the type can be cast/converted into the target type
 		this.programCtx.typeCheck(this).typeExists(semanticData.castType);
 		this.programCtx.typeCheck(this).validConversion(semanticData.exp, <KipperType>semanticData.castType);
 
@@ -1553,9 +1558,9 @@ export class CastOrConvertExpression extends Expression<
 			castType: <KipperType>semanticData.castType,
 		};
 
-		// Add internal reference to the program ctx
-		const expType = (<Expression<ExpressionSemantics, ExpressionTypeSemantics>>semanticData.exp).getTypeSemanticData()
-			.evaluatedType;
+		// Add internal reference to the program ctx for the conversion function, so it is guaranteed to be included in the
+		// output code.
+		const expType = semanticData.exp.getTypeSemanticData().evaluatedType;
 		const internalIdentifier = getConversionFunctionIdentifier(expType, semanticData.castType);
 		if (internalIdentifier in kipperInternalBuiltIns) {
 			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
@@ -2279,18 +2284,18 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 			value: assignValue,
 			identifierCtx: identifier,
 			identifier: identifierSemantics.identifier,
-			ref: identifierSemantics.ref,
+			assignTarget: identifierSemantics.ref,
 			operator: operator,
 		};
 
 		// Ensure that the reference is defined and has a usable value if it's used with an arithmetic operator
 		if (kipperArithmeticAssignOperators.find((o) => o === operator)) {
-			this.programCtx.semanticCheck(identifier).referenceDefined(identifierSemantics.ref);
+			this.programCtx.semanticCheck(identifier).refTargetDefined(identifierSemantics.ref.refTarget);
 		}
 
-		// If the reference was a variable, indicate that the value was updated
-		if (identifierSemantics.ref instanceof ScopeVariableDeclaration) {
-			identifierSemantics.ref.valueWasUpdated = true;
+		// If the reference was a variable, indicate that the value was updated, since it's being assigned to
+		if (identifierSemantics.ref.refTarget instanceof ScopeVariableDeclaration) {
+			identifierSemantics.ref.refTarget.valueWasUpdated = true;
 		}
 	}
 

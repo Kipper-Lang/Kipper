@@ -5,9 +5,10 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompoundStatement, ParameterDeclaration } from "./semantics";
-import { ScopeDeclaration, ScopeParameterDeclaration } from "./scope-declaration";
+import type { CompoundStatement, ParameterDeclaration } from "../../semantics";
+import { ScopeDeclaration } from "../entry";
 import { LocalScope } from "./local-scope";
+import { ScopeParameterDeclaration } from "../entry/scope-parameter-declaration";
 
 /**
  * A function-specific scope that is bound to a {@link FunctionDeclaration} and not the global namespace.

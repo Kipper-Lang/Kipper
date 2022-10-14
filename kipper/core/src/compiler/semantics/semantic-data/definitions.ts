@@ -6,9 +6,9 @@
  */
 import type { SemanticData } from "../../parser";
 import type { KipperStorageType } from "../const";
-import type { Scope } from "../../scope";
+import type { Scope } from "../../symbol-table/scope/scope";
 import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../language";
-import { FunctionScope } from "../../function-scope";
+import { FunctionScope } from "../../symbol-table/scope/function-scope";
 
 /**
  * Semantics for a {@link Declaration}.
