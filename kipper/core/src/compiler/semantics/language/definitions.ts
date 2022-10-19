@@ -41,6 +41,7 @@ import {
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
 import { FunctionScope } from "../../symbol-table/scope/function-scope";
+import { UndefinedCustomType } from "../const";
 
 /**
  * Every antlr4 definition ctx type
@@ -539,6 +540,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			identifier: identifier,
 			storageType: storageType,
 			valueType: valueType,
+			typeSpecifier: typeSpecifier,
 			scope: this.scope,
 			value: assignValue,
 		};
@@ -558,12 +560,24 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Check whether the type of the variable even exists
-		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+		let valueType: KipperType;
+		try {
+			// Check whether the type of the variable even exists
+			this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
+
+			// If the type is valid, simply cast it to a KipperType
+			valueType = <KipperType>semanticData.valueType;
+		} catch (e) {
+			if (this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
+				valueType = new UndefinedCustomType(semanticData.valueType, semanticData.typeSpecifier);
+			} else {
+				throw e;
+			}
+		}
 
 		// Set the type of this variable declaration
 		this.typeSemantics = {
-			valueType: <KipperType>semanticData.valueType,
+			valueType: valueType,
 		};
 
 		// If the variable is defined, check whether the assignment is valid

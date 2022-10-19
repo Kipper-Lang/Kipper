@@ -6,9 +6,10 @@
  */
 import type { ScopeDeclaration } from "../symbol-table/";
 import type { BuiltInFunction } from "../runtime-built-ins";
-import { ScopeVariableDeclaration } from "../symbol-table/entry/scope-variable-declaration";
-import { ScopeFunctionDeclaration } from "../symbol-table/entry/scope-function-declaration";
-import { ScopeParameterDeclaration } from "../symbol-table/entry/scope-parameter-declaration";
+import type { ScopeVariableDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../symbol-table";
+import type { ExpressionSemantics } from "./semantic-data";
+import type { ExpressionTypeSemantics } from "./type-data";
+import type { Expression } from "./language";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -18,6 +19,20 @@ import { ScopeParameterDeclaration } from "../symbol-table/entry/scope-parameter
 // @ts-ignore
 // eslint-disable-next-line no-undef
 export const isBrowser = typeof window !== "undefined" && {}.toString.call(window) === "[object Window]";
+
+/**
+ * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
+ * type.
+ * @since 0.8.0
+ */
+export type KipperMetaType = "type";
+
+/**
+ * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
+ * type.
+ * @since 0.8.0
+ */
+export const kipperMetaType: KipperMetaType = "type";
 
 /**
  * Null type in Kipper.
@@ -128,14 +143,14 @@ export type KipperBoolTypeLiterals = "true" | "false";
 export const kipperBoolType: KipperBoolType = "bool";
 
 /**
- * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
+ * List type in Kipper. {@link KipperType T} represents the type of the list content and only serves as a
  * type checking generic type, it will not change the type itself.
  * @since 0.5.0
  * @example
  * list<T>
  */
-// eslint-disable-next-line no-unused-vars
-export type KipperListType<ValueType extends KipperType> = "list";
+// @typescript-eslint/no-unused-vars
+export type KipperListType<T extends KipperType> = "list";
 
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
@@ -145,20 +160,6 @@ export type KipperListType<ValueType extends KipperType> = "list";
  * list<T>
  */
 export const kipperListType: KipperListType<any> = "list";
-
-/**
- * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
- * type.
- * @since 0.8.0
- */
-export type KipperMetaType = "type";
-
-/**
- * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
- * type.
- * @since 0.8.0
- */
-export const kipperMetaType: KipperMetaType = "type";
 
 /**
  * All primitive types inside Kipper.
@@ -186,14 +187,34 @@ export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
 ];
 
 /**
- * All available variable types inside Kipper.
+ * All compilable and valid base types inside Kipper.
+ *
+ * This is mainly different from the standard {@link KipperType} that it excludes {@link KipperErrorType}, which is
+ * only used for error handling/recovery and skips type checking altogether.
+ * @since 0.10.0
  */
-export type KipperType = KipperMetaType | KipperFuncType | KipperPrimitiveType | KipperListType<any>;
+export type KipperCompilableType = KipperMetaType | KipperPrimitiveType | KipperFuncType | KipperListType<any>;
+
+/**
+ * All compilable and valid base types inside Kipper.
+ * @since 0.10.0
+ */
+export const kipperCompilableTypes: Array<KipperCompilableType> = [
+	kipperFuncType,
+	...kipperPrimitiveTypes,
+	kipperListType,
+];
+
+/**
+ * All error types inside Kipper, which indicate an invalid type that can not be used for type checking.
+ * @since 0.10.0
+ */
+export type KipperErrorType = UndefinedCustomType;
 
 /**
  * All available variable types inside Kipper.
  */
-export const kipperTypes: Array<KipperType> = [kipperMetaType, kipperFuncType, ...kipperPrimitiveTypes, kipperListType];
+export type KipperType = KipperCompilableType | KipperErrorType;
 
 /**
  * List of all supported variable type conversions that can be performed in a Kipper program.
@@ -555,3 +576,17 @@ export type KipperReferenceable =
  * @since 0.10.0
  */
 export type JmpStatementType = "continue" | "break";
+
+/**
+ * Represents an undefined custom type that was specified by the user, but can not be evaluated.
+ *
+ * This is used to represent an invalid type that can not be used for type checking. If a type like this is encountered,
+ * then the type checking will silently fail, as this type should have already thrown an error.
+ * @since 0.10.0
+ */
+export class UndefinedCustomType {
+	constructor(
+		public readonly name: string,
+		public readonly srcNode: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
+	) {}
+}

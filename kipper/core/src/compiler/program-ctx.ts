@@ -7,17 +7,16 @@
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
-import { ParseTreeWalker } from "antlr4ts/tree";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { Reference } from "./symbol-table/reference";
-import { GlobalScope } from "./symbol-table/scope/global-scope";
+import { Reference, GlobalScope } from "./symbol-table";
 import { EvaluatedCompileConfig } from "./compiler";
+import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
  * The program context class used to represent a program for a compilation.

@@ -167,7 +167,6 @@ export abstract class CompilableASTNode<
 
 	/**
 	 * The compilation config for this program.
-	 * @private
 	 * @since 0.10.0
 	 */
 	public get compileConfig(): EvaluatedCompileConfig {

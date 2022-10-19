@@ -509,7 +509,7 @@ export class InvalidConversionTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a variable type is used that is unknown to the program.
+ * Error that is thrown whenever a declaration type is used that is unknown to the program.
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {

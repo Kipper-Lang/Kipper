@@ -6,9 +6,10 @@
  */
 import type { SemanticData } from "../../parser";
 import type { KipperStorageType } from "../const";
-import type { Scope } from "../../symbol-table/scope/scope";
+import type { Scope } from "../../symbol-table";
 import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../language";
-import { FunctionScope } from "../../symbol-table/scope/function-scope";
+import { FunctionScope } from "../../symbol-table";
+import { IdentifierTypeSpecifierExpression } from "../language";
 
 /**
  * Semantics for a {@link Declaration}.
@@ -76,9 +77,16 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	storageType: KipperStorageType;
 	/**
 	 * The type of the value as a string.
+	 *
+	 * The identifier of the {@link typeSpecifier.semanticData.identifier typeSpecifier}.
 	 * @since 0.5.0
 	 */
 	valueType: string;
+	/**
+	 * The type specifier expression for the variable type.
+	 * @since 0.10.0
+	 */
+	typeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * If this is true then the variable has a defined value.
 	 * @since 0.5.0

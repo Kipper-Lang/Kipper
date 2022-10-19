@@ -94,7 +94,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 
 	/**
 	 * The compilation config for this program.
-	 * @private
 	 * @since 0.10.0
 	 */
 	public get compileConfig(): EvaluatedCompileConfig {

@@ -30,9 +30,8 @@ import {
 	IterationStatementContext,
 	JumpStatementContext,
 } from "../../parser";
-import { LocalScope } from "../../symbol-table/scope/local-scope";
+import { LocalScope, FunctionScope } from "../../symbol-table";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { FunctionScope } from "../../symbol-table/scope/function-scope";
 import { FunctionDeclaration } from "./definitions";
 
 /**
