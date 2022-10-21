@@ -19,7 +19,7 @@ import type {
 } from "../language";
 import { ParameterDeclaration } from "../language";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
-import { ScopeDeclaration, ScopeVariableDeclaration, ScopeParameterDeclaration } from "../../symbol-table";
+import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../../symbol-table";
 import {
 	KipperArithmeticOperator,
 	KipperCompilableType,
@@ -30,7 +30,6 @@ import {
 	kipperStrType,
 	kipperSupportedConversions,
 	KipperType,
-	UndefinedCustomType,
 } from "../const";
 import {
 	ArgumentTypeError,
@@ -46,6 +45,7 @@ import {
 	TypeError,
 	UnknownTypeError,
 } from "../../../errors";
+import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -58,30 +58,19 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Checks whether the type is semantically valid and type checking should proceed with the type.
+	 * Gets the type that should be used for the type checking from the provided {@link CheckedType}.
 	 *
-	 * This primarily checks for the {@link UndefinedCustomType}, which is a special type that is used to indicate that
-	 * the type is undefined/invalid and should be ignored. An error should have already been thrown for this type, so
-	 * we can safely ignore it during type checking. (Since the compilation will fail anyway)
-	 * @param type The type that should be checked.
-	 * @returns True if the types are valid, otherwise false.
-	 * @since 0.10.0
+	 * This function is intended to check for {@link UndefinedCustomType}, which is a special type that is created
+	 * during error recovery to indicate a type is invalid/undefined. This type should be always ignored and as such
+	 * this function will return undefined, so that they type checking is skipped. (This is fine, since the compiler
+	 * should have already thrown an error at the creation of the {@link UndefinedCustomType}.)
+	 * @param type The {@link CheckedType} instance.
 	 */
-	public static typeIsCompilable(type: KipperType): boolean {
-		return !(type instanceof UndefinedCustomType);
-	}
-
-	/**
-	 * Gets the compilable type for the passed {@link type} (casts it if possible, otherwise returns undefined).
-	 * @param type The type to get the compilable type for.
-	 * @returns The compilable type unless it's invalid then undefined.
-	 * @private
-	 */
-	public static getCompilableType(type: KipperType): KipperCompilableType | undefined {
-		if (!this.typeIsCompilable(type)) {
-			return undefined;
+	public static getTypeForAnalysis(type: CheckedType): KipperCompilableType | undefined {
+		if (type.isCompilable) {
+			return <KipperCompilableType>type.kipperType;
 		}
-		return type as KipperCompilableType;
+		return undefined;
 	}
 
 	/**
@@ -92,6 +81,30 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public typeExists(type: string): void {
 		if (kipperCompilableTypes.find((val) => val === type) === undefined) {
 			throw this.assertError(new UnknownTypeError(type));
+		}
+	}
+
+	/**
+	 * Creates a new {@link CheckedType} instance based on the passed {@link KipperType}.
+	 *
+	 * If the type is invalid, the function will still return a {@link CheckedType}, but the field
+	 * {@link CheckedType.isCompilable} will be false and the instance WILL NOT be usable for a compilation.
+	 * @param type The unchecked type to analyse.
+	 */
+	public getCheckedType(type: UncheckedType): CheckedType {
+		try {
+			// Ensure the type exists
+			this.typeExists(type.identifier);
+
+			return CheckedType.fromCompilableType(<KipperCompilableType>type.identifier);
+		} catch (e) {
+			if (this.programCtx.compileConfig.recover && !this.programCtx.compileConfig.abortOnFirstError) {
+				// Recover from the error by wrapping the undefined type
+				return CheckedType.fromKipperType(new UndefinedCustomType(type.identifier));
+			}
+
+			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
+			throw e;
 		}
 	}
 
@@ -121,7 +134,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public refTargetCallable(ref: KipperReferenceable): void {
 		if (ref instanceof ScopeDeclaration) {
-			const refType = KipperTypeChecker.getCompilableType(ref.type);
+			const refType = KipperTypeChecker.getTypeForAnalysis(ref.type);
 			if (refType === undefined) {
 				return; // Ignore undefined types - Skip type checking
 			}
@@ -157,8 +170,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Get the compile-types for the left and right hand side
-		const varType = KipperTypeChecker.getCompilableType(leftExpTypeData.evaluatedType);
-		const valueType = KipperTypeChecker.getCompilableType(rightExpTypeData.evaluatedType);
+		const varType = KipperTypeChecker.getTypeForAnalysis(leftExpTypeData.evaluatedType);
+		const valueType = KipperTypeChecker.getTypeForAnalysis(rightExpTypeData.evaluatedType);
 
 		// If either one of the types is undefined, skip type checking
 		if (varType === undefined || valueType === undefined) {
@@ -190,8 +203,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		value: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
 	): void {
 		// Get the compile-types for the left and right hand side
-		const leftExpType = KipperTypeChecker.getCompilableType(scopeEntry.type);
-		const rightExpType = KipperTypeChecker.getCompilableType(value.getTypeSemanticData().evaluatedType);
+		const leftExpType = KipperTypeChecker.getTypeForAnalysis(scopeEntry.type);
+		const rightExpType = KipperTypeChecker.getTypeForAnalysis(value.getTypeSemanticData().evaluatedType);
 
 		// If either one of the types is undefined, skip type checking
 		if (leftExpType === undefined || rightExpType === undefined) {
@@ -213,9 +226,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentTypeError} If the given argument type does not match the parameter type.
 	 * @since 0.7.0
 	 */
-	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: KipperType): void {
+	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: CheckedType): void {
 		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
-		let valueType: KipperType;
+		let valueType: CheckedType;
 
 		// Get the proper semantic data and value type
 		if (arg instanceof ParameterDeclaration) {
@@ -223,12 +236,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			valueType = arg.getTypeSemanticData().valueType;
 		} else {
 			semanticData = arg;
-			valueType = arg.valueType;
+			valueType = CheckedType.fromCompilableType(arg.valueType);
 		}
 
 		// Get the compile-types for the parameter and argument (value provided)
-		const receivedCompileType = KipperTypeChecker.getCompilableType(receivedType);
-		const valueCompileType = KipperTypeChecker.getCompilableType(valueType);
+		const receivedCompileType = KipperTypeChecker.getTypeForAnalysis(receivedType);
+		const valueCompileType = KipperTypeChecker.getTypeForAnalysis(valueType);
 
 		// If either one of the types is undefined, skip type checking
 		if (receivedCompileType === undefined || valueCompileType === undefined) {
@@ -276,8 +289,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const rightOpTypeData = semanticData.rightOp.getTypeSemanticData();
 
 		// Get the compile-types for the operands
-		const leftOpType = KipperTypeChecker.getCompilableType(leftOpTypeData.evaluatedType);
-		const rightOpType = KipperTypeChecker.getCompilableType(rightOpTypeData.evaluatedType);
+		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOpTypeData.evaluatedType);
+		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOpTypeData.evaluatedType);
 
 		// If either one of the types is undefined, skip type checking
 		if (leftOpType === undefined || rightOpType === undefined) {
@@ -300,7 +313,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 
 		// Get the compile-types type of the expression
-		const expType = KipperTypeChecker.getCompilableType(expTypeSemantics.evaluatedType);
+		const expType = KipperTypeChecker.getTypeForAnalysis(expTypeSemantics.evaluatedType);
 
 		// If the expression type is undefined, skip type checking
 		if (expType === undefined) {
@@ -326,8 +339,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		op: KipperArithmeticOperator,
 	): void {
 		// Get the compile-types for both operands
-		const leftOpType = KipperTypeChecker.getCompilableType(leftOp.getTypeSemanticData().evaluatedType);
-		const rightOpType = KipperTypeChecker.getCompilableType(rightOp.getTypeSemanticData().evaluatedType);
+		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
+		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
 
 		// If either one of the types is undefined, skip type checking
 		if (leftOpType === undefined || rightOpType === undefined) {
@@ -354,11 +367,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validConversion(
 		operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		targetType: KipperType,
+		targetType: CheckedType,
 	): void {
 		// Get the compile-types for the specified conversion types
-		const originalCompileType = KipperTypeChecker.getCompilableType(operand.getTypeSemanticData().evaluatedType);
-		const targetCompileType = KipperTypeChecker.getCompilableType(targetType);
+		const originalCompileType = KipperTypeChecker.getTypeForAnalysis(operand.getTypeSemanticData().evaluatedType);
+		const targetCompileType = KipperTypeChecker.getTypeForAnalysis(targetType);
 
 		// If either one of the types is undefined, skip type checking
 		if (originalCompileType === undefined || targetCompileType === undefined) {
@@ -371,7 +384,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			undefined;
 
 		// In case that the targetType are not the same and no conversion is possible, throw an error!
-		if (originalCompileType !== targetType && !viableConversion) {
+		if (originalCompileType !== targetCompileType && !viableConversion) {
 			throw this.assertError(new InvalidConversionTypeError(originalCompileType, targetCompileType));
 		}
 	}
@@ -382,12 +395,15 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public validReturnStatement(returnStatement: ReturnStatement): void {
+		const semanticData = returnStatement.getSemanticData();
+
 		// If the return statement has no return value, then the value is automatically 'void'
-		const statementValueType = KipperTypeChecker.getCompilableType(
-			returnStatement.getSemanticData().returnValue?.getTypeSemanticData().evaluatedType ?? "void",
+		const statementValueType = KipperTypeChecker.getTypeForAnalysis(
+			semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? CheckedType.fromCompilableType("void"),
 		);
-		const functionReturnType = KipperTypeChecker.getCompilableType(
-			<KipperType>returnStatement.getSemanticData().function.getSemanticData().returnType,
+		const functionReturnType = KipperTypeChecker.getTypeForAnalysis(
+			// TODO! DON'T DO THIS. THIS IS PUTTING TYPE CHECKING OF A PARENT INTO A CHILD
+			this.getCheckedType(semanticData.function.getSemanticData().returnType),
 		);
 
 		// If either one of the types is undefined, skip type checking

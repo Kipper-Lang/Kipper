@@ -4,8 +4,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import { Declaration, KipperType } from "../../semantics";
+import { Declaration } from "../../semantics";
 import { KipperProgramContext } from "../../program-ctx";
+import { CheckedType } from "../../semantics/type";
 
 /**
  * An entry of a variable, parameter or function declaration inside a Kipper scope.
@@ -31,7 +32,7 @@ export abstract class ScopeDeclaration {
 	 * The value type of this declaration.
 	 * @since 0.10.0
 	 */
-	public abstract get type(): KipperType;
+	public abstract get type(): CheckedType;
 
 	/**
 	 * Returns whether the scope declaration was defined during its declaration.

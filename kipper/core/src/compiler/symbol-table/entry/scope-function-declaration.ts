@@ -12,6 +12,7 @@ import {
 	ParameterDeclaration,
 } from "../../semantics";
 import { ScopeDeclaration } from "./scope-declaration";
+import { CheckedType } from "../../semantics/type";
 
 /**
  * Represents the definition of a function inside a {@link Scope}.
@@ -61,14 +62,14 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The type of this function. This is always "func".
 	 * @since 0.10.0
 	 */
-	public get type(): KipperType {
-		return "func";
+	public get type(): CheckedType {
+		return CheckedType.fromCompilableType("func");
 	}
 
 	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): KipperType {
+	public get returnType(): CheckedType {
 		return this.typeData.returnType;
 	}
 

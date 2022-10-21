@@ -6,10 +6,8 @@
  */
 import type { ScopeDeclaration } from "../symbol-table/";
 import type { BuiltInFunction } from "../runtime-built-ins";
-import type { ScopeVariableDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../symbol-table";
-import type { ExpressionSemantics } from "./semantic-data";
-import type { ExpressionTypeSemantics } from "./type-data";
-import type { Expression } from "./language";
+import type { ScopeFunctionDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import type { UndefinedCustomType } from "./type";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -576,17 +574,3 @@ export type KipperReferenceable =
  * @since 0.10.0
  */
 export type JmpStatementType = "continue" | "break";
-
-/**
- * Represents an undefined custom type that was specified by the user, but can not be evaluated.
- *
- * This is used to represent an invalid type that can not be used for type checking. If a type like this is encountered,
- * then the type checking will silently fail, as this type should have already thrown an error.
- * @since 0.10.0
- */
-export class UndefinedCustomType {
-	constructor(
-		public readonly name: string,
-		public readonly srcNode: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-	) {}
-}

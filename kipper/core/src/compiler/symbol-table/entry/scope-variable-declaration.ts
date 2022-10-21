@@ -4,14 +4,14 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import {
+import type {
 	KipperStorageType,
-	KipperType,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
 	VariableDeclarationTypeSemantics,
 } from "../../semantics";
-import { Scope } from "../scope";
+import type { Scope } from "../scope";
+import type { CheckedType } from "../../semantics/type";
 import { ScopeDeclaration } from "./scope-declaration";
 
 /**
@@ -67,7 +67,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	/**
 	 * The value type of this variable.
 	 */
-	public get type(): KipperType {
+	public get type(): CheckedType {
 		return this.typeData.valueType;
 	}
 
@@ -108,6 +108,6 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type === "func";
+		return this.type.kipperType === "func";
 	}
 }

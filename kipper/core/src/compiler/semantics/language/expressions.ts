@@ -51,9 +51,9 @@ import type {
 	ExpressionTypeSemantics,
 	FStringPrimaryExpressionTypeSemantics,
 	FunctionCallPostfixTypeSemantics,
-	GenericTypeSpecifierTypeSemantics,
+	GenericTypeSpecifierExpressionTypeSemantics,
 	IdentifierPrimaryExpressionTypeSemantics,
-	IdentifierTypeSpecifierTypeSemantics,
+	IdentifierTypeSpecifierExpressionTypeSemantics,
 	IncrementOrDecrementPostfixExpressionTypeSemantics,
 	IncrementOrDecrementUnaryTypeSemantics,
 	ListPrimaryExpressionTypeSemantics,
@@ -66,8 +66,8 @@ import type {
 	RelationalExpressionTypeSemantics,
 	StringPrimaryExpressionTypeSemantics,
 	TangledPrimaryTypeSemantics,
-	TypeofTypeSpecifierTypeSemantics,
-	TypeSpecifierTypeSemantics,
+	TypeofTypeSpecifierExpressionTypeSemantics,
+	TypeSpecifierExpressionTypeSemantics,
 	UnaryExpressionTypeSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
 } from "../type-data";
@@ -89,8 +89,6 @@ import {
 	KipperRelationalOperator,
 	kipperRelationalOperators,
 	KipperSignOperator,
-	kipperStrType,
-	KipperType,
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
@@ -131,6 +129,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 } from "../../parser";
 import { ParserRuleContext } from "antlr4ts";
+import { CheckedType, UncheckedType } from "../type";
 
 /**
  * Every antlr4 expression ctx type
@@ -351,7 +350,7 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'number'
 		this.typeSemantics = {
-			evaluatedType: "num",
+			evaluatedType: CheckedType.fromCompilableType("num"),
 		};
 	}
 
@@ -416,7 +415,7 @@ export class ListPrimaryExpression extends ConstantExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'list'
 		this.typeSemantics = {
-			evaluatedType: "list",
+			evaluatedType: CheckedType.fromCompilableType("list"),
 		};
 	}
 
@@ -482,7 +481,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: "str",
+			evaluatedType: CheckedType.fromCompilableType("str"),
 		};
 	}
 
@@ -547,7 +546,7 @@ export class BoolPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'bool'
 		this.typeSemantics = {
-			evaluatedType: "bool",
+			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
 	}
 
@@ -614,7 +613,7 @@ export class FStringPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: "str",
+			evaluatedType: CheckedType.fromCompilableType("str"),
 		};
 	}
 
@@ -705,7 +704,8 @@ export class IdentifierPrimaryExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		this.typeSemantics = {
-			evaluatedType: "type" in semanticData.ref.refTarget ? semanticData.ref.refTarget.type : "func",
+			evaluatedType:
+				"type" in semanticData.ref.refTarget ? semanticData.ref.refTarget.type : CheckedType.fromCompilableType("func"),
 		};
 	}
 
@@ -738,7 +738,7 @@ export class IdentifierPrimaryExpression extends Expression<
  */
 export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics,
-	TypeSemantics extends TypeSpecifierTypeSemantics,
+	TypeSemantics extends TypeSpecifierExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {}
 
 /**
@@ -752,7 +752,7 @@ export abstract class TypeSpecifierExpression<
  */
 export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	IdentifierTypeSpecifierExpressionSemantics,
-	IdentifierTypeSpecifierTypeSemantics
+	IdentifierTypeSpecifierExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -789,7 +789,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 
 		// A type identifier will always be of type 'type'
 		this.typeSemantics = {
-			evaluatedType: "type",
+			evaluatedType: CheckedType.fromCompilableType("type"),
 		};
 	}
 
@@ -824,7 +824,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
  */
 export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	GenericTypeSpecifierExpressionSemantics,
-	GenericTypeSpecifierTypeSemantics
+	GenericTypeSpecifierExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -888,7 +888,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
  */
 export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	TypeofTypeSpecifierExpressionSemantics,
-	TypeofTypeSpecifierTypeSemantics
+	TypeofTypeSpecifierExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -1062,7 +1062,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 		// The evaluated type of this expression will always be equal to the constant identifier that this expression
 		// contains e.g. either 'void', 'null' or 'undefined'.
 		this.typeSemantics = {
-			evaluatedType: semanticData.constantIdentifier,
+			evaluatedType: CheckedType.fromCompilableType(semanticData.constantIdentifier),
 		};
 	}
 
@@ -1290,9 +1290,17 @@ export class FunctionCallPostfixExpression extends Expression<
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
 
+		// Get the type that the function call will evaluate to
+		let evaluatedType: CheckedType;
+		if (calledFunc.returnType instanceof CheckedType) {
+			evaluatedType = calledFunc.returnType;
+		} else {
+			evaluatedType = CheckedType.fromCompilableType(calledFunc.returnType);
+		}
+
 		// The evaluated type is always equal to the return of the function
 		this.typeSemantics = {
-			evaluatedType: calledFunc.returnType,
+			evaluatedType: evaluatedType,
 			func: calledFunc,
 		};
 	}
@@ -1468,7 +1476,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		this.programCtx.typeCheck(this).validUnaryExpression(this);
 
 		this.typeSemantics = {
-			evaluatedType: semanticData.operator === "!" ? "bool" : "num",
+			evaluatedType: CheckedType.fromCompilableType(semanticData.operator === "!" ? "bool" : "num"),
 		};
 	}
 
@@ -1535,7 +1543,7 @@ export class CastOrConvertExpression extends Expression<
 		}
 
 		this.semanticData = {
-			castType: type,
+			castType: new UncheckedType(type),
 			exp: exp,
 		};
 	}
@@ -1549,19 +1557,20 @@ export class CastOrConvertExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		// Ensure the type can be cast/converted into the target type
-		this.programCtx.typeCheck(this).typeExists(semanticData.castType);
-		this.programCtx.typeCheck(this).validConversion(semanticData.exp, <KipperType>semanticData.castType);
-
+		const evalType = this.programCtx.typeCheck(this).getCheckedType(semanticData.castType);
 		this.typeSemantics = {
 			// The evaluated type of the expression is equal to the cast type
-			evaluatedType: <KipperType>semanticData.castType,
-			castType: <KipperType>semanticData.castType,
+			evaluatedType: evalType,
+			castType: evalType,
 		};
+
+		// Ensure the conversion is valid
+		this.programCtx.typeCheck(this).validConversion(semanticData.exp, evalType);
 
 		// Add internal reference to the program ctx for the conversion function, so it is guaranteed to be included in the
 		// output code.
 		const expType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const internalIdentifier = getConversionFunctionIdentifier(expType, semanticData.castType);
+		const internalIdentifier = getConversionFunctionIdentifier(expType.kipperType, semanticData.castType.identifier);
 		if (internalIdentifier in kipperInternalBuiltIns) {
 			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
 		}
@@ -1663,7 +1672,7 @@ export class MultiplicativeExpression extends Expression<
 
 		// A multiplicative expression will always be of type 'num'
 		this.typeSemantics = {
-			evaluatedType: "num",
+			evaluatedType: CheckedType.fromCompilableType("num"),
 		};
 	}
 
@@ -1754,14 +1763,13 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 			.validArithmeticExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		// Evaluate the type based on the types of the operands
-		let evaluatedType: KipperType;
-
+		let evaluatedType: CheckedType;
 		const leftOpType = semanticData.leftOp.getTypeSemanticData().evaluatedType;
 		const rightOpType = semanticData.rightOp.getTypeSemanticData().evaluatedType;
 		if (leftOpType === rightOpType) {
 			evaluatedType = leftOpType;
 		} else {
-			evaluatedType = kipperStrType;
+			evaluatedType = CheckedType.fromCompilableType("str");
 		}
 
 		this.typeSemantics = {
@@ -1870,7 +1878,7 @@ export class RelationalExpression extends ComparativeExpression<
 
 		// Relational expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: "bool",
+			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
 	}
 
@@ -1957,7 +1965,7 @@ export class EqualityExpression extends ComparativeExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Equality expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: "bool",
+			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
 	}
 
@@ -2049,7 +2057,7 @@ export class LogicalAndExpression extends LogicalExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: "bool",
+			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
 	}
 
@@ -2131,7 +2139,7 @@ export class LogicalOrExpression extends LogicalExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: "bool",
+			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
 	}
 

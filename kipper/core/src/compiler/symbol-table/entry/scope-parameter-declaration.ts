@@ -4,15 +4,15 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import {
+import { ScopeDeclaration } from "./scope-declaration";
+import type {
 	FunctionDeclaration,
-	KipperType,
 	ParameterDeclaration,
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
 } from "../../semantics";
-import { LocalScope } from "../scope";
-import { ScopeDeclaration } from "./scope-declaration";
+import type { LocalScope } from "../scope";
+import type { CheckedType } from "../../semantics/type";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -66,7 +66,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * The type of this parameter.
 	 * @since 0.10.0
 	 */
-	public get type(): KipperType {
+	public get type(): CheckedType {
 		return this.typeData.valueType;
 	}
 
@@ -113,6 +113,6 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type === "func";
+		return this.type.kipperType === "func";
 	}
 }

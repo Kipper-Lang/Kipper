@@ -27,7 +27,7 @@ describe("GlobalScope", () => {
 			// Should have one variable
 			assert.equal(scope.variables.length, 1);
 			assert.equal(scope.variables[0].identifier, "test");
-			assert.equal(scope.variables[0].type, "num");
+			assert.equal(scope.variables[0].type.getCompilableType(), "num");
 			assert.equal(scope.variables[0].storageType, "var");
 			assert.equal(scope.variables[0].hasValue, true);
 			assert.equal(scope.variables[0].isDefined, true);

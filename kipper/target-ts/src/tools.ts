@@ -9,6 +9,7 @@ import {
 	BuiltInFunctionArgument,
 	FunctionDeclaration,
 	kipperBoolType,
+	KipperCompilableType,
 	kipperFuncType,
 	kipperListType,
 	kipperMetaType,
@@ -26,7 +27,7 @@ import {
  * @param kipperType The type to get the equivalent for.
  * @since 0.8.0
  */
-export function getTypeScriptType(kipperType: KipperType): string {
+export function getTypeScriptType(kipperType: KipperCompilableType): string {
 	switch (kipperType) {
 		case kipperVoidType:
 			return "void";
@@ -56,8 +57,8 @@ export function getTypeScriptType(kipperType: KipperType): string {
  */
 export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperType }>;
-	returnType: KipperType;
+	params: Array<{ identifier: string; type: KipperCompilableType }>;
+	returnType: KipperCompilableType;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -66,9 +67,12 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 		return {
 			identifier: semanticData.identifier,
 			params: semanticData.params.map((param) => {
-				return { identifier: param.getSemanticData().identifier, type: param.getTypeSemanticData().valueType };
+				return {
+					identifier: param.getSemanticData().identifier,
+					type: param.getTypeSemanticData().valueType.getCompilableType(),
+				};
 			}),
-			returnType: typeData.returnType,
+			returnType: typeData.returnType.getCompilableType(),
 		};
 	} else {
 		return {
@@ -88,8 +92,8 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
  */
 export function createTSFunctionSignature(signature: {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperType }>;
-	returnType: KipperType;
+	params: Array<{ identifier: string; type: KipperCompilableType }>;
+	returnType: KipperCompilableType;
 }): string {
 	const { identifier, params } = signature;
 	const argsSignature = `${params.map((p) => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;

@@ -224,7 +224,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		// If the function return type is not 'void' then there must be a return statement in all code paths
 		// Note: We will ignore types here, since the return statements themselves with check later if they have the proper
 		// return type.
-		if (semanticData.returnType !== "void") {
+		if (semanticData.returnType.identifier !== "void") {
 			// Recursively check all code paths to ensure all return a value.
 			const checkChildrenCodePaths = (parent: Statement<SemanticData, TypeData>): boolean => {
 				let returnPathsCovered = false;

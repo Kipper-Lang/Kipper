@@ -29,7 +29,6 @@ import type {
 	IterationStatement,
 	JumpStatement,
 	KipperProgramContext,
-	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
@@ -449,8 +448,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const typeData = node.getTypeSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
-		const originalType: KipperType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const destType: KipperType = typeData.castType;
+		const originalType = semanticData.exp.getTypeSemanticData().evaluatedType.getCompilableType();
+		const destType = typeData.castType.getCompilableType();
 
 		if (originalType === destType) {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.

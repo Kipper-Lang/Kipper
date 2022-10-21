@@ -5,7 +5,7 @@
  * @since 0.1.0
  */
 
-import type { KipperType } from "./semantics";
+import type { KipperCompilableType } from "./semantics";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -29,7 +29,7 @@ export interface BuiltInFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	valueType: KipperType;
+	valueType: KipperCompilableType;
 }
 
 /**
@@ -57,7 +57,7 @@ export interface BuiltInFunction {
 	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
 	 * return anything.
 	 */
-	returnType: KipperType;
+	returnType: KipperCompilableType;
 }
 
 /**
@@ -88,7 +88,7 @@ export interface InternalFunction extends BuiltInFunction {
 	 * return anything.
 	 * @since 0.8.0
 	 */
-	returnType: KipperType;
+	returnType: KipperCompilableType;
 }
 
 /**

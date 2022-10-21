@@ -27,6 +27,7 @@ import type { SemanticData } from "../../parser";
 import type { Expression, IdentifierPrimaryExpression } from "../language";
 import type { ExpressionTypeSemantics } from "../type-data";
 import { Reference } from "../../symbol-table";
+import { UncheckedType } from "../type";
 
 /**
  * Static semantics for an expression class that must be evaluated during the Semantic Analysis.
@@ -298,7 +299,7 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * The type the {@link exp} should be converted to.
 	 * @since 0.10.0
 	 */
-	castType: string;
+	castType: UncheckedType;
 }
 
 /**

@@ -10,8 +10,8 @@ import type { FailedPredicateException } from "antlr4ts/FailedPredicateException
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import type { KipperParseStream, SemanticData, TypeData } from "./compiler";
-import { getParseRuleSource } from "./utils";
 import { CompilableASTNode } from "./compiler";
+import { getParseRuleSource } from "./utils";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -182,7 +182,7 @@ export class KipperWarning extends KipperError {
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`Internal error: ${msg} - Report this bug to the developer using the traceback!`);
+		super(`${msg} - Report this bug to the developer using the traceback!`);
 		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
 	}
 }
@@ -205,7 +205,10 @@ export class UnableToDetermineSemanticDataError extends KipperInternalError {
  */
 export class UndefinedSemanticsError extends KipperInternalError {
 	constructor() {
-		super("Failed to determine semantics for one or more AST nodes. Did you forget to run 'semanticAnalysis'?");
+		super(
+			"Failed to determine semantics for one or more AST nodes. Most likely the semantic analysis failed or the" +
+				" property was accessed too early during semantic analysis",
+		);
 		this.name = "InternalError";
 	}
 }
@@ -217,9 +220,26 @@ export class UndefinedSemanticsError extends KipperInternalError {
 export class UndefinedDeclarationCtxError extends KipperInternalError {
 	constructor() {
 		super(
-			"Failed to determine the declaration context for a declaration. Most likely the property was accessed too early during semantic analysis.",
+			"Failed to determine the declaration context for a declaration. Most likely the semantic analysis failed" +
+				" or the property was accessed too early during semantic analysis.",
 		);
 		this.name = "InternalError";
+	}
+}
+
+/**
+ * Error that is thrown whenever {@link CheckedType.getCompilableType} is called, despite the type not being compilable.
+ *
+ * This is thrown to avoid the compiler from using {@link UndefinedCustomType} for a compilation, as that would cause
+ * undefined behavior.
+ * @since 0.10.0
+ */
+export class TypeNotCompilableError extends KipperInternalError {
+	constructor() {
+		super(
+			"Failed to determine the compilation type for a type. Most likely the type checking failed or the" +
+				" compilation was run despite type checking errors.",
+		);
 	}
 }
 
