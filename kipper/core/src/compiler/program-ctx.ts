@@ -340,6 +340,11 @@ export class KipperProgramContext {
 	public addError(error: KipperError): void {
 		this.errors.push(error);
 		this.logger.reportError(LogLevel.ERROR, error);
+
+		// If the node is defined, add the error to the list of errors caused by the node
+		if (error.tracebackData.errorNode) {
+			error.tracebackData.errorNode.addError(error);
+		}
 	}
 
 	/**
