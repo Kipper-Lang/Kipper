@@ -4,12 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
-import { KipperLogger, LogLevel } from "../logger";
-import { LexerOrParserSyntaxError } from "../errors";
+import { KipperLogger, LogLevel } from "./logger";
+import { LexerOrParserSyntaxError } from "./errors";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
-import type { KipperParseStream } from "./parser";
+import type { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
+import type { KipperParseStream } from "./compiler";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 
@@ -92,6 +92,7 @@ export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSy
 			streamSrc: this.parseStream,
 			tokenSrc: src, // Explicitly set the tokenSrc, since syntax errors should be handled differently than
 			// compilation errors.
+			errorNode: undefined,
 		});
 
 		// Log the error

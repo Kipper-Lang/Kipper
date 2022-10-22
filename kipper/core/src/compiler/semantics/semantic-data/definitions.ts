@@ -6,9 +6,11 @@
  */
 import type { SemanticData } from "../../parser";
 import type { KipperStorageType } from "../const";
-import type { Scope } from "../../scope";
+import type { Scope } from "../../symbol-table";
+import { FunctionScope } from "../../symbol-table";
 import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../language";
-import { FunctionScope } from "../../function-scope";
+import { IdentifierTypeSpecifierExpression } from "../language";
+import { UncheckedType } from "../type";
 
 /**
  * Semantics for a {@link Declaration}.
@@ -36,7 +38,12 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: string;
+	returnType: UncheckedType;
+	/**
+	 * The type specifier expression for the return type.
+	 * @since 0.10.0
+	 */
+	returnTypeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
@@ -76,9 +83,16 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	storageType: KipperStorageType;
 	/**
 	 * The type of the value as a string.
+	 *
+	 * The identifier of the {@link valueTypeSpecifier.semanticData.identifier typeSpecifier}.
 	 * @since 0.5.0
 	 */
-	valueType: string;
+	valueType: UncheckedType;
+	/**
+	 * The type specifier expression for the variable type.
+	 * @since 0.10.0
+	 */
+	valueTypeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * If this is true then the variable has a defined value.
 	 * @since 0.5.0
@@ -110,9 +124,14 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The {@link KipperType type} of the parameter.
 	 * @since 0.5.0
 	 */
-	valueType: string;
+	valueType: UncheckedType;
 	/**
-	 * Parent function declaration.
+	 * The type specifier expression for the parameter type.
+	 * @since 0.10.0
+	 */
+	valueTypeSpecifier: IdentifierTypeSpecifierExpression;
+	/**
+	 * The parent function of this parameter.
 	 * @since 0.10.0
 	 */
 	func: FunctionDeclaration;

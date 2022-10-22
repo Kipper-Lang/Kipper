@@ -5,11 +5,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
+import type { KipperProgramContext } from "../../program-ctx";
+import type { BuiltInFunction } from "../../runtime-built-ins";
+import { FunctionDeclaration, VariableDeclaration } from "../../semantics";
+import { ScopeVariableDeclaration, ScopeFunctionDeclaration } from "../entry/";
+import { ScopeDeclaration } from "../entry";
 import { Scope } from "./scope";
-import { FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import type { KipperProgramContext } from "./program-ctx";
-import type { BuiltInFunction } from "./runtime-built-ins";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a

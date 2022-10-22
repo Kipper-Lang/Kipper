@@ -11,8 +11,14 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
-import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
-import { IfStatementContext, ReturnStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import type {
+	compilableNodeChild,
+	compilableNodeParent,
+	NoSemantics,
+	NoTypeSemantics,
+	SemanticData,
+	TypeData,
+} from "../../parser/";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
@@ -27,13 +33,16 @@ import {
 	CompilableASTNode,
 	CompoundStatementContext,
 	ExpressionStatementContext,
+	IfStatementContext,
 	IterationStatementContext,
 	JumpStatementContext,
+	ReturnStatementContext,
+	SwitchStatementContext,
 } from "../../parser";
-import { LocalScope } from "../../local-scope";
+import { FunctionScope, LocalScope } from "../../symbol-table";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { FunctionScope } from "../../function-scope";
 import { FunctionDeclaration } from "./definitions";
+import { CheckedType } from "../type";
 
 /**
  * Every antlr4 statement ctx type
@@ -630,7 +639,8 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		this.programCtx.typeCheck(this).validReturnStatement(this);
 
 		this.typeSemantics = {
-			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? "void",
+			returnType:
+				semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? CheckedType.fromCompilableType("void"),
 		};
 	}
 

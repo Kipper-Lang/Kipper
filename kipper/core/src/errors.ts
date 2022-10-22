@@ -5,16 +5,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
-import type {
-	InputMismatchException,
-	LexerNoViableAltException,
-	NoViableAltException,
-	ParserRuleContext,
-} from "antlr4ts";
+import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperParseStream } from "./compiler";
+import type { KipperParseStream, SemanticData, TypeData } from "./compiler";
+import { CompilableASTNode } from "./compiler";
 import { getParseRuleSource } from "./utils";
 
 /**
@@ -42,6 +38,11 @@ export interface TracebackMetadata {
 	 * @since 0.8.0
 	 */
 	streamSrc: KipperParseStream | undefined;
+	/**
+	 * The AST Node that caused the error.
+	 * @since 0.10.0
+	 */
+	errorNode: CompilableASTNode<SemanticData, TypeData> | undefined;
 }
 
 /**
@@ -56,13 +57,7 @@ export class KipperError extends Error {
 	 */
 	public tracebackData: TracebackMetadata;
 
-	/**
-	 * The {@link ParserRuleContext antlr4 context} instance, which is the context in which the error occurred.
-	 * @since 0.3.0
-	 */
-	public antlrCtx?: ParserRuleContext;
-
-	constructor(msg: string, token?: ParserRuleContext) {
+	constructor(msg: string) {
 		super(msg);
 		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
@@ -70,21 +65,16 @@ export class KipperError extends Error {
 			filePath: undefined,
 			tokenSrc: undefined,
 			streamSrc: undefined,
+			errorNode: undefined,
 		};
-		this.antlrCtx = token;
 	}
 
 	/**
-	 * Update traceback context data.
+	 * Update traceback context data that are associated with this error.
 	 * @param traceback The traceback data.
 	 * @since 0.3.0
 	 */
-	public setTracebackData(traceback: {
-		location: { line: number | undefined; col: number | undefined };
-		filePath: string | undefined;
-		tokenSrc: string | undefined;
-		streamSrc: KipperParseStream | undefined;
-	}) {
+	public setTracebackData(traceback: TracebackMetadata) {
 		this.tracebackData = traceback;
 	}
 
@@ -164,7 +154,12 @@ export class KipperError extends Error {
 	public get tokenSrc(): string | undefined {
 		// Get the token source, if it was not set already - The fallback option requires this.antlrCtx to be set,
 		// otherwise it will default to undefined.
-		return this.tracebackData.tokenSrc ?? (this.antlrCtx ? getParseRuleSource(this.antlrCtx) : undefined);
+		return (
+			this.tracebackData.tokenSrc ??
+			(this.tracebackData.errorNode?.antlrRuleCtx
+				? getParseRuleSource(this.tracebackData.errorNode.antlrRuleCtx)
+				: undefined)
+		);
 	}
 }
 
@@ -176,8 +171,8 @@ export class KipperError extends Error {
  * @since 0.10.0
  */
 export class KipperWarning extends KipperError {
-	constructor(msg: string, token?: ParserRuleContext) {
-		super(msg, token);
+	constructor(msg: string) {
+		super(msg);
 	}
 }
 
@@ -187,7 +182,7 @@ export class KipperWarning extends KipperError {
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`Internal error: ${msg} - Report this bug to the developer using the traceback!`);
+		super(`${msg} - Report this bug to the developer using the traceback!`);
 		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
 	}
 }
@@ -210,7 +205,10 @@ export class UnableToDetermineSemanticDataError extends KipperInternalError {
  */
 export class UndefinedSemanticsError extends KipperInternalError {
 	constructor() {
-		super("Failed to determine semantics for one or more AST nodes. Did you forget to run 'semanticAnalysis'?");
+		super(
+			"Failed to determine semantics for one or more AST nodes. Most likely the semantic analysis failed or the" +
+				" property was accessed too early during semantic analysis",
+		);
 		this.name = "InternalError";
 	}
 }
@@ -222,9 +220,26 @@ export class UndefinedSemanticsError extends KipperInternalError {
 export class UndefinedDeclarationCtxError extends KipperInternalError {
 	constructor() {
 		super(
-			"Failed to determine the declaration context for a declaration. Most likely the property was accessed too early during semantic analysis.",
+			"Failed to determine the declaration context for a declaration. Most likely the semantic analysis failed" +
+				" or the property was accessed too early during semantic analysis.",
 		);
 		this.name = "InternalError";
+	}
+}
+
+/**
+ * Error that is thrown whenever {@link CheckedType.getCompilableType} is called, despite the type not being compilable.
+ *
+ * This is thrown to avoid the compiler from using {@link UndefinedCustomType} for a compilation, as that would cause
+ * undefined behavior.
+ * @since 0.10.0
+ */
+export class TypeNotCompilableError extends KipperInternalError {
+	constructor() {
+		super(
+			"Failed to determine the compilation type for a type. Most likely the type checking failed or the" +
+				" compilation was run despite type checking errors.",
+		);
 	}
 }
 
@@ -514,7 +529,7 @@ export class InvalidConversionTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a variable type is used that is unknown to the program.
+ * Error that is thrown whenever a declaration type is used that is unknown to the program.
  */
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {

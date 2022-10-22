@@ -6,7 +6,7 @@
  */
 import { KipperCompileTarget } from "./target-presets";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
-import { KipperAntlrErrorListener } from "./antlr-error-listener";
+import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";

@@ -44,25 +44,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
     included in the `JumpStatement` class.
   - `FunctionScope`, which is a subclass of `Scope` that represents a function scope with registered parameters.
+  - `UndefinedCustomType`, which represents an invalid/undefined type that was created by the user, but is not
+    defined in the program. This is used to allow error recovery and continue even with an invalid type during type
+    checking, and let the type checker know to ignore type checks with references of this type.
+  - `Type`, which is an abstract base class for defining a wrapper class for a Kipper type during semantic analysis and
+    type checking.
+  - `UncheckedType`, which is an implementation of `Type` and represents a raw specified type during semantic analysis.
+  - `CheckedType`, which is an implementation of `Type` and represents a checked type during type checking, which also
+    handles compilability and error recovery for undefined types.
 - New functions:
-  - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
-  - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
-  - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
+  - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
+  - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
+  - `ASTNode.getTypeSemanticData()`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
-  - `CompilableASTNode.semanticTypeChecking`, which performs type checking for the AST node and its children nodes.
-    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
-  - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
-    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
-  - `Scope.getReferenceRecursively`, which tries to evaluate a reference recursively in the scope and its parent scopes.
-  - `KipperTypeChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
-  - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
-  - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
-  - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
-  - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
-  - `KipperSemanticChecker.referenceDefined`, which asserts that the specified reference is defined and can be used.
-  - `KipperSemanticChecker.validFunctionBody`, which ensures the body of a function is a compound statement.
-  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody`, which ensures that all code paths of a non-void
+  - `CompilableASTNode.semanticTypeChecking()`, which performs type checking for the AST node and its children nodes.
+    This is called in the function `RootASTNode.semanticAnalysis()` after `CompilableASTNode.semanticAnalysis()`.
+  - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST node.
+    This is called in the function `RootASTNode.semanticAnalysis()` after `CompilableASTNode.semanticTypeChecking()`.
+  - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent scopes.
+  - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
+  - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
+  - `KipperSemanticChecker.identifierUnused()`, which asserts that the specified identifier is unused.
+  - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
+  - `KipperSemanticChecker.referenceDefined()`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.
+  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
     function return a proper value.
+  - `CompilableASTNode.addError()`, which adds an error to the list of errors caused by the node.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -91,6 +100,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
   - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
     semantic analysis, though will return undefined if it encounters any error.
+  - `TracebackMetadata.errorNode`, which contains the error node that caused the error.
+  - `CompilableASTNode.errors` and `RootASTNode.errors`, which returns all errors caused by this node and or its
+    children.
+  - `CompilableASTNode.hasFailed` and `RootASTNode.hasFailed`, which returns true if the node or any of its children
+    have failed to be processed during semantic analysis or type checking.
 
 ### Changed
 
@@ -141,6 +155,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   respectively.
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
+- Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
 
 ## [0.9.2] - 2022-07-23
 
