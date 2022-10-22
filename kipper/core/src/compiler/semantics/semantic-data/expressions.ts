@@ -26,8 +26,9 @@ import type {
 import type { SemanticData } from "../../parser";
 import type { Expression, IdentifierPrimaryExpression } from "../language";
 import type { ExpressionTypeSemantics } from "../type-data";
-import { Reference } from "../../symbol-table";
-import { UncheckedType } from "../type";
+import type { Reference } from "../../symbol-table";
+import type { UncheckedType } from "../type";
+import { IdentifierTypeSpecifierExpression } from "../language";
 
 /**
  * Static semantics for an expression class that must be evaluated during the Semantic Analysis.
@@ -156,7 +157,7 @@ export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifie
 	 * The type specified by this expression.
 	 * @since 0.8.0
 	 */
-	typeIdentifier: string;
+	typeIdentifier: UncheckedType;
 }
 
 /**
@@ -300,6 +301,11 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.10.0
 	 */
 	castType: UncheckedType;
+	/**
+	 * The type specifier that determined {@link castType}.
+	 * @since 0.10.0
+	 */
+	castTypeSpecifier: IdentifierTypeSpecifierExpression;
 }
 
 /**

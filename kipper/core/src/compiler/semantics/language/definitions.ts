@@ -229,9 +229,13 @@ export class ParameterDeclaration extends Declaration<
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
 
+		// The type specifier of the parameter
+		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
+
 		this.semanticData = {
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
-			valueType: new UncheckedType(this.children[0].sourceCode),
+			valueTypeSpecifier: typeSpecifier,
+			valueType: typeSpecifier.getSemanticData().typeIdentifier,
 			func: <FunctionDeclaration>this.parent,
 		};
 
@@ -252,8 +256,8 @@ export class ParameterDeclaration extends Declaration<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Create a checked type instance (this function handles error recovery and invalid types)
-		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.valueType);
+		// Get the type that will be returned using the value type specifier
+		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			valueType: valueType,
 		};
@@ -387,12 +391,13 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		const innerScope = <FunctionScope>this.innerScope;
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const type: UncheckedType = retTypeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
-			returnType: new UncheckedType(type),
+			returnTypeSpecifier: retTypeSpecifier,
+			returnType: type,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
@@ -413,8 +418,8 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Create a checked type instance (this function handles error recovery and invalid types)
-		const returnType = this.programCtx.typeCheck(this).getCheckedType(semanticData.returnType);
+		// Get the type that will be returned using the return type specifier
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			returnType: returnType,
 		};
@@ -528,17 +533,18 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			throw new UnableToDetermineSemanticDataError();
 		}
 
+		// Semantic data of the variable declaration
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType: string = typeSpecifier.getSemanticData().typeIdentifier;
+		const valueType: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: isDefined,
 			identifier: identifier,
 			storageType: storageType,
-			valueType: new UncheckedType(valueType),
-			typeSpecifier: typeSpecifier,
+			valueType: valueType,
+			valueTypeSpecifier: typeSpecifier,
 			scope: this.scope,
 			value: assignValue,
 		};
@@ -558,8 +564,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Create a checked type instance (this function handles error recovery and invalid types)
-		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.valueType);
+		// Get the type that will be returned using the value type specifier
+		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			valueType: valueType,
 		};

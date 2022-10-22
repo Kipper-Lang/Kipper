@@ -50,7 +50,7 @@ describe("GlobalScope", () => {
 
 			// First variable
 			assert.equal(scope.variables[0].identifier, "test");
-			assert.equal(scope.variables[0].type, "num");
+			assert.equal(scope.variables[0].type.identifier, "num");
 			assert.equal(scope.variables[0].storageType, "var");
 			assert.equal(scope.variables[0].hasValue, true);
 			assert.equal(scope.variables[0].isDefined, true);
@@ -60,7 +60,7 @@ describe("GlobalScope", () => {
 
 			// Second variable
 			assert.equal(scope.variables[1].identifier, "test2");
-			assert.equal(scope.variables[1].type, "num");
+			assert.equal(scope.variables[1].type.identifier, "num");
 			assert.equal(scope.variables[1].storageType, "var");
 			assert.equal(scope.variables[1].hasValue, true);
 			assert.equal(scope.variables[1].isDefined, true);
@@ -84,7 +84,7 @@ describe("GlobalScope", () => {
 
 			// First variable
 			assert.equal(scope.variables[0].identifier, "test");
-			assert.equal(scope.variables[0].type, "num");
+			assert.equal(scope.variables[0].type.identifier, "num");
 			assert.equal(scope.variables[0].storageType, "var");
 			assert.equal(scope.variables[0].hasValue, true);
 			assert.equal(scope.variables[0].isDefined, true);
@@ -94,7 +94,7 @@ describe("GlobalScope", () => {
 
 			// Second variable
 			assert.equal(scope.variables[1].identifier, "test2");
-			assert.equal(scope.variables[1].type, "num");
+			assert.equal(scope.variables[1].type.identifier, "num");
 			assert.equal(scope.variables[1].storageType, "var");
 			assert.equal(scope.variables[1].hasValue, true);
 			assert.equal(scope.variables[1].isDefined, true);
@@ -104,7 +104,7 @@ describe("GlobalScope", () => {
 
 			// Third variable
 			assert.equal(scope.variables[2].identifier, "test3");
-			assert.equal(scope.variables[2].type, "num");
+			assert.equal(scope.variables[2].type.identifier, "num");
 			assert.equal(scope.variables[2].storageType, "var");
 			assert.equal(scope.variables[2].hasValue, true);
 			assert.equal(scope.variables[2].isDefined, true);
@@ -130,7 +130,7 @@ describe("GlobalScope", () => {
 			// Should have one function
 			assert.equal(scope.functions.length, 1);
 			assert.equal(scope.functions[0].identifier, "test");
-			assert.equal(scope.functions[0].returnType, "num");
+			assert.equal(scope.functions[0].returnType.identifier, "num");
 			assert.equal(scope.functions[0].hasValue, true);
 			assert.equal(scope.functions[0].isDefined, true);
 			assert.equal(scope.functions[0].isCallable, true);
@@ -156,7 +156,7 @@ describe("GlobalScope", () => {
 
 			// First function
 			assert.equal(scope.functions[0].identifier, "test");
-			assert.equal(scope.functions[0].returnType, "num");
+			assert.equal(scope.functions[0].returnType.identifier, "num");
 			assert.equal(scope.functions[0].hasValue, true);
 			assert.equal(scope.functions[0].isDefined, true);
 			assert.equal(scope.functions[0].isCallable, true);
@@ -165,7 +165,7 @@ describe("GlobalScope", () => {
 
 			// Second function
 			assert.equal(scope.functions[1].identifier, "test2");
-			assert.equal(scope.functions[1].returnType, "num");
+			assert.equal(scope.functions[1].returnType.identifier, "num");
 			assert.equal(scope.functions[1].hasValue, true);
 			assert.equal(scope.functions[1].isDefined, true);
 			assert.equal(scope.functions[1].isCallable, true);
@@ -192,7 +192,7 @@ describe("GlobalScope", () => {
 
 			// First function
 			assert.equal(scope.functions[0].identifier, "test");
-			assert.equal(scope.functions[0].returnType, "num");
+			assert.equal(scope.functions[0].returnType.identifier, "num");
 			assert.equal(scope.functions[0].hasValue, true);
 			assert.equal(scope.functions[0].isDefined, true);
 			assert.equal(scope.functions[0].isCallable, true);
@@ -201,7 +201,7 @@ describe("GlobalScope", () => {
 
 			// Second function
 			assert.equal(scope.functions[1].identifier, "test2");
-			assert.equal(scope.functions[1].returnType, "num");
+			assert.equal(scope.functions[1].returnType.identifier, "num");
 			assert.equal(scope.functions[1].hasValue, true);
 			assert.equal(scope.functions[1].isDefined, true);
 			assert.equal(scope.functions[1].isCallable, true);
@@ -210,7 +210,7 @@ describe("GlobalScope", () => {
 
 			// Third function
 			assert.equal(scope.functions[2].identifier, "test3");
-			assert.equal(scope.functions[2].returnType, "num");
+			assert.equal(scope.functions[2].returnType.identifier, "num");
 			assert.equal(scope.functions[2].hasValue, true);
 			assert.equal(scope.functions[2].isDefined, true);
 			assert.equal(scope.functions[2].isCallable, true);

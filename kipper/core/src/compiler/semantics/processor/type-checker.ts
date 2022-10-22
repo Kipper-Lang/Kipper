@@ -29,7 +29,6 @@ import {
 	KipperReferenceable,
 	kipperStrType,
 	kipperSupportedConversions,
-	KipperType,
 } from "../const";
 import {
 	ArgumentTypeError,
@@ -40,6 +39,7 @@ import {
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionTypeError,
+	KipperError,
 	KipperNotImplementedError,
 	ReadOnlyTypeError,
 	TypeError,
@@ -98,7 +98,16 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			return CheckedType.fromCompilableType(<KipperCompilableType>type.identifier);
 		} catch (e) {
+			// If the error is not a KipperError, rethrow it (since it is not a type error and we don't know what happened)
+			if (!(e instanceof KipperError)) {
+				throw e;
+			}
+
 			if (this.programCtx.compileConfig.recover && !this.programCtx.compileConfig.abortOnFirstError) {
+				// Add the error, but still recover (This is so that the compiler doesn't simply proceed without
+				// throwing any errors, which would be VERY bad.)
+				this.programCtx.addError(e);
+
 				// Recover from the error by wrapping the undefined type
 				return CheckedType.fromKipperType(new UndefinedCustomType(type.identifier));
 			}
@@ -380,8 +389,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Check whether a supported pair of types exist.
 		const viableConversion =
-			kipperSupportedConversions.find((types) => types[0] === originalCompileType && types[1] === targetType) !==
-			undefined;
+			kipperSupportedConversions.find(
+				(types) => types[0] === originalCompileType && types[1] === targetType.kipperType,
+			) !== undefined;
 
 		// In case that the targetType are not the same and no conversion is possible, throw an error!
 		if (originalCompileType !== targetCompileType && !viableConversion) {

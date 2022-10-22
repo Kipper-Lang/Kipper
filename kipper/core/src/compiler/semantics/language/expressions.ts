@@ -772,7 +772,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			typeIdentifier: this.sourceCode,
+			typeIdentifier: new UncheckedType(this.sourceCode),
 		};
 	}
 
@@ -784,12 +784,12 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the type exists
-		this.programCtx.typeCheck(this).typeExists(semanticData.typeIdentifier);
-
-		// A type identifier will always be of type 'type'
+		// Create a checked type instance (this function handles error recovery and invalid types)
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier);
 		this.typeSemantics = {
+			// A type specifier will always evaluate to be of type 'type'
 			evaluatedType: CheckedType.fromCompilableType("type"),
+			storedType: valueType,
 		};
 	}
 
@@ -1533,9 +1533,12 @@ export class CastOrConvertExpression extends Expression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// Fetching the original exp and the type using the children
+		// The first child will always be the expression that will be converted
 		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const type: string = (<IdentifierTypeSpecifierExpression>this.children[1]).getSemanticData().typeIdentifier;
+
+		// Get the type using the type specifier
+		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[1];
+		const type: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
@@ -1543,7 +1546,8 @@ export class CastOrConvertExpression extends Expression<
 		}
 
 		this.semanticData = {
-			castType: new UncheckedType(type),
+			castTypeSpecifier: typeSpecifier,
+			castType: type,
 			exp: exp,
 		};
 	}
@@ -1556,8 +1560,8 @@ export class CastOrConvertExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the type can be cast/converted into the target type
-		const evalType = this.programCtx.typeCheck(this).getCheckedType(semanticData.castType);
+		// Get the type specified by the type specifier
+		const evalType = semanticData.castTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			// The evaluated type of the expression is equal to the cast type
 			evaluatedType: evalType,
@@ -1569,8 +1573,10 @@ export class CastOrConvertExpression extends Expression<
 
 		// Add internal reference to the program ctx for the conversion function, so it is guaranteed to be included in the
 		// output code.
-		const expType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const internalIdentifier = getConversionFunctionIdentifier(expType.kipperType, semanticData.castType.identifier);
+		const internalIdentifier = getConversionFunctionIdentifier(
+			semanticData.exp.getTypeSemanticData().evaluatedType.identifier,
+			semanticData.castType.identifier,
+		);
 		if (internalIdentifier in kipperInternalBuiltIns) {
 			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
 		}
@@ -1762,18 +1768,10 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 			.typeCheck(this)
 			.validArithmeticExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
-		// Evaluate the type based on the types of the operands
-		let evaluatedType: CheckedType;
-		const leftOpType = semanticData.leftOp.getTypeSemanticData().evaluatedType;
-		const rightOpType = semanticData.rightOp.getTypeSemanticData().evaluatedType;
-		if (leftOpType === rightOpType) {
-			evaluatedType = leftOpType;
-		} else {
-			evaluatedType = CheckedType.fromCompilableType("str");
-		}
-
 		this.typeSemantics = {
-			evaluatedType: evaluatedType,
+			// Simply use the left operand's type, since the type of the right operand is irrelevant (since they are always
+			// the same anyway - otherwise there would have already been an error)
+			evaluatedType: semanticData.leftOp.getTypeSemanticData().evaluatedType,
 		};
 	}
 

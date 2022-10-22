@@ -16,6 +16,8 @@ export interface ExpressionTypeSemantics extends TypeData {
 	/**
 	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
 	 * expressions that do not explicitly show their type.
+	 *
+	 * This will always evaluate to "type", as a type specifier will always be a type.
 	 * @since 0.10.0
 	 */
 	evaluatedType: CheckedType;
@@ -70,7 +72,14 @@ export interface IdentifierPrimaryExpressionTypeSemantics extends ExpressionType
  * Type Semantics for AST Node {@link TypeSpecifierExpression}.
  * @since 0.10.0
  */
-export interface TypeSpecifierExpressionTypeSemantics extends ExpressionTypeSemantics {}
+export interface TypeSpecifierExpressionTypeSemantics extends ExpressionTypeSemantics {
+	/**
+	 * The type that is being stored by this type specifier. This is the type that would be used to determine what
+	 * values should be stored in a variable.
+	 * @since 0.10.0
+	 */
+	storedType: CheckedType;
+}
 
 /**
  * Type Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.

@@ -88,6 +88,7 @@ export abstract class CompilableASTNode<
 	 * @since 0.10.0
 	 */
 	public get errors(): Array<KipperError> {
+		// TODO! Finish implementation of this
 		const errors = this._errors;
 		for (const child of this._children) {
 			errors.push(...child.errors);

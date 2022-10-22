@@ -5,10 +5,10 @@
  * @since 0.9.0
  */
 import { Interval } from "antlr4ts/misc/Interval";
-import { ParserRuleContext, Token } from "antlr4ts";
+import type { ParserRuleContext, Token } from "antlr4ts";
 import type { ParseTree } from "antlr4ts/tree";
 import type { CharStream } from "antlr4ts/CharStream";
-import type { KipperType, TranslatedCodeLine } from "./compiler";
+import type { TranslatedCodeLine } from "./compiler";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
@@ -87,7 +87,7 @@ export function titleCase(str: string): string {
  * @param destType The type to convert to.
  * @since 0.8.0
  */
-export function getConversionFunctionIdentifier(originalType: KipperType, destType: string): string {
+export function getConversionFunctionIdentifier(originalType: string, destType: string): string {
 	return `${originalType}To${titleCase(destType)}`;
 }
 

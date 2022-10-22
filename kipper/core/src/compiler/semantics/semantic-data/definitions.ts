@@ -40,6 +40,11 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 */
 	returnType: UncheckedType;
 	/**
+	 * The type specifier expression for the return type.
+	 * @since 0.10.0
+	 */
+	returnTypeSpecifier: IdentifierTypeSpecifierExpression;
+	/**
 	 * Returns true if this declaration defines the function body for the function.
 	 * @since 0.5.0
 	 */
@@ -79,7 +84,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	/**
 	 * The type of the value as a string.
 	 *
-	 * The identifier of the {@link typeSpecifier.semanticData.identifier typeSpecifier}.
+	 * The identifier of the {@link valueTypeSpecifier.semanticData.identifier typeSpecifier}.
 	 * @since 0.5.0
 	 */
 	valueType: UncheckedType;
@@ -87,7 +92,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * The type specifier expression for the variable type.
 	 * @since 0.10.0
 	 */
-	typeSpecifier: IdentifierTypeSpecifierExpression;
+	valueTypeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * If this is true then the variable has a defined value.
 	 * @since 0.5.0
@@ -120,6 +125,11 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * @since 0.5.0
 	 */
 	valueType: UncheckedType;
+	/**
+	 * The type specifier expression for the parameter type.
+	 * @since 0.10.0
+	 */
+	valueTypeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * The parent function of this parameter.
 	 * @since 0.10.0
