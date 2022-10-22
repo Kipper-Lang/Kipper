@@ -5,19 +5,18 @@
  * @since 0.8.0
  */
 import {
+	FunctionDeclaration,
+	KipperNotImplementedError,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	FunctionDeclaration,
 	kipperBoolType,
 	KipperCompilableType,
 	kipperFuncType,
 	kipperListType,
 	kipperMetaType,
-	KipperNotImplementedError,
 	kipperNullType,
 	kipperNumType,
 	kipperStrType,
-	KipperType,
 	kipperUndefinedType,
 	kipperVoidType,
 } from "@kipper/core";
