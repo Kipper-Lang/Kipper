@@ -147,7 +147,7 @@ export const kipperBoolType: KipperBoolType = "bool";
  * @example
  * list<T>
  */
-// @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type KipperListType<T extends KipperType> = "list";
 
 /**

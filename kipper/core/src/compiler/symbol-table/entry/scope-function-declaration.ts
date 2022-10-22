@@ -8,7 +8,6 @@ import {
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,
-	KipperType,
 	ParameterDeclaration,
 } from "../../semantics";
 import { ScopeDeclaration } from "./scope-declaration";

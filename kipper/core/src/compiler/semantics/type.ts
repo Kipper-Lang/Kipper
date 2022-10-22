@@ -3,7 +3,6 @@
  * @since 0.10.0
  */
 import type { KipperCompilableType, KipperType } from "./const";
-import type { CompilableASTNode } from "../parser";
 import { TypeNotCompilableError } from "../../errors";
 
 /**
