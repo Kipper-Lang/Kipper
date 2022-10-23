@@ -42,7 +42,7 @@
     "ts-mocha": "10.0.0",
     "ts-node": "10.9.1",
     "tsify": "5.0.4",
-    "uglify-js": "3.17.2",
+    "uglify-js": "3.17.4",
     "uuid": "9.0.0",
     "watchify": "4.0.0"
   },
