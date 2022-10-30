@@ -40,8 +40,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     value.
   - `ReturnStatementError`, which is thrown whenever a return statement is used outside a function.
   - `InvalidUnaryExpressionOperandError`, which is thrown whenever a unary expression is used with an invalid operand.
-	- `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
-		an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
+    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
   - `TypeNotCompilableError`, which is thrown when an invalid/undefined type is cast to a compilable type, despite it
     being invalid. (This is an internal error that happens if the type is cast during compilation despite it having
     errored during semantic analysis/type checking.)
