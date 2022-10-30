@@ -270,7 +270,7 @@ export class KipperSyntaxError extends KipperError {
  */
 export class ReturnStatementError extends KipperSyntaxError {
 	constructor() {
-		super("The return statement can only be used in a function.");
+		super("A return statement can only be used in a function.");
 	}
 }
 
