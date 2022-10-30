@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Support for arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
 - Support for unary and postfix increment and decrement (`++`, `--`) expressions
-	([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
+  ([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
