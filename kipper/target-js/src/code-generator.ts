@@ -428,7 +428,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = node.getSemanticData();
 		const operandCode = await semanticData.operand.translateCtxAndChildren();
 
-		return [...operandCode, semanticData.operator];
+		return [semanticData.operator, ...operandCode];
 	};
 
 	/**
