@@ -389,7 +389,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementPostfixExpression = async (
 		node: IncrementOrDecrementPostfixExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [...operandCode, semanticData.operator];
 	};
 
 	/**
@@ -422,7 +425,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementUnaryExpression = async (
 		node: IncrementOrDecrementUnaryExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [semanticData.operator, ...operandCode];
 	};
 
 	/**
@@ -561,7 +567,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// The expression that is assigned to the reference
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
-		// Only add ' = EXP' if assignExpression is defined
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 }

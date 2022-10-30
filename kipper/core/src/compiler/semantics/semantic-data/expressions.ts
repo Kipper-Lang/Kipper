@@ -204,7 +204,18 @@ export interface VoidOrNullOrUndefinedPrimaryExpressionSemantics extends Express
  * Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
  * @since 0.5.0
  */
-export interface IncrementOrDecrementPostfixExpressionSemantics extends ExpressionSemantics {}
+export interface IncrementOrDecrementPostfixExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The operator that is used to modify the {@link operand}.
+	 * @since 0.10.0
+	 */
+	operator: KipperIncrementOrDecrementOperator;
+	/**
+	 * The operand that is modified by the operator.
+	 * @since 0.10.0
+	 */
+	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
 
 /**
  * Semantics for AST Node {@link ArraySpecifierExpression}.
@@ -246,7 +257,7 @@ export interface UnaryExpressionSemantics extends ExpressionSemantics {
 	 */
 	operator: KipperUnaryOperator;
 	/**
-	 * The operand that is modified by the operator.
+	 * The operand that is modified by the {@link operator}.
 	 * @since 0.9.0
 	 */
 	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
@@ -262,11 +273,6 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpre
 	 * @since 0.9.0
 	 */
 	operator: KipperIncrementOrDecrementOperator;
-	/**
-	 * The operand that is modified by the operator.
-	 * @since 0.9.0
-	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 }
 
 /**
@@ -279,11 +285,6 @@ export interface OperatorModifiedUnaryExpressionSemantics extends UnaryExpressio
 	 * @since 0.9.0
 	 */
 	operator: KipperUnaryModifierOperator;
-	/**
-	 * The operand that is modified by the {@link operator}.
-	 * @since 0.9.0
-	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 }
 
 /**

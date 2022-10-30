@@ -270,7 +270,7 @@ export class KipperSyntaxError extends KipperError {
  */
 export class ReturnStatementError extends KipperSyntaxError {
 	constructor() {
-		super("The return statement can only be used in a function.");
+		super("A return statement can only be used in a function.");
 	}
 }
 
@@ -281,6 +281,16 @@ export class ReturnStatementError extends KipperSyntaxError {
 export class MissingFunctionBodyError extends KipperSyntaxError {
 	constructor() {
 		super("Missing declaration body of function.");
+	}
+}
+
+/**
+ * Error that is thrown whenever a unary expression is used with an invalid operand.
+ * @since 0.10.0
+ */
+export class InvalidUnaryExpressionOperandError extends KipperSyntaxError {
+	constructor() {
+		super("Invalid operand for the specified unary expression.");
 	}
 }
 

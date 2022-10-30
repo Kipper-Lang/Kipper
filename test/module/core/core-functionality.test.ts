@@ -164,6 +164,50 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 			assert(instance.write().includes("!true;"), "Expected different TypeScript code");
 		});
+
+		describe("--", () => {
+			it("prefix", async () => {
+				const stream = new KipperParseStream("var x: num = 5; var y: num = --x;");
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.write().includes("let y: number = --x;"), "Expected different TypeScript code");
+			});
+
+			it("postfix", async () => {
+				const stream = new KipperParseStream("var x: num = 5; var y: num = x--;");
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.write().includes("let y: number = x--;"), "Expected different TypeScript code");
+			});
+		});
+
+		describe("++", () => {
+			it("prefix", async () => {
+				const stream = new KipperParseStream("var x: num = 5; var y: num = ++x;");
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.write().includes("let y: number = ++x;"), "Expected different TypeScript code");
+			});
+
+			it("postfix", async () => {
+				const stream = new KipperParseStream("var x: num = 5; var y: num = x++;");
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.write().includes("let y: number = x++;"), "Expected different TypeScript code");
+			});
+		});
 	});
 
 	describe("Logical expressions", () => {

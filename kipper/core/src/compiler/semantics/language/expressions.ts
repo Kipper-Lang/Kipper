@@ -80,6 +80,7 @@ import {
 	KipperEqualityOperator,
 	kipperEqualityOperators,
 	KipperFunction,
+	KipperIncrementOrDecrementOperator,
 	kipperLogicalAndOperator,
 	kipperLogicalOrOperator,
 	KipperMultiplicativeOperator,
@@ -1117,11 +1118,18 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
-			);
+		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(-2); // After the expression
+
+		// Ensure that the child expression is present
+		if (!exp) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		this.semanticData = {
+			operand: exp,
+			operator: operator,
+		};
 	}
 
 	/**
@@ -1130,11 +1138,13 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
-			);
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
+
+		this.typeSemantics = {
+			// This will always be a number
+			evaluatedType: CheckedType.fromKipperType("num"),
+		};
 	}
 
 	/**
@@ -1143,8 +1153,9 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
+	public checkForWarnings(): Promise<void> {
+		// (Unary) Increment or decrement expressions like this doesn't have warnings for now.
+		return Promise.resolve(undefined);
 	}
 
 	/**
@@ -1367,11 +1378,18 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
-			);
+		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(0, 2); // Before the expression
+
+		// Ensure that the child expression is present
+		if (!exp) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		this.semanticData = {
+			operand: exp,
+			operator: operator,
+		};
 	}
 
 	/**
@@ -1380,11 +1398,13 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Increment/Decrement Expressions have not been implemented yet."),
-			);
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
+
+		this.typeSemantics = {
+			// This will always be a number
+			evaluatedType: CheckedType.fromKipperType("num"),
+		};
 	}
 
 	/**
@@ -1393,8 +1413,9 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
+	public checkForWarnings(): Promise<void> {
+		// (Unary) Increment or decrement expressions like this doesn't have warnings for now.
+		return Promise.resolve(undefined);
 	}
 
 	/**
