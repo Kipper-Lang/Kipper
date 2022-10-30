@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Support for arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
 - Support for unary and postfix increment and decrement (`++`, `--`) expressions
-	([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
+  ([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
@@ -36,10 +36,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     the same scope or any parent scope.
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
     expression.
-  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
-    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
   - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return a
     value.
+  - `ReturnStatementError`, which is thrown whenever a return statement is used outside a function.
+  - `InvalidUnaryExpressionOperandError`, which is thrown whenever a unary expression is used with an invalid operand.
+	- `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
+		an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+  - `TypeNotCompilableError`, which is thrown when an invalid/undefined type is cast to a compilable type, despite it
+    being invalid. (This is an internal error that happens if the type is cast during compilation despite it having
+    errored during semantic analysis/type checking.)
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
