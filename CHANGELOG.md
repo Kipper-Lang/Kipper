@@ -15,8 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
   also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
   ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
-- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
+- Support for arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- Support for unary and postfix increment and decrement (`++`, `--`) expressions
+	([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
