@@ -8,8 +8,13 @@
 
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { ExpressionSemantics, ParameterDeclarationSemantics, UnaryExpressionSemantics } from "../semantic-data";
-import type { ExpressionTypeSemantics } from "../type-data";
+import type {
+	ExpressionSemantics,
+	IncrementOrDecrementPostfixExpressionSemantics,
+	ParameterDeclarationSemantics,
+	UnaryExpressionSemantics,
+} from "../semantic-data";
+import type { ExpressionTypeSemantics, UnaryExpressionTypeSemantics } from "../type-data";
 import type {
 	AssignmentExpression,
 	Expression,
@@ -17,7 +22,12 @@ import type {
 	ReturnStatement,
 	UnaryExpression,
 } from "../language";
-import { ParameterDeclaration } from "../language";
+import {
+	IdentifierPrimaryExpression,
+	IncrementOrDecrementPostfixExpression,
+	ParameterDeclaration,
+	TangledPrimaryExpression,
+} from "../language";
 import { KipperSemanticsAsserter } from "../semantics-asserter";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../../symbol-table";
 import {
@@ -25,6 +35,7 @@ import {
 	KipperCompilableType,
 	kipperCompilableTypes,
 	KipperFunction,
+	kipperIncrementOrDecrementOperators,
 	kipperPlusOperator,
 	KipperReferenceable,
 	kipperStrType,
@@ -38,6 +49,7 @@ import {
 	InvalidAmountOfArgumentsError,
 	InvalidConversionTypeError,
 	InvalidRelationalComparisonTypeError,
+	InvalidUnaryExpressionOperandError,
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
@@ -313,12 +325,20 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Asserts that the passed unary expression is valid.
-	 * @param operand The expression to check.
+	 * Asserts that the passed unary expression is valid by checking its {@link operand.semanticData.operand operand} and
+	 * {@link operand.semanticData.operator operator}.
+	 * @param operand The unary expression to check. (Also includes {@link IncrementOrDecrementPostfixExpression}, since
+	 * even if it's a postfix expression, it's still a unary expression)
 	 * @since 0.9.0
 	 */
-	public validUnaryExpression(operand: UnaryExpression<UnaryExpressionSemantics, ExpressionTypeSemantics>): void {
-		const semanticData = operand.getSemanticData();
+	public validUnaryExpression(
+		operand:
+			| UnaryExpression<UnaryExpressionSemantics, UnaryExpressionTypeSemantics>
+			| IncrementOrDecrementPostfixExpression,
+	): void {
+		const semanticData = <UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics>(
+			operand.getSemanticData()
+		);
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 
 		// Get the compile-types type of the expression
@@ -332,6 +352,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// Ensure that the operator '+', '-', '++' and '--' are only used on numbers
 		if (semanticData.operator !== "!" && expType !== "num") {
 			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType));
+		}
+
+		// Ensure that the operand of an '++' and '--' modifier expression is a reference
+		let isReference = semanticData.operand instanceof IdentifierPrimaryExpression;
+		if ((<Array<string>>kipperIncrementOrDecrementOperators).includes(semanticData.operator) && !isReference) {
+			// Edge-case: If the operand is a tangled expression, it should still work if the child is an identifier
+			let currExp = semanticData.operand;
+			while (currExp instanceof TangledPrimaryExpression) {
+				// If the child is an identifier it's valid, otherwise continue to the next child (if it's not a tangled
+				// expression it will naturally abort the loop and continue to the error)
+				if (currExp.getSemanticData().childExp instanceof IdentifierPrimaryExpression) {
+					return;
+				}
+
+				currExp = currExp.getSemanticData().childExp;
+			}
+
+			throw this.assertError(new InvalidUnaryExpressionOperandError());
 		}
 	}
 

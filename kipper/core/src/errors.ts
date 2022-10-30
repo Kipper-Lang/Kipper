@@ -285,6 +285,16 @@ export class MissingFunctionBodyError extends KipperSyntaxError {
 }
 
 /**
+ * Error that is thrown whenever a unary expression is used with an invalid operand.
+ * @since 0.10.0
+ */
+export class InvalidUnaryExpressionOperandError extends KipperSyntaxError {
+	constructor() {
+		super("Invalid operand for the specified unary expression.");
+	}
+}
+
+/**
  * Error that is thrown whenever the parser or lexer report a syntax error.
  * @since 0.10.0
  */
