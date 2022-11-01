@@ -129,44 +129,40 @@ p {
 	margin: 0;
 }
 
-@media (max-width: 1200px) {
-	.super-large-header {
-		font-style: normal !important;
-		font-weight: bold !important;
-		font-size: 48px !important;
-		line-height: 58px !important;
-		display: flex;
-		align-items: center;
-		text-align: center;
-	}
-}
+.super-large-header {
+  font-style: normal;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  line-height: 120%;
+  font-size: 2.2rem; /* Smallest font size */
 
-@media (min-width: 1200px) {
-	.super-large-header {
-		font-style: normal !important;
-		font-weight: bold !important;
-		font-size: 82px !important;
-		line-height: 98px !important;
-		display: flex;
-		align-items: center;
-		text-align: center;
-	}
+  @media screen and (min-width: 427px) {
+    font-size: 2.5rem;
+  }
+
+  @media screen and (min-width: 800px) {
+    font-size: 3.5rem;
+  }
+
+  @media screen and (min-width: 1400px) {
+    font-size: 4.5rem;
+  }
 }
 
 /* Dynamic screen size definitions */
-@media (max-width: 1200px) {
-	.text-content {
-		margin: 2rem;
-		max-width: 100vw;
-	}
-}
+.text-content {
+  margin: 2rem;
+  max-width: 100vw;
 
-@media (min-width: 1200px) {
-	.text-content {
-		width: 66.6vw;
-		margin-top: 4rem;
-		margin-bottom: 4rem;
-	}
+  @media screen and (min-width: 1200px) {
+    & {
+      width: 66.6vw;
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+  }
 }
 
 .link-on-red-background {
