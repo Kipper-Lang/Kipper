@@ -2,7 +2,7 @@
   "short_name": "Kipper",
   "name": "Kipper",
   "icons": [{
-    "src": "src/img/icon.png",
+    "src": "src/img/icons/kipper-icon.png",
     "type": "image/png",
     "sizes": "192x192"
   }],

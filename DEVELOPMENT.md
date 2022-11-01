@@ -1,4 +1,4 @@
-![](./src/img/Kipper-Logo-with-head.png)
+![](src/img/logos/kipper-logo-with-head.png)
 # Setup
 
 You need to install TypeScript and Node.js at first.

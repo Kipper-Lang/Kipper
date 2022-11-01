@@ -1,4 +1,4 @@
-![](./src/img/Kipper-Logo-with-head.png)
+![](src/img/logos/kipper-logo-with-head.png)
 
 # Kipper Website
 
@@ -16,7 +16,7 @@ of merging all EJS files and Markdown files into a finished build that can be th
 
 Here's also a simplified flowchart showing the entire process:
 
-![](https://github.com/Luna-Klatzer/Kipper/blob/docs/src/img/Docs-Workflow.png?raw=true)
+![](./src/img/other/docs-workflow.png)
 
 # Development Guide
 
