@@ -14,6 +14,8 @@ ejs.cache = new lru({
 	max: 500,
 });
 
+const rootDir = path.resolve(__dirname, "..", "..");
+
 async function validatePathArguments(src: string, dest: string): Promise<void> {
 	if (!existsSync(dest)) {
 		await fs.mkdir(dest);
@@ -85,8 +87,9 @@ async function buildEjsFiles(src: string, dest: string, data: Record<string, any
 			const itemDest = `${dest}/${htmlFile}`;
 			const itemData = {
 				filename: htmlFile, // This should only contain the filename without any directory
-				filePath: htmlFile, // The path to the file relative to the base URL. For root files only the filename
-				isDocsFile: false,
+				filePath: htmlFile, // The path to the HTML file relative to the base URL. For root files only the filename
+				srcFile: itemSrc.replace(rootDir, "").replace("\\", "/"), // The path to the source file relative to the root directory
+        isDocsFile: false,
 				isNestedDir: false,
 				...data,
 			};
@@ -98,12 +101,20 @@ async function buildEjsFiles(src: string, dest: string, data: Record<string, any
 	}
 }
 
+/**
+ * The metadata for a documentation file, which contains the {@link title} and {@link description}.
+ */
 interface DocumentMetaData {
 	title: string;
 	description: string;
 }
 
-async function determineFileMetadata(markdownHtml: string): Promise<DocumentMetaData> {
+/**
+ * Tries to determine the file metadata of the passed Markdown HTML file.
+ * @param markdownHtml The HTML for the Markdown file.
+ * @returns The metadata for the file.
+ */
+async function determineMarkdownFileMetadata(markdownHtml: string): Promise<DocumentMetaData> {
 	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
 
 	let metaData: DocumentMetaData = { title: "", description: "" };
@@ -176,8 +187,9 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 		throw new Error(`Docs EJS template not found. Expected '${baseTemplate}' to exist.s`);
 	}
 
-	const result = await fs.readdir(src);
-	for (let file of result) {
+  // The contents of the src folder
+	const dirContents = await fs.readdir(src);
+	for (let file of dirContents) {
 		// If the file is an ejs file compile it to HTML
 		if (file.endsWith(".md")) {
 			const htmlFile = file.replace(".md", ".html");
@@ -186,6 +198,7 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 			const itemData = {
 				filename: htmlFile, // This should only contain the filename without any directory
 				filePath: `docs/${htmlFile}`,
+        srcFile: itemSrc.replace(rootDir, "").replace("\\", "/"),
 				isDocsFile: true,
 				isNestedDir: true,
 				...data,
@@ -202,7 +215,7 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 			itemData["markdownContent"] = html;
 
 			// Evaluate title and description
-			const metadata = await determineFileMetadata(itemData["markdownContent"]);
+			const metadata = await determineMarkdownFileMetadata(itemData["markdownContent"]);
 
 			// File metadata can overwrite the default title and description evaluated by 'determineFileMetadata'
 			itemData["title"] = fileMetadata["title"] ?? metadata.title;
@@ -223,10 +236,10 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 	// Get data for the ejs build
 	const data = await getBuildData(config);
 
-	// Build all ejs files
+	// Build all ejs files (Convert from EJS to HTML)
 	await buildEjsFiles(src, dest, data);
 
-	// Build all docs files
+	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const srcDocs = `${src}/docs`;
 	const destDocs = `${dest}/docs`;
 	await buildDocs(srcDocs, destDocs, data);

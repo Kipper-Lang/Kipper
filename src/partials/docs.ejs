@@ -27,6 +27,14 @@
                                     <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="./index.html">Kipper Docs /</a></li>
                                     <li><a class="docs-page-nav-header" href="<%= `../${filePath}` %>"><%= title %></a></li>
                                 </ul>
+                                <a
+                                    id="edit-page-on-github"
+                                    href="<%= `https://github.com/Luna-Klatzer/Kipper/edit/docs${srcFile}` %>"
+                                    title="Edit this page on GitHub"
+                                >
+                                    <i class="fa-brands fa-github"></i>
+                                    <p>Edit page</p>
+                                </a>
                             </nav>
                             <article id="markdown-content">
                                 <%- markdownContent %>

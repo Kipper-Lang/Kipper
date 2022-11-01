@@ -43,14 +43,14 @@
 		margin-top: 0.6rem;
 	}
 
-	& img {
+	img {
 		width: 100%;
 		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
 
-	& p,
-	& div {
+	p,
+	div {
 		& + p,
 		& + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
 		& + div.code-toolbar pre[class*="language-"] {
@@ -58,11 +58,63 @@
 		}
 	}
 
-	& div:last-child,
-	& article:last-child {
+	div:last-child,
+	article:last-child {
 		&,
 		& div.code-toolbar pre[class*="language-"] {
 			margin-bottom: 0 !important;
+		}
+	}
+
+	#docs-page-nav {
+		display: flex;
+		align-content: center;
+		justify-content: space-between;
+
+		#docs-page-nav-kipper-origin,
+		#docs-page-nav-kipper-origin:active,
+		#docs-page-nav-kipper-origin:visited {
+			color: var(--scheme-dark-gray);
+			text-decoration: none !important;
+		}
+
+		#docs-page-nav-kipper-origin:hover {
+			color: var(--scheme-primary);
+		}
+
+		.docs-page-nav-header,
+		.docs-page-nav-header:active,
+		.docs-page-nav-header:visited {
+			color: black;
+			text-decoration: none !important;
+		}
+
+		.docs-page-nav-header:hover {
+			color: var(--scheme-primary);
+		}
+
+		ul li {
+			padding-right: 0.25em;
+		}
+
+		#edit-page-on-github {
+			display: flex;
+			align-content: center;
+			align-items: center;
+			flex-direction: row;
+			column-gap: 0.4rem;
+			text-decoration: none;
+			color: black;
+
+			i.fa-brands.fa-github {
+				margin: 0;
+				padding: 0;
+				line-height: unset;
+			}
+
+			&:hover {
+				color: var(--scheme-primary);
+			}
 		}
 	}
 }
@@ -78,32 +130,6 @@
 #nav-kipper-header > a,
 #nav-kipper-header > a:visited {
 	color: var(--scheme-dark-primary) !important;
-}
-
-#docs-page-nav-kipper-origin,
-#docs-page-nav-kipper-origin:active,
-#docs-page-nav-kipper-origin:visited {
-	color: var(--scheme-dark-gray);
-	text-decoration: none !important;
-}
-
-#docs-page-nav-kipper-origin:hover {
-	color: var(--scheme-primary);
-}
-
-.docs-page-nav-header,
-.docs-page-nav-header:active,
-.docs-page-nav-header:visited {
-	color: black;
-	text-decoration: none !important;
-}
-
-.docs-page-nav-header:hover {
-	color: var(--scheme-primary);
-}
-
-#docs-page-nav ul li {
-	padding-right: 0.25em;
 }
 
 .selected-page-sidebar-nav-header a {

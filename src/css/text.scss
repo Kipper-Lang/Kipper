@@ -113,8 +113,8 @@ h6 {
 		&:link:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
 		&:active:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
 		&:visited:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
-			color: #c71239;
-      text-decoration: none;
+			color: var(--scheme-dark-primary);
+      		text-decoration: none;
 			background-color: transparent;
 		}
 
