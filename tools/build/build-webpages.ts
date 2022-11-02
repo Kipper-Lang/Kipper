@@ -89,7 +89,7 @@ async function buildEjsFiles(src: string, dest: string, data: Record<string, any
 				filename: htmlFile, // This should only contain the filename without any directory
 				filePath: htmlFile, // The path to the HTML file relative to the base URL. For root files only the filename
 				srcFile: itemSrc.replace(rootDir, "").replace("\\", "/"), // The path to the source file relative to the root directory
-        isDocsFile: false,
+				isDocsFile: false,
 				isNestedDir: false,
 				...data,
 			};
@@ -187,7 +187,7 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 		throw new Error(`Docs EJS template not found. Expected '${baseTemplate}' to exist.s`);
 	}
 
-  // The contents of the src folder
+	// The contents of the src folder
 	const dirContents = await fs.readdir(src);
 	for (let file of dirContents) {
 		// If the file is an ejs file compile it to HTML
@@ -198,7 +198,7 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 			const itemData = {
 				filename: htmlFile, // This should only contain the filename without any directory
 				filePath: `docs/${htmlFile}`,
-        srcFile: itemSrc.replace(rootDir, "").replace("\\", "/"),
+				srcFile: itemSrc.replace(rootDir, "").replace("\\", "/"),
 				isDocsFile: true,
 				isNestedDir: true,
 				...data,

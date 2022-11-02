@@ -119,78 +119,77 @@ ol {
 }
 
 #homepage-content {
-  padding: 0;
+	padding: 0;
 
-  ul {
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
-    column-gap: 2rem;
-    padding: 0;
-  }
+	ul {
+		display: flex;
+		align-content: center;
+		justify-content: space-between;
+		column-gap: 2rem;
+		padding: 0;
+	}
 
-  #welcome-image {
-    margin-bottom: 0;
-    margin-top: 0;
-    visibility: hidden;
-    display: none;
-  }
+	#welcome-image {
+		margin-bottom: 0;
+		margin-top: 0;
+		visibility: hidden;
+		display: none;
+	}
 
-  #welcome-text {
-    margin: 4rem 0 0;
+	#welcome-text {
+		margin: 4rem 0 0;
 
-    #welcome-header {
-      text-align: start !important;
-      margin-top: 0;
-    }
+		#welcome-header {
+			text-align: start !important;
+			margin-top: 0;
+		}
 
-    #welcome-description {
-      text-align: start !important;
-      font-size: 1.4em;
-    }
+		#welcome-description {
+			text-align: start !important;
+			font-size: 1.4em;
+		}
 
-    .button,
-    .inverted-button {
-      margin-bottom: 0;
-    }
-  }
+		.button,
+		.inverted-button {
+			margin-bottom: 0;
+		}
+	}
 
-  @media screen and (min-width: 1200px) {
-    padding-top: 5vw;
-    padding-bottom: 5vw;
+	@media screen and (min-width: 1200px) {
+		padding-top: 5vw;
+		padding-bottom: 5vw;
 
-    #welcome-text {
-      margin: 0;
-      max-width: 500px;
-    }
+		#welcome-text {
+			margin: 0;
+			max-width: 500px;
+		}
 
-    #welcome-image {
-      visibility: unset;
-      display: unset;
-      width: 45vw;
-      padding: 0;
-      border-radius: var(--default-border-radius);
-      box-shadow: rgba(var(--scheme-primary-rgb), 0.6) -5px 5px, rgba(var(--scheme-primary-rgb), 0.4) -10px 10px,
-      rgba(var(--scheme-primary-rgb), 0.3) -15px 15px, rgba(var(--scheme-primary-rgb), 0.2) -20px 20px,
-      rgba(var(--scheme-primary-rgb), 0.1) -25px 25px;
-      transition: width 1s ease-in-out, box-shadow 1s ease-in-out;
-    }
+		#welcome-image {
+			visibility: unset;
+			display: unset;
+			width: 45vw;
+			padding: 0;
+			border-radius: var(--default-border-radius);
+			box-shadow: rgba(var(--scheme-primary-rgb), 0.6) -5px 5px, rgba(var(--scheme-primary-rgb), 0.4) -10px 10px,
+				rgba(var(--scheme-primary-rgb), 0.3) -15px 15px, rgba(var(--scheme-primary-rgb), 0.2) -20px 20px,
+				rgba(var(--scheme-primary-rgb), 0.1) -25px 25px;
+			transition: width 1s ease-in-out, box-shadow 1s ease-in-out;
+		}
 
-    #welcome-image:hover {
-      width: 48vw;
-      box-shadow: rgba(var(--scheme-primary-rgb), 0.8) -5px 5px, rgba(var(--scheme-primary-rgb), 0.6) -10px 10px,
-      rgba(var(--scheme-primary-rgb), 0.5) -15px 15px, rgba(var(--scheme-primary-rgb), 0.4) -20px 20px,
-      rgba(var(--scheme-primary-rgb), 0.3) -25px 25px, rgba(var(--scheme-primary-rgb), 0.2) -30px 30px,
-      rgba(var(--scheme-primary-rgb), 0.1) -30px 30px;
-    }
-  }
+		#welcome-image:hover {
+			width: 48vw;
+			box-shadow: rgba(var(--scheme-primary-rgb), 0.8) -5px 5px, rgba(var(--scheme-primary-rgb), 0.6) -10px 10px,
+				rgba(var(--scheme-primary-rgb), 0.5) -15px 15px, rgba(var(--scheme-primary-rgb), 0.4) -20px 20px,
+				rgba(var(--scheme-primary-rgb), 0.3) -25px 25px, rgba(var(--scheme-primary-rgb), 0.2) -30px 30px,
+				rgba(var(--scheme-primary-rgb), 0.1) -30px 30px;
+		}
+	}
 
-
-  @media screen and (min-width: 1300px) {
-    #welcome-text {
-      max-width: 600px;
-    }
-  }
+	@media screen and (min-width: 1300px) {
+		#welcome-text {
+			max-width: 600px;
+		}
+	}
 }
 
 @media screen and (max-width: 780px) {
@@ -206,7 +205,6 @@ ol {
 		padding-left: 2rem;
 	}
 }
-
 
 .kipper-logo-container a {
 	margin: 0 !important;
@@ -418,9 +416,9 @@ textarea {
 	}
 
 	/*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
+ * Don't show links that are fragment identifiers,
+ * or use the `javascript:` pseudo protocol
+ */
 	a[href^="#"]::after,
 	a[href^="javascript:"]::after {
 		content: "";
@@ -437,9 +435,9 @@ textarea {
 	}
 
 	/*
-   * Printing Tables:
-   * https://web.archive.org/web/20180815150934/http://css-discuss.incutio.com/wiki/Printing_Tables
-   */
+ * Printing Tables:
+ * https://web.archive.org/web/20180815150934/http://css-discuss.incutio.com/wiki/Printing_Tables
+ */
 	thead {
 		display: table-header-group;
 	}

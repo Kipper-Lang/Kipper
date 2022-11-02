@@ -25,7 +25,7 @@
 }
 
 #header-description-content #page-header h1 {
-  margin-top: 1rem;
+	margin-top: 1rem;
 }
 
 #header-nav-bar {
@@ -155,13 +155,13 @@
 @media (min-width: 1200px) {
 	#search-bar-wrapper ul #search-bar #search-bar-input {
 		width: var(--search-bar-size);
-    max-width: var(--search-bar-size);
+		max-width: var(--search-bar-size);
 		transition: width 0.5s ease-in-out;
 	}
 
 	#search-bar-wrapper #search-bar #search-bar-input:focus {
 		width: var(--search-bar-size-expanded);
-    max-width: var(--search-bar-size-expanded);
+		max-width: var(--search-bar-size-expanded);
 	}
 }
 
@@ -178,18 +178,18 @@
 	cursor: pointer;
 	display: block;
 	z-index: 2;
-  border: 1px solid rgba(25, 25, 28, 0.2);
+	border: 1px solid rgba(25, 25, 28, 0.2);
 	border-radius: 10px;
 	margin-top: 0.5rem;
-  background-color: white;
+	background-color: white;
 
 	& #search-result {
-    & div {
-      padding: 0.8rem;
+		& div {
+			padding: 0.8rem;
 
-      &:not(:last-child) {
-        border-bottom: 1px solid rgba(25, 25, 28, 0.2);
-      }
-    }
+			&:not(:last-child) {
+				border-bottom: 1px solid rgba(25, 25, 28, 0.2);
+			}
+		}
 	}
 }
