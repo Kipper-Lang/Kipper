@@ -1,0 +1,25 @@
+/*! Formatting for Markdown-generated HTML */
+
+#markdown-content {
+  h1, h2, h3, h4, h5, h6 {
+    &[id]:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    &[id]::after {
+      display: inline-flex;
+      text-decoration: none;
+    }
+
+    &[id]:hover::after {
+      display: inline-flex;
+      text-decoration: none;
+      content: " ¶";
+      margin-left: 0.25rem;
+      font-size: 0.95em;
+      color: black;
+      cursor: pointer;
+    }
+  }
+}

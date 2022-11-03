@@ -1,3 +1,6 @@
+/**
+ * Search bar implementation across the whole website.
+ */
 import { PageIndex, searchIndex } from "./search-index";
 import { isDocsFile } from "./main";
 

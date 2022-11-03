@@ -1,5 +1,5 @@
 /**
- * Generator for the sidebar navigation for the documentation
+ * Generator for the sidebar navigation for the documentation.
  */
 
 const docsFiles: Record<string, { file: string; title: string }> = {

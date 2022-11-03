@@ -1,5 +1,5 @@
 /**
- * @summary Main file for playground.ts, which implements the compilation and online editor behaviour.
+ * Main file for the playground, which implements the compilation and online editor behaviour.
  */
 
 import * as prism from "../prism/prism";

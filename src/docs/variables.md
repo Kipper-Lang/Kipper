@@ -186,7 +186,7 @@ const var10: num = var9 + var8; // 4 + 3 -> 4
 ```
 
 <div class="red-highlight-text">
-  <h2>Important</h2>
+  ## Important
   <p>
   You may not overwrite the value of a constant or declare it without a value.
   </p>

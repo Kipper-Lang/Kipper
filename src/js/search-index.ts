@@ -1,3 +1,8 @@
+/**
+ * Search bar index for storing the index for all pages of the website.
+ *
+ * This will be automated in the future to avoid having to manually update this file.
+ */
 export const rawSearchIndex: Array<string> = [
 	"Quickstart;/docs/quickstart.html;Quickstart;The quickstart guide for Kipper.",
 	"Goals & Roadmap;/docs/goals-and-roadmap.html;Goals & Roadmap;Goals & Roadmap for Kipper.",
