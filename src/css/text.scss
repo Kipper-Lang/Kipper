@@ -242,9 +242,16 @@ code {
 	margin-right: 0.2rem;
 	padding: 0.2em 0.4em;
 	font-size: 85%;
-	font-family: consolas, monospace;
+	font-family: Consolas, "Operator Mono", "Fira code.console-bash", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
 	border-radius: var(--default-border-radius);
 	background-color: var(--scheme-gray);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  & code {
+    /* Prefer Inter over monospace in headers */
+    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", "Inter", monospace;
+  }
 }
 
 pre[class*="language-"] {
