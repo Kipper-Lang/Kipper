@@ -14,7 +14,7 @@ specifiers:
   run-script-os: 1.1.6
   ts-node: 10.9.1
   typescript: 4.7.4
-  uglify-js: 3.17.2
+  uglify-js: 3.17.4
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -32,7 +32,7 @@ devDependencies:
   run-script-os: 1.1.6
   ts-node: 10.9.1_zgusdg2syqzg2kik2gzyf5b6di
   typescript: 4.7.4
-  uglify-js: 3.17.2
+  uglify-js: 3.17.4
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -1434,8 +1434,8 @@ packages:
     hasBin: true
     dev: true
 
-  /uglify-js/3.17.2:
-    resolution: {integrity: sha512-bbxglRjsGQMchfvXZNusUcYgiB9Hx2K4AHYXQy2DITZ9Rd+JzhX7+hoocE5Winr7z2oHvPsekkBwXtigvxevXg==}
+  /uglify-js/3.17.4:
+    resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     dev: true
