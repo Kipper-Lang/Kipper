@@ -27,7 +27,7 @@ specifiers:
   mkdirp: 1.0.4
   mocha: 10.1.0
   nyc: 15.1.0
-  oclif: 3.2.24
+  oclif: 3.2.25
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -72,7 +72,7 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.1.0
   nyc: 15.1.0
-  oclif: 3.2.24
+  oclif: 3.2.25
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -4823,8 +4823,8 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /oclif/3.2.24:
-    resolution: {integrity: sha512-vzcbfIHeGPb5WnV7DPczoIPvBe0Xp/P6ArR28sSKySkg6/SkDMzdD9IfmsyovvaqrBCDTNgw0yvMbuncCQlIdA==}
+  /oclif/3.2.25:
+    resolution: {integrity: sha512-1nwdWHOBW5DkMBBu3HNrwM+WIAL7kDLBeoM8BNJLbnE4hlxBmeubwQTF0oGzmv+0vUomWMiNSbQF7AfzFbwUwA==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -4842,7 +4842,7 @@ packages:
       normalize-package-data: 3.0.3
       qqjs: 0.3.11
       semver: 7.3.8
-      tslib: 2.4.0
+      tslib: 2.4.1
       yeoman-environment: 3.11.1
       yeoman-generator: 5.7.0_yeoman-environment@3.11.1
       yosay: 2.0.2
@@ -6334,6 +6334,7 @@ packages:
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: false
 
   /tslib/2.4.1:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
