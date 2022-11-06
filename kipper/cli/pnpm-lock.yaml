@@ -17,7 +17,7 @@ specifiers:
   '@types/node': ^18.0.0
   '@types/sinon': 10.0.13
   antlr4ts: ^0.5.0-alpha.4
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
   rimraf: ^3.0.2
@@ -50,7 +50,7 @@ devDependencies:
   '@oclif/test': 2.2.10
   '@sinonjs/fake-timers': 9.1.2
   '@types/sinon': 10.0.13
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
 
@@ -924,8 +924,9 @@ packages:
     resolution: {integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==}
     dev: false
 
-  /json-parse-even-better-errors/2.3.1:
-    resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+  /json-parse-even-better-errors/3.0.0:
+    resolution: {integrity: sha512-iZbGHafX/59r39gPwVPRBGw0QQKnA7tte5pSMrhWOW7swGsVvVTjmfyAV9pNqk8YGT7tRCdxRu8uzcgZwoDooA==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
 
   /json-stringify-safe/5.0.1:
