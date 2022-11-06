@@ -14,7 +14,7 @@ specifiers:
   '@oclif/plugin-warn-if-update-available': ^2.0.4
   '@oclif/test': 2.2.8
   '@sinonjs/fake-timers': 9.1.2
-  '@types/node': ^17.0.34
+  '@types/node': ^18.0.0
   '@types/sinon': 10.0.13
   antlr4ts: ^0.5.0-alpha.4
   json-parse-even-better-errors: 2.3.1
@@ -38,10 +38,10 @@ dependencies:
   '@oclif/plugin-help': 5.1.12
   '@oclif/plugin-update': 3.0.0
   '@oclif/plugin-warn-if-update-available': 2.0.4
-  '@types/node': 17.0.45
+  '@types/node': 18.11.9
   antlr4ts: 0.5.0-alpha.4
   rimraf: 3.0.2
-  ts-node: 10.9.1_x2utdhayajzrh747hktprshhby
+  ts-node: 10.9.1_vq46kxj6zfka4f6ijsosnft3hy
   tslib: 2.4.0
   tslog: 3.3.3
   typescript: 4.7.4
@@ -359,8 +359,8 @@ packages:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
     dev: true
 
-  /@types/node/17.0.45:
-    resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+  /@types/node/18.11.9:
+    resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
 
   /@types/sinon/10.0.13:
     resolution: {integrity: sha512-UVjDqJblVNQYvVNUsj0PuYYw0ELRmgt1Nt5Vk0pT5f16ROGfcKJY8o1HVuMOJOpD727RrGB9EGvoaTQE5tgxZQ==}
@@ -665,7 +665,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
-      '@types/node': 17.0.45
+      '@types/node': 18.11.9
       '@types/sinon': 10.0.13
       lodash: 4.17.21
       mock-stdin: 1.0.0
@@ -1327,7 +1327,7 @@ packages:
     dependencies:
       is-number: 7.0.0
 
-  /ts-node/10.9.1_x2utdhayajzrh747hktprshhby:
+  /ts-node/10.9.1_vq46kxj6zfka4f6ijsosnft3hy:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -1346,7 +1346,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 17.0.45
+      '@types/node': 18.11.9
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3

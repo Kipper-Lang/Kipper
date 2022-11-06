@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@size-limit/preset-big-lib': 8.1.0
-  '@types/node': 17.0.35
+  '@types/node': 18.11.9
   ansi-regex: 6.0.1
   antlr4ts: ^0.5.0-alpha.4
   antlr4ts-cli: 0.5.0-alpha.4
@@ -26,7 +26,7 @@ dependencies:
 
 devDependencies:
   '@size-limit/preset-big-lib': 8.1.0_size-limit@8.1.0
-  '@types/node': 17.0.35
+  '@types/node': 18.11.9
   ansi-regex: 6.0.1
   antlr4ts-cli: 0.5.0-alpha.4
   browserify: 17.0.0
@@ -36,7 +36,7 @@ devDependencies:
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
-  ts-node: 10.9.1_zgusdg2syqzg2kik2gzyf5b6di
+  ts-node: 10.9.1_vq46kxj6zfka4f6ijsosnft3hy
   tsify: 5.0.4_brov7mothvcejnwzylwtltjfwe
   typescript: 4.7.4
   uuid: 9.0.0
@@ -226,15 +226,15 @@ packages:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
     dev: true
 
-  /@types/node/17.0.35:
-    resolution: {integrity: sha512-vu1SrqBjbbZ3J6vwY17jBs8Sr/BKA+/a/WtjRG+whKg1iuLFOosq872EXS0eXWILdO36DHQQeku/ZcL6hz2fpg==}
+  /@types/node/18.11.9:
+    resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
     dev: true
 
   /@types/yauzl/2.10.0:
     resolution: {integrity: sha512-Cn6WYCm0tXv8p6k+A8PvbDG763EDpBoTzHdA+Q/MF6H3sapGjCm9NzoaJncJS9tUKSuCoDs9XHxYYsQDgxR6kw==}
     requiresBuild: true
     dependencies:
-      '@types/node': 17.0.35
+      '@types/node': 18.11.9
     dev: true
     optional: true
 
@@ -1547,7 +1547,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 17.0.35
+      '@types/node': 18.11.9
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -2388,7 +2388,7 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
-  /ts-node/10.9.1_zgusdg2syqzg2kik2gzyf5b6di:
+  /ts-node/10.9.1_vq46kxj6zfka4f6ijsosnft3hy:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -2407,7 +2407,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 17.0.35
+      '@types/node': 18.11.9
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3
