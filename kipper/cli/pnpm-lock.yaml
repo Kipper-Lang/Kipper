@@ -12,7 +12,7 @@ specifiers:
   '@oclif/plugin-help': ^5.0.0
   '@oclif/plugin-update': ^3.0.0
   '@oclif/plugin-warn-if-update-available': ^2.0.4
-  '@oclif/test': 2.2.8
+  '@oclif/test': 2.2.10
   '@sinonjs/fake-timers': 9.1.2
   '@types/node': ^18.0.0
   '@types/sinon': 10.0.13
@@ -47,7 +47,7 @@ dependencies:
   typescript: 4.7.4
 
 devDependencies:
-  '@oclif/test': 2.2.8
+  '@oclif/test': 2.2.10
   '@sinonjs/fake-timers': 9.1.2
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
@@ -313,8 +313,8 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: true
 
-  /@oclif/test/2.2.8:
-    resolution: {integrity: sha512-VPVR1XLiTYqKToXlU7TPRnp5WMZvzfjyyPDH2sqKVCuEj9ZdEsK8m4woTK1n9aX1HI1Yv0tyyvg2a8HbUJOwhw==}
+  /@oclif/test/2.2.10:
+    resolution: {integrity: sha512-tz6tH79F0Kw1kWv/8BgTov+WtIeFDdq1PNUkW43U0Rh4HOA1SafPbXCpzhM9A6O7YXS+tq8ayuZdkyOXXJY6Ww==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 1.20.3
