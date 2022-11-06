@@ -22,7 +22,7 @@ specifiers:
   chai: 4.3.6
   coverage-badge-creator: 1.0.14
   eslint: 8.27.0
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 1.0.4
   mocha: 10.1.0
@@ -67,7 +67,7 @@ devDependencies:
   chai: 4.3.6
   coverage-badge-creator: 1.0.14
   eslint: 8.27.0
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 1.0.4
   mocha: 10.1.0
@@ -4012,6 +4012,11 @@ packages:
 
   /json-parse-even-better-errors/2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+    dev: true
+
+  /json-parse-even-better-errors/3.0.0:
+    resolution: {integrity: sha512-iZbGHafX/59r39gPwVPRBGw0QQKnA7tte5pSMrhWOW7swGsVvVTjmfyAV9pNqk8YGT7tRCdxRu8uzcgZwoDooA==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
 
   /json-schema-traverse/0.4.1:
