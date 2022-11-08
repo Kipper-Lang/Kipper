@@ -10,6 +10,7 @@
 </head>
 <body>
 <script src="./js/plugins.ts"></script>
+<script src="./js/markdown.ts"></script>
 <script src="./prism/prism.js"></script>
 
 <!-- Show Error if JS is disabled or blocked -->
@@ -34,8 +35,10 @@
                         .then((response) => {
                           // Set markdown flavor to 'github'
                           showdown.setFlavor("github");
+                          showdown.setOption('simpleLineBreaks', false);
 
                           const converter = new showdown.Converter();
+
                           const md = response.toString();
                           document.getElementById("markdown-content").innerHTML = converter.makeHtml(md);
                         });
