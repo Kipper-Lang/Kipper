@@ -20,11 +20,17 @@ const codeTextAreaResultWrapper: HTMLElement = document.querySelector("#highligh
 const codeTextAreaResult: HTMLElement = document.querySelector("#highlighting-field-content");
 const textSavingState: HTMLDivElement = document.querySelector("#text-saving-state");
 
+// Version selector dropdown
+const versionSelectorDropdown: HTMLUListElement = document.querySelector("#versions-dropdown");
+
 // Menu buttons
 const runCodeListItem: HTMLLIElement = document.querySelector("#run-code-list-item");
 let runCodeButton: HTMLButtonElement = document.querySelector("#run-code-list-item button");
 const copyCodeButton: HTMLButtonElement = document.querySelector("#copy-code-list-item button");
 const clearContentButton: HTMLButtonElement = document.querySelector("#clear-content-list-item button");
+
+// Version selector button
+const versionSelectorButton: HTMLButtonElement = document.querySelector("#versions-button button");
 
 // Sidebar editor fields
 const shellOutput: HTMLDivElement = document.querySelector("#shell-output");
@@ -50,6 +56,11 @@ let running = false;
 // Store the warmup promise
 let warmUp: Promise<void> | undefined = undefined;
 
+/**
+ * Wrap up function that will be called once the compiler has been downloaded and initialised in the web worker.
+ *
+ * Called by {@link warmUpCompiler warmUpCompiler()}.
+ */
 async function wrapUpWarmUp(): Promise<void> {
 	warmUp = undefined;
 	worker.onmessage = undefined;
@@ -225,6 +236,9 @@ function printProgramExitCode(exitCode: number) {
 	compiling = false;
 }
 
+/**
+ * Clears the content of the code editor.
+ */
 function clearEditorContent(): void {
 	console.log("Code Cleared!");
 	codeTextArea.value = "";
@@ -233,6 +247,9 @@ function clearEditorContent(): void {
 	textSavingState.innerHTML = `<p class="gray-text">Code cleared!</p>`;
 }
 
+/**
+ * Copies the code from the code editor.
+ */
 function copyEditorContent(): void {
 	console.log("Code Copied!");
 	navigator.clipboard.writeText(codeTextArea.value).then(() => {
@@ -240,9 +257,21 @@ function copyEditorContent(): void {
 	});
 }
 
+/**
+ * Toggles on or off the dropdown for the version picker.
+ */
+function toggleVersionDropdownVisibility(): void {
+  const isVisible = versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
+  versionSelectorDropdown.style.visibility = isVisible ? "hidden" : "visible";
+  versionSelectorDropdown.style.display = isVisible ? "none" : "unset";
+}
+
 let consoleOutput = "";
 let compilerOutput = "";
 
+/**
+ * Switches the side panel interface to the program console output.
+ */
 function switchToConsoleOutput() {
 	// Change styling
 	compilerOutputButton.style.borderBottom = "2px solid var(--scheme-gray)";
@@ -251,8 +280,11 @@ function switchToConsoleOutput() {
 	writeConsoleResultAndHighlight(consoleOutput);
 }
 
+/**
+ * Switches the side panel interface to the compiler logs output.
+ */
 function switchToCompilerOutput() {
-	// Change styling
+	// Change styling console
 	consoleOutputButton.style.borderBottom = "2px solid var(--scheme-gray)";
 	compilerOutputButton.style.borderBottom = "3px solid var(--scheme-primary)";
 
@@ -263,6 +295,9 @@ function switchToCompilerOutput() {
 runCodeButton.addEventListener("click", runCode);
 copyCodeButton.addEventListener("click", copyEditorContent);
 clearContentButton.addEventListener("click", clearEditorContent);
+
+// Version selector button
+versionSelectorButton.addEventListener("click", toggleVersionDropdownVisibility);
 
 // Sidebar button handling
 consoleOutputButton.addEventListener("click", switchToConsoleOutput);
@@ -280,7 +315,14 @@ window.addEventListener("DOMContentLoaded", writeConsoleOutputDefaultMessage);
 
 // Warmup the compiler to speed up future compilations
 window.addEventListener("DOMContentLoaded", () => {
+  // Add loading message (Don't switch the compiler output window though)
+  compilerOutput = "--- Loading compiler... ---";
+
+  // Warm up the compiler
 	warmUp = warmUpCompiler();
+
+  // Afterwards display the ready message
+  compilerOutput = "--- Kipper Compiler ready for compilation --- ";
 });
 
 // Ensure the code text area stays properly formatted
@@ -292,11 +334,11 @@ codeTextArea.addEventListener("keydown", checkForTab);
 window.addEventListener("DOMContentLoaded", setEditorAndConsoleSizes);
 window.addEventListener("resize", setEditorAndConsoleSizes);
 
-// runtime variable for the writing event listener
+// Runtime variable for the writing event listener
 let cancel;
 let spinning: boolean;
 
-// adding keyup listener
+// Adding keyup listener
 codeTextArea.addEventListener("keyup", (event) => {
 	// if cancel exists / is active -> clear timeout
 	if (cancel) clearTimeout(cancel);
@@ -397,7 +439,11 @@ function writeEditorResultAndHighlight(value: string): void {
 	syncTextAreaSizeAndScroll();
 }
 
-function checkForTab(event) {
+/**
+ * Checks whether the input key is a 'tab' and handles it appropriately for the code editor input.
+ * @param event The key event.
+ */
+function checkForTab(event: KeyboardEvent) {
 	const element = codeTextArea;
 	const code = element.value;
 	if (event.key === "Tab") {
@@ -497,7 +543,7 @@ function clearCompilerOutput(): void {
 }
 
 /**
- * Fixes the sizes of the code editor
+ * Fixes the sizes of the code editor.
  */
 function setEditorAndConsoleSizes(): void {
 	const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);

@@ -63,11 +63,16 @@ async function getBuildData(dataFile: string): Promise<Record<string, any>> {
 	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
 	const resp = await fetch("https://registry.npmjs.org/kipper");
-	const version = (await resp.json())["dist-tags"]["latest"];
+  const json = await resp.json();
 
 	return {
 		...data,
-		version: version,
+		version: json["dist-tags"]["latest"],
+    devVersion: json["dist-tags"]["next"],
+    versions: [
+      json["dist-tags"]["latest"],
+      "next"
+    ]
 	};
 }
 

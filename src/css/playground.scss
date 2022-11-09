@@ -1,32 +1,97 @@
 /*! Configuration for the Playground */
 
 #interactive-console {
-	& #left-console-interface {
+	#left-console-interface {
 		margin: 0;
 		display: flex;
 		flex-grow: 2;
 
-		& #playground-option-menu {
+		#playground-option-menu {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      justify-content: flex-start;
 			border-bottom: 2px solid var(--scheme-gray);
-		}
 
-		& #clear-content-list-item {
-			margin-right: 1rem;
+      #clear-content-list-item {
+        margin-right: 1rem;
+      }
+
+      #version-selection {
+        margin-bottom: 0;
+        margin-left: 0;
+        position: relative;
+        z-index: 2;
+
+        #versions-dropdown {
+          /* Hide the dropdown at first */
+          display: none;
+          visibility: hidden;
+          position: absolute;
+          top: 100%;
+          width: calc(100% - 8px);
+          margin: 4px 0 0 4px;
+          z-index: 2;
+          overflow-y: auto;
+          max-height: 60vh;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+
+          &:last-child.version-selector-button-wrapper {
+            border-bottom: none;
+          }
+
+          li.version-selector-button-wrapper {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            border-bottom: 2px solid var(--scheme-gray);
+
+            button {
+              /* Similar styles like in the playground button */
+              padding: 0.8rem 0.8rem;
+              background-color: white;
+              border: none;
+              cursor: pointer;
+
+              /* Make the button grow to the size of the parent */
+              flex-grow: 1;
+
+              &:hover {
+                color: var(--scheme-primary);
+                background-color: var(--scheme-gray);
+              }
+            }
+          }
+        }
+
+        #versions-button button {
+          display: flex;
+          flex-direction: row;
+          align-content: center;
+          column-gap: 0.4rem;
+
+          .fa-caret-down::before {
+            display: block;
+            margin-top: 0.7em;
+          }
+        }
+      }
 		}
 
 		/* The entire code entire window -> parent of the label and textarea */
-		& #code-editor {
+		#code-editor {
 			display: flex;
 			flex-grow: 1;
 			min-width: 0;
 			min-height: 0;
 
 			/*
- * The user input fields - the two fields will be put over each other to make it look
- * like a single field
- */
-			& #code-editor-textarea,
-			& #highlighting-field {
+       * The user input fields - the two fields will be put over each other to make it look
+       * like a single field
+      */
+			#code-editor-textarea,
+			#highlighting-field {
 				/* Putting them on top of each other */
 				position: absolute;
 				flex-grow: 0;
@@ -44,9 +109,9 @@
 				max-width: 70vw;
 			}
 
-			& #code-editor-textarea,
-			& #highlighting-field,
-			& #highlighting-field * {
+			#code-editor-textarea,
+			#highlighting-field,
+			#highlighting-field * {
 				/* Also add text styles to highlighting tokens */
 				font-size: 14px;
 				font-family: consolas, monospace;
@@ -55,7 +120,7 @@
 				tab-size: 2;
 			}
 
-			& #code-editor-textarea {
+			#code-editor-textarea {
 				/* Move the textarea in front of the result */
 				z-index: 1;
 				color: transparent;
@@ -68,10 +133,10 @@
 				}
 			}
 
-			& #highlighting-field {
+			#highlighting-field {
 				z-index: 0;
 
-				& #highlighting-field-content {
+				#highlighting-field-content {
 					margin: 0 !important;
 					padding: 0 !important;
 					border-radius: 0 !important;
@@ -80,7 +145,7 @@
 		}
 	}
 
-	& .playground-button button {
+	.playground-button-wrapper button {
 		padding: 1rem 1rem;
 		background-color: white;
 		border: none;
@@ -93,26 +158,26 @@
 	}
 
 	/* Sidebar styling */
-	& #shell-sidebar {
+  #shell-sidebar {
 		margin: 0;
 		display: flex;
 
-		& #shell-sidebar-menu {
+		#shell-sidebar-menu {
 			padding: 0;
 			width: inherit;
 
-			& .playground-button {
+			.playground-button-wrapper {
 				display: flex;
 				flex-grow: 1;
 			}
 
-			& button {
+			button {
 				border-bottom: 2px solid var(--scheme-gray);
 				flex-grow: 1;
 			}
 		}
 
-		& #shell-output {
+		#shell-output {
 			& > .code-toolbar {
 				color: #9efeff; /* Shades of purple - Console theme color */
 
@@ -123,7 +188,7 @@
 			}
 		}
 
-		& #shell-output {
+		#shell-output {
 			&,
 			& > .code-toolbar,
 			& > .code-toolbar > pre {
@@ -131,7 +196,7 @@
 				flex-grow: 1;
 			}
 
-			& #shell-sidebar-highlight-field {
+			#shell-sidebar-highlight-field {
 				background-color: var(--scheme-console-blue);
 				display: flex;
 				flex-grow: 1;
