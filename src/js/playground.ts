@@ -313,6 +313,23 @@ codeTextArea.addEventListener("input", (event) => {
 window.addEventListener("DOMContentLoaded", switchToConsoleOutput);
 window.addEventListener("DOMContentLoaded", writeConsoleOutputDefaultMessage);
 
+// Initialise the code input of the editor of the page
+window.addEventListener("DOMContentLoaded", () => {
+	// Restore the code if there has been a previous session
+	const localStorageCodeInput = localStorage.getItem(localStorageIdentifier);
+	if (localStorageCodeInput != undefined) {
+		codeTextArea.value = localStorageCodeInput;
+		writeEditorResultAndHighlight(localStorageCodeInput);
+	} else {
+		codeTextArea.value = "";
+	}
+
+	// If the input is not empty, signalise that code was restored
+	if (codeTextArea.value.trim() !== "") {
+		textSavingState.innerHTML = `<p class="gray-text">Code restored :)</p>`;
+	}
+});
+
 // Warmup the compiler to speed up future compilations
 window.addEventListener("DOMContentLoaded", () => {
   // Add loading message (Don't switch the compiler output window though)
@@ -375,23 +392,6 @@ codeTextArea.addEventListener("keyup", (event) => {
 		spinning = true;
 	}
 });
-
-// Initialise the codeInput
-(() => {
-	// Restore the code if there has been a previous session
-	const localStorageCodeInput = localStorage.getItem(localStorageIdentifier);
-	if (localStorageCodeInput != undefined) {
-		codeTextArea.value = localStorageCodeInput;
-		writeEditorResultAndHighlight(localStorageCodeInput);
-	} else {
-		codeTextArea.value = "";
-	}
-
-	// If the input is not empty, signalise that code was restored
-	if (codeTextArea.value.trim() !== "") {
-		textSavingState.innerHTML = `<p class="gray-text">Code restored :)</p>`;
-	}
-})();
 
 /**
  * Write to the console the default welcome message
