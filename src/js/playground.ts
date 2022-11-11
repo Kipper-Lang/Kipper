@@ -52,6 +52,7 @@ const statusFailure = 1;
 // Program states
 let compiling = false;
 let running = false;
+let consoleOutputSelected = true;
 
 // Store the warmup promise
 let warmUp: Promise<void> | undefined = undefined;
@@ -278,6 +279,7 @@ function switchToConsoleOutput() {
 	consoleOutputButton.style.borderBottom = "3px solid var(--scheme-primary)";
 
 	writeConsoleResultAndHighlight(consoleOutput);
+	consoleOutputSelected = true;
 }
 
 /**
@@ -289,6 +291,7 @@ function switchToCompilerOutput() {
 	compilerOutputButton.style.borderBottom = "3px solid var(--scheme-primary)";
 
 	writeConsoleResultAndHighlight(compilerOutput);
+	consoleOutputSelected = false;
 }
 
 // Playground menu buttons handling
@@ -520,11 +523,21 @@ function writeConsoleResultAndHighlight(value: string): void {
  * @param value The line to add.
  */
 function writeLineToConsoleOutput(value: string): void {
+	// Switch to the console output, if the sidebar wasn't already set to it
+	if (!consoleOutputSelected) {
+		switchToConsoleOutput();
+	}
+
 	consoleOutput += value + "\n";
 	writeConsoleResultAndHighlight(consoleOutput);
 }
 
 function writeLineToCompilerOutput(value: string): void {
+	// Switch to the compiler output, if the sidebar wasn't already set to it
+	if (consoleOutputSelected) {
+		switchToCompilerOutput();
+	}
+
 	compilerOutput += value + "\n";
 	writeConsoleResultAndHighlight(compilerOutput);
 }
