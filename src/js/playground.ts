@@ -77,6 +77,9 @@ function getKipperVersion(): string {
  */
 function setKipperVersion(version: string) {
 	localStorage.setItem("kipperVersion", version);
+
+	// Set the version in the dropdown button
+	versionSelectorButton.innerHTML = `v${version}`;
 }
 
 /**
@@ -84,9 +87,6 @@ function setKipperVersion(version: string) {
  */
 async function switchVersion(version: string) {
 	setKipperVersion(version);
-
-	// Set the version in the dropdown button
-	versionSelectorButton.innerHTML = version;
 
 	// Safely relaunch the worker using the new preset version
 	await safeRelaunchWorker();
