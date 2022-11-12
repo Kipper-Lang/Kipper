@@ -130,7 +130,7 @@ onmessage = async function (event) {
 			execCode = Babel.transform(kipperResult, {
 				filename: "kipper-web-script.ts",
 				presets: ["env", "typescript"],
-			});
+			}).code;
 		}
 
 		// Switch to console output
