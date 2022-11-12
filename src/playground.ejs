@@ -32,9 +32,9 @@
                             </button>
                         </div>
                         <ul id="versions-dropdown" class="no-style-list flex-column">
-                            <% versions.forEach((v) => { %>
+                            <% Object.keys(versions).forEach((v) => { %>
                                 <%-
-                                `<li id="version-selector-${v}" class="version-selector-button-wrapper">
+                                `<li id="version-selector-${v}" class="version-selector-button-wrapper" data-version="${versions[v]}">
                                   <button>${v}</button>
                                 </li>`
                                 %>

@@ -41,10 +41,7 @@ const consoleOutputButton: HTMLButtonElement = document.querySelector("#console-
 const compilerOutputButton: HTMLButtonElement = document.querySelector("#compiler-output-button button");
 
 // Global web worker that will run the code
-let worker: Worker = new Worker(
-	// @ts-ignore
-	new URL("./compile/compile-worker.ts", import.meta.url),
-);
+let worker: Worker = createCompilerWebWorker();
 
 // Status code returns
 const statusFailure = 1;
@@ -58,6 +55,44 @@ let consoleOutputSelected = true;
 let warmUp: Promise<void> | undefined = undefined;
 
 /**
+ * Ensures that a version is set in the {@link localStorage} field 'kipperVersion'.
+ */
+function ensureVersionIsSet(): void {
+	if (!localStorage.getItem("kipperVersion")) {
+		localStorage.setItem("kipperVersion", "latest");
+	}
+}
+
+/**
+ * Get the current version set for the Kipper compiler.
+ */
+function getKipperVersion(): string {
+	ensureVersionIsSet();
+	return localStorage.getItem("kipperVersion");
+}
+
+/**
+ * Sets the {@link localStorage} field 'kipperVersion' to the specified {@link version}.
+ * @param version The version to set.
+ */
+function setKipperVersion(version: string) {
+	localStorage.setItem("kipperVersion", version);
+}
+
+/**
+ * Switches the version of the compiler of the playground.
+ */
+async function switchVersion(version: string) {
+	setKipperVersion(version);
+
+	// Set the version in the dropdown button
+	versionSelectorButton.innerHTML = version;
+
+	// Safely relaunch the worker using the new preset version
+	await safeRelaunchWorker();
+}
+
+/**
  * Wrap up function that will be called once the compiler has been downloaded and initialised in the web worker.
  *
  * Called by {@link warmUpCompiler warmUpCompiler()}.
@@ -66,6 +101,20 @@ async function wrapUpWarmUp(): Promise<void> {
 	warmUp = undefined;
 	worker.onmessage = undefined;
 	console.log("Finished warming up the compiler!");
+}
+
+/**
+ * Creates a new web worker and initialises the Kipper Compiler in the wbe worker thread.
+ */
+function createCompilerWebWorker(): Worker {
+	let newWorker = new Worker(
+		// @ts-ignore
+		new URL("./compile/compile-worker.ts", import.meta.url),
+	);
+
+	// Send the version to the worker
+	newWorker.postMessage(getKipperVersion());
+	return newWorker;
 }
 
 /**
@@ -193,10 +242,9 @@ function switchButtonToRun(): void {
 }
 
 /**
- * Stops the WebWorker from executing the current code.
+ * Safely aborts the worker's current process and recreates it.
  */
-async function stopCode(): Promise<void> {
-	switchButtonToRun();
+async function safeAbortWorker(): Promise<void> {
 	if (window.Worker) {
 		// If there is no current execution, return.
 		if (worker === undefined) {
@@ -208,23 +256,43 @@ async function stopCode(): Promise<void> {
 		worker.terminate();
 
 		// Recreate the worker now to save time for the next run call.
-		worker = new Worker(
-			// @ts-ignore
-			new URL("./compile/compile-worker.ts", import.meta.url),
-		);
+		worker = createCompilerWebWorker();
 	} else {
 		alert("Your browser does not support web-workers! Aborting operation.");
 	}
+}
+
+/**
+ * Stops the WebWorker from executing the current code.
+ */
+async function stopCode(): Promise<void> {
+	switchButtonToRun();
+	await safeAbortWorker();
 
 	if (compiling) {
 		switchToCompilerOutput();
 		writeLineToCompilerOutput("\nCompilation terminated.");
 
 		compiling = false;
-	} else {
+	} else if (running) {
 		switchToConsoleOutput();
 		printProgramExitCode(statusFailure);
+
+		running = false;
 	}
+
+	// If nothing is going on rn, just return
+}
+
+/**
+ * Safely relaunches the worker by aborting it and making sure a new instance is created.
+ */
+async function safeRelaunchWorker(): Promise<void> {
+	// Stop the worker
+	await stopCode();
+
+	// Recreate the worker
+	worker = createCompilerWebWorker();
 }
 
 /**
@@ -259,12 +327,31 @@ function copyEditorContent(): void {
 }
 
 /**
+ * Disables the visibility of the dropdown menu.
+ */
+function disableVersionDropdownVisibility(): void {
+	versionSelectorDropdown.style.visibility = "hidden";
+	versionSelectorDropdown.style.display = "none";
+}
+
+/**
+ * Enables the visibility of the dropdown menu.
+ */
+function enableVersionDropdownVisibility(): void {
+	versionSelectorDropdown.style.visibility = "visible";
+	versionSelectorDropdown.style.display = "unset";
+}
+
+/**
  * Toggles on or off the dropdown for the version picker.
  */
 function toggleVersionDropdownVisibility(): void {
   const isVisible = versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
-  versionSelectorDropdown.style.visibility = isVisible ? "hidden" : "visible";
-  versionSelectorDropdown.style.display = isVisible ? "none" : "unset";
+  if (isVisible) {
+		disableVersionDropdownVisibility();
+	} else {
+		enableVersionDropdownVisibility();
+	}
 }
 
 let consoleOutput = "";
@@ -293,108 +380,6 @@ function switchToCompilerOutput() {
 	writeConsoleResultAndHighlight(compilerOutput);
 	consoleOutputSelected = false;
 }
-
-// Playground menu buttons handling
-runCodeButton.addEventListener("click", runCode);
-copyCodeButton.addEventListener("click", copyEditorContent);
-clearContentButton.addEventListener("click", clearEditorContent);
-
-// Version selector button
-versionSelectorButton.addEventListener("click", toggleVersionDropdownVisibility);
-
-// Sidebar button handling
-consoleOutputButton.addEventListener("click", switchToConsoleOutput);
-compilerOutputButton.addEventListener("click", switchToCompilerOutput);
-
-// Highlight new input
-codeTextArea.addEventListener("input", (event) => {
-	const givenTextArea: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
-	writeEditorResultAndHighlight(givenTextArea.value);
-});
-
-// Print default message to the console output
-window.addEventListener("DOMContentLoaded", switchToConsoleOutput);
-window.addEventListener("DOMContentLoaded", writeConsoleOutputDefaultMessage);
-
-// Initialise the code input of the editor of the page
-window.addEventListener("DOMContentLoaded", () => {
-	// Restore the code if there has been a previous session
-	const localStorageCodeInput = localStorage.getItem(localStorageIdentifier);
-	if (localStorageCodeInput != undefined) {
-		codeTextArea.value = localStorageCodeInput;
-		writeEditorResultAndHighlight(localStorageCodeInput);
-	} else {
-		codeTextArea.value = "";
-	}
-
-	// If the input is not empty, signalise that code was restored
-	if (codeTextArea.value.trim() !== "") {
-		textSavingState.innerHTML = `<p class="gray-text">Code restored :)</p>`;
-	}
-});
-
-// Warmup the compiler to speed up future compilations
-window.addEventListener("DOMContentLoaded", () => {
-  // Add loading message (Don't switch the compiler output window though)
-  compilerOutput = "--- Loading compiler... ---";
-
-  // Warm up the compiler
-	warmUp = warmUpCompiler();
-
-  // Afterwards display the ready message
-  compilerOutput = "--- Kipper Compiler ready for compilation --- ";
-});
-
-// Ensure the code text area stays properly formatted
-codeTextArea.addEventListener("scroll", syncTextAreaSizeAndScroll);
-codeTextArea.addEventListener("keydown", checkForTab);
-
-// Properly configure the sizes of the items in the browser window. This should set every item relative to the maximum
-// possible space available.
-window.addEventListener("DOMContentLoaded", setEditorAndConsoleSizes);
-window.addEventListener("resize", setEditorAndConsoleSizes);
-
-// Runtime variable for the writing event listener
-let cancel;
-let spinning: boolean;
-
-// Adding keyup listener
-codeTextArea.addEventListener("keyup", (event) => {
-	// if cancel exists / is active -> clear timeout
-	if (cancel) clearTimeout(cancel);
-
-	// creating the new timeout and assigning it, if the user types more
-	// the timeout will be cancelled and restarted, so that the caching is
-	// only done when the user finished typing!
-	cancel = setTimeout(() => {
-		const givenTextArea: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
-		localStorage.setItem(localStorageIdentifier, givenTextArea.value);
-
-		spinning = false;
-		textSavingState.innerHTML = `<p class="gray-text">Code Saved!</p>`;
-	}, 1000);
-
-	if (!spinning) {
-		textSavingState.innerHTML = `<div id="text-save-spinner" class="spinner">
-        <!-- This may look stupid, but don't delete it -->
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <p class="gray-text">Saving...</p>
-    `;
-		spinning = true;
-	}
-});
 
 /**
  * Write to the console the default welcome message
@@ -547,12 +532,23 @@ function writeLineToCompilerOutput(value: string): void {
  */
 function clearConsoleOutput(): void {
 	consoleOutput = "";
-	writeConsoleResultAndHighlight(compilerOutput);
+
+	// Don't override the compiler output if it's selected and only clear the console output
+	if (consoleOutputSelected) {
+		writeConsoleResultAndHighlight("");
+	}
 }
 
+/**
+ * Clears the content of the console.
+ */
 function clearCompilerOutput(): void {
 	compilerOutput = "";
-	writeConsoleResultAndHighlight("");
+
+	// Don't override the console output if it's selected and only clear the compiler output
+	if (!consoleOutputSelected) {
+		writeConsoleResultAndHighlight("");
+	}
 }
 
 /**
@@ -571,3 +567,124 @@ function setEditorAndConsoleSizes(): void {
 	shellOutputResult.style.height = `${shellOutput.clientHeight - 2 * rem}px`;
 	shellOutputResult.style.width = `${shellOutput.clientWidth - 2 * rem}px`;
 }
+
+// Print default message to the console output
+window.addEventListener("DOMContentLoaded", switchToConsoleOutput);
+window.addEventListener("DOMContentLoaded", writeConsoleOutputDefaultMessage);
+
+// Initialise the code input of the editor of the page
+window.addEventListener("DOMContentLoaded", () => {
+	// Restore the code if there has been a previous session
+	const localStorageCodeInput = localStorage.getItem(localStorageIdentifier);
+	if (localStorageCodeInput != undefined) {
+		codeTextArea.value = localStorageCodeInput;
+		writeEditorResultAndHighlight(localStorageCodeInput);
+	} else {
+		codeTextArea.value = "";
+	}
+
+	// If the input is not empty, signalise that code was restored
+	if (codeTextArea.value.trim() !== "") {
+		textSavingState.innerHTML = `<p class="gray-text">Code restored :)</p>`;
+	}
+});
+
+// Warmup the compiler to speed up future compilations
+window.addEventListener("DOMContentLoaded", async () => {
+	// Add loading message (Don't switch the compiler output window though)
+	compilerOutput = "--- Loading compiler... ---";
+
+	// Ensure we switch to the stored version, when the page is loaded
+	const storedVersion = getKipperVersion();
+	if (storedVersion !== null) {
+		await switchVersion(storedVersion);
+	}
+
+	// Warm up the compiler
+	warmUp = warmUpCompiler();
+
+	// Afterwards display the ready message
+	compilerOutput = "--- Kipper Compiler ready for compilation --- ";
+});
+
+// Playground menu buttons handling
+runCodeButton.addEventListener("click", runCode);
+copyCodeButton.addEventListener("click", copyEditorContent);
+clearContentButton.addEventListener("click", clearEditorContent);
+
+// Version selector button
+versionSelectorButton.addEventListener("click", toggleVersionDropdownVisibility);
+
+// Sidebar button handling
+consoleOutputButton.addEventListener("click", switchToConsoleOutput);
+compilerOutputButton.addEventListener("click", switchToCompilerOutput);
+
+// Version selector dropdown handling (clicking on a version)
+const versionSelectorDropdownItems = document.querySelectorAll("#versions-dropdown .version-selector-button-wrapper");
+versionSelectorDropdownItems.forEach((item) => {
+	item.addEventListener("click", async () => {
+		// Set the version based on the data field of the element
+		const version = item.getAttribute("data-version");
+		if (version !== null) {
+			await switchVersion(version);
+			disableVersionDropdownVisibility(); // Hide the dropdown
+		}
+	});
+});
+
+// Highlight new input
+codeTextArea.addEventListener("input", (event) => {
+	const givenTextArea: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
+	writeEditorResultAndHighlight(givenTextArea.value);
+});
+
+// Ensure the code text area stays properly formatted
+codeTextArea.addEventListener("scroll", syncTextAreaSizeAndScroll);
+codeTextArea.addEventListener("keydown", checkForTab);
+
+// Properly configure the sizes of the items in the browser window. This should set every item relative to the maximum
+// possible space available.
+window.addEventListener("DOMContentLoaded", setEditorAndConsoleSizes);
+window.addEventListener("resize", setEditorAndConsoleSizes);
+
+// Runtime variable for the writing event listener
+let cancel;
+let spinning: boolean;
+
+// Adding keyup listener
+codeTextArea.addEventListener("keyup", (event) => {
+	// if cancel exists / is active -> clear timeout
+	if (cancel) clearTimeout(cancel);
+
+	// creating the new timeout and assigning it, if the user types more
+	// the timeout will be cancelled and restarted, so that the caching is
+	// only done when the user finished typing!
+	cancel = setTimeout(() => {
+		const givenTextArea: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
+		localStorage.setItem(localStorageIdentifier, givenTextArea.value);
+
+		spinning = false;
+		textSavingState.innerHTML = `<p class="gray-text">Code Saved!</p>`;
+	}, 1000);
+
+	if (!spinning) {
+		textSavingState.innerHTML = `<div id="text-save-spinner" class="spinner">
+        <!-- This may look stupid, but don't delete it -->
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p class="gray-text">Saving...</p>
+    `;
+		spinning = true;
+	}
+});
