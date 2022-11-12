@@ -31,6 +31,7 @@ const clearContentButton: HTMLButtonElement = document.querySelector("#clear-con
 
 // Version selector button
 const versionSelectorButton: HTMLButtonElement = document.querySelector("#versions-button button");
+const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#versions-button button span");
 
 // Sidebar editor fields
 const shellOutput: HTMLDivElement = document.querySelector("#shell-output");
@@ -39,6 +40,12 @@ const shellOutputResult: HTMLElement = document.querySelector("#shell-sidebar-hi
 // Sidebar buttons
 const consoleOutputButton: HTMLButtonElement = document.querySelector("#console-output-button button");
 const compilerOutputButton: HTMLButtonElement = document.querySelector("#compiler-output-button button");
+
+// Active version of the compiler.
+// This will be used to check whether the version selection was changed before starting a new compilation,
+// so that we can ensure the selected version is used instead of the old one. This value will only be changed
+// when the version is passed onto the compiler (e.g. the version has been loaded).
+let activeEnvVersion: string = getKipperVersion();
 
 // Global web worker that will run the code
 let worker: Worker = createCompilerWebWorker();
@@ -59,7 +66,10 @@ let warmUp: Promise<void> | undefined = undefined;
  */
 function ensureVersionIsSet(): void {
 	if (!localStorage.getItem("kipperVersion")) {
-		localStorage.setItem("kipperVersion", "latest");
+		// Get the default version from the dropdown (EJS will have handled this and rendered the correct version)
+		const defaultVersion = versionSelectorButtonVersionText.innerText.replace("v", "");
+
+		localStorage.setItem("kipperVersion", defaultVersion);
 	}
 }
 
@@ -68,6 +78,15 @@ function ensureVersionIsSet(): void {
  */
 function getKipperVersion(): string {
 	ensureVersionIsSet();
+	return getKipperVersionUnsafe()!;
+}
+
+/**
+ * Unsafe version of {@link getKipperVersion}, which does not ensure that the version is set.
+ *
+ * This means it may return null if there hasn't been a version set before.
+ */
+function getKipperVersionUnsafe(): string | null {
 	return localStorage.getItem("kipperVersion");
 }
 
@@ -79,17 +98,7 @@ function setKipperVersion(version: string) {
 	localStorage.setItem("kipperVersion", version);
 
 	// Set the version in the dropdown button
-	versionSelectorButton.innerHTML = `v${version}`;
-}
-
-/**
- * Switches the version of the compiler of the playground.
- */
-async function switchVersion(version: string) {
-	setKipperVersion(version);
-
-	// Safely relaunch the worker using the new preset version
-	await safeRelaunchWorker();
+	versionSelectorButtonVersionText.innerHTML = `v${version}`;
 }
 
 /**
@@ -113,8 +122,19 @@ function createCompilerWebWorker(): Worker {
 	);
 
 	// Send the version to the worker
-	newWorker.postMessage(getKipperVersion());
+	activeEnvVersion = getKipperVersion();
+	newWorker.postMessage(activeEnvVersion);
 	return newWorker;
+}
+
+/**
+ * Ensure that the Kipper Compiler is using the latest selected version.
+ */
+function ensureCompilerWebWorkerIsUpToDate(): void {
+	if (getKipperVersionUnsafe() !== activeEnvVersion) {
+		// Create a new worker and set it as the current worker
+		worker = createCompilerWebWorker();
+	}
 }
 
 /**
@@ -171,6 +191,9 @@ async function runCode(): Promise<void> {
 			}
 		}
 
+		// Ensure that the compiler is using the latest selected version
+		ensureCompilerWebWorkerIsUpToDate();
+
 		console.log("Reading editor content and preparing compilation");
 
 		// Enable compiler logs
@@ -209,6 +232,7 @@ async function runCode(): Promise<void> {
 						// Enable output to 'stdout'
 						switchToConsoleOutput();
 						running = true;
+						compiling = false;
 					} else {
 						// Abort because of the error
 						await stopCode();
@@ -269,30 +293,16 @@ async function stopCode(): Promise<void> {
 	switchButtonToRun();
 	await safeAbortWorker();
 
-	if (compiling) {
+	if (compiling || !consoleOutputSelected) {
 		switchToCompilerOutput();
 		writeLineToCompilerOutput("\nCompilation terminated.");
-
-		compiling = false;
-	} else if (running) {
+	} else if (running || consoleOutputSelected) {
 		switchToConsoleOutput();
 		printProgramExitCode(statusFailure);
+	} // If nothing is going on rn, just keep the console output as it is
 
-		running = false;
-	}
-
-	// If nothing is going on rn, just return
-}
-
-/**
- * Safely relaunches the worker by aborting it and making sure a new instance is created.
- */
-async function safeRelaunchWorker(): Promise<void> {
-	// Stop the worker
-	await stopCode();
-
-	// Recreate the worker
-	worker = createCompilerWebWorker();
+	compiling = false;
+	running = false;
 }
 
 /**
@@ -595,9 +605,10 @@ window.addEventListener("DOMContentLoaded", async () => {
 	compilerOutput = "--- Loading compiler... ---";
 
 	// Ensure we switch to the stored version, when the page is loaded
-	const storedVersion = getKipperVersion();
+	const storedVersion = getKipperVersionUnsafe();
 	if (storedVersion !== null) {
-		await switchVersion(storedVersion);
+		// Switch to the stored version if there has been a previous session
+		setKipperVersion(storedVersion);
 	}
 
 	// Warm up the compiler
@@ -626,7 +637,7 @@ versionSelectorDropdownItems.forEach((item) => {
 		// Set the version based on the data field of the element
 		const version = item.getAttribute("data-version");
 		if (version !== null) {
-			await switchVersion(version);
+			setKipperVersion(version);
 			disableVersionDropdownVisibility(); // Hide the dropdown
 		}
 	});
