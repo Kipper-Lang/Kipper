@@ -153,17 +153,25 @@
     }
   }
 
-  .playground-button-wrapper button {
-    padding: 1rem 1rem;
-    background-color: white;
-    border: none;
-    cursor: pointer;
+  .playground-button-wrapper {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 
-    &:hover {
-      color: var(--scheme-primary);
-      background-color: var(--scheme-gray);
+    button {
+      flex-grow: 1;
+      padding: 1rem 1rem;
+      background-color: white;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--scheme-primary);
+        background-color: var(--scheme-gray);
+      }
     }
   }
+
 
   /* Sidebar styling */
   #shell-sidebar {
@@ -237,4 +245,5 @@
       }
     }
   }
+
 }
