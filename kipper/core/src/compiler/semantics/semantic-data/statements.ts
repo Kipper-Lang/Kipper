@@ -20,12 +20,12 @@ export interface IfStatementSemantics extends SemanticData {
 	 * The condition of the if-statement.
 	 * @since 0.9.0
 	 */
-	condition: Expression<any, any>;
+	condition: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The body of the if-statement.
 	 * @since 0.9.0
 	 */
-	ifBranch: Statement<any, any>;
+	ifBranch: Statement<ExpressionSemantics, ExpressionTypeSemantics>;
 	/**
 	 * The alternative (optional) branch of the if-statement. This alternative branch can either be:
 	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
@@ -34,8 +34,38 @@ export interface IfStatementSemantics extends SemanticData {
 	 * - Nothing (undefined), if it wasn't specified and the if statement does not have any more branches.
 	 * @since 0.9.0
 	 */
-	elseBranch?: IfStatement | Statement<any, any>;
+	elseBranch?: IfStatement | Statement<ExpressionSemantics, ExpressionTypeSemantics>;
 }
+
+/**
+ * Semantics for AST Node {@link IterationStatement}.
+ * @since 0.10.0
+ */
+export interface IterationStatementSemantics extends SemanticData {
+	/**
+	 * The loop condition, which, if it evaluates to true will trigger the loop to continue executing.
+	 * @since 0.10.0
+	 */
+	loopCondition: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
+
+/**
+ * Semantics for AST Node {@link DoWhileLoopStatement}.
+ * @since 0.10.0
+ */
+export interface DoWhileLoopStatementSemantics extends IterationStatementSemantics {}
+
+/**
+ * Semantics for AST Node {@link WhileLoopStatement}.
+ * @since 0.10.0
+ */
+export interface WhileLoopStatementSemantics extends IterationStatementSemantics {}
+
+/**
+ * Semantics for AST Node {@link ForLoopStatement}.
+ * @since 0.10.0
+ */
+export interface ForLoopStatementSemantics extends IterationStatementSemantics {}
 
 /**
  * Semantics for AST Node {@link JumpStatement}.

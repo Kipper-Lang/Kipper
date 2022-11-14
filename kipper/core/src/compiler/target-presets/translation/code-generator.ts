@@ -23,7 +23,6 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	ListPrimaryExpression,
 	LogicalAndExpression,
@@ -41,7 +40,13 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../../semantics";
-import { ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
+import {
+	DoWhileLoopStatement,
+	ForLoopStatement,
+	ReturnStatement,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
+} from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableASTNode } from "../../parser";
 
@@ -122,9 +127,19 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract expressionStatement: TargetASTNodeCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>>;
 
 	/**
-	 * Translates a {@link IterationStatement} into a specific language.
+	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract iterationStatement: TargetASTNodeCodeGenerator<IterationStatement, Array<TranslatedCodeLine>>;
+	public abstract doWhileLoopStatement: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract whileLoopStatement: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract forLoopStatement: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.

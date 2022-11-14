@@ -12,7 +12,15 @@
  * @since 0.1.0
  */
 import type { compilableNodeChild, compilableNodeParent, NoSemantics, NoTypeSemantics, TypeData } from "../../parser/";
-import { IfStatementContext, ReturnStatementContext, SemanticData, SwitchStatementContext } from "../../parser/";
+import {
+	SemanticData,
+	DoWhileLoopIterationStatementContext,
+	ForLoopIterationStatementContext,
+	IfStatementContext,
+	ReturnStatementContext,
+	SwitchStatementContext,
+	WhileLoopIterationStatementContext,
+} from "../../parser/";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
@@ -27,13 +35,18 @@ import {
 	CompilableASTNode,
 	CompoundStatementContext,
 	ExpressionStatementContext,
-	IterationStatementContext,
 	JumpStatementContext,
 } from "../../parser";
 import { LocalScope } from "../../local-scope";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { FunctionScope } from "../../function-scope";
 import { FunctionDeclaration } from "./definitions";
+import {
+	DoWhileLoopStatementSemantics,
+	ForLoopStatementSemantics,
+	IterationStatementSemantics,
+	WhileLoopStatementSemantics,
+} from "../semantic-data";
 
 /**
  * Every antlr4 statement ctx type
@@ -43,7 +56,9 @@ export type antlrStatementCtxType =
 	| IfStatementContext
 	| SwitchStatementContext
 	| ExpressionStatementContext
-	| IterationStatementContext
+	| DoWhileLoopIterationStatementContext
+	| WhileLoopIterationStatementContext
+	| ForLoopIterationStatementContext
 	| JumpStatementContext
 	| ReturnStatementContext;
 
@@ -67,14 +82,17 @@ export class StatementASTNodeFactory {
 			return new SwitchStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ExpressionStatementContext) {
 			return new ExpressionStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof IterationStatementContext) {
-			return new IterationStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof DoWhileLoopIterationStatementContext) {
+			return new DoWhileLoopStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof WhileLoopIterationStatementContext) {
+			return new WhileLoopStatement(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ForLoopIterationStatementContext) {
+			return new ForLoopStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ReturnStatementContext) {
 			return new ReturnStatement(antlrRuleCtx, parent);
-		} else {
-			// Can only be {@link JumpStatementContext}
-			return new JumpStatement(antlrRuleCtx, parent);
 		}
+		// Can only be {@link JumpStatementContext}
+		return new JumpStatement(antlrRuleCtx, parent);
 	}
 }
 
@@ -428,17 +446,26 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> {
+export abstract class IterationStatement<
+	Semantics extends IterationStatementSemantics,
+	TypeSemantics extends NoTypeSemantics,
+> extends Statement<Semantics, TypeSemantics> {}
+
+/**
+ * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
+ */
+export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatementSemantics, NoTypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: IterationStatementContext;
+	protected override readonly _antlrRuleCtx: DoWhileLoopIterationStatementContext;
 
 	protected readonly _children: Array<compilableNodeChild>;
 
-	constructor(antlrRuleCtx: IterationStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: DoWhileLoopIterationStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -454,7 +481,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrRuleCtx(): IterationStatementContext {
+	public override get antlrRuleCtx(): DoWhileLoopIterationStatementContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -465,7 +492,7 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
 			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Iteration statements have not been implemented yet."));
+			.notImplementedError(new KipperNotImplementedError("Do-While loop statements have not been implemented yet."));
 	}
 
 	/**
@@ -487,9 +514,146 @@ export class IterationStatement extends Statement<NoSemantics, NoTypeSemantics> 
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IterationStatement> = this.semanticAnalyser.iterationStatement;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<IterationStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.iterationStatement;
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement> =
+		this.semanticAnalyser.doWhileLoopStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.doWhileLoopStatement;
+}
+
+/**
+ * While loop statement class, which represents a while loop statement in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
+ */
+export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSemantics, NoTypeSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: WhileLoopIterationStatementContext;
+
+	protected readonly _children: Array<compilableNodeChild>;
+
+	constructor(antlrRuleCtx: WhileLoopIterationStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<compilableNodeChild> {
+		return this._children;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this statement.
+	 */
+	public override get antlrRuleCtx(): WhileLoopIterationStatementContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("While-loop statements have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<WhileLoopStatement> = this.semanticAnalyser.whileLoopStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.whileLoopStatement;
+}
+
+/**
+ * For loop statement class, which represents a for loop statement in the Kipper language and is compilable
+ * using {@link translateCtxAndChildren}.
+ */
+export class ForLoopStatement extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: ForLoopIterationStatementContext;
+
+	protected readonly _children: Array<compilableNodeChild>;
+
+	constructor(antlrRuleCtx: ForLoopIterationStatementContext, parent: compilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
+
+	/**
+	 * The children of this parse token.
+	 */
+	public get children(): Array<compilableNodeChild> {
+		return this._children;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this statement.
+	 */
+	public override get antlrRuleCtx(): ForLoopIterationStatementContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
+	}
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		// TODO!
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		// TODO!
+	}
+
+	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ForLoopStatement> = this.semanticAnalyser.forLoopStatement;
+	targetCodeGenerator: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>> =
+		this.codeGenerator.forLoopStatement;
 }
 
 /**

@@ -5,19 +5,23 @@
  * @since 0.10.0
  */
 import type {
+	KipperType,
+	TranslatedCodeLine,
+	TranslatedExpression,
+	LogicalExpressionSemantics,
+	ComparativeExpressionSemantics,
+	ExpressionSemantics,
+	ExpressionTypeSemantics,
 	AdditiveExpression,
 	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
-	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
 	Expression,
-	ExpressionSemantics,
 	ExpressionStatement,
-	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
@@ -26,14 +30,11 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	KipperProgramContext,
-	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
-	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -44,18 +45,19 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
 import {
 	CompoundStatement,
+	DoWhileLoopStatement,
+	ForLoopStatement,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
 import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
@@ -222,9 +224,23 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link IterationStatement} into the JavaScript language.
+	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
 	 */
-	iterationStatement = async (node: IterationStatement): Promise<Array<TranslatedCodeLine>> => {
+	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 */
+	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 */
+	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 

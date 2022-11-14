@@ -22,7 +22,6 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	ListPrimaryExpression,
 	LogicalAndExpression,
@@ -39,11 +38,14 @@ import type {
 	VariableDeclaration,
 } from "@kipper/core";
 import {
+	DoWhileLoopStatement,
+	ForLoopStatement,
 	IfStatement,
 	KipperTargetSemanticAnalyser,
 	ReservedIdentifierOverwriteError,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
 } from "@kipper/core";
 import { getJavaScriptBuiltInIdentifier } from "./tools";
 
@@ -171,9 +173,19 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	expressionStatement = async (node: ExpressionStatement) => {};
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link IterationStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopStatement} instances.
 	 */
-	iterationStatement = async (node: IterationStatement) => {};
+	doWhileLoopStatement = async (node: DoWhileLoopStatement) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link WhileLoopStatement} instances.
+	 */
+	whileLoopStatement = async (node: WhileLoopStatement) => {};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ForLoopStatement} instances.
+	 */
+	forLoopStatement = async (node: ForLoopStatement) => {};
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.

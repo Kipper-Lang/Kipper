@@ -24,7 +24,6 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	ListPrimaryExpression,
 	LogicalAndExpression,
@@ -40,7 +39,14 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "../semantics";
-import { KipperSemanticErrorHandler, ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../semantics";
+import {
+	DoWhileLoopStatement,
+	ForLoopStatement,
+	KipperSemanticErrorHandler,
+	ReturnStatement,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
+} from "../semantics";
 import type { CompilableASTNode } from "../parser";
 
 /**
@@ -78,9 +84,19 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract expressionStatement: TargetASTNodeSemanticAnalyser<ExpressionStatement>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link IterationStatement} instances.
+	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract iterationStatement: TargetASTNodeSemanticAnalyser<IterationStatement>;
+	public abstract doWhileLoopStatement: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract whileLoopStatement: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract forLoopStatement: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
