@@ -58,14 +58,14 @@ import {
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
-	getConversionFunctionIdentifier
+	getConversionFunctionIdentifier,
 } from "@kipper/core";
 import {
 	createJSFunctionSignature,
 	getJavaScriptBuiltInIdentifier,
 	getJSFunctionSignature,
 	indentLines,
-	removeBraces
+	removeBraces,
 } from "./tools";
 import { version } from "./index";
 
@@ -196,7 +196,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}
 		}
 
-		// Return with the second branch added. (Since th	is function calls itself indirectly recursively, there can be as
+		// Return with the second branch added. (Since the function calls itself indirectly recursively, there can be as
 		// many else-ifs as the user wants.)
 		return [
 			...baseCode.slice(0, baseCode.length - 1), // Add all lines except the last one that ends the if-statement
@@ -248,9 +248,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const isCompound = semanticData.loopBody instanceof CompoundStatement;
 
 		return [
-			["while", " ", "(",  ...condition, ")", " ", isCompound ? "{" : ""],
-			...indentLines(removeBraces(statement)),
-			[isCompound ? "}" : ""]
+			["while", " ", "(", ...condition, ")", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "}" : ""],
 		];
 	};
 
