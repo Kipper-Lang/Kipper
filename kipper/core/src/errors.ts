@@ -275,11 +275,8 @@ export class MissingFunctionBodyError extends KipperSyntaxError {
  */
 export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 	private readonly _recognizer: Recognizer<Token, any>;
-
 	private readonly _offendingSymbol: Token | undefined;
-
 	private readonly _msg: string;
-
 	private readonly _error:
 		| RecognitionException
 		| NoViableAltException
@@ -289,11 +286,11 @@ export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 		| undefined;
 
 	/**
-	 * KipperSyntaxError Constructor
-	 * @param recognizer The Antlr4 Parser - should normally always be KipperParser
-	 * @param offendingSymbol The token that caused the error
-	 * @param msg The msg that was generated as the error message in the Parser
-	 * @param error The error instance that raised the syntax error in the Lexer
+	 * Create a new {@link LexerOrParserSyntaxError} instance.
+	 * @param recognizer The Antlr4 Parser - should normally always be KipperParser.
+	 * @param offendingSymbol The token that caused the error.
+	 * @param msg The msg that was generated as the error message in the Parser.
+	 * @param error The error instance that raised the syntax error in the Lexer.
 	 */
 	public constructor(
 		recognizer: Recognizer<Token, any>,
@@ -308,7 +305,6 @@ export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 			| undefined,
 	) {
 		super(msg);
-
 		this._recognizer = recognizer;
 		this._offendingSymbol = offendingSymbol;
 		this._msg = msg;
@@ -316,28 +312,28 @@ export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 	}
 
 	/**
-	 * Returns the Antlr4 Parser - should normally always be {@link KipperParser}
+	 * Returns the Antlr4 Parser - should normally always be {@link KipperParser}.
 	 */
 	public get recognizer(): Recognizer<Token, any> {
 		return this._recognizer;
 	}
 
 	/**
-	 * Returns the token that caused the error
+	 * Returns the token that caused the error.
 	 */
 	public get offendingSymbol(): Token | undefined {
 		return this._offendingSymbol;
 	}
 
 	/**
-	 * Returns the msg that was generated as the error message in the Parser
+	 * Returns the msg that was generated as the error message in the Parser.
 	 */
 	public get msg(): string {
 		return this._msg;
 	}
 
 	/**
-	 * Returns the error instance that raised the syntax error in the Lexer
+	 * Returns the error instance that raised the syntax error in the Lexer.
 	 */
 	public get error():
 		| RecognitionException
@@ -348,11 +344,6 @@ export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 		| undefined {
 		return this._error;
 	}
-
-	/**
-	 * Reports the syntax error and writes onto the console
-	 */
-	public async reportError(): Promise<void> {}
 }
 
 /**
