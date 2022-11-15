@@ -58,9 +58,15 @@ import {
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
+	getConversionFunctionIdentifier
 } from "@kipper/core";
-import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
-import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
+import {
+	createJSFunctionSignature,
+	getJavaScriptBuiltInIdentifier,
+	getJSFunctionSignature,
+	indentLines,
+	removeBraces
+} from "./tools";
 import { version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -234,7 +240,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
 	 */
 	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["while", " ", "(",  ...condition, ")", " ", isCompound ? "{" : ""],
+			...indentLines(removeBraces(statement)),
+			[isCompound ? "}" : ""]
+		];
 	};
 
 	/**

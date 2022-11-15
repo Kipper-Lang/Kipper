@@ -8,7 +8,6 @@ import { Interval } from "antlr4ts/misc/Interval";
 import { ParserRuleContext, Token } from "antlr4ts";
 import { ParseTree } from "antlr4ts/tree";
 import { CharStream } from "antlr4ts/CharStream";
-import { TranslatedCodeLine } from "./compiler";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
@@ -89,16 +88,4 @@ export function titleCase(str: string): string {
  */
 export function getConversionFunctionIdentifier(originalType: string, destType: string): string {
 	return `${originalType}To${titleCase(destType)}`;
-}
-
-/**
- * Indents the lines of the {@link arr} with the specified {@link spaces number of spaces}.
- * @param arr The array of code lines.
- * @param spaces The number of spaces to add at the start of every line.
- */
-export function indentLines(arr: Array<TranslatedCodeLine>, spaces: number = 2) {
-	return arr.map((line: TranslatedCodeLine) => {
-		line[0] = `${" ".repeat(spaces)}${line[0]}`;
-		return line;
-	});
 }

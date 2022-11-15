@@ -4,12 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { SemanticData } from "../../parser";
+import type { SemanticData, TypeData } from "../../parser";
 import type { Expression, IfStatement, Statement } from "../language";
-import { FunctionDeclaration } from "../language";
-import { JmpStatementType } from "../const";
-import { ExpressionSemantics } from "./expressions";
-import { ExpressionTypeSemantics } from "../type-data";
+import type { FunctionDeclaration } from "../language";
+import type { JmpStatementType } from "../const";
+import type { ExpressionSemantics } from "./expressions";
+import type { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Semantics for AST Node {@link IfStatement}.
@@ -25,7 +25,7 @@ export interface IfStatementSemantics extends SemanticData {
 	 * The body of the if-statement.
 	 * @since 0.9.0
 	 */
-	ifBranch: Statement<ExpressionSemantics, ExpressionTypeSemantics>;
+	ifBranch: Statement<SemanticData, TypeData>;
 	/**
 	 * The alternative (optional) branch of the if-statement. This alternative branch can either be:
 	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
@@ -34,7 +34,7 @@ export interface IfStatementSemantics extends SemanticData {
 	 * - Nothing (undefined), if it wasn't specified and the if statement does not have any more branches.
 	 * @since 0.9.0
 	 */
-	elseBranch?: IfStatement | Statement<ExpressionSemantics, ExpressionTypeSemantics>;
+	elseBranch?: IfStatement | Statement<SemanticData, TypeData>;
 }
 
 /**
@@ -47,6 +47,12 @@ export interface IterationStatementSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	loopCondition: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	/**
+	 * The body of the loop, which is handled and executed depending on the loop type and the value of
+	 * {@link loopCondition}.
+	 * @since 0.10.0
+	 */
+	loopBody: Statement<SemanticData, TypeData>;
 }
 
 /**
@@ -59,7 +65,13 @@ export interface DoWhileLoopStatementSemantics extends IterationStatementSemanti
  * Semantics for AST Node {@link WhileLoopStatement}.
  * @since 0.10.0
  */
-export interface WhileLoopStatementSemantics extends IterationStatementSemantics {}
+export interface WhileLoopStatementSemantics extends IterationStatementSemantics {
+	/**
+	 * The body of the loop, which is executed as long as {@link loopCondition} is true.
+	 * @since 0.10.0
+	 */
+	loopBody: Statement<SemanticData, TypeData>;
+}
 
 /**
  * Semantics for AST Node {@link ForLoopStatement}.

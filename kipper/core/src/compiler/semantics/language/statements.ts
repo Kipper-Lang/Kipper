@@ -73,7 +73,10 @@ export class StatementASTNodeFactory {
 	 * @param parent The file context class that will be assigned to the instance.
 	 * @since 0.9.0
 	 */
-	public static create(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent): Statement<any, any> {
+	public static create(
+		antlrRuleCtx: antlrStatementCtxType,
+		parent: compilableNodeParent,
+	): Statement<SemanticData, TypeData> {
 		if (antlrRuleCtx instanceof CompoundStatementContext) {
 			return new CompoundStatement(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IfStatementContext) {
@@ -151,7 +154,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: CompoundStatementContext;
 
-	protected readonly _children: Array<Statement<any, any>>;
+	protected readonly _children: Array<Statement<SemanticData, TypeData>>;
 
 	private readonly _localScope: LocalScope | FunctionScope;
 
@@ -171,7 +174,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Statement<any, any>> {
+	public get children(): Array<Statement<SemanticData, TypeData>> {
 		return this._children;
 	}
 
@@ -235,7 +238,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 */
 	protected override readonly _antlrRuleCtx: IfStatementContext;
 
-	protected readonly _children: Array<Expression<any, any> | Statement<any, any>>;
+	protected readonly _children: Array<Expression<any, any> | Statement<SemanticData, TypeData>>;
 
 	constructor(antlrRuleCtx: IfStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -249,7 +252,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 * May contain both {@link Expression expressions} and {@link Statement statements}, as it will always contain
 	 * an expression at index 03 to represent the condition.
 	 */
-	public get children(): Array<Expression<any, any> | Statement<any, any>> {
+	public get children(): Array<Expression<any, any> | Statement<SemanticData, TypeData>> {
 		return this._children;
 	}
 
@@ -267,9 +270,9 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	public async primarySemanticAnalysis(): Promise<void> {
 		// There will be always at least two children
 		const condition: Expression<any, any> = <Expression<any, any>>this.children[0];
-		const body: Statement<any, any> = <Statement<any, any>>this.children[1];
-		const alternativeBranch: IfStatement | Statement<any, any> | null =
-			this.children.length > 2 ? <IfStatement | Statement<any, any>>this.children[2] : null;
+		const body: Statement<SemanticData, TypeData> = <Statement<SemanticData, TypeData>>this.children[1];
+		const alternativeBranch: IfStatement | Statement<SemanticData, TypeData> | null =
+			this.children.length > 2 ? <IfStatement | Statement<SemanticData, TypeData>>this.children[2] : null;
 
 		// Ensure that the children are fully present and not undefined
 		if (!condition || !body) {
@@ -318,7 +321,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
 
-	protected readonly _children: Array<Statement<any, any>>;
+	protected readonly _children: Array<Statement<SemanticData, TypeData>>;
 
 	constructor(antlrRuleCtx: SwitchStatementContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -329,7 +332,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	/**
 	 * The children of this AST node.
 	 */
-	public get children(): Array<Statement<any, any>> {
+	public get children(): Array<Statement<SemanticData, TypeData>> {
 		return this._children;
 	}
 
@@ -559,9 +562,13 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("While-loop statements have not been implemented yet."));
+		const loopCondition = <Expression<ExpressionSemantics, ExpressionTypeSemantics>>this.children[0];
+		const loopBody = <Statement<SemanticData, TypeData>>this.children[1];
+
+		this.semanticData = {
+			loopCondition: loopCondition,
+			loopBody: loopBody,
+		};
 	}
 
 	/**
@@ -569,8 +576,9 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+	public primarySemanticTypeChecking(): Promise<void> {
+		// While-loop statements will never have type checking
+		return Promise.resolve(undefined);
 	}
 
 	/**
