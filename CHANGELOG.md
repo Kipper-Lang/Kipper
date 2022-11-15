@@ -45,24 +45,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     included in the `JumpStatement` class.
   - `FunctionScope`, which is a subclass of `Scope` that represents a function scope with registered parameters.
 - New functions:
-  - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
-  - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
-  - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
+  - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
+  - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
+  - `ASTNode.getTypeSemanticData()`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
-  - `CompilableASTNode.semanticTypeChecking`, which performs type checking for the AST node and its children nodes.
+  - `CompilableASTNode.semanticTypeChecking()`, which performs type checking for the AST node and its children nodes.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
-  - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
+  - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
-  - `Scope.getReferenceRecursively`, which tries to evaluate a reference recursively in the scope and its parent scopes.
-  - `KipperTypeChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
-  - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
-  - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
-  - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
-  - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
-  - `KipperSemanticChecker.referenceDefined`, which asserts that the specified reference is defined and can be used.
-  - `KipperSemanticChecker.validFunctionBody`, which ensures the body of a function is a compound statement.
-  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody`, which ensures that all code paths of a non-void
+  - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent scopes.
+  - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
+  - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
+  - `KipperSemanticChecker.identifierUnused()`, which asserts that the specified identifier is unused.
+  - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
+  - `KipperSemanticChecker.referenceDefined()`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.
+  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
     function return a proper value.
+  - `removeBraces` for removing braces due to formatting reasons.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -130,6 +131,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
+  - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
 
 ### Removed
 
