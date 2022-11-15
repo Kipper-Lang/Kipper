@@ -88,18 +88,4 @@ describe("Not implemented", () => {
 		}
 		assert.fail("Expected NotImplementedError");
 	});
-
-	it("While Loop", async () => {
-		try {
-			await new KipperCompiler().compile("while (true) {}", {
-				abortOnFirstError: true,
-				target: defaultTarget,
-			});
-		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "KipperNotImplementedError", "Expected proper error");
-			assert.equal((<KipperError>e).name, "NotImplementedError", "Expected proper error");
-			return;
-		}
-		assert.fail("Expected NotImplementedError");
-	});
 });

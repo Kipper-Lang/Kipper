@@ -15,7 +15,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: number;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: number;"), "Invalid TypeScript code");
 		});
 	});
 
@@ -27,7 +27,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: number = 4;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: number = 4;"), "Invalid TypeScript code");
 		});
 
 		it("const", async () => {
@@ -37,7 +37,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("const x: number = 4;"), "Expected different TypeScript code");
+			assert(instance.write().includes("const x: number = 4;"), "Invalid TypeScript code");
 		});
 	});
 
@@ -49,7 +49,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: number = 4;\nx = 5;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: number = 4;\nx = 5;"), "Invalid TypeScript code");
 		});
 
 		it("str", async () => {
@@ -59,7 +59,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Expected different TypeScript code");
+			assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Invalid TypeScript code");
 		});
 	});
 
@@ -71,7 +71,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("__kipper.print = __kipper.print;"), "Expected different TypeScript code");
+			assert(instance.write().includes("__kipper.print = __kipper.print;"), "Invalid TypeScript code");
 		});
 
 		it("two expressions", async () => {
@@ -81,8 +81,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("12 * 93;"), "Expected different TypeScript code");
-			assert(instance.write().includes('"5" + "1";'), "Expected different TypeScript code");
+			assert(instance.write().includes("12 * 93;"), "Invalid TypeScript code");
+			assert(instance.write().includes('"5" + "1";'), "Invalid TypeScript code");
 		});
 
 		it("three expressions", async () => {
@@ -92,9 +92,9 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes('__kipper.print("x");'), "Expected different TypeScript code");
-			assert(instance.write().includes('__kipper.print("y");'), "Expected different TypeScript code");
-			assert(instance.write().includes('__kipper.print("z");'), "Expected different TypeScript code");
+			assert(instance.write().includes('__kipper.print("x");'), "Invalid TypeScript code");
+			assert(instance.write().includes('__kipper.print("y");'), "Invalid TypeScript code");
+			assert(instance.write().includes('__kipper.print("z");'), "Invalid TypeScript code");
 		});
 	});
 
@@ -106,8 +106,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: void = void(0);"), "Expected different TypeScript code");
-			assert(instance.write().includes("let y: void = undefined;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: void = void(0);"), "Invalid TypeScript code");
+			assert(instance.write().includes("let y: void = undefined;"), "Invalid TypeScript code");
 		});
 
 		it("null", async () => {
@@ -117,7 +117,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: null = null;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: null = null;"), "Invalid TypeScript code");
 		});
 
 		it("undefined", async () => {
@@ -127,8 +127,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("let x: undefined = undefined;"), "Expected different TypeScript code");
-			assert(instance.write().includes("let y: void = undefined;"), "Expected different TypeScript code");
+			assert(instance.write().includes("let x: undefined = undefined;"), "Invalid TypeScript code");
+			assert(instance.write().includes("let y: void = undefined;"), "Invalid TypeScript code");
 		});
 	});
 
@@ -140,7 +140,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("+4;"), "Expected different TypeScript code");
+			assert(instance.write().includes("+4;"), "Invalid TypeScript code");
 		});
 
 		it("unary minus", async () => {
@@ -150,7 +150,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("-4;"), "Expected different TypeScript code");
+			assert(instance.write().includes("-4;"), "Invalid TypeScript code");
 		});
 
 		// Technically, this is a logical operator, but it's considered a unary operator in Kipper, as it modifies
@@ -162,7 +162,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
-			assert(instance.write().includes("!true;"), "Expected different TypeScript code");
+			assert(instance.write().includes("!true;"), "Invalid TypeScript code");
 		});
 	});
 
@@ -177,11 +177,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -208,11 +205,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -238,11 +232,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -268,11 +259,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -300,11 +288,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -330,11 +315,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -360,11 +342,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -390,11 +369,8 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 				const code = instance.write();
-				assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-				assert(
-					code.includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'),
-					"Expected different TypeScript code",
-				);
+				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+				assert(code.includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				let jsCode = ts.transpile(code);
 
@@ -423,8 +399,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-			assert(code.includes('if (x === 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+			assert.include(code, 'if (x === 4) {\n  __kipper.print("Works");\n}', "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -450,8 +426,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-			assert(code.includes('if (x !== 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+			assert(code.includes('if (x !== 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -477,8 +453,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-			assert(code.includes('if (x < 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+			assert(code.includes('if (x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -504,8 +480,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 4;"), "Expected different TypeScript code");
-			assert(code.includes('if (x <= 5) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
+			assert(code.includes('if (x <= 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -531,8 +507,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 5;"), "Expected different TypeScript code");
-			assert(code.includes('if (x > 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 5;", "Invalid TypeScript code");
+			assert(code.includes('if (x > 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -558,8 +534,8 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("let x: number = 5;"), "Expected different TypeScript code");
-			assert(code.includes('if (x >= 4) {\n  __kipper.print("Works");\n}'), "Expected different TypeScript code");
+			assert.include(code, "let x: number = 5;", "Invalid TypeScript code");
+			assert(code.includes('if (x >= 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			let jsCode = ts.transpile(code);
 
@@ -567,6 +543,135 @@ describe("Core functionality", () => {
 			const prevLog = console.log;
 			console.log = (message: any) => {
 				assert(message === "Works", "Expected different output");
+			};
+
+			// Evaluate expression
+			eval(jsCode);
+
+			// Restore old console.log
+			console.log = prevLog;
+		});
+	});
+
+	describe("If statements", () => {
+		it("Single if-branch", async () => {
+			const stream = new KipperParseStream("if (true) { var x: num = 5; }");
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(code, "if (true) {\n  let x: number = 5;\n}", "Invalid TypeScript code");
+		});
+
+		it("Two if-else branches", async () => {
+			const stream = new KipperParseStream("if (true) { var x: num = 5; } else { var x: num = 5; }");
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"if (true) {\n  let x: number = 5;\n} else {\n  let x: number = 5;\n}",
+				"Invalid TypeScript code",
+			);
+		});
+
+		it("Multi if-else-if branches", async () => {
+			const stream = new KipperParseStream(
+				"if (true) { var x: num = 5; } else if (true) { var x: num = 5; } else { var x: num = 5; }",
+			);
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"if (true) {\n  let x: number = 5;\n} else if (true) {\n  let x: number = 5;\n} else {\n  let x: number =" +
+					" 5;\n}",
+				"Invalid TypeScript code",
+			);
+		});
+	});
+
+	describe("While loop", () => {
+		it("Simple Loop with compound statement", async () => {
+			const stream = new KipperParseStream("var x: num = 1; while (x <= 5) { x += 1; }; print(x as str);");
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(code, "while (x <= 5) {\n  x += 1;\n}", "Invalid TypeScript code");
+
+			let jsCode = ts.transpile(code);
+
+			// Overwrite built-in to access output
+			const prevLog = console.log;
+			console.log = (message: any) => {
+				assert(message === "6", "Expected different output");
+			};
+
+			// Evaluate expression
+			eval(jsCode);
+
+			// Restore old console.log
+			console.log = prevLog;
+		});
+
+		it("Simple Loop with expression statement", async () => {
+			const stream = new KipperParseStream("var x: num = 1; while (x <= 5) x += 1; print(x as str);");
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(code, "while (x <= 5) \n  x += 1;", "Invalid TypeScript code");
+
+			let jsCode = ts.transpile(code);
+
+			// Overwrite built-in to access output
+			const prevLog = console.log;
+			console.log = (message: any) => {
+				assert(message === "6", "Expected different output");
+			};
+
+			// Evaluate expression
+			eval(jsCode);
+
+			// Restore old console.log
+			console.log = prevLog;
+		});
+
+		it("Simple Loop with if statement", async () => {
+			const stream = new KipperParseStream("var x: num = 1; while (x < 5) if (x != 5) x += 1; print(x as str);");
+			const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+			assert(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert(instance.programCtx.stream === stream, "Expected matching streams");
+
+			const code = instance.write();
+			assert.include(code, "while (x < 5) \n  if (x !== 5) {\n    x += 1;\n  }", "Invalid TypeScript code");
+
+			let jsCode = ts.transpile(code);
+
+			// Overwrite built-in to access output
+			const prevLog = console.log;
+			console.log = (message: any) => {
+				assert(message === "5", "Expected different output");
 			};
 
 			// Evaluate expression
@@ -587,7 +692,7 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(code.includes("function test(): void {\n}"), "Expected different TypeScript code");
+			assert.include(code, "function test(): void {\n}", "Invalid TypeScript code");
 		});
 
 		it("Call", async () => {
@@ -599,9 +704,10 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(
-				code.includes('function test(): void {\n  __kipper.print("Works");\n  return;\n}'),
-				"Expected different TypeScript code",
+			assert.include(
+				code,
+				'function test(): void {\n  __kipper.print("Works");\n  return;\n}',
+				"Invalid TypeScript code",
 			);
 
 			let jsCode = ts.transpile(code);
@@ -628,9 +734,10 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(
-				code.includes("function test(): number {\n  return 5;\n}\n__kipper.print(__kipper.numToStr(test()));"),
-				"Expected different TypeScript code",
+			assert.include(
+				code,
+				"function test(): number {\n  return 5;\n}\n__kipper.print(__kipper.numToStr(test()));",
+				"Invalid TypeScript code",
 			);
 
 			let jsCode = ts.transpile(code);
@@ -659,9 +766,10 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.stream === stream, "Expected matching streams");
 
 			const code = instance.write();
-			assert(
-				code.includes("function test(x: number, y: string): number {\n  return x + __kipper.strToNum(y);\n}"),
-				"Expected different TypeScript code",
+			assert.include(
+				code,
+				"function test(x: number, y: string): number {\n  return x + __kipper.strToNum(y);\n}",
+				"Invalid TypeScript code",
 			);
 
 			let jsCode = ts.transpile(code);
