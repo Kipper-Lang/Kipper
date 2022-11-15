@@ -12,12 +12,12 @@ import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 
 export default class Analyse extends Command {
-	static description = "Analyse a Kipper file and validate its syntax and semantic integrity.";
+	static override description = "Analyse a Kipper file and validate its syntax and semantic integrity.";
 
 	// TODO! Add examples when the command moves out of development
-	static examples = [];
+	static override examples = [];
 
-	static args = [
+	static override args = [
 		{
 			name: "file",
 			required: false,
@@ -25,7 +25,7 @@ export default class Analyse extends Command {
 		},
 	];
 
-	static flags: Record<string, IFlag<any>> = {
+	static override flags: Record<string, IFlag<any>> = {
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
@@ -44,7 +44,7 @@ export default class Analyse extends Command {
 		}),
 	};
 
-	async run() {
+	public async run() {
 		const { args, flags } = this.parse(Analyse);
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);

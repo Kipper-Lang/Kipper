@@ -44,7 +44,7 @@ function createTSFunctionSignature(signature: {
  * @since 0.8.0
  */
 export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGenerator {
-	async numToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async numToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.args[0][0];
 
@@ -63,7 +63,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		];
 	}
 
-	async strToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async strToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.args[0][0];
 
@@ -82,7 +82,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		];
 	}
 
-	async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.args[0][0];
 
@@ -101,7 +101,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		];
 	}
 
-	async boolToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async boolToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.args[0][0];
 
@@ -120,7 +120,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		];
 	}
 
-	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.args[0][0];
 
