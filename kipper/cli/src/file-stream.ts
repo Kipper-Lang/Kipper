@@ -59,7 +59,7 @@ export class KipperParseFile extends KipperParseStream {
 	/**
 	 * Returns the absolute Path of the file.
 	 */
-	get absolutePath(): string {
+	public get absolutePath(): string {
 		return this._absolutePath;
 	}
 
@@ -67,14 +67,14 @@ export class KipperParseFile extends KipperParseStream {
 	 * An alternative name to {@link absolutePath}, but this path may be relative.
 	 * @since 0.1.0
 	 */
-	public get filePath(): string {
+	public override get filePath(): string {
 		return super.filePath;
 	}
 
 	/**
 	 * Returns the encoding for this specific file
 	 */
-	get encoding(): BufferEncoding {
+	public get encoding(): BufferEncoding {
 		return this._encoding;
 	}
 
@@ -82,7 +82,7 @@ export class KipperParseFile extends KipperParseStream {
 	 * Returns the path as a {@link path.ParsedPath} instance.
 	 * @since 0.1.0
 	 */
-	get path(): path.ParsedPath {
+	public get path(): path.ParsedPath {
 		return this._path;
 	}
 
@@ -93,7 +93,7 @@ export class KipperParseFile extends KipperParseStream {
 	 * @returns The new {@link KipperParseFile} instance with the set values
 	 * @since 0.1.0
 	 */
-	static async fromFile(filePath: string, encoding: KipperEncoding = "utf8"): Promise<KipperParseFile> {
+	public static async fromFile(filePath: string, encoding: KipperEncoding = "utf8"): Promise<KipperParseFile> {
 		const fileLocation = path.resolve(filePath);
 		const name = (() => {
 			const items1 = fileLocation.split("\\");

@@ -17,7 +17,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	/**
 	 * Translates a {@link FunctionDeclaration} into the TypeScript language.
 	 */
-	functionDeclaration = async (node: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
+	override functionDeclaration = async (node: FunctionDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 
 		// Function signature and body
@@ -31,7 +31,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	/**
 	 * Translates a {@link VariableDeclaration} into the TypeScript language.
 	 */
-	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
+	override variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
 
