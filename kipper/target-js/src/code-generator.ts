@@ -5,19 +5,23 @@
  * @since 0.10.0
  */
 import type {
+	KipperType,
+	TranslatedCodeLine,
+	TranslatedExpression,
+	LogicalExpressionSemantics,
+	ComparativeExpressionSemantics,
+	ExpressionSemantics,
+	ExpressionTypeSemantics,
 	AdditiveExpression,
 	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
-	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
 	Expression,
-	ExpressionSemantics,
 	ExpressionStatement,
-	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
@@ -26,13 +30,11 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	KipperProgramContext,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
-	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -43,21 +45,28 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
 import {
 	CompoundStatement,
+	DoWhileLoopStatement,
+	ForLoopStatement,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
+	getConversionFunctionIdentifier,
 } from "@kipper/core";
-import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
-import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
+import {
+	createJSFunctionSignature,
+	getJavaScriptBuiltInIdentifier,
+	getJSFunctionSignature,
+	indentLines,
+	removeBraces,
+} from "./tools";
 import { version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -187,7 +196,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}
 		}
 
-		// Return with the second branch added. (Since th	is function calls itself indirectly recursively, there can be as
+		// Return with the second branch added. (Since the function calls itself indirectly recursively, there can be as
 		// many else-ifs as the user wants.)
 		return [
 			...baseCode.slice(0, baseCode.length - 1), // Add all lines except the last one that ends the if-statement
@@ -221,9 +230,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link IterationStatement} into the JavaScript language.
+	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
 	 */
-	iterationStatement = async (node: IterationStatement): Promise<Array<TranslatedCodeLine>> => {
+	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 */
+	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["while", " ", "(", ...condition, ")", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "}" : ""],
+		];
+	};
+
+	/**
+	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 */
+	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 

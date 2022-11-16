@@ -9,6 +9,9 @@ import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
 import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { ExternalFunctionDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
+import { ForLoopIterationStatementContext } from "./KipperParser";
+import { WhileLoopIterationStatementContext } from "./KipperParser";
+import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -188,6 +191,45 @@ export interface KipperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitExternalBlockItem?: (ctx: ExternalBlockItemContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `ForLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by the `ForLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `WhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by the `WhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `DoWhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by the `DoWhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnAssignmentExpression`

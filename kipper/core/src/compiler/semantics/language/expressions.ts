@@ -225,10 +225,9 @@ export class ExpressionASTNodeFactory {
 			return new BoolPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof VoidOrNullOrUndefinedPrimaryExpressionContext) {
 			return new VoidOrNullOrUndefinedPrimaryExpression(antlrRuleCtx, parent);
-		} else {
-			// Last remaining possible type {@link AssignmentExpression}
-			return new AssignmentExpression(antlrRuleCtx, parent);
 		}
+		// Last remaining possible type {@link AssignmentExpression}
+		return new AssignmentExpression(antlrRuleCtx, parent);
 	}
 }
 

@@ -215,9 +215,9 @@ switchLabeledStatement
     ;
 
 iterationStatement
-    :   For '(' forCondition ')' statement
-    |   While '(' expression ')' statement
-    |   Do statement While '(' expression ')' endOfLine
+    :   For '(' forCondition ')' statement # ForLoopIterationStatement
+    |   While '(' expression ')' statement # WhileLoopIterationStatement
+    |   Do statement While '(' expression ')' endOfLine # DoWhileLoopIterationStatement
     ;
 
 forCondition

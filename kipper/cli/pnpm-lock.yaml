@@ -12,12 +12,12 @@ specifiers:
   '@oclif/plugin-help': ^5.0.0
   '@oclif/plugin-update': ^3.0.0
   '@oclif/plugin-warn-if-update-available': ^2.0.4
-  '@oclif/test': 2.2.0
+  '@oclif/test': 2.2.10
   '@sinonjs/fake-timers': 9.1.2
-  '@types/node': ^17.0.34
+  '@types/node': ^18.0.0
   '@types/sinon': 10.0.13
   antlr4ts: ^0.5.0-alpha.4
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
   rimraf: ^3.0.2
@@ -38,19 +38,19 @@ dependencies:
   '@oclif/plugin-help': 5.1.12
   '@oclif/plugin-update': 3.0.0
   '@oclif/plugin-warn-if-update-available': 2.0.4
-  '@types/node': 17.0.45
+  '@types/node': 18.11.9
   antlr4ts: 0.5.0-alpha.4
   rimraf: 3.0.2
-  ts-node: 10.9.1_x2utdhayajzrh747hktprshhby
+  ts-node: 10.9.1_vq46kxj6zfka4f6ijsosnft3hy
   tslib: 2.4.0
   tslog: 3.3.3
   typescript: 4.7.4
 
 devDependencies:
-  '@oclif/test': 2.2.0
+  '@oclif/test': 2.2.10
   '@sinonjs/fake-timers': 9.1.2
   '@types/sinon': 10.0.13
-  json-parse-even-better-errors: 2.3.1
+  json-parse-even-better-errors: 3.0.0
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
 
@@ -184,12 +184,12 @@ packages:
       wrap-ansi: 7.0.0
     dev: false
 
-  /@oclif/core/1.16.4:
-    resolution: {integrity: sha512-l+xHtVMteJWeTZZ+f2yLyNjf69X0mhAH8GILXnmoAGAemXbc1DVstvloxOouarvm9xyHHhquzO1Qg5l6xa1VIw==}
+  /@oclif/core/1.20.3:
+    resolution: {integrity: sha512-sM2zQlzOUpHpcTBi7ETnHzK1KRF5BReKvERuF0jRlI2HgQ669arGccv1gkdouyMTG5prG92qy9P4ByhFVkLSQQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.2
+      '@oclif/screen': 3.0.3
       ansi-escapes: 4.3.2
       ansi-styles: 4.3.0
       cardinal: 2.1.1
@@ -304,13 +304,19 @@ packages:
   /@oclif/screen/3.0.2:
     resolution: {integrity: sha512-S/SF/XYJeevwIgHFmVDAFRUvM3m+OjhvCAYMk78ZJQCYCQ5wS7j+LTt1ZEv2jpEEGg2tx/F6TYYWxddNAYHrFQ==}
     engines: {node: '>=12.0.0'}
+    dev: false
 
-  /@oclif/test/2.2.0:
-    resolution: {integrity: sha512-hykwoXt8Ml+J+mwr9cJ+xl+84gSKdF+S7MKCjM5cPGMg6uhXBuzXtMlVK91s4bZh0uPYUioYJWAeptAgTHfgHQ==}
+  /@oclif/screen/3.0.3:
+    resolution: {integrity: sha512-KX8gMYA9ujBPOd1HFsV9e0iEx7Uoj8AG/3YsW4TtWQTg4lJvr82qNm7o/cFQfYRIt+jw7Ew/4oL4A22zOT+IRA==}
+    engines: {node: '>=12.0.0'}
+    dev: true
+
+  /@oclif/test/2.2.10:
+    resolution: {integrity: sha512-tz6tH79F0Kw1kWv/8BgTov+WtIeFDdq1PNUkW43U0Rh4HOA1SafPbXCpzhM9A6O7YXS+tq8ayuZdkyOXXJY6Ww==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.16.4
-      fancy-test: 2.0.0
+      '@oclif/core': 1.20.3
+      fancy-test: 2.0.6
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -351,8 +357,8 @@ packages:
     resolution: {integrity: sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q==}
     dev: true
 
-  /@types/node/17.0.45:
-    resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+  /@types/node/18.11.9:
+    resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
 
   /@types/sinon/10.0.13:
     resolution: {integrity: sha512-UVjDqJblVNQYvVNUsj0PuYYw0ELRmgt1Nt5Vk0pT5f16ROGfcKJY8o1HVuMOJOpD727RrGB9EGvoaTQE5tgxZQ==}
@@ -651,13 +657,13 @@ packages:
       tmp: 0.0.33
     dev: false
 
-  /fancy-test/2.0.0:
-    resolution: {integrity: sha512-SFb2D/VX9SV+wNYXO1IIh1wyxUC1GS0mYCFJOWD1ia7MPj9yE2G8jaPkw4t/pg0Sj7/YJP56OzMY4nAuJSOugQ==}
+  /fancy-test/2.0.6:
+    resolution: {integrity: sha512-vzH5MOYK+vAQW/jnRnBiyASemIOAmSYuh2j12w4Ktzh+u2d69OENvI9GLDvNLMxOIqCtwz8ndLMH+5cJHfBmSQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
-      '@types/node': 17.0.45
+      '@types/node': 18.11.9
       '@types/sinon': 10.0.13
       lodash: 4.17.21
       mock-stdin: 1.0.0
@@ -916,8 +922,9 @@ packages:
     resolution: {integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==}
     dev: false
 
-  /json-parse-even-better-errors/2.3.1:
-    resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+  /json-parse-even-better-errors/3.0.0:
+    resolution: {integrity: sha512-iZbGHafX/59r39gPwVPRBGw0QQKnA7tte5pSMrhWOW7swGsVvVTjmfyAV9pNqk8YGT7tRCdxRu8uzcgZwoDooA==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
 
   /json-stringify-safe/5.0.1:
@@ -1319,7 +1326,7 @@ packages:
     dependencies:
       is-number: 7.0.0
 
-  /ts-node/10.9.1_x2utdhayajzrh747hktprshhby:
+  /ts-node/10.9.1_vq46kxj6zfka4f6ijsosnft3hy:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -1338,7 +1345,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 17.0.45
+      '@types/node': 18.11.9
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3

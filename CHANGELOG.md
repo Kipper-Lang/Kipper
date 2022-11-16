@@ -15,7 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
   also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
   ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
-- Support for arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
+- Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
+- Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
 - Support for unary and postfix increment and decrement (`++`, `--`) expressions
   ([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
@@ -65,9 +66,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ASTNode.getTypeSemanticData()`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
   - `CompilableASTNode.semanticTypeChecking()`, which performs type checking for the AST node and its children nodes.
-    This is called in the function `RootASTNode.semanticAnalysis()` after `CompilableASTNode.semanticAnalysis()`.
+    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
   - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST node.
-    This is called in the function `RootASTNode.semanticAnalysis()` after `CompilableASTNode.semanticTypeChecking()`.
+    This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
   - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent scopes.
   - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
   - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
@@ -79,6 +80,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperSemanticChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
     function return a proper value.
   - `CompilableASTNode.addError()`, which adds an error to the list of errors caused by the node.
+  - `removeBraces()` for removing braces due to formatting reasons.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -151,6 +153,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
+  - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
 
 ### Removed
 

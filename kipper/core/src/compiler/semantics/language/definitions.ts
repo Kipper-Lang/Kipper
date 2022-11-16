@@ -64,9 +64,9 @@ export class DefinitionASTNodeFactory {
 			return new FunctionDeclaration(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
 			return new ParameterDeclaration(antlrRuleCtx, parent);
-		} else {
-			return new VariableDeclaration(antlrRuleCtx, parent);
 		}
+		// Last remaining possible type {@link VariableDeclaration}
+		return new VariableDeclaration(antlrRuleCtx, parent);
 	}
 }
 
