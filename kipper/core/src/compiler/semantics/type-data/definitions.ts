@@ -5,7 +5,7 @@
  * @since 0.10.0
  */
 import type { TypeData } from "../../parser";
-import type { KipperType } from "../const";
+import type { CheckedType } from "../type";
 
 /**
  * Type Semantics for a {@link Declaration}.
@@ -22,7 +22,7 @@ export interface FunctionDeclarationTypeSemantics extends TypeData {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.10.0
 	 */
-	returnType: KipperType;
+	returnType: CheckedType;
 }
 
 /**
@@ -34,7 +34,7 @@ export interface ParameterDeclarationTypeSemantics extends TypeData {
 	 * The {@link KipperType type} of the parameter.
 	 * @since 0.10.0
 	 */
-	valueType: KipperType;
+	valueType: CheckedType;
 }
 
 /**
@@ -43,10 +43,10 @@ export interface ParameterDeclarationTypeSemantics extends TypeData {
  */
 export interface VariableDeclarationTypeSemantics extends TypeData {
 	/**
-	 * The Kipper type that this declaration has.
+	 * The type of the value that may be stored in this variable.
 	 *
-	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}
+	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}.
 	 * @since 0.10.0
 	 */
-	valueType: KipperType;
+	valueType: CheckedType;
 }

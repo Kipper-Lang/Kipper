@@ -339,7 +339,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!(semanticData.ref instanceof ScopeDeclaration)) {
+		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 		return [identifier];
@@ -423,7 +423,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementPostfixExpression = async (
 		node: IncrementOrDecrementPostfixExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [...operandCode, semanticData.operator];
 	};
 
 	/**
@@ -456,7 +459,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementUnaryExpression = async (
 		node: IncrementOrDecrementUnaryExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [semanticData.operator, ...operandCode];
 	};
 
 	/**
@@ -482,8 +488,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const typeData = node.getTypeSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
-		const originalType: KipperType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const destType: KipperType = typeData.castType;
+		const originalType = semanticData.exp.getTypeSemanticData().evaluatedType.getCompilableType();
+		const destType = typeData.castType.getCompilableType();
 
 		if (originalType === destType) {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
@@ -588,14 +594,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!(semanticData.ref instanceof ScopeDeclaration)) {
+		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 
 		// The expression that is assigned to the reference
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
-		// Only add ' = EXP' if assignExpression is defined
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 }

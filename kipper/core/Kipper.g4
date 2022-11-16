@@ -40,7 +40,7 @@ primaryExpression
 postfixExpression
     :   primaryExpression #passOnPostfixExpression
     |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
-    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
+    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
     |   'call'? primaryExpression '(' argumentExpressionList? ')' # functionCallPostfixExpression
     ;
 

@@ -7,17 +7,16 @@
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
-import { ParseTreeWalker } from "antlr4ts/tree";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
 import { KipperLogger, LogLevel } from "../logger";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { Reference } from "./reference";
-import { GlobalScope } from "./global-scope";
+import { Reference, GlobalScope } from "./symbol-table";
 import { EvaluatedCompileConfig } from "./compiler";
+import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
  * The program context class used to represent a program for a compilation.
@@ -341,6 +340,11 @@ export class KipperProgramContext {
 	public addError(error: KipperError): void {
 		this.errors.push(error);
 		this.logger.reportError(LogLevel.ERROR, error);
+
+		// If the node is defined, add the error to the list of errors caused by the node
+		if (error.tracebackData.errorNode) {
+			error.tracebackData.errorNode.addError(error);
+		}
 	}
 
 	/**
@@ -583,8 +587,8 @@ export class KipperProgramContext {
 	 */
 	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
 		this._builtInReferences.push({
-			ref: ref,
-			exp: exp,
+			refTarget: ref,
+			srcExpr: exp,
 		});
 	}
 
@@ -596,8 +600,8 @@ export class KipperProgramContext {
 	 */
 	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
 		this._internalReferences.push({
-			ref: ref,
-			exp: exp,
+			refTarget: ref,
+			srcExpr: exp,
 		});
 	}
 }

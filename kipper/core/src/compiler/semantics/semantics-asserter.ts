@@ -38,8 +38,8 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 			filePath: this.programCtx.filePath,
 			tokenSrc: this.ctx ? getParseRuleSource(this.ctx.antlrRuleCtx) : undefined,
 			streamSrc: this.programCtx.stream,
+			errorNode: this.ctx,
 		});
-		error.antlrCtx = this.ctx?.antlrRuleCtx;
 
 		return error;
 	}

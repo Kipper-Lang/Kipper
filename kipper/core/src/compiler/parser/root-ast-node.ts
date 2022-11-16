@@ -55,6 +55,29 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
+	 * The errors that were caused by this root node. Includes all errors from children.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		const errors = [];
+		for (const child of this._children) {
+			errors.push(...child.errors);
+		}
+		return errors;
+	}
+
+	/**
+	 * Returns true if the semantic analysis or type checking of {@link CompilableASTNode this node} or any
+	 * {@link children children nodes} failed.
+	 *
+	 * This indicates that the root node is not valid and can not be translated.
+	 * @since 0.10.0
+	 */
+	public get hasFailed(): boolean {
+		return this.errors.length > 0;
+	}
+
+	/**
 	 * The children of this AST root node.
 	 * @since 0.8.0
 	 */
@@ -72,7 +95,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 
 	/**
 	 * The compilation config for this program.
-	 * @private
 	 * @since 0.10.0
 	 */
 	public get compileConfig(): EvaluatedCompileConfig {

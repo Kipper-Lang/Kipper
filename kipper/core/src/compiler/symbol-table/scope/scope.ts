@@ -5,8 +5,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import type { FunctionDeclaration, VariableDeclaration } from "./semantics";
+import type { FunctionDeclaration, VariableDeclaration } from "../../semantics";
+import { ScopeDeclaration, ScopeVariableDeclaration, ScopeFunctionDeclaration } from "../entry/";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},

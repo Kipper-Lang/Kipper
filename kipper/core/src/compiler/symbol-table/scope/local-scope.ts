@@ -5,9 +5,10 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "./semantics";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./scope-declaration";
-import { KipperNotImplementedError } from "../errors";
+import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "../../semantics";
+import { KipperNotImplementedError } from "../../../errors";
+import { ScopeVariableDeclaration, ScopeFunctionDeclaration } from "../entry/";
+import { ScopeDeclaration } from "../entry";
 import { Scope } from "./scope";
 
 /**

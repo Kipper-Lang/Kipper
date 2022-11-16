@@ -61,8 +61,8 @@ export abstract class KipperSemanticErrorHandler {
 			filePath: this.filePath,
 			tokenSrc: this.ctx ? getParseRuleSource(this.ctx.antlrRuleCtx) : undefined,
 			streamSrc: this.stream,
+			errorNode: this.ctx,
 		});
-		error.antlrCtx = this.ctx?.antlrRuleCtx;
 		return error;
 	}
 }
