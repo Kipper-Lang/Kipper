@@ -12,13 +12,6 @@
  * @since 0.1.0
  */
 import type {
-	SemanticData,
-	DoWhileLoopIterationStatementContext,
-	ForLoopIterationStatementContext,
-	IfStatementContext,
-	ReturnStatementContext,
-	SwitchStatementContext,
-	WhileLoopIterationStatementContext,
 	compilableNodeChild,
 	compilableNodeParent,
 	NoSemantics,
@@ -26,6 +19,12 @@ import type {
 	SemanticData,
 	TypeData,
 } from "../../parser/";
+import type {
+	DoWhileLoopStatementSemantics,
+	ForLoopStatementSemantics,
+	IterationStatementSemantics,
+	WhileLoopStatementSemantics,
+} from "../semantic-data";
 import type { TranslatedCodeLine } from "../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
@@ -36,25 +35,21 @@ import type {
 	ReturnStatementSemantics,
 } from "../semantic-data";
 import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
-import {
-	CompilableASTNode,
-	CompoundStatementContext,
-	ExpressionStatementContext,
-	IfStatementContext,
-	IterationStatementContext,
-	JumpStatementContext,
-	ReturnStatementContext,
-	SwitchStatementContext,
-} from "../../parser";
 import { FunctionScope, LocalScope } from "../../symbol-table";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { FunctionDeclaration } from "./definitions";
 import {
-	DoWhileLoopStatementSemantics,
-	ForLoopStatementSemantics,
-	IterationStatementSemantics,
-	WhileLoopStatementSemantics,
-} from "../semantic-data";
+	DoWhileLoopIterationStatementContext,
+	ForLoopIterationStatementContext,
+	CompilableASTNode,
+	CompoundStatementContext,
+	ExpressionStatementContext,
+	IfStatementContext,
+	ReturnStatementContext,
+	SwitchStatementContext,
+	JumpStatementContext,
+	WhileLoopIterationStatementContext,
+} from "../../parser";
 import { CheckedType } from "../type";
 
 /**
