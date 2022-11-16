@@ -6,36 +6,86 @@
  */
 
 import { LogLevel } from "@kipper/core";
-import { ILogObject, ISettingsParam, Logger } from "tslog";
+import { ISettingsParam, Logger } from "tslog";
 
 /**
- * Default {@link ISettingsParam} Configuration for the CLI Logger.
+ * The default Kipper CLI LogObj that will be passed to {@link Logger}.
+ * @since 0.10.0
  */
-export const defaultKipperLoggerConfig: ISettingsParam = {
-	dateTimePattern: "hour:minute:second",
-	displayFilePath: "hidden",
-	displayFunctionName: false,
-	displayDateTime: false,
-};
+export type LogObj = { [key: string]: any };
 
 /**
- * Default visual CLI {@link Logger logger}.
- */
-export const defaultCliLogger: Logger = new Logger(defaultKipperLoggerConfig);
-
-/**
- * CLI Emit Handler for the {@link KipperLogger}. This handles the formatted output of the CLI using the
- * {@link Logger Logger class (tslog)}.
+ * CLI Emit Handler for the {@link KipperLogger}. This handles the formatted output of the CLI using the {@link Logger}
+ * provided by tslog.
  * @since 0.10.0
  */
 export class CLIEmitHandler {
 	/**
-	 * Active CLI logger, which is the one that will be used to log messages.
-	 *
-	 * Per default {@link defaultCliLogger}, unless explicitly set to use another instance.
+	 * Default {@link ISettingsParam} settings for the {@link this.logger}
+	 */
+	public static readonly defaultSettings: ISettingsParam<LogObj> = {};
+
+	private static _logger: Logger<LogObj> = new Logger<LogObj>(CLIEmitHandler.defaultSettings);
+
+	/**
+	 * Active CLI logger, which will be used to log messages.
 	 * @since 0.10.0
 	 */
-	public static cliLogger: Logger = defaultCliLogger;
+	public static get logger(): Logger<LogObj> {
+		return this._logger;
+	}
+
+	public static set logger(logger: Logger<LogObj>) {
+		this._logger = logger;
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.FATAL fatal}.
+	 * @since 0.10.0
+	 */
+	public static fatal(msg: string): void {
+		this.emit(LogLevel.FATAL, msg);
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.ERROR error}.
+	 * @since 0.10.0
+	 */
+	public static error(msg: string): void {
+		this.emit(LogLevel.ERROR, msg);
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.WARN warn}.
+	 * @since 0.10.0
+	 */
+	public static warn(msg: string): void {
+		this.emit(LogLevel.WARN, msg);
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.INFO info}.
+	 * @since 0.10.0
+	 */
+	public static info(msg: string): void {
+		this.emit(LogLevel.INFO, msg);
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.DEBUG debug}.
+	 * @since 0.10.0
+	 */
+	public static debug(msg: string): void {
+		this.emit(LogLevel.DEBUG, msg);
+	}
+
+	/**
+	 * Prints the specified {@link msg} using the {@link this.logger logger} with the level {@link LogLevel.UNKNOWN unknown}.
+	 * @since 0.10.0
+	 */
+	public static unknown(msg: string): void {
+		this.emit(LogLevel.UNKNOWN, msg);
+	}
 
 	/**
 	 * CLI Emit Handler for the {@link KipperLogger}.
@@ -43,20 +93,32 @@ export class CLIEmitHandler {
 	 * @param msg The log message.
 	 * @returns The log object that the {@link Logger} returned.
 	 */
-	public static emit(level: LogLevel, msg: string): ILogObject {
+	public static emit(level: LogLevel, msg: string): LogObj | undefined {
 		switch (level) {
 			case LogLevel.FATAL:
-				return CLIEmitHandler.cliLogger.fatal(msg);
+				return this.logger.fatal(msg);
 			case LogLevel.ERROR:
-				return CLIEmitHandler.cliLogger.error(msg);
+				return this.logger.error(msg);
 			case LogLevel.WARN:
-				return CLIEmitHandler.cliLogger.warn(msg);
+				return this.logger.warn(msg);
 			case LogLevel.DEBUG:
-				return CLIEmitHandler.cliLogger.debug(msg);
+				return this.logger.debug(msg);
 			case LogLevel.UNKNOWN:
 			case LogLevel.INFO:
 			default:
-				return CLIEmitHandler.cliLogger.info(msg);
+				return this.logger.info(msg);
 		}
+	}
+
+	/**
+	 * Enables timestamps for the CLI logger by using the default config and adding the timestamp to the pretty log.
+	 * @since 0.10.0
+	 */
+	public static useTimeStampConfig(): void {
+		this.logger = new Logger<LogObj>({
+			...this.defaultSettings,
+			prettyLogTemplate: "{{hh}}:{{MM}}:{{ss}}\\t{{logLevelName}}\\t{{message}}",
+			stylePrettyLogs: true,
+		});
 	}
 }

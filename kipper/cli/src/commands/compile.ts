@@ -16,8 +16,7 @@ import {
 	LogLevel,
 } from "@kipper/core";
 import { IFlag } from "@oclif/command/lib/flags";
-import { Logger } from "tslog";
-import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
+import { CLIEmitHandler } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, getTarget, writeCompilationResult } from "../compile";
 
@@ -99,7 +98,7 @@ export default class Compile extends Command {
 
 		// If 'log-timestamp' is set, set the logger to use the timestamp
 		if (flags["log-timestamp"]) {
-			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
+			CLIEmitHandler.useTimeStampConfig();
 		}
 
 		// Input data for this run
@@ -154,7 +153,7 @@ export default class Compile extends Command {
 		} catch (e) {
 			// In case the error is not a KipperError, throw it as an internal error (this should not happen)
 			if (!(e instanceof KipperError)) {
-				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+				CLIEmitHandler.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
 			}
 		}
 	}

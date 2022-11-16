@@ -7,7 +7,7 @@
 import { Command, flags } from "@oclif/command";
 import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { CLIEmitHandler, defaultCliLogger } from "../logger";
+import { CLIEmitHandler } from "../logger";
 import { KipperInvalidInputError } from "../errors";
 import { IFlag } from "@oclif/command/lib/flags";
 
@@ -80,7 +80,7 @@ export default class Analyse extends Command {
 			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
 			// output of the error and traceback.
 			if (!(e instanceof KipperError)) {
-				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
+				CLIEmitHandler.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
 			}
 		}
 	}
