@@ -27,7 +27,7 @@ specifiers:
   mkdirp: 1.0.4
   mocha: 10.1.0
   nyc: 15.1.0
-  oclif: 3.2.25
+  oclif: 3.2.27
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -72,7 +72,7 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.1.0
   nyc: 15.1.0
-  oclif: 3.2.25
+  oclif: 3.2.27
   prettier: 2.7.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -651,6 +651,40 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
+  /@oclif/core/1.20.4:
+    resolution: {integrity: sha512-giug32M4YhSYNYKQwE1L57/+k5gp1+Bq3/0vKNQmzAY1tizFGhvBJc6GIRZasHjU+xtZLutQvrVrJo7chX3hxg==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@oclif/linewrap': 1.0.0
+      '@oclif/screen': 3.0.3
+      ansi-escapes: 4.3.2
+      ansi-styles: 4.3.0
+      cardinal: 2.1.1
+      chalk: 4.1.2
+      clean-stack: 3.0.1
+      cli-progress: 3.11.2
+      debug: 4.3.4_supports-color@8.1.1
+      ejs: 3.1.8
+      fs-extra: 9.1.0
+      get-package-type: 0.1.0
+      globby: 11.1.0
+      hyperlinker: 1.0.0
+      indent-string: 4.0.0
+      is-wsl: 2.2.0
+      js-yaml: 3.14.1
+      natural-orderby: 2.0.3
+      object-treeify: 1.1.33
+      password-prompt: 1.1.2
+      semver: 7.3.8
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
+      supports-color: 8.1.1
+      supports-hyperlinks: 2.2.0
+      tslib: 2.4.1
+      widest-line: 3.1.0
+      wrap-ansi: 7.0.0
+    dev: true
+
   /@oclif/errors/1.3.6:
     resolution: {integrity: sha512-fYaU4aDceETd89KXP+3cLyg9EHZsLD3RxF2IU9yxahhBpspWjkWi3Dy3bTgcwZ3V47BgxQaGapzJWDM33XIVDQ==}
     engines: {node: '>=8.0.0'}
@@ -680,7 +714,7 @@ packages:
     resolution: {integrity: sha512-EICYITNwc155RHBiRnhUmvuc5oEuRE+9B+8rErw4OKKpPfZ5edvth38e4QOONfDRjb3MHfNu0sds1aB3i/BikA==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.20.3
+      '@oclif/core': 1.20.4
     dev: true
 
   /@oclif/plugin-not-found/2.3.7:
@@ -688,16 +722,16 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.1
-      '@oclif/core': 1.20.3
+      '@oclif/core': 1.20.4
       fast-levenshtein: 3.0.0
       lodash: 4.17.21
     dev: true
 
-  /@oclif/plugin-warn-if-update-available/2.0.6:
-    resolution: {integrity: sha512-9PSerV/jz3Mq5P8+bfLhr4UrTNOLmhUo8tGsv/CzJ0c/QffjYONZ8pCNsrVDO+wWzzuYHedXPZjDpOCmMcTTag==}
+  /@oclif/plugin-warn-if-update-available/2.0.14:
+    resolution: {integrity: sha512-gEgFZuNtFx3yPfSuxhAm9F8nLZ4+UnBJhbjTywY0Cvrqvd+OvKvo6PfwRm0lWmH4EgWwQEq39pfaks1fg+y1gw==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.20.3
+      '@oclif/core': 1.20.4
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
@@ -4833,15 +4867,15 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /oclif/3.2.25:
-    resolution: {integrity: sha512-1nwdWHOBW5DkMBBu3HNrwM+WIAL7kDLBeoM8BNJLbnE4hlxBmeubwQTF0oGzmv+0vUomWMiNSbQF7AfzFbwUwA==}
+  /oclif/3.2.27:
+    resolution: {integrity: sha512-tMKEitC/fVki5mYx8D41qDuOymf24V/UGdkT04dTwtSkoMa/alGxERS2Oa/G/7Q0pfCGl9I5vi5WFuV2rY1ehQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
-      '@oclif/core': 1.20.3
+      '@oclif/core': 1.20.4
       '@oclif/plugin-help': 5.1.18
       '@oclif/plugin-not-found': 2.3.7
-      '@oclif/plugin-warn-if-update-available': 2.0.6
+      '@oclif/plugin-warn-if-update-available': 2.0.14
       aws-sdk: 2.1248.0
       concurrently: 7.5.0
       debug: 4.3.4
