@@ -4,6 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
+import type { ParseTree } from "antlr4ts/tree";
 import type { compilableNodeParent, SemanticData, TypeData } from "../../parser";
 import {
 	CompilableASTNode,
@@ -15,20 +16,24 @@ import {
 	ParameterDeclarationContext,
 	StorageTypeSpecifierContext,
 } from "../../parser";
-import type { ParseTree } from "antlr4ts/tree";
-import type { ScopeVariableDeclaration } from "../../scope-declaration";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeParameterDeclaration } from "../../scope-declaration";
+import {
+	FunctionScope,
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "../../symbol-table";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
-import type { KipperStorageType, KipperType, TranslatedCodeLine } from "../const";
+import type { KipperStorageType, TranslatedCodeLine } from "../const";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
 import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
-import {
+import type {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
 	ParameterDeclarationSemantics,
 	VariableDeclarationSemantics,
 } from "../semantic-data";
-import {
+import type {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
@@ -36,7 +41,7 @@ import {
 } from "../type-data";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
-import { FunctionScope } from "../../function-scope";
+import { UncheckedType } from "../type";
 
 /**
  * Every antlr4 definition ctx type
@@ -59,9 +64,9 @@ export class DefinitionASTNodeFactory {
 			return new FunctionDeclaration(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
 			return new ParameterDeclaration(antlrRuleCtx, parent);
-		} else {
-			return new VariableDeclaration(antlrRuleCtx, parent);
 		}
+		// Last remaining possible type {@link VariableDeclaration}
+		return new VariableDeclaration(antlrRuleCtx, parent);
 	}
 }
 
@@ -224,9 +229,13 @@ export class ParameterDeclaration extends Declaration<
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
 
+		// The type specifier of the parameter
+		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
+
 		this.semanticData = {
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
-			valueType: this.children[0].sourceCode,
+			valueTypeSpecifier: typeSpecifier,
+			valueType: typeSpecifier.getSemanticData().typeIdentifier,
 			func: <FunctionDeclaration>this.parent,
 		};
 
@@ -247,10 +256,10 @@ export class ParameterDeclaration extends Declaration<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
-
+		// Get the type that will be returned using the value type specifier
+		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			valueType: <KipperType>semanticData.valueType,
+			valueType: valueType,
 		};
 	}
 
@@ -382,11 +391,12 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		const innerScope = <FunctionScope>this.innerScope;
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: string = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const type: UncheckedType = retTypeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
+			returnTypeSpecifier: retTypeSpecifier,
 			returnType: type,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
@@ -408,12 +418,10 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the return type is valid
-		this.programCtx.typeCheck(this).typeExists(semanticData.returnType);
-
-		// Set the return type data
+		// Get the type that will be returned using the return type specifier
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			returnType: <KipperType>semanticData.returnType,
+			returnType: returnType,
 		};
 	}
 
@@ -525,16 +533,18 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			throw new UnableToDetermineSemanticDataError();
 		}
 
+		// Semantic data of the variable declaration
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType: string = typeSpecifier.getSemanticData().typeIdentifier;
+		const valueType: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: isDefined,
 			identifier: identifier,
 			storageType: storageType,
 			valueType: valueType,
+			valueTypeSpecifier: typeSpecifier,
 			scope: this.scope,
 			value: assignValue,
 		};
@@ -554,12 +564,10 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Check whether the type of the variable even exists
-		this.programCtx.typeCheck(this).typeExists(semanticData.valueType);
-
-		// Set the type of this variable declaration
+		// Get the type that will be returned using the value type specifier
+		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			valueType: <KipperType>semanticData.valueType,
+			valueType: valueType,
 		};
 
 		// If the variable is defined, check whether the assignment is valid

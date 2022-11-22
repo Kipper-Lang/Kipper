@@ -6,7 +6,7 @@
  */
 import { KipperCompileTarget } from "./target-presets";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
-import { KipperAntlrErrorListener } from "./antlr-error-listener";
+import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
@@ -337,7 +337,7 @@ export class KipperCompiler {
 	}
 
 	/**
-	 * Creates a new {@link KipperProgramContext} based on the passed {@link parseData} and {@link config configuration}.
+	 * Creates a new {@link KipperProgramContext} based on the passed {@link parseData} and {@link compilerOptions}.
 	 * @param parseData The parsing data of the file.
 	 * @param compilerOptions The compilation config.
 	 * @return The newly created {@link KipperProgramContext} instance, which contains the metadata of the compiled

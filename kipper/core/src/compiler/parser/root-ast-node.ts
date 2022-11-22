@@ -4,19 +4,20 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import { KipperProgramContext } from "../program-ctx";
-import { Declaration, Statement, TranslatedCodeLine } from "../semantics";
-import { NoSemantics, NoTypeSemantics, ParserASTNode } from "./ast-node";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import {
+import type { NoSemantics, NoTypeSemantics, SemanticData, TypeData } from "./ast-node";
+import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
 	TargetSetUpCodeGenerator,
 	TargetWrapUpCodeGenerator,
 } from "../target-presets";
+import type { EvaluatedCompileConfig } from "../compiler";
+import type { KipperProgramContext } from "../program-ctx";
+import type { Declaration, Statement, TranslatedCodeLine } from "../semantics";
+import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import { ParserASTNode } from "./ast-node";
 import { KipperError, UndefinedSemanticsError } from "../../errors";
-import { EvaluatedCompileConfig } from "../compiler";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
@@ -27,7 +28,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 
 	protected readonly _parent: undefined;
 
-	protected readonly _children: Array<Declaration<any, any> | Statement<any, any>>;
+	protected readonly _children: Array<Declaration<any, any> | Statement<SemanticData, TypeData>>;
 
 	constructor(programCtx: KipperProgramContext, antlrCtx: ParserRuleContext) {
 		super(antlrCtx, undefined);
@@ -54,10 +55,33 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
+	 * The errors that were caused by this root node. Includes all errors from children.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		const errors = [];
+		for (const child of this._children) {
+			errors.push(...child.errors);
+		}
+		return errors;
+	}
+
+	/**
+	 * Returns true if the semantic analysis or type checking of {@link CompilableASTNode this node} or any
+	 * {@link children children nodes} failed.
+	 *
+	 * This indicates that the root node is not valid and can not be translated.
+	 * @since 0.10.0
+	 */
+	public get hasFailed(): boolean {
+		return this.errors.length > 0;
+	}
+
+	/**
 	 * The children of this AST root node.
 	 * @since 0.8.0
 	 */
-	public get children(): Array<Declaration<any, any> | Statement<any, any>> {
+	public get children(): Array<Declaration<any, any> | Statement<SemanticData, TypeData>> {
 		return this._children;
 	}
 
@@ -71,7 +95,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 
 	/**
 	 * The compilation config for this program.
-	 * @private
 	 * @since 0.10.0
 	 */
 	public get compileConfig(): EvaluatedCompileConfig {
@@ -100,7 +123,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	 * Adds new child at the end of the tree.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: Declaration<any, any> | Statement<any, any>): void {
+	public addNewChild(newChild: Declaration<any, any> | Statement<SemanticData, TypeData>): void {
 		this._children.push(newChild);
 	}
 

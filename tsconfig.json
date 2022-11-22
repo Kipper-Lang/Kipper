@@ -4,12 +4,15 @@
     "declaration": true,
     "importHelpers": true,
     "removeComments": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitThis": true,
+		"noImplicitReturns": true,
+		"strict": true,
     "moduleResolution": "node",
     "module": "commonjs",
     "rootDir": "./kipper",
 		"outDir": "./lib",
-		"strict": true,
     "target": "es2016",
     "lib": [
       "ES2016"

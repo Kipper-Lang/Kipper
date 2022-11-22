@@ -40,7 +40,7 @@ primaryExpression
 postfixExpression
     :   primaryExpression #passOnPostfixExpression
     |   primaryExpression arraySpecifier+ #arraySpecifierPostfixExpression
-    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression
+    |   primaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
     |   'call'? primaryExpression '(' argumentExpressionList? ')' # functionCallPostfixExpression
     ;
 
@@ -215,9 +215,9 @@ switchLabeledStatement
     ;
 
 iterationStatement
-    :   For '(' forCondition ')' statement
-    |   While '(' expression ')' statement
-    |   Do statement While '(' expression ')' endOfLine
+    :   For '(' forCondition ')' statement # ForLoopIterationStatement
+    |   While '(' expression ')' statement # WhileLoopIterationStatement
+    |   Do statement While '(' expression ')' endOfLine # DoWhileLoopIterationStatement
     ;
 
 forCondition
