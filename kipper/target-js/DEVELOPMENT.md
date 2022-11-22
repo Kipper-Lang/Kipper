@@ -18,23 +18,14 @@ Install the following extensions:
 
 ### Install dependencies
 
-Whenever dependencies in `package.json` are changed, run the following command:
-
-```sh
-pnpm install
-```
-
-To only install resolved dependencies in `package-lock.json`:
-
-```sh
-pnpm install --frozen-lockfile
-```
+For installing the dependencies, please refer to the root [DEVELOPMENT.md](../../DEVELOPMENT.md), as the entire project should be
+handled as a monorepo.
 
 ## Other scripts for Development
 
 ### Rebuild the project
 
-To incrementally build the project:
+To build the project:
 
 ```sh
 pnpm run build
