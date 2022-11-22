@@ -1124,7 +1124,7 @@ describe("Kipper errors", () => {
 						await new KipperCompiler().compile(`def x() -> num {};`, defaultConfig);
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-						assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
@@ -1138,7 +1138,7 @@ describe("Kipper errors", () => {
 						await new KipperCompiler().compile(`def x() -> num { if (true) { return 1; } };`, defaultConfig);
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-						assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
@@ -1150,7 +1150,7 @@ describe("Kipper errors", () => {
 						await new KipperCompiler().compile(`def x() -> num { if (true) {  } else { return 1; } };`, defaultConfig);
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-						assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
@@ -1162,7 +1162,7 @@ describe("Kipper errors", () => {
 						await new KipperCompiler().compile(`def x() -> num { if (true) { return 1; } else { } };`, defaultConfig);
 					} catch (e) {
 						assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-						assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+						assert((<KipperError>e).name === "TypeError", "Expected proper error");
 						await ensureTracebackDataExists(<KipperError>e);
 						return;
 					}
@@ -1181,7 +1181,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
@@ -1199,7 +1199,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							return;
 						}
 						assert.fail("Expected 'IncompleteReturnsInCodePaths'");
@@ -1218,7 +1218,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
@@ -1236,7 +1236,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
@@ -1256,7 +1256,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							await ensureTracebackDataExists(<KipperError>e);
 							return;
 						}
@@ -1274,7 +1274,7 @@ describe("Kipper errors", () => {
 								(<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError",
 								"Expected proper error",
 							);
-							assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+							assert((<KipperError>e).name === "TypeError", "Expected proper error");
 							return;
 						}
 						assert.fail("Expected 'IncompleteReturnsInCodePaths'");

@@ -4,11 +4,9 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
-
-export * from "./semantic-data";
-export * from "./type-data";
-export * from "./language";
+export * from "./analyser/";
+export * from "./symbol-table/";
+export * from "./scope-tree/";
 export * from "./const";
-export * from "./processor";
-export * from "./semantics-asserter";
-export * from "./semantics-error-handler";
+export * from "./type";
+export * from "./reference";

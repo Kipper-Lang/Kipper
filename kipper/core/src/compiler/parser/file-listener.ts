@@ -5,7 +5,6 @@
  * @since 0.0.3
  */
 import type {
-	KipperListener,
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualCastOrConvertExpressionContext,
@@ -35,6 +34,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	IterationStatementContext,
 	JumpStatementContext,
+	KipperListener,
 	ListPrimaryExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
@@ -67,7 +67,7 @@ import {
 	Statement,
 	StatementASTNodeFactory,
 } from "../semantics";
-import { RootASTNode } from "./root-ast-node";
+import { RootASTNode } from "./ast/root-ast-node";
 import { CompilableASTNode } from "./compilable-ast-node";
 import { KipperInternalError } from "../../errors";
 

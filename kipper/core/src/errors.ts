@@ -569,6 +569,16 @@ export class ExpressionNotCallableError extends TypeError {
 }
 
 /**
+ * Error that is thrown when not all code paths of a function return a value.
+ * @since 0.10.0
+ */
+export class IncompleteReturnsInCodePathsError extends TypeError {
+	constructor() {
+		super("Not all code paths of function return a value.");
+	}
+}
+
+/**
  * Error that is thrown whenever a constant declaration is not defined.
  * @since 0.8.3
  */
@@ -608,15 +618,5 @@ export class ArgumentError extends KipperError {
 export class InvalidAmountOfArgumentsError extends ArgumentError {
 	constructor(func: string, expected: number, received: number) {
 		super(`Function '${func}' only accepts ${expected} argument${expected === 1 ? "" : "s"}, received ${received}.`);
-	}
-}
-
-/**
- * Error that is thrown when not all code paths of a function return a value.
- * @since 0.10.0
- */
-export class IncompleteReturnsInCodePathsError extends KipperSyntaxError {
-	constructor() {
-		super("Not all code paths return a value.");
 	}
 }

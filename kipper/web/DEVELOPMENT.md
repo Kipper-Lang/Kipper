@@ -18,7 +18,7 @@ Install the following extensions:
 
 ### Install dependencies
 
-For installing the dependencies, please refer to the root [DEVELOPMENT.md](../../DEVELOPMENT.md), as the entire project should be 
+For installing the dependencies, please refer to the root [DEVELOPMENT.md](../../DEVELOPMENT.md), as the entire project should be
 handled as a monorepo.
 
 ## Other scripts for Development

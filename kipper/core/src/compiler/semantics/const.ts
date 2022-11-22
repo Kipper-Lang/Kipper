@@ -4,9 +4,13 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.3.0
  */
-import type { ScopeDeclaration } from "../symbol-table/";
+import type {
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "./scope-tree";
 import type { BuiltInFunction } from "../runtime-built-ins";
-import type { ScopeFunctionDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import type { UndefinedCustomType } from "./type";
 
 /**

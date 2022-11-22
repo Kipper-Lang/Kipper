@@ -14,11 +14,10 @@ import type {
 import type { KipperParser, TypeData } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
-import type { RootASTNode } from "./root-ast-node";
-import type { SemanticData } from "./ast-node";
+import type { RootASTNode, SemanticData } from "./ast";
+import { ParserASTNode } from "./ast";
 import type { EvaluatedCompileConfig } from "../compiler";
-import type { GlobalScope, LocalScope } from "../symbol-table";
-import { ParserASTNode } from "./ast-node";
+import type { GlobalScope, LocalScope } from "../semantics/";
 import { KipperError } from "../../errors";
 
 /**
