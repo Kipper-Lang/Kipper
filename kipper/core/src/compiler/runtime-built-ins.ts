@@ -1,7 +1,5 @@
 /**
  * Built-Ins file, which provides the blueprints for the Kipper built-in functions and variables.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 

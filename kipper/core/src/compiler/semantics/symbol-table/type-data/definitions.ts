@@ -1,7 +1,5 @@
 /**
  * Semantic type data definitions for all definition AST nodes.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type { TypeData } from "../../../parser";

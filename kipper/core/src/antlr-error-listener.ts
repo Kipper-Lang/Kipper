@@ -1,7 +1,5 @@
 /**
  * Antlr4 Error listener handling Antlr4 errors and reporting them.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
 import { KipperLogger, LogLevel } from "./logger";

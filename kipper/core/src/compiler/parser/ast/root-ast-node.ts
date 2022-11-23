@@ -1,7 +1,5 @@
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { NoSemantics, NoTypeSemantics, SemanticData, TypeData } from "./ast-node";

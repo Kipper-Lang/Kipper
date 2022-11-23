@@ -1,7 +1,5 @@
 /**
  * Compilation translation class specifying how a translation target should be implemented.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 

@@ -1,7 +1,5 @@
 /**
  * A reference to a variable/function/builtin/internal identifier.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { Expression, ExpressionSemantics, ExpressionTypeSemantics } from "./symbol-table";

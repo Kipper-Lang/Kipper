@@ -3,8 +3,6 @@
  *
  * These are used like an entry for a symbol table, where the important information about a variable, parameter or
  * function is stored.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 export * from "./scope-declaration";

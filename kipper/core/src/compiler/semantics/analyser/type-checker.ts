@@ -1,8 +1,6 @@
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
  * invalid use of types and identifiers is detected.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
 

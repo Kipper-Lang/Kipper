@@ -2,8 +2,6 @@
  * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
  * simplifies its content down to a simplified representation, which can be used for semantic analysis and
  * code translation.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 

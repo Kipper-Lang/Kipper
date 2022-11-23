@@ -1,8 +1,6 @@
 /**
  * File containing the definition for a global scope of a {@link KipperProgramContext}, which contains the global
  * variables and functions of a Kipper program.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { KipperProgramContext } from "../../program-ctx";
@@ -42,6 +40,14 @@ export class GlobalScope extends Scope {
 	 */
 	public get variables(): Array<ScopeVariableDeclaration> {
 		return this._variables;
+	}
+
+	/**
+	 * The parent scope of this global scope. This is always `undefined`.
+	 * @since 0.10.0
+	 */
+	public get parent(): undefined {
+		return undefined;
 	}
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {

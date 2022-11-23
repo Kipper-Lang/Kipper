@@ -1,12 +1,20 @@
 /**
  * A scope in a Kipper program, which contains {@link ScopeVariableDeclaration variables} and
  * {@link ScopeFunctionDeclaration functions}.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { FunctionDeclaration, VariableDeclaration } from "../index";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+
+/**
+ * A simple interface defining the basic functionality of a scope.
+ * @since 0.10.0
+ */
+export interface ScopeTree {
+	functions: Array<ScopeFunctionDeclaration>;
+	variables: Array<ScopeVariableDeclaration>;
+	parent?: ScopeTree;
+}
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},
@@ -15,7 +23,7 @@ import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } 
  * A scope can be a child of another scope or the global scope of a {@link KipperProgramContext program}.
  * @since 0.8.0
  */
-export abstract class Scope {
+export abstract class Scope implements ScopeTree {
 	protected readonly _functions: Array<ScopeFunctionDeclaration>;
 	protected readonly _variables: Array<ScopeVariableDeclaration>;
 
@@ -25,7 +33,7 @@ export abstract class Scope {
 	}
 
 	/**
-	 * All local functions in this scope.
+	 * All functions in this scope.
 	 *
 	 * This will be always empty for {@link CompoundStatement compound statement scopes}, as local functions are not
 	 * implemented in the Kipper Parser yet.
@@ -36,12 +44,18 @@ export abstract class Scope {
 	}
 
 	/**
-	 * All local variables in this scope.
+	 * All variables in this scope.
 	 * @since 0.8.0
 	 */
 	public get variables(): Array<ScopeVariableDeclaration> {
 		return this._variables;
 	}
+
+	/**
+	 * The parent scope of this scope.
+	 * @since 0.10.0
+	 */
+	public abstract parent?: ScopeTree;
 
 	/**
 	 * Adds a new variable declaration to the {@link variables list of variables}.

@@ -1,13 +1,10 @@
 /**
  * Semantic data definitions for all definition AST nodes.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type { SemanticData } from "../../../parser";
 import type { KipperStorageType } from "../../const";
 import type { Scope } from "../../scope-tree";
-import { FunctionScope } from "../../scope-tree";
 import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../nodes";
 import { IdentifierTypeSpecifierExpression } from "../nodes";
 import { UncheckedType } from "../../type";
@@ -59,11 +56,6 @@ export interface FunctionDeclarationSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	functionBody: CompoundStatement;
-	/**
-	 * The scope of this {@link functionBody}.
-	 * @since 0.5.0
-	 */
-	innerScope: FunctionScope;
 }
 
 /**

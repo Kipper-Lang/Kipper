@@ -1,7 +1,5 @@
 /**
  * Semantic type data definitions for all expression AST nodes.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type { KipperFunction } from "../../const";

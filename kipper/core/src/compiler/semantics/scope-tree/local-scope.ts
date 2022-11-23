@@ -1,11 +1,11 @@
 /**
  * File containing the definition for a local scope that is bound to a {@link CompoundStatement} and not the global
  * namespace.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-import type { CompoundStatement, FunctionDeclaration, VariableDeclaration } from "../index";
+import type { FunctionDeclaration, VariableDeclaration } from "../index";
+import type { ScopeNode } from "../symbol-table/scope-node";
+import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
@@ -15,8 +15,17 @@ import { Scope } from "./scope";
  * @since 0.8.0
  */
 export class LocalScope extends Scope {
-	constructor(public ctx: CompoundStatement) {
+	constructor(public ctx: ScopeNode<LocalScope>) {
 		super();
+	}
+
+	/**
+	 * The parent scope of this local scope. This will be either a {@link LocalScope} or a {@link GlobalScope} (unique
+	 * to the {@link KipperProgramContext} class).
+	 * @since 0.10.0
+	 */
+	public get parent(): LocalScope | GlobalScope {
+		return this.ctx.scope;
 	}
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
@@ -54,10 +63,10 @@ export class LocalScope extends Scope {
 		if (!localRef) {
 			// If the scope of the ctx (Compound statement) is another local scope, then go upwards recursively again.
 			if (this.ctx.scope instanceof LocalScope) {
-				return this.ctx.scope.getReferenceRecursively(identifier);
+				return this.parent.getReferenceRecursively(identifier);
 			} else {
 				// Fetching from the global scope
-				return this.ctx.scope.getReference(identifier);
+				return this.parent.getReference(identifier);
 			}
 		}
 		return localRef;

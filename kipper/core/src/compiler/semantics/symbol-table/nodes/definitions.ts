@@ -1,7 +1,5 @@
 /**
  * Declaration and definitions in the Kipper language.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 import type { ParseTree } from "antlr4ts/tree";
@@ -42,6 +40,7 @@ import type {
 import { getParseTreeSource } from "../../../../utils";
 import { CompoundStatement, Statement } from "./statements";
 import { UncheckedType } from "../../type";
+import { ScopeNode } from "../scope-node";
 
 /**
  * Union type of all possible antlr4 parse tree node ctx instances for a {@link Declaration}.
@@ -169,7 +168,7 @@ export class ParameterDeclaration extends Declaration<
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected _scopeDeclaration: ScopeParameterDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeParameterDeclaration | undefined;
 
 	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -183,6 +182,11 @@ export class ParameterDeclaration extends Declaration<
 		return this._antlrRuleCtx;
 	}
 
+	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
 	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
@@ -199,7 +203,7 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	/**
-	 * Registers this parameter in the {@link semanticData.func.semanticData.innerScope scope} of the
+	 * Registers this parameter in the {@link semanticData.func.innerScope scope} of the
 	 * {@link this.semanticData.func parent function}.
 	 *
 	 * This will also populate the {@link scopeDeclaration} field, since only after the parameter is registered in the
@@ -263,9 +267,9 @@ export class ParameterDeclaration extends Declaration<
 		};
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
+	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
 		this.semanticAnalyser.parameterDeclaration;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
+	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.parameterDeclaration;
 }
 
@@ -274,7 +278,10 @@ export class ParameterDeclaration extends Declaration<
  * language and is compilable using {@link translateCtxAndChildren}.
  * @since 0.1.2
  */
-export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantics, FunctionDeclarationTypeSemantics> {
+export class FunctionDeclaration
+	extends Declaration<FunctionDeclarationSemantics, FunctionDeclarationTypeSemantics>
+	implements ScopeNode<FunctionScope>
+{
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -287,11 +294,14 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected _scopeDeclaration: ScopeFunctionDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
+
+	private readonly _innerScope: FunctionScope;
 
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+		this._innerScope = new FunctionScope(this);
 	}
 
 	/**
@@ -301,6 +311,11 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		return this._antlrRuleCtx;
 	}
 
+	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
 	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
@@ -317,25 +332,11 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 	}
 
 	/**
-	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be
-	 * registered.
-	 * @returns The inner scope of this function, or undefined if the function is invalid and the scope can't be
-	 * determined.
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
 	 * @since 0.10.0
 	 */
-	public get innerScope(): FunctionScope | undefined {
-		const body = this.children[this.children.length - 1];
-		try {
-			// Check whether the function body is valid, and if it is not, return undefined
-			// IMPORTANT! If an error occurs, we will ignore it, since the function will throw an error anyway during
-			// semantic analysis.
-			this.programCtx.semanticCheck(this).validFunctionBody(body);
-		} catch {
-			return undefined;
-		}
-
-		// The semantic check should ensure that the body is a 'CompoundStatement' and the inner scope is a function scope.
-		return <FunctionScope>(<CompoundStatement>body).localScope;
+	public get innerScope(): FunctionScope {
+		return this._innerScope;
 	}
 
 	/**
@@ -379,7 +380,6 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 
 		// Check the function body and ensure it exists/and is valid
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
-		const innerScope = <FunctionScope>this.innerScope;
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const type: UncheckedType = retTypeSpecifier.getSemanticData().typeIdentifier;
@@ -391,7 +391,6 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 			returnType: type,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
-			innerScope: innerScope, // Should always be a 'FunctionScope', since it will check itself again if the body is valid
 		};
 
 		// Add function definition to the current scope
@@ -426,9 +425,9 @@ export class FunctionDeclaration extends Declaration<FunctionDeclarationSemantic
 		// TODO!
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
+	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
 		this.semanticAnalyser.functionDeclaration;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
+	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.functionDeclaration;
 }
 
@@ -459,7 +458,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected _scopeDeclaration: ScopeVariableDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -478,6 +477,11 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return this._children;
 	}
 
+	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
 	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
@@ -577,8 +581,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 	}
 
-	targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VariableDeclaration> =
+	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VariableDeclaration> =
 		this.semanticAnalyser.variableDeclaration;
-	targetCodeGenerator: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
+	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
 		this.codeGenerator.variableDeclaration;
 }

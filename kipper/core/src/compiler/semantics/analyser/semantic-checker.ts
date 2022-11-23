@@ -1,8 +1,6 @@
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
  * invalid use of tokens is detected.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.7.0
  */
 
@@ -11,6 +9,7 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type { compilableNodeChild, compilableNodeParent } from "../../parser";
 import { KipperSemanticsAsserter } from "./err-handler";
 import {
+	LocalScope,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
@@ -37,6 +36,7 @@ import {
 	UndefinedReferenceError,
 	UnknownReferenceError,
 } from "../../../errors";
+import { ScopeNode } from "../symbol-table/scope-node";
 
 /**
  * Kipper Semantic Checker, which asserts that semantic logic and cohesion is valid and throws errors in case that an
@@ -54,10 +54,10 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param scopeCtx The scopeCtx to search in. If undefined, the global scope is used.
 	 * @since 0.8.0
 	 */
-	protected getReference(identifier: string, scopeCtx?: CompoundStatement): KipperReferenceable | undefined {
+	protected getReference(identifier: string, scopeCtx?: ScopeNode<LocalScope>): KipperReferenceable | undefined {
 		return (
 			(scopeCtx // First try to fetch from the local scope if it is defined
-				? scopeCtx.localScope.getReferenceRecursively(identifier)
+				? scopeCtx.innerScope.getReferenceRecursively(identifier)
 				: this.programCtx.globalScope.getReference(identifier)) ??
 			this.programCtx.globalScope.getReference(identifier) ?? // Fall back to looking globally
 			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
@@ -67,11 +67,11 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownReferenceError}.
 	 * @param identifier The identifier to fetch.
-	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
+	 * @param localScopeNode The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public getExistingReference(identifier: string, scopeCtx?: CompoundStatement): KipperReferenceable {
-		const ref = this.getReference(identifier, scopeCtx);
+	public getExistingReference(identifier: string, localScopeNode?: ScopeNode<LocalScope>): KipperReferenceable {
+		const ref = this.getReference(identifier, localScopeNode);
 		if (!ref) {
 			throw this.assertError(new UnknownReferenceError(identifier));
 		}
@@ -132,14 +132,14 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param scopeCtx The ctx of the local scope, which will be also checked if it is defined.
 	 * @since 0.7.0
 	 */
-	public variableIdentifierNotDeclared(identifier: string, scopeCtx?: CompoundStatement): void {
+	public variableIdentifierNotDeclared(identifier: string, scopeCtx?: ScopeNode<LocalScope>): void {
 		// Always check in the global scope
 		if (this.programCtx.globalScope.getVariable(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 
 		// Also check in the local scope if it was defined
-		if (scopeCtx && scopeCtx.localScope.getReferenceRecursively(identifier)) {
+		if (scopeCtx && scopeCtx.innerScope.getReferenceRecursively(identifier)) {
 			throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
 		}
 	}

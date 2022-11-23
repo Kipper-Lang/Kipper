@@ -1,8 +1,6 @@
 /**
  * Errors for the {@link KipperCompiler} that are used throughout this library. All errors inherit from the core
  * {@link KipperError}
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.2
  */
 import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
@@ -215,6 +213,8 @@ export class UndefinedSemanticsError extends KipperInternalError {
 
 /**
  * Error that is thrown whenever the {@link Declaration.scopeDeclaration} field of an AST Node is undefined.
+ *
+ * This indicates a
  * @since 0.10.0
  */
 export class UndefinedDeclarationCtxError extends KipperInternalError {
@@ -222,6 +222,23 @@ export class UndefinedDeclarationCtxError extends KipperInternalError {
 		super(
 			"Failed to determine the declaration context for a declaration. Most likely the semantic analysis failed" +
 				" or the property was accessed too early during semantic analysis.",
+		);
+		this.name = "InternalError";
+	}
+}
+
+/**
+ * Error that is thrown whenever the {@link ScopeNode.innerScope} of an {@link ScopeNode} is undefined or can't be
+ * determined.
+ *
+ * This indicates a severe error in the compiler, as that should always be syntactically impossible.
+ * @since 0.10.0
+ */
+export class UnableToGetInnerScopeError extends KipperInternalError {
+	constructor() {
+		super(
+			"Failed to get the inner scope of a scope-node. This indicates a severe bug in the compiler, as that should" +
+				" always be syntactically impossible.",
 		);
 		this.name = "InternalError";
 	}

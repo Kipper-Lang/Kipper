@@ -1,7 +1,5 @@
 /**
  * An entry of a variable, parameter or function declaration inside a Kipper scope.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import { Declaration } from "../../index";

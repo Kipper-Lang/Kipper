@@ -1,7 +1,5 @@
 /**
  * Constant values for Kipper.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.3.0
  */
 import type {

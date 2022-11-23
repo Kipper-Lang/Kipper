@@ -1,7 +1,5 @@
 /**
  *
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import { ScopeDeclaration } from "./scope-declaration";
@@ -75,7 +73,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get scope(): LocalScope {
-		return this.func.getSemanticData().innerScope;
+		return this.func.innerScope;
 	}
 
 	/**

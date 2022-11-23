@@ -1,7 +1,5 @@
 /**
  * Error handler which handles semantic errors for {@link CompilableASTNode compilable AST nodes}.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { CompilableASTNode, KipperParseStream } from "../../../parser";
