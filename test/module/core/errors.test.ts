@@ -1600,7 +1600,6 @@ describe("Kipper errors", () => {
 				});
 			});
 
-			// TODO!
 			describe("NoError", () => {
 				it("Regular Unary Expression", async () => {
 					let result: KipperCompileResult | undefined = undefined;
