@@ -1602,11 +1602,38 @@ describe("Kipper errors", () => {
 
 			// TODO!
 			describe("NoError", () => {
-				it("Regular Unary Expression", async () => {});
+				it("Regular Unary Expression", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; x++;", defaultConfig);
+					} catch (e) {
+						assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
+					}
+					assert(result !== undefined, "Expected result");
+					assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				});
 
-				it("Identifier in Tangled Expression", async () => {});
+				it("Identifier in Tangled Expression", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; (x)++;", defaultConfig);
+					} catch (e) {
+						assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
+					}
+					assert(result !== undefined, "Expected result");
+					assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				});
 
-				it("Identifier in Tangled Expression (Nested)", async () => {});
+				it("Identifier in Tangled Expression (Nested)", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; ((x))++;", defaultConfig);
+					} catch (e) {
+						assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
+					}
+					assert(result !== undefined, "Expected result");
+					assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				});
 			});
 		});
 	});
