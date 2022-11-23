@@ -73,8 +73,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
   - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
   - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
-	- `KipperTypeChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
-		function return a proper value.
+  - `KipperTypeChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
+    function return a proper value.
   - `KipperSemanticChecker.identifierUnused()`, which asserts that the specified identifier is unused.
   - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
   - `KipperSemanticChecker.referenceDefined()`, which asserts that the specified reference is defined and can be used.
@@ -94,7 +94,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `JmpStatementType`, which represents all possible jump statement types e.g. `break` and `continue`.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
-  	the definitions of its children, will be stored in the `innerScope` field of the class implementation.
+    the definitions of its children, will be stored in the `innerScope` field of the class implementation.
   - `ScopeTree`, which implements the basic functionality of a scope.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
@@ -116,10 +116,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `TracebackMetadata.errorNode`, which contains the error node that caused the error.
   - `CompilableASTNode.errors` and `RootASTNode.errors`, which returns all errors caused by this node and or its
     children.
-  - `KipperProgramContext.hasFailed`, `CompilableASTNode.hasFailed`, `RootASTNode.hasFailed`, which returns true if the 
-		node or any of its children have failed to be processed during semantic analysis or type checking.
+  - `KipperProgramContext.hasFailed`, `CompilableASTNode.hasFailed`, `RootASTNode.hasFailed`, which returns true if the
+    node or any of its children have failed to be processed during semantic analysis or type checking.
   - `Scope.parent`, which returns the parent scope of the scope. This is used to recursively evaluate references in all
-  	parent scopes.
+    parent scopes.
 
 ### Changed
 
