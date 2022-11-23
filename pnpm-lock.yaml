@@ -2,10 +2,10 @@ lockfileVersion: 5.4
 
 specifiers:
   '@istanbuljs/nyc-config-typescript': 1.0.2
-  '@kipper/cli': workspace:^0.10.0-alpha.5
-  '@kipper/core': workspace:^0.10.0-alpha.5
-  '@kipper/target-js': workspace:^0.10.0-alpha.5
-  '@kipper/target-ts': workspace:^0.10.0-alpha.5
+  '@kipper/cli': workspace:~
+  '@kipper/core': workspace:~
+  '@kipper/target-js': workspace:~
+  '@kipper/target-ts': workspace:~
   '@oclif/config': 1.18.6
   '@oclif/parser': 3.8.9
   '@oclif/test': 2.2.10
