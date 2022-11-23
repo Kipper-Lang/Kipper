@@ -1,8 +1,6 @@
 /**
  * The TypeScript target-specific built-ins generator for generating the code that allows for the use of built-in
  * functions.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type { BuiltInFunction, TranslatedCodeLine } from "@kipper/core";

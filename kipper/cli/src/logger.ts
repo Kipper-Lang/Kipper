@@ -1,7 +1,5 @@
 /**
  * CLI Logger implementing the core logger from '@kipper/core'
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.6
  */
 

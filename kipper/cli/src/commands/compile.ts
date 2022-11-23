@@ -1,7 +1,5 @@
 /**
  * 'compile' command for compiling a Kipper program.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";

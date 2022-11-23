@@ -1,7 +1,5 @@
 /**
  * 'run' command for running a compiled kipper-file (.js file) or compiling and running a file in one
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 import * as ts from "typescript";
