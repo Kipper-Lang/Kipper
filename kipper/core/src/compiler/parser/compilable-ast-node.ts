@@ -3,7 +3,7 @@
  * @since 0.8.0
  */
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import type { CompoundStatement, TranslatedCodeLine } from "../semantics";
+import type { TranslatedCodeLine } from "../semantics";
 import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
@@ -14,24 +14,25 @@ import type {
 import type { KipperParser, TypeData } from "./index";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
-import type { RootASTNode } from "./root-ast-node";
-import type { SemanticData } from "./ast-node";
+import type { RootASTNode, SemanticData } from "./ast";
 import type { EvaluatedCompileConfig } from "../compiler";
-import type { GlobalScope, LocalScope } from "../symbol-table";
-import { ParserASTNode } from "./ast-node";
+import type { GlobalScope, LocalScope } from "../semantics/";
+import { ParserASTNode } from "./ast";
 import { KipperError } from "../../errors";
+import { ScopeNode } from "../semantics/symbol-table/scope-node";
+import { FunctionScope } from "../semantics";
 
 /**
  * An eligible parent for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeParent = CompilableASTNode<any, any> | RootASTNode;
+export type compilableNodeParent = CompilableASTNode<SemanticData, TypeData> | RootASTNode;
 
 /**
  * An eligible child for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeChild = CompilableASTNode<any, any>;
+export type compilableNodeChild = CompilableASTNode<SemanticData, TypeData>;
 
 /**
  * Compilable AST Node that can be semantically analysed and translated into a target language.
@@ -41,7 +42,7 @@ export abstract class CompilableASTNode<
 	Semantics extends SemanticData,
 	TypeSemantics extends TypeData,
 > extends ParserASTNode<Semantics, TypeSemantics> {
-	public _scopeCtx: CompoundStatement | KipperProgramContext | undefined;
+	public _scopeCtx: ScopeNode<LocalScope | FunctionScope> | KipperProgramContext | undefined;
 
 	protected _parent: compilableNodeParent;
 
@@ -190,10 +191,10 @@ export abstract class CompilableASTNode<
 	 * @since 0.8.0
 	 */
 	public get scope(): LocalScope | GlobalScope {
-		if ("localScope" in this.scopeCtx) {
-			return this.scopeCtx.localScope;
+		if ("innerScope" in this.scopeCtx) {
+			return (<ScopeNode<LocalScope | FunctionScope>>this.scopeCtx).innerScope;
 		} else {
-			return this.scopeCtx.globalScope;
+			return (<KipperProgramContext>this.scopeCtx).globalScope;
 		}
 	}
 
@@ -201,22 +202,21 @@ export abstract class CompilableASTNode<
 	 * The context / AST node of the {@link scope}.
 	 * @since 0.8.0
 	 */
-	public get scopeCtx(): CompoundStatement | KipperProgramContext {
+	public get scopeCtx(): ScopeNode<LocalScope | FunctionScope> | KipperProgramContext {
 		if (this._scopeCtx) {
 			return this._scopeCtx;
 		}
 
 		let parent: compilableNodeParent = this.parent;
-		while (parent.parent !== undefined && !("localScope" in parent)) {
+		while (parent.parent !== undefined && !("innerScope" in parent)) {
 			parent = parent.parent;
 		}
 
 		// If there is no parent -> root node, return the program context
 		if (parent.parent === undefined) {
-			return parent.programCtx;
+			return (<RootASTNode>parent).programCtx;
 		}
-		// Return the local scope (Compound statement) ctx.
-		return parent;
+		return <ScopeNode<LocalScope | FunctionScope>>parent;
 	}
 
 	/**
@@ -390,13 +390,13 @@ export abstract class CompilableASTNode<
 	 * the {@link semanticData} field.
 	 * @since 0.8.0
 	 */
-	protected abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
+	public abstract readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
 
 	/**
 	 * Code generator function that is specific for the {@link KipperCompileTarget target}.
 	 * @since 0.8.0
 	 */
-	protected abstract targetCodeGenerator: TargetASTNodeCodeGenerator<
+	public abstract readonly targetCodeGenerator: TargetASTNodeCodeGenerator<
 		any,
 		TranslatedCodeLine | Array<TranslatedCodeLine>
 	>;

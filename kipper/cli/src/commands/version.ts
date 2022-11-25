@@ -1,7 +1,5 @@
 /**
  * 'version' command returning the version and user agent of the Kipper installation.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.5.0
  */
 import { Command } from "@oclif/core";

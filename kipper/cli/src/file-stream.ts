@@ -1,8 +1,6 @@
 /**
  * Classes implementing antlr4 streams and providing an interface to interact with the compiler. Extends basic
  * stream functionality from the core kipper module.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 

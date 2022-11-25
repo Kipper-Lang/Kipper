@@ -1,7 +1,5 @@
 /**
  * CLI related errors that core on {@link KipperError}
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 

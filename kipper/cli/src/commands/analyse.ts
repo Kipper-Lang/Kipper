@@ -1,7 +1,5 @@
 /**
  * 'analyse' command for analysing the syntax of a file.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";

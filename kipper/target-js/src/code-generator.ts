@@ -1,27 +1,21 @@
 /**
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type {
-	KipperType,
-	TranslatedCodeLine,
-	TranslatedExpression,
-	LogicalExpressionSemantics,
-	ComparativeExpressionSemantics,
-	ExpressionSemantics,
-	ExpressionTypeSemantics,
 	AdditiveExpression,
 	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
+	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
 	Expression,
+	ExpressionSemantics,
 	ExpressionStatement,
+	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
 	FunctionCallPostfixExpression,
 	FunctionDeclaration,
@@ -35,6 +29,7 @@ import type {
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
+	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -45,6 +40,8 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TranslatedCodeLine,
+	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
@@ -52,13 +49,13 @@ import {
 	CompoundStatement,
 	DoWhileLoopStatement,
 	ForLoopStatement,
+	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
-	getConversionFunctionIdentifier,
 } from "@kipper/core";
 import {
 	createJSFunctionSignature,

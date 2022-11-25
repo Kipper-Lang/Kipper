@@ -1,25 +1,32 @@
 /**
  * A file context for a single Kipper file, which may be used for parsing or compiling a Kipper file
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
-import { Expression, KipperSemanticChecker, KipperTypeChecker, TranslatedCodeLine } from "./semantics";
-import { KipperLogger, LogLevel } from "../logger";
+import {
+	Expression,
+	GlobalScope,
+	KipperSemanticChecker,
+	KipperTypeChecker,
+	Reference,
+	TranslatedCodeLine,
+} from "./semantics";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { Reference, GlobalScope } from "./symbol-table";
+import { KipperLogger, LogLevel } from "../logger";
 import { EvaluatedCompileConfig } from "./compiler";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
  * The program context class used to represent a program for a compilation.
+ *
+ * This stores all related data for a compilation, such as the AST, the semantic data, the type data, the scope tree,
+ * etc. and will handle all issues according to the {@link compileConfig}.
  * @since 0.0.3
  */
 export class KipperProgramContext {
@@ -38,7 +45,7 @@ export class KipperProgramContext {
 	 * to avoid running the function unnecessarily and generate code again, even though it already exists.
 	 * @private
 	 */
-	private _compiledCode: Array<Array<string>> | undefined;
+	private _compiledCode: Array<TranslatedCodeLine> | undefined;
 
 	/**
 	 * A list of all references to built-in functions. This is used to determine which built-in functions are
@@ -257,7 +264,7 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be an empty array.
 	 */
-	public get compiledCode(): Array<Array<string>> | undefined {
+	public get compiledCode(): Array<TranslatedCodeLine> | undefined {
 		return this._compiledCode;
 	}
 
@@ -345,6 +352,16 @@ export class KipperProgramContext {
 		if (error.tracebackData.errorNode) {
 			error.tracebackData.errorNode.addError(error);
 		}
+	}
+
+	/**
+	 * Returns true if the file has any errors, false otherwise.
+	 *
+	 * This is equivalent to checking if the length of {@link errors} is greater than 0.
+	 * @since 0.10.0
+	 */
+	public get hasFailed(): boolean {
+		return this.errors.length > 0;
 	}
 
 	/**
@@ -493,7 +510,7 @@ export class KipperProgramContext {
 		await this.semanticAnalysis();
 
 		// If the semantic analysis failed, return an empty array
-		if (this.errors.length > 0) {
+		if (this.hasFailed) {
 			return undefined;
 		}
 

@@ -1,7 +1,5 @@
 /**
  * Main Compiler file for interacting with the entire Kipper Compiler
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.1
  */
 import { KipperCompileTarget } from "./target-presets";

@@ -1,7 +1,5 @@
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
 import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";

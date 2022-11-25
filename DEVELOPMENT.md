@@ -70,7 +70,7 @@ pnpm start [COMMAND] [ARGS...] [FLAGS...]
 
 ### Rebuild the project
 
-To incrementally build the project:
+To build the project:
 
 ```sh
 pnpm run build

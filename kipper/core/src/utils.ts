@@ -1,14 +1,11 @@
 /**
  * Utility functions for the Kipper core package.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.9.0
  */
 import { Interval } from "antlr4ts/misc/Interval";
 import type { ParserRuleContext, Token } from "antlr4ts";
 import type { ParseTree } from "antlr4ts/tree";
 import type { CharStream } from "antlr4ts/CharStream";
-import type { TranslatedCodeLine } from "./compiler";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.

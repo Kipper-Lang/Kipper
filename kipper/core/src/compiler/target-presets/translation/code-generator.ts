@@ -1,7 +1,5 @@
 /**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type {

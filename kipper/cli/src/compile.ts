@@ -1,7 +1,5 @@
 /**
  * CLI implementation and wrapper functions for Kipper compilations.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 import { KipperCompileResult, KipperCompileTarget, KipperParseStream } from "@kipper/core";
