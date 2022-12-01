@@ -13,7 +13,7 @@ repetition.
 
 ## Syntax
 
-Defining a Kipper function:
+### Defining a function
 
 ```ts
 def NAME(ARG_NAME: TYPE, ...) -> RETURN_TYPE {
@@ -31,7 +31,9 @@ Rules for defining a Kipper function:
 - The return type must be specified.
 - Arguments are optional.
 
-Calling a defined function ([Function call expression](./expressions.html)):
+### Calling a function
+
+*See also [Function call expression](./expressions.html).*
 
 ```ts
 call NAME(ARG1, ARG2, ARGn, ...);
@@ -41,12 +43,19 @@ NAME(ARGS, ARG2, ARGn, ...);
 
 ## Behaviour
 
-When calling a function all arguments have to be passed with the argument types matching. When calling, the variables are going to be copied to the local function stack (local scope), where the function may utilise them for its behaviour.
+Functions are executable segments of code that are only executed when their identifier is referenced and called as shown above. 
 
-<p class="red-highlight-text">
-  A function allows for an infinite amount of arguments, though at the current stage of development, no optional or
-  default arguments are available. Meaning <em>all</em> arguments have to be passed when calling a function!
-</p>
+When calling them all arguments have to be passed with the argument types matching. Once the function has been called,
+the variables are going to be copied to the local function stack (local scope) and be available to the body of the function. 
+This means that the arguments will also be referencable by statements inside the function body.
+
+<div class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+    A function allows for an infinite amount of arguments, though at the current stage of development, no optional or
+    default arguments are available. Meaning <em>all</em> arguments have to be defined when calling a function!
+  </p>
+</div>
 
 ### Function name shadowing
 
