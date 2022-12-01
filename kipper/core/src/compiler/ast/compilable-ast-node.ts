@@ -9,18 +9,17 @@ import type {
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
-	TargetASTNodeSemanticAnalyser,
+	TargetASTNodeSemanticAnalyser
 } from "../target-presets";
 import type { KipperParser } from "../parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
-import type { EvaluatedCompileConfig } from "../compiler";
-import type { GlobalScope, LocalScope } from "../analysis";
-import type { ScopeNode } from "./scope-node";
-import type { FunctionScope } from "../analysis";
 import { ParserASTNode } from "./index";
+import type { EvaluatedCompileConfig } from "../compiler";
+import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
+import type { ScopeNode } from "./scope-node";
 import { KipperError } from "../../errors";
 
 /**
@@ -276,8 +275,10 @@ export abstract class CompilableASTNode<
 			return;
 		}
 
-		// Finally, check if this node is semantically valid
-		await this.primarySemanticAnalysis();
+		// If the semantic analysis function is defined, then call it
+		if (this.primarySemanticAnalysis !== undefined) {
+			await this.primarySemanticAnalysis();
+		}
 	}
 
 	/**
@@ -322,8 +323,10 @@ export abstract class CompilableASTNode<
 			return;
 		}
 
-		// Finally, check if this node's type data is semantically valid
-		await this.primarySemanticTypeChecking();
+		// If the target type checking function is defined, then call it
+		if (this.primarySemanticTypeChecking !== undefined) {
+			await this.primarySemanticTypeChecking();
+		}
 	}
 
 	/**
@@ -356,39 +359,47 @@ export abstract class CompilableASTNode<
 			}
 		}
 
-		await this.targetSemanticAnalysis(this);
+		// If the target semantic analysis function is defined, then call it
+		if (this.targetSemanticAnalysis !== undefined) {
+			await this.targetSemanticAnalysis(this);
+		}
 	}
 
 	/**
 	 * Semantically analyses the code inside this AST node.
+	 *
+	 * If this is {@link undefined} then it means there is no semantic analysis that needs to be done.
 	 * @throws KipperError if the code is not valid.
 	 * @since 0.8.0
 	 */
-	public abstract primarySemanticAnalysis(): Promise<void>;
+	public abstract primarySemanticAnalysis(): Promise<void> | undefined;
 
 	/**
 	 * Type checks the code inside this AST node.
+	 *
+	 * If this is {@link undefined} then it means there is no type checking that needs to be done.
 	 * @throws TypeError When a type mismatch or invalid usage is encountered.
 	 * @since 0.8.0
 	 */
-	public abstract primarySemanticTypeChecking(): Promise<void>;
+	public abstract primarySemanticTypeChecking(): Promise<void> | undefined;
 
 	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code. This
+	 * will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * If this is {@link undefined} then it means there is no warning checks that needs to be done.
 	 * @since 0.9.0
 	 */
-	public abstract checkForWarnings(): Promise<void>;
+	public abstract checkForWarnings(): Promise<void> | undefined;
 
 	/**
-	 * Semantic analyser function that is specific for the {@link KipperCompileTarget target}.
+	 * Semantic analyser function that is specific for the {@link KipperCompileTarget target}. This only should
+	 * perform logical analysis and not interpret the code/modify the {@link semanticData} field.
 	 *
-	 * This only should perform logical analysis and not interpret the code/modify
-	 * the {@link semanticData} field.
+	 * If this is {@link undefined} then it means there is no target specific semantic analysis that needs to be done.
 	 * @since 0.8.0
 	 */
-	public abstract readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
+	public abstract readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
 
 	/**
 	 * Code generator function that is specific for the {@link KipperCompileTarget target}.

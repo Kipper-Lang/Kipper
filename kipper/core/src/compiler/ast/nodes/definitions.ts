@@ -12,7 +12,7 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	StorageTypeSpecifierContext,
+	StorageTypeSpecifierContext
 } from "../../parser";
 import {
 	FunctionScope,
@@ -20,7 +20,7 @@ import {
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
-	UncheckedType,
+	UncheckedType
 } from "../../analysis";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, TranslatedCodeLine } from "../../const";
@@ -29,13 +29,13 @@ import type {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
 	ParameterDeclarationSemantics,
-	VariableDeclarationSemantics,
+	VariableDeclarationSemantics
 } from "../semantic-data";
 import type {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
-	VariableDeclarationTypeSemantics,
+	VariableDeclarationTypeSemantics
 } from "../type-data";
 import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
 import { getParseTreeSource } from "../../../utils";
@@ -144,7 +144,7 @@ export abstract class Declaration<
 		return await this.targetCodeGenerator(this);
 	}
 
-	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
+	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
 	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }
 
@@ -267,10 +267,8 @@ export class ParameterDeclaration extends Declaration<
 		};
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ParameterDeclaration> =
-		this.semanticAnalyser.parameterDeclaration;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ParameterDeclaration, Array<TranslatedCodeLine>> =
-		this.codeGenerator.parameterDeclaration;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.parameterDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.parameterDeclaration;
 }
 
 /**
@@ -425,10 +423,8 @@ export class FunctionDeclaration
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<FunctionDeclaration> =
-		this.semanticAnalyser.functionDeclaration;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<FunctionDeclaration, Array<TranslatedCodeLine>> =
-		this.codeGenerator.functionDeclaration;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.functionDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.functionDeclaration;
 }
 
 /**
@@ -581,8 +577,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		}
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<VariableDeclaration> =
-		this.semanticAnalyser.variableDeclaration;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>> =
-		this.codeGenerator.variableDeclaration;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.variableDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.variableDeclaration;
 }

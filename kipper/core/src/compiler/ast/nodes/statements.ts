@@ -15,7 +15,7 @@ import type {
 	NoSemantics,
 	NoTypeSemantics,
 	SemanticData,
-	TypeData,
+	TypeData
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
@@ -25,11 +25,11 @@ import type {
 	IterationStatementSemantics,
 	JumpStatementSemantics,
 	ReturnStatementSemantics,
-	WhileLoopStatementSemantics,
+	WhileLoopStatementSemantics
 } from "../semantic-data";
 import type { TranslatedCodeLine } from "../../const";
 import type { Expression } from "./expressions";
-import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../target-presets";
+import type { TargetASTNodeCodeGenerator } from "../../target-presets";
 import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
 import {
 	CompoundStatementContext,
@@ -40,12 +40,11 @@ import {
 	JumpStatementContext,
 	ReturnStatementContext,
 	SwitchStatementContext,
-	WhileLoopIterationStatementContext,
+	WhileLoopIterationStatementContext
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
-import { LocalScope } from "../../analysis";
+import { CheckedType, LocalScope } from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { CheckedType } from "../../analysis";
 import { ScopeNode } from "../scope-node";
 
 /**
@@ -217,10 +216,8 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> i
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<CompoundStatement> =
-		this.semanticAnalyser.compoundStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<CompoundStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.compoundStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.compoundStatement;
+	readonly targetCodeGenerator = this.codeGenerator.compoundStatement;
 }
 
 /**
@@ -302,9 +299,8 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<IfStatement> = this.semanticAnalyser.ifStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<IfStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.ifStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.ifStatement;
+	readonly targetCodeGenerator = this.codeGenerator.ifStatement;
 }
 
 /**
@@ -369,10 +365,8 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<SwitchStatement> =
-		this.semanticAnalyser.switchStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<SwitchStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.switchStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.switchStatement;
+	readonly targetCodeGenerator = this.codeGenerator.switchStatement;
 }
 
 /**
@@ -437,10 +431,8 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExpressionStatement> =
-		this.semanticAnalyser.expressionStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.expressionStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
+	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;
 }
 
 /**
@@ -515,10 +507,8 @@ export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatemen
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement> =
-		this.semanticAnalyser.doWhileLoopStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.doWhileLoopStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.doWhileLoopStatement;
+	readonly targetCodeGenerator = this.codeGenerator.doWhileLoopStatement;
 }
 
 /**
@@ -589,10 +579,8 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<WhileLoopStatement> =
-		this.semanticAnalyser.whileLoopStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.whileLoopStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopStatement;
+	readonly targetCodeGenerator = this.codeGenerator.whileLoopStatement;
 }
 
 /**
@@ -658,10 +646,8 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ForLoopStatement> =
-		this.semanticAnalyser.forLoopStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.forLoopStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.forLoopStatement;
+	readonly targetCodeGenerator = this.codeGenerator.forLoopStatement;
 }
 
 /**
@@ -735,9 +721,8 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<JumpStatement> = this.semanticAnalyser.jumpStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.jumpStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.jumpStatement;
+	readonly targetCodeGenerator = this.codeGenerator.jumpStatement;
 }
 
 /**
@@ -817,8 +802,6 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		// TODO!
 	}
 
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ReturnStatement> =
-		this.semanticAnalyser.returnStatement;
-	readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>> =
-		this.codeGenerator.returnStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.returnStatement;
+	readonly targetCodeGenerator = this.codeGenerator.returnStatement;
 }

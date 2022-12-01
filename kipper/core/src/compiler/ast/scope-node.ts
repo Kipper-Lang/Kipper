@@ -51,7 +51,7 @@ export interface ScopeNode<T extends Scope> extends CompilableASTNode<SemanticDa
 	 * the {@link semanticData} field.
 	 * @since 0.10.0
 	 */
-	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any>;
+	readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
 	/**
 	 * Code generator function that is specific for the {@link KipperCompileTarget target}.
 	 * @since 0.10.0

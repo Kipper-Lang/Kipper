@@ -9,6 +9,7 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -35,15 +36,14 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-	CompilableASTNode,
+	VariableDeclaration
 } from "../ast";
 import {
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
+	WhileLoopStatement
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 
@@ -61,188 +61,188 @@ export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any, any>>
  * @since 0.10.0
  */
 export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHandler {
-	/**type
+	/**
 	 * Performs translation-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
-	public abstract compoundStatement: TargetASTNodeSemanticAnalyser<CompoundStatement>;
+	public abstract compoundStatement?: TargetASTNodeSemanticAnalyser<CompoundStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IfStatement} instances.
 	 */
-	public abstract ifStatement: TargetASTNodeSemanticAnalyser<IfStatement>;
+	public abstract ifStatement?: TargetASTNodeSemanticAnalyser<IfStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link SwitchStatement} instances.
 	 */
-	public abstract switchStatement: TargetASTNodeSemanticAnalyser<SwitchStatement>;
+	public abstract switchStatement?: TargetASTNodeSemanticAnalyser<SwitchStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ExpressionStatement} instances.
 	 */
-	public abstract expressionStatement: TargetASTNodeSemanticAnalyser<ExpressionStatement>;
+	public abstract expressionStatement?: TargetASTNodeSemanticAnalyser<ExpressionStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract doWhileLoopStatement: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
+	public abstract doWhileLoopStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract whileLoopStatement: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
+	public abstract whileLoopStatement?: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract forLoopStatement: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
+	public abstract forLoopStatement?: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
 	 */
-	public abstract jumpStatement: TargetASTNodeSemanticAnalyser<JumpStatement>;
+	public abstract jumpStatement?: TargetASTNodeSemanticAnalyser<JumpStatement>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
 	 */
-	public abstract returnStatement: TargetASTNodeSemanticAnalyser<ReturnStatement>;
+	public abstract returnStatement?: TargetASTNodeSemanticAnalyser<ReturnStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
-	public abstract parameterDeclaration: TargetASTNodeSemanticAnalyser<ParameterDeclaration>;
+	public abstract parameterDeclaration?: TargetASTNodeSemanticAnalyser<ParameterDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link FunctionDeclaration} instances.
 	 */
-	public abstract functionDeclaration: TargetASTNodeSemanticAnalyser<FunctionDeclaration>;
+	public abstract functionDeclaration?: TargetASTNodeSemanticAnalyser<FunctionDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
-	public abstract variableDeclaration: TargetASTNodeSemanticAnalyser<VariableDeclaration>;
+	public abstract variableDeclaration?: TargetASTNodeSemanticAnalyser<VariableDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
-	public abstract numberPrimaryExpression: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
+	public abstract numberPrimaryExpression?: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ListPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression: TargetASTNodeSemanticAnalyser<ListPrimaryExpression>;
+	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ListPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
-	public abstract identifierPrimaryExpression: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression>;
+	public abstract identifierPrimaryExpression?: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link StringPrimaryExpression} instances.
 	 */
-	public abstract stringPrimaryExpression: TargetASTNodeSemanticAnalyser<StringPrimaryExpression>;
+	public abstract stringPrimaryExpression?: TargetASTNodeSemanticAnalyser<StringPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
-	public abstract fStringPrimaryExpression: TargetASTNodeSemanticAnalyser<FStringPrimaryExpression>;
+	public abstract fStringPrimaryExpression?: TargetASTNodeSemanticAnalyser<FStringPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link BoolPrimaryExpression} instances.
 	 */
-	public abstract boolPrimaryExpression: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression>;
+	public abstract boolPrimaryExpression?: TargetASTNodeSemanticAnalyser<BoolPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
 	 */
-	public abstract identifierTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression>;
+	public abstract identifierTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<IdentifierTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.
 	 */
-	public abstract genericTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression>;
+	public abstract genericTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<GenericTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
 	 */
-	public abstract typeofTypeSpecifierExpression: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression>;
+	public abstract typeofTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
-	public abstract tangledPrimaryExpression: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression>;
+	public abstract tangledPrimaryExpression?: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ArraySpecifierExpression} instances.
 	 */
-	public abstract arraySpecifierExpression: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression>;
+	public abstract arraySpecifierExpression?: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
-	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression>;
+	public abstract voidOrNullOrUndefinedPrimaryExpression?: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link incrementOrDecrementPostfixExpression} instances.
 	 */
-	public abstract incrementOrDecrementPostfixExpression: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression>;
+	public abstract incrementOrDecrementPostfixExpression?: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
 	 */
-	public abstract functionCallPostfixExpression: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression>;
+	public abstract functionCallPostfixExpression?: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
 	 */
-	public abstract incrementOrDecrementUnaryExpression: TargetASTNodeSemanticAnalyser<IncrementOrDecrementUnaryExpression>;
+	public abstract incrementOrDecrementUnaryExpression?: TargetASTNodeSemanticAnalyser<IncrementOrDecrementUnaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
 	 */
-	public abstract operatorModifiedUnaryExpression: TargetASTNodeSemanticAnalyser<OperatorModifiedUnaryExpression>;
+	public abstract operatorModifiedUnaryExpression?: TargetASTNodeSemanticAnalyser<OperatorModifiedUnaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link CastOrConvertExpression} instances.
 	 */
-	public abstract castOrConvertExpression: TargetASTNodeSemanticAnalyser<CastOrConvertExpression>;
+	public abstract castOrConvertExpression?: TargetASTNodeSemanticAnalyser<CastOrConvertExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link MultiplicativeExpression} instances.
 	 */
-	public abstract multiplicativeExpression: TargetASTNodeSemanticAnalyser<MultiplicativeExpression>;
+	public abstract multiplicativeExpression?: TargetASTNodeSemanticAnalyser<MultiplicativeExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link AdditiveExpression} instances.
 	 */
-	public abstract additiveExpression: TargetASTNodeSemanticAnalyser<AdditiveExpression>;
+	public abstract additiveExpression?: TargetASTNodeSemanticAnalyser<AdditiveExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link RelationalExpression} instances.
 	 */
-	public abstract relationalExpression: TargetASTNodeSemanticAnalyser<RelationalExpression>;
+	public abstract relationalExpression?: TargetASTNodeSemanticAnalyser<RelationalExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
-	public abstract equalityExpression: TargetASTNodeSemanticAnalyser<EqualityExpression>;
+	public abstract equalityExpression?: TargetASTNodeSemanticAnalyser<EqualityExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link LogicalAndExpression} instances.
 	 */
-	public abstract logicalAndExpression: TargetASTNodeSemanticAnalyser<LogicalAndExpression>;
+	public abstract logicalAndExpression?: TargetASTNodeSemanticAnalyser<LogicalAndExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link LogicalOrExpression} instances.
 	 */
-	public abstract logicalOrExpression: TargetASTNodeSemanticAnalyser<LogicalOrExpression>;
+	public abstract logicalOrExpression?: TargetASTNodeSemanticAnalyser<LogicalOrExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ConditionalExpression} instances.
 	 */
-	public abstract conditionalExpression: TargetASTNodeSemanticAnalyser<ConditionalExpression>;
+	public abstract conditionalExpression?: TargetASTNodeSemanticAnalyser<ConditionalExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
-	public abstract assignmentExpression: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
 }
