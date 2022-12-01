@@ -81,6 +81,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.
   - `CompilableASTNode.addError()`, which adds an error to the list of errors caused by the node.
   - `removeBraces()` for removing braces due to formatting reasons.
+  - `CompilableASTNode.recursivelyCheckForWarnings()`, which recursively calls all children's `checkforWarnings()` 
+		functions as well as the function of the parent instance.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
