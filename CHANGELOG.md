@@ -59,7 +59,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     type checking.
   - `UncheckedType`, which is an implementation of `Type` and represents a raw specified type during semantic analysis.
   - `CheckedType`, which is an implementation of `Type` and represents a checked type during type checking, which also
-    handles compilability and error recovery for undefined types.
+    handles compatibility and error recovery for undefined types.
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -95,7 +95,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
-  - `ScopeTree`, which implements the basic functionality of a scope.
+  - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -139,11 +139,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
+- Migrated the internal storage of `Scope` and its implementing classes to a hashmap implementation.
 - Default error identifier is now just `Error` instead of `KipperError`.
 - Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
-- Made the following functions protected, as a way to enforce the use of `Scope.getReferenceRecursively`:
-  - `Scope.getVariable`
-  - `Scope.getFunction`
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -172,6 +170,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
 - Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
+- Removed the following fields:
+  - `Scope.functions` (replaced by hash-map implementation of `Scope`)
+  - `Scope.variables` (replaced by hash-map implementation of `Scope`)
+  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
+  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
 
 ## [0.9.2] - 2022-07-23
 
