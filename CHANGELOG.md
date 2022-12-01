@@ -139,9 +139,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   of the global scope.
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
-- Migrated the internal storage of `Scope` and its implementing classes to a hashmap implementation.
 - Default error identifier is now just `Error` instead of `KipperError`.
 - Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
+- Migrated the internal storage of `Scope` and its implementing classes to a hashmap implementation.
+- Updated types of `CompilableASTNode` functions `primarySemanticAnalysis`, `primarySemanticTypeChecking` and 
+	`targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve 
+	performance and not call an async function unnecessarily.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
