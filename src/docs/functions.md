@@ -104,9 +104,9 @@ def add_prefix(prefix: str, main_str: str) -> str {
 // ✓ Calling the function with all the required arguments and passing the result to a variable
 var result_str: str = call add_prefix("pre", "fix"); // -> "prefix"
 
+// X May not call a function without its required arguments!
+var any_var: str = add_prefix();
+
 // X May not pass the function itself to a variable!
 var any_var: str = add_prefix;
-
-// X May not call a function without its required arguments or brackets!
-var any_var: str = call add_prefix;
 ```
