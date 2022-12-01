@@ -33,20 +33,17 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../semantics";
-import {
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
-} from "../../semantics";
+	CompilableASTNode,
+} from "../../ast";
+import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { CompilableASTNode } from "../../parser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

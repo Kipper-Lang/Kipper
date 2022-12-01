@@ -2,8 +2,7 @@
  * Built-Ins file, which provides the blueprints for the Kipper built-in functions and variables.
  * @since 0.1.0
  */
-
-import type { KipperCompilableType } from "./semantics";
+import type { KipperCompilableType } from "./const";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.

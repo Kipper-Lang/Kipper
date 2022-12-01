@@ -2,8 +2,7 @@
  * The primary Kipper optimiser for optimising Kipper code and removing dead code.
  * @since 0.8.0
  */
-
-import type { RootASTNode } from "../parser";
+import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
 import { BuiltInFunction, InternalFunction } from "../runtime-built-ins";
 

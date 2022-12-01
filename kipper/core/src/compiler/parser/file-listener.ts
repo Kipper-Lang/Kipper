@@ -64,9 +64,9 @@ import {
 	ExpressionASTNodeFactory,
 	Statement,
 	StatementASTNodeFactory,
-} from "../semantics";
-import { RootASTNode } from "./ast/root-ast-node";
-import { CompilableASTNode } from "./compilable-ast-node";
+	RootASTNode,
+	CompilableASTNode,
+} from "../ast";
 import { KipperInternalError } from "../../errors";
 
 const passOnHandler = undefined;

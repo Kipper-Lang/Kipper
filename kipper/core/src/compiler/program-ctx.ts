@@ -1,21 +1,19 @@
 /**
- * A file context for a single Kipper file, which may be used for parsing or compiling a Kipper file
+ * A file context for a single source code file, which stores the important information about the contents of the file.
+ *
+ * This may be used as an interface for semantically analysing its contents (the AST) and generating code for the
+ * target language.s
  * @since 0.0.3
  */
 
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import { CompilableASTNode, KipperFileListener, RootASTNode } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
-import {
-	Expression,
-	GlobalScope,
-	KipperSemanticChecker,
-	KipperTypeChecker,
-	Reference,
-	TranslatedCodeLine,
-} from "./semantics";
+import type { TranslatedCodeLine } from "./const";
+import { KipperFileListener } from "./parser";
+import { CompilableASTNode, RootASTNode, type Expression } from "./ast";
+import { GlobalScope, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";

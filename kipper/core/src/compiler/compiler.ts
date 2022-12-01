@@ -2,15 +2,15 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
+import type { TranslatedCodeLine } from "./const";
+import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
+import { BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
 import { KipperCompileTarget } from "./target-presets";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
-import { type BuiltInFunction, kipperInternalBuiltIns, kipperRuntimeBuiltIns } from "./runtime-built-ins";
-import type { TranslatedCodeLine } from "./semantics";
-import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
 import { KipperError } from "../errors";
 
 /**
