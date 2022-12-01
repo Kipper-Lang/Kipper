@@ -36,14 +36,14 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../ast";
 import {
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement
+	WhileLoopStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 

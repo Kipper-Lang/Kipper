@@ -12,7 +12,7 @@ import {
 	FunctionDeclarationContext,
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
-	StorageTypeSpecifierContext
+	StorageTypeSpecifierContext,
 } from "../../parser";
 import {
 	FunctionScope,
@@ -20,7 +20,7 @@ import {
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
-	UncheckedType
+	UncheckedType,
 } from "../../analysis";
 import type { Expression, IdentifierTypeSpecifierExpression } from "./expressions";
 import type { KipperStorageType, TranslatedCodeLine } from "../../const";
@@ -29,13 +29,13 @@ import type {
 	DeclarationSemantics,
 	FunctionDeclarationSemantics,
 	ParameterDeclarationSemantics,
-	VariableDeclarationSemantics
+	VariableDeclarationSemantics,
 } from "../semantic-data";
 import type {
 	DeclarationTypeData,
 	FunctionDeclarationTypeSemantics,
 	ParameterDeclarationTypeSemantics,
-	VariableDeclarationTypeSemantics
+	VariableDeclarationTypeSemantics,
 } from "../type-data";
 import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from "../../../errors";
 import { getParseTreeSource } from "../../../utils";
@@ -222,9 +222,7 @@ export class ParameterDeclaration extends Declaration<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
@@ -419,9 +417,7 @@ export class FunctionDeclaration
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.functionDeclaration;
 	readonly targetCodeGenerator = this.codeGenerator.functionDeclaration;
@@ -499,9 +495,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}

@@ -15,7 +15,7 @@ import type {
 	NoSemantics,
 	NoTypeSemantics,
 	SemanticData,
-	TypeData
+	TypeData,
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
@@ -25,7 +25,7 @@ import type {
 	IterationStatementSemantics,
 	JumpStatementSemantics,
 	ReturnStatementSemantics,
-	WhileLoopStatementSemantics
+	WhileLoopStatementSemantics,
 } from "../semantic-data";
 import type { TranslatedCodeLine } from "../../const";
 import type { Expression } from "./expressions";
@@ -40,7 +40,7 @@ import {
 	JumpStatementContext,
 	ReturnStatementContext,
 	SwitchStatementContext,
-	WhileLoopIterationStatementContext
+	WhileLoopIterationStatementContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { CheckedType, LocalScope } from "../../analysis";
@@ -161,6 +161,8 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> i
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._semanticData = {};
+		this._typeSemantics = {};
 		this._innerScope = new LocalScope(this);
 	}
 
@@ -191,20 +193,14 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> i
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		// Compound statements will never have semantic data
-		this.semanticData = {};
-	}
+	public primarySemanticAnalysis = undefined; // Compound statements will never have semantic data
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public primarySemanticTypeChecking(): Promise<void> {
-		// Compound statements will never have type checking
-		return Promise.resolve(undefined);
-	}
+	public primarySemanticTypeChecking = undefined; // Compound statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
@@ -212,9 +208,7 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> i
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.compoundStatement;
 	readonly targetCodeGenerator = this.codeGenerator.compoundStatement;
@@ -238,6 +232,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._typeSemantics = {};
 	}
 
 	/**
@@ -285,9 +280,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
-	}
+	public primarySemanticTypeChecking = undefined; // If-statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
@@ -295,9 +288,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.ifStatement;
 	readonly targetCodeGenerator = this.codeGenerator.ifStatement;
@@ -352,7 +343,9 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Switch statements have not been implemented yet."));
 	}
 
 	/**
@@ -361,9 +354,7 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.switchStatement;
 	readonly targetCodeGenerator = this.codeGenerator.switchStatement;
@@ -386,6 +377,8 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._semanticData = {};
+		this._typeSemantics = {};
 	}
 
 	/**
@@ -406,20 +399,14 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		// Expression statements will never have semantic data
-		this.semanticData = {};
-	}
+	public primarySemanticAnalysis = undefined; // Expression statements will never have semantic data
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public primarySemanticTypeChecking(): Promise<void> {
-		// Expression statements will never have type checking
-		return Promise.resolve(undefined);
-	}
+	public primarySemanticTypeChecking = undefined; // Expression statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
@@ -427,9 +414,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
 	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;
@@ -494,7 +479,9 @@ export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatemen
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("Do-While loop statements have not been implemented yet."));
 	}
 
 	/**
@@ -503,9 +490,7 @@ export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatemen
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.doWhileLoopStatement;
 	readonly targetCodeGenerator = this.codeGenerator.doWhileLoopStatement;
@@ -529,6 +514,7 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._typeSemantics = {};
 	}
 
 	/**
@@ -564,10 +550,7 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public primarySemanticTypeChecking(): Promise<void> {
-		// While-loop statements will never have type checking
-		return Promise.resolve(undefined);
-	}
+	public primarySemanticTypeChecking = undefined; // While-loop statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
@@ -575,9 +558,7 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopStatement;
 	readonly targetCodeGenerator = this.codeGenerator.whileLoopStatement;
@@ -633,7 +614,9 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// TODO!
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
 	}
 
 	/**
@@ -642,9 +625,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.forLoopStatement;
 	readonly targetCodeGenerator = this.codeGenerator.forLoopStatement;
@@ -708,7 +689,11 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this.typeSemantics = {};
+		throw this.programCtx
+			.semanticCheck(this)
+			.notImplementedError(
+				new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
+			);
 	}
 
 	/**
@@ -717,9 +702,7 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.jumpStatement;
 	readonly targetCodeGenerator = this.codeGenerator.jumpStatement;
@@ -798,9 +781,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.returnStatement;
 	readonly targetCodeGenerator = this.codeGenerator.returnStatement;

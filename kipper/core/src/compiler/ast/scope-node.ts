@@ -30,20 +30,20 @@ export interface ScopeNode<T extends Scope> extends CompilableASTNode<SemanticDa
 	 * @throws KipperError if the code is not valid.
 	 * @since 0.10.0
 	 */
-	primarySemanticAnalysis(): Promise<void>;
+	primarySemanticAnalysis?(): Promise<void>;
 	/**
 	 * Type checks the code inside this AST node.
 	 * @throws TypeError When a type mismatch or invalid usage is encountered.
 	 * @since 0.10.0
 	 */
-	primarySemanticTypeChecking(): Promise<void>;
+	primarySemanticTypeChecking?(): Promise<void>;
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.10.0
 	 */
-	checkForWarnings(): Promise<void>;
+	checkForWarnings?(): Promise<void>;
 	/**
 	 * Semantic analyser function that is specific for the {@link KipperCompileTarget target}.
 	 *

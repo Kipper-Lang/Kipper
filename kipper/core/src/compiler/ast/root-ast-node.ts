@@ -191,8 +191,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 					continue;
 				}
 
-				// TODO! Implement proper recursive handling for warnings
-				await child.checkForWarnings();
+				await child.recursivelyCheckForWarnings();
 			}
 		}
 	}

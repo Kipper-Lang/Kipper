@@ -9,7 +9,7 @@ import type {
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
-	TargetASTNodeSemanticAnalyser
+	TargetASTNodeSemanticAnalyser,
 } from "../target-presets";
 import type { KipperParser } from "../parser";
 import type { TypeData } from "./ast-node";
@@ -247,7 +247,7 @@ export abstract class CompilableASTNode<
 	public async semanticAnalysis(): Promise<void> {
 		// Start with the evaluation of the children
 		let incompleteSemantics: boolean = false;
-		for (let child of this.children) {
+		for (const child of this.children) {
 			try {
 				await child.semanticAnalysis();
 			} catch (e) {
@@ -289,7 +289,7 @@ export abstract class CompilableASTNode<
 	public async semanticTypeChecking(): Promise<void> {
 		// Start with the evaluation of the children
 		let incompleteSemantics: boolean = false;
-		for (let child of this.children) {
+		for (const child of this.children) {
 			try {
 				// If no semantic data is present, abort processing this item, as there were already semantic errors
 				// (For now will not bother performing any error recovery, like fixing types or auto-casting)
@@ -338,7 +338,7 @@ export abstract class CompilableASTNode<
 	 */
 	public async wrapUpSemanticAnalysis(): Promise<void> {
 		// Start with the evaluation of the children
-		for (let child of this.children) {
+		for (const child of this.children) {
 			try {
 				// If no semantic data or type data is present, abort processing this item, as there were already semantic
 				// or type errors.
@@ -366,22 +366,40 @@ export abstract class CompilableASTNode<
 	}
 
 	/**
+	 * Recursively checks for warnings by calling this function on all {@link this.children children} and calling
+	 * {@link checkForWarnings} on this class as well.
+	 * @since 0.10.0
+	 */
+	public async recursivelyCheckForWarnings(): Promise<void> {
+		for (const child of this.children) {
+			await child.recursivelyCheckForWarnings();
+		}
+
+		// If the check for warnings function is defined, then call it
+		if (this.checkForWarnings) {
+			await this.checkForWarnings();
+		}
+	}
+
+	/**
 	 * Semantically analyses the code inside this AST node.
 	 *
-	 * If this is {@link undefined} then it means there is no semantic analysis that needs to be done.
+	 * If this is {@link undefined} then it means there is no semantic analysis that needs to be done. This will also
+	 * automatically make {@link semanticData} be defined as an empty object.
 	 * @throws KipperError if the code is not valid.
 	 * @since 0.8.0
 	 */
-	public abstract primarySemanticAnalysis(): Promise<void> | undefined;
+	public abstract primarySemanticAnalysis?(): Promise<void>;
 
 	/**
 	 * Type checks the code inside this AST node.
 	 *
-	 * If this is {@link undefined} then it means there is no type checking that needs to be done.
+	 * If this is {@link undefined} then it means there is no type checking that needs to be done. This will also
+	 * automatically make {@link typeSemantics} be defined as an empty object.
 	 * @throws TypeError When a type mismatch or invalid usage is encountered.
 	 * @since 0.8.0
 	 */
-	public abstract primarySemanticTypeChecking(): Promise<void> | undefined;
+	public abstract primarySemanticTypeChecking?(): Promise<void>;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code. This
@@ -390,7 +408,7 @@ export abstract class CompilableASTNode<
 	 * If this is {@link undefined} then it means there is no warning checks that needs to be done.
 	 * @since 0.9.0
 	 */
-	public abstract checkForWarnings(): Promise<void> | undefined;
+	public abstract checkForWarnings?(): Promise<void>;
 
 	/**
 	 * Semantic analyser function that is specific for the {@link KipperCompileTarget target}. This only should

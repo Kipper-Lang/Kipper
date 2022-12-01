@@ -34,7 +34,7 @@ import type {
 	TypeofTypeSpecifierExpressionSemantics,
 	TypeSpecifierExpressionSemantics,
 	UnaryExpressionSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionSemantics
+	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 } from "../semantic-data";
 import type {
 	AdditiveExpressionTypeSemantics,
@@ -66,7 +66,7 @@ import type {
 	TypeofTypeSpecifierExpressionTypeSemantics,
 	TypeSpecifierExpressionTypeSemantics,
 	UnaryExpressionTypeSemantics,
-	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
+	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
 } from "../type-data";
 import {
 	KipperAdditiveOperator,
@@ -90,7 +90,7 @@ import {
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
-	TranslatedExpression
+	TranslatedExpression,
 } from "../../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
@@ -123,7 +123,7 @@ import {
 	TangledPrimaryExpressionContext,
 	TypeofTypeSpecifierContext,
 	UnaryOperatorContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext
+	VoidOrNullOrUndefinedPrimaryExpressionContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { ParserRuleContext } from "antlr4ts";
@@ -274,9 +274,7 @@ export abstract class Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public abstract checkForWarnings?(): Promise<void>;
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -356,9 +354,7 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -419,9 +415,7 @@ export class ListPrimaryExpression extends ConstantExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -483,9 +477,7 @@ export class StringPrimaryExpression extends ConstantExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -546,9 +538,7 @@ export class BoolPrimaryExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -611,9 +601,7 @@ export class FStringPrimaryExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -701,9 +689,7 @@ export class IdentifierPrimaryExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -783,9 +769,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -847,9 +831,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -909,9 +891,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -985,9 +965,7 @@ export class TangledPrimaryExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1048,9 +1026,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1126,10 +1102,7 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public checkForWarnings(): Promise<void> {
-		// (Unary) Increment or decrement expressions like this doesn't have warnings for now.
-		return Promise.resolve(undefined);
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1191,9 +1164,7 @@ export class ArraySpecifierExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1291,9 +1262,7 @@ export class FunctionCallPostfixExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1380,10 +1349,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public checkForWarnings(): Promise<void> {
-		// (Unary) Increment or decrement expressions like this doesn't have warnings for now.
-		return Promise.resolve(undefined);
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1472,9 +1438,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1572,9 +1536,7 @@ export class CastOrConvertExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1670,9 +1632,7 @@ export class MultiplicativeExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1761,9 +1721,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1865,9 +1823,7 @@ export class RelationalExpression extends ComparativeExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -1950,9 +1906,7 @@ export class EqualityExpression extends ComparativeExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -2041,9 +1995,7 @@ export class LogicalAndExpression extends LogicalExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -2121,9 +2073,7 @@ export class LogicalOrExpression extends LogicalExpression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -2187,9 +2137,7 @@ export class ConditionalExpression extends Expression<
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
@@ -2299,9 +2247,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public async checkForWarnings(): Promise<void> {
-		// TODO!
-	}
+	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
