@@ -5,6 +5,7 @@
 
 import type { BuiltInFunction, BuiltInFunctionArgument, FunctionDeclaration } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
+import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an JavaScript env.
@@ -46,7 +47,7 @@ export function createJSFunctionSignature(signature: { identifier: string; param
  * @since 0.10.0
  */
 export function getJavaScriptBuiltInIdentifier(identifier: string): string {
-	return `__kipper.${identifier}`;
+	return `${JavaScriptTargetSemanticAnalyser.internalObjectIdentifier}.${identifier}`;
 }
 
 /**
