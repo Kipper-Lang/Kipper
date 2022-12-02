@@ -3,7 +3,7 @@
 # Kipper Core Package - `@kipper/core`
 
 [![Version](https://img.shields.io/npm/v/@kipper/core?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
-[![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
+[![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
 ![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
@@ -54,18 +54,11 @@ Simple example of compiling and running Kipper code in a browser:
 <!-- You won't have to define Kipper or anything after including the previous file. It will be defined per default  -->
 <!-- with the global 'Kipper' -->
 <script type="module">
-	// Define your own logger and compiler, which will handle the compilation
-	const logger = new Kipper.KipperLogger((level, msg) => {
-		console.log(`[${Kipper.getLogLevelString(level)}] ${msg}`);
-	});
-	// Define your own compiler with your wanted configuration
-	const compiler = new Kipper.KipperCompiler(logger);
+	const compiler = new Kipper.KipperCompiler();
 
 	// Compile the code to JavaScript
 	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
-	const result = await compiler.compile(`call print("Hello world!");`, {
-		target: new KipperJS.KipperJavaScriptTarget(),
-	});
+	const result = await compiler.compile(`print("Hello world!");`, { target: new KipperJS.TargetJS() });
 	const jsCode = result.write();
 
 	// Finally, run your program
@@ -73,7 +66,7 @@ Simple example of compiling and running Kipper code in a browser:
 </script>
 ```
 
-### Locally using Node.js and the CLI
+### Locally using Node.js with `@kipper/cli`
 
 This is to recommend way to use Kipper if you want to dive deeper into Kipper, as it allows you to locally use and run
 kipper, without depending on a browser.
@@ -102,26 +95,19 @@ the compiler. This also allows for special handling of logging and customising t
 
 Simple example of using the Kipper Compiler in Node.js:
 
-- JavaScript:
+- JavaScript (CommonJS):
 
   ```js
   const fs = require("fs").promises;
   const kipper = require("@kipper/core");
-  const KipperJavaScriptTarget = require("@kipper/target-js").KipperJavaScriptTarget;
+  const kipperJS = require("@kipper/target-js");
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8").then(async (fileContent) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+  	const compiler = new kipper.KipperCompiler();
 
   	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  		target: new KipperJavaScriptTarget(),
-  	});
+  	let result = await compiler.compile(fileContent, { target: new kipperJS.TargetJS() });
   	let jsCode = result.write();
 
   	// Running the Kipper program
@@ -129,26 +115,19 @@ Simple example of using the Kipper Compiler in Node.js:
   });
   ```
 
-- TypeScript:
+- TypeScript (CommonJS):
 
   ```ts
   import { promises as fs } from "fs";
-  import * as kipper from "@kipper/core";
-  import { KipperJavaScriptTarget } from "@kipper/target-js";
+  import { KipperCompiler } from "@kipper/core";
+  import TargetJS from "@kipper/target-js";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+  	const compiler = new KipperCompiler();
 
   	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  		target: new KipperJavaScriptTarget(),
-  	});
+  	let result = await compiler.compile(fileContent, { target: new TargetJS() });
   	let jsCode = result.write();
 
   	// Running the Kipper program
