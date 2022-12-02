@@ -102,6 +102,4 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
  * Alias for {@link KipperJavaScriptTarget}.
  * @since 0.10.0
  */
-const TargetJS = KipperJavaScriptTarget;
-
-export default TargetJS;
+export const TargetJS = KipperJavaScriptTarget;

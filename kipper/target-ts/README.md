@@ -31,41 +31,41 @@ Simply import the target and specify it in the `compilerOptions` field of `Kippe
 
 - JavaScript (CommonJS):
 
-	```js
-	const fs = require("fs").promises;
-	const kipper = require("@kipper/core");
-	const kipperTS = require("@kipper/target-ts");
+  ```js
+  const fs = require("fs").promises;
+  const kipper = require("@kipper/core");
+  const kipperTS = require("@kipper/target-ts");
 
-	const path = "INSERT_PATH";
-	fs.readFile(path, "utf8").then(async (fileContent) => {
-		const compiler = new kipper.KipperCompiler();
+  const path = "INSERT_PATH";
+  fs.readFile(path, "utf8").then(async (fileContent) => {
+  	const compiler = new kipper.KipperCompiler();
 
-		// Compile the code string or stream
-		let result = await compiler.compile(fileContent, { target: new kipperTS.TargetTS() });
-		let jsCode = result.write();
+  	// Compile the code string or stream
+  	let result = await compiler.compile(fileContent, { target: new kipperTS.TargetTS() });
+  	let jsCode = result.write();
 
-		// Running the Kipper program
-		eval(jsCode);
-	});
-	```
+  	// Running the Kipper program
+  	eval(jsCode);
+  });
+  ```
 
 - TypeScript (CommonJS):
 
-	```ts
-	import { promises as fs } from "fs";
-	import { KipperCompiler } from "@kipper/core";
-	import TargetTS from "@kipper/target-ts";
+  ```ts
+  import { promises as fs } from "fs";
+  import { KipperCompiler } from "@kipper/core";
+  import { TargetTS } from "@kipper/target-ts";
 
-	const path = "INSERT_PATH";
-	fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
-		const compiler = new KipperCompiler();
+  const path = "INSERT_PATH";
+  fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
+  	const compiler = new KipperCompiler();
 
-		// Compile the code string or stream
-		let result = await compiler.compile(fileContent, { target: new TargetTS() });
-		let tsCode = result.write();
-	});
-	```
- 
+  	// Compile the code string or stream
+  	let result = await compiler.compile(fileContent, { target: new TargetTS() });
+  	let tsCode = result.write();
+  });
+  ```
+
 If you are using `@kipper/cli` then this package is automatically installed and compiling to TypeScript can be done
 using the `--target=ts` flag, for example:
 

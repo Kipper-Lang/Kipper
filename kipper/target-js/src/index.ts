@@ -4,6 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
+export * from "./target";
 export * from "./semantic-analyser";
 export * from "./code-generator";
 export * from "./built-in-generator";

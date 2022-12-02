@@ -120,7 +120,7 @@ Simple example of using the Kipper Compiler in Node.js:
   ```ts
   import { promises as fs } from "fs";
   import { KipperCompiler } from "@kipper/core";
-  import TargetJS from "@kipper/target-js";
+  import { TargetJS } from "@kipper/target-js";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {

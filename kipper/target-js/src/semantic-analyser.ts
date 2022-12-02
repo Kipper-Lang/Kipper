@@ -9,7 +9,7 @@ import {
 	KipperTargetSemanticAnalyser,
 	ReservedIdentifierOverwriteError,
 } from "@kipper/core";
-import TargetJS from "./target";
+import { TargetJS } from "./target";
 
 /**
  * The TypeScript target-specific semantic analyser.

@@ -6,7 +6,7 @@ import { KipperCompileTarget } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
-import { JavaScriptTargetSemanticAnalyser } from "@kipper/target-js";
+import { TargetJS } from "@kipper/target-js/lib/target";
 
 /**
  * The TypeScript translation target for the Kipper language.
@@ -17,13 +17,13 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	 * The internal identifier for the global Kipper object storing runtime definitions.
 	 * @since 0.10.0
 	 */
-	static readonly internalObjectIdentifier = JavaScriptTargetSemanticAnalyser.internalObjectIdentifier;
+	static readonly internalObjectIdentifier = TargetJS.internalObjectIdentifier;
 
 	/**
 	 * All reserved identifiers in JavaScript/TypeScript that may not be overwritten.
 	 * @since 0.10.0
 	 */
-	static readonly reservedIdentifiers = JavaScriptTargetSemanticAnalyser.reservedIdentifiers;
+	static readonly reservedIdentifiers = TargetJS.reservedIdentifiers;
 
 	constructor(
 		semanticAnalyser: TypeScriptTargetSemanticAnalyser = new TypeScriptTargetSemanticAnalyser(),
@@ -40,6 +40,4 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
  * Alias for {@link KipperTypeScriptTarget}.
  * @since 0.10.0
  */
-const TargetTS = KipperTypeScriptTarget;
-
-export default TargetTS;
+export const TargetTS = KipperTypeScriptTarget;

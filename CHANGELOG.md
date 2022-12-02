@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
-  analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available 
+  analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
   as alias), which can be used as the target in the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
 - Standalone web-module package called `@kipper/web`, which from now on will provide the `kipper-standalone.js` script
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
@@ -126,8 +126,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 
 - Moved TypeScript target from the core package to a new monorepo package called `@kipper/target-ts`, which implements
-  the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget` 
-	(`TargetTS` available as alias), which can be used as the target in the `CompileConfig`.
+  the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`
+  (`TargetTS` available as alias), which can be used as the target in the `CompileConfig`.
 - Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
   assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
