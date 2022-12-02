@@ -4,25 +4,7 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import { KipperCompileTarget } from "@kipper/core";
-import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
-import { TypeScriptTargetCodeGenerator } from "./code-generator";
-import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
-
-/**
- * The TypeScript translation target for the Kipper language.
- * @since 0.10.0
- */
-export class KipperTypeScriptTarget extends KipperCompileTarget {
-	constructor(
-		semanticAnalyser: TypeScriptTargetSemanticAnalyser = new TypeScriptTargetSemanticAnalyser(),
-		codeGenerator: TypeScriptTargetCodeGenerator = new TypeScriptTargetCodeGenerator(),
-		builtInGenerator: TypeScriptTargetBuiltInGenerator = new TypeScriptTargetBuiltInGenerator(),
-	) {
-		super("typescript", semanticAnalyser, codeGenerator, builtInGenerator, "ts");
-	}
-}
-
+export * from "./target";
 export * from "./semantic-analyser";
 export * from "./code-generator";
 export * from "./built-in-generator";

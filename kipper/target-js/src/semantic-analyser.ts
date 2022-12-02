@@ -9,78 +9,7 @@ import {
 	KipperTargetSemanticAnalyser,
 	ReservedIdentifierOverwriteError,
 } from "@kipper/core";
-import { getJavaScriptBuiltInIdentifier } from "./tools";
-
-/**
- * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.
- * @since 0.10.0
- */
-export const reservedIdentifiers: Array<string> = [
-	"break",
-	"case",
-	"catch",
-	"class",
-	"const",
-	"continue",
-	"debugger",
-	"default",
-	"delete",
-	"do",
-	"else",
-	"enum",
-	"export",
-	"extends",
-	"false",
-	"finally",
-	"for",
-	"function",
-	"if",
-	"import",
-	"in",
-	"instanceof",
-	"new",
-	"null",
-	"return",
-	"super",
-	"switch",
-	"this",
-	"throw",
-	"true",
-	"try",
-	"typeof",
-	"var",
-	"void",
-	"while",
-	"with",
-	"as",
-	"implements",
-	"interface",
-	"let",
-	"package",
-	"private",
-	"protected",
-	"public",
-	"static",
-	"yield",
-	"any",
-	"boolean",
-	"constructor",
-	"declare",
-	"get",
-	"module",
-	"require",
-	"number",
-	"set",
-	"string",
-	"symbol",
-	"type",
-	"from",
-	"of",
-];
-
-// Reserved Kipper identifiers (cached)
-let reservedKipperIdentifiers: Array<string> = [];
-let reservedIdentifiersCached: boolean = false;
+import { TargetJS } from "./target";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -93,22 +22,16 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * @param declaration The variable, function or parameter declaration.
 	 * @private
 	 */
-	protected checkViabilityOfIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
+	protected checkViabilityOfIdentifier(
+		declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration,
+	): void {
 		const identifier = declaration.getSemanticData().identifier;
 
-		if (!reservedIdentifiersCached) {
-			reservedKipperIdentifiers = [
-				...declaration.programCtx.internals.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
-				...declaration.programCtx.builtIns.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
-			];
-		}
-
-		// Throw an error in case the declaration identifier causes issues in TypeScript.
-		//
-		// Error cases:
-		// 1. Identifiers starting with '__' are always reserved and may not be defined.
-		// 2. Identifiers may not overwrite TypeScript specific keywords.
-		if (reservedKipperIdentifiers.find((i) => i === identifier) || reservedIdentifiers.find((i) => i === identifier)) {
+		// Throw an error in case the declaration identifier is reserved
+		if (
+			identifier === TargetJS.internalObjectIdentifier ||
+			TargetJS.reservedIdentifiers.find((i) => i === identifier)
+		) {
 			this.setTracebackData({ ctx: declaration });
 			throw this.error(new ReservedIdentifierOverwriteError(identifier));
 		}

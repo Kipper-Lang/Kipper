@@ -9,5 +9,3 @@ import { JavaScriptTargetSemanticAnalyser } from "@kipper/target-js";
  * @since 0.8.0
  */
 export class TypeScriptTargetSemanticAnalyser extends JavaScriptTargetSemanticAnalyser {}
-
-export { reservedIdentifiers } from "@kipper/target-js";

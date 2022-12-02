@@ -127,26 +127,19 @@ the compiler. This also allows for special handling of logging and customising t
 
 Simple example of using the Kipper Compiler in Node.js:
 
-- JavaScript:
+- JavaScript (CommonJS):
 
   ```js
   const fs = require("fs").promises;
   const kipper = require("@kipper/core");
-  const KipperJavaScriptTarget = require("@kipper/target-js").KipperJavaScriptTarget;
+  const kipperJS = require("@kipper/target-js");
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8").then(async (fileContent) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+  	const compiler = new kipper.KipperCompiler();
 
   	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  		target: new KipperJavaScriptTarget(),
-  	});
+  	let result = await compiler.compile(fileContent, { target: new kipperJS.TargetJS() });
   	let jsCode = result.write();
 
   	// Running the Kipper program
@@ -154,26 +147,19 @@ Simple example of using the Kipper Compiler in Node.js:
   });
   ```
 
-- TypeScript:
+- TypeScript (CommonJS):
 
   ```ts
   import { promises as fs } from "fs";
-  import * as kipper from "@kipper/core";
-  import { KipperJavaScriptTarget } from "@kipper/target-js";
+  import { KipperCompiler } from "@kipper/core";
+  import { TargetJS } from "@kipper/target-js";
 
   const path = "INSERT_PATH";
   fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
-  	// Define your own logger and compiler, which will handle the compilation
-  	const logger = new kipper.KipperLogger((level, msg) => {
-  		console.log(`[${level}] ${msg}`);
-  	});
-  	const compiler = new kipper.KipperCompiler(logger);
+  	const compiler = new KipperCompiler();
 
   	// Compile the code string or stream
-  	let result = await compiler.compile(fileContent, {
-  		/* Config */
-  		target: new KipperJavaScriptTarget(),
-  	});
+  	let result = await compiler.compile(fileContent, { target: new TargetJS() });
   	let jsCode = result.write();
 
   	// Running the Kipper program
