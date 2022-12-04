@@ -1131,9 +1131,9 @@ packages:
     dependencies:
       '@types/json-schema': 7.0.11
       '@types/semver': 7.3.13
-      '@typescript-eslint/scope-manager': 5.43.0
-      '@typescript-eslint/types': 5.43.0
-      '@typescript-eslint/typescript-estree': 5.43.0_typescript@4.7.4
+      '@typescript-eslint/scope-manager': 5.44.0
+      '@typescript-eslint/types': 5.44.0
+      '@typescript-eslint/typescript-estree': 5.44.0_typescript@4.7.4
       eslint: 8.27.0
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0_eslint@8.27.0
