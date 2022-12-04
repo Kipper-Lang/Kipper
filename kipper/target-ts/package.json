@@ -13,7 +13,7 @@
 		"mkdirp": "1.0.4",
 		"ansi-regex": "6.0.1",
 		"minimist": "1.2.7",
-		"prettier": "2.7.1",
+		"prettier": "2.8.0",
 		"watchify": "4.0.0",
 		"json-parse-even-better-errors": "3.0.0",
 		"run-script-os": "1.1.6",
