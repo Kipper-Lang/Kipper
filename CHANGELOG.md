@@ -8,8 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- Added full support for custom-defined functions, function arguments, function return evaluation, function 
-	scopes/argument referencing and return-value code branch inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
+- Added full support for custom-defined functions, function arguments, function return evaluation, function
+  scopes/argument referencing and return-value code branch inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
 - Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
   analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
@@ -80,7 +80,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperSemanticChecker.identifierNotUsed()`, which asserts that the specified identifier is unused in the
     specified scope and can be used for a new declaration.
   - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
-  - `KipperSemanticChecker.refTargetDefined()`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.referenceDefined()`, which asserts that the specified reference is defined and can be used.
   - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.
   - `CompilableASTNode.addError()`, which adds an error to the list of errors caused by the node.
   - `removeBraces()` for removing braces due to formatting reasons.
