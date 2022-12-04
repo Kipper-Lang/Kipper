@@ -37,7 +37,7 @@ export class LocalScope extends Scope {
 		const identifier = declaration.getSemanticData().identifier;
 
 		// Ensuring that the declaration does not overwrite other definitions
-		// Using 'declaration' as a context since it stores the context info of the scope
+		this.ctx.programCtx.semanticCheck(declaration).builtInNotDefined(identifier);
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
