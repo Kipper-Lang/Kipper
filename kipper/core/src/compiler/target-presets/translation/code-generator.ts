@@ -1,7 +1,5 @@
 /**
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type {
@@ -23,7 +21,6 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	ListPrimaryExpression,
 	LogicalAndExpression,
@@ -36,14 +33,17 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../../semantics";
-import { ReturnStatement, VoidOrNullOrUndefinedPrimaryExpression } from "../../semantics";
+	DoWhileLoopStatement,
+	ForLoopStatement,
+	ReturnStatement,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
+	CompilableASTNode,
+} from "../../ast";
+import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { CompilableASTNode } from "../../parser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -122,9 +122,19 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract expressionStatement: TargetASTNodeCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>>;
 
 	/**
-	 * Translates a {@link IterationStatement} into a specific language.
+	 * Translates a {@link ForLoopStatement} into a specific language.
 	 */
-	public abstract iterationStatement: TargetASTNodeCodeGenerator<IterationStatement, Array<TranslatedCodeLine>>;
+	public abstract doWhileLoopStatement: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract whileLoopStatement: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ForLoopStatement} into a specific language.
+	 */
+	public abstract forLoopStatement: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.

@@ -2,8 +2,9 @@
 
 # Kipper TypeScript Target - `@kipper/target-ts`
 
-[![Version](https://img.shields.io/npm/v/@kipper/target-ts?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/target-ts)
-![](https://img.shields.io/badge/Coverage-83%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+[![Version](https://img.shields.io/npm/v/@kipper/target-ts?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
+[![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
+![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
@@ -23,6 +24,54 @@ npm i @kipper/target-ts
 ```
 
 If you are using `pnpm` or `yarn`, use `pnpm i @kipper/target-ts` or `yarn add @kipper/target-ts`.
+
+## Usage
+
+Simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for example:
+
+- JavaScript (CommonJS):
+
+  ```js
+  const fs = require("fs").promises;
+  const kipper = require("@kipper/core");
+  const kipperTS = require("@kipper/target-ts");
+
+  const path = "INSERT_PATH";
+  fs.readFile(path, "utf8").then(async (fileContent) => {
+  	const compiler = new kipper.KipperCompiler();
+
+  	// Compile the code string or stream
+  	let result = await compiler.compile(fileContent, { target: new kipperTS.TargetTS() });
+  	let jsCode = result.write();
+
+  	// Running the Kipper program
+  	eval(jsCode);
+  });
+  ```
+
+- TypeScript (CommonJS):
+
+  ```ts
+  import { promises as fs } from "fs";
+  import { KipperCompiler } from "@kipper/core";
+  import { TargetTS } from "@kipper/target-ts";
+
+  const path = "INSERT_PATH";
+  fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
+  	const compiler = new KipperCompiler();
+
+  	// Compile the code string or stream
+  	let result = await compiler.compile(fileContent, { target: new TargetTS() });
+  	let tsCode = result.write();
+  });
+  ```
+
+If you are using `@kipper/cli` then this package is automatically installed and compiling to TypeScript can be done
+using the `--target=ts` flag, for example:
+
+```bash
+kipper compile example-script.kip --target=ts
+```
 
 ## Kipper Docs
 

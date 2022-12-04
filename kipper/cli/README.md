@@ -8,7 +8,8 @@ Kipper is a simple strongly and statically typed programming language, which is 
 straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
 
 [![Version](https://img.shields.io/npm/v/@kipper/cli?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/cli)
-![](https://img.shields.io/badge/Coverage-83%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
+[![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
+![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logo=github&logoColor=white&color=blue&prefix=$coverage$)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![Install size](https://packagephobia.com/badge?p=@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
@@ -36,7 +37,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.10.0-alpha.5 linux-x64 node-v16.16.0
+@kipper/cli/0.10.0-alpha.6 win32-x64 node-v18.6.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -76,7 +77,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [lib/commands/analyse.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/analyse.js)_
+_See code: [lib/commands/analyse.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/analyse.js)_
 
 ## `kipper compile [FILE]`
 
@@ -115,7 +116,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [lib/commands/compile.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/compile.js)_
+_See code: [lib/commands/compile.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/compile.js)_
 
 ## `kipper help [COMMAND]`
 
@@ -132,7 +133,7 @@ OPTIONS
   -n, --nested-commands  Include all nested commands in the output.
 ```
 
-_See code: [lib/commands/help.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/help.js)_
+_See code: [lib/commands/help.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/help.js)_
 
 ## `kipper run [FILE]`
 
@@ -171,7 +172,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [lib/commands/run.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/run.js)_
+_See code: [lib/commands/run.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/run.js)_
 
 ## `kipper update [CHANNEL]`
 
@@ -194,7 +195,7 @@ EXAMPLES
   [object Object]
 ```
 
-_See code: [lib/commands/update.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/update.js)_
+_See code: [lib/commands/update.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/update.js)_
 
 ## `kipper version`
 
@@ -205,7 +206,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [lib/commands/version.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.5/kipper/cli/lib/commands/version.js)_
+_See code: [lib/commands/version.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/version.js)_
 
 <!-- commandsstop -->
 

@@ -9,6 +9,9 @@ import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
 import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { ExternalFunctionDeclarationContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
+import { ForLoopIterationStatementContext } from "./KipperParser";
+import { WhileLoopIterationStatementContext } from "./KipperParser";
+import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -156,6 +159,30 @@ export interface KipperVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitExternalBlockItem?: (ctx: ExternalBlockItemContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `ForLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `WhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `DoWhileLoopIterationStatement`
+	 * labeled alternative in `KipperParser.iterationStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnAssignmentExpression`

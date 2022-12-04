@@ -1,20 +1,17 @@
 /**
  * CLI related errors that core on {@link KipperError}
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.1.0
  */
 
 import { KipperError } from "@kipper/core";
-import { ParserRuleContext } from "antlr4ts";
 
 /**
  * A Kipper CLI error that extends from {@link KipperError} and represents any error that is unique to the CLI.
  * @since 0.1.0
  */
 export abstract class KipperCLIError extends KipperError {
-	protected constructor(msg: string, token?: ParserRuleContext) {
-		super(msg, token);
+	protected constructor(msg: string) {
+		super(msg);
 	}
 }
 

@@ -2933,6 +2933,7 @@ export class KipperParser extends Parser {
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.For:
+					_localctx = new ForLoopIterationStatementContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 419;
@@ -2948,6 +2949,7 @@ export class KipperParser extends Parser {
 					}
 					break;
 				case KipperParser.While:
+					_localctx = new WhileLoopIterationStatementContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 425;
@@ -2963,6 +2965,7 @@ export class KipperParser extends Parser {
 					}
 					break;
 				case KipperParser.Do:
+					_localctx = new DoWhileLoopIterationStatementContext(_localctx);
 					this.enterOuterAlt(_localctx, 3);
 					{
 						this.state = 431;
@@ -6351,33 +6354,6 @@ export class SwitchLabeledStatementContext extends ParserRuleContext {
 }
 
 export class IterationStatementContext extends ParserRuleContext {
-	public For(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.For, 0);
-	}
-	public LeftParen(): TerminalNode {
-		return this.getToken(KipperParser.LeftParen, 0);
-	}
-	public forCondition(): ForConditionContext | undefined {
-		return this.tryGetRuleContext(0, ForConditionContext);
-	}
-	public RightParen(): TerminalNode {
-		return this.getToken(KipperParser.RightParen, 0);
-	}
-	public statement(): StatementContext {
-		return this.getRuleContext(0, StatementContext);
-	}
-	public While(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.While, 0);
-	}
-	public expression(): ExpressionContext | undefined {
-		return this.tryGetRuleContext(0, ExpressionContext);
-	}
-	public Do(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.Do, 0);
-	}
-	public endOfLine(): EndOfLineContext | undefined {
-		return this.tryGetRuleContext(0, EndOfLineContext);
-	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
@@ -6385,22 +6361,134 @@ export class IterationStatementContext extends ParserRuleContext {
 	public get ruleIndex(): number {
 		return KipperParser.RULE_iterationStatement;
 	}
+	public copyFrom(ctx: IterationStatementContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class ForLoopIterationStatementContext extends IterationStatementContext {
+	public For(): TerminalNode {
+		return this.getToken(KipperParser.For, 0);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public forCondition(): ForConditionContext {
+		return this.getRuleContext(0, ForConditionContext);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public statement(): StatementContext {
+		return this.getRuleContext(0, StatementContext);
+	}
+	constructor(ctx: IterationStatementContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
 	// @Override
 	public enterRule(listener: KipperListener): void {
-		if (listener.enterIterationStatement) {
-			listener.enterIterationStatement(this);
+		if (listener.enterForLoopIterationStatement) {
+			listener.enterForLoopIterationStatement(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperListener): void {
-		if (listener.exitIterationStatement) {
-			listener.exitIterationStatement(this);
+		if (listener.exitForLoopIterationStatement) {
+			listener.exitForLoopIterationStatement(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperVisitor<Result>): Result {
-		if (visitor.visitIterationStatement) {
-			return visitor.visitIterationStatement(this);
+		if (visitor.visitForLoopIterationStatement) {
+			return visitor.visitForLoopIterationStatement(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class WhileLoopIterationStatementContext extends IterationStatementContext {
+	public While(): TerminalNode {
+		return this.getToken(KipperParser.While, 0);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public expression(): ExpressionContext {
+		return this.getRuleContext(0, ExpressionContext);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public statement(): StatementContext {
+		return this.getRuleContext(0, StatementContext);
+	}
+	constructor(ctx: IterationStatementContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperListener): void {
+		if (listener.enterWhileLoopIterationStatement) {
+			listener.enterWhileLoopIterationStatement(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperListener): void {
+		if (listener.exitWhileLoopIterationStatement) {
+			listener.exitWhileLoopIterationStatement(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperVisitor<Result>): Result {
+		if (visitor.visitWhileLoopIterationStatement) {
+			return visitor.visitWhileLoopIterationStatement(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class DoWhileLoopIterationStatementContext extends IterationStatementContext {
+	public Do(): TerminalNode {
+		return this.getToken(KipperParser.Do, 0);
+	}
+	public statement(): StatementContext {
+		return this.getRuleContext(0, StatementContext);
+	}
+	public While(): TerminalNode {
+		return this.getToken(KipperParser.While, 0);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public expression(): ExpressionContext {
+		return this.getRuleContext(0, ExpressionContext);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public endOfLine(): EndOfLineContext {
+		return this.getRuleContext(0, EndOfLineContext);
+	}
+	constructor(ctx: IterationStatementContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperListener): void {
+		if (listener.enterDoWhileLoopIterationStatement) {
+			listener.enterDoWhileLoopIterationStatement(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperListener): void {
+		if (listener.exitDoWhileLoopIterationStatement) {
+			listener.exitDoWhileLoopIterationStatement(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperVisitor<Result>): Result {
+		if (visitor.visitDoWhileLoopIterationStatement) {
+			return visitor.visitDoWhileLoopIterationStatement(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

@@ -1,7 +1,5 @@
 /**
  * 'run' command for running a compiled kipper-file (.js file) or compiling and running a file in one
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 import * as ts from "typescript";
@@ -27,7 +25,7 @@ import { getFile, getTarget, writeCompilationResult } from "../compile";
  * Run the Kipper program.
  * @param jsCode
  */
-export function executeKipperProgram(jsCode: string) {
+export async function executeKipperProgram(jsCode: string) {
 	const kipperProgram = spawn(process.execPath, ["-e", jsCode]);
 
 	// Per default the encoding should be 'utf-8'
@@ -42,12 +40,12 @@ export function executeKipperProgram(jsCode: string) {
 }
 
 export default class Run extends Command {
-	static description = "Compile and execute a Kipper program.";
+	static override description = "Compile and execute a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
-	static examples = [];
+	static override examples = [];
 
-	static args = [
+	static override args = [
 		{
 			name: "file",
 			required: false,
@@ -55,7 +53,7 @@ export default class Run extends Command {
 		},
 	];
 
-	static flags: Record<string, IFlag<any>> = {
+	static override flags: Record<string, IFlag<any>> = {
 		target: flags.string({
 			char: "t",
 			default: "js",
@@ -113,7 +111,7 @@ export default class Run extends Command {
 		}),
 	};
 
-	async run() {
+	public async run() {
 		const { args, flags } = this.parse(Run);
 
 		// If 'log-timestamp' is set, set the logger to use the timestamp
@@ -167,7 +165,7 @@ export default class Run extends Command {
 			}
 
 			// Execute the program
-			executeKipperProgram(jsProgram);
+			await executeKipperProgram(jsProgram);
 		} catch (e) {
 			// In case the error is not a KipperError, throw it as an internal error (this should not happen)
 			if (!(e instanceof KipperError)) {

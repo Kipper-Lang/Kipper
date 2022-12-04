@@ -1,11 +1,8 @@
 /**
  * The primary Kipper optimiser for optimising Kipper code and removing dead code.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.8.0
  */
-
-import type { RootASTNode } from "../parser";
+import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
 import { BuiltInFunction, InternalFunction } from "../runtime-built-ins";
 
@@ -59,9 +56,9 @@ export class KipperOptimiser {
 	private async optimiseBuiltIns(): Promise<void> {
 		const newBuiltIns: Array<BuiltInFunction> = [];
 		for (const ref of this.programCtx.builtInReferences) {
-			const alreadyIncluded: boolean = newBuiltIns.find((r) => r === ref.ref) !== undefined;
+			const alreadyIncluded: boolean = newBuiltIns.find((r) => r === ref.refTarget) !== undefined;
 			if (!alreadyIncluded) {
-				newBuiltIns.push(ref.ref);
+				newBuiltIns.push(ref.refTarget);
 			}
 		}
 		this.programCtx.builtIns = newBuiltIns;
@@ -75,9 +72,9 @@ export class KipperOptimiser {
 	private async optimiseInternals(): Promise<void> {
 		const newInternals: Array<InternalFunction> = [];
 		for (const ref of this.programCtx.internalReferences) {
-			const alreadyIncluded: boolean = newInternals.find((r) => r === ref.ref) !== undefined;
+			const alreadyIncluded: boolean = newInternals.find((r) => r === ref.refTarget) !== undefined;
 			if (!alreadyIncluded) {
-				newInternals.push(ref.ref);
+				newInternals.push(ref.refTarget);
 			}
 		}
 		this.programCtx.internals = newInternals;

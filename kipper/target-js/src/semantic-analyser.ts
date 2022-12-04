@@ -1,122 +1,15 @@
 /**
  * The TypeScript target-specific semantic analyser.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type {
-	AdditiveExpression,
-	ArraySpecifierExpression,
-	AssignmentExpression,
-	BoolPrimaryExpression,
-	CastOrConvertExpression,
-	CompoundStatement,
-	ConditionalExpression,
-	EqualityExpression,
-	ExpressionStatement,
-	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
-	FunctionDeclaration,
-	GenericTypeSpecifierExpression,
-	IdentifierPrimaryExpression,
-	IdentifierTypeSpecifierExpression,
-	IncrementOrDecrementPostfixExpression,
-	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
-	JumpStatement,
-	ListPrimaryExpression,
-	LogicalAndExpression,
-	LogicalOrExpression,
-	MultiplicativeExpression,
-	NumberPrimaryExpression,
-	OperatorModifiedUnaryExpression,
-	ParameterDeclaration,
-	RelationalExpression,
-	StringPrimaryExpression,
-	SwitchStatement,
-	TangledPrimaryExpression,
-	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-} from "@kipper/core";
 import {
-	IfStatement,
+	FunctionDeclaration,
+	ParameterDeclaration,
+	VariableDeclaration,
 	KipperTargetSemanticAnalyser,
 	ReservedIdentifierOverwriteError,
-	ReturnStatement,
-	VoidOrNullOrUndefinedPrimaryExpression,
 } from "@kipper/core";
-import { getJavaScriptBuiltInIdentifier } from "./tools";
-
-/**
- * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.
- * @since 0.10.0
- */
-export const reservedIdentifiers: Array<string> = [
-	"break",
-	"case",
-	"catch",
-	"class",
-	"const",
-	"continue",
-	"debugger",
-	"default",
-	"delete",
-	"do",
-	"else",
-	"enum",
-	"export",
-	"extends",
-	"false",
-	"finally",
-	"for",
-	"function",
-	"if",
-	"import",
-	"in",
-	"instanceof",
-	"new",
-	"null",
-	"return",
-	"super",
-	"switch",
-	"this",
-	"throw",
-	"true",
-	"try",
-	"typeof",
-	"var",
-	"void",
-	"while",
-	"with",
-	"as",
-	"implements",
-	"interface",
-	"let",
-	"package",
-	"private",
-	"protected",
-	"public",
-	"static",
-	"yield",
-	"any",
-	"boolean",
-	"constructor",
-	"declare",
-	"get",
-	"module",
-	"require",
-	"number",
-	"set",
-	"string",
-	"symbol",
-	"type",
-	"from",
-	"of",
-];
-
-// Reserved Kipper identifiers (cached)
-let reservedKipperIdentifiers: Array<string> = [];
-let reservedIdentifiersCached: boolean = false;
+import { TargetJS } from "./target";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -129,22 +22,16 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * @param declaration The variable, function or parameter declaration.
 	 * @private
 	 */
-	protected checkViabilityOfIdentifier(declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration) {
+	protected checkViabilityOfIdentifier(
+		declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration,
+	): void {
 		const identifier = declaration.getSemanticData().identifier;
 
-		if (!reservedIdentifiersCached) {
-			reservedKipperIdentifiers = [
-				...declaration.programCtx.internals.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
-				...declaration.programCtx.builtIns.map((v) => getJavaScriptBuiltInIdentifier(v.identifier)),
-			];
-		}
-
-		// Throw an error in case the declaration identifier causes issues in TypeScript.
-		//
-		// Error cases:
-		// 1. Identifiers starting with '__' are always reserved and may not be defined.
-		// 2. Identifiers may not overwrite TypeScript specific keywords.
-		if (reservedKipperIdentifiers.find((i) => i === identifier) || reservedIdentifiers.find((i) => i === identifier)) {
+		// Throw an error in case the declaration identifier is reserved
+		if (
+			identifier === TargetJS.internalObjectIdentifier ||
+			TargetJS.reservedIdentifiers.find((i) => i === identifier)
+		) {
 			this.setTracebackData({ ctx: declaration });
 			throw this.error(new ReservedIdentifierOverwriteError(identifier));
 		}
@@ -153,37 +40,47 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	/**
 	 * Performs typescript-specific semantic analysis for {@link CompoundStatement} instances.
 	 */
-	compoundStatement = async (node: CompoundStatement) => {};
+	compoundStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IfStatement} instances.
 	 */
-	ifStatement = async (node: IfStatement) => {};
+	ifStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link SwitchStatement} instances.
 	 */
-	switchStatement = async (node: SwitchStatement) => {};
+	switchStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ExpressionStatement} instances.
 	 */
-	expressionStatement = async (node: ExpressionStatement) => {};
+	expressionStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link IterationStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopStatement} instances.
 	 */
-	iterationStatement = async (node: IterationStatement) => {};
+	doWhileLoopStatement = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link WhileLoopStatement} instances.
+	 */
+	whileLoopStatement = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ForLoopStatement} instances.
+	 */
+	forLoopStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
 	 */
-	jumpStatement = async (node: JumpStatement) => {};
+	jumpStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ReturnStatement} instances.
 	 */
-	returnStatement = async (node: ReturnStatement) => {};
+	returnStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
@@ -209,125 +106,125 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	/**
 	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.
 	 */
-	numberPrimaryExpression = async (node: NumberPrimaryExpression) => {};
+	numberPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ListPrimaryExpression} instances.
 	 */
-	listPrimaryExpression = async (node: ListPrimaryExpression) => {};
+	listPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
-	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression) => {};
+	identifierPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
 	 */
-	identifierTypeSpecifierExpression = async (node: IdentifierTypeSpecifierExpression) => {};
+	identifierTypeSpecifierExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link GenericTypeSpecifierExpression} instances.
 	 */
-	genericTypeSpecifierExpression = async (node: GenericTypeSpecifierExpression) => {};
+	genericTypeSpecifierExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
 	 */
-	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression) => {};
+	typeofTypeSpecifierExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link StringPrimaryExpression} instances.
 	 */
-	stringPrimaryExpression = async (node: StringPrimaryExpression) => {};
+	stringPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link FStringPrimaryExpression} instances.
 	 */
-	fStringPrimaryExpression = async (node: FStringPrimaryExpression) => {};
+	fStringPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link BoolPrimaryExpression} instances.
 	 */
-	boolPrimaryExpression = async (node: BoolPrimaryExpression) => {};
+	boolPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
-	tangledPrimaryExpression = async (node: TangledPrimaryExpression) => {};
+	tangledPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ArraySpecifierExpression} instances.
 	 */
-	arraySpecifierExpression = async (node: ArraySpecifierExpression) => {};
+	arraySpecifierExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
-	voidOrNullOrUndefinedPrimaryExpression = async (node: VoidOrNullOrUndefinedPrimaryExpression) => {};
+	voidOrNullOrUndefinedPrimaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementPostfixExpression} instances.
 	 */
-	incrementOrDecrementPostfixExpression = async (node: IncrementOrDecrementPostfixExpression) => {};
+	incrementOrDecrementPostfixExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
 	 */
-	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression) => {};
+	functionCallPostfixExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.
 	 */
-	incrementOrDecrementUnaryExpression = async (node: IncrementOrDecrementUnaryExpression) => {};
+	incrementOrDecrementUnaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link OperatorModifiedUnaryExpression} instances.
 	 */
-	operatorModifiedUnaryExpression = async (node: OperatorModifiedUnaryExpression) => {};
+	operatorModifiedUnaryExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link CastOrConvertExpression} instances.
 	 */
-	castOrConvertExpression = async (node: CastOrConvertExpression) => {};
+	castOrConvertExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link MultiplicativeExpression} instances.
 	 */
-	multiplicativeExpression = async (node: MultiplicativeExpression) => {};
+	multiplicativeExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link AdditiveExpression} instances.
 	 */
-	additiveExpression = async (node: AdditiveExpression) => {};
+	additiveExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link RelationalExpression} instances.
 	 */
-	relationalExpression = async (node: RelationalExpression) => {};
+	relationalExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
-	equalityExpression = async (node: EqualityExpression) => {};
+	equalityExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.
 	 */
-	logicalAndExpression = async (node: LogicalAndExpression) => {};
+	logicalAndExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link LogicalOrExpression} instances.
 	 */
-	logicalOrExpression = async (node: LogicalOrExpression) => {};
+	logicalOrExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ConditionalExpression} instances.
 	 */
-	conditionalExpression = async (node: ConditionalExpression) => {};
+	conditionalExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
-	assignmentExpression = async (node: AssignmentExpression) => {};
+	assignmentExpression = undefined;
 }

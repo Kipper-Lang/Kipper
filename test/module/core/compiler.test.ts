@@ -221,8 +221,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
-					assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
+					assert(instance.programCtx.globalScope.entries.size === 4, "Expected four global scope entries");
 					assert(instance.programCtx.builtIns.length === 1, "Expected a single global function");
 				});
 
@@ -235,8 +234,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 					assert(instance.write().includes(fileContent), "Expected compiled code to not change");
 				});
 
@@ -249,8 +247,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
+					assert(instance.programCtx.globalScope.entries.size === 1, "Expected one global scope entry");
 				});
 
 				it(`Nested scopes (${target.fileExtension})`, async () => {
@@ -262,8 +259,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 1, "Expected one global function");
-					assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variables");
+					assert(instance.programCtx.globalScope.entries.size === 4, "Expected four global scope entries");
 				});
 
 				it(`Single Function call (${target.fileExtension})`, async () => {
@@ -275,8 +271,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -303,8 +298,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -332,8 +326,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 1, "Expected a single global function");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 1, "Expected one global scope entry");
 				});
 
 				it(`Multi Function definition (${target.fileExtension})`, async () => {
@@ -345,8 +338,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 3, "Expected three global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 3, "Expected three global scope entries");
 				});
 
 				it(`Function call argument (${target.fileExtension})`, async () => {
@@ -358,8 +350,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -387,8 +378,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
+					assert(instance.programCtx.globalScope.entries.size === 1, "Expected one global scope entry");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -415,8 +405,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 1, "Expected one global variable");
+					assert(instance.programCtx.globalScope.entries.size === 1, "Expected one global scope entry");
 				});
 
 				it(`Bool (${target.fileExtension})`, async () => {
@@ -428,8 +417,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 2, "Expected two global variables");
+					assert(instance.programCtx.globalScope.entries.size === 2, "Expected two global scope entries");
 				});
 
 				it(`Type conversion (${target.fileExtension})`, async () => {
@@ -440,8 +428,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 4, "Expected four global variables");
+					assert(instance.programCtx.globalScope.entries.size === 4, "Expected four global scope entries");
 
 					const code = instance.write();
 					assert(code);
@@ -459,8 +446,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx);
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 3, "Expected three global variable");
+					assert(instance.programCtx.globalScope.entries.size === 3, "Expected three global scope entries");
 
 					const code = instance.write();
 					assert(code);
@@ -477,8 +463,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected no global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
@@ -505,8 +490,7 @@ describe("KipperCompiler", () => {
 					assert(instance.programCtx.internals);
 					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 					assert(instance.programCtx.stream === stream, "Expected matching streams");
-					assert(instance.programCtx.globalScope.functions.length === 0, "Expected no global functions");
-					assert(instance.programCtx.globalScope.variables.length === 0, "Expected two global variables");
+					assert(instance.programCtx.globalScope.entries.size === 0, "Expected no global scope entries");
 
 					const code = instance.write();
 					assert(code);

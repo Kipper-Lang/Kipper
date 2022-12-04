@@ -1,7 +1,5 @@
 /**
  * 'compile' command for compiling a Kipper program.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.5
  */
 import { Command, flags } from "@oclif/command";
@@ -22,12 +20,12 @@ import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from
 import { getFile, getTarget, writeCompilationResult } from "../compile";
 
 export default class Compile extends Command {
-	static description = "Compile a Kipper program into the specified target language.";
+	static override description = "Compile a Kipper program into the specified target language.";
 
 	// TODO! Add examples when the command moves out of development
-	static examples = [];
+	static override examples = [];
 
-	static args = [
+	static override args = [
 		{
 			name: "file",
 			required: false,
@@ -35,7 +33,7 @@ export default class Compile extends Command {
 		},
 	];
 
-	static flags: Record<string, IFlag<any>> = {
+	static override flags: Record<string, IFlag<any>> = {
 		target: flags.string({
 			char: "t",
 			default: "js",
@@ -94,7 +92,7 @@ export default class Compile extends Command {
 		}),
 	};
 
-	async run() {
+	public async run() {
 		const { args, flags } = this.parse(Compile);
 
 		// If 'log-timestamp' is set, set the logger to use the timestamp

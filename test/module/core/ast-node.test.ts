@@ -32,11 +32,11 @@ describe("AST Nodes", () => {
 				return Promise.resolve(undefined);
 			}
 
-			targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExampleNode> = () => {
+			readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<ExampleNode> = () => {
 				return Promise.resolve(undefined);
 			};
 
-			targetCodeGenerator: TargetASTNodeCodeGenerator<ExampleNode, TranslatedCodeLine> = async () => {
+			readonly targetCodeGenerator: TargetASTNodeCodeGenerator<ExampleNode, TranslatedCodeLine> = async () => {
 				return <TranslatedCodeLine>[];
 			};
 

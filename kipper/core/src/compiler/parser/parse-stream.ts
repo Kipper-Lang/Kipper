@@ -1,7 +1,5 @@
 /**
  * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.0.3
  */
 import { CharStreams, CodePointCharStream } from "antlr4ts";

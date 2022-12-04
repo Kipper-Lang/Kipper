@@ -2,7 +2,7 @@
  * Generator for the Kipper built-ins that are specific for a target.
  * @since 0.10.0
  */
-import type { TranslatedCodeLine } from "../../semantics";
+import type { TranslatedCodeLine } from "../../const";
 import type { BuiltInFunction } from "../../runtime-built-ins";
 
 /**

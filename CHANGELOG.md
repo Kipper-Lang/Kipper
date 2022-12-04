@@ -8,15 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Added full support for custom-defined functions, function arguments, function return evaluation, function
+  scopes/argument referencing and return-value code branch inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
+- Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
-  analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget`, which can be sed as the
-  target in the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
+  analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
+  as alias), which can be used as the target in the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
 - Standalone web-module package called `@kipper/web`, which from now on will provide the `kipper-standalone.js` script
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
   also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
   ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
 - Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
   ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+- Support for unary and postfix increment and decrement (`++`, `--`) expressions
+  ([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
@@ -34,35 +39,53 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
     the same scope or any parent scope.
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
     expression.
-  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
-    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
   - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return a
     value.
+  - `ReturnStatementError`, which is thrown whenever a return statement is used outside a function.
+  - `InvalidUnaryExpressionOperandError`, which is thrown whenever a unary expression is used with an invalid operand.
+  - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
+    an internal error that happens if the declaration context is accessed too early e.g. before its creation.)
+  - `TypeNotCompilableError`, which is thrown when an invalid/undefined type is cast to a compilable type, despite it
+    being invalid. (This is an internal error that happens if the type is cast during compilation despite it having
+    errored during semantic analysis/type checking.)
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
   - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
     included in the `JumpStatement` class.
   - `FunctionScope`, which is a subclass of `Scope` that represents a function scope with registered parameters.
+  - `UndefinedCustomType`, which represents an invalid/undefined type that was created by the user, but is not
+    defined in the program. This is used to allow error recovery and continue even with an invalid type during type
+    checking, and let the type checker know to ignore type checks with references of this type.
+  - `Type`, which is an abstract base class for defining a wrapper class for a Kipper type during semantic analysis and
+    type checking.
+  - `UncheckedType`, which is an implementation of `Type` and represents a raw specified type during semantic analysis.
+  - `CheckedType`, which is an implementation of `Type` and represents a checked type during type checking, which also
+    handles compatibility and error recovery for undefined types.
 - New functions:
-  - `KipperTargetCodeGenerator.setUp`, which should generate SetUp code for the specified target.
-  - `KipperTargetCodeGenerator.wrapUp`, which should generate WrapUp code for the specified target.
-  - `ASTNode.getTypeSemanticData`, which returns the type semantics if they are defined, otherwise throws an
+  - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
+  - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
+  - `ASTNode.getTypeSemanticData()`, which returns the type semantics if they are defined, otherwise throws an
     `UndefinedSemanticsError`.
-  - `CompilableASTNode.semanticTypeChecking`, which performs type checking for the AST node and its children nodes.
+  - `CompilableASTNode.semanticTypeChecking()`, which performs type checking for the AST node and its children nodes.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
-  - `CompilableASTNode.wrapUpSemanticAnalysis`, which performs wrap-up semantic analysis for the target of the AST node.
+  - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
-  - `Scope.getReferenceRecursively`, which tries to evaluate a reference recursively in the scope and its parent scopes.
-  - `KipperTypeChecker.validReturnStatement`, which ensures that a return statement is only used inside a function.
-  - `KipperTypeChecker.checkMatchingTypes`, which checks if the two specified types are matching.
-  - `KipperTypeChecker.referenceCallable`, which asserts that the specified reference is a callable function.
-  - `KipperSemanticChecker.identifierUnused`, which asserts that the specified identifier is unused.
-  - `KipperSemanticChecker.getReturnStatementParent`, which evaluates the parent function for a return statement.
-  - `KipperSemanticChecker.referenceDefined`, which asserts that the specified reference is defined and can be used.
-  - `KipperSemanticChecker.validFunctionBody`, which ensures the body of a function is a compound statement.
-  - `KipperSemanticChecker.validReturnCodePathsInFunctionBody`, which ensures that all code paths of a non-void
+  - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent scopes.
+  - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
+  - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
+  - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
+  - `KipperTypeChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
     function return a proper value.
+  - `KipperSemanticChecker.identifierNotUsed()`, which asserts that the specified identifier is unused in the
+    specified scope and can be used for a new declaration.
+  - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
+  - `KipperSemanticChecker.refTargetDefined()`, which asserts that the specified reference is defined and can be used.
+  - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.
+  - `CompilableASTNode.addError()`, which adds an error to the list of errors caused by the node.
+  - `removeBraces()` for removing braces due to formatting reasons.
+  - `CompilableASTNode.recursivelyCheckForWarnings()`, which recursively calls all children's `checkforWarnings()`
+    functions as well as the function of the parent instance.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -74,6 +97,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperArg`, which represents a function argument. Alias for `KipperParam`.
   - `KipperParam`, which represents a function parameter.
   - `JmpStatementType`, which represents all possible jump statement types e.g. `break` and `continue`.
+- New interfaces:
+  - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
+    the definitions of its children, will be stored in the `innerScope` field of the class implementation.
+  - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -91,12 +118,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `ScopeDeclaration.hasValue`, which is an abstract field that returns whether the scope declaration has a value set.
   - `FunctionDeclaration.innerScope`, which returns the inner scope of the function declaration. This can be used before
     semantic analysis, though will return undefined if it encounters any error.
+  - `TracebackMetadata.errorNode`, which contains the error node that caused the error.
+  - `CompilableASTNode.errors` and `RootASTNode.errors`, which returns all errors caused by this node and or its
+    children.
+  - `KipperProgramContext.hasFailed`, `CompilableASTNode.hasFailed`, `RootASTNode.hasFailed`, which returns true if the
+    node or any of its children have failed to be processed during semantic analysis or type checking.
+  - `Scope.parent`, which returns the parent scope of the scope. This is used to recursively evaluate references in all
+    parent scopes.
 
 ### Changed
 
 - Moved TypeScript target from the core package to a new monorepo package called `@kipper/target-ts`, which implements
-  the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`, which
-  can be sed as the target in the `CompileConfig`.
+  the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`
+  (`TargetTS` available as alias), which can be used as the target in the `CompileConfig`.
 - Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
   assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
@@ -112,9 +146,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   such as `print("Hello world!");`.
 - Default error identifier is now just `Error` instead of `KipperError`.
 - Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
-- Made the following functions protected, as a way to enforce the use of `Scope.getReferenceRecursively`:
-  - `Scope.getVariable`
-  - `Scope.getFunction`
+- Migrated the internal storage of `Scope` and its implementing classes to a hashmap implementation.
+- Updated types of `CompilableASTNode` functions `primarySemanticAnalysis`, `primarySemanticTypeChecking` and
+  `targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve
+  performance and not call an async function unnecessarily.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -130,6 +165,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
+  - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
 
 ### Removed
 
@@ -141,6 +177,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   respectively.
 - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
+- Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
+- Removed the following fields:
+  - `Scope.functions` (replaced by hash-map implementation of `Scope`)
+  - `Scope.variables` (replaced by hash-map implementation of `Scope`)
+  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
+  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
 
 ## [0.9.2] - 2022-07-23
 

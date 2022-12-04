@@ -1,7 +1,5 @@
 /**
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 import type {
@@ -26,10 +24,8 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
-	IterationStatement,
 	JumpStatement,
 	KipperProgramContext,
-	KipperType,
 	ListPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
@@ -51,14 +47,23 @@ import type {
 } from "@kipper/core";
 import {
 	CompoundStatement,
+	DoWhileLoopStatement,
+	ForLoopStatement,
+	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopStatement,
 } from "@kipper/core";
-import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
-import { getConversionFunctionIdentifier, indentLines } from "@kipper/core/lib/utils";
+import {
+	createJSFunctionSignature,
+	getJavaScriptBuiltInIdentifier,
+	getJSFunctionSignature,
+	indentLines,
+	removeBraces,
+} from "./tools";
 import { version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -188,7 +193,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}
 		}
 
-		// Return with the second branch added. (Since th	is function calls itself indirectly recursively, there can be as
+		// Return with the second branch added. (Since the function calls itself indirectly recursively, there can be as
 		// many else-ifs as the user wants.)
 		return [
 			...baseCode.slice(0, baseCode.length - 1), // Add all lines except the last one that ends the if-statement
@@ -222,9 +227,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link IterationStatement} into the JavaScript language.
+	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
 	 */
-	iterationStatement = async (node: IterationStatement): Promise<Array<TranslatedCodeLine>> => {
+	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 */
+	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["while", " ", "(", ...condition, ")", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "}" : ""],
+		];
+	};
+
+	/**
+	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 */
+	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
@@ -306,7 +336,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!(semanticData.ref instanceof ScopeDeclaration)) {
+		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 		return [identifier];
@@ -390,7 +420,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementPostfixExpression = async (
 		node: IncrementOrDecrementPostfixExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [...operandCode, semanticData.operator];
 	};
 
 	/**
@@ -423,7 +456,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	incrementOrDecrementUnaryExpression = async (
 		node: IncrementOrDecrementUnaryExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const operandCode = await semanticData.operand.translateCtxAndChildren();
+
+		return [semanticData.operator, ...operandCode];
 	};
 
 	/**
@@ -449,8 +485,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const typeData = node.getTypeSemanticData();
 
 		const exp: TranslatedExpression = await semanticData.exp.translateCtxAndChildren();
-		const originalType: KipperType = semanticData.exp.getTypeSemanticData().evaluatedType;
-		const destType: KipperType = typeData.castType;
+		const originalType = semanticData.exp.getTypeSemanticData().evaluatedType.getCompilableType();
+		const destType = typeData.castType.getCompilableType();
 
 		if (originalType === destType) {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
@@ -555,14 +591,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
-		if (!(semanticData.ref instanceof ScopeDeclaration)) {
+		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 
 		// The expression that is assigned to the reference
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
-		// Only add ' = EXP' if assignExpression is defined
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 }

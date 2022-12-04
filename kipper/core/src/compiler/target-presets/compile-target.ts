@@ -1,12 +1,10 @@
 /**
  * Compilation translation class specifying how a translation target should be implemented.
- * @author Luna Klatzer
- * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
 
 import type { KipperTargetBuiltInGenerator, KipperTargetCodeGenerator } from "./translation";
-import type { KipperTargetSemanticAnalyser } from "./target-semantic-analyser";
+import type { KipperTargetSemanticAnalyser } from "./semantic-analyser";
 
 /**
  * Represents a Kipper compilation translation defining how a Kipper parse tree shall
