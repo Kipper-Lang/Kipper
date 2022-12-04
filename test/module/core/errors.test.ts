@@ -330,6 +330,22 @@ describe("Kipper errors", () => {
 		});
 
 		describe("IdentifierAlreadyUsedByParameterError", () => {
+			it("Overwrite by other parameter", async () => {
+				let result: KipperCompileResult | undefined = undefined;
+				try {
+					result = await new KipperCompiler().compile("def f(x: num, x: num) -> void {};", defaultConfig);
+				} catch (e) {
+					assert(
+						(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByParameterError",
+						"Expected proper error",
+					);
+					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+					ensureTracebackDataExists(<KipperError>e);
+					return;
+				}
+				assert.fail("Expected 'IdentifierAlreadyUsedByParameterError'");
+			});
+
 			describe("Override from Root Function Scope", () => {
 				it("Redeclaration by variable", async () => {
 					let result: KipperCompileResult | undefined = undefined;
@@ -385,7 +401,7 @@ describe("Kipper errors", () => {
 										params: [],
 										returnType: "void",
 									},
-							  ]
+								]
 							: [],
 				};
 
