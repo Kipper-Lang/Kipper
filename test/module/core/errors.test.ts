@@ -401,7 +401,7 @@ describe("Kipper errors", () => {
 										params: [],
 										returnType: "void",
 									},
-								]
+							  ]
 							: [],
 				};
 

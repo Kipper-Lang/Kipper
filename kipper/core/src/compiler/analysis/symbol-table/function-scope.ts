@@ -39,7 +39,6 @@ export class FunctionScope extends LocalScope {
 		const identifier = declaration.getSemanticData().identifier;
 
 		// Ensuring that the declaration does not overwrite other definitions
-		this.ctx.programCtx.semanticCheck(declaration).builtInNotDefined(identifier);
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
 		const scopeDeclaration = new ScopeParameterDeclaration(declaration);

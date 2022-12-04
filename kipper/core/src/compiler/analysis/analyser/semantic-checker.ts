@@ -99,6 +99,9 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public identifierNotUsed(identifier: string, scopeCtx: Scope): void {
+		// Ensure beforehand that also no built-in has the same identifier
+		this.builtInNotDefined(identifier);
+
 		const ref = scopeCtx.getEntryRecursively(identifier);
 		if (ref) {
 			if (ref instanceof ScopeVariableDeclaration) {
