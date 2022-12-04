@@ -393,16 +393,8 @@ describe("Kipper errors", () => {
 			].forEach((test) => {
 				const config: CompileConfig = {
 					...defaultConfig,
-					extendBuiltIns:
-						test.i !== "print"
-							? [
-									{
-										identifier: test.i,
-										params: [],
-										returnType: "void",
-									},
-							  ]
-							: [],
+					// prettier-ignore
+					extendBuiltIns: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
 				};
 
 				describe(`Global Scope - ${test.t} Overwrite`, () => {
