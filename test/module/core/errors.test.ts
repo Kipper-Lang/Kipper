@@ -1,4 +1,5 @@
 import {
+	CompileConfig,
 	KipperCompiler,
 	KipperCompileResult,
 	KipperError,
@@ -128,75 +129,336 @@ describe("Kipper errors", () => {
 			assert.fail("Expected 'InvalidGlobalError'");
 		});
 
-		it("BuiltInOverwriteError", async () => {
-			let compiler = new KipperCompiler();
-			const parseData: ParseData = await compiler.parse(new KipperParseStream("var i: num = 4;"));
-			const programCtx = await compiler.getProgramCtx(parseData, defaultConfig);
-			try {
-				// Register new global
-				programCtx.registerBuiltIns({ identifier: "i", params: [], returnType: "void" });
-				await programCtx.compileProgram();
-			} catch (e) {
-				assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
-				ensureTracebackDataExists(<KipperError>e);
-				return;
-			}
-			assert.fail("Expected 'BuiltInOverwriteError'");
+		describe("IdentifierAlreadyUsedByVariableError", () => {
+			describe("Same Global Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; var x: num = 5;", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+
+				it("Redeclaration by function", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num; def x() -> void {};", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+
+				it("Redeclaration by parameter", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num; def f(x: num) -> void {};", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+			});
+
+			describe("Same Nested Scope", async () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("{ var x: num = 5; var x: num = 5; }", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+
+				// Functions and parameters are not allowed to be nested (Local functions are not implemented yet)
+			});
+
+			describe("Global Override from Nested Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; { var x: num = 5; }", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+
+				// Functions and parameters are not allowed to be nested (Local functions are not implemented yet)
+			});
+
+			describe("Nested Override from Deeper Nested Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("var x: num = 5; { { var x: num = 5; } }", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+				});
+
+				// Functions and parameters are not allowed to be nested (Local functions are not implemented yet)
+			});
 		});
 
 		describe("IdentifierAlreadyUsedByFunctionError", () => {
-			it("Redeclaration by variable", async () => {
-				let result: KipperCompileResult | undefined = undefined;
-				try {
-					result = await new KipperCompiler().compile("def x() -> void {}; var x: num = 4;", defaultConfig);
-				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
-					ensureTracebackDataExists(<KipperError>e);
-					return;
-				}
-				assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+			describe("Same Global Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def x() -> void {}; var x: num = 4;", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+				});
+
+				it("Redeclaration by function", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def x() -> void {} def x() -> void {}", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+				});
+
+				it("Redeclaration by parameter", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def x() -> void {} def f(x: num) -> void {}", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+				});
 			});
 
-			it("Redeclaration by function", async () => {
-				let result: KipperCompileResult | undefined = undefined;
-				try {
-					result = await new KipperCompiler().compile("def x() -> void {} def x() -> void {}", defaultConfig);
-				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
-					ensureTracebackDataExists(<KipperError>e);
-					return;
-				}
-				assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+			describe("Global Override from Nested Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def x() -> void {}; { var x: num = 4; }", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+				});
+			});
+
+			describe("Nested Override from Deeper Nested Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def x() -> void {}; { { var x: num = 4; } }", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByFunctionError'");
+				});
 			});
 		});
 
-		describe("IdentifierAlreadyUsedByVariableError", () => {
-			it("Redeclaration by variable", async () => {
-				let result: KipperCompileResult | undefined = undefined;
-				try {
-					result = await new KipperCompiler().compile("var x: num = 5; \nvar x: num = 5;", defaultConfig);
-				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
-					ensureTracebackDataExists(<KipperError>e);
-					return;
-				}
-				assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+		describe("IdentifierAlreadyUsedByParameterError", () => {
+			describe("Override from Root Function Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile("def f(x: num) -> void { var x: num = 4; };", defaultConfig);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByParameterError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByParameterError'");
+				});
 			});
 
-			it("Redeclaration by function", async () => {
-				let result: KipperCompileResult | undefined = undefined;
-				try {
-					result = await new KipperCompiler().compile("var x: num; def x() -> void {};", defaultConfig);
-				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
-					ensureTracebackDataExists(<KipperError>e);
-					return;
-				}
-				assert.fail("Expected 'IdentifierAlreadyUsedByVariableError'");
+			describe("Override from Nested Function Scope", () => {
+				it("Redeclaration by variable", async () => {
+					let result: KipperCompileResult | undefined = undefined;
+					try {
+						result = await new KipperCompiler().compile(
+							"def f(x: num) -> void { { var x: num = 4; } };",
+							defaultConfig,
+						);
+					} catch (e) {
+						assert(
+							(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByParameterError",
+							"Expected proper error",
+						);
+						ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+						ensureTracebackDataExists(<KipperError>e);
+						return;
+					}
+					assert.fail("Expected 'IdentifierAlreadyUsedByParameterError'");
+				});
+			});
+		});
+
+		describe("BuiltInOverwriteError", () => {
+			[
+				{ i: "i", t: "Custom Built-in" },
+				{ i: "print", t: "Built-in" },
+			].forEach((test) => {
+				const config: CompileConfig = {
+					...defaultConfig,
+					extendBuiltIns:
+						test.i !== "print"
+							? [
+									{
+										identifier: test.i,
+										params: [],
+										returnType: "void",
+									},
+							  ]
+							: [],
+				};
+
+				describe(`Global Scope - ${test.t} Overwrite`, () => {
+					it("Redeclaration by variable", async () => {
+						let result: KipperCompileResult | undefined = undefined;
+						try {
+							result = await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+							ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+							ensureTracebackDataExists(<KipperError>e);
+							return;
+						}
+						assert.fail("Expected 'BuiltInOverwriteError'");
+					});
+
+					it("Redeclaration by function", async () => {
+						let result: KipperCompileResult | undefined = undefined;
+						try {
+							result = await new KipperCompiler().compile(`def ${test.i}() -> void {};`, config);
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+							ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+							ensureTracebackDataExists(<KipperError>e);
+							return;
+						}
+						assert.fail("Expected 'BuiltInOverwriteError'");
+					});
+
+					it("Redeclaration by parameter", async () => {
+						let result: KipperCompileResult | undefined = undefined;
+						try {
+							result = await new KipperCompiler().compile(`def f(${test.i}: num) -> void {};`, config);
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+							ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+							ensureTracebackDataExists(<KipperError>e);
+							return;
+						}
+						assert.fail("Expected 'BuiltInOverwriteError'");
+					});
+				});
+
+				describe(`Nested Scope - ${test.t} Overwrite`, () => {
+					it("Redeclaration by variable", async () => {
+						let result: KipperCompileResult | undefined = undefined;
+						try {
+							result = await new KipperCompiler().compile(`{ var ${test.i}: num = 4; }`, config);
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+							ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+							ensureTracebackDataExists(<KipperError>e);
+							return;
+						}
+						assert.fail("Expected 'BuiltInOverwriteError'");
+					});
+				});
+
+				describe(`Deep Nested Scope - ${test.t} Overwrite`, () => {
+					it("Redeclaration by variable", async () => {
+						let result: KipperCompileResult | undefined = undefined;
+						try {
+							result = await new KipperCompiler().compile(`{ { var ${test.i}: num = 4; } }`, config);
+						} catch (e) {
+							assert((<KipperError>e).constructor.name === "BuiltInOverwriteError", "Expected proper error");
+							ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
+							ensureTracebackDataExists(<KipperError>e);
+							return;
+						}
+						assert.fail("Expected 'BuiltInOverwriteError'");
+					});
+				});
 			});
 		});
 
