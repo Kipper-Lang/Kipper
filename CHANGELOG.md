@@ -75,7 +75,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
   - `KipperTypeChecker.validReturnCodePathsInFunctionBody()`, which ensures that all code paths of a non-void
     function return a proper value.
-  - `KipperSemanticChecker.identifierUnused()`, which asserts that the specified identifier is unused.
+  - `KipperSemanticChecker.identifierNotUsed()`, which asserts that the specified identifier is unused in the
+    specified scope and can be used for a new declaration.
   - `KipperSemanticChecker.getReturnStatementParent()`, which evaluates the parent function for a return statement.
   - `KipperSemanticChecker.referenceDefined()`, which asserts that the specified reference is defined and can be used.
   - `KipperSemanticChecker.validFunctionBody()`, which ensures the body of a function is a compound statement.

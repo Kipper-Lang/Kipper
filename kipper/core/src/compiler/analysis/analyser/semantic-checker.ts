@@ -12,7 +12,6 @@ import {
 	Scope,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
 } from "../symbol-table";
 import {
@@ -90,37 +89,19 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Asserts that the passed parameter identifier has not been used yet (both declarations or definitions).
-	 * @param identifier The identifier to check.
-	 * @param scopeCtx The ctx of the local scope, which will be also used for the reference check.
+	 * Recursively ensures that the identifier does not overwrite any declarations in this scope or parent scopes.
+	 * @param identifier The identifier to search for in this scope and its parent scopes.
+	 * @param scopeCtx The context instance of the scope.
 	 * @throws {IdentifierAlreadyUsedByVariableError} If the identifier is already used by a variable.
 	 * @throws {IdentifierAlreadyUsedByFunctionError} If the identifier is already used by a function.
 	 * @throws {IdentifierAlreadyUsedByParameterError} If the identifier is already used by a parameter.
 	 * @throws {BuiltInOverwriteError} If the identifier is already in use by a built-in function.
-	 */
-	public identifierUnused(identifier: string, scopeCtx?: CompoundStatement): void {
-		// Check if the identifier is available and throw an appropriate error if it is not
-		const ref = this.getReference(identifier, scopeCtx);
-		if (ref) {
-			if (ref instanceof ScopeVariableDeclaration) {
-				throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
-			} else if (ref instanceof ScopeFunctionDeclaration) {
-				throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
-			} else if (ref instanceof ScopeParameterDeclaration) {
-				throw this.assertError(new IdentifierAlreadyUsedByParameterError(identifier));
-			} else {
-				throw this.assertError(new BuiltInOverwriteError(identifier));
-			}
-		}
-	}
-
-	/**
-	 * Recursively ensures that the identifier does not overwrite any declarations in this scope or parent scopes.
-	 * @param identifier The identifier to search for in this scope and its parent scopes.
-	 * @param scopeCtx The context instance of the scope.
 	 * @since 0.10.0
 	 */
 	public identifierNotUsed(identifier: string, scopeCtx: Scope): void {
+		// Ensure beforehand that also no built-in has the same identifier
+		this.builtInNotDefined(identifier);
+
 		const ref = scopeCtx.getEntryRecursively(identifier);
 		if (ref) {
 			if (ref instanceof ScopeVariableDeclaration) {
