@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Note that all changes categorised under [Unreleased](#unreleased) are UNSTABLE changes, which MAY be released in the
 next version. These should not be considered guaranteed changes for the next release of Kipper.
 
-To use development versions of Kipper download the [`next` tag release](), which will include the specified changes.
+To use development versions of Kipper download the [`next` tag release](https://www.npmjs.com/package/kipper), which 
+will include the specified changes.
 
 ### Added
 
