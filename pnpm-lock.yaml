@@ -28,7 +28,7 @@ specifiers:
   mocha: 10.1.0
   nyc: 15.1.0
   oclif: 3.4.2
-  prettier: 2.8.0
+  prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
   source-map-support: 0.5.21
@@ -73,7 +73,7 @@ devDependencies:
   mocha: 10.1.0
   nyc: 15.1.0
   oclif: 3.4.2
-  prettier: 2.8.0
+  prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
   source-map-support: 0.5.21
@@ -5107,8 +5107,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier/2.8.0:
-    resolution: {integrity: sha512-9Lmg8hTFZKG0Asr/kW9Bp8tJjRVluO8EJQVfY2T7FMw9T5jy4I/Uvx0Rca/XWf50QQ1/SS48+6IJWnrb+2yemA==}
+  /prettier/2.8.1:
+    resolution: {integrity: sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true

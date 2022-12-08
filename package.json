@@ -35,7 +35,7 @@
     "mocha": "10.1.0",
     "nyc": "15.1.0",
     "oclif": "3.4.2",
-    "prettier": "2.8.0",
+    "prettier": "2.8.1",
     "run-script-os": "1.1.6",
     "size-limit": "8.1.0",
     "source-map-support": "0.5.21",
