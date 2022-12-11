@@ -64,7 +64,9 @@
   ],
   "files": [
     "LICENSE",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+		"lib",
+		"src/index.ts"
   ],
   "license": "GPL-3.0",
   "main": "lib/index.js",
@@ -83,7 +85,7 @@
     }
   ],
   "scripts": {
-    "fastbuild": "pnpm run -r build",
+    "fastbuild": "tsc && pnpm run -r build",
     "build": "pnpm run fastbuild",
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",

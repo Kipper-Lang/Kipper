@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+<details>
+<summary>Show unreleased changes</summary>
+
+Note that all changes categorised under [Unreleased](#unreleased) are UNSTABLE changes, which MAY be released in the
+next version. These should not be considered guaranteed changes for the next release of Kipper.
+
+To use development versions of Kipper download the
+[`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
+
 ### Added
 
 - Added full support for custom-defined functions, function arguments, function return evaluation, function
@@ -183,6 +192,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - `Scope.variables` (replaced by hash-map implementation of `Scope`)
   - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
   - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
+
+</details>
 
 ## [0.9.2] - 2022-07-23
 

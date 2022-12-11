@@ -7,6 +7,7 @@
 
 // The 'kipper' module should export the Compiler core and the Kipper targets.
 export * from "@kipper/core";
+export * from "@kipper/target-js";
 export * from "@kipper/target-ts";
 
 // eslint-disable-next-line no-unused-vars
