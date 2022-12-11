@@ -4,7 +4,7 @@ specifiers:
   '@kipper/core': workspace:~
   '@kipper/target-js': workspace:~
   '@kipper/target-ts': workspace:~
-  '@types/node': 18.11.11
+  '@types/node': 18.11.13
   ansi-regex: 6.0.1
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
@@ -22,7 +22,7 @@ devDependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-  '@types/node': 18.11.11
+  '@types/node': 18.11.13
   ansi-regex: 6.0.1
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
@@ -30,7 +30,7 @@ devDependencies:
   mkdirp: 1.0.4
   prettier: 2.8.1
   run-script-os: 1.1.6
-  ts-node: 10.9.1_bspv7bpieoza2i5ctiw2ofswem
+  ts-node: 10.9.1_73migmg77y47omm5253gettkxi
   typescript: 4.9.4
   uglify-js: 3.17.4
   uuid: 9.0.0
@@ -77,8 +77,8 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
-  /@types/node/18.11.11:
-    resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
+  /@types/node/18.11.13:
+    resolution: {integrity: sha512-IASpMGVcWpUsx5xBOrxMj7Bl8lqfuTY7FKAnPmu5cHkfQVWF8GulWS1jbRqA934qZL35xh5xN/+Xe/i26Bod4w==}
     dev: true
 
   /JSONStream/1.3.5:
@@ -1390,7 +1390,7 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /ts-node/10.9.1_bspv7bpieoza2i5ctiw2ofswem:
+  /ts-node/10.9.1_73migmg77y47omm5253gettkxi:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -1409,7 +1409,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.11.11
+      '@types/node': 18.11.13
       acorn: 8.8.0
       acorn-walk: 8.2.0
       arg: 4.1.3
