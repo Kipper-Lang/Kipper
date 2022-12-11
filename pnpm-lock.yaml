@@ -25,7 +25,7 @@ specifiers:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 1.0.4
-  mocha: 10.1.0
+  mocha: 10.2.0
   nyc: 15.1.0
   oclif: 3.4.2
   prettier: 2.8.0
@@ -70,14 +70,14 @@ devDependencies:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 1.0.4
-  mocha: 10.1.0
+  mocha: 10.2.0
   nyc: 15.1.0
   oclif: 3.4.2
   prettier: 2.8.0
   run-script-os: 1.1.6
   size-limit: 8.1.0
   source-map-support: 0.5.21
-  ts-mocha: 10.0.0_mocha@10.1.0
+  ts-mocha: 10.0.0_mocha@10.2.0
   ts-node: 10.9.1_zhirybrk4zoofuxp64necizyzy
   tsify: 5.0.4_x42wrubbqx6rzgydjpgojicxfm
   uglify-js: 3.17.4
@@ -4377,8 +4377,8 @@ packages:
     hasBin: true
     dev: true
 
-  /mocha/10.1.0:
-    resolution: {integrity: sha512-vUF7IYxEoN7XhQpFLxQAEMtE4W91acW4B6En9l97MwE9stL1A9gusXfoHZCLVHDUJ/7V5+lbCM6yMqzo5vNymg==}
+  /mocha/10.2.0:
+    resolution: {integrity: sha512-IDY7fl/BecMwFHzoqF2sg/SHHANeBoMMXFlS9r0OXKDssYE1M5O43wUY/9BVPeIvfH2zmEbBfseqN9gBQZzXkg==}
     engines: {node: '>= 14.0.0'}
     hasBin: true
     dependencies:
@@ -6088,14 +6088,14 @@ packages:
     resolution: {integrity: sha512-whw60l7r+8ZU8Tu/Uc2yxtc4ZTZbR/PF3u1IPNKGQ6p8EICLb3Z2lAgoqw9bqYd8IkgnsaOcLzYHFckjqNsf0g==}
     dev: true
 
-  /ts-mocha/10.0.0_mocha@10.1.0:
+  /ts-mocha/10.0.0_mocha@10.2.0:
     resolution: {integrity: sha512-VRfgDO+iiuJFlNB18tzOfypJ21xn2xbuZyDvJvqpTbWgkAgD17ONGr8t+Tl8rcBtOBdjXp5e/Rk+d39f7XBHRw==}
     engines: {node: '>= 6.X.X'}
     hasBin: true
     peerDependencies:
       mocha: ^3.X.X || ^4.X.X || ^5.X.X || ^6.X.X || ^7.X.X || ^8.X.X || ^9.X.X || ^10.X.X
     dependencies:
-      mocha: 10.1.0
+      mocha: 10.2.0
       ts-node: 7.0.1
     optionalDependencies:
       tsconfig-paths: 3.14.1
