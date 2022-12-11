@@ -19,9 +19,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.0.0
-          run_install: |
-            - recursive: true
+          version: 7.x.x
+          run_install: false
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
 
@@ -41,8 +40,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - uses: pnpm/action-setup@v2.2.4
         with:
-          version: 7.0.0
-          run_install: |
-            - recursive: true
+          version: 7.x.x
+          run_install: false
       - run: pnpm i
       - run: pnpm test
