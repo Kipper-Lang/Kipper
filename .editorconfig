@@ -8,5 +8,8 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 max_line_length = 120
 
+[*.g4]
+indent_size = 4
+
 [*.md]
 trim_trailing_whitespace = false
