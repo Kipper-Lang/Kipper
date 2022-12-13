@@ -71,6 +71,8 @@ To use development versions of Kipper download the
   - `UncheckedType`, which is an implementation of `Type` and represents a raw specified type during semantic analysis.
   - `CheckedType`, which is an implementation of `Type` and represents a checked type during type checking, which also
     handles compatibility and error recovery for undefined types.
+  - `MemberAccessExpression`, which is a subclass of `Expression` that represents a member access expression (Antlr4
+    rule `memberAccessExpression`).
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -110,6 +112,8 @@ To use development versions of Kipper download the
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
   - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
+  - `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
+  - `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -159,6 +163,7 @@ To use development versions of Kipper download the
 - Updated types of `CompilableASTNode` functions `primarySemanticAnalysis`, `primarySemanticTypeChecking` and
   `targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve
   performance and not call an async function unnecessarily.
+- Allowed the use of function declarations inside nested scopes (e.g. inside a function body or compound statement).
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -171,6 +176,8 @@ To use development versions of Kipper download the
   - `UnknownIdentifierError` to `UnknownReferenceError`.
   - `FunctionDeclarationSemantics.args` to `params`.
   - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
+  - `ListPrimaryExpression` to `ArrayLiteralPrimaryExpression`.
+  - `FunctionCallPostfixExpression` to `FunctionCallExpression`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
@@ -192,6 +199,8 @@ To use development versions of Kipper download the
   - `Scope.variables` (replaced by hash-map implementation of `Scope`)
   - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
   - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
+- Parser rule `arraySpecifierExpression` (`ArraySpecifierExpression`), which was made obsolete with the addition of
+  `bracketNotationMemberAccessExpression` (`BracketNotationMemberAccessExpression`).
 
 </details>
 
