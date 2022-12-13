@@ -476,6 +476,7 @@ packages:
       treeverse: 1.0.4
       walk-up-path: 1.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -505,6 +506,8 @@ packages:
       promise-retry: 2.0.1
       semver: 7.3.8
       which: 2.0.2
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /@npmcli/installed-package-contents/1.0.7:
@@ -535,6 +538,7 @@ packages:
       pacote: 12.0.3
       semver: 7.3.8
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -584,6 +588,7 @@ packages:
       node-gyp: 8.4.1
       read-package-json-fast: 2.0.3
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -1854,6 +1859,8 @@ packages:
       ssri: 8.0.1
       tar: 6.1.12
       unique-filename: 1.1.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /cacache/16.1.3:
@@ -1878,6 +1885,8 @@ packages:
       ssri: 9.0.1
       tar: 6.1.12
       unique-filename: 2.0.1
+    transitivePeerDependencies:
+      - bluebird
     dev: true
 
   /cached-path-relative/1.1.0:
@@ -2875,7 +2884,7 @@ packages:
     dev: true
 
   /fast-levenshtein/2.0.6:
-    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==, tarball: fast-levenshtein/-/fast-levenshtein-2.0.6.tgz}
+    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
     dependencies:
       fastest-levenshtein: 1.0.16
     dev: true
@@ -4075,6 +4084,7 @@ packages:
       socks-proxy-agent: 7.0.0
       ssri: 9.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4099,6 +4109,7 @@ packages:
       socks-proxy-agent: 6.2.1
       ssri: 8.0.1
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4474,6 +4485,7 @@ packages:
       tar: 6.1.12
       which: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4582,6 +4594,7 @@ packages:
       minizlib: 2.1.2
       npm-package-arg: 8.1.5
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -4693,6 +4706,7 @@ packages:
       yeoman-generator: 5.7.0_yeoman-environment@3.12.1
       yosay: 2.0.2
     transitivePeerDependencies:
+      - bluebird
       - encoding
       - supports-color
     dev: true
@@ -4864,6 +4878,7 @@ packages:
       ssri: 8.0.1
       tar: 6.1.12
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
@@ -5083,6 +5098,11 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -5795,8 +5815,8 @@ packages:
     dev: true
 
   /strip-bom/3.0.0:
-    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==, tarball: strip-bom/-/strip-bom-3.0.0.tgz}
-    engines: {node: '>=0.10.0'}
+    resolution: {integrity: sha512-vavAMRXOgBVNF6nyEEmL3DBK19iRpDcoIwW+swQ+CbGiu7lju6t+JklA1MHweoWtadgt4ISVUsXLyDq34ddcwA==}
+    engines: {node: '>=4'}
     dependencies:
       is-utf8: 0.2.1
     dev: true
@@ -6764,6 +6784,7 @@ packages:
       textextensions: 5.15.0
       untildify: 4.0.0
     transitivePeerDependencies:
+      - bluebird
       - supports-color
     dev: true
 
