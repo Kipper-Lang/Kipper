@@ -5,7 +5,6 @@
 
 import type {
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -15,7 +14,7 @@ import type {
 	EqualityExpression,
 	ExpressionStatement,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -24,7 +23,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MultiplicativeExpression,
@@ -127,9 +126,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract numberPrimaryExpression?: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ListPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ListPrimaryExpression>;
+	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayLiteralPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
@@ -172,11 +171,6 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract tangledPrimaryExpression?: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ArraySpecifierExpression} instances.
-	 */
-	public abstract arraySpecifierExpression?: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression>;
-
-	/**
 	 * Performs translation-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
 	public abstract voidOrNullOrUndefinedPrimaryExpression?: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression>;
@@ -187,9 +181,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract incrementOrDecrementPostfixExpression?: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link FunctionCallExpression} instances.
 	 */
-	public abstract functionCallPostfixExpression?: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression>;
+	public abstract functionCallExpression?: TargetASTNodeSemanticAnalyser<FunctionCallExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.

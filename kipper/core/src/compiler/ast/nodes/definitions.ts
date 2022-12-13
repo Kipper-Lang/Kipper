@@ -13,6 +13,7 @@ import {
 	InitDeclaratorContext,
 	ParameterDeclarationContext,
 	StorageTypeSpecifierContext,
+	VariableDeclarationContext,
 } from "../../parser";
 import {
 	FunctionScope,
@@ -45,7 +46,10 @@ import { ScopeNode } from "../scope-node";
 /**
  * Union type of all possible antlr4 parse tree node ctx instances for a {@link Declaration}.
  */
-export type antlrDefinitionCtxType = FunctionDeclarationContext | ParameterDeclarationContext | DeclarationContext;
+export type antlrDefinitionCtxType =
+	| FunctionDeclarationContext
+	| ParameterDeclarationContext
+	| VariableDeclarationContext;
 
 /**
  * Factory class which generates definition class instances using {@link DefinitionASTNodeFactory.create DefinitionASTNodeFactory.create()}.
@@ -86,7 +90,7 @@ export abstract class Declaration<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: antlrDefinitionCtxType;
+	protected override readonly _antlrRuleCtx: DeclarationContext;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -106,7 +110,7 @@ export abstract class Declaration<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): antlrDefinitionCtxType {
+	public override get antlrRuleCtx(): DeclarationContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -436,7 +440,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: DeclarationContext;
+	protected override readonly _antlrRuleCtx: VariableDeclarationContext;
 
 	/**
 	 * The private field '_children' that actually stores the variable data,
@@ -452,7 +456,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
-	constructor(antlrRuleCtx: DeclarationContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: VariableDeclarationContext, parent: compilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -461,7 +465,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): DeclarationContext {
+	public override get antlrRuleCtx(): VariableDeclarationContext {
 		return this._antlrRuleCtx;
 	}
 

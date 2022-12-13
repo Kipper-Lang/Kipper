@@ -68,10 +68,10 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
- * Semantics for AST Node {@link ListPrimaryExpression}.
+ * Semantics for AST Node {@link ArrayLiteralPrimaryExpression}.
  * @since 0.5.0
  */
-export interface ListPrimaryExpressionSemantics extends ExpressionSemantics {
+export interface ArrayLiteralPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The value of the constant list expression.
 	 * @since 0.5.0
@@ -216,16 +216,26 @@ export interface IncrementOrDecrementPostfixExpressionSemantics extends Expressi
 }
 
 /**
- * Semantics for AST Node {@link ArraySpecifierExpression}.
- * @since 0.5.0
+ * Semantics for AST Node {@link MemberAccessExpression}.
+ * @since 0.10.0
  */
-export interface ArraySpecifierExpressionSemantics extends ExpressionSemantics {}
+export interface MemberAccessExpressionSemantics extends ExpressionSemantics {
+	/**
+	 * The object or array that is accessed.
+	 * @since 0.10.0
+	 */
+	object: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	/**
+	 * The member that is accessed.
+	 */
+	member: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+}
 
 /**
- * Semantics for AST Node {@link FunctionCallPostfixExpression}.
+ * Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */
-export interface FunctionCallPostfixExpressionSemantics extends ExpressionSemantics {
+export interface FunctionCallExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The identifier of the function that is called.
 	 * @since 0.5.0

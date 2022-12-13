@@ -109,7 +109,7 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	numberPrimaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ListPrimaryExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
 	 */
 	listPrimaryExpression = undefined;
 
@@ -169,9 +169,9 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	incrementOrDecrementPostfixExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link FunctionCallExpression} instances.
 	 */
-	functionCallPostfixExpression = undefined;
+	functionCallExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.

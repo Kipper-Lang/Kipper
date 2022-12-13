@@ -4,7 +4,6 @@
  */
 import type {
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -13,7 +12,7 @@ import type {
 	EqualityExpression,
 	ExpressionStatement,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -22,7 +21,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MultiplicativeExpression,
@@ -167,9 +166,12 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract numberPrimaryExpression: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link ListPrimaryExpression} into a specific language.
+	 * Translates a {@link ArrayLiteralPrimaryExpression} into a specific language.
 	 */
-	public abstract listPrimaryExpression: TargetASTNodeCodeGenerator<ListPrimaryExpression, TranslatedExpression>;
+	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<
+		ArrayLiteralPrimaryExpression,
+		TranslatedExpression
+	>;
 
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.
@@ -224,11 +226,6 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract tangledPrimaryExpression: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into a specific language.
-	 */
-	public abstract arraySpecifierExpression: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
-
-	/**
 	 * Translates a {@link VoidOrNullOrUndefinedPrimaryExpression} into a specific language.
 	 */
 	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeCodeGenerator<
@@ -245,12 +242,9 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into a specific language.
+	 * Translates a {@link FunctionCallExpression} into a specific language.
 	 */
-	public abstract functionCallPostfixExpression: TargetASTNodeCodeGenerator<
-		FunctionCallPostfixExpression,
-		TranslatedExpression
-	>;
+	public abstract functionCallExpression: TargetASTNodeCodeGenerator<FunctionCallExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.

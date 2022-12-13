@@ -5,7 +5,6 @@
 import type { TargetASTNodeCodeGenerator } from "../../target-presets";
 import type {
 	AdditiveExpressionSemantics,
-	ArraySpecifierExpressionSemantics,
 	AssignmentExpressionSemantics,
 	BoolPrimaryExpressionSemantics,
 	CastOrConvertExpressionSemantics,
@@ -15,13 +14,13 @@ import type {
 	EqualityExpressionSemantics,
 	ExpressionSemantics,
 	FStringPrimaryExpressionSemantics,
-	FunctionCallPostfixExpressionSemantics,
+	FunctionCallExpressionSemantics,
 	GenericTypeSpecifierExpressionSemantics,
 	IdentifierPrimaryExpressionSemantics,
 	IdentifierTypeSpecifierExpressionSemantics,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	IncrementOrDecrementUnaryExpressionSemantics,
-	ListPrimaryExpressionSemantics,
+	ArrayLiteralPrimaryExpressionSemantics,
 	LogicalAndExpressionSemantics,
 	LogicalExpressionSemantics,
 	LogicalOrExpressionSemantics,
@@ -35,10 +34,10 @@ import type {
 	TypeSpecifierExpressionSemantics,
 	UnaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
+	MemberAccessExpressionSemantics,
 } from "../semantic-data";
 import type {
 	AdditiveExpressionTypeSemantics,
-	ArraySpecifierTypeSemantics,
 	AssignmentExpressionTypeSemantics,
 	BoolPrimaryExpressionTypeSemantics,
 	CastOrConvertExpressionTypeSemantics,
@@ -53,7 +52,7 @@ import type {
 	IdentifierTypeSpecifierExpressionTypeSemantics,
 	IncrementOrDecrementPostfixExpressionTypeSemantics,
 	IncrementOrDecrementUnaryTypeSemantics,
-	ListPrimaryExpressionTypeSemantics,
+	ArrayLiteralPrimaryExpressionTypeSemantics,
 	LogicalAndExpressionTypeSemantics,
 	LogicalExpressionTypeSemantics,
 	LogicalOrExpressionTypeSemantics,
@@ -99,22 +98,22 @@ import { TerminalNode } from "antlr4ts/tree";
 import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
 import {
 	AdditiveExpressionContext,
-	ArraySpecifierPostfixExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	CastOrConvertExpressionContext,
 	ConditionalExpressionContext,
 	EqualityExpressionContext,
 	FStringPrimaryExpressionContext,
-	FunctionCallPostfixExpressionContext,
+	FunctionCallExpressionContext,
 	GenericTypeSpecifierContext,
 	IdentifierPrimaryExpressionContext,
 	IdentifierTypeSpecifierContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
-	ListPrimaryExpressionContext,
+	ArrayLiteralPrimaryExpressionContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
+	MemberAccessExpressionContext,
 	MultiplicativeExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
@@ -127,22 +126,23 @@ import {
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { ParserRuleContext } from "antlr4ts";
+import { MemberAccessExpressionTypeSemantics } from "../type-data";
 
 /**
  * Union type of all possible antlr4 parse tree node ctx instances for an {@link Expression}.
  */
 export type antlrExpressionCtxType =
 	| NumberPrimaryExpressionContext
-	| ListPrimaryExpressionContext
+	| ArrayLiteralPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
 	| VoidOrNullOrUndefinedPrimaryExpressionContext
 	| BoolPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
 	| TangledPrimaryExpressionContext
-	| ArraySpecifierPostfixExpressionContext
+	| MemberAccessExpressionContext
 	| IncrementOrDecrementPostfixExpressionContext
-	| FunctionCallPostfixExpressionContext
+	| FunctionCallExpressionContext
 	| IncrementOrDecrementUnaryExpressionContext
 	| OperatorModifiedUnaryExpressionContext
 	| CastOrConvertExpressionContext
@@ -175,8 +175,8 @@ export class ExpressionASTNodeFactory {
 	): Expression<ExpressionSemantics, ExpressionTypeSemantics> {
 		if (antlrRuleCtx instanceof NumberPrimaryExpressionContext) {
 			return new NumberPrimaryExpression(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ListPrimaryExpressionContext) {
-			return new ListPrimaryExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof ArrayLiteralPrimaryExpressionContext) {
+			return new ArrayLiteralPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IdentifierPrimaryExpressionContext) {
 			return new IdentifierPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IdentifierTypeSpecifierContext) {
@@ -191,12 +191,10 @@ export class ExpressionASTNodeFactory {
 			return new FStringPrimaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof TangledPrimaryExpressionContext) {
 			return new TangledPrimaryExpression(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ArraySpecifierPostfixExpressionContext) {
-			return new ArraySpecifierExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IncrementOrDecrementPostfixExpressionContext) {
 			return new IncrementOrDecrementPostfixExpression(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof FunctionCallPostfixExpressionContext) {
-			return new FunctionCallPostfixExpression(antlrRuleCtx, parent);
+		} else if (antlrRuleCtx instanceof FunctionCallExpressionContext) {
+			return new FunctionCallExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof IncrementOrDecrementUnaryExpressionContext) {
 			return new IncrementOrDecrementUnaryExpression(antlrRuleCtx, parent);
 		} else if (antlrRuleCtx instanceof OperatorModifiedUnaryExpressionContext) {
@@ -371,18 +369,18 @@ export class NumberPrimaryExpression extends ConstantExpression<
  * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
-export class ListPrimaryExpression extends ConstantExpression<
-	ListPrimaryExpressionSemantics,
-	ListPrimaryExpressionTypeSemantics
+export class ArrayLiteralPrimaryExpression extends ConstantExpression<
+	ArrayLiteralPrimaryExpressionSemantics,
+	ArrayLiteralPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ListPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: ArrayLiteralPrimaryExpressionContext;
 
-	constructor(antlrRuleCtx: ListPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
+	constructor(antlrRuleCtx: ArrayLiteralPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -420,12 +418,12 @@ export class ListPrimaryExpression extends ConstantExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ListPrimaryExpressionContext {
+	public override get antlrRuleCtx(): ArrayLiteralPrimaryExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.listPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.listPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.arrayLiteralExpression;
 }
 
 /**
@@ -1116,65 +1114,25 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 }
 
 /**
- * Array Specifier expression, which accesses a list/array based on its index.
- * @since 0.1.0
- * @example
- * array[0]
+ * Member access expression, which represents a member access expression that evaluates to a value of a member of an
+ * object or array.
+ * @since 0.10.0
  */
-export class ArraySpecifierExpression extends Expression<
-	ArraySpecifierExpressionSemantics,
-	ArraySpecifierTypeSemantics
-> {
+export abstract class MemberAccessExpression<
+	Semantics extends MemberAccessExpressionSemantics,
+	TypeSemantics extends MemberAccessExpressionTypeSemantics,
+> extends Expression<Semantics, TypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ArraySpecifierPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
 
-	constructor(antlrRuleCtx: ArraySpecifierPostfixExpressionContext, parent: CompilableASTNode<any, any>) {
+	protected constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
-	}
-
-	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.7.0
-	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Array Subscripting has not been implemented yet."));
-	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ArraySpecifierPostfixExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.arraySpecifierExpression;
-	readonly targetCodeGenerator = this.codeGenerator.arraySpecifierExpression;
 }
 
 /**
@@ -1185,8 +1143,8 @@ export class ArraySpecifierExpression extends Expression<
  * // or
  * print("Hello world!")
  */
-export class FunctionCallPostfixExpression extends Expression<
-	FunctionCallPostfixExpressionSemantics,
+export class FunctionCallExpression extends Expression<
+	FunctionCallExpressionSemantics,
 	FunctionCallPostfixTypeSemantics
 > {
 	/**
@@ -1194,9 +1152,9 @@ export class FunctionCallPostfixExpression extends Expression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: FunctionCallPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: FunctionCallExpressionContext;
 
-	constructor(antlrRuleCtx: FunctionCallPostfixExpressionContext, parent: CompilableASTNode<any, any>) {
+	constructor(antlrRuleCtx: FunctionCallExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -1267,12 +1225,12 @@ export class FunctionCallPostfixExpression extends Expression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): FunctionCallPostfixExpressionContext {
+	public override get antlrRuleCtx(): FunctionCallExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallPostfixExpression;
-	readonly targetCodeGenerator = this.codeGenerator.functionCallPostfixExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
+	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
 }
 
 /**

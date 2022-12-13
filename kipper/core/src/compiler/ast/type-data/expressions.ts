@@ -28,10 +28,10 @@ export interface ExpressionTypeSemantics extends TypeData {
 export interface NumberPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
- * Type Semantics for AST Node {@link ListPrimaryExpression}.
+ * Type Semantics for AST Node {@link ArrayLiteralPrimaryExpression}.
  * @since 0.10.0
  */
-export interface ListPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {}
+export interface ArrayLiteralPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
  * Type Semantics for AST Node {@link StringPrimaryExpression}.
@@ -120,13 +120,13 @@ export interface VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics extends Exp
 export interface IncrementOrDecrementPostfixExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
- * Type Semantics for AST Node {@link ArraySpecifierExpression}.
- * @since 0.5.0
+ * Type Semantics for AST Node {@link MemberAccessExpression}.
+ * @since 0.10.0
  */
-export interface ArraySpecifierTypeSemantics extends ExpressionTypeSemantics {}
+export interface MemberAccessExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
- * Type Semantics for AST Node {@link FunctionCallPostfixExpression}.
+ * Type Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */
 export interface FunctionCallPostfixTypeSemantics extends ExpressionTypeSemantics {

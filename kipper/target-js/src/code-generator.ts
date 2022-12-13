@@ -3,21 +3,23 @@
  * @since 0.10.0
  */
 import type {
+	ComparativeExpressionSemantics,
+	ExpressionSemantics,
+	ExpressionTypeSemantics,
+	LogicalExpressionSemantics,
+	TranslatedCodeLine,
+	TranslatedExpression,
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
-	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
 	Expression,
-	ExpressionSemantics,
 	ExpressionStatement,
-	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -26,10 +28,9 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
-	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -40,8 +41,6 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
@@ -321,9 +320,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ListPrimaryExpression} into the JavaScript language.
+	 * Translates a {@link ArrayLiteralPrimaryExpression} into the JavaScript language.
 	 */
-	listPrimaryExpression = async (node: ListPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayLiteralExpression = async (node: ArrayLiteralPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
@@ -397,13 +396,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into the JavaScript language.
-	 */
-	arraySpecifierExpression = async (node: ArraySpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
-	};
-
-	/**
 	 * Translates a {@link IncrementOrDecrementPostfixExpression} into the JavaScript language.
 	 */
 	voidOrNullOrUndefinedPrimaryExpression = async (
@@ -427,9 +419,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into the JavaScript language.
+	 * Translates a {@link FunctionCallExpression} into the JavaScript language.
 	 */
-	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
+	functionCallExpression = async (node: FunctionCallExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
 		const semanticData = node.getSemanticData();
 		const func = node.getTypeSemanticData().func;
