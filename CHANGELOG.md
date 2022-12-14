@@ -2,7 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
+to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
@@ -18,11 +19,13 @@ To use development versions of Kipper download the
 ### Added
 
 - Added full support for custom-defined functions, function arguments, function return evaluation, function
-  scopes/argument referencing and return-value code branch inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
+  scopes/argument referencing and return-value code branch
+  inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
 - Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
   analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
-  as alias), which can be used as the target in the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
+  as alias), which can be used as the target in
+  the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
 - Standalone web-module package called `@kipper/web`, which from now on will provide the `kipper-standalone.js` script
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
   also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
@@ -48,7 +51,8 @@ To use development versions of Kipper download the
     the same scope or any parent scope.
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
     expression.
-  - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return a
+  - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return
+    a
     value.
   - `ReturnStatementError`, which is thrown whenever a return statement is used outside a function.
   - `InvalidUnaryExpressionOperandError`, which is thrown whenever a unary expression is used with an invalid operand.
@@ -80,9 +84,11 @@ To use development versions of Kipper download the
     `UndefinedSemanticsError`.
   - `CompilableASTNode.semanticTypeChecking()`, which performs type checking for the AST node and its children nodes.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticAnalysis()`.
-  - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST node.
+  - `CompilableASTNode.wrapUpSemanticAnalysis()`, which performs wrap-up semantic analysis for the target of the AST
+    node.
     This is called in the function `RootASTNode.semanticAnalysis` after `CompilableASTNode.semanticTypeChecking()`.
-  - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent scopes.
+  - `Scope.getReferenceRecursively()`, which tries to evaluate a reference recursively in the scope and its parent
+    scopes.
   - `KipperTypeChecker.validReturnStatement()`, which ensures that a return statement is only used inside a function.
   - `KipperTypeChecker.checkMatchingTypes()`, which checks if the two specified types are matching.
   - `KipperTypeChecker.referenceCallable()`, which asserts that the specified reference is a callable function.
@@ -108,6 +114,24 @@ To use development versions of Kipper download the
   - `KipperArg`, which represents a function argument. Alias for `KipperParam`.
   - `KipperParam`, which represents a function parameter.
   - `JmpStatementType`, which represents all possible jump statement types e.g. `break` and `continue`.
+  - `ParserDeclarationKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Declaration` AST
+    node.
+  - `ParserExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Expression` AST
+    node.
+  - `ParserStatementKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Statement` AST
+    node.
+  - `ParserConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `ConstantExpression` AST node.
+  - `ParserTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `TypeSpecifierExpression` AST node.
+  - `ParserMemberAccessKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `MemberAccessExpression` AST node.
+  - `ParserUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `UnaryExpression` AST node.
+  - `ParserComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `ComparativeExpression` AST node.
+  - `ParserLogicalExpressionType`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `LogicalExpression` AST node.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -119,8 +143,10 @@ To use development versions of Kipper download the
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
     abort on the first error encountered. This overwrites `recover` per default.
   - `RootASTNode.target`, which returns the `KipperCompileTarget` of the program ctx the root AST node is in.
-  - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is in.
-  - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST node is in.
+  - `RootASTNode.codeGenerator`, which returns the `KipperTargetCodeGenerator` of the program ctx the root AST node is
+    in.
+  - `RootASTNode.semanticAnalyser`, which returns the `KipperTargetSemanticAnalyser` of the program ctx the root AST
+    node is in.
   - `ASTNode.typeSemantics`, which contains the type data for an ASTNode that was evaluated during type checking.
   - `ScopeFunctionDeclaration.typeData`, which returns the type data of the function AST node.
   - `ScopeVariableDeclaration.typeData`, which returns the type data of the variable AST node.
@@ -138,6 +164,8 @@ To use development versions of Kipper download the
     node or any of its children have failed to be processed during semantic analysis or type checking.
   - `Scope.parent`, which returns the parent scope of the scope. This is used to recursively evaluate references in all
     parent scopes.
+  - `ParserASTNode.kind`, which returns the kind of the parser AST node. This returns the `KipperParser` rule number, as
+    defined by `KipperParser.RULE_*`.
 
 ### Changed
 
@@ -164,6 +192,7 @@ To use development versions of Kipper download the
   `targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve
   performance and not call an async function unnecessarily.
 - Allowed the use of function declarations inside nested scopes (e.g. inside a function body or compound statement).
+- Split grammar file `Kipper.g4` into `KipperLexer.g4` and `KipperParser.g4`.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -178,6 +207,9 @@ To use development versions of Kipper download the
   - `KipperTypeChecker.argumentTypesMatch` to `validArgumentValue`.
   - `ListPrimaryExpression` to `ArrayLiteralPrimaryExpression`.
   - `FunctionCallPostfixExpression` to `FunctionCallExpression`.
+  - `antlrDefinitionCtxType` to `ParserDeclarationCtx`.
+  - `antlrExpressionCtxType` to `ParserExpressionCtx`.
+  - `antlrStatementCtxType` to `ParserStatementCtx`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
@@ -684,7 +716,8 @@ To use development versions of Kipper download the
   `CompilableASTNode`.
 - New type `TargetTokenCodeGenerator`, which represents a function type that semantically analyses a
   `CompilableASTNode`.
-- Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code into
+- Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code
+  into
   a specific target language.
 - Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis
   logic for a compilation target.
@@ -697,7 +730,8 @@ To use development versions of Kipper download the
 - New protected functions `primarySemanticAnalysis` and `targetSemanticAnalysis`, which are split to separate the
   core/primary semantic analysis and the target specific semantic analysis.
 - New types `KipperVoidType`, `KipperNumType`, `KipperStrType`, `KipperCharType`, `KipperBoolType` and `KipperListType`,
-  which represent Kipper available types in the Kipper language. core/primary semantic analysis and the target specific semantic analysis.
+  which represent Kipper available types in the Kipper language. core/primary semantic analysis and the target specific
+  semantic analysis.
 - Assert function `CompileAssert.getExistingFunction()` for fetching a function and throwing an error if it does
   not exist.
 - New CLI commands:
@@ -838,9 +872,11 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking variable
+- Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking
+  variable
   called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
-- Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its identifier,
+- Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its
+  identifier,
   storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
 - Added errors `BuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 - Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing
@@ -851,7 +887,8 @@ To use development versions of Kipper download the
 ### Changed
 
 - Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token
-  (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type, scope
+  (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type,
+  scope
   and state).
 - Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
   default to `"anonymous-script"`.
@@ -885,7 +922,8 @@ To use development versions of Kipper download the
 - File `builtIns.ts`, which defines the behaviour on how to define built-in items inside a kipper program. This
   primarily includes global functions, which can be represented using the interface `BuiltInFunction`. (In work!)
 - Implemented `**` (Power-to) as a valid arithmetic expression.
-- Implemented `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to configure
+- Implemented `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to
+  configure
   the compilation behaviour.
 - Implemented new module `/compiler/tokens`, which contains the parse token implementations.
 - Implemented basic global function `print` that will be available inside a Kipper program per default (unless
