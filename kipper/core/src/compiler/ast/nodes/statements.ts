@@ -64,7 +64,7 @@ export type ParserStatementCtx =
 	| ReturnStatementContext;
 
 /**
- * Union type of all possible {@link ParserASTNode.kind} values for a {@link Declaration} AST node.
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
  * @since 0.10.0
  */
 export type ParserStatementKind =
