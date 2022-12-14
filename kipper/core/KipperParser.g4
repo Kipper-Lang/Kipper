@@ -24,9 +24,16 @@ externalItem
 // -- Declarations
 
 declaration
-    :   storageTypeSpecifier initDeclarator SemiColon # variableDeclaration
-    |	'def' declarator '(' parameterList? ')' '->' typeSpecifier (compoundStatement | SemiColon) # functionDeclaration
+    :   variableDeclaration | functionDeclaration
     ;
+
+variableDeclaration
+	:	storageTypeSpecifier initDeclarator SemiColon
+	;
+
+functionDeclaration
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier (compoundStatement | SemiColon)
+	;
 
 declarator
     :   directDeclarator
@@ -44,17 +51,6 @@ storageTypeSpecifier
 initDeclarator
     :   declarator ':' typeSpecifier ('=' initializer)?
     ;
-
-// TODO! Implement the following type specifiers as expressions
-typeSpecifier
-    :   typeSpecifierIdentifier # identifierTypeSpecifier // for simple type identifiers, like 'num'
-    |   typeSpecifierIdentifier '<' typeSpecifierIdentifier '>' # genericTypeSpecifier // for lists
-    |   'typeof' '('  typeSpecifierIdentifier  ')' # typeofTypeSpecifier // typeof another variable
-    ;
-
-typeSpecifierIdentifier
-	:	(Identifier | 'null' | 'undefined' | 'void')
-	;
 
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
@@ -93,13 +89,20 @@ blockItem
     ;
 
 expressionStatement
-    :   expression? SemiColon
+    :   expression SemiColon
     ;
 
 selectionStatement
-    :   'if' '(' expression ')' statement ('else' statement)? #ifStatement
-    |   'switch' '(' expression ')' '{' (switchLabeledStatement)* '}' #switchStatement
+    :	ifStatement | switchStatement
     ;
+
+ifStatement
+	:	'if' '(' expression ')' statement ('else' statement)?
+	;
+
+switchStatement
+	:	'switch' '(' expression ')' '{' (switchLabeledStatement)* '}'
+	;
 
 switchLabeledStatement
     :   'case' expression ':' statement
@@ -107,14 +110,26 @@ switchLabeledStatement
     ;
 
 iterationStatement
-    :   For '(' forCondition ')' statement # ForLoopIterationStatement
-    |   While '(' expression ')' statement # WhileLoopIterationStatement
-    |   Do statement While '(' expression ')' SemiColon # DoWhileLoopIterationStatement
+    :	forLoopIterationStatement
+    |	whileLoopIterationStatement
+    |	doWhileLoopIterationStatement
     ;
 
+forLoopIterationStatement
+	:	'for' '(' forCondition ')' statement
+	;
+
+whileLoopIterationStatement
+	:	'while' '(' expression ')' statement
+	;
+
+doWhileLoopIterationStatement
+	:	'do' statement 'while' '(' expression ')' SemiColon
+	;
+
 forCondition
-	  :   (forDeclaration | expression?) SemiColon forExpression? SemiColon forExpression?
-	  ;
+	:	(forDeclaration | expression?) SemiColon forExpression? SemiColon forExpression?
+	;
 
 forDeclaration
     :   storageTypeSpecifier initDeclarator
@@ -135,48 +150,53 @@ returnStatement
 // -- Expressions
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
-    :   tangledExpression # tangledPrimaryExpression
-    |   boolLiteral #boolPrimaryExpression
-    | 	identifier # identifierPrimaryExpression
-    |   stringLiteral # stringPrimaryExpression
-    |   fStringLiteral # fStringPrimaryExpression
-    |   numberLiteral #numberPrimaryExpression
-    |   arrayLiteral #arrayLiteralPrimaryExpression
-    |	voidOrNullOrUndefined #voidOrNullOrUndefinedPrimaryExpression
+    :   tangledPrimaryExpression
+    |   boolPrimaryExpression
+    | 	identifierPrimaryExpression
+    |   stringPrimaryExpression
+    |   fStringPrimaryExpression
+    |   numberPrimaryExpression
+    |   arrayLiteralPrimaryExpression
+    |	voidOrNullOrUndefinedPrimaryExpression
     ;
 
-tangledExpression
+tangledPrimaryExpression
 	:   '(' expression ')'
+	;
+
+boolPrimaryExpression
+	:	True | False
+	;
+
+identifierPrimaryExpression
+	:	identifier
 	;
 
 identifier
 	:	Identifier
 	;
 
-boolLiteral
-	:	True | False
-	;
-
-stringLiteral
+stringPrimaryExpression
 	:	SingleQuoteStringLiteral | DoubleQuoteStringLiteral
 	;
 
-fStringLiteral
+fStringPrimaryExpression
 	:	SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral
 	;
 
-numberLiteral
+numberPrimaryExpression
 	:	IntegerConstant | FloatingConstant
 	;
 
-arrayLiteral
+arrayLiteralPrimaryExpression
 	:	'[' (expression (',' expression)*)? ']'
 	;
 
-voidOrNullOrUndefined
+voidOrNullOrUndefinedPrimaryExpression
 	:	Void | Null | Undefined
 	;
 
+// Lowest level above 'primaryExpression', which represents property access, function calls, and array access
 computedPrimaryExpression
     :	primaryExpression
     |	memberAccessExpression
@@ -188,8 +208,15 @@ functionCallExpression
 	;
 
 memberAccessExpression
-	:	primaryExpression ('.' identifier)+ # dotNotationMemberAccessExpression
-	| 	primaryExpression bracketNotation+ # bracketNotationMemberAccessExpression
+	:	dotNotationMemberAccessExpression |	bracketNotationMemberAccessExpression
+	;
+
+dotNotationMemberAccessExpression
+	:	primaryExpression ('.' identifier)+
+	;
+
+bracketNotationMemberAccessExpression
+	:	primaryExpression bracketNotation+
 	;
 
 bracketNotation
@@ -197,19 +224,31 @@ bracketNotation
     ;
 
 postfixExpression
-    :   computedPrimaryExpression #passOnPostfixExpression
-    |   computedPrimaryExpression incrementOrDecrementOperator # incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
+    :   computedPrimaryExpression // Pass-on (Not matching rule)
+    |   incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
     ;
+
+incrementOrDecrementPostfixExpression
+	:	computedPrimaryExpression incrementOrDecrementOperator
+	;
 
 argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)*
     ;
 
 unaryExpression
-    :   postfixExpression # passOnUnaryExpression
-    |   incrementOrDecrementOperator postfixExpression # incrementOrDecrementUnaryExpression
-    |   unaryOperator postfixExpression # operatorModifiedUnaryExpression
+    :   postfixExpression // Pass-on (Not matching rule)
+    |   incrementOrDecrementUnaryExpression
+    |   operatorModifiedUnaryExpression
     ;
+
+incrementOrDecrementUnaryExpression
+	:	incrementOrDecrementOperator postfixExpression
+	;
+
+operatorModifiedUnaryExpression
+	:	unaryOperator postfixExpression
+	;
 
 incrementOrDecrementOperator
     :   '++' |  '--'
@@ -221,7 +260,7 @@ unaryOperator
 
 castOrConvertExpression
     :   unaryExpression # passOnCastOrConvertExpression
-    |   unaryExpression 'as' typeSpecifier # actualCastOrConvertExpression
+    |   unaryExpression 'as' typeSpecifier #actualCastOrConvertExpression
     ;
 
 multiplicativeExpression
@@ -271,3 +310,24 @@ assignmentOperator
 expression
     :   assignmentExpression (',' assignmentExpression)* // Comma-separated expressions
     ;
+
+// TODO! Implement the following type specifiers as expressions
+typeSpecifier
+    :   identifierTypeSpecifier | genericTypeSpecifier | typeofTypeSpecifier
+    ;
+
+identifierTypeSpecifier
+	:	typeSpecifierIdentifier
+	;
+
+genericTypeSpecifier
+	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
+	;
+
+typeofTypeSpecifier
+	:	'typeof' '(' typeSpecifierIdentifier ')'
+	;
+
+typeSpecifierIdentifier
+	:	(Identifier | 'null' | 'undefined' | 'void')
+	;

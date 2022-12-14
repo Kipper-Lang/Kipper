@@ -4,15 +4,7 @@ import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
 import { ActualLogicalAndExpressionContext } from "./KipperParser";
-import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
-import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
-import { PassOnUnaryExpressionContext } from "./KipperParser";
-import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
-import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
-import { ForLoopIterationStatementContext } from "./KipperParser";
-import { WhileLoopIterationStatementContext } from "./KipperParser";
-import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -23,39 +15,22 @@ import { PassOnAdditiveExpressionContext } from "./KipperParser";
 import { ActualAdditiveExpressionContext } from "./KipperParser";
 import { PassOnRelationalExpressionContext } from "./KipperParser";
 import { ActualRelationalExpressionContext } from "./KipperParser";
-import { IfStatementContext } from "./KipperParser";
-import { SwitchStatementContext } from "./KipperParser";
-import { PassOnPostfixExpressionContext } from "./KipperParser";
-import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
-import { TangledPrimaryExpressionContext } from "./KipperParser";
-import { BoolPrimaryExpressionContext } from "./KipperParser";
-import { IdentifierPrimaryExpressionContext } from "./KipperParser";
-import { StringPrimaryExpressionContext } from "./KipperParser";
-import { FStringPrimaryExpressionContext } from "./KipperParser";
-import { NumberPrimaryExpressionContext } from "./KipperParser";
-import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
-import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
-import { IdentifierTypeSpecifierContext } from "./KipperParser";
-import { GenericTypeSpecifierContext } from "./KipperParser";
-import { TypeofTypeSpecifierContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
 import { ActualMultiplicativeExpressionContext } from "./KipperParser";
 import { PassOnLogicalOrExpressionContext } from "./KipperParser";
 import { ActualLogicalOrExpressionContext } from "./KipperParser";
-import { VariableDeclarationContext } from "./KipperParser";
-import { FunctionDeclarationContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
 import { DeclarationContext } from "./KipperParser";
+import { VariableDeclarationContext } from "./KipperParser";
+import { FunctionDeclarationContext } from "./KipperParser";
 import { DeclaratorContext } from "./KipperParser";
 import { DirectDeclaratorContext } from "./KipperParser";
 import { StorageTypeSpecifierContext } from "./KipperParser";
 import { InitDeclaratorContext } from "./KipperParser";
-import { TypeSpecifierContext } from "./KipperParser";
-import { TypeSpecifierIdentifierContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InitializerContext } from "./KipperParser";
@@ -65,29 +40,40 @@ import { BlockItemListContext } from "./KipperParser";
 import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
+import { IfStatementContext } from "./KipperParser";
+import { SwitchStatementContext } from "./KipperParser";
 import { SwitchLabeledStatementContext } from "./KipperParser";
 import { IterationStatementContext } from "./KipperParser";
+import { ForLoopIterationStatementContext } from "./KipperParser";
+import { WhileLoopIterationStatementContext } from "./KipperParser";
+import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { ForConditionContext } from "./KipperParser";
 import { ForDeclarationContext } from "./KipperParser";
 import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { TangledExpressionContext } from "./KipperParser";
+import { TangledPrimaryExpressionContext } from "./KipperParser";
+import { BoolPrimaryExpressionContext } from "./KipperParser";
+import { IdentifierPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierContext } from "./KipperParser";
-import { BoolLiteralContext } from "./KipperParser";
-import { StringLiteralContext } from "./KipperParser";
-import { FStringLiteralContext } from "./KipperParser";
-import { NumberLiteralContext } from "./KipperParser";
-import { ArrayLiteralContext } from "./KipperParser";
-import { VoidOrNullOrUndefinedContext } from "./KipperParser";
+import { StringPrimaryExpressionContext } from "./KipperParser";
+import { FStringPrimaryExpressionContext } from "./KipperParser";
+import { NumberPrimaryExpressionContext } from "./KipperParser";
+import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
+import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
 import { ComputedPrimaryExpressionContext } from "./KipperParser";
 import { FunctionCallExpressionContext } from "./KipperParser";
 import { MemberAccessExpressionContext } from "./KipperParser";
+import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
+import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
 import { BracketNotationContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
+import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
 import { UnaryExpressionContext } from "./KipperParser";
+import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
+import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementOperatorContext } from "./KipperParser";
 import { UnaryOperatorContext } from "./KipperParser";
 import { CastOrConvertExpressionContext } from "./KipperParser";
@@ -101,6 +87,11 @@ import { ConditionalExpressionContext } from "./KipperParser";
 import { AssignmentExpressionContext } from "./KipperParser";
 import { AssignmentOperatorContext } from "./KipperParser";
 import { ExpressionContext } from "./KipperParser";
+import { TypeSpecifierContext } from "./KipperParser";
+import { IdentifierTypeSpecifierContext } from "./KipperParser";
+import { GenericTypeSpecifierContext } from "./KipperParser";
+import { TypeofTypeSpecifierContext } from "./KipperParser";
+import { TypeSpecifierIdentifierContext } from "./KipperParser";
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -134,71 +125,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitActualLogicalAndExpression?: (ctx: ActualLogicalAndExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `passOnUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterPassOnUnaryExpression?: (ctx: PassOnUnaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `passOnUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitPassOnUnaryExpression?: (ctx: PassOnUnaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `incrementOrDecrementUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterIncrementOrDecrementUnaryExpression?: (ctx: IncrementOrDecrementUnaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `incrementOrDecrementUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitIncrementOrDecrementUnaryExpression?: (ctx: IncrementOrDecrementUnaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `operatorModifiedUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `operatorModifiedUnaryExpression`
-	 * labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `externalBlockItem`
 	 * labeled alternative in `KipperParser.externalItem`.
 	 * @param ctx the parse tree
@@ -210,45 +136,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitExternalBlockItem?: (ctx: ExternalBlockItemContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `ForLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by the `ForLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `WhileLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by the `WhileLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `DoWhileLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by the `DoWhileLoopIterationStatement`
-	 * labeled alternative in `KipperParser.iterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnAssignmentExpression`
@@ -381,162 +268,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `ifStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterIfStatement?: (ctx: IfStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by the `ifStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitIfStatement?: (ctx: IfStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `switchStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx the parse tree
-	 */
-	enterSwitchStatement?: (ctx: SwitchStatementContext) => void;
-	/**
-	 * Exit a parse tree produced by the `switchStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx the parse tree
-	 */
-	exitSwitchStatement?: (ctx: SwitchStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `passOnPostfixExpression`
-	 * labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterPassOnPostfixExpression?: (ctx: PassOnPostfixExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `passOnPostfixExpression`
-	 * labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitPassOnPostfixExpression?: (ctx: PassOnPostfixExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `incrementOrDecrementPostfixExpression`
-	 * labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `incrementOrDecrementPostfixExpression`
-	 * labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `tangledPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `tangledPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `boolPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `boolPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `identifierPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterIdentifierPrimaryExpression?: (ctx: IdentifierPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `identifierPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitIdentifierPrimaryExpression?: (ctx: IdentifierPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `stringPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterStringPrimaryExpression?: (ctx: StringPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `stringPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitStringPrimaryExpression?: (ctx: StringPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `fStringPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `fStringPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `numberPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterNumberPrimaryExpression?: (ctx: NumberPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `numberPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitNumberPrimaryExpression?: (ctx: NumberPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `arrayLiteralPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `arrayLiteralPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `voidOrNullOrUndefinedPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `voidOrNullOrUndefinedPrimaryExpression`
-	 * labeled alternative in `KipperParser.primaryExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
 	 * labeled alternative in `KipperParser.conditionalExpression`.
 	 * @param ctx the parse tree
@@ -561,45 +292,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitActualConditionalExpression?: (ctx: ActualConditionalExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `identifierTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	enterIdentifierTypeSpecifier?: (ctx: IdentifierTypeSpecifierContext) => void;
-	/**
-	 * Exit a parse tree produced by the `identifierTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	exitIdentifierTypeSpecifier?: (ctx: IdentifierTypeSpecifierContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `genericTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	enterGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
-	/**
-	 * Exit a parse tree produced by the `genericTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	exitGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `typeofTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
-	/**
-	 * Exit a parse tree produced by the `typeofTypeSpecifier`
-	 * labeled alternative in `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnMultiplicativeExpression`
@@ -654,32 +346,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitActualLogicalOrExpression?: (ctx: ActualLogicalOrExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `variableDeclaration`
-	 * labeled alternative in `KipperParser.declaration`.
-	 * @param ctx the parse tree
-	 */
-	enterVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
-	/**
-	 * Exit a parse tree produced by the `variableDeclaration`
-	 * labeled alternative in `KipperParser.declaration`.
-	 * @param ctx the parse tree
-	 */
-	exitVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `functionDeclaration`
-	 * labeled alternative in `KipperParser.declaration`.
-	 * @param ctx the parse tree
-	 */
-	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
-	/**
-	 * Exit a parse tree produced by the `functionDeclaration`
-	 * labeled alternative in `KipperParser.declaration`.
-	 * @param ctx the parse tree
-	 */
-	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.compilationUnit`.
 	 * @param ctx the parse tree
 	 */
@@ -724,6 +390,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitDeclaration?: (ctx: DeclarationContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.variableDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.variableDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.declarator`.
 	 * @param ctx the parse tree
 	 */
@@ -766,28 +454,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitInitDeclarator?: (ctx: InitDeclaratorContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeSpecifier?: (ctx: TypeSpecifierContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.typeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeSpecifier?: (ctx: TypeSpecifierContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.typeSpecifierIdentifier`.
-	 * @param ctx the parse tree
-	 */
-	enterTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.typeSpecifierIdentifier`.
-	 * @param ctx the parse tree
-	 */
-	exitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterList`.
@@ -889,6 +555,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitSelectionStatement?: (ctx: SelectionStatementContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.ifStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterIfStatement?: (ctx: IfStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.ifStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitIfStatement?: (ctx: IfStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.switchStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterSwitchStatement?: (ctx: SwitchStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.switchStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitSwitchStatement?: (ctx: SwitchStatementContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.switchLabeledStatement`.
 	 * @param ctx the parse tree
 	 */
@@ -909,6 +597,39 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIterationStatement?: (ctx: IterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.forLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.forLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitForLoopIterationStatement?: (ctx: ForLoopIterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.whileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.whileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitWhileLoopIterationStatement?: (ctx: WhileLoopIterationStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	enterDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	exitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.forCondition`.
@@ -977,15 +698,37 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitPrimaryExpression?: (ctx: PrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.tangledExpression`.
+	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterTangledExpression?: (ctx: TangledExpressionContext) => void;
+	enterTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.tangledExpression`.
+	 * Exit a parse tree produced by `KipperParser.tangledPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitTangledExpression?: (ctx: TangledExpressionContext) => void;
+	exitTangledPrimaryExpression?: (ctx: TangledPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.boolPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBoolPrimaryExpression?: (ctx: BoolPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.identifierPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterIdentifierPrimaryExpression?: (ctx: IdentifierPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.identifierPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitIdentifierPrimaryExpression?: (ctx: IdentifierPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.identifier`.
@@ -999,70 +742,59 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitIdentifier?: (ctx: IdentifierContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.boolLiteral`.
+	 * Enter a parse tree produced by `KipperParser.stringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterBoolLiteral?: (ctx: BoolLiteralContext) => void;
+	enterStringPrimaryExpression?: (ctx: StringPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.boolLiteral`.
+	 * Exit a parse tree produced by `KipperParser.stringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitBoolLiteral?: (ctx: BoolLiteralContext) => void;
+	exitStringPrimaryExpression?: (ctx: StringPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.stringLiteral`.
+	 * Enter a parse tree produced by `KipperParser.fStringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterStringLiteral?: (ctx: StringLiteralContext) => void;
+	enterFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.stringLiteral`.
+	 * Exit a parse tree produced by `KipperParser.fStringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitStringLiteral?: (ctx: StringLiteralContext) => void;
+	exitFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.fStringLiteral`.
+	 * Enter a parse tree produced by `KipperParser.numberPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterFStringLiteral?: (ctx: FStringLiteralContext) => void;
+	enterNumberPrimaryExpression?: (ctx: NumberPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.fStringLiteral`.
+	 * Exit a parse tree produced by `KipperParser.numberPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitFStringLiteral?: (ctx: FStringLiteralContext) => void;
+	exitNumberPrimaryExpression?: (ctx: NumberPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.numberLiteral`.
+	 * Enter a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterNumberLiteral?: (ctx: NumberLiteralContext) => void;
+	enterArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.numberLiteral`.
+	 * Exit a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitNumberLiteral?: (ctx: NumberLiteralContext) => void;
+	exitArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.arrayLiteral`.
+	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterArrayLiteral?: (ctx: ArrayLiteralContext) => void;
+	enterVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.arrayLiteral`.
+	 * Exit a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitArrayLiteral?: (ctx: ArrayLiteralContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefined`.
-	 * @param ctx the parse tree
-	 */
-	enterVoidOrNullOrUndefined?: (ctx: VoidOrNullOrUndefinedContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.voidOrNullOrUndefined`.
-	 * @param ctx the parse tree
-	 */
-	exitVoidOrNullOrUndefined?: (ctx: VoidOrNullOrUndefinedContext) => void;
+	exitVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.computedPrimaryExpression`.
@@ -1098,6 +830,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitMemberAccessExpression?: (ctx: MemberAccessExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.dotNotationMemberAccessExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.dotNotationMemberAccessExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.bracketNotationMemberAccessExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bracketNotationMemberAccessExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.bracketNotation`.
 	 * @param ctx the parse tree
 	 */
@@ -1120,6 +874,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitPostfixExpression?: (ctx: PostfixExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.argumentExpressionList`.
 	 * @param ctx the parse tree
 	 */
@@ -1140,6 +905,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitUnaryExpression?: (ctx: UnaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterIncrementOrDecrementUnaryExpression?: (ctx: IncrementOrDecrementUnaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitIncrementOrDecrementUnaryExpression?: (ctx: IncrementOrDecrementUnaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitOperatorModifiedUnaryExpression?: (ctx: OperatorModifiedUnaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementOperator`.
@@ -1283,4 +1070,59 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitExpression?: (ctx: ExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeSpecifier?: (ctx: TypeSpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeSpecifier?: (ctx: TypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.identifierTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterIdentifierTypeSpecifier?: (ctx: IdentifierTypeSpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.identifierTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitIdentifierTypeSpecifier?: (ctx: IdentifierTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.genericTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.genericTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitGenericTypeSpecifier?: (ctx: GenericTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.typeofTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeofTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeofTypeSpecifier?: (ctx: TypeofTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.typeSpecifierIdentifier`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeSpecifierIdentifier`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
 }
