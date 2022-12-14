@@ -17,18 +17,30 @@ import type { Declaration, Statement } from "./nodes";
 import type { TranslatedCodeLine } from "../const";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperError, UndefinedSemanticsError } from "../../errors";
+import { CompilationUnitContext, KipperParser } from "../parser";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
 export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
-	protected _programCtx: KipperProgramContext;
+	protected readonly _antlrRuleCtx: CompilationUnitContext;
+	protected readonly _programCtx: KipperProgramContext;
 	protected readonly _parent: undefined;
 	protected readonly _children: Array<Declaration<any, any> | Statement<SemanticData, TypeData>>;
 
-	constructor(programCtx: KipperProgramContext, antlrCtx: ParserRuleContext) {
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_compilationUnit;
+
+	constructor(programCtx: KipperProgramContext, antlrCtx: CompilationUnitContext) {
 		super(antlrCtx, undefined);
+		this._antlrRuleCtx = antlrCtx;
 		this._programCtx = programCtx;
 		this._children = [];
 		this._parent = undefined;

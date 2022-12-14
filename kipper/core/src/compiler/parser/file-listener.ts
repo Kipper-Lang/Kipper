@@ -56,11 +56,8 @@ import type {
 	InitDeclaratorContext,
 	ParameterListContext,
 	PassOnAssignmentExpressionContext,
-	PassOnCastOrConvertExpressionContext,
 	PassOnConditionalExpressionContext,
 	PassOnLogicalOrExpressionContext,
-	PassOnPostfixExpressionContext,
-	PassOnUnaryExpressionContext,
 	StorageTypeSpecifierContext,
 	TypeSpecifierContext,
 	UnaryExpressionContext,
@@ -68,11 +65,11 @@ import type {
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
-	type antlrDefinitionCtxType,
-	type antlrExpressionCtxType,
-	type antlrStatementCtxType,
+	type ParserDeclarationCtx,
+	type ParserExpressionCtx,
+	type ParserStatementCtx,
 	Declaration,
-	DefinitionASTNodeFactory,
+	DeclarationASTNodeFactory,
 	Expression,
 	ExpressionASTNodeFactory,
 	Statement,
@@ -88,6 +85,7 @@ import {
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	PassOnAdditiveExpressionContext,
+	PassOnCastOrConvertExpressionContext,
 	PassOnEqualityExpressionContext,
 	PassOnLogicalAndExpressionContext,
 	PassOnMultiplicativeExpressionContext,
@@ -178,7 +176,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The context instance of the expression
 	 * @private
 	 */
-	private handleIncomingExpressionCtx(ctx: antlrExpressionCtxType) {
+	private handleIncomingExpressionCtx(ctx: ParserExpressionCtx) {
 		if (this.getCurrentNode instanceof RootASTNode) {
 			throw new KipperInternalError(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
@@ -215,7 +213,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
 	 * @private
 	 */
-	private handleIncomingStatementCtx(ctx: antlrStatementCtxType) {
+	private handleIncomingStatementCtx(ctx: ParserStatementCtx) {
 		this._currentPrimaryNode = StatementASTNodeFactory.create(ctx, this.getCurrentNode);
 	}
 
@@ -229,8 +227,8 @@ export class KipperFileListener implements KipperParserListener {
 	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
 	 * @private
 	 */
-	private handleIncomingDefinitionCtx(ctx: antlrDefinitionCtxType) {
-		this._currentPrimaryNode = DefinitionASTNodeFactory.create(ctx, this.getCurrentNode);
+	private handleIncomingDefinitionCtx(ctx: ParserDeclarationCtx) {
+		this._currentPrimaryNode = DeclarationASTNodeFactory.create(ctx, this.getCurrentNode);
 	}
 
 	/**
@@ -475,20 +473,6 @@ export class KipperFileListener implements KipperParserListener {
 	public exitPostfixExpression?(ctx: PostfixExpressionContext): void; // Unspecific parent -> skip
 
 	/**
-	 * Enter a parse tree produced by the `passOnPostfixExpression`
-	 * Labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public enterPassOnPostfixExpression?(ctx: PassOnPostfixExpressionContext): void; // Pass-on -> skip
-
-	/**
-	 * Exit a parse tree produced by the `passOnPostfixExpression`
-	 * Labeled alternative in `KipperParser.postfixExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public exitPassOnPostfixExpression?(ctx: PassOnPostfixExpressionContext): void; // Pass-on -> skip
-
-	/**
 	 * Enter a parse tree produced by the `incrementOrDecrementPostfixExpression`
 	 * Labeled alternative in `KipperParser.postfixExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
@@ -543,20 +527,6 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext})
 	 */
 	public exitUnaryExpression?(ctx: UnaryExpressionContext): void; // Unspecific parent -> skip
-
-	/**
-	 * Enter a parse tree produced by the `passOnUnaryExpression`
-	 * Labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public enterPassOnUnaryExpression?(ctx: PassOnUnaryExpressionContext): void; // Pass-on -> skip
-
-	/**
-	 * Exit a parse tree produced by the `passOnUnaryExpression`
-	 * Labeled alternative in `KipperParser.unaryExpression`.
-	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
-	 */
-	public exitPassOnUnaryExpression?(ctx: PassOnUnaryExpressionContext): void; // Pass-on -> skip
 
 	/**
 	 * Enter a parse tree produced by the `incrementOrDecrementUnaryExpression`
@@ -642,7 +612,7 @@ export class KipperFileListener implements KipperParserListener {
 
 	/**
 	 * Enter a parse tree produced by the `actualCastOrConvertExpression`
-	 * Labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public enterActualCastOrConvertExpression(ctx: ActualCastOrConvertExpressionContext): void {
@@ -651,7 +621,7 @@ export class KipperFileListener implements KipperParserListener {
 
 	/**
 	 * Exit a parse tree produced by the `actualCastOrConvertExpression`
-	 * Labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public exitActualCastOrConvertExpression(ctx: ActualCastOrConvertExpressionContext): void {

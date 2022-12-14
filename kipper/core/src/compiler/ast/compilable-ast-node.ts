@@ -26,13 +26,13 @@ import { KipperError } from "../../errors";
  * An eligible parent for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeParent = CompilableASTNode<SemanticData, TypeData> | RootASTNode;
+export type CompilableNodeParent = CompilableASTNode<SemanticData, TypeData> | RootASTNode;
 
 /**
  * An eligible child for a compilable node.
  * @since 0.8.0
  */
-export type compilableNodeChild = CompilableASTNode<SemanticData, TypeData>;
+export type CompilableNodeChild = CompilableASTNode<SemanticData, TypeData>;
 
 /**
  * Compilable AST Node that can be semantically analysed and translated into a target language.
@@ -43,11 +43,11 @@ export abstract class CompilableASTNode<
 	TypeSemantics extends TypeData,
 > extends ParserASTNode<Semantics, TypeSemantics> {
 	public _scopeCtx: ScopeNode<LocalScope | FunctionScope> | KipperProgramContext | undefined;
-	protected _parent: compilableNodeParent;
-	protected _children: Array<compilableNodeChild>;
+	protected _parent: CompilableNodeParent;
+	protected _children: Array<CompilableNodeChild>;
 	protected _errors: Array<KipperError>;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: compilableNodeParent) {
+	protected constructor(antlrCtx: ParserRuleContext, parent: CompilableNodeParent) {
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];
@@ -58,7 +58,7 @@ export abstract class CompilableASTNode<
 	 * Returns the {@link CompilableASTNode parent} that has this node as a child.
 	 * @since 0.8.0
 	 */
-	public get parent(): compilableNodeParent {
+	public get parent(): CompilableNodeParent {
 		return this._parent;
 	}
 
@@ -66,7 +66,7 @@ export abstract class CompilableASTNode<
 	 * The children of this AST node.
 	 * @since 0.8.0
 	 */
-	public get children(): Array<compilableNodeChild> {
+	public get children(): Array<CompilableNodeChild> {
 		return this._children;
 	}
 
@@ -77,7 +77,7 @@ export abstract class CompilableASTNode<
 	 * This will also automatically set the parent of {@link newChild} to this instance.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: compilableNodeChild): void {
+	public addNewChild(newChild: CompilableNodeChild): void {
 		this._children.push(newChild);
 	}
 
@@ -204,7 +204,7 @@ export abstract class CompilableASTNode<
 			return this._scopeCtx;
 		}
 
-		let parent: compilableNodeParent = this.parent;
+		let parent: CompilableNodeParent = this.parent;
 		while (parent.parent !== undefined && !("innerScope" in parent)) {
 			parent = parent.parent;
 		}

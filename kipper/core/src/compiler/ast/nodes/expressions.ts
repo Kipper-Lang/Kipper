@@ -123,15 +123,17 @@ import {
 	TypeofTypeSpecifierContext,
 	UnaryOperatorContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
+	KipperParser,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { ParserRuleContext } from "antlr4ts";
 import { MemberAccessExpressionTypeSemantics } from "../type-data";
 
 /**
- * Union type of all possible antlr4 parse tree node ctx instances for an {@link Expression}.
+ * Union type of all usable expression sub-rule context classes implemented by the {@link KipperParser} for an
+ * {@link Expression}.
  */
-export type antlrExpressionCtxType =
+export type ParserExpressionCtx =
 	| NumberPrimaryExpressionContext
 	| ArrayLiteralPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
@@ -140,7 +142,6 @@ export type antlrExpressionCtxType =
 	| StringPrimaryExpressionContext
 	| FStringPrimaryExpressionContext
 	| TangledPrimaryExpressionContext
-	| MemberAccessExpressionContext
 	| IncrementOrDecrementPostfixExpressionContext
 	| FunctionCallExpressionContext
 	| IncrementOrDecrementUnaryExpressionContext
@@ -159,6 +160,41 @@ export type antlrExpressionCtxType =
 	| TypeofTypeSpecifierContext;
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link Declaration} AST node.
+ * @since 0.10.0
+ */
+export type ParserExpressionKind =
+	| typeof KipperParser.RULE_expression
+	| typeof KipperParser.RULE_numberPrimaryExpression
+	| typeof KipperParser.RULE_arrayLiteralPrimaryExpression
+	| typeof KipperParser.RULE_identifierPrimaryExpression
+	| typeof KipperParser.RULE_voidOrNullOrUndefinedPrimaryExpression
+	| typeof KipperParser.RULE_boolPrimaryExpression
+	| typeof KipperParser.RULE_stringPrimaryExpression
+	| typeof KipperParser.RULE_fStringPrimaryExpression
+	| typeof KipperParser.RULE_tangledPrimaryExpression
+	| typeof KipperParser.RULE_memberAccessExpression
+	| typeof KipperParser.RULE_incrementOrDecrementPostfixExpression
+	| typeof KipperParser.RULE_functionCallExpression
+	| typeof KipperParser.RULE_incrementOrDecrementUnaryExpression
+	| typeof KipperParser.RULE_operatorModifiedUnaryExpression
+	| typeof KipperParser.RULE_castOrConvertExpression
+	| typeof KipperParser.RULE_multiplicativeExpression
+	| typeof KipperParser.RULE_additiveExpression
+	| typeof KipperParser.RULE_relationalExpression
+	| typeof KipperParser.RULE_equalityExpression
+	| typeof KipperParser.RULE_logicalAndExpression
+	| typeof KipperParser.RULE_logicalOrExpression
+	| typeof KipperParser.RULE_conditionalExpression
+	| typeof KipperParser.RULE_assignmentExpression
+	| typeof KipperParser.RULE_identifierTypeSpecifier
+	| typeof KipperParser.RULE_genericTypeSpecifier
+	| typeof KipperParser.RULE_typeofTypeSpecifier
+	| typeof KipperParser.RULE_memberAccessExpression
+	| typeof KipperParser.RULE_bracketNotationMemberAccessExpression
+	| typeof KipperParser.RULE_dotNotationMemberAccessExpression;
+
+/**
  * Factory class which generates expression class instances using {@link ExpressionASTNodeFactory.create ExpressionASTNodeFactory.create()}.
  * @since 0.9.0
  */
@@ -170,7 +206,7 @@ export class ExpressionASTNodeFactory {
 	 * @since 0.9.0
 	 */
 	public static create(
-		antlrRuleCtx: antlrExpressionCtxType,
+		antlrRuleCtx: ParserExpressionCtx,
 		parent: CompilableASTNode<any, any>,
 	): Expression<ExpressionSemantics, ExpressionTypeSemantics> {
 		if (antlrRuleCtx instanceof NumberPrimaryExpressionContext) {
@@ -245,11 +281,20 @@ export abstract class Expression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: antlrExpressionCtxType;
+	protected override readonly _antlrRuleCtx: ParserExpressionCtx;
 
 	protected override _children: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
 
-	protected constructor(antlrRuleCtx: antlrExpressionCtxType, parent: CompilableASTNode<any, any>) {
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public abstract readonly kind: ParserExpressionKind;
+
+	protected constructor(antlrRuleCtx: ParserExpressionCtx, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -277,7 +322,7 @@ export abstract class Expression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): antlrExpressionCtxType {
+	public override get antlrRuleCtx(): ParserExpressionCtx {
 		return this._antlrRuleCtx;
 	}
 
@@ -294,13 +339,26 @@ export abstract class Expression<
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link ConstantExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserConstantExpressionKind =
+	| typeof KipperParser.RULE_numberPrimaryExpression
+	| typeof KipperParser.RULE_stringPrimaryExpression
+	| typeof KipperParser.RULE_boolPrimaryExpression
+	| typeof KipperParser.RULE_voidOrNullOrUndefinedPrimaryExpression
+	| typeof KipperParser.RULE_arrayLiteralPrimaryExpression;
+
+/**
  * Abstract constant expression class representing a constant expression, which was defined in the source code. This
  * abstract class only exists to provide the commonality between the different constant expressions.
  */
 export abstract class ConstantExpression<
 	Semantics extends ConstantExpressionSemantics,
 	TypeSemantics extends ExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {}
+> extends Expression<Semantics, TypeSemantics> {
+	public abstract readonly kind: ParserConstantExpressionKind;
+}
 
 /**
  * Integer constant expression, which represents a number constant that was defined in the source code.
@@ -316,6 +374,15 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_numberPrimaryExpression;
 
 	constructor(antlrRuleCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -380,6 +447,15 @@ export class ArrayLiteralPrimaryExpression extends ConstantExpression<
 	 */
 	protected override readonly _antlrRuleCtx: ArrayLiteralPrimaryExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_arrayLiteralPrimaryExpression;
+
 	constructor(antlrRuleCtx: ArrayLiteralPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -440,6 +516,15 @@ export class StringPrimaryExpression extends ConstantExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_stringPrimaryExpression;
 
 	constructor(antlrRuleCtx: StringPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -503,6 +588,15 @@ export class BoolPrimaryExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_boolPrimaryExpression;
+
 	constructor(antlrRuleCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -564,7 +658,14 @@ export class FStringPrimaryExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: FStringPrimaryExpressionContext;
 
-	// TODO! Implement proper f-string value referencing using children expressions
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_fStringPrimaryExpression;
 
 	constructor(antlrRuleCtx: FStringPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -628,6 +729,15 @@ export class IdentifierPrimaryExpression extends Expression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_identifierPrimaryExpression;
 
 	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -701,13 +811,24 @@ export class IdentifierPrimaryExpression extends Expression<
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link TypeSpecifierExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserTypeSpecifierExpressionKind =
+	| typeof KipperParser.RULE_identifierTypeSpecifier
+	| typeof KipperParser.RULE_genericTypeSpecifier
+	| typeof KipperParser.RULE_typeofTypeSpecifier;
+
+/**
  * Abstract type class representing a type specifier. This abstract class only exists to provide the commonality between the
  * different type specifier expressions.
  */
 export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics,
 	TypeSemantics extends TypeSpecifierExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {}
+> extends Expression<Semantics, TypeSemantics> {
+	public abstract readonly kind: ParserTypeSpecifierExpressionKind;
+}
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.
@@ -728,6 +849,15 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_identifierTypeSpecifier;
 
 	constructor(antlrRuleCtx: IdentifierTypeSpecifierContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -797,6 +927,15 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	protected override readonly _antlrRuleCtx: GenericTypeSpecifierContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_genericTypeSpecifier;
+
 	constructor(antlrRuleCtx: GenericTypeSpecifierContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -856,6 +995,15 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_typeofTypeSpecifier;
 
 	constructor(antlrRuleCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -919,6 +1067,15 @@ export class TangledPrimaryExpression extends Expression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: TangledPrimaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_tangledPrimaryExpression;
 
 	constructor(antlrRuleCtx: TangledPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -986,6 +1143,15 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_voidOrNullOrUndefinedPrimaryExpression;
 
 	constructor(antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1055,6 +1221,15 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_incrementOrDecrementPostfixExpression;
+
 	constructor(antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -1114,6 +1289,15 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link MemberAccessExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserMemberAccessKind =
+	| typeof KipperParser.RULE_memberAccessExpression
+	| typeof KipperParser.RULE_dotNotationMemberAccessExpression
+	| typeof KipperParser.RULE_bracketNotationMemberAccessExpression;
+
+/**
  * Member access expression, which represents a member access expression that evaluates to a value of a member of an
  * object or array.
  * @since 0.10.0
@@ -1128,6 +1312,15 @@ export abstract class MemberAccessExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind: ParserMemberAccessKind = KipperParser.RULE_memberAccessExpression;
 
 	protected constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1153,6 +1346,15 @@ export class FunctionCallExpression extends Expression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: FunctionCallExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_functionCallExpression;
 
 	constructor(antlrRuleCtx: FunctionCallExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1234,6 +1436,14 @@ export class FunctionCallExpression extends Expression<
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link UnaryExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserUnaryExpressionKind =
+	| typeof KipperParser.RULE_incrementOrDecrementUnaryExpression
+	| typeof KipperParser.RULE_operatorModifiedUnaryExpression;
+
+/**
  * Abstract unary expression class representing a unary expression, which can be used to modify an expression with
  * a specified operator. This abstract class only exists to provide the commonality between the different comparative
  * expressions.
@@ -1242,7 +1452,9 @@ export class FunctionCallExpression extends Expression<
 export abstract class UnaryExpression<
 	Semantics extends UnaryExpressionSemantics,
 	TypeSemantics extends UnaryExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {}
+> extends Expression<Semantics, TypeSemantics> {
+	public abstract readonly kind: ParserUnaryExpressionKind;
+}
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
@@ -1261,6 +1473,15 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_incrementOrDecrementUnaryExpression;
 
 	constructor(antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1338,6 +1559,15 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_operatorModifiedUnaryExpression;
 
 	constructor(antlrRuleCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1428,6 +1658,15 @@ export class CastOrConvertExpression extends Expression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_castOrConvertExpression;
 
 	constructor(antlrRuleCtx: CastOrConvertExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1529,6 +1768,15 @@ export class MultiplicativeExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_multiplicativeExpression;
+
 	constructor(antlrRuleCtx: MultiplicativeExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -1620,6 +1868,15 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	 */
 	protected override readonly _antlrRuleCtx: AdditiveExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_additiveExpression;
+
 	constructor(antlrRuleCtx: AdditiveExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -1693,6 +1950,14 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link ComparativeExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserComparativeExpressionKind =
+	| typeof KipperParser.RULE_equalityExpression
+	| typeof KipperParser.RULE_relationalExpression;
+
+/**
  * Abstract comparative expression class representing a comparative expression, which can be used to compare two
  * expressions. This abstract class only exists to provide the commonality between the different comparative expressions.
  * @since 0.9.0
@@ -1700,7 +1965,9 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 export abstract class ComparativeExpression<
 	Semantics extends ComparativeExpressionSemantics,
 	TypeSemantics extends ComparativeExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {}
+> extends Expression<Semantics, TypeSemantics> {
+	public abstract readonly kind: ParserComparativeExpressionKind;
+}
 
 /**
  * Relational expression, which can be used to compare two numeric expressions.
@@ -1727,6 +1994,15 @@ export class RelationalExpression extends ComparativeExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_relationalExpression;
 
 	constructor(antlrRuleCtx: RelationalExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1814,6 +2090,15 @@ export class EqualityExpression extends ComparativeExpression<
 	 */
 	protected override readonly _antlrRuleCtx: EqualityExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_equalityExpression;
+
 	constructor(antlrRuleCtx: EqualityExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -1878,6 +2163,14 @@ export class EqualityExpression extends ComparativeExpression<
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link LogicalExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserLogicalExpressionType =
+	| typeof KipperParser.RULE_logicalAndExpression
+	| typeof KipperParser.RULE_logicalOrExpression;
+
+/**
  * Logical expression, representing an expression which can be used to combine two expressions/conditions using
  * {@link LogicalAndExpression logical AND} or {@link LogicalOrExpression logical OR}. This
  * abstract class only exists to provide the commonality between the different logical expressions.
@@ -1886,7 +2179,9 @@ export class EqualityExpression extends ComparativeExpression<
 export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics,
 	TypeSemantics extends LogicalExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {}
+> extends Expression<Semantics, TypeSemantics> {
+	public abstract readonly kind: ParserLogicalExpressionType;
+}
 
 /**
  * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will
@@ -1908,6 +2203,15 @@ export class LogicalAndExpression extends LogicalExpression<
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_logicalAndExpression;
 
 	constructor(antlrRuleCtx: LogicalAndExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
@@ -1987,6 +2291,15 @@ export class LogicalOrExpression extends LogicalExpression<
 	 */
 	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_logicalOrExpression;
+
 	constructor(antlrRuleCtx: LogicalOrExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -2063,6 +2376,15 @@ export class ConditionalExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_conditionalExpression;
+
 	constructor(antlrRuleCtx: ConditionalExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -2130,6 +2452,15 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_assignmentExpression;
+
 	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -2153,7 +2484,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		})();
 		const assignValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
 
-		// Throw an error if the children are incomplete or the operator can not be determined
+		// Throw an error if the children are incomplete or the operator can not be determined (antlrRuleChildren[1])
 		if (!assignValue || !(antlrRuleChildren[1] instanceof ParserRuleContext)) {
 			throw new UnableToDetermineSemanticDataError();
 		}

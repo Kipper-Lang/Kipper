@@ -48,6 +48,15 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	protected _semanticData: Semantics | undefined;
 	protected _typeSemantics: TypeSemantics | undefined;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public abstract readonly kind: number;
+
 	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];

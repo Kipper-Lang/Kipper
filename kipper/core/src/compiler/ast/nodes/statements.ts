@@ -10,8 +10,8 @@
  * @since 0.1.0
  */
 import type {
-	compilableNodeChild,
-	compilableNodeParent,
+	CompilableNodeChild,
+	CompilableNodeParent,
 	NoSemantics,
 	NoTypeSemantics,
 	SemanticData,
@@ -38,6 +38,7 @@ import {
 	ForLoopIterationStatementContext,
 	IfStatementContext,
 	JumpStatementContext,
+	KipperParser,
 	ReturnStatementContext,
 	SwitchStatementContext,
 	WhileLoopIterationStatementContext,
@@ -48,9 +49,10 @@ import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from ".
 import { ScopeNode } from "../scope-node";
 
 /**
- * Union type of all possible antlr4 parse tree node ctx instances for an {@link Statement}.
+ * Union type of all usable statement sub-rule context classes implemented by the {@link KipperParser} for a
+ * {@link Statement}.
  */
-export type antlrStatementCtxType =
+export type ParserStatementCtx =
 	| CompoundStatementContext
 	| IfStatementContext
 	| SwitchStatementContext
@@ -60,6 +62,23 @@ export type antlrStatementCtxType =
 	| ForLoopIterationStatementContext
 	| JumpStatementContext
 	| ReturnStatementContext;
+
+/**
+ * Union type of all possible {@link ParserASTNode.kind} values for a {@link Declaration} AST node.
+ * @since 0.10.0
+ */
+export type ParserStatementKind =
+	| typeof KipperParser.RULE_statement
+	| typeof KipperParser.RULE_typeofTypeSpecifier
+	| typeof KipperParser.RULE_compoundStatement
+	| typeof KipperParser.RULE_ifStatement
+	| typeof KipperParser.RULE_switchStatement
+	| typeof KipperParser.RULE_expressionStatement
+	| typeof KipperParser.RULE_doWhileLoopIterationStatement
+	| typeof KipperParser.RULE_whileLoopIterationStatement
+	| typeof KipperParser.RULE_forLoopIterationStatement
+	| typeof KipperParser.RULE_jumpStatement
+	| typeof KipperParser.RULE_returnStatement;
 
 /**
  * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
@@ -73,8 +92,8 @@ export class StatementASTNodeFactory {
 	 * @since 0.9.0
 	 */
 	public static create(
-		antlrRuleCtx: antlrStatementCtxType,
-		parent: compilableNodeParent,
+		antlrRuleCtx: ParserStatementCtx,
+		parent: CompilableNodeParent,
 	): Statement<SemanticData, TypeData> {
 		if (antlrRuleCtx instanceof CompoundStatementContext) {
 			return new CompoundStatement(antlrRuleCtx, parent);
@@ -112,9 +131,18 @@ export abstract class Statement<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: antlrStatementCtxType;
+	protected override readonly _antlrRuleCtx: ParserStatementCtx;
 
-	protected constructor(antlrRuleCtx: antlrStatementCtxType, parent: compilableNodeParent) {
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public abstract readonly kind: ParserStatementKind;
+
+	protected constructor(antlrRuleCtx: ParserStatementCtx, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 
@@ -125,7 +153,7 @@ export abstract class Statement<
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrRuleCtx(): antlrStatementCtxType {
+	public override get antlrRuleCtx(): ParserStatementCtx {
 		return this._antlrRuleCtx;
 	}
 
@@ -153,11 +181,20 @@ export class CompoundStatement extends Statement<NoSemantics, NoTypeSemantics> i
 	 */
 	protected override readonly _antlrRuleCtx: CompoundStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_compoundStatement;
+
 	protected readonly _children: Array<Statement<SemanticData, TypeData>>;
 
 	private readonly _innerScope: LocalScope;
 
-	constructor(antlrRuleCtx: CompoundStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: CompoundStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -226,9 +263,18 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 */
 	protected override readonly _antlrRuleCtx: IfStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_ifStatement;
+
 	protected readonly _children: Array<Expression<any, any> | Statement<SemanticData, TypeData>>;
 
-	constructor(antlrRuleCtx: IfStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: IfStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -305,9 +351,18 @@ export class SwitchStatement extends Statement<NoSemantics, NoTypeSemantics> {
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_switchStatement;
+
 	protected readonly _children: Array<Statement<SemanticData, TypeData>>;
 
-	constructor(antlrRuleCtx: SwitchStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: SwitchStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -371,9 +426,18 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 */
 	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_expressionStatement;
+
 	protected readonly _children: Array<Expression<any, any>>;
 
-	constructor(antlrRuleCtx: ExpressionStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -441,9 +505,18 @@ export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatemen
 	 */
 	protected override readonly _antlrRuleCtx: DoWhileLoopIterationStatementContext;
 
-	protected readonly _children: Array<compilableNodeChild>;
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_doWhileLoopIterationStatement;
 
-	constructor(antlrRuleCtx: DoWhileLoopIterationStatementContext, parent: compilableNodeParent) {
+	protected readonly _children: Array<CompilableNodeChild>;
+
+	constructor(antlrRuleCtx: DoWhileLoopIterationStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -452,7 +525,7 @@ export class DoWhileLoopStatement extends IterationStatement<DoWhileLoopStatemen
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<compilableNodeChild> {
+	public get children(): Array<CompilableNodeChild> {
 		return this._children;
 	}
 
@@ -508,9 +581,18 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 */
 	protected override readonly _antlrRuleCtx: WhileLoopIterationStatementContext;
 
-	protected readonly _children: Array<compilableNodeChild>;
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_whileLoopIterationStatement;
 
-	constructor(antlrRuleCtx: WhileLoopIterationStatementContext, parent: compilableNodeParent) {
+	protected readonly _children: Array<CompilableNodeChild>;
+
+	constructor(antlrRuleCtx: WhileLoopIterationStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -520,7 +602,7 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<compilableNodeChild> {
+	public get children(): Array<CompilableNodeChild> {
 		return this._children;
 	}
 
@@ -576,9 +658,18 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 */
 	protected override readonly _antlrRuleCtx: ForLoopIterationStatementContext;
 
-	protected readonly _children: Array<compilableNodeChild>;
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_forLoopIterationStatement;
 
-	constructor(antlrRuleCtx: ForLoopIterationStatementContext, parent: compilableNodeParent) {
+	protected readonly _children: Array<CompilableNodeChild>;
+
+	constructor(antlrRuleCtx: ForLoopIterationStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -587,7 +678,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<compilableNodeChild> {
+	public get children(): Array<CompilableNodeChild> {
 		return this._children;
 	}
 
@@ -643,9 +734,18 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 */
 	protected override readonly _antlrRuleCtx: JumpStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_jumpStatement;
+
 	protected readonly _children: Array<Expression<any, any>>;
 
-	constructor(antlrRuleCtx: JumpStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: JumpStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -720,9 +820,18 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 */
 	protected override readonly _antlrRuleCtx: ReturnStatementContext;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_returnStatement;
+
 	protected readonly _children: Array<Expression<any, any>>;
 
-	constructor(antlrRuleCtx: ReturnStatementContext, parent: compilableNodeParent) {
+	constructor(antlrRuleCtx: ReturnStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
