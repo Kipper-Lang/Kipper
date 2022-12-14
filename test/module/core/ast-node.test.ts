@@ -12,7 +12,7 @@ import {
 	TargetASTNodeSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
-	compilableNodeParent,
+	CompilableNodeParent,
 } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
@@ -24,7 +24,9 @@ describe("AST Nodes", () => {
 	describe("CompilableASTNode", () => {
 		// Example class for testing purposes
 		class ExampleNode extends CompilableASTNode<any, any> {
-			constructor(antlrCtx: ParserRuleContext, parent: compilableNodeParent) {
+			readonly kind: number = Number.MAX_SAFE_INTEGER;
+
+			constructor(antlrCtx: ParserRuleContext, parent: CompilableNodeParent) {
 				super(antlrCtx, parent);
 			}
 
