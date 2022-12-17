@@ -578,11 +578,13 @@ function clearCompilerOutput(): void {
 function setEditorAndConsoleSizes(): void {
 	const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
-	// Set editor size. Subtracts -2rem due to an inner padding of 1rem
+	// Set editor size
+	// - Subtract 2rem for the height due to an inner padding of 1rem
+	// - Subtract 4rem for the width due to an inner padding of 3rem + 1rem
 	codeTextAreaResultWrapper.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
-	codeTextAreaResultWrapper.style.width = `${codeEditor.clientWidth - 2 * rem}px`;
+	codeTextAreaResultWrapper.style.width = `${codeEditor.clientWidth - 4 * rem}px`;
 	codeTextArea.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
-	codeTextArea.style.width = `${codeEditor.clientWidth - 2 * rem}px`;
+	codeTextArea.style.width = `${codeEditor.clientWidth - 4 * rem}px`;
 
 	// Set console size. Subtracts -2rem due to an inner padding of 1rem
 	shellOutputResult.style.height = `${shellOutput.clientHeight - 2 * rem}px`;

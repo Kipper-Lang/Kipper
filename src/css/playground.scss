@@ -94,10 +94,19 @@
       min-width: 0;
       min-height: 0;
 
+      .line-numbers .line-numbers-rows {
+        /* Disable the border for the line-numbers sidebar */
+        border-right: none;
+
+        /* Remove the additional spacing which was used for the border */
+        left: -2.8em;
+        width: 2em;
+      }
+
       /*
- * The user input fields - the two fields will be put over each other to make it look
- * like a single field
-*/
+       * The user input fields - the two fields will be put over each other to make it look
+       * like a single field
+      */
       #code-editor-textarea,
       #highlighting-field {
         /* Putting them on top of each other */
@@ -109,7 +118,7 @@
 
         /* Identical styling */
         margin: 0;
-        padding: 1rem;
+        padding: 1rem 1rem 1rem 3rem;
         resize: none;
         border: none;
         outline: none;
@@ -171,7 +180,6 @@
       }
     }
   }
-
 
   /* Sidebar styling */
   #shell-sidebar {
@@ -245,5 +253,4 @@
       }
     }
   }
-
 }
