@@ -16,6 +16,17 @@ ejs.cache = new lru({
 
 const rootDir = path.resolve(__dirname, "..", "..");
 
+// Add new extension to showdown
+showdown.extension("line-numbers", () => {
+	// Add 'line-numbers' class to all pre html tags of the code blocks
+	return [{
+		type: "output",
+		filter: (text: string) => {
+			return text.replace(/<pre><code class="/g, "<pre class=\"line-numbers\"><code class=\"");
+		}
+	}];
+});
+
 async function validatePathArguments(src: string, dest: string): Promise<void> {
 	if (!existsSync(dest)) {
 		await fs.mkdir(dest);
@@ -185,8 +196,8 @@ async function buildDocs(src: string, dest: string, data: Record<string, any>): 
 	showdown.setOption("customizedHeaderId", true);
 	showdown.setOption("emoji", true);
 
-	// Create new converted
-	const converter = new showdown.Converter();
+	// Create new converted - Note: Extension 'line-numbers' is disabled for now
+	const converter = new showdown.Converter(/* { extensions: ['line-numbers'] } */);
 
 	// Get base Docs template
 	const baseTemplate = path.resolve(`${src}/../partials/docs.ejs`);

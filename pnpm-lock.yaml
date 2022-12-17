@@ -65,7 +65,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': 5.27.1
   '@typescript-eslint/parser': 5.27.1
   any-promise: 1.3.0
-  debug: 4.3.3
+  debug: ^4.3.4
   ejs: 3.1.8
   eslint: 8.17.0
   follow-redirects: 1.14.8
@@ -100,7 +100,7 @@ devDependencies:
   '@parcel/bundler-default': 2.2.1_@parcel+core@2.8.0
   '@parcel/cache': 2.2.1_@parcel+core@2.8.0
   '@parcel/codeframe': 2.2.1
-  '@parcel/config-default': 2.2.1_3h7iidreelhwwj6rjhzux4nnea
+  '@parcel/config-default': 2.2.1_zcm7dt4hna4cwytkwv7crtpf4q
   '@parcel/core': 2.8.0
   '@parcel/diagnostic': 2.2.1
   '@parcel/events': 2.2.1
@@ -125,7 +125,7 @@ devDependencies:
   '@parcel/packager-raw-url': 2.2.1_@parcel+core@2.8.0
   '@parcel/plugin': 2.2.1_@parcel+core@2.8.0
   '@parcel/reporter-cli': 2.2.1_@parcel+core@2.8.0
-  '@parcel/reporter-dev-server': 2.2.1_p6hdpnhevhutskwo23jw2uwdxq
+  '@parcel/reporter-dev-server': 2.2.1_7wo7zy73zuruw72tmlej774yey
   '@parcel/resolver-default': 2.2.1_@parcel+core@2.8.0
   '@parcel/resolver-glob': 2.6.2_@parcel+core@2.8.0
   '@parcel/runtime-browser-hmr': 2.2.1_@parcel+core@2.8.0
@@ -157,10 +157,10 @@ devDependencies:
   '@typescript-eslint/eslint-plugin': 5.27.1_gqqek76glurx4clp2d3mbasbku
   '@typescript-eslint/parser': 5.27.1_y4s4gf3tymogvl7nr5hol4hl74
   any-promise: 1.3.0
-  debug: 4.3.3
+  debug: 4.3.4
   ejs: 3.1.8
   eslint: 8.17.0
-  follow-redirects: 1.14.8_debug@4.3.3
+  follow-redirects: 1.14.8_debug@4.3.4
   json-schema: 0.4.0
   lru-cache: 7.12.0
   minimist: 1.2.6
@@ -1025,7 +1025,7 @@ packages:
       - '@parcel/core'
     dev: true
 
-  /@parcel/config-default/2.2.1_3h7iidreelhwwj6rjhzux4nnea:
+  /@parcel/config-default/2.2.1_zcm7dt4hna4cwytkwv7crtpf4q:
     resolution: {integrity: sha512-bknWAuGh5mKVhOBMUI2i/cet+w2o2wUp/Xpi/iIWXC91ASkgKjS9flNn1+DgGVxBwPRj2kkbjAZa5j39wZKEQw==}
     peerDependencies:
       '@parcel/core': ^2.2.1
@@ -1044,7 +1044,7 @@ packages:
       '@parcel/packager-js': 2.2.1_@parcel+core@2.8.0
       '@parcel/packager-raw': 2.2.1_@parcel+core@2.8.0
       '@parcel/packager-svg': 2.6.2_@parcel+core@2.8.0
-      '@parcel/reporter-dev-server': 2.2.1_p6hdpnhevhutskwo23jw2uwdxq
+      '@parcel/reporter-dev-server': 2.2.1_7wo7zy73zuruw72tmlej774yey
       '@parcel/resolver-default': 2.2.1_@parcel+core@2.8.0
       '@parcel/runtime-browser-hmr': 2.2.1_@parcel+core@2.8.0
       '@parcel/runtime-js': 2.2.1_@parcel+core@2.8.0
@@ -1978,7 +1978,7 @@ packages:
       - '@parcel/core'
     dev: true
 
-  /@parcel/reporter-dev-server/2.2.1_p6hdpnhevhutskwo23jw2uwdxq:
+  /@parcel/reporter-dev-server/2.2.1_7wo7zy73zuruw72tmlej774yey:
     resolution: {integrity: sha512-rSRH1nFRS6nEN3Wma3oejcu1jzvbu9/hXgMKOp3TJax9jJ3nJdYPEeIA/jbJTqU1pf6hWyG3wvPOiXW8nhCGAg==}
     engines: {node: '>= 12.0.0', parcel: ^2.2.1}
     dependencies:
@@ -1986,7 +1986,7 @@ packages:
       '@parcel/utils': 2.6.2
       connect: 3.7.0
       ejs: 3.1.8
-      http-proxy-middleware: 2.0.6_debug@4.3.3
+      http-proxy-middleware: 2.0.6_debug@4.3.4
       nullthrows: 1.1.1
       serve-handler: 6.1.3
       ws: 7.2.0
@@ -3571,18 +3571,6 @@ packages:
       ms: 2.0.0
     dev: true
 
-  /debug/4.3.3:
-    resolution: {integrity: sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.2
-    dev: true
-
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
@@ -3882,7 +3870,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.3
+      debug: 4.3.4
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
@@ -4095,7 +4083,7 @@ packages:
     resolution: {integrity: sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==}
     dev: true
 
-  /follow-redirects/1.14.8_debug@4.3.3:
+  /follow-redirects/1.14.8_debug@4.3.4:
     resolution: {integrity: sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -4104,7 +4092,7 @@ packages:
       debug:
         optional: true
     dependencies:
-      debug: 4.3.3
+      debug: 4.3.4
     dev: true
 
   /for-each/0.3.3:
@@ -4392,7 +4380,7 @@ packages:
       - supports-color
     dev: false
 
-  /http-proxy-middleware/2.0.6_debug@4.3.3:
+  /http-proxy-middleware/2.0.6_debug@4.3.4:
     resolution: {integrity: sha512-ya/UeJ6HVBYxrgYotAZo1KvPWlgB48kUJLDePFeneHsVujFaW5WNj2NgWCAE//B1Dl02BIfYlpNgBy8Kf8Rjmw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -4402,7 +4390,7 @@ packages:
         optional: true
     dependencies:
       '@types/http-proxy': 1.17.9
-      http-proxy: 1.18.1_debug@4.3.3
+      http-proxy: 1.18.1_debug@4.3.4
       is-glob: 4.0.3
       is-plain-obj: 3.0.0
       micromatch: 4.0.5
@@ -4410,12 +4398,12 @@ packages:
       - debug
     dev: true
 
-  /http-proxy/1.18.1_debug@4.3.3:
+  /http-proxy/1.18.1_debug@4.3.4:
     resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.8_debug@4.3.3
+      follow-redirects: 1.14.8_debug@4.3.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -5039,7 +5027,7 @@ packages:
     dev: true
 
   /ms/2.0.0:
-    resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
+    resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
     dev: true
 
   /ms/2.1.2:
