@@ -91,7 +91,7 @@ call print_banner();
 print_banner();
 
 // ✓ Simple function with arguments and return-type
-// Note: It is good to always document your functions to make sure you understand their behaviour even later on!
+// Note: It is good to always document your functions
 /*
  * @brief Adds the prefix before the main_str
  * @param prefix The prefix that shall be added
