@@ -42,7 +42,7 @@ List of all browsers that were tested for support of Kipper (_Please report any 
       <td>No support <em class="red-checkmark">x</em></td>
     </tr>
     <tr>
-      <td>Firefox 89+ (Incl. Nightly 102)</td>
+      <td>Firefox 89+</td>
       <td>
         Supported and tested
         <em class="green-checkmark">✓</em>
