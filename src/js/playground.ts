@@ -417,6 +417,15 @@ function writeConsoleOutputDefaultMessage(): void {
 }
 
 /**
+ * Escapes all '&', '<' and '>' characters.
+ */
+function escapeHTMLChars(str: string): string {
+  return str.replace(new RegExp("&", "g"), "&amp;")
+    .replace(new RegExp("<", "g"), "&lt;")
+    .replace(new RegExp(">", "g"), "&gt;");
+}
+
+/**
  * Editor-Update, which allows for syntax highlighting
  * @param value The value the element was updated to
  */
@@ -428,7 +437,7 @@ function writeEditorResultAndHighlight(value: string): void {
 	}
 
 	// Write results to the original 'codeInput' <textarea> and syntax-highlighted result
-	codeTextAreaResult.innerHTML = value.replace(new RegExp("&", "g"), "&").replace(new RegExp("<", "g"), "<"); // Allow newlines
+	codeTextAreaResult.innerHTML = escapeHTMLChars(value);
 
 	// Highlight output field
 	prism.highlightElement(codeTextAreaResult);
@@ -507,7 +516,9 @@ function writeConsoleResultAndHighlight(value: string): void {
 	}
 
 	// Write content to the console
-	shellOutputResult.innerHTML = value.replace(new RegExp("&", "g"), "&").replace(new RegExp("<", "g"), "<"); // Allow newlines
+	shellOutputResult.innerHTML = escapeHTMLChars(value);
+
+  console.log(shellOutputResult);
 
 	// Highlight output field
 	prism.highlightElement(shellOutputResult);

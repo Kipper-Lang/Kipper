@@ -13,7 +13,7 @@ repetition.
 
 ## Syntax
 
-Defining a Kipper function:
+### Defining a function
 
 ```ts
 def NAME(ARG_NAME: TYPE, ...) -> RETURN_TYPE {
@@ -31,17 +31,49 @@ Rules for defining a Kipper function:
 - The return type must be specified.
 - Arguments are optional.
 
-Calling a defined function ([Function call expression](./expressions.html)):
+### Calling a function
+
+*See also [Function call expression](./expressions.html).*
 
 ```ts
-call NAME(ARGS...);
+call NAME(ARG1, ARG2, ARGn, ...);
+// OR - 'call' is optional
+NAME(ARGS, ARG2, ARGn, ...);
 ```
 
 ## Behaviour
 
-When calling a function all arguments have to be passed with the argument types matching. When calling, the variables are going to be copied to the local function stack (local scope), where the function may utilise them for its behaviour.
+Functions are executable segments of code that are only executed when their identifier is referenced and called as shown above. 
 
-_Note! A function allows for an infinite amount of arguments (`ARG_NAME: TYPE`), though at the current stage of development, no optional or default arguments are available/planned. Meaning **all** arguments have to be passed when calling a function!_
+When calling them all arguments have to be passed with the argument types matching. Once the function has been called,
+the variables are going to be copied to the local function stack (local scope) and be available to the body of the function. 
+This means that the arguments will also be referencable by statements inside the function body.
+
+<div class="red-highlight-text">
+  <h2>Important</h2>
+  <p>
+    A function allows for an infinite amount of arguments, though at the current stage of development, no optional or
+    default arguments are available. Meaning <em>all</em> arguments have to be defined when calling a function!
+  </p>
+</div>
+
+### Function name shadowing
+
+Like many other languages, Kipper allows some form of identifier/variable shadowing, though it's heavily restricted to
+avoid confusion in many cases. An exception though is the shadowing of the function identifier inside its own scope.
+
+That means that the following code is valid and that the variable `x` is *not* going to throw an `IdentifierError`:
+
+```ts
+def x() -> void {
+  // 'x' will exist without issue with the type 'num'
+  // in this scope/all children scopes.
+  var x: num = 5;
+
+  // 'x' can also now be referenced, though note that the function will keep being shadowed
+  print(x as str);
+}
+```
 
 ## Examples
 
@@ -54,6 +86,9 @@ def print_banner() -> void {
 
 // ✓ Calling the function
 call print_banner();
+
+// ✓ Without 'call' keyword
+print_banner();
 
 // ✓ Simple function with arguments and return-type
 // Note: It is good to always document your functions to make sure you understand their behaviour even later on!
@@ -69,12 +104,9 @@ def add_prefix(prefix: str, main_str: str) -> str {
 // ✓ Calling the function with all the required arguments and passing the result to a variable
 var result_str: str = call add_prefix("pre", "fix"); // -> "prefix"
 
-// X May not pass the function itself to a variable!
-var any_var: str = add_prefix("pre", "fix");
+// X May not call a function without its required arguments!
+var any_var: str = add_prefix();
 
 // X May not pass the function itself to a variable!
 var any_var: str = add_prefix;
-
-// X May not call a function without its required arguments or brackets!
-var any_var: str = call add_prefix;
 ```
