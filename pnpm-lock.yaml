@@ -20,7 +20,7 @@ specifiers:
   antlr4ts-cli: 0.5.0-alpha.4
   browserify: 17.0.0
   chai: 4.3.6
-  coverage-badge-creator: 1.0.14
+  coverage-badge-creator: 1.0.15
   eslint: 8.29.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
@@ -65,7 +65,7 @@ devDependencies:
   antlr4ts-cli: 0.5.0-alpha.4
   browserify: 17.0.0
   chai: 4.3.6
-  coverage-badge-creator: 1.0.14
+  coverage-badge-creator: 1.0.15
   eslint: 8.29.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
@@ -2343,8 +2343,8 @@ packages:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: true
 
-  /coverage-badge-creator/1.0.14:
-    resolution: {integrity: sha512-U5UB+2hwJPZdFIlp3OlwPqgeOimXMcdAFZj1Fq7fvV0zcvLT0MIBRIi+UeJPyvQOT/Wy7gUQoPRi0DYnxxyZTg==}
+  /coverage-badge-creator/1.0.15:
+    resolution: {integrity: sha512-J6D3ZXJt2JfhBX8klkFGg+NbE9zYkfRsesWOB2+Pt7udCr7g1KBrSkG1P9WyZfiBrEb2pILmLgw9fXVlIHiIog==}
     hasBin: true
     dev: true
 
