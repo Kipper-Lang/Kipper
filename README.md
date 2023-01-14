@@ -14,6 +14,8 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
 
+*For more details about this project, you can read the sections [Goals & Planned Features](#goals--planned-features) and [Why Kipper?](#why-kipper)!*
+
 ## Installation
 
 To install the whole Kipper package with its CLI, run the following command:
