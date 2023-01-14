@@ -14,8 +14,6 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
 
-_For more details about this project, you can read more about Kipper in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper)._
-
 ## Installation
 
 To install the whole Kipper package with its CLI, run the following command:
@@ -66,42 +64,6 @@ _Kipper is still in an early development phase, as such not all features shown i
 - Full translation to/and integration with JavaScript and TypeScript.
 - Import Support for `.ts` files, as well as `.d.ts` + `.js` files.
 - Translation support for all ES versions as far as ES5 (JavaScript target specific)
-
-## Why Kipper?
-
-_Skip this section, if you are not interested in the details behind Kipper and this
-project. It is not required knowledge for trying out or using Kipper._
-
-The primary use case and reason for the development of Kipper is the
-simplification of the development process for developers, both in the web
-and server-side space, by improving on common issues and helping developers
-fix them more easily and quickly.
-
-Therefore this programming language, like TypeScript, aims to provide more
-safety and functionality using a compiler and pre-runtime error checking.
-This primarily also utilises type checking, as a way to ensure that programs
-work as intended and that developers can discover errors before they run their
-code.
-
-TypeScript already does a great job at this, so why is Kipper needed or how does
-it do things differently? TypeScript is an amazing language, which is why Kipper
-has many of its designs and features similarly implemented. Though a big issue
-that TypeScript can't detect is and properly resolve is the issue of inconsistent
-or incomplete typing. This is a huge issue when working with dynamic data or JavaScript
-code, where types are unknown or can't be known before runtime, since due to the
-compile time typing of TypeScript type checking often is not able to detect
-issues and many will simply bypass error checks altogether. Even with
-`instanceof` and `typeof` checks, it becomes a tedious effort that often results
-in more errors, due to issues arising while trying to fix the original problems.
-
-Kipper therefore tries to implement a way to easily solve those issues in a
-standardised way, by allowing for more complex runtime type checks and runtime
-error handling. This means Kipper will still be there to assist the developer
-during runtime, by handling many cases where type issues could arise. This also
-means functionality like casts or conversions are more strictly handled and don't
-overwrite type checking behaviour. Even so though, Kipper will always try to not
-be invasive, and developers can choose during development time how to handle
-different cases and how Kipper should handle them during runtime.
 
 ## How to use Kipper?
 
@@ -213,6 +175,42 @@ Simple example of using the Kipper Compiler in Node.js:
   	eval(jsCode);
   });
   ```
+
+## Why Kipper?
+
+_Skip this section, if you are not interested in the details behind Kipper and this
+project. It is not required knowledge for using or trying out Kipper._
+
+The primary use case and reason for the development of Kipper is the
+simplification of the development process for developers, both in the web
+and server-side space, by improving on common issues and helping developers
+fix them more easily and quickly.
+
+Therefore this programming language, like TypeScript, aims to provide more
+safety and functionality using a compiler and pre-runtime error checking.
+This primarily also utilises type checking, as a way to ensure that programs
+work as intended and that developers can discover errors before they run their
+code.
+
+TypeScript already does a great job at this, so why is Kipper needed or how does
+it do things differently? TypeScript is an amazing language, which is why Kipper
+has many of its designs and features similarly implemented. Though a big issue
+that TypeScript can't detect is and properly resolve is the issue of inconsistent
+or incomplete typing. This is a huge issue when working with dynamic data or JavaScript
+code, where types are unknown or can't be known before runtime, since due to the
+compile time typing of TypeScript type checking often is not able to detect
+issues and many will simply bypass error checks altogether. Even with
+`instanceof` and `typeof` checks, it becomes a tedious effort that often results
+in more errors, due to issues arising while trying to fix the original problems.
+
+Kipper therefore tries to implement a way to easily solve those issues in a
+standardised way, by allowing for more complex runtime type checks and runtime
+error handling. This means Kipper will still be there to assist the developer
+during runtime, by handling many cases where type issues could arise. This also
+means functionality like casts or conversions are more strictly handled and don't
+overwrite type checking behaviour. Even so though, Kipper will always try to not
+be invasive, and developers can choose during development time how to handle
+different cases and how Kipper should handle them during runtime.
 
 ## Contributing to Kipper
 
