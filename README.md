@@ -24,16 +24,23 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Goals & Planned Features
 
-- Full type safety to ensure if possible that all errors occur on compile time, not runtime.
-- Runtime types and type checking, which allow variable types to be checked during runtime, if their type can not be
-  evaluated during compile time. For example when using `JSON.parse()` and the object type is
-  unknown.
-- Full translation to/and integration with JavaScript and TypeScript.
-- Custom Operator Overload Methods for specifying custom behaviour for specific operators.
-  These will be similar to the Python dunder methods.
-- Type Conversion Overloading to customise conversion behaviour.
-- Runtime errors for invalid operations. No hidden errors like in JavaScript.
+- Full compiler ensured type safety, by analysing and reporting code during compilation.
+- Duck typing type checking with TypeScript-like interface types for both compile and runtime.
+- Runtime type and type checking features, where original compile time type issues can be
+  resolved during runtime.
+- Strict cast and conversion handling, so that potentially or definitely problematic usage
+  is detected by the compiler and ensures the developer has to handle them.
+- Avoidance of `any` type issues, with ensurance of compiler checks that operations and data
+  access are valid.
+- Runtime errors and safety checks in case of incomplete or faulty typing. This should avoid 
+  issues, such as "TypeError: can't access property "..." of undefined".
 - Null safety, by enforcing non-null types unless explicitly allowed.
+- Conversion behaviour functions in classes to customise conversion behaviour.
+- Operator overloading and additional customisation behaviour.
+- Type Conversion Overloading to customise conversion behaviour.
+- Full translation to/and integration with JavaScript and TypeScript.
+- Import Support for `.ts` files, as well as `.d.ts` + `.js` files.
+- Translation support for all ES versions as far as ES5 (JavaScript target specific)
 
 ## Example Code Snippet
 
