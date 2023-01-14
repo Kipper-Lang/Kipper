@@ -32,7 +32,7 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
   is detected by the compiler and ensures the developer has to handle them.
 - Avoidance of `any` type issues, with ensurance of compiler checks that operations and data
   access are valid.
-- Runtime errors and safety checks in case of incomplete or faulty typing. This should avoid 
+- Runtime errors and safety checks in case of incomplete or faulty typing. This should avoid
   issues, such as "TypeError: can't access property "..." of undefined".
 - Null safety, by enforcing non-null types unless explicitly allowed.
 - Conversion behaviour functions in classes to customise conversion behaviour.
