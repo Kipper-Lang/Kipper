@@ -14,7 +14,7 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
 
-_For more details about this project, you can read the sections [Goals & Planned Features](#goals--planned-features) and [Why Kipper?](#why-kipper)!_
+*For more details about this project, you can read more about Kipper in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper).*
 
 ## Installation
 
@@ -70,7 +70,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 ## Why Kipper?
 
 _Skip this section, if you are not interested in the details behind Kipper and this
-project. It is not required knowledge for using or trying out Kipper._
+project. It is not required knowledge for trying out or using Kipper._
 
 The primary use case and reason for the development of Kipper is the
 simplification of the development process for developers, both in the web
