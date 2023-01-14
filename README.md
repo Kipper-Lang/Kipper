@@ -63,7 +63,7 @@ _Kipper is still in an early development phase, as such not all features shown i
 - Type Conversion Overloading to customise conversion behaviour.
 - Full translation to/and integration with JavaScript and TypeScript.
 - Import Support for `.ts` files, as well as `.d.ts` + `.js` files.
-- Translation support for all ES versions as far as ES5 (JavaScript target specific)
+- Translation support for all ES versions as far as ES6 (JavaScript target specific)
 
 ## How to use Kipper?
 
