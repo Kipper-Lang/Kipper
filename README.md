@@ -22,6 +22,27 @@ npm i kipper
 
 If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
+## Kipper Docs
+
+In-detail documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+
+## Packages
+
+- [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
+- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
+- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI).
+- [`@kipper/web`](https://www.npmjs.com/package/@kipper/web): The standalone web-module for the Kipper compiler.
+- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
+  compiler.
+- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
+  compiler.
+
+## Example Code Snippet
+
+![](img/carbon/carbon-code-snippet.png)
+
+_Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
+
 ## Goals & Planned Features
 
 - Full compiler ensured type safety, by analysing and reporting code during compilation.
@@ -42,26 +63,41 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 - Import Support for `.ts` files, as well as `.d.ts` + `.js` files.
 - Translation support for all ES versions as far as ES5 (JavaScript target specific)
 
-## Example Code Snippet
+## Why Kipper?
 
-![](img/carbon/carbon-code-snippet.png)
+*Skip this section, if you are not interested in the details behind Kipper and this
+project. It is not required knowledge for using or trying out Kipper.*
 
-_Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
+The primary use case and reason for the development of Kipper is the
+simplification of the development process for developers, both in the web
+and server-side space, by improving on common issues and helping developers
+fix them more easily and quickly.
 
-## Packages
+Therefore this programming language, like TypeScript, aims to provide more
+safety and functionality using a compiler and pre-runtime error checking.
+This primarily also utilises type checking, as a way to ensure that programs
+work as intended and that developers can discover errors before they run their
+code.
 
-- [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
-- [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
-- [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli): The Kipper command line interface (CLI).
-- [`@kipper/web`](https://www.npmjs.com/package/@kipper/web): The standalone web-module for the Kipper compiler.
-- [`@kipper/target-js`](https://www.npmjs.com/package/@kipper/target-js): The JavaScript target for the Kipper
-  compiler.
-- [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
-  compiler.
+TypeScript already does a great job at this, so why is Kipper needed or how does
+it do things differently? TypeScript is an amazing language, which is why Kipper
+has many of its designs and features similarly implemented. Though a big issue
+that TypeScript can't detect is and properly resolve is the issue of inconsistent
+or incomplete typing. This is a huge issue when working with dynamic data or JavaScript
+code, where types are unknown or can't be known before runtime, since due to the
+compile time typing of TypeScript type checking often is not able to detect 
+issues and many will simply bypass error checks altogether. Even with 
+`instanceof` and `typeof` checks, it becomes a tedious effort that often results
+in more errors, due to issues arising while trying to fix the original problems.
 
-## Kipper Docs
-
-Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+Kipper therefore tries to implement a way to easily solve those issues in a
+standardised way, by allowing for more complex runtime type checks and runtime
+error handling. This means Kipper will still be there to assist the developer
+during runtime, by handling many cases where type issues could arise. This also
+means functionality like casts or conversions are more strictly handled and don't
+overwrite type checking behaviour. Even so though, Kipper will always try to not
+be invasive, and developers can choose during development time how to handle 
+different cases and how Kipper should handle them during runtime.
 
 ## How to use Kipper?
 
