@@ -15,7 +15,6 @@ import type { EvaluatedCompileConfig } from "../compiler";
 import type { KipperProgramContext } from "../program-ctx";
 import type { Declaration, Statement } from "./nodes";
 import type { TranslatedCodeLine } from "../const";
-import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { KipperError, UndefinedSemanticsError } from "../../errors";
 import { CompilationUnitContext, KipperParser } from "../parser";
 

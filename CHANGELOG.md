@@ -77,6 +77,8 @@ To use development versions of Kipper download the
     handles compatibility and error recovery for undefined types.
   - `MemberAccessExpression`, which is a subclass of `Expression` that represents a member access expression (Antlr4
     rule `memberAccessExpression`).
+  - `AnalysableASTNode`, which represents an AST node that can be semantically processed. This class was created as
+    a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -138,6 +140,8 @@ To use development versions of Kipper download the
   - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
   - `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
   - `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
+  - `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
+  - `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -214,6 +218,16 @@ To use development versions of Kipper download the
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
   - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
+  - Function `CompilableASTNode.semanticAnalysis` to `AnalysableASTNode.semanticAnalysis`.
+  - Function `CompilableASTNode.semanticTypeChecking` to `AnalysableASTNode.semanticTypeChecking`.
+  - Function `CompilableASTNode.wrapUpSemanticAnalysis` to `AnalysableASTNode.wrapUpSemanticAnalysis`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
+  - Abstract Function `CompilableASTNode.primarySemanticAnalysis` to `AnalysableASTNode.primarySemanticAnalysis`.
+  - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode.primarySemanticTypeChecking`.
+  - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode.checkForWarnings`.
+  - Field `CompilableASTNode.programCtx` to `AnalysableASTNode.programCtx`
+  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode.compileConfig`
 
 ### Removed
 

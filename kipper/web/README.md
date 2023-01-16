@@ -4,7 +4,7 @@
 
 [![Version](https://img.shields.io/npm/v/@kipper/web?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
-![](https://img.shields.io/badge/Coverage-86%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
+![](https://img.shields.io/badge/Coverage-85%25-83A603.svg?style=flat&logoColor=white&color=blue&prefix=$coverage$)
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
