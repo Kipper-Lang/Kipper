@@ -4,8 +4,13 @@
 
 The Kipper command line interface (CLI) to interact with the Kipper compiler.
 
-Kipper is a simple strongly and statically typed programming language, which is designed to allow for
-straightforward, simple, secure and type-safe coding similar to TypeScript, Rust and Python! 🦊
+Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
+
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+
+_For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
+and the [Kipper website](https://kipper-lang.org)._
 
 [![Version](https://img.shields.io/npm/v/@kipper/cli?label=release&color=%23cd2620&logo=npm)](https://npmjs.org/package/@kipper/cli)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
@@ -26,7 +31,7 @@ straightforward, simple, secure and type-safe coding similar to TypeScript, Rust
 
 # Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
 
 # Usage
 
