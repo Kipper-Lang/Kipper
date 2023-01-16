@@ -40,6 +40,8 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 	CompilableASTNode,
+	SemanticData,
+	TypeData,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -54,9 +56,8 @@ import type { KipperProgramContext } from "../../program-ctx";
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeCodeGenerator<
-	T extends CompilableASTNode<any, any>,
+	T extends CompilableASTNode<SemanticData, TypeData>,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
-	// eslint-disable-next-line no-unused-vars
 > = (node: T) => Promise<R>;
 
 /**

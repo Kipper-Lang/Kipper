@@ -8,7 +8,6 @@ import type {
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
@@ -36,24 +35,27 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../ast";
-import {
+	TypeData,
+	SemanticData,
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
+	AnalysableASTNode,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 
 /**
- * Represents a function that checks the semantics for a {@link CompilableASTNode}.
+ * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
  *
  * This function does not interpret but only check the logical integrity of the AST node.
  * @since 0.10.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any, any>> = (node: T) => Promise<void>;
+export type TargetASTNodeSemanticAnalyser<T extends AnalysableASTNode<SemanticData, TypeData>> = (
+	node: T,
+) => Promise<void>;
 
 /**
  * Represents a Semantic analyser that is specific for a {@link KipperCompileTarget}.
