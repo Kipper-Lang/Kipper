@@ -13,7 +13,12 @@
 The JavaScript target for the Kipper Compiler.
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 🦊
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
+
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+
+_For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
+and the [Kipper website](https://kipper-lang.org)._
 
 ## Installation
 
@@ -78,7 +83,7 @@ kipper compile example-script.kip --target=js
 
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
 
 ## Copyright and License
 
