@@ -4,6 +4,7 @@
 		"outDir": "./lib",
 		"rootDir": "./src",
 		"target": "es2016",
+		"skipLibCheck": true,
 		"lib": [
 			"ES7" // ES7 -> ES2016
 		]

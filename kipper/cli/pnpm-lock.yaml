@@ -12,7 +12,7 @@ specifiers:
   '@oclif/plugin-help': ^5.0.0
   '@oclif/plugin-update': ^3.0.0
   '@oclif/plugin-warn-if-update-available': ^2.0.4
-  '@oclif/test': 2.2.10
+  '@oclif/test': 2.2.15
   '@sinonjs/fake-timers': 10.0.0
   '@types/node': ^18.0.0
   '@types/sinon': 10.0.13
@@ -24,13 +24,13 @@ specifiers:
   ts-node: ^10.9.1
   tslib: ~2.4.0
   tslog: ^3.3.0
-  typescript: ~4.7.4
+  typescript: ~4.9.0
 
 dependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-  '@oclif/command': 1.8.16
+  '@oclif/command': 1.8.16_@oclif+config@1.18.3
   '@oclif/config': 1.18.3
   '@oclif/core': 1.13.11
   '@oclif/errors': 1.3.5
@@ -41,13 +41,13 @@ dependencies:
   '@types/node': 18.11.9
   antlr4ts: 0.5.0-alpha.4
   rimraf: 3.0.2
-  ts-node: 10.9.1_vq46kxj6zfka4f6ijsosnft3hy
+  ts-node: 10.9.1_wup25etrarvlqkprac7h35hj7u
   tslib: 2.4.0
   tslog: 3.3.3
-  typescript: 4.7.4
+  typescript: 4.9.3
 
 devDependencies:
-  '@oclif/test': 2.2.10
+  '@oclif/test': 2.2.15
   '@sinonjs/fake-timers': 10.0.0
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 3.0.0
@@ -105,12 +105,14 @@ packages:
       chalk: 4.1.2
       strip-ansi: 6.0.1
       supports-color: 8.1.1
-      tslib: 2.4.0
+      tslib: 2.4.1
     dev: false
 
-  /@oclif/command/1.8.16:
+  /@oclif/command/1.8.16_@oclif+config@1.18.3:
     resolution: {integrity: sha512-rmVKYEsKzurfRU0xJz+iHelbi1LGlihIWZ7Qvmb/CBz1EkhL7nOkW4SVXmG2dA5Ce0si2gr88i6q4eBOMRNJ1w==}
     engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@oclif/config': ^1
     dependencies:
       '@oclif/config': 1.18.3
       '@oclif/errors': 1.3.5
@@ -184,8 +186,8 @@ packages:
       wrap-ansi: 7.0.0
     dev: false
 
-  /@oclif/core/1.20.3:
-    resolution: {integrity: sha512-sM2zQlzOUpHpcTBi7ETnHzK1KRF5BReKvERuF0jRlI2HgQ669arGccv1gkdouyMTG5prG92qy9P4ByhFVkLSQQ==}
+  /@oclif/core/1.21.0:
+    resolution: {integrity: sha512-B/AKYfHcNRAbb6Xz2kj0FlH9gWEi8aFS4iEr7EzguP3E2DpDk4wcf7eOMOfJYEmhuVd9sOpVWSnI2yP+FL/3Sg==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
@@ -213,7 +215,7 @@ packages:
       strip-ansi: 6.0.1
       supports-color: 8.1.1
       supports-hyperlinks: 2.2.0
-      tslib: 2.4.0
+      tslib: 2.4.1
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
     dev: true
@@ -256,7 +258,7 @@ packages:
       '@oclif/errors': 1.3.5
       '@oclif/linewrap': 1.0.0
       chalk: 4.1.2
-      tslib: 2.4.0
+      tslib: 2.4.1
     dev: false
 
   /@oclif/plugin-help/5.1.12:
@@ -311,12 +313,12 @@ packages:
     engines: {node: '>=12.0.0'}
     dev: true
 
-  /@oclif/test/2.2.10:
-    resolution: {integrity: sha512-tz6tH79F0Kw1kWv/8BgTov+WtIeFDdq1PNUkW43U0Rh4HOA1SafPbXCpzhM9A6O7YXS+tq8ayuZdkyOXXJY6Ww==}
+  /@oclif/test/2.2.15:
+    resolution: {integrity: sha512-IItdu34/nIn46qYg2PxeAA7fgW+y3KTUM+UCEaRvaFxEfQiHG173ohFJu7HPVsMfAS+RuTQfmAd/c0xKVQLGUQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.20.3
-      fancy-test: 2.0.6
+      '@oclif/core': 1.21.0
+      fancy-test: 2.0.9
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -657,8 +659,8 @@ packages:
       tmp: 0.0.33
     dev: false
 
-  /fancy-test/2.0.6:
-    resolution: {integrity: sha512-vzH5MOYK+vAQW/jnRnBiyASemIOAmSYuh2j12w4Ktzh+u2d69OENvI9GLDvNLMxOIqCtwz8ndLMH+5cJHfBmSQ==}
+  /fancy-test/2.0.9:
+    resolution: {integrity: sha512-sQ/tAoUiEcNkwg454GCCGWZaERQ48AV6WJZDJzRLwBI4k5M0OrzWME98Cqv3Vribnbe9rJlVb5hOcQmyZjrOBg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/chai': 4.3.3
@@ -1173,7 +1175,7 @@ packages:
   /rxjs/7.5.6:
     resolution: {integrity: sha512-dnyv2/YsXhnm461G+R/Pe5bWP41Nm6LBXEYWI6eiFP4fiwx6WRI/CD0zbdVAudd9xwLEF2IDcKXLHit0FYjUzw==}
     dependencies:
-      tslib: 2.4.0
+      tslib: 2.4.1
     dev: false
 
   /safe-buffer/5.2.1:
@@ -1326,7 +1328,7 @@ packages:
     dependencies:
       is-number: 7.0.0
 
-  /ts-node/10.9.1_vq46kxj6zfka4f6ijsosnft3hy:
+  /ts-node/10.9.1_wup25etrarvlqkprac7h35hj7u:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -1352,13 +1354,17 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.7.4
+      typescript: 4.9.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: false
 
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
+    dev: false
+
+  /tslib/2.4.1:
+    resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
 
   /tslog/3.3.3:
     resolution: {integrity: sha512-lGrkndwpAohZ9ntQpT+xtUw5k9YFV1DjsksiWQlBSf82TTqsSAWBARPRD9juI730r8o3Awpkjp2aXy9k+6vr+g==}
@@ -1382,8 +1388,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  /typescript/4.7.4:
-    resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
+  /typescript/4.9.3:
+    resolution: {integrity: sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: false
