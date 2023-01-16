@@ -28,7 +28,7 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Kipper Docs
 
-In-detail documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+In-detail documentation for the Kipper language is available [here](https://kipper-lang.org)!
 
 ## Packages
 

@@ -50,7 +50,7 @@
     "node": ">=14.0.0",
     "pnpm": ">=7"
   },
-  "homepage": "https://luna-klatzer.github.io/Kipper/",
+  "homepage": "https://kipper-lang.org",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
   "repository": {
     "type": "git",
