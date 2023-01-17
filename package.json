@@ -37,7 +37,7 @@
     "oclif": "3.4.2",
     "prettier": "2.8.1",
     "run-script-os": "1.1.6",
-    "size-limit": "8.1.0",
+    "size-limit": "8.1.1",
     "source-map-support": "0.5.21",
     "ts-mocha": "10.0.0",
     "ts-node": "10.9.1",
