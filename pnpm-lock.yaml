@@ -27,7 +27,7 @@ specifiers:
   mkdirp: 1.0.4
   mocha: 10.2.0
   nyc: 15.1.0
-  oclif: 3.4.2
+  oclif: 3.4.3
   prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -72,7 +72,7 @@ devDependencies:
   mkdirp: 1.0.4
   mocha: 10.2.0
   nyc: 15.1.0
-  oclif: 3.4.2
+  oclif: 3.4.3
   prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -615,40 +615,6 @@ packages:
       tslib: 2.4.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@oclif/core/1.20.4:
-    resolution: {integrity: sha512-giug32M4YhSYNYKQwE1L57/+k5gp1+Bq3/0vKNQmzAY1tizFGhvBJc6GIRZasHjU+xtZLutQvrVrJo7chX3hxg==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.4
-      ansi-escapes: 4.3.2
-      ansi-styles: 4.3.0
-      cardinal: 2.1.1
-      chalk: 4.1.2
-      clean-stack: 3.0.1
-      cli-progress: 3.11.2
-      debug: 4.3.4_supports-color@8.1.1
-      ejs: 3.1.8
-      fs-extra: 9.1.0
-      get-package-type: 0.1.0
-      globby: 11.1.0
-      hyperlinker: 1.0.0
-      indent-string: 4.0.0
-      is-wsl: 2.2.0
-      js-yaml: 3.14.1
-      natural-orderby: 2.0.3
-      object-treeify: 1.1.33
-      password-prompt: 1.1.2
-      semver: 7.3.8
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
-      supports-color: 8.1.1
-      supports-hyperlinks: 2.3.0
-      tslib: 2.4.1
-      widest-line: 3.1.0
-      wrap-ansi: 7.0.0
     dev: true
 
   /@oclif/core/1.24.0:
@@ -4765,12 +4731,12 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /oclif/3.4.2:
-    resolution: {integrity: sha512-YF7zqHCEWiRvfuXkqyPuQsC4PiEJuXLQWIMXOtdJgOnIKqBh9Sp3e4xFsSal9QheVsCwO5kM3Nhe+G430hk/mA==}
+  /oclif/3.4.3:
+    resolution: {integrity: sha512-Kg8ezSJvDluazG6eyN+TeoryaFn3i9utKVty2hy6I0FUy6QcPnbl8+MCha4Jwc+x5+pA46Tu0n2cnjUcWqp56w==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
-      '@oclif/core': 1.20.4
+      '@oclif/core': 1.24.0
       '@oclif/plugin-help': 5.1.19
       '@oclif/plugin-not-found': 2.3.9
       '@oclif/plugin-warn-if-update-available': 2.0.14
