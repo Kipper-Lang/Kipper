@@ -2,9 +2,11 @@ name: "Coverage Badge"
 
 on:
   push:
+    branches-ignore:
+      - "renovate/**"
   pull_request:
-  schedule:
-    - cron: "38 18 * * 5"
+    branches-ignore:
+      - "renovate/**"
 
 jobs:
   run:
