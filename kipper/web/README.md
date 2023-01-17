@@ -15,6 +15,11 @@ The standalone web-module for the Kipper Compiler.
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 🦊
 
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+
+_For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
+and the [Kipper website](https://kipper-lang.org)._
+
 ## Usage
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
@@ -50,7 +55,7 @@ Simple example of compiling and running Kipper code in a browser:
 
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://luna-klatzer.github.io/Kipper/)!
+Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
 
 ## Copyright and License
 
