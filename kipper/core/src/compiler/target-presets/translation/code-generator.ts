@@ -45,6 +45,8 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpression } from "../../ast";
+import { TargetASTNodeSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -123,26 +125,31 @@ export abstract class KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract doWhileLoopStatement: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0s
 	 */
 	public abstract whileLoopStatement: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract forLoopStatement: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract jumpStatement: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract returnStatement: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>>;
 
@@ -168,6 +175,7 @@ export abstract class KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ArrayLiteralPrimaryExpression} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<
 		ArrayLiteralPrimaryExpression,
@@ -179,6 +187,24 @@ export abstract class KipperTargetCodeGenerator {
 	 */
 	public abstract identifierPrimaryExpression: TargetASTNodeCodeGenerator<
 		IdentifierPrimaryExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link DotNotationMemberAccessExpression} into a specific language.
+	 * @since 0.10.0
+	 */
+	public abstract dotNotationMemberAccessExpression: TargetASTNodeCodeGenerator<
+		DotNotationMemberAccessExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link BracketNotationMemberAccessExpression} into a specific language.
+	 * @since 0.10.0
+	 */
+	public abstract bracketNotationMemberAccessExpression: TargetASTNodeCodeGenerator<
+		BracketNotationMemberAccessExpression,
 		TranslatedExpression
 	>;
 

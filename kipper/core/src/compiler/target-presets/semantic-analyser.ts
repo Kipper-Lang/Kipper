@@ -45,6 +45,7 @@ import type {
 	AnalysableASTNode,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
+import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpression } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -84,26 +85,31 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract doWhileLoopStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract whileLoopStatement?: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract forLoopStatement?: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
+	 * @since 0.10.0
 	 */
 	public abstract jumpStatement?: TargetASTNodeSemanticAnalyser<JumpStatement>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract returnStatement?: TargetASTNodeSemanticAnalyser<ReturnStatement>;
 
@@ -136,6 +142,18 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
 	public abstract identifierPrimaryExpression?: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link DotNotationMemberAccessExpression} instances.
+	 * @since 0.10.0
+	 */
+	public abstract dotNotationMemberAccessExpression?: TargetASTNodeSemanticAnalyser<DotNotationMemberAccessExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BracketNotationMemberAccessExpression} instances.
+	 * @since 0.10.0
+	 */
+	public abstract bracketNotationMemberAccessExpression?: TargetASTNodeSemanticAnalyser<BracketNotationMemberAccessExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link StringPrimaryExpression} instances.

@@ -45,7 +45,9 @@ import type {
 	VariableDeclaration,
 } from "@kipper/core";
 import {
+	BracketNotationMemberAccessExpression,
 	CompoundStatement,
+	DotNotationMemberAccessExpression,
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	getConversionFunctionIdentifier,
@@ -227,6 +229,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -234,6 +237,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -252,6 +256,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -266,6 +271,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ReturnStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -339,6 +345,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 		return [identifier];
+	};
+
+	/**
+	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
+	 * @since 0.10.0
+	 */
+	dotNotationMemberAccessExpression = async (
+		node: DotNotationMemberAccessExpression,
+	): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const object = await semanticData.object.translateCtxAndChildren();
+		const member = await semanticData.member.translateCtxAndChildren();
+
+		return [...object, ".", ...member];
+	};
+
+	/**
+	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
+	 * @since 0.10.0
+	 */
+	bracketNotationMemberAccessExpression = async (
+		node: BracketNotationMemberAccessExpression,
+	): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const object = await semanticData.object.translateCtxAndChildren();
+		const member = await semanticData.member.translateCtxAndChildren();
+
+		return [...object, "[", ...member, "]"];
 	};
 
 	/**

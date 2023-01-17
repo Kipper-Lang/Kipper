@@ -232,6 +232,18 @@ export interface MemberAccessExpressionSemantics extends ExpressionSemantics {
 }
 
 /**
+ * Semantics for AST Node {@link BracketNotationMemberAccessExpression}.
+ * @since 0.10.0
+ */
+export interface BracketNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {}
+
+/**
+ * Semantics for AST Node {@link DotNotationMemberAccessExpression}.
+ * @since 0.10.0
+ */
+export interface DotNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {}
+
+/**
  * Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */

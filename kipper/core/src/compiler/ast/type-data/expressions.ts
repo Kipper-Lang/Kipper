@@ -126,6 +126,18 @@ export interface IncrementOrDecrementPostfixExpressionTypeSemantics extends Expr
 export interface MemberAccessExpressionTypeSemantics extends ExpressionTypeSemantics {}
 
 /**
+ * Type Semantics for AST Node {@link DotNotationMemberAccessExpression}.
+ * @since 0.10.0
+ */
+export interface DotNotationMemberAccessExpressionTypeSemantics extends MemberAccessExpressionTypeSemantics {}
+
+/**
+ * Type Semantics for AST Node {@link BracketNotationMemberAccessExpression}.
+ * @since 0.10.0
+ */
+export interface BracketNotationMemberAccessExpressionTypeSemantics extends MemberAccessExpressionTypeSemantics {}
+
+/**
  * Type Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */

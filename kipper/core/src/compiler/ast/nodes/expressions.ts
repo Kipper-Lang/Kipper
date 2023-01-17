@@ -35,6 +35,7 @@ import type {
 	UnaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 	MemberAccessExpressionSemantics,
+	DotNotationMemberAccessExpressionSemantics,
 } from "../semantic-data";
 import type {
 	AdditiveExpressionTypeSemantics,
@@ -66,6 +67,8 @@ import type {
 	TypeSpecifierExpressionTypeSemantics,
 	UnaryExpressionTypeSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
+	DotNotationMemberAccessExpressionTypeSemantics,
+	BracketNotationMemberAccessExpressionTypeSemantics,
 } from "../type-data";
 import {
 	KipperAdditiveOperator,
@@ -124,10 +127,13 @@ import {
 	UnaryOperatorContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	KipperParser,
+	BracketNotationMemberAccessExpressionContext,
+	DotNotationMemberAccessExpressionContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { ParserRuleContext } from "antlr4ts";
 import { MemberAccessExpressionTypeSemantics } from "../type-data";
+import { BracketNotationMemberAccessExpressionSemantics } from "../semantic-data";
 
 /**
  * Union type of all usable expression sub-rule context classes implemented by the {@link KipperParser} for an
@@ -156,6 +162,9 @@ export type ParserExpressionCtx =
 	| ConditionalExpressionContext
 	| AssignmentExpressionContext
 	| IdentifierTypeSpecifierContext
+	| MemberAccessExpressionContext
+	| DotNotationMemberAccessExpressionContext
+	| BracketNotationMemberAccessExpressionContext
 	| GenericTypeSpecifierContext
 	| TypeofTypeSpecifierContext;
 
@@ -1298,6 +1307,15 @@ export type ParserMemberAccessKind =
 	| typeof KipperParser.RULE_bracketNotationMemberAccessExpression;
 
 /**
+ * Union type of all possible {@link ParserASTNode} context classes for a {@link MemberAccessExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserMemberContextType =
+	| MemberAccessExpressionContext
+	| DotNotationMemberAccessExpressionContext
+	| BracketNotationMemberAccessExpressionContext;
+
+/**
  * Member access expression, which represents a member access expression that evaluates to a value of a member of an
  * object or array.
  * @since 0.10.0
@@ -1311,7 +1329,7 @@ export abstract class MemberAccessExpression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
+	protected override readonly _antlrRuleCtx: ParserMemberContextType;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -1322,10 +1340,130 @@ export abstract class MemberAccessExpression<
 	 */
 	public override readonly kind: ParserMemberAccessKind = KipperParser.RULE_memberAccessExpression;
 
-	protected constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode<any, any>) {
+	protected constructor(antlrRuleCtx: ParserMemberContextType, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
+}
+
+/**
+ * Dot notation member access expression, which represents a member access expression that evaluates to a value of a
+ * member of an object using dot notation (x.y).
+ * @since 0.10.0
+ */
+export class DotNotationMemberAccessExpression extends MemberAccessExpression<
+	DotNotationMemberAccessExpressionSemantics,
+	DotNotationMemberAccessExpressionTypeSemantics
+> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: DotNotationMemberAccessExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_dotNotationMemberAccessExpression;
+
+	constructor(antlrRuleCtx: DotNotationMemberAccessExpressionContext, parent: CompilableASTNode<any, any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): DotNotationMemberAccessExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {} // TODO!
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {} // TODO!
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.dotNotationMemberAccessExpression;
+	readonly targetCodeGenerator = this.codeGenerator.dotNotationMemberAccessExpression;
+}
+
+/**
+ * Bracket notation member access expression, which represents a member access expression that evaluates to a value of a
+ * member of an object using bracket notation (x["y"]).
+ * @since 0.10.0
+ */
+export class BracketNotationMemberAccessExpression extends MemberAccessExpression<
+	BracketNotationMemberAccessExpressionSemantics,
+	BracketNotationMemberAccessExpressionTypeSemantics
+> {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: BracketNotationMemberAccessExpressionContext;
+
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 * @since 0.10.0
+	 */
+	public override readonly kind = KipperParser.RULE_bracketNotationMemberAccessExpression;
+
+	constructor(antlrRuleCtx: BracketNotationMemberAccessExpressionContext, parent: CompilableASTNode<any, any>) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): BracketNotationMemberAccessExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 */
+	public async primarySemanticAnalysis(): Promise<void> {} // TODO!
+
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {} // TODO!
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bracketNotationMemberAccessExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bracketNotationMemberAccessExpression;
 }
 
 /**
@@ -1359,6 +1497,13 @@ export class FunctionCallExpression extends Expression<
 	constructor(antlrRuleCtx: FunctionCallExpressionContext, parent: CompilableASTNode<any, any>) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): FunctionCallExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -1423,13 +1568,6 @@ export class FunctionCallExpression extends Expression<
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): FunctionCallExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
 	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
