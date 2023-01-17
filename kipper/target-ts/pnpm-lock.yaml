@@ -7,7 +7,7 @@ specifiers:
   ansi-regex: 6.0.1
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
-  mkdirp: 1.0.4
+  mkdirp: 2.1.1
   prettier: 2.8.1
   run-script-os: 1.1.6
   ts-node: 10.9.1
@@ -24,7 +24,7 @@ devDependencies:
   ansi-regex: 6.0.1
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
-  mkdirp: 1.0.4
+  mkdirp: 2.1.1
   prettier: 2.8.1
   run-script-os: 1.1.6
   ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
@@ -984,8 +984,8 @@ packages:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: true
 
-  /mkdirp/1.0.4:
-    resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
+  /mkdirp/2.1.1:
+    resolution: {integrity: sha512-tXNRfEiv5Z5R1jrXKfSNwhzDjMPdSZqYC1co5ZC7yjNwClJ0Hqt5NGRAayuK6urzM5MWX2IGFLAT4Gs1saeYQw==}
     engines: {node: '>=10'}
     hasBin: true
     dev: true

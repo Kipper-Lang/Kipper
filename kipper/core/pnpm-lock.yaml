@@ -9,7 +9,7 @@ specifiers:
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
-  mkdirp: 1.0.4
+  mkdirp: 2.1.1
   prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -32,7 +32,7 @@ devDependencies:
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
-  mkdirp: 1.0.4
+  mkdirp: 2.1.1
   prettier: 2.8.1
   run-script-os: 1.1.6
   size-limit: 8.1.0
@@ -1683,6 +1683,12 @@ packages:
 
   /mkdirp/1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dev: true
+
+  /mkdirp/2.1.1:
+    resolution: {integrity: sha512-tXNRfEiv5Z5R1jrXKfSNwhzDjMPdSZqYC1co5ZC7yjNwClJ0Hqt5NGRAayuK6urzM5MWX2IGFLAT4Gs1saeYQw==}
     engines: {node: '>=10'}
     hasBin: true
     dev: true
