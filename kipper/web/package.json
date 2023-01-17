@@ -17,7 +17,7 @@
     "json-parse-even-better-errors": "3.0.0",
     "run-script-os": "1.1.6",
     "ts-node": "10.9.1",
-    "@types/node": "18.11.13",
+    "@types/node": "18.11.18",
     "browserify": "17.0.0",
     "uglify-js": "3.17.4"
   },
