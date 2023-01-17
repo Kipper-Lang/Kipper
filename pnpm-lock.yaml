@@ -8,7 +8,7 @@ specifiers:
   '@kipper/target-ts': workspace:~
   '@oclif/config': 1.18.6
   '@oclif/parser': 3.8.9
-  '@oclif/test': 2.2.15
+  '@oclif/test': 2.2.21
   '@size-limit/preset-big-lib': 8.1.1
   '@types/chai': 4.3.0
   '@types/mocha': 10.0.1
@@ -54,7 +54,7 @@ devDependencies:
   '@istanbuljs/nyc-config-typescript': 1.0.2_nyc@15.1.0
   '@oclif/config': 1.18.6
   '@oclif/parser': 3.8.9
-  '@oclif/test': 2.2.15
+  '@oclif/test': 2.2.21
   '@size-limit/preset-big-lib': 8.1.1_pjare2nfjx6e73nwjyjcfzxsny
   '@types/chai': 4.3.0
   '@types/mocha': 10.0.1
@@ -622,7 +622,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.3
+      '@oclif/screen': 3.0.4
       ansi-escapes: 4.3.2
       ansi-styles: 4.3.0
       cardinal: 2.1.1
@@ -651,12 +651,12 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /@oclif/core/1.21.0:
-    resolution: {integrity: sha512-B/AKYfHcNRAbb6Xz2kj0FlH9gWEi8aFS4iEr7EzguP3E2DpDk4wcf7eOMOfJYEmhuVd9sOpVWSnI2yP+FL/3Sg==}
+  /@oclif/core/1.24.0:
+    resolution: {integrity: sha512-J41suyV4fLfLcRRySZdtgFYSjIlpYqD90SY01Fm4+ZJUMcfDh/eQAD4sogyYOsIT0bfEzYOyYCjmfHmgcoX5aA==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@oclif/linewrap': 1.0.0
-      '@oclif/screen': 3.0.3
+      '@oclif/screen': 3.0.4
       ansi-escapes: 4.3.2
       ansi-styles: 4.3.0
       cardinal: 2.1.1
@@ -714,7 +714,7 @@ packages:
     resolution: {integrity: sha512-eQVRCFJOwRj8Tbqz8Lzd9GN38egwLCg+ohJ0xfg12CoXml03WqkfcFiAWkVwSWmLVrZUlUVrxfXKKkmpUaXZHg==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.21.0
+      '@oclif/core': 1.24.0
     dev: true
 
   /@oclif/plugin-not-found/2.3.9:
@@ -722,7 +722,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.2
-      '@oclif/core': 1.21.0
+      '@oclif/core': 1.24.0
       fast-levenshtein: 3.0.0
       lodash: 4.17.21
     dev: true
@@ -731,7 +731,7 @@ packages:
     resolution: {integrity: sha512-gEgFZuNtFx3yPfSuxhAm9F8nLZ4+UnBJhbjTywY0Cvrqvd+OvKvo6PfwRm0lWmH4EgWwQEq39pfaks1fg+y1gw==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.21.0
+      '@oclif/core': 1.24.0
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
@@ -742,17 +742,17 @@ packages:
       - supports-color
     dev: true
 
-  /@oclif/screen/3.0.3:
-    resolution: {integrity: sha512-KX8gMYA9ujBPOd1HFsV9e0iEx7Uoj8AG/3YsW4TtWQTg4lJvr82qNm7o/cFQfYRIt+jw7Ew/4oL4A22zOT+IRA==}
+  /@oclif/screen/3.0.4:
+    resolution: {integrity: sha512-IMsTN1dXEXaOSre27j/ywGbBjrzx0FNd1XmuhCWCB9NTPrhWI1Ifbz+YLSEcstfQfocYsrbrIessxXb2oon4lA==}
     engines: {node: '>=12.0.0'}
     dev: true
 
-  /@oclif/test/2.2.15:
-    resolution: {integrity: sha512-IItdu34/nIn46qYg2PxeAA7fgW+y3KTUM+UCEaRvaFxEfQiHG173ohFJu7HPVsMfAS+RuTQfmAd/c0xKVQLGUQ==}
+  /@oclif/test/2.2.21:
+    resolution: {integrity: sha512-uIjn0PM6R9qlpYzoB9eYBwh3uMd5EdTux2dhBnYMA3DWcLOV4/+2TxKeVurfHFHfQfRp7imYSab7vEwTfiSo7g==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.21.0
-      fancy-test: 2.0.9
+      '@oclif/core': 1.24.0
+      fancy-test: 2.0.12
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2925,8 +2925,8 @@ packages:
       - supports-color
     dev: true
 
-  /fancy-test/2.0.9:
-    resolution: {integrity: sha512-sQ/tAoUiEcNkwg454GCCGWZaERQ48AV6WJZDJzRLwBI4k5M0OrzWME98Cqv3Vribnbe9rJlVb5hOcQmyZjrOBg==}
+  /fancy-test/2.0.12:
+    resolution: {integrity: sha512-S7qVQNaViLTMzn71huZvrUCV59ldq+enQ1EQOkdNbl4q4Om97gwqbYKvZoglsnzCWRRFaFP+qHynpdqaLdiZqg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/chai': 4.3.0
@@ -2935,7 +2935,7 @@ packages:
       '@types/sinon': 10.0.13
       lodash: 4.17.21
       mock-stdin: 1.0.0
-      nock: 13.2.9
+      nock: 13.3.0
       stdout-stderr: 0.1.13
     transitivePeerDependencies:
       - supports-color
@@ -4530,8 +4530,8 @@ packages:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
     dev: true
 
-  /nock/13.2.9:
-    resolution: {integrity: sha512-1+XfJNYF1cjGB+TKMWi29eZ0b82QOvQs2YoLNzbpWGqFMtRQHTa57osqdGj4FrFPgkO4D4AZinzUJR9VvW3QUA==}
+  /nock/13.3.0:
+    resolution: {integrity: sha512-HHqYQ6mBeiMc+N038w8LkMpDCRquCHWeNmN3v6645P3NhN2+qXOBqvPqo7Rt1VyCMzKhJ733wZqw5B7cQVFNPg==}
     engines: {node: '>= 10.13'}
     dependencies:
       debug: 4.3.4
