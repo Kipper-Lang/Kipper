@@ -15,6 +15,8 @@ import { PassOnAdditiveExpressionContext } from "./KipperParser";
 import { ActualAdditiveExpressionContext } from "./KipperParser";
 import { PassOnRelationalExpressionContext } from "./KipperParser";
 import { ActualRelationalExpressionContext } from "./KipperParser";
+import { BracketNotationIndexContext } from "./KipperParser";
+import { BracketNotationSliceContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
@@ -204,6 +206,22 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `bracketNotationIndex`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBracketNotationIndex?: (ctx: BracketNotationIndexContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `bracketNotationSlice`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBracketNotationSlice?: (ctx: BracketNotationSliceContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`

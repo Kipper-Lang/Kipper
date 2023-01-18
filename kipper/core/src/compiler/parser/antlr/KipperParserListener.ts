@@ -15,6 +15,8 @@ import { PassOnAdditiveExpressionContext } from "./KipperParser";
 import { ActualAdditiveExpressionContext } from "./KipperParser";
 import { PassOnRelationalExpressionContext } from "./KipperParser";
 import { ActualRelationalExpressionContext } from "./KipperParser";
+import { BracketNotationIndexContext } from "./KipperParser";
+import { BracketNotationSliceContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
@@ -266,6 +268,32 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `bracketNotationIndex`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 */
+	enterBracketNotationIndex?: (ctx: BracketNotationIndexContext) => void;
+	/**
+	 * Exit a parse tree produced by the `bracketNotationIndex`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 */
+	exitBracketNotationIndex?: (ctx: BracketNotationIndexContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `bracketNotationSlice`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 */
+	enterBracketNotationSlice?: (ctx: BracketNotationSliceContext) => void;
+	/**
+	 * Exit a parse tree produced by the `bracketNotationSlice`
+	 * labeled alternative in `KipperParser.bracketNotation`.
+	 * @param ctx the parse tree
+	 */
+	exitBracketNotationSlice?: (ctx: BracketNotationSliceContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`

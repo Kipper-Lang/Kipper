@@ -46,7 +46,6 @@ import type {
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpression } from "../../ast";
-import { TargetASTNodeSemanticAnalyser } from "../semantic-analyser";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

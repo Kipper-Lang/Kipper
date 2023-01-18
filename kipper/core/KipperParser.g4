@@ -220,7 +220,8 @@ bracketNotationMemberAccessExpression
 	;
 
 bracketNotation
-	:   '[' expression ']'
+	:   '[' expression ']' # bracketNotationIndex
+	|   '[' expression ':' expression ']' # bracketNotationSlice
     ;
 
 postfixExpression
