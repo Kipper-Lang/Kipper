@@ -128,16 +128,36 @@ To use development versions of Kipper download the
     node.
   - `ParserConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ConstantExpression` AST node.
+  - `ParserConstantExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
+    for a `ConstantExpression` AST node.
   - `ParserTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `TypeSpecifierExpression` AST node.
+  - `ParserTypeSpecifierExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
+    values for a `TypeSpecifierExpression` AST node.
   - `ParserMemberAccessKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+    `MemberAccessExpression` AST node.
+  - `ParserMemberAccessContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
     `MemberAccessExpression` AST node.
   - `ParserUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `UnaryExpression` AST node.
+  - `ParserUnaryExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
+    `UnaryExpression` AST node.
   - `ParserComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ComparativeExpression` AST node.
+  - `ParserComparativeExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
+    for a `ComparativeExpression` AST node.
   - `ParserLogicalExpressionType`, which is a union type of all possible `ParserASTNode.kind` values for a
     `LogicalExpression` AST node.
+  - `ParserLogicalExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
+    a `LogicalExpression` AST node.
+  - `ConstructableASTStatementClass`, which is a union type of all possible `Statement` AST node classes.
+  - `ConstructableASTExpressionClass`, which is a union type of all possible `Expression` AST node classes.
+  - `ConstructableASTDeclarationClass`, which is a union type of all possible `Declaration` AST node classes.
+  - `ConstructableASTNodeClass`, which is a union type of all possible `ASTNode` AST node classes.
+  - `ConstructableASTStatement`, which is a union type of all possible `Statement` AST node instances.
+  - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
+  - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
+  - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -146,6 +166,7 @@ To use development versions of Kipper download the
   - `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
   - `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
   - `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
+  - `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -174,6 +195,9 @@ To use development versions of Kipper download the
     parent scopes.
   - `ParserASTNode.kind`, which returns the kind of the parser AST node. This returns the `KipperParser` rule number, as
     defined by `KipperParser.RULE_*`.
+  - `StatementASTNodeFactory.statementMatchTable`, which returns the match table for the statement AST node factory.
+  - `ExpressionASTNodeFactory.expressionMatchTable`, which returns the match table for the expression AST node factory.
+  - `DeclarationASTNodeFactory.declarationMatchTable`, which returns the match table for the declaration AST node factory.
 
 ### Changed
 
@@ -201,6 +225,9 @@ To use development versions of Kipper download the
   performance and not call an async function unnecessarily.
 - Allowed the use of function declarations inside nested scopes (e.g. inside a function body or compound statement).
 - Split grammar file `Kipper.g4` into `KipperLexer.g4` and `KipperParser.g4`.
+- Updated factory system for `StatementASTNodeFactory`, `DeclarationASTNodeFactory` and `ExpressionASTNodeFactory` to
+  use a mapping table instead of a switch statement for better readability and accessibility. This also allows for
+  easier extension of the factory system. The `create` function is now instance-based (not static anymore) as well.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -218,6 +245,9 @@ To use development versions of Kipper download the
   - `antlrDefinitionCtxType` to `ParserDeclarationCtx`.
   - `antlrExpressionCtxType` to `ParserExpressionCtx`.
   - `antlrStatementCtxType` to `ParserStatementCtx`.
+  - `ParserExpressionCtx` to `ParserExpressionContextType`.
+  - `ParserStatementCtx` to `ParserStatementContextType`.
+  - `ParserDeclarationCtx` to `ParserDeclarationContextType`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
