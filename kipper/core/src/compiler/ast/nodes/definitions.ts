@@ -1,5 +1,5 @@
 /**
- * Declaration and definitions in the Kipper language.
+ * AST Node Declaration/Definition classes of the Kipper language.
  * @since 0.1.0
  */
 import type { ParseTree } from "antlr4ts/tree";
@@ -47,61 +47,43 @@ import { ScopeNode } from "../scope-node";
  * Union type of all usable definition/declaration sub-rule context classes implemented by the {@link KipperParser}
  * for a {@link Declaration}.
  */
-export type ParserDeclarationCtx =
+export type ParserDeclarationContextType =
 	| FunctionDeclarationContext
 	| ParameterDeclarationContext
 	| VariableDeclarationContext;
 
 /**
- * Union type of all possible {@link ParserASTNode.kind} values for a {@link Declaration} AST node.
+ * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Declaration} AST node.
+ *
+ * Note that not all KipperParser rule contexts have a corresponding AST node type. For example, the
+ * {@link KipperParser.declaration} rule context has no corresponding AST node type because it is a union of all
+ * possible declaration types.
  * @since 0.10.0
  */
 export type ParserDeclarationKind =
-	| typeof KipperParser.RULE_declaration
 	| typeof KipperParser.RULE_functionDeclaration
 	| typeof KipperParser.RULE_parameterDeclaration
 	| typeof KipperParser.RULE_variableDeclaration;
 
 /**
- * Factory class which generates definition class instances using {@link DeclarationASTNodeFactory.create DefinitionASTNodeFactory.create()}.
- * @since 0.9.0
- */
-export class DeclarationASTNodeFactory {
-	/**
-	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
-	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
-	 * @param parent The file context class that will be assigned to the instance.
-	 * @since 0.9.0
-	 */
-	public static create(antlrRuleCtx: ParserDeclarationCtx, parent: CompilableNodeParent): Declaration<any, any> {
-		if (antlrRuleCtx instanceof FunctionDeclarationContext) {
-			return new FunctionDeclaration(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ParameterDeclarationContext) {
-			return new ParameterDeclaration(antlrRuleCtx, parent);
-		}
-		// Last remaining possible type {@link VariableDeclaration}
-		return new VariableDeclaration(antlrRuleCtx, parent);
-	}
-}
-
-/**
- * Base Declaration class that represents a value or function declaration or definition in Kipper.
+ * Declaration class that represents any declaration for a value or function declaration or definition in the Kipper
+ * language.
  *
- * Any function or variable declaration in Kipper will be registered in a {@link Scope}, which will define the
- * visibility of the variable. The only exception is a {@link ParameterDeclaration}, which is bound to a function
- * and its local scope.
+ * Any function, variable or parameter declaration in Kipper will be registered in a {@link Scope}, which will
+ * define the visibility of the variable. The only exception is a {@link ParameterDeclaration}, which is bound to a
+ * function and its local scope.
  * @since 0.1.0
  */
 export abstract class Declaration<
-	Semantics extends DeclarationSemantics,
-	TypeData extends DeclarationTypeData,
+	Semantics extends DeclarationSemantics = DeclarationSemantics,
+	TypeData extends DeclarationTypeData = DeclarationTypeData,
 > extends CompilableASTNode<Semantics, TypeData> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ParserDeclarationCtx;
+	protected override readonly _antlrRuleCtx: ParserDeclarationContextType;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -119,7 +101,7 @@ export abstract class Declaration<
 	 */
 	public abstract readonly kind: ParserDeclarationKind;
 
-	protected constructor(antlrRuleCtx: ParserDeclarationCtx, parent: CompilableNodeParent) {
+	protected constructor(antlrRuleCtx: ParserDeclarationContextType, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 
@@ -130,7 +112,7 @@ export abstract class Declaration<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ParserDeclarationCtx {
+	public override get antlrRuleCtx(): ParserDeclarationContextType {
 		return this._antlrRuleCtx;
 	}
 

@@ -40,8 +40,6 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 	CompilableASTNode,
-	SemanticData,
-	TypeData,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -57,7 +55,7 @@ import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpressio
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeCodeGenerator<
-	T extends CompilableASTNode<SemanticData, TypeData>,
+	T extends CompilableASTNode,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
 > = (node: T) => Promise<R>;
 

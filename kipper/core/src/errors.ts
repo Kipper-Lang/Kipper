@@ -7,7 +7,7 @@ import type { InputMismatchException, LexerNoViableAltException, NoViableAltExce
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperParseStream, SemanticData, TypeData } from "./compiler";
+import type { KipperParseStream } from "./compiler";
 import { CompilableASTNode } from "./compiler";
 import { getParseRuleSource } from "./utils";
 
@@ -40,7 +40,7 @@ export interface TracebackMetadata {
 	 * The AST Node that caused the error.
 	 * @since 0.10.0
 	 */
-	errorNode: CompilableASTNode<SemanticData, TypeData> | undefined;
+	errorNode: CompilableASTNode | undefined;
 }
 
 /**
@@ -182,6 +182,17 @@ export class KipperInternalError extends Error {
 	constructor(msg: string) {
 		super(`${msg} - Report this bug to the developer using the traceback!`);
 		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
+	}
+}
+
+/**
+ * Error that is thrown when an AST factory is unable to create an AST node based on the given context.
+ * @since 0.10.0
+ */
+export class ASTFactoryError extends KipperInternalError {
+	constructor(msg: string = "") {
+		super(msg || "Failed to create AST node from ANTLR rule context. Likely invalid rule context instance.");
+		this.name = "InternalError";
 	}
 }
 

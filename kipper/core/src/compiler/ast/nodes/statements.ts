@@ -1,12 +1,5 @@
 /**
- * The primary statements that make up the Kipper language.
- *
- * Statements:
- * - Compound statement
- * - Selection statement
- * - Expression statement
- * - Iteration statement
- * - Jump statement (Only valid in functions or loops)
+ * AST Node Statement classes of the Kipper language.
  * @since 0.1.0
  */
 import type {
@@ -31,6 +24,7 @@ import type { TranslatedCodeLine } from "../../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../target-presets";
 import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
+import type { ScopeNode } from "../scope-node";
 import {
 	CompoundStatementContext,
 	DoWhileLoopIterationStatementContext,
@@ -46,13 +40,12 @@ import {
 import { CompilableASTNode } from "../compilable-ast-node";
 import { CheckedType, LocalScope } from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
-import { ScopeNode } from "../scope-node";
 
 /**
  * Union type of all usable statement sub-rule context classes implemented by the {@link KipperParser} for a
  * {@link Statement}.
  */
-export type ParserStatementCtx =
+export type ParserStatementContextType =
 	| CompoundStatementContext
 	| IfStatementContext
 	| SwitchStatementContext
@@ -68,8 +61,6 @@ export type ParserStatementCtx =
  * @since 0.10.0
  */
 export type ParserStatementKind =
-	| typeof KipperParser.RULE_statement
-	| typeof KipperParser.RULE_typeofTypeSpecifier
 	| typeof KipperParser.RULE_compoundStatement
 	| typeof KipperParser.RULE_ifStatement
 	| typeof KipperParser.RULE_switchStatement
@@ -81,57 +72,20 @@ export type ParserStatementKind =
 	| typeof KipperParser.RULE_returnStatement;
 
 /**
- * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
- * @since 0.9.0
- */
-export class StatementASTNodeFactory {
-	/**
-	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
-	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
-	 * @param parent The file context class that will be assigned to the instance.
-	 * @since 0.9.0
-	 */
-	public static create(
-		antlrRuleCtx: ParserStatementCtx,
-		parent: CompilableNodeParent,
-	): Statement<SemanticData, TypeData> {
-		if (antlrRuleCtx instanceof CompoundStatementContext) {
-			return new CompoundStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof IfStatementContext) {
-			return new IfStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof SwitchStatementContext) {
-			return new SwitchStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ExpressionStatementContext) {
-			return new ExpressionStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof DoWhileLoopIterationStatementContext) {
-			return new DoWhileLoopStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof WhileLoopIterationStatementContext) {
-			return new WhileLoopStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ForLoopIterationStatementContext) {
-			return new ForLoopStatement(antlrRuleCtx, parent);
-		} else if (antlrRuleCtx instanceof ReturnStatementContext) {
-			return new ReturnStatement(antlrRuleCtx, parent);
-		}
-		// Can only be {@link JumpStatementContext}
-		return new JumpStatement(antlrRuleCtx, parent);
-	}
-}
-
-/**
  * Base Statement class, which represents a statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  * @since 0.1.0
  */
 export abstract class Statement<
-	Semantics extends SemanticData,
-	TypeSemantics extends TypeData,
+	Semantics extends SemanticData = SemanticData,
+	TypeSemantics extends TypeData = TypeData,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ParserStatementCtx;
+	protected override readonly _antlrRuleCtx: ParserStatementContextType;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -142,7 +96,7 @@ export abstract class Statement<
 	 */
 	public abstract readonly kind: ParserStatementKind;
 
-	protected constructor(antlrRuleCtx: ParserStatementCtx, parent: CompilableNodeParent) {
+	protected constructor(antlrRuleCtx: ParserStatementContextType, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 
@@ -153,7 +107,7 @@ export abstract class Statement<
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrRuleCtx(): ParserStatementCtx {
+	public override get antlrRuleCtx(): ParserStatementContextType {
 		return this._antlrRuleCtx;
 	}
 
@@ -485,13 +439,34 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 }
 
 /**
+ * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link MemberAccessExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserIterationStatementContextType =
+	| ForLoopIterationStatementContext
+	| WhileLoopIterationStatementContext
+	| DoWhileLoopIterationStatementContext;
+
+/**
+ * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link MemberAccessExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserIterationStatementKind =
+	| typeof KipperParser.RULE_forLoopIterationStatement
+	| typeof KipperParser.RULE_whileLoopIterationStatement
+	| typeof KipperParser.RULE_doWhileLoopIterationStatement;
+
+/**
  * Iteration statement class, which represents an iteration/loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
 export abstract class IterationStatement<
 	Semantics extends IterationStatementSemantics,
 	TypeSemantics extends NoTypeSemantics,
-> extends Statement<Semantics, TypeSemantics> {}
+> extends Statement<Semantics, TypeSemantics> {
+	protected abstract readonly _antlrRuleCtx: ParserIterationStatementContextType;
+	public abstract readonly kind: ParserIterationStatementKind;
+}
 
 /**
  * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable

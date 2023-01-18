@@ -225,17 +225,26 @@ export interface MemberAccessExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.10.0
 	 */
 	object: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * The member that is accessed.
-	 */
-	member: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
 }
 
 /**
  * Semantics for AST Node {@link BracketNotationMemberAccessExpression}.
  * @since 0.10.0
  */
-export interface BracketNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {}
+export interface BracketNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {
+	/**
+	 * The index or key that is accessed. This is mutually exclusive with {@link slice}.
+	 */
+	indexOrKey?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	/**
+	 * A slice of the array that is accessed. This is mutually exclusive with {@link indexOrKey}.
+	 * @since 0.10.0
+	 */
+	slice?: {
+		start?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+		end?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	};
+}
 
 /**
  * Semantics for AST Node {@link DotNotationMemberAccessExpression}.

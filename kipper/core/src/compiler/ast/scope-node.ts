@@ -6,7 +6,6 @@
  */
 import type { Scope } from "../analysis";
 import type { CompilableASTNode } from "./compilable-ast-node";
-import type { SemanticData, TypeData } from "./ast-node";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../target-presets";
 import type { TranslatedCodeLine } from "../const";
 
@@ -17,7 +16,7 @@ import type { TranslatedCodeLine } from "../const";
  * This means that the node will have the field {@link innerScope} set to the scope that is created for it.
  * @since 0.10.0
  */
-export interface ScopeNode<T extends Scope> extends CompilableASTNode<SemanticData, TypeData> {
+export interface ScopeNode<T extends Scope> extends CompilableASTNode {
 	/**
 	 * The inner scope that is created for this node.
 	 *

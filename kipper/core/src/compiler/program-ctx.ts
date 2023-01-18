@@ -184,7 +184,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
-	public semanticCheck(ctx: CompilableASTNode<any, any> | undefined): KipperSemanticChecker {
+	public semanticCheck(ctx: CompilableASTNode | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
 		this.semanticChecker.setTracebackData({ ctx });
 		return this.semanticChecker;
@@ -196,7 +196,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */
-	public typeCheck(ctx: CompilableASTNode<any, any> | undefined): KipperTypeChecker {
+	public typeCheck(ctx: CompilableASTNode | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
 		this.typeChecker.setTracebackData({ ctx });
 		return this.typeChecker;

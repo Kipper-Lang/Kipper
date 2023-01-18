@@ -6,3 +6,4 @@
 export * from "./expressions";
 export * from "./definitions";
 export * from "./statements";
+export * from "./factories";

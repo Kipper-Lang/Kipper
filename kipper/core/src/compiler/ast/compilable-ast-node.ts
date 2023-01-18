@@ -21,19 +21,22 @@ import { TargetASTNodeCodeGenerator } from "../target-presets";
  * An eligible parent for a compilable AST node.
  * @since 0.8.0
  */
-export type CompilableNodeParent = CompilableASTNode<SemanticData, TypeData> | RootASTNode;
+export type CompilableNodeParent = CompilableASTNode | RootASTNode;
 
 /**
  * An eligible child for a compilable AST node.
  * @since 0.8.0
  */
-export type CompilableNodeChild = CompilableASTNode<SemanticData, TypeData>;
+export type CompilableNodeChild = CompilableASTNode;
 
 /**
  * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
-export abstract class CompilableASTNode<Semantics extends SemanticData, TypeSemantics extends TypeData>
+export abstract class CompilableASTNode<
+		Semantics extends SemanticData = SemanticData,
+		TypeSemantics extends TypeData = TypeData,
+	>
 	extends AnalysableASTNode<Semantics, TypeSemantics>
 	implements TargetCompilableNode
 {

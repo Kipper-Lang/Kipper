@@ -65,9 +65,9 @@ import type {
 import type { KipperProgramContext } from "../program-ctx";
 import { ParserRuleContext } from "antlr4ts";
 import {
-	type ParserDeclarationCtx,
-	type ParserExpressionCtx,
-	type ParserStatementCtx,
+	type ParserDeclarationContextType,
+	type ParserExpressionContextType,
+	type ParserStatementContextType,
 	Declaration,
 	DeclarationASTNodeFactory,
 	Expression,
@@ -102,12 +102,10 @@ import {
  * @since 0.0.3
  */
 export class KipperFileListener implements KipperParserListener {
-	/**
-	 * The private field '_itemBuffer' that actually stores the variable data,
-	 * which is returned inside the {@link this.itemBuffer}.
-	 * @private
-	 */
 	private readonly _rootNode: RootASTNode;
+	private readonly _expressionFactory: ExpressionASTNodeFactory;
+	private readonly _statementFactory: StatementASTNodeFactory;
+	private readonly _declarationFactory: DeclarationASTNodeFactory;
 
 	/**
 	 * If this is true, the current context is inside an external item and automatically indicates
@@ -126,7 +124,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentPrimaryNode: CompilableASTNode<any, any> | undefined;
+	private _currentPrimaryNode: CompilableASTNode | undefined;
 
 	/**
 	 * The current expression that is being walked through. This is the instance where current metadata
@@ -140,6 +138,9 @@ export class KipperFileListener implements KipperParserListener {
 		this._isExternalItem = false;
 		this._isFunctionDefinition = false;
 		this._currentPrimaryNode = undefined;
+		this._expressionFactory = new ExpressionASTNodeFactory();
+		this._statementFactory = new StatementASTNodeFactory();
+		this._declarationFactory = new DeclarationASTNodeFactory();
 	}
 
 	/**
@@ -151,11 +152,37 @@ export class KipperFileListener implements KipperParserListener {
 	}
 
 	/**
+	 * Returns the {@link ExpressionASTNodeFactory expression factory} that is used to create new expression nodes
+	 * based on the current Antlr4 context that is being walked through.
+	 * @since 0.10.0
+	 */
+	public get expressionFactory(): ExpressionASTNodeFactory {
+		return this._expressionFactory;
+	}
+
+	/**
+	 * Returns the {@link StatementASTNodeFactory statement factory} that is used to create new statement nodes based on
+	 * the current Antlr4 context that is being walked through.
+	 * @since 0.10.0
+	 */
+	public get statementFactory(): StatementASTNodeFactory {
+		return this._statementFactory;
+	}
+
+	/**
+	 * Returns the {@link DeclarationASTNodeFactory declaration factory} that is used to create new declaration nodes
+	 * based on the current Antlr4 context that is being walked through.
+	 */
+	public get declarationFactory(): DeclarationASTNodeFactory {
+		return this._declarationFactory;
+	}
+
+	/**
 	 * Returns which token is being processed at the moment and where meta-data should be assigned to. If
 	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryNode}.
 	 * @private
 	 */
-	private get getCurrentNode(): CompilableASTNode<any, any> | RootASTNode {
+	private get getCurrentNode(): CompilableASTNode | RootASTNode {
 		if (this._currentExpression) {
 			return this._currentExpression;
 		} else if (this._currentPrimaryNode) {
@@ -176,7 +203,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The context instance of the expression
 	 * @private
 	 */
-	private handleIncomingExpressionCtx(ctx: ParserExpressionCtx) {
+	private handleIncomingExpressionCtx(ctx: ParserExpressionContextType) {
 		if (this.getCurrentNode instanceof RootASTNode) {
 			throw new KipperInternalError(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
@@ -184,7 +211,7 @@ export class KipperFileListener implements KipperParserListener {
 			);
 		}
 
-		this._currentExpression = ExpressionASTNodeFactory.create(ctx, this.getCurrentNode);
+		this._currentExpression = this.expressionFactory.create(ctx, this.getCurrentNode);
 	}
 
 	/**
@@ -213,8 +240,8 @@ export class KipperFileListener implements KipperParserListener {
 	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
 	 * @private
 	 */
-	private handleIncomingStatementCtx(ctx: ParserStatementCtx) {
-		this._currentPrimaryNode = StatementASTNodeFactory.create(ctx, this.getCurrentNode);
+	private handleIncomingStatementCtx(ctx: ParserStatementContextType) {
+		this._currentPrimaryNode = this.statementFactory.create(ctx, this.getCurrentNode);
 	}
 
 	/**
@@ -227,8 +254,8 @@ export class KipperFileListener implements KipperParserListener {
 	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
 	 * @private
 	 */
-	private handleIncomingDefinitionCtx(ctx: ParserDeclarationCtx) {
-		this._currentPrimaryNode = DeclarationASTNodeFactory.create(ctx, this.getCurrentNode);
+	private handleIncomingDeclarationCtx(ctx: ParserDeclarationContextType) {
+		this._currentPrimaryNode = this.declarationFactory.create(ctx, this.getCurrentNode);
 	}
 
 	/**
@@ -1311,7 +1338,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public enterVariableDeclaration(ctx: VariableDeclarationContext): void {
-		this.handleIncomingDefinitionCtx(ctx);
+		this.handleIncomingDeclarationCtx(ctx);
 	}
 
 	/**
@@ -1327,7 +1354,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public enterFunctionDeclaration(ctx: FunctionDeclarationContext): void {
-		this.handleIncomingDefinitionCtx(ctx);
+		this.handleIncomingDeclarationCtx(ctx);
 	}
 
 	/**
@@ -1343,7 +1370,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @param ctx The parse tree (instance of {@link ParserRuleContext}).
 	 */
 	public enterParameterDeclaration(ctx: ParameterDeclarationContext): void {
-		this.handleIncomingDefinitionCtx(ctx);
+		this.handleIncomingDeclarationCtx(ctx);
 	}
 
 	/**

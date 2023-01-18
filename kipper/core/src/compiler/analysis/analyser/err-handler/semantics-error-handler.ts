@@ -16,7 +16,7 @@ export abstract class KipperSemanticErrorHandler {
 
 	protected col: number | undefined;
 
-	protected ctx: CompilableASTNode<any, any> | undefined;
+	protected ctx: CompilableASTNode | undefined;
 
 	protected filePath: string | undefined;
 
@@ -31,7 +31,7 @@ export abstract class KipperSemanticErrorHandler {
 	 * @since 0.8.0
 	 */
 	public setTracebackData(data: {
-		ctx?: CompilableASTNode<any, any>;
+		ctx?: CompilableASTNode;
 		line?: number;
 		col?: number;
 		filePath?: string;

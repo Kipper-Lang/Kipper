@@ -2,7 +2,7 @@
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
-import type { NoSemantics, NoTypeSemantics, SemanticData, TypeData } from "./ast-node";
+import type { NoSemantics, NoTypeSemantics } from "./ast-node";
 import { ParserASTNode } from "./ast-node";
 import type {
 	KipperCompileTarget,
@@ -26,7 +26,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	protected readonly _antlrRuleCtx: CompilationUnitContext;
 	protected readonly _programCtx: KipperProgramContext;
 	protected readonly _parent: undefined;
-	protected readonly _children: Array<Declaration<any, any> | Statement<SemanticData, TypeData>>;
+	protected readonly _children: Array<Declaration | Statement>;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -89,7 +89,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	 * The children of this AST root node.
 	 * @since 0.8.0
 	 */
-	public get children(): Array<Declaration<any, any> | Statement<SemanticData, TypeData>> {
+	public get children(): Array<Declaration | Statement> {
 		return this._children;
 	}
 
@@ -131,7 +131,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	 * Adds new child at the end of the tree.
 	 * @since 0.8.0
 	 */
-	public addNewChild(newChild: Declaration<any, any> | Statement<SemanticData, TypeData>): void {
+	public addNewChild(newChild: Declaration | Statement): void {
 		this._children.push(newChild);
 	}
 

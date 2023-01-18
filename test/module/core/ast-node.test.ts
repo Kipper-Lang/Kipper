@@ -23,7 +23,7 @@ describe("AST Nodes", () => {
 
 	describe("CompilableASTNode", () => {
 		// Example class for testing purposes
-		class ExampleNode extends CompilableASTNode<any, any> {
+		class ExampleNode extends CompilableASTNode {
 			readonly kind: number = Number.MAX_SAFE_INTEGER;
 
 			constructor(antlrCtx: ParserRuleContext, parent: CompilableNodeParent) {
