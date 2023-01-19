@@ -79,10 +79,6 @@ To use development versions of Kipper download the
     rule `memberAccessExpression`).
   - `AnalysableASTNode`, which represents an AST node that can be semantically processed. This class was created as
     a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
-  - `BracketNotationMemberAccessExpression`, which is a subclass of `MemberAccessExpression` that represents a member
-    access expression using bracket notation (Antlr4 rule `bracketNotationMemberAccessExpression`).
-  - `DotNotationMemberAccessExpression`, which is a subclass of `MemberAccessExpression` that represents a member access
-    expression using dot notation (Antlr4 rule `dotNotationMemberAccessExpression`).
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -134,10 +130,6 @@ To use development versions of Kipper download the
     `TypeSpecifierExpression` AST node.
   - `ParserTypeSpecifierExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
     values for a `TypeSpecifierExpression` AST node.
-  - `ParserMemberAccessKind`, which is a union type of all possible `ParserASTNode.kind` values for a
-    `MemberAccessExpression` AST node.
-  - `ParserMemberAccessContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
-    `MemberAccessExpression` AST node.
   - `ParserUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `UnaryExpression` AST node.
   - `ParserUnaryExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
