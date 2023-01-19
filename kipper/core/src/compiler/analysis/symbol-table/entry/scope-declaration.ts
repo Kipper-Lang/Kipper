@@ -15,7 +15,7 @@ import { CheckedType } from "../../type";
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
-	public abstract get node(): Declaration<any, any>;
+	public abstract get node(): Declaration;
 
 	public abstract get identifier(): string;
 

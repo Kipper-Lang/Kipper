@@ -600,7 +600,7 @@ export class KipperProgramContext {
 	 * @param ref The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
+	public addBuiltInReference(exp: Expression, ref: BuiltInFunction) {
 		this._builtInReferences.push({
 			refTarget: ref,
 			srcExpr: exp,
@@ -613,7 +613,7 @@ export class KipperProgramContext {
 	 * @param ref The internal identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
+	public addInternalReference(exp: Expression, ref: InternalFunction) {
 		this._internalReferences.push({
 			refTarget: ref,
 			srcExpr: exp,

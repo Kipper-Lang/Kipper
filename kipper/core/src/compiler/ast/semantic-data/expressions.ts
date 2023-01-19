@@ -23,7 +23,6 @@ import type {
 } from "../../const";
 import type { SemanticData } from "../ast-node";
 import type { Expression, IdentifierPrimaryExpression } from "../nodes";
-import type { ExpressionTypeSemantics } from "../type-data";
 import type { Reference } from "../../analysis";
 import type { UncheckedType } from "../../analysis";
 import { IdentifierTypeSpecifierExpression } from "../nodes";
@@ -76,7 +75,7 @@ export interface ArrayLiteralPrimaryExpressionSemantics extends ExpressionSemant
 	 * The value of the constant list expression.
 	 * @since 0.5.0
 	 */
-	value: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+	value: Array<Expression>;
 }
 
 /**
@@ -121,7 +120,7 @@ export interface FStringPrimaryExpressionSemantics extends ExpressionSemantics {
 	 * a {@link StringPrimaryExpression constant string} or {@link Expression evaluable runtime expression}.
 	 * @since 0.5.0
 	 */
-	items: Array<string | Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+	items: Array<string | Expression>;
 }
 
 /**
@@ -183,7 +182,7 @@ export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
 	 * The child expression contained in this tangled expression.
 	 * @since 0.10.0
 	 */
-	childExp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	childExp: Expression;
 }
 
 /**
@@ -212,7 +211,7 @@ export interface IncrementOrDecrementPostfixExpressionSemantics extends Expressi
 	 * The operand that is modified by the operator.
 	 * @since 0.10.0
 	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	operand: Expression;
 }
 
 /**
@@ -224,33 +223,16 @@ export interface MemberAccessExpressionSemantics extends ExpressionSemantics {
 	 * The object or array that is accessed.
 	 * @since 0.10.0
 	 */
-	object: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-}
-
-/**
- * Semantics for AST Node {@link BracketNotationMemberAccessExpression}.
- * @since 0.10.0
- */
-export interface BracketNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {
+	objectLike: Expression;
 	/**
-	 * The index or key that is accessed. This is mutually exclusive with {@link slice}.
-	 */
-	indexOrKey?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	/**
-	 * A slice of the array that is accessed. This is mutually exclusive with {@link indexOrKey}.
+	 * The member that is accessed. This can be in three different forms:
+	 * - Dot Notation: object.member
+	 * - Bracket Notation: object["member"]
+	 * - Slice Notation: object[1:3]
 	 * @since 0.10.0
 	 */
-	slice?: {
-		start?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-		end?: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	};
+	propertyIndexOrKeyOrSlice: string | Expression | { start?: Expression; end?: Expression };
 }
-
-/**
- * Semantics for AST Node {@link DotNotationMemberAccessExpression}.
- * @since 0.10.0
- */
-export interface DotNotationMemberAccessExpressionSemantics extends MemberAccessExpressionSemantics {}
 
 /**
  * Semantics for AST Node {@link FunctionCallExpression}.
@@ -271,7 +253,7 @@ export interface FunctionCallExpressionSemantics extends ExpressionSemantics {
 	 * The arguments that were passed to this function.
 	 * @since 0.6.0
 	 */
-	args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>;
+	args: Array<Expression>;
 }
 
 /**
@@ -289,7 +271,7 @@ export interface UnaryExpressionSemantics extends ExpressionSemantics {
 	 * The operand that is modified by the {@link operator}.
 	 * @since 0.9.0
 	 */
-	operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	operand: Expression;
 }
 
 /**
@@ -325,7 +307,7 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * The expression to convert.
 	 * @since 0.8.0
 	 */
-	exp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	exp: Expression;
 	/**
 	 * The type the {@link exp} should be converted to.
 	 * @since 0.10.0
@@ -347,12 +329,12 @@ export interface ArithmeticExpressionSemantics extends ExpressionSemantics {
 	 * The left operand of the expression.
 	 * @since 0.10.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The right operand of the expression.
 	 * @since 0.10.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 	/**
 	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
@@ -369,12 +351,12 @@ export interface MultiplicativeExpressionSemantics extends ArithmeticExpressionS
 	 * The first expression. The left side of the expression.
 	 * @since 0.6.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression. The right side of the expression.
 	 * @since 0.6.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 	/**
 	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
@@ -391,12 +373,12 @@ export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemanti
 	 * The first expression. The left side of the expression.
 	 * @since 0.6.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression. The right side of the expression.
 	 * @since 0.6.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 	/**
 	 * The operator using the two values {@link this.leftOp leftOp} and {@link this.rightOp rightOp} to generate a result.
 	 * @since 0.6.0
@@ -419,12 +401,12 @@ export interface ComparativeExpressionSemantics extends ExpressionSemantics {
 	 * The left expression (left-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The right expression (right-hand side) used in this comparative expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -441,12 +423,12 @@ export interface RelationalExpressionSemantics extends ComparativeExpressionSema
 	 * The first expression (left-hand side) used in this relational expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression (right-hand side) used in this relational expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -463,12 +445,12 @@ export interface EqualityExpressionSemantics extends ComparativeExpressionSemant
 	 * The first expression (left-hand side) used in this equality expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression (right-hand side) used in this equality expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -486,12 +468,12 @@ export interface LogicalExpressionSemantics extends ExpressionSemantics {
 	 * The first expression (left-hand side) used in this logical expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression (right-hand side) used in this logical expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -508,12 +490,12 @@ export interface LogicalAndExpressionSemantics extends LogicalExpressionSemantic
 	 * The first expression (left-hand side) used in this logical-and expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression (right-hand side) used in this logical-and expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -530,12 +512,12 @@ export interface LogicalOrExpressionSemantics extends LogicalExpressionSemantics
 	 * The first expression (left-hand side) used in this logical-or expression.
 	 * @since 0.9.0
 	 */
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
 	/**
 	 * The second expression (right-hand side) used in this logical-or expression.
 	 * @since 0.9.0
 	 */
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	rightOp: Expression;
 }
 
 /**
@@ -568,7 +550,7 @@ export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	 * The assigned value to this variable.
 	 * @since 0.7.0
 	 */
-	value: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	value: Expression;
 	/**
 	 * The operator of the assignment expression.
 	 * @since 0.10.0

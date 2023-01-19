@@ -124,16 +124,10 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	identifierPrimaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link DotNotationMemberAccessExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link MemberAccessExpression} instances.
 	 * @since 0.10.0
 	 */
-	dotNotationMemberAccessExpression = undefined;
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link BracketNotationMemberAccessExpression} instances.
-	 * @since 0.10.0
-	 */
-	bracketNotationMemberAccessExpression = undefined;
+	memberAccessExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IdentifierTypeSpecifierExpression} instances.
@@ -169,11 +163,6 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
 	tangledPrimaryExpression = undefined;
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ArraySpecifierExpression} instances.
-	 */
-	arraySpecifierExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.

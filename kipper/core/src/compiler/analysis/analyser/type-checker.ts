@@ -6,8 +6,6 @@
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 import type {
-	ExpressionSemantics,
-	ExpressionTypeSemantics,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
 	SemanticData,
@@ -222,10 +220,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param value The right expression/value of the assignment.
 	 * @since 0.7.0
 	 */
-	public validVariableDefinition(
-		scopeEntry: ScopeVariableDeclaration,
-		value: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-	): void {
+	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, value: Expression): void {
 		// Get the compile-types for the left and right hand side
 		const leftExpType = KipperTypeChecker.getTypeForAnalysis(scopeEntry.type);
 		const rightExpType = KipperTypeChecker.getTypeForAnalysis(value.getTypeSemanticData().evaluatedType);
@@ -285,16 +280,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(
-		func: KipperFunction,
-		args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>,
-	): void {
+	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression>): void {
 		if (func.params.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
 		}
 
 		// Iterate through both arrays at the same type to verify each type is valid
-		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
+		args.forEach((arg: Expression, index) => {
 			const typeData = arg.getTypeSemanticData();
 
 			this.setTracebackData({ ctx: arg });
@@ -383,11 +375,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param op The arithmetic operation that is performed.
 	 * @since 0.9.0
 	 */
-	public validArithmeticExpression(
-		leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		op: KipperArithmeticOperator,
-	): void {
+	public validArithmeticExpression(leftOp: Expression, rightOp: Expression, op: KipperArithmeticOperator): void {
 		// Get the compile-types for both operands
 		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
 		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
@@ -415,10 +403,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param targetType The type to convert to.
 	 * @since 0.8.0
 	 */
-	public validConversion(
-		operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		targetType: CheckedType,
-	): void {
+	public validConversion(operand: Expression, targetType: CheckedType): void {
 		// Get the compile-types for the specified conversion types
 		const originalCompileType = KipperTypeChecker.getTypeForAnalysis(operand.getTypeSemanticData().evaluatedType);
 		const targetCompileType = KipperTypeChecker.getTypeForAnalysis(targetType);

@@ -4,6 +4,10 @@ import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
 import { ActualLogicalAndExpressionContext } from "./KipperParser";
+import { PassOnMemberAccessExpressionContext } from "./KipperParser";
+import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
+import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
+import { SliceNotationMemberAccessExpressionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
@@ -15,8 +19,6 @@ import { PassOnAdditiveExpressionContext } from "./KipperParser";
 import { ActualAdditiveExpressionContext } from "./KipperParser";
 import { PassOnRelationalExpressionContext } from "./KipperParser";
 import { ActualRelationalExpressionContext } from "./KipperParser";
-import { BracketNotationIndexContext } from "./KipperParser";
-import { BracketNotationSliceContext } from "./KipperParser";
 import { PassOnConditionalExpressionContext } from "./KipperParser";
 import { ActualConditionalExpressionContext } from "./KipperParser";
 import { PassOnMultiplicativeExpressionContext } from "./KipperParser";
@@ -64,12 +66,11 @@ import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
-import { ComputedPrimaryExpressionContext } from "./KipperParser";
-import { FunctionCallExpressionContext } from "./KipperParser";
 import { MemberAccessExpressionContext } from "./KipperParser";
-import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
-import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
+import { ComputedPrimaryExpressionContext } from "./KipperParser";
 import { BracketNotationContext } from "./KipperParser";
+import { SliceNotationContext } from "./KipperParser";
+import { FunctionCallExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -118,6 +119,38 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualLogicalAndExpression?: (ctx: ActualLogicalAndExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `passOnMemberAccessExpression`
+	 * labeled alternative in `KipperParser.memberAccessExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPassOnMemberAccessExpression?: (ctx: PassOnMemberAccessExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `dotNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.memberAccessExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `bracketNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.memberAccessExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `sliceNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.memberAccessExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `externalBlockItem`
@@ -206,22 +239,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `bracketNotationIndex`
-	 * labeled alternative in `KipperParser.bracketNotation`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBracketNotationIndex?: (ctx: BracketNotationIndexContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `bracketNotationSlice`
-	 * labeled alternative in `KipperParser.bracketNotation`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBracketNotationSlice?: (ctx: BracketNotationSliceContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
@@ -559,20 +576,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.computedPrimaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitComputedPrimaryExpression?: (ctx: ComputedPrimaryExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.functionCallExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `KipperParser.memberAccessExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -580,18 +583,11 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitMemberAccessExpression?: (ctx: MemberAccessExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.dotNotationMemberAccessExpression`.
+	 * Visit a parse tree produced by `KipperParser.computedPrimaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.bracketNotationMemberAccessExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => Result;
+	visitComputedPrimaryExpression?: (ctx: ComputedPrimaryExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.bracketNotation`.
@@ -599,6 +595,20 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitBracketNotation?: (ctx: BracketNotationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.sliceNotation`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitSliceNotation?: (ctx: SliceNotationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.functionCallExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.postfixExpression`.

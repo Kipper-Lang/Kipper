@@ -151,7 +151,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {InvalidAssignmentError} If the left-hand side of the assignment is invalid.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: Expression<any, any>): void {
+	public validAssignment(leftExp: Expression): void {
 		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),

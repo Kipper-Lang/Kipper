@@ -35,7 +35,6 @@ import type {
 	UnaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 	MemberAccessExpressionSemantics,
-	DotNotationMemberAccessExpressionSemantics,
 } from "../semantic-data";
 import type {
 	AdditiveExpressionTypeSemantics,
@@ -67,8 +66,7 @@ import type {
 	TypeSpecifierExpressionTypeSemantics,
 	UnaryExpressionTypeSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics,
-	DotNotationMemberAccessExpressionTypeSemantics,
-	BracketNotationMemberAccessExpressionTypeSemantics,
+	MemberAccessExpressionTypeSemantics,
 } from "../type-data";
 import {
 	KipperAdditiveOperator,
@@ -127,11 +125,10 @@ import {
 	KipperParser,
 	BracketNotationMemberAccessExpressionContext,
 	DotNotationMemberAccessExpressionContext,
+	MemberAccessExpressionContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { ParserRuleContext } from "antlr4ts";
-import { MemberAccessExpressionTypeSemantics } from "../type-data";
-import { BracketNotationMemberAccessExpressionSemantics } from "../semantic-data";
 import { TerminalNode } from "antlr4ts/tree";
 
 /**
@@ -199,8 +196,7 @@ export type ParserExpressionKind =
 	| typeof KipperParser.RULE_identifierTypeSpecifier
 	| typeof KipperParser.RULE_genericTypeSpecifier
 	| typeof KipperParser.RULE_typeofTypeSpecifier
-	| typeof KipperParser.RULE_bracketNotationMemberAccessExpression
-	| typeof KipperParser.RULE_dotNotationMemberAccessExpression;
+	| typeof KipperParser.RULE_memberAccessExpression;
 
 /**
  * Expression class, which represents any expression in the Kipper language that is able to evaluate to a value with
@@ -244,11 +240,11 @@ export abstract class Expression<
 		parent.addNewChild(this);
 	}
 
-	public get children(): Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>> {
+	public get children(): Array<Expression> {
 		return this._children;
 	}
 
-	public addNewChild(newChild: Expression<ExpressionSemantics, ExpressionTypeSemantics>) {
+	public addNewChild(newChild: Expression) {
 		this._children.push(newChild);
 	}
 
@@ -306,8 +302,8 @@ export type ParserConstantExpressionKind =
  * abstract class only exists to provide the commonality between the different constant expressions.
  */
 export abstract class ConstantExpression<
-	Semantics extends ConstantExpressionSemantics,
-	TypeSemantics extends ExpressionTypeSemantics,
+	Semantics extends ConstantExpressionSemantics = ConstantExpressionSemantics,
+	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserConstantExpressionContextType;
 	public abstract readonly kind: ParserConstantExpressionKind;
@@ -786,8 +782,8 @@ export type ParserTypeSpecifierExpressionKind =
  * different type specifier expressions.
  */
 export abstract class TypeSpecifierExpression<
-	Semantics extends TypeSpecifierExpressionSemantics,
-	TypeSemantics extends TypeSpecifierExpressionTypeSemantics,
+	Semantics extends TypeSpecifierExpressionSemantics = TypeSpecifierExpressionSemantics,
+	TypeSemantics extends TypeSpecifierExpressionTypeSemantics = TypeSpecifierExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContextType;
 	public abstract readonly kind: ParserTypeSpecifierExpressionKind;
@@ -1051,7 +1047,7 @@ export class TangledPrimaryExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Tangled expressions always contain one expression child
-		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const exp: Expression = this.children[0];
 
 		// Ensure that the child expression is present
 		if (!exp) {
@@ -1203,7 +1199,7 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const exp: Expression = this.children[0];
 		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(-2); // After the expression
 
 		// Ensure that the child expression is present
@@ -1252,58 +1248,29 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 }
 
 /**
- * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link MemberAccessExpression} AST node.
- * @since 0.10.0
- */
-export type ParserMemberAccessExpressionContextType =
-	| DotNotationMemberAccessExpressionContext
-	| BracketNotationMemberAccessExpressionContext;
-
-/**
- * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link MemberAccessExpression} AST node.
- * @since 0.10.0
- */
-export type ParserMemberAccessExpressionKind =
-	| typeof KipperParser.RULE_dotNotationMemberAccessExpression
-	| typeof KipperParser.RULE_bracketNotationMemberAccessExpression;
-
-/**
  * Member access expression, which represents a member access expression that evaluates to a value of a member of an
  * object or array.
  * @since 0.10.0
  */
-export abstract class MemberAccessExpression<
-	Semantics extends MemberAccessExpressionSemantics,
-	TypeSemantics extends MemberAccessExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserMemberAccessExpressionContextType;
-	public abstract readonly kind: ParserMemberAccessExpressionKind;
-}
-
-/**
- * Dot notation member access expression, which represents a member access expression that evaluates to a value of a
- * member of an object using dot notation (x.y).
- * @since 0.10.0
- */
-export class DotNotationMemberAccessExpression extends MemberAccessExpression<
-	DotNotationMemberAccessExpressionSemantics,
-	DotNotationMemberAccessExpressionTypeSemantics
+export class MemberAccessExpression extends Expression<
+	MemberAccessExpressionSemantics,
+	MemberAccessExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: DotNotationMemberAccessExpressionContext;
+	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_dotNotationMemberAccessExpression;
+	public override readonly kind = KipperParser.RULE_memberAccessExpression;
 
-	constructor(antlrRuleCtx: DotNotationMemberAccessExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -1311,7 +1278,7 @@ export class DotNotationMemberAccessExpression extends MemberAccessExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): DotNotationMemberAccessExpressionContext {
+	public override get antlrRuleCtx(): MemberAccessExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -1336,68 +1303,8 @@ export class DotNotationMemberAccessExpression extends MemberAccessExpression<
 	 */
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.dotNotationMemberAccessExpression;
-	readonly targetCodeGenerator = this.codeGenerator.dotNotationMemberAccessExpression;
-}
-
-/**
- * Bracket notation member access expression, which represents a member access expression that evaluates to a value of a
- * member of an object using bracket notation (x["y"]).
- * @since 0.10.0
- */
-export class BracketNotationMemberAccessExpression extends MemberAccessExpression<
-	BracketNotationMemberAccessExpressionSemantics,
-	BracketNotationMemberAccessExpressionTypeSemantics
-> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: BracketNotationMemberAccessExpressionContext;
-
-	/**
-	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
-	 * node wraps.
-	 * @since 0.10.0
-	 */
-	public override readonly kind = KipperParser.RULE_bracketNotationMemberAccessExpression;
-
-	constructor(antlrRuleCtx: BracketNotationMemberAccessExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): BracketNotationMemberAccessExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 */
-	public async primarySemanticAnalysis(): Promise<void> {} // TODO!
-
-	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.7.0
-	 */
-	public async primarySemanticTypeChecking(): Promise<void> {} // TODO!
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bracketNotationMemberAccessExpression;
-	readonly targetCodeGenerator = this.codeGenerator.bracketNotationMemberAccessExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.memberAccessExpression;
+	readonly targetCodeGenerator = this.codeGenerator.memberAccessExpression;
 }
 
 /**
@@ -1455,8 +1362,7 @@ export class FunctionCallExpression extends Expression<
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
 		// Tries to fetch the function. If it fails throw a {@link UnknownFunctionIdentifier} error.
-		const args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>> =
-			this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
+		const args: Array<Expression> = this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		this.semanticData = {
 			identifier: identifierSemantics.identifier,
@@ -1530,8 +1436,8 @@ export type ParserUnaryExpressionKind =
  * @since 0.9.0
  */
 export abstract class UnaryExpression<
-	Semantics extends UnaryExpressionSemantics,
-	TypeSemantics extends UnaryExpressionTypeSemantics,
+	Semantics extends UnaryExpressionSemantics = UnaryExpressionSemantics,
+	TypeSemantics extends UnaryExpressionTypeSemantics = UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContextType;
 	public abstract readonly kind: ParserUnaryExpressionKind;
@@ -1574,7 +1480,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const exp: Expression = this.children[0];
 		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(0, 2); // Before the expression
 
 		// Ensure that the child expression is present
@@ -1672,7 +1578,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		})?.text;
 
 		// Get the expression of this unary expression
-		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const exp: Expression = this.children[0];
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !unaryOperator) {
@@ -1760,7 +1666,7 @@ export class CastOrConvertExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// The first child will always be the expression that will be converted
-		const exp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
+		const exp: Expression = this.children[0];
 
 		// Get the type using the type specifier
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[1];
@@ -1879,8 +1785,8 @@ export class MultiplicativeExpression extends Expression<
 		})?.text;
 
 		// Get the expressions of this multiplicative expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
 		if (!operator || !leftOp || !rightOp) {
@@ -1976,8 +1882,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 		})?.text;
 
 		// Get the expressions of this additive expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
 		if (!operator || !leftOp || !rightOp) {
@@ -2050,8 +1956,8 @@ export type ParserComparativeExpressionKind =
  * @since 0.9.0
  */
 export abstract class ComparativeExpression<
-	Semantics extends ComparativeExpressionSemantics,
-	TypeSemantics extends ComparativeExpressionTypeSemantics,
+	Semantics extends ComparativeExpressionSemantics = ComparativeExpressionSemantics,
+	TypeSemantics extends ComparativeExpressionTypeSemantics = ComparativeExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserComparativeExpressionContextType;
 	public abstract readonly kind: ParserComparativeExpressionKind;
@@ -2106,8 +2012,8 @@ export class RelationalExpression extends ComparativeExpression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the expressions of this relational expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 		const operator = <KipperRelationalOperator | undefined>children.find((token) => {
 			return token instanceof TerminalNode && kipperRelationalOperators.find((op) => op === token.text) !== undefined;
 		})?.text;
@@ -2201,8 +2107,8 @@ export class EqualityExpression extends ComparativeExpression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the expressions of this relational expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 		const operator = <KipperEqualityOperator | undefined>children.find((token) => {
 			return token instanceof TerminalNode && kipperEqualityOperators.find((op) => op === token.text) !== undefined;
 		})?.text;
@@ -2272,8 +2178,8 @@ export type ParserLogicalExpressionType =
  * @abstract
  */
 export abstract class LogicalExpression<
-	Semantics extends LogicalExpressionSemantics,
-	TypeSemantics extends LogicalExpressionTypeSemantics,
+	Semantics extends LogicalExpressionSemantics = LogicalExpressionSemantics,
+	TypeSemantics extends LogicalExpressionTypeSemantics = LogicalExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContextType;
 	public abstract readonly kind: ParserLogicalExpressionType;
@@ -2320,8 +2226,8 @@ export class LogicalAndExpression extends LogicalExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-and expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
 		if (!leftOp || !rightOp) {
@@ -2407,8 +2313,8 @@ export class LogicalOrExpression extends LogicalExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-or expression
-		const leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[0];
-		const rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const leftOp: Expression = this.children[0];
+		const rightOp: Expression = this.children[1];
 
 		// Ensure that the children are fully present and not undefined
 		if (!leftOp || !rightOp) {
@@ -2578,7 +2484,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 
 			return <IdentifierPrimaryExpression>exp;
 		})();
-		const assignValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> = this.children[1];
+		const assignValue: Expression = this.children[1];
 
 		// Throw an error if the children are incomplete or the operator can not be determined (antlrRuleChildren[1])
 		if (!assignValue || !(antlrRuleChildren[1] instanceof ParserRuleContext)) {

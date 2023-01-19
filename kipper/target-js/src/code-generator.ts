@@ -4,8 +4,6 @@
  */
 import type {
 	ComparativeExpressionSemantics,
-	ExpressionSemantics,
-	ExpressionTypeSemantics,
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
@@ -45,14 +43,13 @@ import type {
 	VariableDeclaration,
 } from "@kipper/core";
 import {
-	BracketNotationMemberAccessExpression,
 	CompoundStatement,
-	DotNotationMemberAccessExpression,
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
+	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -351,28 +348,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	dotNotationMemberAccessExpression = async (
-		node: DotNotationMemberAccessExpression,
-	): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-		const object = await semanticData.object.translateCtxAndChildren();
-		const member = await semanticData.member.translateCtxAndChildren();
-
-		return [...object, ".", ...member];
-	};
-
-	/**
-	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
-	 * @since 0.10.0
-	 */
-	bracketNotationMemberAccessExpression = async (
-		node: BracketNotationMemberAccessExpression,
-	): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-		const object = await semanticData.object.translateCtxAndChildren();
-		const member = await semanticData.member.translateCtxAndChildren();
-
-		return [...object, "[", ...member, "]"];
+	memberAccessExpression = async (node: MemberAccessExpression): Promise<TranslatedExpression> => {
+		return [];
 	};
 
 	/**
@@ -497,7 +474,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Get the operator and the operand
 		const operator: string = semanticData.operator;
-		const operand: Expression<ExpressionSemantics, ExpressionTypeSemantics> = semanticData.operand;
+		const operand: Expression = semanticData.operand;
 
 		// Return the generated unary expression
 		return [operator].concat(await operand.translateCtxAndChildren());
@@ -554,7 +531,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	protected translateOperatorExpressionWithOperands = async (
-		node: ComparativeExpression<any, any> | LogicalExpression<any, any>,
+		node: ComparativeExpression | LogicalExpression,
 	): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();

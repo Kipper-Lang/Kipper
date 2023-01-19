@@ -131,7 +131,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentExpression: Expression<any, any> | undefined;
+	private _currentExpression: Expression | undefined;
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);

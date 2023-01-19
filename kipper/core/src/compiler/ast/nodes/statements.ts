@@ -12,7 +12,6 @@ import type {
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
-	ExpressionSemantics,
 	ForLoopStatementSemantics,
 	IfStatementSemantics,
 	IterationStatementSemantics,
@@ -23,7 +22,7 @@ import type {
 import type { TranslatedCodeLine } from "../../const";
 import type { Expression } from "./expressions";
 import type { TargetASTNodeCodeGenerator } from "../../target-presets";
-import type { ExpressionTypeSemantics, ReturnStatementTypeSemantics } from "../type-data";
+import type { ReturnStatementTypeSemantics } from "../type-data";
 import type { ScopeNode } from "../scope-node";
 import {
 	CompoundStatementContext,
@@ -226,7 +225,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 */
 	public override readonly kind = KipperParser.RULE_ifStatement;
 
-	protected readonly _children: Array<Expression<any, any> | Statement<SemanticData, TypeData>>;
+	protected readonly _children: Array<Expression | Statement<SemanticData, TypeData>>;
 
 	constructor(antlrRuleCtx: IfStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -241,7 +240,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 * May contain both {@link Expression expressions} and {@link Statement statements}, as it will always contain
 	 * an expression at index 03 to represent the condition.
 	 */
-	public get children(): Array<Expression<any, any> | Statement<SemanticData, TypeData>> {
+	public get children(): Array<Expression | Statement<SemanticData, TypeData>> {
 		return this._children;
 	}
 
@@ -258,7 +257,7 @@ export class IfStatement extends Statement<IfStatementSemantics, NoTypeSemantics
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// There will be always at least two children
-		const condition: Expression<any, any> = <Expression<any, any>>this.children[0];
+		const condition: Expression = <Expression>this.children[0];
 		const body: Statement<SemanticData, TypeData> = <Statement<SemanticData, TypeData>>this.children[1];
 		const alternativeBranch: IfStatement | Statement<SemanticData, TypeData> | null =
 			this.children.length > 2 ? <IfStatement | Statement<SemanticData, TypeData>>this.children[2] : null;
@@ -389,7 +388,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 */
 	public override readonly kind = KipperParser.RULE_expressionStatement;
 
-	protected readonly _children: Array<Expression<any, any>>;
+	protected readonly _children: Array<Expression>;
 
 	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -402,7 +401,7 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Expression<any, any>> {
+	public get children(): Array<Expression> {
 		return this._children;
 	}
 
@@ -593,7 +592,7 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const loopCondition = <Expression<ExpressionSemantics, ExpressionTypeSemantics>>this.children[0];
+		const loopCondition = <Expression>this.children[0];
 		const loopBody = <Statement<SemanticData, TypeData>>this.children[1];
 
 		this.semanticData = {
@@ -718,7 +717,7 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 */
 	public override readonly kind = KipperParser.RULE_jumpStatement;
 
-	protected readonly _children: Array<Expression<any, any>>;
+	protected readonly _children: Array<Expression>;
 
 	constructor(antlrRuleCtx: JumpStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -729,7 +728,7 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Expression<any, any>> {
+	public get children(): Array<Expression> {
 		return this._children;
 	}
 
@@ -804,7 +803,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 */
 	public override readonly kind = KipperParser.RULE_returnStatement;
 
-	protected readonly _children: Array<Expression<any, any>>;
+	protected readonly _children: Array<Expression>;
 
 	constructor(antlrRuleCtx: ReturnStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -815,7 +814,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	/**
 	 * The children of this parse token.
 	 */
-	public get children(): Array<Expression<any, any>> {
+	public get children(): Array<Expression> {
 		return this._children;
 	}
 
@@ -831,7 +830,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 * and throw errors if encountered.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const returnValue = <Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined>this.children[0];
+		const returnValue = <Expression | undefined>this.children[0];
 
 		// Getting the function of the return statement
 		const func = this.programCtx.semanticCheck(this).getReturnStatementParent(this);

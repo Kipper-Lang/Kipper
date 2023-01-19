@@ -2,7 +2,7 @@
  * A reference to a variable/function/builtin/internal identifier.
  * @since 0.8.0
  */
-import type { Expression, ExpressionSemantics, ExpressionTypeSemantics } from "../ast";
+import type { Expression } from "../ast";
 import type { KipperReferenceable } from "../const";
 
 /**
@@ -22,5 +22,5 @@ export interface Reference<T extends KipperReferenceable> {
 	 * The expression which created the reference to {@link refTarget}.
 	 * @since 0.8.0
 	 */
-	readonly srcExpr: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	readonly srcExpr: Expression;
 }

@@ -43,9 +43,9 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 	AnalysableASTNode,
+	MemberAccessExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpression } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -144,16 +144,10 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract identifierPrimaryExpression?: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link DotNotationMemberAccessExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link MemberAccessExpression} instances.
 	 * @since 0.10.0
 	 */
-	public abstract dotNotationMemberAccessExpression?: TargetASTNodeSemanticAnalyser<DotNotationMemberAccessExpression>;
-
-	/**
-	 * Performs translation-specific semantic analysis for {@link BracketNotationMemberAccessExpression} instances.
-	 * @since 0.10.0
-	 */
-	public abstract bracketNotationMemberAccessExpression?: TargetASTNodeSemanticAnalyser<BracketNotationMemberAccessExpression>;
+	public abstract memberAccessExpression?: TargetASTNodeSemanticAnalyser<MemberAccessExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link StringPrimaryExpression} instances.

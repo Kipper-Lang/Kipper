@@ -196,33 +196,32 @@ voidOrNullOrUndefinedPrimaryExpression
 	:	Void | Null | Undefined
 	;
 
-// Lowest level above 'primaryExpression', which represents property access, function calls, and array access
+// Member Access Expression are a special type of expression, because they can be chained together and as such are
+// mutually recursive with themselves and therefore can't be handled with regular expression rules
+memberAccessExpression
+	:	primaryExpression # passOnMemberAccessExpression
+	|	memberAccessExpression ('.' identifier) # dotNotationMemberAccessExpression
+	|	memberAccessExpression bracketNotation # bracketNotationMemberAccessExpression
+	|	memberAccessExpression sliceNotation # sliceNotationMemberAccessExpression
+	;
+
+// Lowest level above 'primaryExpression', which represents member access and function call expressions
 computedPrimaryExpression
-    :	primaryExpression
-    |	memberAccessExpression
+    :	memberAccessExpression
     |	functionCallExpression
     ;
 
-functionCallExpression
-	:	'call'? primaryExpression '(' argumentExpressionList? ')'
-	;
-
-memberAccessExpression
-	:	dotNotationMemberAccessExpression |	bracketNotationMemberAccessExpression
-	;
-
-dotNotationMemberAccessExpression
-	:	primaryExpression ('.' identifier)+
-	;
-
-bracketNotationMemberAccessExpression
-	:	primaryExpression bracketNotation+
-	;
-
 bracketNotation
-	:   '[' expression ']' # bracketNotationIndex
-	|   '[' expression ':' expression ']' # bracketNotationSlice
+	:   '[' expression ']'
     ;
+
+sliceNotation
+	:	'[' expression? ':' expression? ']'
+	;
+
+functionCallExpression
+	:	'call'? memberAccessExpression '(' argumentExpressionList? ')'
+	;
 
 postfixExpression
     :   computedPrimaryExpression // Pass-on (Not matching rule)

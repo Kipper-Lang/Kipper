@@ -40,10 +40,10 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 	CompilableASTNode,
+	MemberAccessExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import { BracketNotationMemberAccessExpression, DotNotationMemberAccessExpression } from "../../ast";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -188,22 +188,10 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
-	 * Translates a {@link DotNotationMemberAccessExpression} into a specific language.
+	 * Translates a {@link MemberAccessExpression} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract dotNotationMemberAccessExpression: TargetASTNodeCodeGenerator<
-		DotNotationMemberAccessExpression,
-		TranslatedExpression
-	>;
-
-	/**
-	 * Translates a {@link BracketNotationMemberAccessExpression} into a specific language.
-	 * @since 0.10.0
-	 */
-	public abstract bracketNotationMemberAccessExpression: TargetASTNodeCodeGenerator<
-		BracketNotationMemberAccessExpression,
-		TranslatedExpression
-	>;
+	public abstract memberAccessExpression: TargetASTNodeCodeGenerator<MemberAccessExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link StringPrimaryExpression} into a specific language.

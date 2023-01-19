@@ -467,7 +467,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * which is returned inside the {@link this.children}.
 	 * @private
 	 */
-	protected override _children: Array<Expression<any, any>>;
+	protected override _children: Array<Expression>;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -498,7 +498,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return this._antlrRuleCtx;
 	}
 
-	public override get children(): Array<Expression<any, any>> {
+	public override get children(): Array<Expression> {
 		return this._children;
 	}
 
@@ -554,7 +554,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
-		const assignValue: Expression<any, any> | undefined = this.children[1];
+		const assignValue: Expression | undefined = this.children[1];
 
 		// Throw an error if children are incomplete
 		if (!storageTypeCtx || !initDeclaratorCtx || !declaratorCtx || !typeSpecifier) {

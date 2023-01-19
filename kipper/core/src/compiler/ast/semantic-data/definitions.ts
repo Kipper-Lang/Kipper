@@ -99,7 +99,7 @@ export interface VariableDeclarationSemantics extends SemanticData {
 	 * The assigned value to this variable. If {@link isDefined} is false, then this value is undefined.
 	 * @since 0.7.0
 	 */
-	value: Expression<any, any> | undefined;
+	value: Expression | undefined;
 }
 
 /**

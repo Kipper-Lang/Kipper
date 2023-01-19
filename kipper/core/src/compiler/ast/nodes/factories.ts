@@ -9,10 +9,8 @@ import {
 	ArrayLiteralPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
-	BracketNotationMemberAccessExpression,
 	CastOrConvertExpression,
 	ConditionalExpression,
-	DotNotationMemberAccessExpression,
 	EqualityExpression,
 	Expression,
 	FStringPrimaryExpression,
@@ -24,6 +22,7 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	OperatorModifiedUnaryExpression,
@@ -160,8 +159,7 @@ export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, Pars
 		[KipperParser.RULE_identifierTypeSpecifier]: IdentifierTypeSpecifierExpression,
 		[KipperParser.RULE_genericTypeSpecifier]: GenericTypeSpecifierExpression,
 		[KipperParser.RULE_typeofTypeSpecifier]: TypeofTypeSpecifierExpression,
-		[KipperParser.RULE_bracketNotationMemberAccessExpression]: BracketNotationMemberAccessExpression,
-		[KipperParser.RULE_dotNotationMemberAccessExpression]: DotNotationMemberAccessExpression,
+		[KipperParser.RULE_memberAccessExpression]: MemberAccessExpression,
 	} satisfies Record<ParserExpressionKind, typeof Expression<any, any>>;
 
 	/**
