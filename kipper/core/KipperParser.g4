@@ -200,7 +200,7 @@ voidOrNullOrUndefinedPrimaryExpression
 // mutually recursive with themselves and therefore can't be handled with regular expression rules
 memberAccessExpression
 	:	primaryExpression # passOnMemberAccessExpression
-	|	memberAccessExpression ('.' identifier) # dotNotationMemberAccessExpression
+	|	memberAccessExpression '.' identifier # dotNotationMemberAccessExpression
 	|	memberAccessExpression bracketNotation # bracketNotationMemberAccessExpression
 	|	memberAccessExpression sliceNotation # sliceNotationMemberAccessExpression
 	;
