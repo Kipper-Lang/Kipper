@@ -89,7 +89,6 @@
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",
     "test-no-rebuild": "nyc mocha",
-    "cov-badge": "coverage-badge-creator && pnpm run -r cov-badge",
     "antlr4ts": "pnpm --filter \"@kipper/core\" run antlr4ts",
     "postantlr4ts": "pnpm run build",
     "prettier": "prettier --write .",

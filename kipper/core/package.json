@@ -66,7 +66,6 @@
 		"postantlr4ts": "run-script-os && pnpm run build",
 		"postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/",
 		"postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\",
-		"cov-badge": "coverage-badge-creator",
 		"lint": "pnpm run tslint",
 		"lint:fix": "pnpm run tslint:fix",
 		"tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",

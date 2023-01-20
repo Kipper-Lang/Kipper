@@ -51,7 +51,6 @@
     "postbrowserify": "uglifyjs ./kipper-standalone.js -o ./kipper-standalone.min.js",
     "build": "pnpm run browserify",
     "version": "pnpm version",
-    "cov-badge": "coverage-badge-creator",
     "lint": "pnpm run tslint",
     "lint:fix": "pnpm run tslint:fix",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
