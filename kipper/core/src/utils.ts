@@ -2,21 +2,22 @@
  * Utility functions for the Kipper core package.
  * @since 0.9.0
  */
-import { Interval } from "antlr4ts/misc/Interval";
-import type { ParserRuleContext, Token } from "antlr4ts";
+import type { Token } from "antlr4ts";
 import type { ParseTree } from "antlr4ts/tree";
 import type { CharStream } from "antlr4ts/CharStream";
+import type { KipperParserRuleContext } from "./compiler";
+import { Interval } from "antlr4ts/misc/Interval";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.
  * @param antlrCtx The token antlr4 context.
  * @since 0.4.0
  */
-export function getParseRuleSource(antlrCtx: ParserRuleContext): string {
+export function getParseRuleSource(antlrCtx: KipperParserRuleContext): string {
 	let inputStream = antlrCtx.start.inputStream;
 	let start = antlrCtx.start.startIndex;
 
-	// If {@link inputStream} is undefined, then we will try to fetch the text using {@link ParserRuleContext.text}
+	// If {@link inputStream} is undefined, then we will try to fetch the text using {@link KipperParserRuleContext.text}
 	if (inputStream === undefined) {
 		return antlrCtx.text;
 	}

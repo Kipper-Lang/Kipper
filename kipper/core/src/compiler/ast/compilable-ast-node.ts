@@ -2,10 +2,9 @@
  * Compilable AST Node that can be semantically analysed and translated into a target language.
  * @since 0.8.0
  */
-import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import type { TranslatedCodeLine } from "../const";
 import type { KipperCompileTarget, KipperTargetCodeGenerator, KipperTargetSemanticAnalyser } from "../target-presets";
-import type { KipperParser } from "../parser";
+import type { KipperParser, KipperParserRuleContext } from "../parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
@@ -45,7 +44,7 @@ export abstract class CompilableASTNode<
 	protected override _parent: CompilableNodeParent;
 	protected override _children: Array<CompilableNodeChild>;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: CompilableNodeParent) {
+	protected constructor(antlrCtx: KipperParserRuleContext, parent: CompilableNodeParent) {
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];

@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import * as path from "path";
-import { ParserRuleContext } from "antlr4ts";
+import { KipperParserRuleContext } from "@kipper/core";
 import {
 	CompilableASTNode,
 	KipperCompiler,
@@ -26,7 +26,7 @@ describe("AST Nodes", () => {
 		class ExampleNode extends CompilableASTNode {
 			readonly kind: number = Number.MAX_SAFE_INTEGER;
 
-			constructor(antlrCtx: ParserRuleContext, parent: CompilableNodeParent) {
+			constructor(antlrCtx: KipperParserRuleContext, parent: CompilableNodeParent) {
 				super(antlrCtx, parent);
 			}
 

@@ -4,14 +4,14 @@
  * {@link CompilableASTNode}.
  * @since 0.10.0
  */
+import type { KipperParserRuleContext } from "../parser";
+import type { TargetASTNodeSemanticAnalyser } from "../target-presets";
+import type { TargetAnalysableNode } from "./target-node";
 import { ParserASTNode, SemanticData, TypeData } from "./ast-node";
 import { KipperError } from "../../errors";
-import { TargetASTNodeSemanticAnalyser } from "../target-presets";
 import { KipperProgramContext } from "../program-ctx";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { RootASTNode } from "./root-ast-node";
 import { EvaluatedCompileConfig } from "../compiler";
-import { TargetAnalysableNode } from "./target-node";
 
 /**
  * An eligible parent for an analysable AST node.
@@ -36,7 +36,7 @@ export abstract class AnalysableASTNode<Semantics extends SemanticData, TypeSema
 	protected override _children: Array<AnalysableNodeChild>;
 	protected override _parent: AnalysableNodeParent;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: AnalysableNodeParent) {
+	protected constructor(antlrCtx: KipperParserRuleContext, parent: AnalysableNodeParent) {
 		super(antlrCtx, parent);
 		this._children = [];
 		this._parent = parent;

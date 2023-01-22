@@ -6,6 +6,13 @@ parser grammar KipperParser;
 
 options {
   tokenVocab=KipperLexer;
+  contextSuperClass=KipperParserRuleContext;
+}
+
+@parser::header {
+	// Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
+	// possible syntax kind values.
+	import { KipperParserRuleContext, ParserASTMapSyntaxKind } from "..";
 }
 
 // Entry Point for an entire file
@@ -196,20 +203,33 @@ voidOrNullOrUndefinedPrimaryExpression
 	:	Void | Null | Undefined
 	;
 
-// Member Access Expression are a special type of expression, because they can be chained together and as such are
-// mutually recursive with themselves and therefore can't be handled with regular expression rules
-memberAccessExpression
-	:	primaryExpression # passOnMemberAccessExpression
-	|	memberAccessExpression '.' identifier # dotNotationMemberAccessExpression
-	|	memberAccessExpression bracketNotation # bracketNotationMemberAccessExpression
-	|	memberAccessExpression sliceNotation # sliceNotationMemberAccessExpression
+// Member Access Expressions and function call expressions are a special type of expression, because they can be
+// chained together and as such are mutually recursive with themselves. Since Antlr4 doesn't properly implement
+// left-recursion, except in direct left recursion, both memeber access expressions and function call expressions
+// need to have their own mutual rule.
+//
+// As a result and to prevent the need for a common AST class implementing both, they need special handling, which
+// comes in the form of a special '_labelASTKind' property on the rule context, which defines which AST class should
+// implement the rule context.
+//
+// Note: All AST identifier numbers are stored in the 'ParserASTMapping' object.
+computedPrimaryExpression
+	locals[_labelASTKind: ParserASTMapSyntaxKind | undefined]
+	: 	primaryExpression # passOncomputedPrimaryExpression
+	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = 69 } # dotNotationMemberAccessExpression
+	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = 69 } # bracketNotationMemberAccessExpression
+	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = 69 } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # explicitCallFunctionCallExpression
 	;
 
-// Lowest level above 'primaryExpression', which represents member access and function call expressions
-computedPrimaryExpression
-    :	memberAccessExpression
-    |	functionCallExpression
+argumentExpressionList
+    :   assignmentExpression (',' assignmentExpression)*
     ;
+
+dotNotation
+	:	'.' identifier
+	;
 
 bracketNotation
 	:   '[' expression ']'
@@ -217,10 +237,6 @@ bracketNotation
 
 sliceNotation
 	:	'[' expression? ':' expression? ']'
-	;
-
-functionCallExpression
-	:	'call'? memberAccessExpression '(' argumentExpressionList? ')'
 	;
 
 postfixExpression
@@ -231,10 +247,6 @@ postfixExpression
 incrementOrDecrementPostfixExpression
 	:	computedPrimaryExpression incrementOrDecrementOperator
 	;
-
-argumentExpressionList
-    :   assignmentExpression (',' assignmentExpression)*
-    ;
 
 unaryExpression
     :   postfixExpression // Pass-on (Not matching rule)

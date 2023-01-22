@@ -3,7 +3,7 @@
  * @since 0.10.0
  */
 import type { CompilableASTNode, CompilableNodeParent } from "../compilable-ast-node";
-import { KipperParser } from "../../parser";
+import { ParserASTMapping, KipperParserRuleContext } from "../../parser";
 import {
 	AdditiveExpression,
 	ArrayLiteralPrimaryExpression,
@@ -27,20 +27,19 @@ import {
 	NumberPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParserExpressionContextType,
-	ParserExpressionKind,
+	ASTExpressionKind,
 	RelationalExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "./expressions";
-import { ParserRuleContext } from "antlr4ts";
 import {
 	Declaration,
 	FunctionDeclaration,
 	ParameterDeclaration,
 	ParserDeclarationContextType,
-	ParserDeclarationKind,
+	ASTDeclarationKind,
 	VariableDeclaration,
 } from "./definitions";
 import {
@@ -51,7 +50,7 @@ import {
 	IfStatement,
 	JumpStatement,
 	ParserStatementContextType,
-	ParserStatementKind,
+	ASTStatementKind,
 	ReturnStatement,
 	Statement,
 	SwitchStatement,
@@ -64,7 +63,7 @@ import {
  */
 export interface ASTNodeFactory<
 	T extends CompilableASTNode = CompilableASTNode,
-	U extends ParserRuleContext = ParserRuleContext,
+	U extends KipperParserRuleContext = KipperParserRuleContext,
 > {
 	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
@@ -81,21 +80,21 @@ export interface ASTNodeFactory<
  */
 export class StatementASTNodeFactory implements ASTNodeFactory<Statement, ParserExpressionContextType> {
 	/**
-	 * A table matching all {@link ParserStatementKind statement kinds} to their respective constructable AST node
+	 * A table matching all {@link ASTStatementKind statement kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
 	public readonly statementMatchTable = {
-		[KipperParser.RULE_compoundStatement]: CompoundStatement,
-		[KipperParser.RULE_ifStatement]: IfStatement,
-		[KipperParser.RULE_switchStatement]: SwitchStatement,
-		[KipperParser.RULE_expressionStatement]: ExpressionStatement,
-		[KipperParser.RULE_doWhileLoopIterationStatement]: DoWhileLoopStatement,
-		[KipperParser.RULE_whileLoopIterationStatement]: WhileLoopStatement,
-		[KipperParser.RULE_forLoopIterationStatement]: ForLoopStatement,
-		[KipperParser.RULE_returnStatement]: ReturnStatement,
-		[KipperParser.RULE_jumpStatement]: JumpStatement,
-	} satisfies Record<ParserStatementKind, typeof Statement<any, any>>;
+		[ParserASTMapping.RULE_compoundStatement]: CompoundStatement,
+		[ParserASTMapping.RULE_ifStatement]: IfStatement,
+		[ParserASTMapping.RULE_switchStatement]: SwitchStatement,
+		[ParserASTMapping.RULE_expressionStatement]: ExpressionStatement,
+		[ParserASTMapping.RULE_doWhileLoopIterationStatement]: DoWhileLoopStatement,
+		[ParserASTMapping.RULE_whileLoopIterationStatement]: WhileLoopStatement,
+		[ParserASTMapping.RULE_forLoopIterationStatement]: ForLoopStatement,
+		[ParserASTMapping.RULE_returnStatement]: ReturnStatement,
+		[ParserASTMapping.RULE_jumpStatement]: JumpStatement,
+	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
@@ -104,10 +103,10 @@ export class StatementASTNodeFactory implements ASTNodeFactory<Statement, Parser
 	 * @since 0.9.0
 	 */
 	public create(antlrRuleCtx: ParserStatementContextType, parent: CompilableNodeParent): ConstructableASTStatement {
-		const ruleIndex = <keyof typeof this.statementMatchTable>antlrRuleCtx.ruleIndex;
+		const astSyntaxKind = <keyof typeof this.statementMatchTable>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.statementMatchTable[ruleIndex](<any>antlrRuleCtx, parent);
+		return new this.statementMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -116,7 +115,7 @@ export class StatementASTNodeFactory implements ASTNodeFactory<Statement, Parser
  * @since 0.10.0
  */
 export type ConstructableASTStatementClass =
-	typeof StatementASTNodeFactory.prototype.statementMatchTable[ParserStatementKind];
+	typeof StatementASTNodeFactory.prototype.statementMatchTable[ASTStatementKind];
 
 /**
  * A union of all construable Statement AST nodes. Uses {@link ConstructableASTStatementClass} to infer the type.
@@ -130,37 +129,37 @@ export type ConstructableASTStatement = InstanceType<ConstructableASTStatementCl
  */
 export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, ParserExpressionContextType> {
 	/**
-	 * A table matching all {@link ParserExpressionKind expression kinds} to their respective constructable AST node
+	 * A table matching all {@link ASTExpressionKind expression kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
 	public readonly expressionMatchTable = {
-		[KipperParser.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
-		[KipperParser.RULE_arrayLiteralPrimaryExpression]: ArrayLiteralPrimaryExpression,
-		[KipperParser.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
-		[KipperParser.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpression,
-		[KipperParser.RULE_boolPrimaryExpression]: BoolPrimaryExpression,
-		[KipperParser.RULE_stringPrimaryExpression]: StringPrimaryExpression,
-		[KipperParser.RULE_fStringPrimaryExpression]: FStringPrimaryExpression,
-		[KipperParser.RULE_tangledPrimaryExpression]: TangledPrimaryExpression,
-		[KipperParser.RULE_incrementOrDecrementPostfixExpression]: IncrementOrDecrementPostfixExpression,
-		[KipperParser.RULE_functionCallExpression]: FunctionCallExpression,
-		[KipperParser.RULE_incrementOrDecrementUnaryExpression]: IncrementOrDecrementUnaryExpression,
-		[KipperParser.RULE_operatorModifiedUnaryExpression]: OperatorModifiedUnaryExpression,
-		[KipperParser.RULE_castOrConvertExpression]: CastOrConvertExpression,
-		[KipperParser.RULE_multiplicativeExpression]: MultiplicativeExpression,
-		[KipperParser.RULE_additiveExpression]: AdditiveExpression,
-		[KipperParser.RULE_relationalExpression]: RelationalExpression,
-		[KipperParser.RULE_equalityExpression]: EqualityExpression,
-		[KipperParser.RULE_logicalAndExpression]: LogicalAndExpression,
-		[KipperParser.RULE_logicalOrExpression]: LogicalOrExpression,
-		[KipperParser.RULE_conditionalExpression]: ConditionalExpression,
-		[KipperParser.RULE_assignmentExpression]: AssignmentExpression,
-		[KipperParser.RULE_identifierTypeSpecifier]: IdentifierTypeSpecifierExpression,
-		[KipperParser.RULE_genericTypeSpecifier]: GenericTypeSpecifierExpression,
-		[KipperParser.RULE_typeofTypeSpecifier]: TypeofTypeSpecifierExpression,
-		[KipperParser.RULE_memberAccessExpression]: MemberAccessExpression,
-	} satisfies Record<ParserExpressionKind, typeof Expression<any, any>>;
+		[ParserASTMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
+		[ParserASTMapping.RULE_arrayLiteralPrimaryExpression]: ArrayLiteralPrimaryExpression,
+		[ParserASTMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
+		[ParserASTMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpression,
+		[ParserASTMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpression,
+		[ParserASTMapping.RULE_stringPrimaryExpression]: StringPrimaryExpression,
+		[ParserASTMapping.RULE_fStringPrimaryExpression]: FStringPrimaryExpression,
+		[ParserASTMapping.RULE_tangledPrimaryExpression]: TangledPrimaryExpression,
+		[ParserASTMapping.RULE_incrementOrDecrementPostfixExpression]: IncrementOrDecrementPostfixExpression,
+		[ParserASTMapping.RULE_functionCallExpression]: FunctionCallExpression,
+		[ParserASTMapping.RULE_incrementOrDecrementUnaryExpression]: IncrementOrDecrementUnaryExpression,
+		[ParserASTMapping.RULE_operatorModifiedUnaryExpression]: OperatorModifiedUnaryExpression,
+		[ParserASTMapping.RULE_castOrConvertExpression]: CastOrConvertExpression,
+		[ParserASTMapping.RULE_multiplicativeExpression]: MultiplicativeExpression,
+		[ParserASTMapping.RULE_additiveExpression]: AdditiveExpression,
+		[ParserASTMapping.RULE_relationalExpression]: RelationalExpression,
+		[ParserASTMapping.RULE_equalityExpression]: EqualityExpression,
+		[ParserASTMapping.RULE_logicalAndExpression]: LogicalAndExpression,
+		[ParserASTMapping.RULE_logicalOrExpression]: LogicalOrExpression,
+		[ParserASTMapping.RULE_conditionalExpression]: ConditionalExpression,
+		[ParserASTMapping.RULE_assignmentExpression]: AssignmentExpression,
+		[ParserASTMapping.RULE_identifierTypeSpecifier]: IdentifierTypeSpecifierExpression,
+		[ParserASTMapping.RULE_genericTypeSpecifier]: GenericTypeSpecifierExpression,
+		[ParserASTMapping.RULE_typeofTypeSpecifier]: TypeofTypeSpecifierExpression,
+		[ParserASTMapping.RULE_memberAccessExpression]: MemberAccessExpression,
+	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
@@ -169,10 +168,10 @@ export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, Pars
 	 * @since 0.9.0
 	 */
 	public create(antlrRuleCtx: ParserExpressionContextType, parent: CompilableASTNode): ConstructableASTExpression {
-		const ruleIndex = <keyof typeof this.expressionMatchTable>antlrRuleCtx.ruleIndex;
+		const astSyntaxKind = <keyof typeof this.expressionMatchTable>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.expressionMatchTable[ruleIndex](<any>antlrRuleCtx, parent);
+		return new this.expressionMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -181,7 +180,7 @@ export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, Pars
  * @since 0.10.0
  */
 export type ConstructableASTExpressionClass =
-	typeof ExpressionASTNodeFactory.prototype.expressionMatchTable[ParserExpressionKind];
+	typeof ExpressionASTNodeFactory.prototype.expressionMatchTable[ASTExpressionKind];
 
 /**
  * A union of all construable Expression AST nodes. Uses {@link ConstructableASTExpressionClass} to infer the type.
@@ -195,15 +194,15 @@ export type ConstructableASTExpression = InstanceType<ConstructableASTExpression
  */
 export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, ParserExpressionContextType> {
 	/**
-	 * A table matching all {@link ParserDeclarationKind declaration kinds} to their respective constructable AST node
+	 * A table matching all {@link ASTDeclarationKind declaration kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
 	public readonly declarationMatchTable = {
-		[KipperParser.RULE_functionDeclaration]: FunctionDeclaration,
-		[KipperParser.RULE_variableDeclaration]: VariableDeclaration,
-		[KipperParser.RULE_parameterDeclaration]: ParameterDeclaration,
-	} satisfies Record<ParserDeclarationKind, typeof Declaration<any, any>>;
+		[ParserASTMapping.RULE_functionDeclaration]: FunctionDeclaration,
+		[ParserASTMapping.RULE_variableDeclaration]: VariableDeclaration,
+		[ParserASTMapping.RULE_parameterDeclaration]: ParameterDeclaration,
+	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
 	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
@@ -212,10 +211,10 @@ export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, Pa
 	 * @since 0.9.0
 	 */
 	public create(antlrRuleCtx: ParserDeclarationContextType, parent: CompilableNodeParent): ConstructableASTDeclaration {
-		const ruleIndex = <keyof typeof this.declarationMatchTable>antlrRuleCtx.ruleIndex;
+		const astSyntaxKind = <keyof typeof this.declarationMatchTable>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.declarationMatchTable[ruleIndex](<any>antlrRuleCtx, parent);
+		return new this.declarationMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -224,7 +223,7 @@ export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, Pa
  * @since 0.10.0
  */
 export type ConstructableASTDeclarationClass =
-	typeof DeclarationASTNodeFactory.prototype.declarationMatchTable[ParserDeclarationKind];
+	typeof DeclarationASTNodeFactory.prototype.declarationMatchTable[ASTDeclarationKind];
 
 /**
  * A union of all construable Declaration AST nodes. Uses {@link ConstructableASTDeclarationClass} to infer the type.

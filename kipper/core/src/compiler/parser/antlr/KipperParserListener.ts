@@ -1,14 +1,20 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
+// Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
+// possible syntax kind values.
+import { KipperParserRuleContext, ParserASTMapSyntaxKind } from "..";
+
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
 import { ActualLogicalAndExpressionContext } from "./KipperParser";
-import { PassOnMemberAccessExpressionContext } from "./KipperParser";
+import { ExternalBlockItemContext } from "./KipperParser";
+import { PassOncomputedPrimaryExpressionContext } from "./KipperParser";
 import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
 import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
 import { SliceNotationMemberAccessExpressionContext } from "./KipperParser";
-import { ExternalBlockItemContext } from "./KipperParser";
+import { FunctionCallExpressionContext } from "./KipperParser";
+import { ExplicitCallFunctionCallExpressionContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -66,14 +72,13 @@ import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
-import { MemberAccessExpressionContext } from "./KipperParser";
 import { ComputedPrimaryExpressionContext } from "./KipperParser";
+import { ArgumentExpressionListContext } from "./KipperParser";
+import { DotNotationContext } from "./KipperParser";
 import { BracketNotationContext } from "./KipperParser";
 import { SliceNotationContext } from "./KipperParser";
-import { FunctionCallExpressionContext } from "./KipperParser";
 import { PostfixExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementPostfixExpressionContext } from "./KipperParser";
-import { ArgumentExpressionListContext } from "./KipperParser";
 import { UnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementUnaryExpressionContext } from "./KipperParser";
 import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
@@ -128,58 +133,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitActualLogicalAndExpression?: (ctx: ActualLogicalAndExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by the `passOnMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterPassOnMemberAccessExpression?: (ctx: PassOnMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `passOnMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitPassOnMemberAccessExpression?: (ctx: PassOnMemberAccessExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by the `sliceNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by the `sliceNotationMemberAccessExpression`
-	 * labeled alternative in `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => void;
-
-	/**
 	 * Enter a parse tree produced by the `externalBlockItem`
 	 * labeled alternative in `KipperParser.externalItem`.
 	 * @param ctx the parse tree
@@ -191,6 +144,84 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitExternalBlockItem?: (ctx: ExternalBlockItemContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `passOncomputedPrimaryExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOncomputedPrimaryExpression?: (ctx: PassOncomputedPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOncomputedPrimaryExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOncomputedPrimaryExpression?: (ctx: PassOncomputedPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `dotNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `dotNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitDotNotationMemberAccessExpression?: (ctx: DotNotationMemberAccessExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `bracketNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `bracketNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBracketNotationMemberAccessExpression?: (ctx: BracketNotationMemberAccessExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `sliceNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `sliceNotationMemberAccessExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `functionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `functionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `explicitCallFunctionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterExplicitCallFunctionCallExpression?: (ctx: ExplicitCallFunctionCallExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `explicitCallFunctionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitExplicitCallFunctionCallExpression?: (ctx: ExplicitCallFunctionCallExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnAssignmentExpression`
@@ -852,17 +883,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitVoidOrNullOrUndefinedPrimaryExpression?: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterMemberAccessExpression?: (ctx: MemberAccessExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.memberAccessExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitMemberAccessExpression?: (ctx: MemberAccessExpressionContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.computedPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -872,6 +892,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitComputedPrimaryExpression?: (ctx: ComputedPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.argumentExpressionList`.
+	 * @param ctx the parse tree
+	 */
+	enterArgumentExpressionList?: (ctx: ArgumentExpressionListContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
+	 * @param ctx the parse tree
+	 */
+	exitArgumentExpressionList?: (ctx: ArgumentExpressionListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.dotNotation`.
+	 * @param ctx the parse tree
+	 */
+	enterDotNotation?: (ctx: DotNotationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.dotNotation`.
+	 * @param ctx the parse tree
+	 */
+	exitDotNotation?: (ctx: DotNotationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.bracketNotation`.
@@ -896,17 +938,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitSliceNotation?: (ctx: SliceNotationContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.functionCallExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.functionCallExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.postfixExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -927,17 +958,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.argumentExpressionList`.
-	 * @param ctx the parse tree
-	 */
-	enterArgumentExpressionList?: (ctx: ArgumentExpressionListContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.argumentExpressionList`.
-	 * @param ctx the parse tree
-	 */
-	exitArgumentExpressionList?: (ctx: ArgumentExpressionListContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.unaryExpression`.

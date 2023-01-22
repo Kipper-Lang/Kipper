@@ -1,14 +1,14 @@
 /**
- * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link KipperParserRuleContext Antlr4 parse rule context} and
  * simplifies its content down to a simplified representation, which can be used for semantic analysis and
  * code translation.
  * @since 0.8.0
  */
 
-import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import type { ParseTree } from "antlr4ts/tree";
 import { getParseRuleSource } from "../../utils";
 import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../../errors";
+import { KipperParserRuleContext } from "../parser";
 
 /**
  * Semantics type which defines the blueprint for {@link CompilableASTNode.semanticData semanticData} inside a
@@ -36,13 +36,13 @@ export interface NoSemantics {}
 export interface NoTypeSemantics {}
 
 /**
- * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link KipperParserRuleContext Antlr4 parse rule context} and
  * simplifies its content down to a simplified representation, which can be used for semantic analysis and
  * code translation.
  * @since 0.8.0
  */
 export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantics extends TypeData> {
-	protected readonly _antlrRuleCtx: ParserRuleContext;
+	protected readonly _antlrRuleCtx: KipperParserRuleContext;
 	protected readonly _children: Array<ParserASTNode<any, any>>;
 	protected readonly _parent: ParserASTNode<any, any> | undefined;
 	protected _semanticData: Semantics | undefined;
@@ -57,7 +57,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 */
 	public abstract readonly kind: number;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
+	protected constructor(antlrCtx: KipperParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 		this._parent = parent;
@@ -102,7 +102,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * The antlr rule context containing the antlr4 metadata for this AST node.
 	 * @since 0.8.0
 	 */
-	public get antlrRuleCtx(): ParserRuleContext {
+	public get antlrRuleCtx(): KipperParserRuleContext {
 		return this._antlrRuleCtx;
 	}
 
