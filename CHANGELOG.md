@@ -52,8 +52,7 @@ To use development versions of Kipper download the
   - `ExpressionNotCallableError`, which is thrown when an expression is not callable, despite it being used in a call
     expression.
   - `IncompleteReturnsInCodePathsError`, which is thrown whenever a non-void function has code paths that do not return
-    a
-    value.
+    a value.
   - `ReturnStatementError`, which is thrown whenever a return statement is used outside a function.
   - `InvalidUnaryExpressionOperandError`, which is thrown whenever a unary expression is used with an invalid operand.
   - `UndefinedDeclarationCtxError`, which is thrown when the declaration context of a declaration is undefined. (This is
@@ -116,29 +115,29 @@ To use development versions of Kipper download the
   - `KipperArg`, which represents a function argument. Alias for `KipperParam`.
   - `KipperParam`, which represents a function parameter.
   - `JmpStatementType`, which represents all possible jump statement types e.g. `break` and `continue`.
-  - `ParserDeclarationKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Declaration` AST
+  - `ASTDeclarationKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Declaration` AST
     node.
-  - `ParserExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Expression` AST
+  - `ASTExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Expression` AST
     node.
-  - `ParserStatementKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Statement` AST
+  - `ASTStatementKind`, which is a union type of all possible `ParserASTNode.kind` values for a `Statement` AST
     node.
-  - `ParserConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+  - `ASTConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ConstantExpression` AST node.
   - `ParserConstantExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
     for a `ConstantExpression` AST node.
-  - `ParserTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+  - `ASTTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `TypeSpecifierExpression` AST node.
   - `ParserTypeSpecifierExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
     values for a `TypeSpecifierExpression` AST node.
-  - `ParserUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+  - `ASTUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `UnaryExpression` AST node.
   - `ParserUnaryExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
     `UnaryExpression` AST node.
-  - `ParserComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
+  - `ASTComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ComparativeExpression` AST node.
   - `ParserComparativeExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
     for a `ComparativeExpression` AST node.
-  - `ParserLogicalExpressionType`, which is a union type of all possible `ParserASTNode.kind` values for a
+  - `ASTLogicalExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `LogicalExpression` AST node.
   - `ParserLogicalExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
     a `LogicalExpression` AST node.
@@ -150,6 +149,8 @@ To use development versions of Kipper download the
   - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
+  - `ParserASTMapSyntaxKind`, which represents a union of all AST node kind values that can be used to map a
+    `KipperParser` rule context to an AST node. This is the type representing all values from `ParserASTMapping`.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -190,6 +191,9 @@ To use development versions of Kipper download the
   - `StatementASTNodeFactory.statementMatchTable`, which returns the match table for the statement AST node factory.
   - `ExpressionASTNodeFactory.expressionMatchTable`, which returns the match table for the expression AST node factory.
   - `DeclarationASTNodeFactory.declarationMatchTable`, which returns the match table for the declaration AST node factory.
+- New constants:
+  - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
+    instance.
 
 ### Changed
 
