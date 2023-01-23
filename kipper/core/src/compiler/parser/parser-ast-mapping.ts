@@ -11,8 +11,8 @@
  * are ignored and the parent rule index is used instead. This means that the rule index is not unique and cannot be
  * used for identifying the AST node class for a labelled rule. As such we need a new mapping for the AST generation.
  *
- * Not every number contained here is mapped to an AST node. Some may be only used for internal purposes inside the
- * parser. For completion’s sake, all numbers are listed here regardless.
+ * Not every number contained here is mapped to a constructable AST node. Some may be only used for 
+ * internal purposes inside the parser. For completion’s sake, all numbers are listed here regardless.
  * @since 0.10.0
  */
 export const ParserASTMapping = {
@@ -92,10 +92,10 @@ export const ParserASTMapping = {
 } as const;
 
 /**
- * Every possible {@link ParserASTMapping AST kind number} mapped to an {@link KipperParserRuleContext} class.
+ * Union type of every possible {@link ParserASTMapping AST kind number} mapped to a KipperParser rule.
  *
- * Not every number contained here is mapped to an AST node. Some may be only used for internal purposes inside the
- * parser. For completion’s sake, all numbers are listed here regardless.
+ * Not every number contained here is mapped to a constructable AST node. Some may be only used for 
+ * internal purposes inside the parser. For completion’s sake, all numbers are listed here regardless.
  * @since 0.10.0
  */
 export type ParserASTMapSyntaxKind = typeof ParserASTMapping[keyof typeof ParserASTMapping];
