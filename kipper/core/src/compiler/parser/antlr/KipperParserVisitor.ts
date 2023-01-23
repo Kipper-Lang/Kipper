@@ -10,11 +10,11 @@ import { PassOnLogicalAndExpressionContext } from "./KipperParser";
 import { ActualLogicalAndExpressionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { PassOncomputedPrimaryExpressionContext } from "./KipperParser";
+import { FunctionCallExpressionContext } from "./KipperParser";
+import { ExplicitCallFunctionCallExpressionContext } from "./KipperParser";
 import { DotNotationMemberAccessExpressionContext } from "./KipperParser";
 import { BracketNotationMemberAccessExpressionContext } from "./KipperParser";
 import { SliceNotationMemberAccessExpressionContext } from "./KipperParser";
-import { FunctionCallExpressionContext } from "./KipperParser";
-import { ExplicitCallFunctionCallExpressionContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
@@ -142,6 +142,22 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPassOncomputedPrimaryExpression?: (ctx: PassOncomputedPrimaryExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by the `functionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `explicitCallFunctionCallExpression`
+	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExplicitCallFunctionCallExpression?: (ctx: ExplicitCallFunctionCallExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by the `dotNotationMemberAccessExpression`
 	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
 	 * @param ctx the parse tree
@@ -164,22 +180,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitSliceNotationMemberAccessExpression?: (ctx: SliceNotationMemberAccessExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `functionCallExpression`
-	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFunctionCallExpression?: (ctx: FunctionCallExpressionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by the `explicitCallFunctionCallExpression`
-	 * labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitExplicitCallFunctionCallExpression?: (ctx: ExplicitCallFunctionCallExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnAssignmentExpression`

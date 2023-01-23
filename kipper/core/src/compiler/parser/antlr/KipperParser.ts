@@ -2473,7 +2473,7 @@ export class KipperParser extends Parser {
 							switch (this.interpreter.adaptivePredict(this._input, 29, this._ctx)) {
 								case 1:
 									{
-										_localctx = new DotNotationMemberAccessExpressionContext(
+										_localctx = new FunctionCallExpressionContext(
 											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
 										);
 										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
@@ -2482,56 +2482,8 @@ export class KipperParser extends Parser {
 											throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
 										}
 										this.state = 375;
-										this.dotNotation();
-										_localctx._labelASTKind = 69;
-									}
-									break;
-
-								case 2:
-									{
-										_localctx = new BracketNotationMemberAccessExpressionContext(
-											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
-										);
-										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 378;
-										if (!this.precpred(this._ctx, 4)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 4)");
-										}
-										this.state = 379;
-										this.bracketNotation();
-										_localctx._labelASTKind = 69;
-									}
-									break;
-
-								case 3:
-									{
-										_localctx = new SliceNotationMemberAccessExpressionContext(
-											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
-										);
-										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 382;
-										if (!this.precpred(this._ctx, 3)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
-										}
-										this.state = 383;
-										this.sliceNotation();
-										_localctx._labelASTKind = 69;
-									}
-									break;
-
-								case 4:
-									{
-										_localctx = new FunctionCallExpressionContext(
-											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
-										);
-										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 386;
-										if (!this.precpred(this._ctx, 2)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
-										}
-										this.state = 387;
 										this.match(KipperParser.LeftParen);
-										this.state = 389;
+										this.state = 377;
 										this._errHandler.sync(this);
 										_la = this._input.LA(1);
 										if (
@@ -2563,14 +2515,62 @@ export class KipperParser extends Parser {
 													0)
 										) {
 											{
-												this.state = 388;
+												this.state = 376;
 												this.argumentExpressionList();
 											}
 										}
 
-										this.state = 391;
+										this.state = 379;
 										this.match(KipperParser.RightParen);
 										_localctx._labelASTKind = 70;
+									}
+									break;
+
+								case 2:
+									{
+										_localctx = new DotNotationMemberAccessExpressionContext(
+											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
+										);
+										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
+										this.state = 381;
+										if (!this.precpred(this._ctx, 3)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
+										}
+										this.state = 382;
+										this.dotNotation();
+										_localctx._labelASTKind = 69;
+									}
+									break;
+
+								case 3:
+									{
+										_localctx = new BracketNotationMemberAccessExpressionContext(
+											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
+										);
+										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
+										this.state = 385;
+										if (!this.precpred(this._ctx, 2)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
+										}
+										this.state = 386;
+										this.bracketNotation();
+										_localctx._labelASTKind = 69;
+									}
+									break;
+
+								case 4:
+									{
+										_localctx = new SliceNotationMemberAccessExpressionContext(
+											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
+										);
+										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
+										this.state = 389;
+										if (!this.precpred(this._ctx, 1)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
+										}
+										this.state = 390;
+										this.sliceNotation();
+										_localctx._labelASTKind = 69;
 									}
 									break;
 							}
@@ -3962,13 +3962,13 @@ export class KipperParser extends Parser {
 				return this.precpred(this._ctx, 5);
 
 			case 1:
-				return this.precpred(this._ctx, 4);
-
-			case 2:
 				return this.precpred(this._ctx, 3);
 
-			case 3:
+			case 2:
 				return this.precpred(this._ctx, 2);
+
+			case 3:
+				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
@@ -4052,8 +4052,8 @@ export class KipperParser extends Parser {
 		"\x03%\x03&\x03&\x03'\x03'\x03(\x03(\x03)\x03)\x03)\x03)\x07)\u0161\n" +
 		")\f)\x0E)\u0164\v)\x05)\u0166\n)\x03)\x03)\x03*\x03*\x03+\x03+\x03+\x03" +
 		"+\x03+\x03+\x05+\u0172\n+\x03+\x03+\x03+\x05+\u0177\n+\x03+\x03+\x03+" +
-		"\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x05+\u0188" +
-		"\n+\x03+\x03+\x07+\u018C\n+\f+\x0E+\u018F\v+\x03,\x03,\x03,\x07,\u0194" +
+		"\x05+\u017C\n+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+" +
+		"\x03+\x03+\x03+\x07+\u018C\n+\f+\x0E+\u018F\v+\x03,\x03,\x03,\x07,\u0194" +
 		"\n,\f,\x0E,\u0197\v,\x03-\x03-\x03-\x03.\x03.\x03.\x03.\x03/\x03/\x05" +
 		"/\u01A2\n/\x03/\x03/\x05/\u01A6\n/\x03/\x03/\x030\x030\x050\u01AC\n0\x03" +
 		"1\x031\x031\x032\x032\x032\x052\u01B4\n2\x033\x033\x033\x034\x034\x03" +
@@ -4193,24 +4193,24 @@ export class KipperParser extends Parser {
 		"V,\x02\u0171\u0170\x03\x02\x02\x02\u0171\u0172\x03\x02\x02\x02\u0172\u0173" +
 		"\x03\x02\x02\x02\u0173\u0174\x07!\x02\x02\u0174\u0175\b+\x01\x02\u0175" +
 		"\u0177\x03\x02\x02\x02\u0176\u016B\x03\x02\x02\x02\u0176\u016D\x03\x02" +
-		"\x02\x02\u0177\u018D\x03\x02\x02\x02\u0178\u0179\f\x07\x02\x02\u0179\u017A" +
-		"\x05X-\x02\u017A\u017B\b+\x01\x02\u017B\u018C\x03\x02\x02\x02\u017C\u017D" +
-		"\f\x06\x02\x02\u017D\u017E\x05Z.\x02\u017E\u017F\b+\x01\x02\u017F\u018C" +
-		"\x03\x02\x02\x02\u0180\u0181\f\x05\x02\x02\u0181\u0182\x05\\/\x02\u0182" +
-		"\u0183\b+\x01\x02\u0183\u018C\x03\x02\x02\x02\u0184\u0185\f\x04\x02\x02" +
-		"\u0185\u0187\x07 \x02\x02\u0186\u0188\x05V,\x02\u0187\u0186\x03\x02\x02" +
-		"\x02\u0187\u0188\x03\x02\x02\x02\u0188\u0189\x03\x02\x02\x02\u0189\u018A" +
-		"\x07!\x02\x02\u018A\u018C\b+\x01\x02\u018B\u0178\x03\x02\x02\x02\u018B" +
-		"\u017C\x03\x02\x02\x02\u018B\u0180\x03\x02\x02\x02\u018B\u0184\x03\x02" +
-		"\x02\x02\u018C\u018F\x03\x02\x02\x02\u018D\u018B\x03\x02\x02\x02\u018D" +
-		"\u018E\x03\x02\x02\x02\u018EU\x03\x02\x02\x02\u018F\u018D\x03\x02\x02" +
-		"\x02\u0190\u0195\x05|?\x02\u0191\u0192\x07\x1C\x02\x02\u0192\u0194\x05" +
-		"|?\x02\u0193\u0191\x03\x02\x02\x02\u0194\u0197\x03\x02\x02\x02\u0195\u0193" +
-		"\x03\x02\x02\x02\u0195\u0196\x03\x02\x02\x02\u0196W\x03\x02\x02\x02\u0197" +
-		"\u0195\x03\x02\x02\x02\u0198\u0199\x07=\x02\x02\u0199\u019A\x05H%\x02" +
-		'\u019AY\x03\x02\x02\x02\u019B\u019C\x07"\x02\x02\u019C\u019D\x05\x80' +
-		"A\x02\u019D\u019E\x07#\x02\x02\u019E[\x03\x02\x02\x02\u019F\u01A1\x07" +
-		'"\x02\x02\u01A0\u01A2\x05\x80A\x02\u01A1\u01A0\x03\x02\x02\x02\u01A1' +
+		"\x02\x02\u0177\u018D\x03\x02\x02\x02\u0178\u0179\f\x07\x02\x02\u0179\u017B" +
+		"\x07 \x02\x02\u017A\u017C\x05V,\x02\u017B\u017A\x03\x02\x02\x02\u017B" +
+		"\u017C\x03\x02\x02\x02\u017C\u017D\x03\x02\x02\x02\u017D\u017E\x07!\x02" +
+		"\x02\u017E\u018C\b+\x01\x02\u017F\u0180\f\x05\x02\x02\u0180\u0181\x05" +
+		"X-\x02\u0181\u0182\b+\x01\x02\u0182\u018C\x03\x02\x02\x02\u0183\u0184" +
+		"\f\x04\x02\x02\u0184\u0185\x05Z.\x02\u0185\u0186\b+\x01\x02\u0186\u018C" +
+		"\x03\x02\x02\x02\u0187\u0188\f\x03\x02\x02\u0188\u0189\x05\\/\x02\u0189" +
+		"\u018A\b+\x01\x02\u018A\u018C\x03\x02\x02\x02\u018B\u0178\x03\x02\x02" +
+		"\x02\u018B\u017F\x03\x02\x02\x02\u018B\u0183\x03\x02\x02\x02\u018B\u0187" +
+		"\x03\x02\x02\x02\u018C\u018F\x03\x02\x02\x02\u018D\u018B\x03\x02\x02\x02" +
+		"\u018D\u018E\x03\x02\x02\x02\u018EU\x03\x02\x02\x02\u018F\u018D\x03\x02" +
+		"\x02\x02\u0190\u0195\x05|?\x02\u0191\u0192\x07\x1C\x02\x02\u0192\u0194" +
+		"\x05|?\x02\u0193\u0191\x03\x02\x02\x02\u0194\u0197\x03\x02\x02\x02\u0195" +
+		"\u0193\x03\x02\x02\x02\u0195\u0196\x03\x02\x02\x02\u0196W\x03\x02\x02" +
+		"\x02\u0197\u0195\x03\x02\x02\x02\u0198\u0199\x07=\x02\x02\u0199\u019A" +
+		'\x05H%\x02\u019AY\x03\x02\x02\x02\u019B\u019C\x07"\x02\x02\u019C\u019D' +
+		"\x05\x80A\x02\u019D\u019E\x07#\x02\x02\u019E[\x03\x02\x02\x02\u019F\u01A1" +
+		'\x07"\x02\x02\u01A0\u01A2\x05\x80A\x02\u01A1\u01A0\x03\x02\x02\x02\u01A1' +
 		"\u01A2\x03\x02\x02\x02\u01A2\u01A3\x03\x02\x02\x02\u01A3\u01A5\x07\x1F" +
 		"\x02\x02\u01A4\u01A6\x05\x80A\x02\u01A5\u01A4\x03\x02\x02\x02\u01A5\u01A6" +
 		"\x03\x02\x02\x02\u01A6\u01A7\x03\x02\x02\x02\u01A7\u01A8\x07#\x02\x02" +
@@ -4271,7 +4271,7 @@ export class KipperParser extends Parser {
 		"\x8AF\x02\u0231\u0232\x07!\x02\x02\u0232\x89\x03\x02\x02\x02\u0233\u0234" +
 		"\t\x10\x02\x02\u0234\x8B\x03\x02\x02\x021\x8D\x93\x95\x9B\xA5\xAC\xB9" +
 		"\xC0\xCF\xD3\xDA\xDE\xE5\xEE\xF8\u0105\u010A\u0122\u0124\u0128\u012C\u0136" +
-		"\u013E\u014A\u0162\u0165\u0171\u0176\u0187\u018B\u018D\u0195\u01A1\u01A5" +
+		"\u013E\u014A\u0162\u0165\u0171\u0176\u017B\u018B\u018D\u0195\u01A1\u01A5" +
 		"\u01AB\u01B3\u01C4\u01CE\u01D9\u01E4\u01EF\u01FA\u0205\u020F\u0216\u021F" +
 		"\u0225";
 	public static __ATN: ATN;
@@ -6034,6 +6034,85 @@ export class PassOncomputedPrimaryExpressionContext extends ComputedPrimaryExpre
 		}
 	}
 }
+export class FunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
+	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
+		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
+		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
+	}
+	constructor(ctx: ComputedPrimaryExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterFunctionCallExpression) {
+			listener.enterFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitFunctionCallExpression) {
+			listener.exitFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitFunctionCallExpression) {
+			return visitor.visitFunctionCallExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ExplicitCallFunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
+	public CallFunc(): TerminalNode {
+		return this.getToken(KipperParser.CallFunc, 0);
+	}
+	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
+		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
+		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
+	}
+	constructor(ctx: ComputedPrimaryExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterExplicitCallFunctionCallExpression) {
+			listener.enterExplicitCallFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitExplicitCallFunctionCallExpression) {
+			listener.exitExplicitCallFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitExplicitCallFunctionCallExpression) {
+			return visitor.visitExplicitCallFunctionCallExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
 export class DotNotationMemberAccessExpressionContext extends ComputedPrimaryExpressionContext {
 	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
 		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
@@ -6125,85 +6204,6 @@ export class SliceNotationMemberAccessExpressionContext extends ComputedPrimaryE
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
 		if (visitor.visitSliceNotationMemberAccessExpression) {
 			return visitor.visitSliceNotationMemberAccessExpression(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class FunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
-	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
-		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
-	}
-	public LeftParen(): TerminalNode {
-		return this.getToken(KipperParser.LeftParen, 0);
-	}
-	public RightParen(): TerminalNode {
-		return this.getToken(KipperParser.RightParen, 0);
-	}
-	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
-		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
-	}
-	constructor(ctx: ComputedPrimaryExpressionContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterFunctionCallExpression) {
-			listener.enterFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitFunctionCallExpression) {
-			listener.exitFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitFunctionCallExpression) {
-			return visitor.visitFunctionCallExpression(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ExplicitCallFunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
-	public CallFunc(): TerminalNode {
-		return this.getToken(KipperParser.CallFunc, 0);
-	}
-	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
-		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
-	}
-	public LeftParen(): TerminalNode {
-		return this.getToken(KipperParser.LeftParen, 0);
-	}
-	public RightParen(): TerminalNode {
-		return this.getToken(KipperParser.RightParen, 0);
-	}
-	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
-		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
-	}
-	constructor(ctx: ComputedPrimaryExpressionContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterExplicitCallFunctionCallExpression) {
-			listener.enterExplicitCallFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitExplicitCallFunctionCallExpression) {
-			listener.exitExplicitCallFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitExplicitCallFunctionCallExpression) {
-			return visitor.visitExplicitCallFunctionCallExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

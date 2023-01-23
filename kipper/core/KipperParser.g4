@@ -216,11 +216,11 @@ voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 	locals[_labelASTKind: ParserASTMapSyntaxKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # explicitCallFunctionCallExpression
 	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = 69 } # dotNotationMemberAccessExpression
 	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = 69 } # bracketNotationMemberAccessExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = 69 } # sliceNotationMemberAccessExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # explicitCallFunctionCallExpression
 	;
 
 argumentExpressionList
