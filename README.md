@@ -49,6 +49,8 @@ _Kipper is still in an early development phase, as such not all features shown i
 
 ## Goals & Planned Features
 
+*View the current implementation state in the [Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139).*
+
 - Full compiler ensured type safety, by analysing and reporting code during compilation.
 - Duck typing type checking with TypeScript-like interface types for both compile and runtime.
 - Runtime type and type checking features, where original compile time type issues can be
