@@ -30,6 +30,15 @@ npm i @kipper/target-ts
 
 If you are using `pnpm` or `yarn`, use `pnpm i @kipper/target-ts` or `yarn add @kipper/target-ts`.
 
+## General Information
+
+- Website: https://kipper-lang.org
+- Docs: https://docs.kipper-lang.org
+- Playground: https://play.kipper-lang.org
+- Issue Tracker: https://issues.kipper-lang.org
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
+
 ## Usage
 
 Simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for example:
