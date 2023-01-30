@@ -30,6 +30,15 @@ npm i @kipper/target-js
 
 If you are using `pnpm` or `yarn`, use `pnpm i @kipper/target-js` or `yarn add @kipper/target-js`.
 
+## General Information
+
+- Website: https://kipper-lang.org
+- Docs: https://docs.kipper-lang.org
+- Playground: https://play.kipper-lang.org
+- Issue Tracker: https://issues.kipper-lang.org
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
+
 ## Usage
 
 Simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for example:
