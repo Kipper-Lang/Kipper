@@ -20,6 +20,15 @@ It compiles to both JavaScript and TypeScript, and can be set up in your termina
 _For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
 
+## General Information
+
+- Website: https://kipper-lang.org
+- Docs: https://docs.kipper-lang.org
+- Playground: https://play.kipper-lang.org
+- Issue Tracker: https://issues.kipper-lang.org
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
+
 ## Usage
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.min.js` file, which
