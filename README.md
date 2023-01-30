@@ -19,9 +19,9 @@ _For more details, you can read more about this project in the sections ["Goals 
 ## General Information
 
 - Website: https://kipper-lang.org
-- Docs: https://kipper-lang.org/docs
-- Playground: https://kipper-lang.org/playground
-- Issue Tracker: https://github.com/Luna-Klatzer/Kipper/issues
+- Docs: https://docs.kipper-lang.org
+- Playground: https://play.kipper-lang.org
+- Issue Tracker: https://issues.kipper-lang.org
 - Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
 - Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
 
