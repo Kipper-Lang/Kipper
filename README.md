@@ -16,6 +16,15 @@ It compiles to both JavaScript and TypeScript, and can be set up in your termina
 
 _For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper)._
 
+## General Information
+
+- Website: https://kipper-lang.org
+- Docs: https://kipper-lang.org/docs
+- Playground: https://kipper-lang.org/playground
+- Issue Tracker: https://github.com/Luna-Klatzer/Kipper/issues
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
+
 ## Installation
 
 To install the whole Kipper package with its CLI, run the following command:
@@ -26,11 +35,7 @@ npm i kipper
 
 If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
-## Kipper Docs
-
-In-detail documentation for the Kipper language is available [here](https://kipper-lang.org)!
-
-## Packages
+## Project Packages
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
@@ -40,12 +45,6 @@ In-detail documentation for the Kipper language is available [here](https://kipp
   compiler.
 - [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
   compiler.
-
-## Example Code Snippet
-
-![](img/carbon/carbon-code-snippet.png)
-
-_Kipper is still in an early development phase, as such not all features shown in the snippet are implemented yet._
 
 ## Goals & Planned Features
 
@@ -228,7 +227,7 @@ If you have any questions or concerns, you can open up a discussion page [here](
 ![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2022 Luna Klatzer
+Copyright (C) 2021-2023 Luna Klatzer
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
