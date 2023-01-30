@@ -2,7 +2,7 @@ import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { KipperCompiler, KipperError } from "@kipper/core";
 import { assert } from "chai";
 
-describe("Not implemented", () => {
+describe("NotImplemented", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
 
 	it("F-String Expression", async () => {
