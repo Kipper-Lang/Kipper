@@ -227,7 +227,7 @@ To use development versions of Kipper download the
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
-  - `ReadOnlyAssignmentTypeError` to `ReadOnlyTypeError`.
+  - `ReadOnlyAssignmentTypeError` to `ReadOnlyWriteTypeError`.
   - `InvalidAssignmentTypeError` to `AssignmentTypeError`.
   - `InvalidArgumentTypeError` to `ArgumentTypeError`.
   - `InvalidArithmeticOperationTypeError` to `ArithmeticOperationTypeError`.
