@@ -1291,14 +1291,52 @@ export class MemberAccessExpression extends Expression<
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 */
-	public async primarySemanticAnalysis(): Promise<void> {} // TODO!
+	public async primarySemanticAnalysis(): Promise<void> {
+		// Handle the different types of member access expressions
+		if (this.antlrRuleCtx instanceof DotNotationMemberAccessExpressionContext) {
+			throw this.programCtx
+				.semanticCheck(this)
+				.notImplementedError(
+					new KipperNotImplementedError("Member access expressions using dot notation are not yet implemented"),
+				);
+		} else if (this.antlrRuleCtx instanceof BracketNotationMemberAccessExpressionContext) {
+			const objExp = this.children[0];
+			const keyExp = this.children[1];
+
+			// Ensure both required objects are present
+			if (!objExp || !keyExp) {
+				throw new UnableToDetermineSemanticDataError();
+			}
+
+			this.semanticData = {
+				objectLike: objExp,
+				propertyIndexOrKeyOrSlice: keyExp,
+				accessType: "bracket",
+			};
+		} else {
+			// Slice notation
+			throw this.programCtx
+				.semanticCheck(this)
+				.notImplementedError(
+					new KipperNotImplementedError("Member access expressions using slice notation are not yet implemented"),
+				);
+		}
+	}
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {} // TODO!
+	public async primarySemanticTypeChecking(): Promise<void> {
+		// Ensure the objectLike expression is indexable/accessible
+		// Note: This will throw an error if the objectLike expression is not indexable/accessible
+		const type = this.programCtx.typeCheck(this).getTypeOfMemberAccessExpression(this);
+
+		this.typeSemantics = {
+			evaluatedType: type,
+		};
+	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

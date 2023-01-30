@@ -232,6 +232,11 @@ export interface MemberAccessExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.10.0
 	 */
 	propertyIndexOrKeyOrSlice: string | Expression | { start?: Expression; end?: Expression };
+	/**
+	 * The type of the member access expression. Represented using strings.
+	 * @since 0.10.0
+	 */
+	accessType: "dot" | "bracket" | "slice";
 }
 
 /**

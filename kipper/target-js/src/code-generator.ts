@@ -349,7 +349,20 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	memberAccessExpression = async (node: MemberAccessExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const object = await semanticData.objectLike.translateCtxAndChildren();
+
+		switch (semanticData.accessType) {
+			case "dot":
+				return []; // TODO: Not implemented
+			case "bracket": {
+				// -> The member access is done via brackets, meaning the member name is an expression
+				const member = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
+				return [...object, "[", ...member, "]"];
+			}
+			case "slice":
+				return []; // TODO: Not implemented
+		}
 	};
 
 	/**
