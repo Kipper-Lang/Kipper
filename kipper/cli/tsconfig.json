@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
+		"sourceRoot": "./src",
 		"target": "es2016",
 		"skipLibCheck": true,
 		"lib": [
