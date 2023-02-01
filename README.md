@@ -48,7 +48,7 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
 ## Goals & Planned Features
 
-*View the current implementation state in the [Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139).*
+_View the current implementation state in the [Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)._
 
 - Full compiler ensured type safety, by analysing and reporting code during compilation.
 - Duck typing type checking with TypeScript-like interface types for both compile and runtime.
