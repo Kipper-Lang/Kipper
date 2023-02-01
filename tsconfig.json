@@ -5,7 +5,7 @@
     "importHelpers": true,
     "removeComments": true,
     "noImplicitAny": true,
-		"noImplicitOverride": true,
+		"noImplicitOverride": false,
 		"noImplicitThis": true,
 		"noImplicitReturns": true,
 		"strict": true,

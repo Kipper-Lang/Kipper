@@ -14,7 +14,7 @@ const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("KipperProgramContext", async () => {
 	const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-	const stream: KipperParseStream = new KipperParseStream(fileContent);
+	const stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
 	const defaultTarget = new KipperTypeScriptTarget();
 
 	describe("constructor", async () => {

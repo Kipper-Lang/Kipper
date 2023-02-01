@@ -296,7 +296,10 @@ export class KipperCompiler {
 		if (stream instanceof KipperParseStream) {
 			return stream;
 		} else {
-			return new KipperParseStream(stream, name);
+			return new KipperParseStream({
+				name: name,
+				stringContent: stream,
+			});
 		}
 	}
 

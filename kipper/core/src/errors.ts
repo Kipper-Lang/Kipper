@@ -175,6 +175,16 @@ export class KipperWarning extends KipperError {
 }
 
 /**
+ * An error that is thrown when the compiler is misconfigured or have invalid input.
+ * @since 0.10.0
+ */
+export class KipperConfigError extends KipperError {
+	constructor(msg: string) {
+		super(msg);
+	}
+}
+
+/**
  * Internal error for Kipper. This error should always be printed with its stack.
  * @since 0.3.0
  */

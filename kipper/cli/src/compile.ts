@@ -15,7 +15,7 @@ import { KipperTypeScriptTarget } from "@kipper/target-ts";
  * @param name The name of the target.
  * @since 0.10.0
  */
-export async function getTarget(name: string): Promise<KipperCompileTarget> {
+export function getTarget(name: string): KipperCompileTarget {
 	switch (name) {
 		case "js": {
 			return new KipperJavaScriptTarget();
@@ -41,7 +41,7 @@ export async function getFile(
 	if (args.file) {
 		return await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
 	} else if (flags["string-code"]) {
-		return new KipperParseStream(flags["string-code"]);
+		return new KipperParseStream({ stringContent: flags["string-code"] });
 	} else {
 		throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated. Aborting...");
 	}
