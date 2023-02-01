@@ -156,6 +156,8 @@ To use development versions of Kipper download the
 - Updated types of `CompilableASTNode` functions `primarySemanticAnalysis`, `primarySemanticTypeChecking` and
   `targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve
   performance and not call an async function unnecessarily.
+- Changed constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
+  allow a mismatch content between the two.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -175,9 +177,10 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments 
-	to undefined variables and allowed the referencing of variables that were not defined or had no value set.
-- Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+  to undefined variables and allowed the referencing of variables that were not defined or had no value set.
+- Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
 
 ### Deprecated
 
