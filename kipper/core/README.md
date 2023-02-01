@@ -30,9 +30,14 @@ npm i @kipper/core
 
 If you are using `pnpm` or `yarn`, use `pnpm i @kipper/core` or `yarn add @kipper/core`.
 
-## Kipper Docs
+## General Information
 
-Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
+- Website: https://kipper-lang.org
+- Docs: https://docs.kipper-lang.org
+- Playground: https://play.kipper-lang.org
+- Issue Tracker: https://issues.kipper-lang.org
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
 
 ## How to use Kipper?
 
