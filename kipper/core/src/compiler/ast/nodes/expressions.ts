@@ -1320,8 +1320,8 @@ export class MemberAccessExpression extends Expression<
 			const startExp: Expression | undefined = this.children[1];
 			const endExp: Expression | undefined = this.children[2];
 
-			// Ensure both required objects are present
-			if (!objExp || !startExp) {
+			// Ensure the object expression is present
+			if (!objExp) {
 				throw new UnableToDetermineSemanticDataError();
 			}
 
