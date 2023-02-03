@@ -1314,12 +1314,22 @@ export class MemberAccessExpression extends Expression<
 				accessType: "bracket",
 			};
 		} else {
-			// Slice notation
-			throw this.programCtx
-				.semanticCheck(this)
-				.notImplementedError(
-					new KipperNotImplementedError("Member access expressions using slice notation are not yet implemented"),
-				);
+			// Slice notation requires 2 or 3 children
+			// Note: The end expression is optional - if it is not present, then the slice is open-ended
+			const objExp: Expression = this.children[0];
+			const startExp: Expression = this.children[1];
+			const endExp: Expression | undefined = this.children[2];
+
+			// Ensure both required objects are present
+			if (!objExp || !startExp) {
+				throw new UnableToDetermineSemanticDataError();
+			}
+
+			this.semanticData = {
+				objectLike: objExp,
+				propertyIndexOrKeyOrSlice: {start: startExp, end: endExp},
+				accessType: "slice",
+			};
 		}
 	}
 
