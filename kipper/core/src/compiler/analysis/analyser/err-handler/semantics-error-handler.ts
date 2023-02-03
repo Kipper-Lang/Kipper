@@ -13,13 +13,9 @@ import { getParseRuleSource } from "../../../../utils";
  */
 export abstract class KipperSemanticErrorHandler {
 	protected line: number | undefined;
-
 	protected col: number | undefined;
-
 	protected ctx: CompilableASTNode | undefined;
-
 	protected filePath: string | undefined;
-
 	protected stream: KipperParseStream | undefined;
 
 	/**

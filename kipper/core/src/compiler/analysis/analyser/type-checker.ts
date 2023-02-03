@@ -376,7 +376,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param leftOp The left operand expression.
+	 * @param leftOp The left validBracketNotationKeyoperand expression.
 	 * @param rightOp The right operand expression.
 	 * @param op The arithmetic operation that is performed.
 	 * @throws {ArithmeticOperationTypeError} If the type of the left or right operand is not a number, and the operation
@@ -553,6 +553,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * Checks whether the members of the passed {@link objLike} can be accessed. (As well if there are members)
 	 * @param objLike The object-like expression to check.
 	 * @throws {TypeError} If the object expression is not an object.
+	 * @since 0.10.0
 	 */
 	public objectLikeIsIndexableOrAccessible(objLike: Expression): void {
 		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
@@ -573,6 +574,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param objLike The object-like expression to check.
 	 * @param key The key that accesses the members of the object-like expression.
 	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
+	 * @since 0.10.0
 	 */
 	public validBracketNotationKey(objLike: Expression, key: Expression): void {
 		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
@@ -590,8 +592,34 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
+	 * Ensure the passed {@link key slice keys} may be used to access the members of the passed {@link objLike}.
+	 * @param objLike The object-like expression to check.
+	 * @param key The key that accesses the members of the object-like expression.
+	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
+	 * @since 0.10.0
+	 */
+	public validSliceNotationKey(objLike: Expression, key: { start?: Expression; end?: Expression }): void {
+		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
+		const startType = key.start ? KipperTypeChecker.getTypeForAnalysis(key.start.getTypeSemanticData().evaluatedType) : undefined;
+		const endType = key.end ? KipperTypeChecker.getTypeForAnalysis(key.end.getTypeSemanticData().evaluatedType) : undefined;
+
+		// If the obj type is undefined, skip type checking (the type is invalid anyway)
+		if (objType === undefined) {
+			return;
+		}
+
+		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
+		if (startType !== undefined && startType !== "num") {
+			throw this.assertError(new InvalidKeyTypeError(objType, startType), key.start);
+		} else if (endType !== undefined && endType !== "num") {
+			throw this.assertError(new InvalidKeyTypeError(objType, endType), key.end);
+		}
+	}
+
+	/**
 	 * Get the type that this member access expression is accessing.
 	 * @param memberAccess The member access expression to get the type for.
+	 * @since 0.10.0
 	 */
 	public getTypeOfMemberAccessExpression(memberAccess: MemberAccessExpression): CheckedType {
 		const semanticData = memberAccess.getSemanticData();
@@ -625,10 +653,21 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					); // TODO! Add support for lists
 				}
 			}
-			case "slice":
-				throw this.notImplementedError(
-					new KipperNotImplementedError("Member access expression using slice notation is not implemented yet"),
-				);
+			case "slice": {
+				if (objType === "str") {
+					// Also ensure the key is valid
+					this.validSliceNotationKey(
+						semanticData.objectLike, <{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice
+					);
+
+					return CheckedType.fromCompilableType("str");
+				} else {
+					// Must be a list -> Not implemented yet
+					throw this.notImplementedError(
+						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
+					); // TODO! Add support for lists
+				}
+			}
 		}
 	}
 }

@@ -1314,10 +1314,10 @@ export class MemberAccessExpression extends Expression<
 				accessType: "bracket",
 			};
 		} else {
-			// Slice notation requires 2 or 3 children
-			// Note: The end expression is optional - if it is not present, then the slice is open-ended
+			// Slice notation requires at least 1 child, which is the object expression
+			// Note: Both the start and end expression are optional - if one is not present, then the slice is open-ended
 			const objExp: Expression = this.children[0];
-			const startExp: Expression = this.children[1];
+			const startExp: Expression | undefined = this.children[1];
 			const endExp: Expression | undefined = this.children[2];
 
 			// Ensure both required objects are present
