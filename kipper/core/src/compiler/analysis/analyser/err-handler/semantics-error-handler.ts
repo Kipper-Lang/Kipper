@@ -19,11 +19,11 @@ export abstract class KipperSemanticErrorHandler {
 	protected stream: KipperParseStream | undefined;
 
 	/**
-	 * Sets the traceback related line and column info.
+	 * Sets the traceback related metadata that will be used to create a traceback for an {@link KipperError} instance.
 	 *
 	 * In case that {@link data.ctx} is set and other fields are missing, these fields will be filled up using the data
 	 * in the {@link data.ctx AST node ctx} instance.
-	 * @param data The traceback data.
+	 * @param data The traceback data that will be used to initialise an {@link KipperError} instance.
 	 * @since 0.8.0
 	 */
 	public setTracebackData(data: {
