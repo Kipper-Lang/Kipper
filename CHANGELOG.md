@@ -78,6 +78,9 @@ To use development versions of Kipper download the
     rule `memberAccessExpression`).
   - `AnalysableASTNode`, which represents an AST node that can be semantically processed. This class was created as
     a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
+  - `InternalReference<T>`, which represents an indirect reference to an internal function by the user. This is 
+		primarily used to keep track of the internal functions that are used in the program, and to generate them in the 
+		target code.
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -160,6 +163,7 @@ To use development versions of Kipper download the
   - `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
   - `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
   - `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
+  - `InternalFunctionArgument`, which represents an internal function argument.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
