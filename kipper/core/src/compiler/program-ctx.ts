@@ -13,7 +13,7 @@ import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import { KipperFileListener } from "./parser";
 import { CompilableASTNode, RootASTNode, type Expression } from "./ast";
-import { GlobalScope, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
+import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";
@@ -65,7 +65,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.8.0
 	 */
-	private readonly _internalReferences: Array<Reference<InternalFunction>>;
+	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -274,7 +274,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.8.0
 	 */
-	public get internalReferences(): Array<Reference<InternalFunction>> {
+	public get internalReferences(): Array<InternalReference<InternalFunction>> {
 		return this._internalReferences;
 	}
 

@@ -58,11 +58,37 @@ export interface BuiltInFunction {
 }
 
 /**
+ * Interface representation of an argument of a {@link InternalFunction}.
+ * @since 0.10.0
+ */
+export interface InternalFunctionArgument {
+	/**
+	 * The identifier of the argument inside the function
+	 *
+	 * This value does not affect the behaviour of the language, as named-arguments are not implemented in Kipper. This
+	 * only serves the purpose of readability and allowing easier differentiation.
+	 * @since 0.6.0
+	 */
+	identifier: string;
+	/**
+	 * The type of the argument inside the function
+	 *
+	 * Unlike {@link BuiltInFunction}, this can also be an array of types, which means that the value type may be a union.
+	 * @example
+	 *  def func(x: num, y: str) -> void {}
+	 *
+	 *  // x is of type 'num'
+	 *  // y is of type 'str'
+	 */
+	valueType: KipperCompilableType | Array<KipperCompilableType>;
+}
+
+/**
  * Interface representation of a {@link InternalFunction}, which is used to provide functionality for Kipper specific
  * keywords, internal logic and other implementation related handling that must be present for a program to work.
  * @since 0.8.0
  */
-export interface InternalFunction extends BuiltInFunction {
+export interface InternalFunction {
 	/**
 	 * The identifier of the internal function.
 	 *
@@ -73,19 +99,22 @@ export interface InternalFunction extends BuiltInFunction {
 	 */
 	identifier: string;
 	/**
-	 * The args that are accepted inside this function. These are represented using {@link BuiltInFunctionArgument}.
+	 * The args that are accepted inside this function. These are represented using {@link InternalFunctionArgument}.
 	 *
 	 * The index in the array also represents the argument position inside the function. Meaning the first item in the
 	 * array maps to the first argument inside the function.
 	 * @since 0.8.0
 	 */
-	params: Array<BuiltInFunctionArgument>;
+	params: Array<InternalFunctionArgument>;
 	/**
 	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
 	 * return anything.
+	 *
+	 * Unlike {@link BuiltInFunction}, this can also be an array of types, which means that the function return may be a
+	 * union.
 	 * @since 0.8.0
 	 */
-	returnType: KipperCompilableType;
+	returnType: KipperCompilableType | Array<KipperCompilableType>;
 }
 
 /**
@@ -155,4 +184,22 @@ export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 		],
 		returnType: "num",
 	},
+	slice: {
+		identifier: "slice",
+		params: [
+			{
+				identifier: "objLike",
+				valueType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
+			},
+			{
+				identifier: "start",
+				valueType: ["num", "undefined"], // Optional
+			},
+			{
+				identifier: "end",
+				valueType: ["num", "undefined"], // Optional
+			}
+		],
+		returnType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
+	}
 };

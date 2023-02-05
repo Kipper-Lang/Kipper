@@ -35,13 +35,12 @@ import {
 	KipperArithmeticOperator,
 	KipperCompilableType,
 	kipperCompilableTypes,
-	KipperFunction,
 	kipperIncrementOrDecrementOperators,
 	kipperPlusOperator,
 	KipperReferenceable,
+	KipperReferenceableFunction,
 	kipperStrType,
 	kipperSupportedConversions,
-	KipperType,
 } from "../../const";
 import {
 	ArgumentTypeError,
@@ -114,7 +113,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			return CheckedType.fromCompilableType(<KipperCompilableType>type.identifier);
 		} catch (e) {
-			// If the error is not a KipperError, rethrow it (since it is not a type error and we don't know what happened)
+			// If the error is not a KipperError, rethrow it (since it is not a type error, and we don't know what happened)
 			if (!(e instanceof KipperError)) {
 				throw e;
 			}
@@ -127,7 +126,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				// Recover from the error by wrapping the undefined type
 				return CheckedType.fromKipperType(new UndefinedCustomType(type.identifier));
 			}
-			UndefinedCustomType;
 
 			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
 			throw e;
@@ -255,28 +253,28 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: CheckedType): void {
 		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
-		let valueType: CheckedType;
+		let argType: CheckedType;
 
 		// Get the proper semantic data and value type
 		if (arg instanceof ParameterDeclaration) {
 			semanticData = arg.getSemanticData();
-			valueType = arg.getTypeSemanticData().valueType;
+			argType = arg.getTypeSemanticData().valueType;
 		} else {
 			semanticData = arg;
-			valueType = CheckedType.fromCompilableType(arg.valueType);
+			argType = CheckedType.fromCompilableType(arg.valueType);
 		}
 
 		// Get the compile-types for the parameter and argument (value provided)
 		const receivedCompileType = KipperTypeChecker.getTypeForAnalysis(receivedType);
-		const valueCompileType = KipperTypeChecker.getTypeForAnalysis(valueType);
+		const argCompileType = KipperTypeChecker.getTypeForAnalysis(argType);
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (receivedCompileType === undefined || valueCompileType === undefined) {
+		if (receivedCompileType === undefined || argCompileType === undefined) {
 			return;
 		}
 
-		if (!this.checkMatchingTypes(valueCompileType, receivedCompileType)) {
-			throw this.assertError(new ArgumentTypeError(semanticData.identifier, valueCompileType, receivedCompileType));
+		if (!this.checkMatchingTypes(argCompileType, receivedCompileType)) {
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, argCompileType, receivedCompileType));
 		}
 	}
 
@@ -288,7 +286,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: KipperFunction, args: Array<Expression>): void {
+	public validFunctionCallArguments(func: KipperReferenceableFunction, args: Array<Expression>): void {
 		if (func.params.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
 		}

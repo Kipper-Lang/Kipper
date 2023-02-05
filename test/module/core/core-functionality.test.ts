@@ -726,6 +726,32 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("Member access", () => {
+		describe("Dot notation", () => {
+
+		});
+
+		describe("Bracket notation", () => {
+
+		});
+
+		describe("Slice notation", () => {
+			it("Simple slice with both start and end", async () => {
+				const stream = new KipperParseStream('var x: str = "1234"[1:2];');
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", 1, 2);',
+					"Expected different TypeScript code"
+				);
+			});
+		});
+	});
+
 	describe("Functions", () => {
 		it("Declaration", async () => {
 			const stream = new KipperParseStream("def test() -> void { }");

@@ -10,6 +10,7 @@ import type {
 	UndefinedCustomType,
 } from "./analysis";
 import type { BuiltInFunction } from "./runtime-built-ins";
+import { InternalFunction } from "./runtime-built-ins";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -534,10 +535,16 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
 
 /**
+ * Represents all referencable functions that a user can use inside Kipper. This does not include internal functions.
+ * @since 0.10.0
+ */
+export type KipperReferenceableFunction = BuiltInFunction | ScopeFunctionDeclaration;
+
+/**
  * Represents a Kipper function that can be either declared or defined.
  * @since 0.6.0
  */
-export type KipperFunction = BuiltInFunction | ScopeFunctionDeclaration;
+export type KipperFunction = InternalFunction | KipperReferenceableFunction;
 
 /**
  * Represents a Kipper variable that can be either declared or defined.
@@ -560,12 +567,11 @@ export type KipperParam = ScopeParameterDeclaration;
 export type KipperArg = KipperParam;
 
 /**
- * Represents a item that can be referenced.
+ * Represents a runtime variable or function that can be referenced.
  * @since 0.6.0
  */
 export type KipperReferenceable =
-	| BuiltInFunction
-	| KipperFunction
+	| KipperReferenceableFunction
 	| KipperVariable
 	| KipperParam
 	| KipperArg

@@ -3,7 +3,13 @@
  * @since 0.10.0
  */
 
-import type { BuiltInFunction, BuiltInFunctionArgument, FunctionDeclaration } from "@kipper/core";
+import type {
+	BuiltInFunction,
+	BuiltInFunctionArgument,
+	FunctionDeclaration,
+	InternalFunction,
+	InternalFunctionArgument
+} from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
 import { TargetJS } from "./target";
 
@@ -12,7 +18,7 @@ import { TargetJS } from "./target";
  * @param funcSpec The function spec object containing the metadata of the function.
  * @since 0.10.0
  */
-export function getJSFunctionSignature(funcSpec: BuiltInFunction | FunctionDeclaration): {
+export function getJSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
 	params: Array<string>;
 } {
@@ -26,7 +32,7 @@ export function getJSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 	} else {
 		return {
 			identifier: funcSpec.identifier,
-			params: funcSpec.params.map((arg: BuiltInFunctionArgument) => arg.identifier),
+			params: funcSpec.params.map((arg: BuiltInFunctionArgument | InternalFunctionArgument) => arg.identifier),
 		};
 	}
 }

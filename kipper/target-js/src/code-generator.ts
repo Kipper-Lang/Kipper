@@ -360,8 +360,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const member = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
 				return [...object, "[", ...member, "]"];
 			}
-			case "slice":
-				return []; // TODO: Not implemented
+			case "slice": {
+				// -> The member access is done via a slice, meaning the member name is a slice expression
+				const slice = (<{ start?: Expression, end?: Expression }>semanticData.propertyIndexOrKeyOrSlice);
+
+				// Translate the start and end expression, if they exist.
+				// If they don't, simply undefined will be passed onto the underlying function
+				const start = slice.start ? (await slice.start.translateCtxAndChildren()) : 'undefined';
+				const end = slice.end ? (await slice.end.translateCtxAndChildren()) : 'undefined';
+
+				// Get the slice function identifier
+				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
+
+				// Return the slice expression in form of a function call to the internal 'slice' function
+				return [sliceIdentifier, "(", ...object, ", ", ...start, ", ", ...end, ")" ];
+			}
 		}
 	};
 

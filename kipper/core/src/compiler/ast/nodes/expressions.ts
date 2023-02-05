@@ -83,14 +83,14 @@ import {
 	KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNegateOperator,
-	KipperNullType,
+	KipperNullType, KipperReferenceableFunction,
 	KipperRelationalOperator,
 	kipperRelationalOperators,
 	KipperSignOperator,
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
-	TranslatedExpression,
+	TranslatedExpression
 } from "../../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
@@ -1314,6 +1314,8 @@ export class MemberAccessExpression extends Expression<
 				accessType: "bracket",
 			};
 		} else {
+			this.antlrRuleCtx;
+
 			// Slice notation requires at least 1 child, which is the object expression
 			// Note: Both the start and end expression are optional - if one is not present, then the slice is open-ended
 			const objExp: Expression = this.children[0];
@@ -1330,6 +1332,9 @@ export class MemberAccessExpression extends Expression<
 				propertyIndexOrKeyOrSlice: {start: startExp, end: endExp},
 				accessType: "slice",
 			};
+
+			// Add internal reference to the program ctx for the slice function, so it will be generated in the output code
+			this.programCtx.addInternalReference(this, kipperInternalBuiltIns["slice"]);
 		}
 	}
 
@@ -1434,7 +1439,7 @@ export class FunctionCallExpression extends Expression<
 
 		// Ensure that the reference is a callable function
 		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
-		const calledFunc = <KipperFunction>semanticData.callTarget.refTarget;
+		const calledFunc = <KipperReferenceableFunction>semanticData.callTarget.refTarget;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
@@ -1756,8 +1761,7 @@ export class CastOrConvertExpression extends Expression<
 		// Ensure the conversion is valid
 		this.programCtx.typeCheck(this).validConversion(semanticData.exp, evalType);
 
-		// Add internal reference to the program ctx for the conversion function, so it is guaranteed to be included in the
-		// output code.
+		// Add internal reference to the program ctx for the conversion function, so it will be generated in the output code
 		const internalIdentifier = getConversionFunctionIdentifier(
 			semanticData.exp.getTypeSemanticData().evaluatedType.identifier,
 			semanticData.castType.identifier,
