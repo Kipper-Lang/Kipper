@@ -157,6 +157,7 @@ To use development versions of Kipper download the
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
   - `ParserASTMapSyntaxKind`, which represents a union of all AST node kind values that can be used to map a
     `KipperParser` rule context to an AST node. This is the type representing all values from `ParserASTMapping`.
+  - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -199,6 +200,8 @@ To use development versions of Kipper download the
   - `ExpressionASTNodeFactory.expressionMatchTable`, which returns the match table for the expression AST node factory.
   - `DeclarationASTNodeFactory.declarationMatchTable`, which returns the match table for the declaration AST node factory.
 - New constants:
+  - `kipperNullType`, which represents the Kipper null type.
+  - `kipperUndefinedType`, which represents the Kipper undefined type.
   - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
 
