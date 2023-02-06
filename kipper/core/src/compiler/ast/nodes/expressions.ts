@@ -76,7 +76,6 @@ import {
 	KipperBoolTypeLiterals,
 	KipperEqualityOperator,
 	kipperEqualityOperators,
-	KipperFunction,
 	KipperIncrementOrDecrementOperator,
 	kipperLogicalAndOperator,
 	kipperLogicalOrOperator,
@@ -132,7 +131,6 @@ import {
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { TerminalNode } from "antlr4ts/tree";
-import * as console from "console";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link KipperParser} for an
@@ -1320,9 +1318,6 @@ export class MemberAccessExpression extends Expression<
 			const sliceNotationAntlrCtx = this.getAntlrRuleChildren()[1] as SliceNotationContext;
 			const hasStart = sliceNotationAntlrCtx.sliceStart;
 			const hasEnd = sliceNotationAntlrCtx.sliceEnd;
-
-			process.stderr.write(String(hasStart));
-			process.stderr.write(String(hasEnd));
 
 			// Slice notation requires at least 1 child, which is the object expression
 			// Note: Both the start and end expression are optional - if one is not present, then the slice is open-ended
