@@ -632,7 +632,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert(message === "12", "Expected different output"), jsCode);
 			});
 
 			it("Simple slice with neither start nor end", async () => {
@@ -649,7 +649,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert(message === "1234", "Expected different output"), jsCode);
 			});
 		});
 	});
