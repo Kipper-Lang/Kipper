@@ -565,12 +565,27 @@ describe("Core functionality", () => {
 		describe("Dot notation", () => {});
 
 		describe("Bracket notation", () => {
+			it("Simple access of a string", async () => {
+				const stream = new KipperParseStream('var x: str = "1234"[1]; print(x);');
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = "1234"[1];',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+			});
 		});
 
 		describe("Slice notation", () => {
 			it("Simple slice with both start and end", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[1:2];');
+				const stream = new KipperParseStream('var x: str = "1234"[1:2]; print(x);');
 				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
 
 				assert(instance.programCtx);
@@ -579,8 +594,62 @@ describe("Core functionality", () => {
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.slice("1234", 1, 2);',
-					"Expected different TypeScript code"
+					"Expected different TypeScript code",
 				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with only start", async () => {
+				const stream = new KipperParseStream('var x: str = "1234"[1:]; print(x);');
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", 1, undefined);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "234", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with only end", async () => {
+				const stream = new KipperParseStream('var x: str = "1234"[:2]; print(x);');
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", undefined, 2);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with neither start nor end", async () => {
+				const stream = new KipperParseStream('var x: str = "1234"[:]; print(x);');
+				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", undefined, undefined);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
 			});
 		});
 	});
