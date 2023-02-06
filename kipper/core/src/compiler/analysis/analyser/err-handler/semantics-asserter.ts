@@ -32,7 +32,7 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 	 */
 	protected assertError(error: KipperError, overwriteCtx?: CompilableASTNode): KipperError {
 		if (overwriteCtx) {
-			this.setTracebackData({ctx: overwriteCtx});
+			this.setTracebackData({ ctx: overwriteCtx });
 		}
 
 		// Update error metadata

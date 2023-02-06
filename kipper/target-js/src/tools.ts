@@ -8,7 +8,7 @@ import type {
 	BuiltInFunctionArgument,
 	FunctionDeclaration,
 	InternalFunction,
-	InternalFunctionArgument
+	InternalFunctionArgument,
 } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
 import { TargetJS } from "./target";

@@ -83,14 +83,15 @@ import {
 	KipperMultiplicativeOperator,
 	kipperMultiplicativeOperators,
 	KipperNegateOperator,
-	KipperNullType, KipperReferenceableFunction,
+	KipperNullType,
+	KipperReferenceableFunction,
 	KipperRelationalOperator,
 	kipperRelationalOperators,
 	KipperSignOperator,
 	kipperUnaryModifierOperators,
 	KipperUndefinedType,
 	KipperVoidType,
-	TranslatedExpression
+	TranslatedExpression,
 } from "../../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
@@ -127,9 +128,11 @@ import {
 	SliceNotationMemberAccessExpressionContext,
 	ParserASTMapping,
 	KipperParserRuleContext,
+	SliceNotationContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { TerminalNode } from "antlr4ts/tree";
+import * as console from "console";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link KipperParser} for an
@@ -1314,13 +1317,18 @@ export class MemberAccessExpression extends Expression<
 				accessType: "bracket",
 			};
 		} else {
-			this.antlrRuleCtx;
+			const sliceNotationAntlrCtx = this.getAntlrRuleChildren()[1] as SliceNotationContext;
+			const hasStart = sliceNotationAntlrCtx.sliceStart;
+			const hasEnd = sliceNotationAntlrCtx.sliceEnd;
+
+			process.stderr.write(String(hasStart));
+			process.stderr.write(String(hasEnd));
 
 			// Slice notation requires at least 1 child, which is the object expression
 			// Note: Both the start and end expression are optional - if one is not present, then the slice is open-ended
 			const objExp: Expression = this.children[0];
-			const startExp: Expression | undefined = this.children[1];
-			const endExp: Expression | undefined = this.children[2];
+			const startExp: Expression | undefined = hasStart ? this.children[1] : undefined;
+			const endExp: Expression | undefined = hasEnd ? (hasStart ? this.children[2] : this.children[1]) : undefined;
 
 			// Ensure the object expression is present
 			if (!objExp) {
@@ -1329,7 +1337,7 @@ export class MemberAccessExpression extends Expression<
 
 			this.semanticData = {
 				objectLike: objExp,
-				propertyIndexOrKeyOrSlice: {start: startExp, end: endExp},
+				propertyIndexOrKeyOrSlice: { start: startExp, end: endExp },
 				accessType: "slice",
 			};
 

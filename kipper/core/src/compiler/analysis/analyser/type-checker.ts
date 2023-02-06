@@ -598,8 +598,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validSliceNotationKey(objLike: Expression, key: { start?: Expression; end?: Expression }): void {
 		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
-		const startType = key.start ? KipperTypeChecker.getTypeForAnalysis(key.start.getTypeSemanticData().evaluatedType) : undefined;
-		const endType = key.end ? KipperTypeChecker.getTypeForAnalysis(key.end.getTypeSemanticData().evaluatedType) : undefined;
+		const startType = key.start
+			? KipperTypeChecker.getTypeForAnalysis(key.start.getTypeSemanticData().evaluatedType)
+			: undefined;
+		const endType = key.end
+			? KipperTypeChecker.getTypeForAnalysis(key.end.getTypeSemanticData().evaluatedType)
+			: undefined;
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
 		if (objType === undefined) {
@@ -655,7 +659,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				if (objType === "str") {
 					// Also ensure the key is valid
 					this.validSliceNotationKey(
-						semanticData.objectLike, <{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice
+						semanticData.objectLike,
+						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
 					);
 
 					return CheckedType.fromCompilableType("str");

@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
-import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier, } from "./tools";
+import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier } from "./tools";
 
 /**
  * The TypeScript target-specific built-ins generator for generating the code that allows for the use of built-in

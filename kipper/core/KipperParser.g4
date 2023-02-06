@@ -236,7 +236,8 @@ bracketNotation
     ;
 
 sliceNotation
-	:	'[' expression? ':' expression? ']'
+	locals[sliceStart: boolean = false, sliceEnd: boolean = false]
+	:	'[' (expression { _localctx.sliceStart = true })? ':' (expression { _localctx.sliceEnd = true })? ']'
 	;
 
 postfixExpression

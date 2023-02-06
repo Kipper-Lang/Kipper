@@ -16,7 +16,9 @@ import {
 	kipperNumType,
 	kipperStrType,
 	kipperUndefinedType,
-	kipperVoidType, InternalFunction, InternalFunctionArgument
+	kipperVoidType,
+	InternalFunction,
+	InternalFunctionArgument,
 } from "@kipper/core";
 
 /**

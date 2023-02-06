@@ -198,8 +198,8 @@ export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 			{
 				identifier: "end",
 				valueType: ["num", "undefined"], // Optional
-			}
+			},
 		],
 		returnType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
-	}
+	},
 };
