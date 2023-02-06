@@ -1,13 +1,5 @@
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import {
-	CompileConfig,
-	KipperCompiler,
-	KipperCompileResult,
-	KipperError,
-	KipperParseStream,
-	KipperProgramContext,
-	ParseData,
-} from "@kipper/core";
+import { CompileConfig, KipperError, KipperProgramContext } from "@kipper/core";
 import { assert } from "chai";
 
 export const defaultTarget = new KipperTypeScriptTarget();
