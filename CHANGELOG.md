@@ -78,9 +78,9 @@ To use development versions of Kipper download the
     rule `memberAccessExpression`).
   - `AnalysableASTNode`, which represents an AST node that can be semantically processed. This class was created as
     a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
-  - `InternalReference<T>`, which represents an indirect reference to an internal function by the user. This is 
-		primarily used to keep track of the internal functions that are used in the program, and to generate them in the 
-		target code.
+  - `InternalReference<T>`, which represents an indirect reference to an internal function by the user. This is
+    primarily used to keep track of the internal functions that are used in the program, and to generate them in the
+    target code.
 - New functions:
   - `KipperTargetCodeGenerator.setUp()`, which should generate SetUp code for the specified target.
   - `KipperTargetCodeGenerator.wrapUp()`, which should generate WrapUp code for the specified target.
@@ -262,8 +262,8 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments 
-	to undefined variables and allowed the referencing of variables that were not defined or had no value set.
+- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+  to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 
 ### Deprecated
