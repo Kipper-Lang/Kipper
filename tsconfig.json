@@ -18,6 +18,13 @@
     ]
     // ES7 -> ES2016
   },
+	"ts-node": {
+		"compilerOptions": {
+			"rootDir": "./kipper",
+			"sourceRoot": "./kipper",
+		},
+		"files": true
+	},
   "exclude": [
     "node_modules",
     "lib",
