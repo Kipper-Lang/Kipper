@@ -63,6 +63,10 @@ To use development versions of Kipper download the
   - `TypeNotCompilableError`, which is thrown when an invalid/undefined type is cast to a compilable type, despite it
     being invalid. (This is an internal error that happens if the type is cast during compilation despite it having
     errored during semantic analysis/type checking.)
+  - `InvalidKeyTypeError`, which is thrown when an expression with invalid type is used as a key/index to access 
+		an object-like or array-like.
+  - `ValueNotIndexableError`, which is thrown when a value is not indexable (not object-like), despite it being used 
+		in a member access expression.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
