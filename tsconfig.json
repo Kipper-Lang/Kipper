@@ -20,8 +20,8 @@
   },
 	"ts-node": {
 		"compilerOptions": {
-			"rootDir": "./kipper",
-			"sourceRoot": "./kipper",
+			"rootDir": ".",
+			"sourceRoot": ".",
 		},
 		"files": true
 	},
