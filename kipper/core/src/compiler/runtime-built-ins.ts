@@ -202,4 +202,18 @@ export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 		],
 		returnType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
 	},
+	index: {
+		identifier: "index",
+		params: [
+			{
+				identifier: "arrayLike",
+				valueType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+			},
+			{
+				identifier: "indexOrKey",
+				valueType: "num",
+			},
+		],
+		returnType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+	},
 };

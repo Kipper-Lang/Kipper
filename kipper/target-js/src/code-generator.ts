@@ -99,6 +99,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// Create global kipper object - Always prefer the global '__kipper' instance
 			["// @ts-ignore"],
 			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
+			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			[
+				'__kipper.TypeError = __kipper.TypeError ||  (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				";",
+			],
+			[
+				'__kipper.IndexError = __kipper.IndexError ||  (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				";",
+			],
 		];
 	};
 
@@ -352,13 +362,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = node.getSemanticData();
 		const object = await semanticData.objectLike.translateCtxAndChildren();
 
-		switch (semanticData.accessType) {
+		switch (<"dot" | "bracket" | "slice">semanticData.accessType) {
 			case "dot":
 				return []; // TODO: Not implemented
 			case "bracket": {
 				// -> The member access is done via brackets, meaning the member name is an expression
-				const member = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
-				return [...object, "[", ...member, "]"];
+				// In this case, only indexes are allowed, not keys, but in the future, this will change with the implementation
+				// of objects.
+				const keyOrIndex = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
+
+				// Return the member access expression in form of a function call to the internal 'index' function
+				const sliceIdentifier = getJavaScriptBuiltInIdentifier("index");
+				return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
 			}
 			case "slice": {
 				// -> The member access is done via a slice, meaning the member name is a slice expression
@@ -369,10 +384,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const start = slice.start ? await slice.start.translateCtxAndChildren() : "undefined";
 				const end = slice.end ? await slice.end.translateCtxAndChildren() : "undefined";
 
-				// Get the slice function identifier
-				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
-
 				// Return the slice expression in form of a function call to the internal 'slice' function
+				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
 				return [sliceIdentifier, "(", ...object, ", ", ...start, ", ", ...end, ")"];
 			}
 		}

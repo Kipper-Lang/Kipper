@@ -1314,6 +1314,11 @@ export class MemberAccessExpression extends Expression<
 				propertyIndexOrKeyOrSlice: keyExp,
 				accessType: "bracket",
 			};
+
+			// Add internal reference to the program ctx for the index function, so it will be generated in the output code
+			// Note: Once objects are implemented, an if statement will be required to check if the object is an array or
+			// object-like, since for objects the 'get' function will be used instead of the 'index' function.
+			this.programCtx.addInternalReference(this, kipperInternalBuiltIns["index"]);
 		} else {
 			const sliceNotationAntlrCtx = this.getAntlrRuleChildren()[1] as SliceNotationContext;
 			const hasStart = sliceNotationAntlrCtx.sliceStart;

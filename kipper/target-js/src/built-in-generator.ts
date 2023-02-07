@@ -6,7 +6,30 @@
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { KipperTargetBuiltInGenerator } from "@kipper/core";
 import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
-import * as stream from "stream";
+
+/**
+ * Generates a JavaScript function from the given signature and body.
+ * @param signature The signature of the function.
+ * @param body The body of the function.
+ * @since 0.10.0
+ */
+export function genJSFunction(
+	signature: { identifier: string; params: string[] },
+	body: string,
+): Array<TranslatedCodeLine> {
+	return [
+		[
+			getJavaScriptBuiltInIdentifier(signature.identifier),
+			" ",
+			"=",
+			" ",
+			createJSFunctionSignature(signature),
+			" ",
+			body,
+			";",
+		],
+	];
+}
 
 /**
  * The TypeScript target-specific built-ins generator for generating the code that allows for the use of built-in
@@ -18,57 +41,21 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ return (${convArgIdentifier}).toString(); }`,
-				";",
-			],
-		];
+		return genJSFunction(signature, `{ return (${convArgIdentifier}).toString(); }`);
 	}
 
 	async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ return parseInt(${convArgIdentifier}); }`,
-				";",
-			],
-		];
+		return genJSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
 	}
 
 	async boolToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ return \`\${${convArgIdentifier}}\`; }`,
-				";",
-			],
-		];
+		return genJSFunction(signature, `{ return \`\${${convArgIdentifier}}\`; }`);
 	}
 
 	async boolToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
@@ -76,18 +63,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const convArgIdentifier = signature.params[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ return ${convArgIdentifier} ? 1 : 0; }`,
-				";",
-			],
-		];
+		return genJSFunction(signature, `{ return ${convArgIdentifier} ? 1 : 0; }`);
 	}
 
 	async slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
@@ -97,18 +73,24 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const endIdentifier = signature.params[2];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ return ${objLikeIdentifier} ? ${objLikeIdentifier}.slice(${startIdentifier}, ${endIdentifier}) : ${objLikeIdentifier}; }`,
-				";",
-			],
-		];
+		return genJSFunction(
+			signature,
+			`{ return ${objLikeIdentifier} ? ${objLikeIdentifier}.slice(${startIdentifier}, ${endIdentifier}) : ${objLikeIdentifier}; }`,
+		);
+	}
+
+	async index(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const arrayLikeIdentifier = signature.params[0];
+		const indexIdentifier = signature.params[1];
+
+		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
+		return genJSFunction(
+			signature,
+			`{ if (${indexIdentifier} >= ${arrayLikeIdentifier}.length) ` +
+				`throw new __kipper.IndexError(\`Index '\${${indexIdentifier}}' out of bonds of array-like.\`); ` +
+				`return ${arrayLikeIdentifier}[${indexIdentifier}]; }`,
+		);
 	}
 
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
@@ -116,17 +98,6 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const printArgIdentifier = signature.params[0];
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createJSFunctionSignature(signature),
-				" ",
-				`{ console.log(${printArgIdentifier}); }`,
-				";",
-			],
-		];
+		return genJSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
 	}
 }

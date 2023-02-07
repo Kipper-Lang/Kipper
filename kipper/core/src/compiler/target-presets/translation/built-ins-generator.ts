@@ -60,6 +60,17 @@ export abstract class KipperTargetBuiltInGenerator {
 	public abstract slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
+	 * Index function which provides the ability to index an iterable object-like type.
+	 *
+	 * This is used to get a specific index from an iterable object-like type, such as a string or array. Though unlike
+	 * in JavaScript this will assert that the index is within the bounds of the iterable object-like type. Otherwise,
+	 * an error will be thrown.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 */
+	public abstract index(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
 	 * Print function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
