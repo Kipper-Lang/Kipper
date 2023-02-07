@@ -65,7 +65,7 @@ To use development versions of Kipper download the
     errored during semantic analysis/type checking.)
   - `InvalidKeyTypeError`, which is thrown when an expression with invalid type is used as a key/index to access 
 		an object-like or array-like.
-  - `ValueNotIndexableError`, which is thrown when a value is not indexable (not object-like), despite it being used 
+  - `ValueNotIndexableTypeError`, which is thrown when a value is not indexable (not object-like), despite it being used 
 		in a member access expression.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
