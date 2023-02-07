@@ -58,7 +58,7 @@ import {
 	KipperNotImplementedError,
 	ReadOnlyWriteTypeError,
 	UnknownTypeError,
-	ValueTypeNotIndexableError,
+	ValueNotIndexableError,
 } from "../../../errors";
 import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
 
@@ -563,7 +563,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// TODO! Add support for 'object' types once they are implemented
 		if (objType !== "str" && objType !== "list") {
-			throw this.assertError(new ValueTypeNotIndexableError(objType));
+			throw this.assertError(new ValueNotIndexableError(objType));
 		}
 	}
 

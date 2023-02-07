@@ -612,7 +612,7 @@ export class IncompleteReturnsInCodePathsError extends TypeError {
  * Error that is thrown whenever a value is indexed or accessed that is not a string, array or object.
  * @since 0.10.0
  */
-export class ValueTypeNotIndexableError extends TypeError {
+export class ValueNotIndexableError extends TypeError {
 	constructor(type: string) {
 		super(`Value of type '${type}' is not indexable.`);
 	}
