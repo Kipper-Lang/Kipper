@@ -313,7 +313,7 @@ conditionalExpression
 
 assignmentExpression
     :   conditionalExpression # passOnAssignmentExpression
-    |   primaryExpression assignmentOperator assignmentExpression # actualAssignmentExpression
+    |   computedPrimaryExpression assignmentOperator assignmentExpression # actualAssignmentExpression
     ;
 
 assignmentOperator

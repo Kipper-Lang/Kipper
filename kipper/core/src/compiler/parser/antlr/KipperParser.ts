@@ -3656,7 +3656,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 532;
-						this.primaryExpression();
+						this.computedPrimaryExpression(0);
 						this.state = 533;
 						this.assignmentOperator();
 						this.state = 534;
@@ -4259,7 +4259,7 @@ export class KipperParser extends Parser {
 		"\u0210\x05z>\x02\u0210\u0211\x07\x1F\x02\x02\u0211\u0212\x05z>\x02\u0212" +
 		"\u0214\x03\x02\x02\x02\u0213\u020C\x03\x02\x02\x02\u0213\u020D\x03\x02" +
 		"\x02\x02\u0214{\x03\x02\x02\x02\u0215\u021B\x05z>\x02\u0216\u0217\x05" +
-		"@!\x02\u0217\u0218\x05~@\x02\u0218\u0219\x05|?\x02\u0219\u021B\x03\x02" +
+		"T+\x02\u0217\u0218\x05~@\x02\u0218\u0219\x05|?\x02\u0219\u021B\x03\x02" +
 		"\x02\x02\u021A\u0215\x03\x02\x02\x02\u021A\u0216\x03\x02\x02\x02\u021B" +
 		"}\x03\x02\x02\x02\u021C\u021D\t\x0F\x02\x02\u021D\x7F\x03\x02\x02\x02" +
 		"\u021E\u0223\x05|?\x02\u021F\u0220\x07\x1C\x02\x02\u0220\u0222\x05|?\x02" +
@@ -7335,8 +7335,8 @@ export class PassOnAssignmentExpressionContext extends AssignmentExpressionConte
 	}
 }
 export class ActualAssignmentExpressionContext extends AssignmentExpressionContext {
-	public primaryExpression(): PrimaryExpressionContext {
-		return this.getRuleContext(0, PrimaryExpressionContext);
+	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
+		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
 	}
 	public assignmentOperator(): AssignmentOperatorContext {
 		return this.getRuleContext(0, AssignmentOperatorContext);
