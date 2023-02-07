@@ -574,7 +574,7 @@ describe("Core functionality", () => {
 				assert(instance.programCtx.stream === stream, "Expected matching streams");
 				assert.include(
 					instance.write(),
-					'let x: string = "1234"[1];',
+					'let x: string = __kipper.index("1234", 1);',
 					"Expected different TypeScript code",
 				);
 
