@@ -73,5 +73,138 @@ describe("AST Nodes", () => {
 				assert(node.parent.programCtx === programCtx, "Expected 'parent' to match");
 			});
 		});
+
+		describe("hasFailed", () => {
+			it("With no errors", async () => {
+				const result = await new KipperCompiler().compile(
+					"var valid: str = '1';",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
+				assert.equal(ast.children[0].hasFailed, false, "Expected 'hasFailed' to be false");
+			});
+
+			it("With errors", async () => {
+				const result = await new KipperCompiler().compile(
+					"var invalid: str = 1;",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
+				assert.isTrue(ast.children[0].hasFailed, "Expected 'hasFailed' to be false");
+			});
+		});
+	});
+
+	describe("RootASTNode", () => {
+		describe("sourceCode", () => {
+			it("With empty file", async () => {
+				const result = await new KipperCompiler().compile("", {target: defaultTarget});
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.sourceCode, "", "Expected source code to be empty");
+			});
+
+			it("With file content", async () => {
+				const sourceCode = "var valid: str = '1';";
+				const result = await new KipperCompiler().compile(sourceCode, {target: defaultTarget});
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.sourceCode, sourceCode, "Expected source code to match");
+			});
+		});
+
+		describe("hasFailed", () => {
+			it("With no errors", async () => {
+				const result = await new KipperCompiler().compile(
+					"var valid: str = '1';",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.hasFailed, false, "Expected 'hasFailed' to be false");
+			});
+
+			it("With errors", async () => {
+				const result = await new KipperCompiler().compile(
+					"var invalid: str = 1;",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.isTrue(ast.hasFailed, "Expected 'hasFailed' to be false");
+			});
+		});
+
+		describe("children", () => {
+			it("With empty file", async () => {
+				const result = await new KipperCompiler().compile("", {target: defaultTarget});
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.children.length, 0, "Expected 0 children");
+			});
+
+			it("With single statement", async () => {
+				const result = await new KipperCompiler().compile(
+					// Even though this is invalid, we still expect 1 child to be present
+					"var invalid: str = 1;",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.children.length, 1, "Expected 1 child");
+			});
+
+			it("With multiple statements", async () => {
+				const result = await new KipperCompiler().compile(
+					// Even though this is invalid, we still expect 3 children to be present
+					"var invalid: str = 1; var valid: str = '1'; var invalid: str = 1;",
+					{target: defaultTarget}
+				);
+				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.notEqual(ast, undefined, "Expected AST to be present");
+				assert.equal(ast.children.length, 2, "Expected 2 children");
+			});
+		});
+
+		it("programCtx", async () => {
+			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
+			let stream: KipperParseStream = new KipperParseStream(fileContent);
+			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
+				target: defaultTarget,
+			});
+			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
+
+			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
+			assert.notEqual(programCtx.abstractSyntaxTree, undefined, "Expected AST to be present");
+			assert.equal(ast.programCtx, programCtx, "Expected programCtx to match");
+		});
+
+		it("parent", async () => {
+			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
+			let stream: KipperParseStream = new KipperParseStream(fileContent);
+			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
+				target: defaultTarget,
+			});
+			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
+
+			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
+			assert.notEqual(programCtx.abstractSyntaxTree, undefined, "Expected AST to be present");
+			assert.equal(ast.parent, undefined, "Expected parent to be undefined");
+		});
 	});
 });
