@@ -409,8 +409,8 @@ describe("ArithmeticOperationTypeError", () => {
 				} catch (e) {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
-				assert.notEqual(result, undefined, "Expected result");
-				assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
+				assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 			});
 
 			it("num", async () => {
@@ -420,8 +420,8 @@ describe("ArithmeticOperationTypeError", () => {
 				} catch (e) {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
-				assert.notEqual(result, undefined, "Expected result");
-				assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
+				assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 			});
 		});
 
@@ -433,8 +433,8 @@ describe("ArithmeticOperationTypeError", () => {
 				} catch (e) {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
-				assert.notEqual(result, undefined, "Expected result");
-				assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
+				assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 			});
 
 			it("num", async () => {
@@ -444,8 +444,8 @@ describe("ArithmeticOperationTypeError", () => {
 				} catch (e) {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
-				assert.notEqual(result, undefined, "Expected result");
-				assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+				assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
+				assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 			});
 		});
 	});

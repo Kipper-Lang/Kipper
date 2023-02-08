@@ -40,7 +40,7 @@ describe("InvalidUnaryExpressionTypeError", () => {
 		} catch (e) {
 			assert.fail(`Expected no '${(<KipperError>e).name}'`);
 		}
-		assert.notEqual(result, undefined, "Expected result");
-		assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
+		assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
+		assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 	});
 });
