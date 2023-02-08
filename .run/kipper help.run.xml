@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="kipper help" type="NodeJSConfigurationType" application-parameters="help" path-to-js-file="./kipper/cli/bin/run" working-dir="$PROJECT_DIR$/">
+    <method v="2" />
+  </configuration>
+</component>
