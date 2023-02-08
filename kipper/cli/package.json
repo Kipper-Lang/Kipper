@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.10.0-alpha.6",
+  "version": "0.10.0-alpha.7",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
@@ -28,7 +28,7 @@
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
     "typescript": "4.9.4",
-		"oclif": "3.4.0",
+    "oclif": "3.4.0",
     "json-parse-even-better-errors": "2.3.1"
   },
   "engines": {

@@ -21,10 +21,9 @@ and the [Kipper website](https://kipper-lang.org)._
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
 
 <!-- toc -->
-
-- [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
-- [Usage](#usage)
-- [Commands](#commands)
+* [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 ## General Information
@@ -39,7 +38,6 @@ and the [Kipper website](https://kipper-lang.org)._
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
@@ -51,18 +49,16 @@ USAGE
   $ kipper COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kipper analyse [FILE]`](#kipper-analyse-file)
-- [`kipper compile [FILE]`](#kipper-compile-file)
-- [`kipper help [COMMAND]`](#kipper-help-command)
-- [`kipper run [FILE]`](#kipper-run-file)
-- [`kipper version`](#kipper-version)
+* [`kipper analyse [FILE]`](#kipper-analyse-file)
+* [`kipper compile [FILE]`](#kipper-compile-file)
+* [`kipper help [COMMAND]`](#kipper-help-command)
+* [`kipper run [FILE]`](#kipper-run-file)
+* [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
 
@@ -191,7 +187,6 @@ USAGE
 ```
 
 _See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/version.ts)_
-
 <!-- commandsstop -->
 
 ## Copyright and License
