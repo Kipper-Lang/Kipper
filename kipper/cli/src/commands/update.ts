@@ -1,9 +1,0 @@
-/**
- * 'update' command for updating the CLI if there is a new version available.
- * @since 0.5.0
- */
-import UpdateCommand from "@oclif/plugin-update/lib/commands/update";
-
-export default class Update extends UpdateCommand {
-	static override description = "Update the Kipper compiler and CLI.";
-}
