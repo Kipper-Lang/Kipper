@@ -5,8 +5,9 @@
   "recursive": true,
 	"watch": false,
 	"watch-files": [
-		"./kipper/core/src",
-		"./kipper/cli/src"
+		"./kipper/core/src/",
+		"./kipper/cli/src/",
+		"./node_modules/@kipper/"
 	],
   "reporter": "spec",
   "require": [
