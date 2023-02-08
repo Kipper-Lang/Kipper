@@ -3,9 +3,9 @@
   "description": "The Kipper Command Line Interface (CLI).",
   "version": "0.10.0-alpha.6",
   "author": "Luna-Klatzer @Luna-Klatzer",
-  "bin": {
-    "kipper": "./bin/run"
-  },
+	"bin": {
+		"kipper": "./bin/run"
+	},
   "dependencies": {
     "@kipper/core": "workspace:~",
     "@kipper/target-js": "workspace:~",
@@ -19,20 +19,18 @@
     "@oclif/plugin-update": "^3.0.0",
     "@oclif/plugin-warn-if-update-available": "^2.0.4",
     "tslog": "^3.3.0",
-    "antlr4ts": "^0.5.0-alpha.4",
-    "tslib": "~2.4.0",
-    "typescript": "~4.9.0",
-    "ts-node": "^10.9.1",
-    "@types/node": "^18.0.0",
-    "rimraf": "^4.0.0"
+    "antlr4ts": "^0.5.0-alpha.4"
   },
   "devDependencies": {
+		"typescript": "4.9.4",
+		"@types/node": "^18.0.0",
     "@oclif/test": "2.2.21",
     "@types/sinon": "10.0.13",
     "@sinonjs/fake-timers": "10.0.2",
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
-    "json-parse-even-better-errors": "3.0.0"
+    "json-parse-even-better-errors": "3.0.0",
+		"rimraf": "^4.0.0"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -72,7 +70,7 @@
     "repositoryPrefix": "https://github.com/Luna-Klatzer/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>",
     "warn-if-update-available": {
       "timeoutInDays": 7,
-      "message": "<%= config.name %> update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>."
+      "message": "<%= config.name %> npm package update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>."
     }
   },
   "scripts": {

@@ -3,6 +3,7 @@
  * @since 0.0.3
  */
 import { CharStreams, CodePointCharStream } from "antlr4ts";
+import { KipperConfigError } from "../../errors";
 
 /**
  * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
@@ -18,29 +19,36 @@ export class KipperParseStream {
 	private readonly _charStream: CodePointCharStream;
 
 	/**
-	 * Parser File Constructor
-	 * @param stringContent The content of the stream.
-	 * @param name The relative or absolute path to the file
-	 * @param filePath The path to the file. If this is undefined, then it will default to the value in {@link name}.
-	 * @param charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
+	 * Constructor for the {@link KipperParseStream} class.
+	 * @param options.stringContent The content of the stream. If {@link options.charStream} is set, this will be ignored,
+	 * and the {@link options.charStream.toString} will be used instead.
+	 * @param options.name The relative or absolute path to the file
+	 * @param options.filePath The path to the file. If this is undefined, then it will default to the value in {@link name}.
+	 * @param options.charStream The {@link CodePointCharStream}, which will be, if not set, auto-generated
 	 * by the stringContent.
 	 */
-	public constructor(
-		stringContent: string,
-		name: string = "anonymous-script",
-		filePath?: string,
-		charStream?: CodePointCharStream,
-	) {
-		this._name = name;
-		this._filePath = filePath ?? name;
-		this._charStream = charStream ?? CharStreams.fromString(stringContent, this._name);
+	public constructor(options: {
+		name?: string;
+		stringContent?: string;
+		filePath?: string;
+		charStream?: CodePointCharStream;
+	}) {
+		if (options.stringContent === undefined && options.charStream === undefined) {
+			throw new KipperConfigError("No 'stringContent' or 'charStream' for argument 'options' was provided");
+		}
+
+		this._name = options.name ?? "anonymous-script";
+		this._filePath = options.filePath ?? this._name;
+		this._charStream = options.charStream ?? CharStreams.fromString(<string>options.stringContent, this._name);
 	}
 
 	/**
 	 * Returns the Antlr4 {@link CodePointCharStream} for the initialised {@link stringContent}.
+	 *
+	 * This is a copy of the stream, so modifying it will not modify the original stream.
 	 */
 	public get charStream(): CodePointCharStream {
-		return this._charStream;
+		return CharStreams.fromString(this.stringContent, this._name);
 	}
 
 	/**
@@ -65,7 +73,8 @@ export class KipperParseStream {
 
 	/**
 	 * Returns the file path of the file.
-	 * @note If {@link _filePath} wasn't set during construction, then this defaults to {@link name}.
+	 *
+	 * If {@link filePath} wasn't set during construction, then this defaults to {@link name}.
 	 */
 	public get filePath(): string {
 		return this._filePath;

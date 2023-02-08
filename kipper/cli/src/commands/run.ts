@@ -2,7 +2,6 @@
  * 'run' command for running a compiled kipper-file (.js file) or compiling and running a file in one
  * @since 0.0.3
  */
-import * as ts from "typescript";
 import { Command, flags } from "@oclif/command";
 import {
 	defaultOptimisationOptions,
@@ -123,28 +122,27 @@ export default class Run extends Command {
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
-		const target: KipperCompileTarget = await getTarget(flags["target"]);
+		const target: KipperCompileTarget = getTarget(flags["target"]);
+
+		// Compilation configuration
+		const parseStream = new KipperParseStream({
+			name: file.name,
+			filePath: file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+			charStream: file.charStream,
+		});
+		const compilerOptions = {
+			target: target,
+			optimisationOptions: {
+				optimiseInternals: flags["optimise-internals"],
+				optimiseBuiltIns: flags["optimise-builtins"],
+			},
+			recover: flags["recover"],
+			abortOnFirstError: flags["abort-on-first-error"],
+		};
 
 		let result: KipperCompileResult;
 		try {
-			// Compile the file
-			result = await compiler.compile(
-				new KipperParseStream(
-					file.stringContent,
-					file.name,
-					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-					file.charStream,
-				),
-				{
-					target: target,
-					optimisationOptions: {
-						optimiseInternals: flags["optimise-internals"],
-						optimiseBuiltIns: flags["optimise-builtins"],
-					},
-					recover: flags["recover"],
-					abortOnFirstError: flags["abort-on-first-error"],
-				},
-			);
+			result = await compiler.compile(parseStream, compilerOptions);
 
 			// If the compilation failed, abort
 			if (!result.success) {
@@ -157,9 +155,9 @@ export default class Run extends Command {
 			// Get the JS code that should be evaluated
 			let jsProgram: string;
 			if (target.targetName === "typescript") {
-				jsProgram = ts.transpileModule(result.write(), {
-					compilerOptions: { module: ts.ModuleKind.CommonJS },
-				}).outputText;
+				// Also do the compilation now with the JavaScript target
+				let jsProgramCtx = await compiler.compile(parseStream, { ...compilerOptions, target: getTarget("js") });
+				jsProgram = jsProgramCtx.write();
 			} else {
 				jsProgram = result.write();
 			}

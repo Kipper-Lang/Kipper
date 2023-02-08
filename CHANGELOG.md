@@ -1,4 +1,4 @@
-# Kipper Changelog
+# Kipper Compiler Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -140,8 +140,6 @@ To use development versions of Kipper download the
 - Moved TypeScript target from the core package to a new monorepo package called `@kipper/target-ts`, which implements
   the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`
   (`TargetTS` available as alias), which can be used as the target in the `CompileConfig`.
-- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and
-  assignments to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
   ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
 - Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type checking and
@@ -154,11 +152,12 @@ To use development versions of Kipper download the
 - Updated the function call syntax and made the `call` keyword optional. This allows for simplified function calls,
   such as `print("Hello world!");`.
 - Default error identifier is now just `Error` instead of `KipperError`.
-- Fixed bug which didn't allow the representation of empty lists (e.g. `[]`).
 - Migrated the internal storage of `Scope` and its implementing classes to a hashmap implementation.
 - Updated types of `CompilableASTNode` functions `primarySemanticAnalysis`, `primarySemanticTypeChecking` and
   `targetSemanticAnalysis` and made them possibly undefined if there is nothing to check. This is to improve
   performance and not call an async function unnecessarily.
+- Changed constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
+  allow a mismatch content between the two.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -175,6 +174,15 @@ To use development versions of Kipper download the
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
   - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
+
+### Fixed
+
+- Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+  to undefined variables and allowed the referencing of variables that were not defined or had no value set.
+- Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
+
+### Deprecated
 
 ### Removed
 

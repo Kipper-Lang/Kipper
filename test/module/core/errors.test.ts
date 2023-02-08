@@ -111,7 +111,7 @@ describe("Kipper errors", () => {
 		it("InvalidGlobalError", async () => {
 			let compiler = new KipperCompiler();
 			try {
-				const parseData: ParseData = await compiler.parse(new KipperParseStream("var i: num = 4;"));
+				const parseData: ParseData = await compiler.parse(new KipperParseStream({ stringContent: "var i: num = 4;" }));
 				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, defaultConfig);
 
 				// Duplicate identifier

@@ -106,30 +106,29 @@ export default class Compile extends Command {
 		const file: KipperParseFile | KipperParseStream = await getFile(args, flags);
 		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
+		// Compilation configuration
+		const parseStream = new KipperParseStream({
+			name: file.name,
+			filePath: file instanceof KipperParseFile ? file.absolutePath : file.filePath,
+			charStream: file.charStream,
+		});
+		const compilerOptions = {
+			target: target,
+			optimisationOptions: {
+				optimiseInternals: flags["optimise-internals"],
+				optimiseBuiltIns: flags["optimise-builtins"],
+			},
+			recover: flags["recover"],
+			abortOnFirstError: flags["abort-on-first-error"],
+		};
+
 		// Start timer for processing
 		const startTime: number = new Date().getTime();
 
 		// Compile the file
 		let result: KipperCompileResult;
 		try {
-			// Run the file
-			result = await compiler.compile(
-				new KipperParseStream(
-					file.stringContent,
-					file.name,
-					file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-					file.charStream,
-				),
-				{
-					target: target,
-					optimisationOptions: {
-						optimiseInternals: flags["optimise-internals"],
-						optimiseBuiltIns: flags["optimise-builtins"],
-					},
-					recover: flags["recover"],
-					abortOnFirstError: flags["abort-on-first-error"],
-				},
-			);
+			result = await compiler.compile(parseStream, compilerOptions);
 
 			// If the compilation failed, abort
 			if (!result.success) {

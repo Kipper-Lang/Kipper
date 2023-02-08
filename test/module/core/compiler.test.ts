@@ -82,7 +82,7 @@ describe("KipperCompiler", () => {
 		describe("Error", () => {
 			it("Invalid file", async () => {
 				const fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
+				const stream = new KipperParseStream({ stringContent: fileContent });
 				try {
 					await compiler.syntaxAnalyse(stream);
 					assert(false, "Expected an error");
@@ -95,80 +95,67 @@ describe("KipperCompiler", () => {
 		describe("NoError", () => {
 			it("Main file", async () => {
 				const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Nested scopes", async () => {
 				const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Single Function definition", async () => {
 				const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Multi Function definition", async () => {
 				const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Variable Declaration", async () => {
 				const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Arithmetics", async () => {
 				const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Function call argument", async () => {
 				const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Assign", async () => {
 				const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Variable assignment", async () => {
 				const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Type conversion", async () => {
 				const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Spaced program", async () => {
 				const fileContent = (await fs.readFile(spacedProgramFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("Expression statements", async () => {
 				const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 
 			it("If statements", async () => {
 				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream(fileContent);
-				await compiler.syntaxAnalyse(stream);
+				await compiler.syntaxAnalyse(fileContent);
 			});
 		});
 	});
@@ -178,7 +165,7 @@ describe("KipperCompiler", () => {
 
 		it("Validate file ctx return", async () => {
 			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-			let stream = new KipperParseStream(fileContent);
+			let stream = new KipperParseStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
@@ -192,7 +179,7 @@ describe("KipperCompiler", () => {
 
 		it("Check valid escaped characters", async () => {
 			const fileContent = "'\\r \\n \\r \\n';";
-			let stream = new KipperParseStream(fileContent);
+			let stream = new KipperParseStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
@@ -214,7 +201,7 @@ describe("KipperCompiler", () => {
 			tests.forEach((target) => {
 				it(`Sample program (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -227,7 +214,7 @@ describe("KipperCompiler", () => {
 
 				it(`Arithmetics (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -240,7 +227,7 @@ describe("KipperCompiler", () => {
 
 				it(`Variable Declaration (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -252,7 +239,7 @@ describe("KipperCompiler", () => {
 
 				it(`Nested scopes (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -264,7 +251,7 @@ describe("KipperCompiler", () => {
 
 				it(`Single Function call (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -292,7 +279,7 @@ describe("KipperCompiler", () => {
 
 				it(`Multi Function call (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -319,7 +306,7 @@ describe("KipperCompiler", () => {
 
 				it(`Single Function definition (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -331,7 +318,7 @@ describe("KipperCompiler", () => {
 
 				it(`Multi Function definition (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -343,7 +330,7 @@ describe("KipperCompiler", () => {
 
 				it(`Function call argument (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -371,7 +358,7 @@ describe("KipperCompiler", () => {
 
 				it(`Variable assignment (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -398,7 +385,7 @@ describe("KipperCompiler", () => {
 
 				it(`Assign (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -410,7 +397,7 @@ describe("KipperCompiler", () => {
 
 				it(`Bool (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(boolFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -422,7 +409,7 @@ describe("KipperCompiler", () => {
 
 				it(`Type conversion (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -440,7 +427,7 @@ describe("KipperCompiler", () => {
 
 				it(`Expression statements (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -456,7 +443,7 @@ describe("KipperCompiler", () => {
 
 				it(`Tangled expressions (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(tangledExpressionsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
@@ -483,7 +470,7 @@ describe("KipperCompiler", () => {
 
 				it(`If statements (${target.fileExtension})`, async () => {
 					const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
-					const stream = new KipperParseStream(fileContent);
+					const stream = new KipperParseStream({ stringContent: fileContent });
 					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
 					assert(instance.programCtx);
