@@ -286,6 +286,7 @@ To use development versions of Kipper download the
 
 ### Removed
 
+- Kipper CLI command `update`, as it was not needed since there are no plans to deploy S3 distributions of Kipper.
 - `KipperError.isWarning`, which has been replaced by the new class `KipperWarning`.
 - `KipperCharType` (`char`) and its grammar implementation, meaning all string types from now on will only be of type
   `str`. This also means that the single-quote character `'` can from now also be used for string literals and
