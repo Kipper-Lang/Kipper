@@ -57,7 +57,7 @@ describe("UndefinedReferenceError", () => {
 		} catch (e) {
 			assert.fail(`Expected no '${(<KipperError>e).name}'`);
 		}
-		assert(result !== undefined, "Expected result");
+		assert.notEqual(result, undefined, "Expected result");
 		assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
 	});
 });

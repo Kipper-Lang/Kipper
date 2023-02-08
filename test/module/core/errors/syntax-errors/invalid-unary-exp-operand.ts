@@ -69,7 +69,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			} catch (e) {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
-			assert(result !== undefined, "Expected result");
+			assert.notEqual(result, undefined, "Expected result");
 			assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
 		});
 
@@ -80,7 +80,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			} catch (e) {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
-			assert(result !== undefined, "Expected result");
+			assert.notEqual(result, undefined, "Expected result");
 			assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
 		});
 
@@ -91,7 +91,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			} catch (e) {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
-			assert(result !== undefined, "Expected result");
+			assert.notEqual(result, undefined, "Expected result");
 			assert.isFalse(result?.programCtx.hasFailed ?? false, "Expected no errors");
 		});
 	});
