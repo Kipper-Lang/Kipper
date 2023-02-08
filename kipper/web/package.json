@@ -42,7 +42,7 @@
     "kipper-standalone.min.js",
     "LICENSE"
   ],
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
