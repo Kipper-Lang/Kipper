@@ -168,14 +168,14 @@ describe("AST Nodes", () => {
 
 			it("With multiple statements", async () => {
 				const result = await new KipperCompiler().compile(
-					// Even though this is invalid, we still expect 3 children to be present
-					"var invalid: str = 1; var valid: str = '1'; var invalid: str = 1;",
+					// Even though some of these are invalid, we still expect 3 children to be present
+					"var x1: str = 1; var x2: str = '1'; const x3: str;",
 					{target: defaultTarget}
 				);
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
-				assert.equal(ast.children.length, 2, "Expected 2 children");
+				assert.equal(ast.children.length, 3, "Expected 2 children");
 			});
 		});
 
@@ -186,6 +186,9 @@ describe("AST Nodes", () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
+
+			// Generate the AST by compiling the program (as 'generateAbstractSyntaxTree' is private)
+			await programCtx.compileProgram();
 			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
 
 			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
@@ -200,6 +203,9 @@ describe("AST Nodes", () => {
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
+
+			// Generate the AST by compiling the program (as 'generateAbstractSyntaxTree' is private)
+			await programCtx.compileProgram();
 			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
 
 			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
