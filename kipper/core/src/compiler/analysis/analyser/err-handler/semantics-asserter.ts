@@ -5,6 +5,7 @@
  */
 import type { KipperProgramContext } from "../../../program-ctx";
 import type { KipperError } from "../../../../errors";
+import type { CompilableASTNode } from "../../../ast";
 import { KipperNotImplementedError } from "../../../../errors";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../../../utils";
@@ -25,9 +26,15 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 	/**
 	 * Updates the error and adds the proper traceback data, and returns it.
 	 * @param error The error to update.
+	 * @param overwriteCtx The context to overwrite the current context with. This is used when a parent checks children
+	 * semantics in order to provide the correct traceback data and errors occur in the children.
 	 * @returns The Kipper error.
 	 */
-	protected assertError(error: KipperError): KipperError {
+	protected assertError(error: KipperError, overwriteCtx?: CompilableASTNode): KipperError {
+		if (overwriteCtx) {
+			this.setTracebackData({ ctx: overwriteCtx });
+		}
+
 		// Update error metadata
 		error.setTracebackData({
 			location: { line: this.line ?? 1, col: this.col ?? 0 },

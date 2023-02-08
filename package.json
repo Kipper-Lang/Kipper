@@ -90,7 +90,7 @@
     "prebuild": "pnpm run lint:fix && pnpm run prettier",
     "pretest": "pnpm run build",
     "test": "pnpm run test-no-rebuild",
-    "test-no-rebuild": "nyc mocha",
+    "test-no-rebuild": "nyc mocha ./test/",
     "antlr4ts": "pnpm --filter \"@kipper/core\" run antlr4ts",
     "postantlr4ts": "pnpm run build",
     "prettier": "prettier --write .",

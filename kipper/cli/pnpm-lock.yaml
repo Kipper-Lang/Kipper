@@ -28,7 +28,7 @@ dependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-  '@oclif/command': 1.8.16_@oclif+config@1.18.3
+  '@oclif/command': 1.8.16
   '@oclif/config': 1.18.3
   '@oclif/core': 1.13.11
   '@oclif/errors': 1.3.5
@@ -81,11 +81,9 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@oclif/command/1.8.16_@oclif+config@1.18.3:
+  /@oclif/command/1.8.16:
     resolution: {integrity: sha512-rmVKYEsKzurfRU0xJz+iHelbi1LGlihIWZ7Qvmb/CBz1EkhL7nOkW4SVXmG2dA5Ce0si2gr88i6q4eBOMRNJ1w==}
     engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@oclif/config': ^1
     dependencies:
       '@oclif/config': 1.18.3
       '@oclif/errors': 1.3.5

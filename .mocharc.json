@@ -3,10 +3,15 @@
   "timeout": 15000,
   "exit": true,
   "recursive": true,
+	"watch": false,
+	"watch-files": [
+		"./kipper/core/src/",
+		"./kipper/cli/src/",
+		"./node_modules/@kipper/"
+	],
   "reporter": "spec",
   "require": [
-		"ts-node/register",
-		"source-map-support/register"
+		"ts-node/register"
 	],
 	"spec": [
 		"**/*.test.ts"

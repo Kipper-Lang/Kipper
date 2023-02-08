@@ -1,14 +1,14 @@
 /**
- * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link KipperParserRuleContext Antlr4 parse rule context} and
  * simplifies its content down to a simplified representation, which can be used for semantic analysis and
  * code translation.
  * @since 0.8.0
  */
 
-import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import type { ParseTree } from "antlr4ts/tree";
 import { getParseRuleSource } from "../../utils";
 import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../../errors";
+import { KipperParserRuleContext } from "../parser";
 
 /**
  * Semantics type which defines the blueprint for {@link CompilableASTNode.semanticData semanticData} inside a
@@ -36,19 +36,28 @@ export interface NoSemantics {}
 export interface NoTypeSemantics {}
 
 /**
- * An Abstract Syntax Tree (AST) node, which wraps an {@link ParserRuleContext Antlr4 parse rule context} and
+ * An Abstract Syntax Tree (AST) node, which wraps an {@link KipperParserRuleContext Antlr4 parse rule context} and
  * simplifies its content down to a simplified representation, which can be used for semantic analysis and
  * code translation.
  * @since 0.8.0
  */
 export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantics extends TypeData> {
-	protected readonly _antlrRuleCtx: ParserRuleContext;
+	protected readonly _antlrRuleCtx: KipperParserRuleContext;
 	protected readonly _children: Array<ParserASTNode<any, any>>;
 	protected readonly _parent: ParserASTNode<any, any> | undefined;
 	protected _semanticData: Semantics | undefined;
 	protected _typeSemantics: TypeSemantics | undefined;
 
-	protected constructor(antlrCtx: ParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * @since 0.10.0
+	 */
+	public abstract readonly kind: number;
+
+	protected constructor(antlrCtx: KipperParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;
 		this._children = [];
 		this._parent = parent;
@@ -93,7 +102,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * The antlr rule context containing the antlr4 metadata for this AST node.
 	 * @since 0.8.0
 	 */
-	public get antlrRuleCtx(): ParserRuleContext {
+	public get antlrRuleCtx(): KipperParserRuleContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -141,6 +150,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public getAntlrRuleChildren(): Array<ParseTree> {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.antlrRuleCtx.children === undefined) {
 			throw new UnableToDetermineSemanticDataError();
 		}
@@ -153,6 +163,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public getSemanticData(): Semantics {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.semanticData === undefined) {
 			throw new UndefinedSemanticsError();
 		}
@@ -165,6 +176,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.10.0
 	 */
 	public getTypeSemanticData(): TypeSemantics {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.typeSemantics === undefined) {
 			throw new UndefinedSemanticsError();
 		}

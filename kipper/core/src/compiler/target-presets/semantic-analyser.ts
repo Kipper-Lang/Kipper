@@ -5,17 +5,15 @@
 
 import type {
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
 	EqualityExpression,
 	ExpressionStatement,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -24,7 +22,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MultiplicativeExpression,
@@ -37,24 +35,28 @@ import type {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "../ast";
-import {
+	TypeData,
+	SemanticData,
 	DoWhileLoopStatement,
 	ForLoopStatement,
 	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
+	AnalysableASTNode,
+	MemberAccessExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 
 /**
- * Represents a function that checks the semantics for a {@link CompilableASTNode}.
+ * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
  *
  * This function does not interpret but only check the logical integrity of the AST node.
  * @since 0.10.0
  */
 // eslint-disable-next-line no-unused-vars
-export type TargetASTNodeSemanticAnalyser<T extends CompilableASTNode<any, any>> = (node: T) => Promise<void>;
+export type TargetASTNodeSemanticAnalyser<T extends AnalysableASTNode<SemanticData, TypeData>> = (
+	node: T,
+) => Promise<void>;
 
 /**
  * Represents a Semantic analyser that is specific for a {@link KipperCompileTarget}.
@@ -83,26 +85,31 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract doWhileLoopStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract whileLoopStatement?: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract forLoopStatement?: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
+	 * @since 0.10.0
 	 */
 	public abstract jumpStatement?: TargetASTNodeSemanticAnalyser<JumpStatement>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract returnStatement?: TargetASTNodeSemanticAnalyser<ReturnStatement>;
 
@@ -127,14 +134,20 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract numberPrimaryExpression?: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ListPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ListPrimaryExpression>;
+	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayLiteralPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
 	 */
 	public abstract identifierPrimaryExpression?: TargetASTNodeSemanticAnalyser<IdentifierPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link MemberAccessExpression} instances.
+	 * @since 0.10.0
+	 */
+	public abstract memberAccessExpression?: TargetASTNodeSemanticAnalyser<MemberAccessExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link StringPrimaryExpression} instances.
@@ -172,11 +185,6 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract tangledPrimaryExpression?: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ArraySpecifierExpression} instances.
-	 */
-	public abstract arraySpecifierExpression?: TargetASTNodeSemanticAnalyser<ArraySpecifierExpression>;
-
-	/**
 	 * Performs translation-specific semantic analysis for {@link VoidOrNullOrUndefinedPrimaryExpression} instances.
 	 */
 	public abstract voidOrNullOrUndefinedPrimaryExpression?: TargetASTNodeSemanticAnalyser<VoidOrNullOrUndefinedPrimaryExpression>;
@@ -187,9 +195,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract incrementOrDecrementPostfixExpression?: TargetASTNodeSemanticAnalyser<IncrementOrDecrementPostfixExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link FunctionCallPostfixExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link FunctionCallExpression} instances.
 	 */
-	public abstract functionCallPostfixExpression?: TargetASTNodeSemanticAnalyser<FunctionCallPostfixExpression>;
+	public abstract functionCallExpression?: TargetASTNodeSemanticAnalyser<FunctionCallExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IncrementOrDecrementUnaryExpression} instances.

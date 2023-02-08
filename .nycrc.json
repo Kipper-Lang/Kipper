@@ -4,9 +4,7 @@
 		"json-summary",
 		"lcov"
 	],
-	"extension": [
-		"ts"
-	],
+	"extension": ["ts"],
 	"exclude": [
 		"**/parser/antlr/*.*",
 		"**/*.test.ts",

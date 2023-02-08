@@ -5,7 +5,7 @@
  */
 import type { KipperReferenceable } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { compilableNodeChild, compilableNodeParent, ScopeNode } from "../../ast";
+import type { CompilableNodeChild, CompilableNodeParent, ScopeNode } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import {
 	LocalScope,
@@ -151,7 +151,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {InvalidAssignmentError} If the left-hand side of the assignment is invalid.
 	 * @since 0.7.0
 	 */
-	public validAssignment(leftExp: Expression<any, any>): void {
+	public validAssignment(leftExp: Expression): void {
 		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
@@ -177,7 +177,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {MissingFunctionBodyError} If the function body is missing or invalid.
 	 * @since 0.10.0
 	 */
-	public validFunctionBody(body: compilableNodeChild | undefined): void {
+	public validFunctionBody(body: CompilableNodeChild | undefined): void {
 		if (!body || !(body instanceof CompoundStatement)) {
 			throw this.assertError(new MissingFunctionBodyError());
 		}
@@ -193,7 +193,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	public getReturnStatementParent(retStatement: ReturnStatement): FunctionDeclaration {
 		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
 		// declaration. This is to ensure a return statement is always used inside a function.
-		let currentParent: compilableNodeParent | undefined = retStatement.parent;
+		let currentParent: CompilableNodeParent | undefined = retStatement.parent;
 		while (!(currentParent instanceof FunctionDeclaration) && currentParent) {
 			currentParent = currentParent.parent;
 		}

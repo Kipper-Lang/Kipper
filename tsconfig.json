@@ -11,7 +11,6 @@
 		"strict": true,
     "moduleResolution": "node",
     "module": "commonjs",
-    "rootDir": "./kipper",
 		"outDir": "./lib",
     "target": "es2016",
     "lib": [
@@ -19,6 +18,13 @@
     ]
     // ES7 -> ES2016
   },
+	"ts-node": {
+		"compilerOptions": {
+			"rootDir": ".",
+			"sourceRoot": ".",
+		},
+		"files": true
+	},
   "exclude": [
     "node_modules",
     "lib",

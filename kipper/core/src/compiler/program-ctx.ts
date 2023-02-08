@@ -13,7 +13,7 @@ import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import { KipperFileListener } from "./parser";
 import { CompilableASTNode, RootASTNode, type Expression } from "./ast";
-import { GlobalScope, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
+import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";
@@ -24,7 +24,7 @@ import { ParseTreeWalker } from "antlr4ts/tree";
  * The program context class used to represent a program for a compilation.
  *
  * This stores all related data for a compilation, such as the AST, the semantic data, the type data, the scope tree,
- * etc. and will handle all issues according to the {@link compileConfig}.
+ * etc. and will handle all issues according to the {@link this.compileConfig compileConfig}.
  * @since 0.0.3
  */
 export class KipperProgramContext {
@@ -65,7 +65,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.8.0
 	 */
-	private readonly _internalReferences: Array<Reference<InternalFunction>>;
+	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -184,7 +184,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
 	 * may be used to check semantic integrity and cohesion.
 	 */
-	public semanticCheck(ctx: CompilableASTNode<any, any> | undefined): KipperSemanticChecker {
+	public semanticCheck(ctx: CompilableASTNode | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
 		this.semanticChecker.setTracebackData({ ctx });
 		return this.semanticChecker;
@@ -196,7 +196,7 @@ export class KipperProgramContext {
 	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
 	 * to check certain types.
 	 */
-	public typeCheck(ctx: CompilableASTNode<any, any> | undefined): KipperTypeChecker {
+	public typeCheck(ctx: CompilableASTNode | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
 		this.typeChecker.setTracebackData({ ctx });
 		return this.typeChecker;
@@ -274,7 +274,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.8.0
 	 */
-	public get internalReferences(): Array<Reference<InternalFunction>> {
+	public get internalReferences(): Array<InternalReference<InternalFunction>> {
 		return this._internalReferences;
 	}
 
@@ -391,13 +391,13 @@ export class KipperProgramContext {
 			throw e;
 		}
 
-		// Caching the result
-		this._abstractSyntaxTree = listener.rootNode;
-
+		/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
 		if (!listener.rootNode) {
-			// This should usually never happen. If it does, then something went wrong terribly
 			throw new KipperInternalError("Missing AST root node in listener instance");
 		}
+
+		// Caching the result
+		this._abstractSyntaxTree = listener.rootNode;
 
 		const countNodes: number = listener.rootNode.children.length;
 		this.logger.debug(`Finished generation of Kipper AST.`);
@@ -600,7 +600,7 @@ export class KipperProgramContext {
 	 * @param ref The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression<any, any>, ref: BuiltInFunction) {
+	public addBuiltInReference(exp: Expression, ref: BuiltInFunction) {
 		this._builtInReferences.push({
 			refTarget: ref,
 			srcExpr: exp,
@@ -613,7 +613,7 @@ export class KipperProgramContext {
 	 * @param ref The internal identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addInternalReference(exp: Expression<any, any>, ref: InternalFunction) {
+	public addInternalReference(exp: Expression, ref: InternalFunction) {
 		this._internalReferences.push({
 			refTarget: ref,
 			srcExpr: exp,

@@ -4,7 +4,6 @@
  */
 import type {
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -13,7 +12,7 @@ import type {
 	EqualityExpression,
 	ExpressionStatement,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -22,7 +21,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MultiplicativeExpression,
@@ -41,6 +40,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 	CompilableASTNode,
+	MemberAccessExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -55,9 +55,8 @@ import type { KipperProgramContext } from "../../program-ctx";
  */
 // eslint-disable-next-line no-unused-vars
 export type TargetASTNodeCodeGenerator<
-	T extends CompilableASTNode<any, any>,
+	T extends CompilableASTNode,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
-	// eslint-disable-next-line no-unused-vars
 > = (node: T) => Promise<R>;
 
 /**
@@ -123,26 +122,31 @@ export abstract class KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract doWhileLoopStatement: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0s
 	 */
 	public abstract whileLoopStatement: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract forLoopStatement: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract jumpStatement: TargetASTNodeCodeGenerator<JumpStatement, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.
+	 * @since 0.10.0
 	 */
 	public abstract returnStatement: TargetASTNodeCodeGenerator<ReturnStatement, Array<TranslatedCodeLine>>;
 
@@ -167,9 +171,13 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract numberPrimaryExpression: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link ListPrimaryExpression} into a specific language.
+	 * Translates a {@link ArrayLiteralPrimaryExpression} into a specific language.
+	 * @since 0.10.0
 	 */
-	public abstract listPrimaryExpression: TargetASTNodeCodeGenerator<ListPrimaryExpression, TranslatedExpression>;
+	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<
+		ArrayLiteralPrimaryExpression,
+		TranslatedExpression
+	>;
 
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.
@@ -178,6 +186,12 @@ export abstract class KipperTargetCodeGenerator {
 		IdentifierPrimaryExpression,
 		TranslatedExpression
 	>;
+
+	/**
+	 * Translates a {@link MemberAccessExpression} into a specific language.
+	 * @since 0.10.0
+	 */
+	public abstract memberAccessExpression: TargetASTNodeCodeGenerator<MemberAccessExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link StringPrimaryExpression} into a specific language.
@@ -224,11 +238,6 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract tangledPrimaryExpression: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into a specific language.
-	 */
-	public abstract arraySpecifierExpression: TargetASTNodeCodeGenerator<ArraySpecifierExpression, TranslatedExpression>;
-
-	/**
 	 * Translates a {@link VoidOrNullOrUndefinedPrimaryExpression} into a specific language.
 	 */
 	public abstract voidOrNullOrUndefinedPrimaryExpression: TargetASTNodeCodeGenerator<
@@ -245,12 +254,9 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into a specific language.
+	 * Translates a {@link FunctionCallExpression} into a specific language.
 	 */
-	public abstract functionCallPostfixExpression: TargetASTNodeCodeGenerator<
-		FunctionCallPostfixExpression,
-		TranslatedExpression
-	>;
+	public abstract functionCallExpression: TargetASTNodeCodeGenerator<FunctionCallExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link IncrementOrDecrementUnaryExpression} into a specific language.

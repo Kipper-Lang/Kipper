@@ -3,6 +3,20 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
+/**
+ * Tests the 'print' function of Kipper.
+ * @param newConsoleLog The new console.log function, which is called by the 'print' function. This function should
+ * assert the output and throw an error if the output is invalid.
+ * @param jsProgram The program that was compiled to JavaScript that should be evaluated. This program should contain a
+ * translated 'print' function call.
+ */
+function testPrintOutput(newConsoleLog: (message: any) => void, jsProgram: string): void {
+	const oldConsoleLog = console.log;
+	console.log = newConsoleLog;
+	eval(jsProgram); // Eval the program, which should call the 'print' function.
+	console.log = oldConsoleLog;
+}
+
 describe("Core functionality", () => {
 	const compiler = new KipperCompiler();
 	const defaultTarget = new KipperTypeScriptTarget();
@@ -205,8 +219,7 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 3 && x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
+				const jsCode = ts.transpile(code);
 				// Overwrite built-in to access output
 				const prevLog = console.log;
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
@@ -214,10 +227,8 @@ describe("Core functionality", () => {
 					assert(message === "Works", "Expected different output");
 				};
 
-				// Evaluate expression
+				// Evaluate expression and restore old console.log
 				eval(jsCode);
-
-				// Restore old console.log
 				console.log = prevLog;
 			});
 
@@ -232,19 +243,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 3 && x < 2) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = () => {
-					assert(false, "Expected no output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 
 			it("false && true", async () => {
@@ -258,19 +258,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 5 && x < 3) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = () => {
-					assert(false, "Expected no output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 
 			it("false && false", async () => {
@@ -284,19 +273,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 5 && x < 8) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = () => {
-					assert(false, "Expected no output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 		});
 
@@ -312,19 +290,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = (message: any) => {
-					assert(message === "Works", "Expected different output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 			});
 
 			it("true || false", async () => {
@@ -338,19 +305,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = (message: any) => {
-					assert(message === "Works", "Expected different output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 			});
 
 			it("false || true", async () => {
@@ -364,19 +320,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = (message: any) => {
-					assert(message === "Works", "Expected different output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 			});
 
 			it("false || false", async () => {
@@ -390,19 +335,8 @@ describe("Core functionality", () => {
 				assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 				assert(code.includes('if (x > 5 || x > 8) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-				let jsCode = ts.transpile(code);
-
-				// Overwrite built-in to access output
-				const prevLog = console.log;
-				console.log = () => {
-					assert(false, "Expected no output");
-				};
-
-				// Evaluate expression
-				eval(jsCode);
-
-				// Restore old console.log
-				console.log = prevLog;
+				const jsCode = ts.transpile(code);
+				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 		});
 	});
@@ -419,19 +353,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 			assert.include(code, 'if (x === 4) {\n  __kipper.print("Works");\n}', "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it("!=", async () => {
@@ -445,19 +368,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 			assert(code.includes('if (x !== 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it("<", async () => {
@@ -471,19 +383,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 			assert(code.includes('if (x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it("<=", async () => {
@@ -497,19 +398,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code");
 			assert(code.includes('if (x <= 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it(">", async () => {
@@ -523,19 +413,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 5;", "Invalid TypeScript code");
 			assert(code.includes('if (x > 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it(">=", async () => {
@@ -549,19 +428,8 @@ describe("Core functionality", () => {
 			assert.include(code, "let x: number = 5;", "Invalid TypeScript code");
 			assert(code.includes('if (x >= 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 	});
 
@@ -620,19 +488,8 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "while (x <= 5) {\n  x += 1;\n}", "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "6", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "6", "Expected different output"), jsCode);
 		});
 
 		it("Simple Loop with expression statement", async () => {
@@ -645,19 +502,8 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "while (x <= 5) \n  x += 1;", "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "6", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "6", "Expected different output"), jsCode);
 		});
 
 		it("Simple Loop with if statement", async () => {
@@ -670,19 +516,101 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "while (x < 5) \n  if (x !== 5) {\n    x += 1;\n  }", "Invalid TypeScript code");
 
-			let jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "5", "Expected different output"), jsCode);
+		});
+	});
 
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "5", "Expected different output");
-			};
+	describe("Member access", () => {
+		describe("Dot notation", () => {});
 
-			// Evaluate expression
-			eval(jsCode);
+		describe("Bracket notation", () => {
+			it("Simple access of a string", async () => {
+				const fileContent = 'var x: str = "1234"[1]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			// Restore old console.log
-			console.log = prevLog;
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.index("1234", 1);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+			});
+		});
+
+		describe("Slice notation", () => {
+			it("Simple slice with both start and end", async () => {
+				const fileContent = 'var x: str = "1234"[1:2]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", 1, 2);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with only start", async () => {
+				const fileContent = 'var x: str = "1234"[1:]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", 1, undefined);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "234", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with only end", async () => {
+				const fileContent = 'var x: str = "1234"[:2]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", undefined, 2);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "12", "Expected different output"), jsCode);
+			});
+
+			it("Simple slice with neither start nor end", async () => {
+				const fileContent = 'var x: str = "1234"[:]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert(instance.programCtx);
+				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				assert.include(
+					instance.write(),
+					'let x: string = __kipper.slice("1234", undefined, undefined);',
+					"Expected different TypeScript code",
+				);
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput((message: any) => assert(message === "1234", "Expected different output"), jsCode);
+			});
 		});
 	});
 
@@ -712,19 +640,8 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code",
 			);
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "Works", "Expected different output");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
 		});
 
 		it("Return value", async () => {
@@ -741,19 +658,8 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code",
 			);
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "5", "Expected different result");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "5", "Expected different result"), jsCode);
 		});
 
 		it("Parameters", async () => {
@@ -770,19 +676,8 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code",
 			);
 
-			let jsCode = ts.transpile(code);
-
-			// Overwrite built-in to access output
-			const prevLog = console.log;
-			console.log = (message: any) => {
-				assert(message === "6", "Expected different result");
-			};
-
-			// Evaluate expression
-			eval(jsCode);
-
-			// Restore old console.log
-			console.log = prevLog;
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert(message === "6", "Expected different result"), jsCode);
 		});
 	});
 });

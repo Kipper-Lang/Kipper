@@ -5,7 +5,7 @@ const validFilePath = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 const invalidFilePath = path.resolve(`${__dirname}/../../kipper-files/invalid.kip`);
 const utf16filePath = path.resolve(`${__dirname}/../../kipper-files/hello-world-utf16.kip`);
 
-describe("kipper analyse", () => {
+describe("Kipper CLI 'analyse'", () => {
 	describe("primary", () => {
 		test
 			.stdout()

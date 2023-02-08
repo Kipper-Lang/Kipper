@@ -17,33 +17,42 @@ import {
 	kipperStrType,
 	kipperUndefinedType,
 	kipperVoidType,
+	InternalFunction,
+	InternalFunctionArgument,
 } from "@kipper/core";
 
 /**
- * Fetches the typescript equivalent for a {@link KipperType}.
+ * Fetches the typescript equivalent for a {@link KipperCompilableType}.
  * @param kipperType The type to get the equivalent for.
  * @since 0.8.0
  */
-export function getTypeScriptType(kipperType: KipperCompilableType): string {
+export function getTypeScriptType(kipperType: KipperCompilableType | Array<KipperCompilableType>): string {
+	if (Array.isArray(kipperType)) {
+		// Recursively call this function for each type in the array
+		return `${kipperType.map(getTypeScriptType).join(" | ")}`;
+	}
+
 	switch (kipperType) {
-		case kipperVoidType:
-			return "void";
-		case kipperNullType:
-			return "null";
-		case kipperUndefinedType:
-			return "undefined";
-		case kipperFuncType:
-			throw new KipperNotImplementedError("Lambda functions have not been implemented for TypeScript translation yet.");
 		case kipperBoolType:
 			return "boolean";
-		/* The Kipper meta type is basically just a runtime string, which contains the identifier for the type */
+		case kipperFuncType:
+			return "Function";
+		case kipperListType:
+			return "Array";
 		case kipperMetaType:
-		case kipperStrType:
-			return "string";
+			return "object";
+		case kipperNullType:
+			return "null";
 		case kipperNumType:
 			return "number";
-		case kipperListType:
-			throw new KipperNotImplementedError("Kipper lists have not been implemented for TypeScript translation yet.");
+		case kipperStrType:
+			return "string";
+		case kipperUndefinedType:
+			return "undefined";
+		case kipperVoidType:
+			return "void";
+		default:
+			throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
 	}
 }
 
@@ -52,10 +61,10 @@ export function getTypeScriptType(kipperType: KipperCompilableType): string {
  * @param funcSpec The function spec object containing the metadata of the function.
  * @since 0.10.0
  */
-export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDeclaration): {
+export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperCompilableType }>;
-	returnType: KipperCompilableType;
+	params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
+	returnType: KipperCompilableType | Array<KipperCompilableType>;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -74,7 +83,7 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
 	} else {
 		return {
 			identifier: funcSpec.identifier,
-			params: funcSpec.params.map((arg: BuiltInFunctionArgument) => {
+			params: funcSpec.params.map((arg: BuiltInFunctionArgument | InternalFunctionArgument) => {
 				return { identifier: arg.identifier, type: arg.valueType };
 			}),
 			returnType: funcSpec.returnType,
@@ -89,8 +98,8 @@ export function getTSFunctionSignature(funcSpec: BuiltInFunction | FunctionDecla
  */
 export function createTSFunctionSignature(signature: {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperCompilableType }>;
-	returnType: KipperCompilableType;
+	params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
+	returnType: KipperCompilableType | Array<KipperCompilableType>;
 }): string {
 	const { identifier, params } = signature;
 	const argsSignature = `${params.map((p) => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;

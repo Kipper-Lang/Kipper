@@ -194,8 +194,8 @@ Usually the semantic interfaces of a Kipper AST node are like this:
 
 ```ts
 export interface AdditiveExpressionSemantics extends ArithmeticExpressionSemantics {
-	leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
-	rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	leftOp: Expression;
+	rightOp: Expression;
 	operator: KipperAdditiveOperator;
 }
 
