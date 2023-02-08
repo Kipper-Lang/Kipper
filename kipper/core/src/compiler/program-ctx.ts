@@ -391,13 +391,13 @@ export class KipperProgramContext {
 			throw e;
 		}
 
-		// Caching the result
-		this._abstractSyntaxTree = listener.rootNode;
-
+		/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
 		if (!listener.rootNode) {
-			// This should usually never happen. If it does, then something went wrong terribly
 			throw new KipperInternalError("Missing AST root node in listener instance");
 		}
+
+		// Caching the result
+		this._abstractSyntaxTree = listener.rootNode;
 
 		const countNodes: number = listener.rootNode.children.length;
 		this.logger.debug(`Finished generation of Kipper AST.`);

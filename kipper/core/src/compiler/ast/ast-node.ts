@@ -150,6 +150,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public getAntlrRuleChildren(): Array<ParseTree> {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.antlrRuleCtx.children === undefined) {
 			throw new UnableToDetermineSemanticDataError();
 		}
@@ -162,6 +163,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.8.0
 	 */
 	public getSemanticData(): Semantics {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.semanticData === undefined) {
 			throw new UndefinedSemanticsError();
 		}
@@ -174,6 +176,7 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * @since 0.10.0
 	 */
 	public getTypeSemanticData(): TypeSemantics {
+		/* istanbul ignore if: such internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.typeSemantics === undefined) {
 			throw new UndefinedSemanticsError();
 		}

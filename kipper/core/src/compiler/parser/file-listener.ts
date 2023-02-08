@@ -186,6 +186,7 @@ export class KipperFileListener implements KipperParserListener {
 	 * @private
 	 */
 	private handleIncomingExpressionCtx(ctx: ParserExpressionContextType) {
+		/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
 		if (this.getCurrentNode instanceof RootASTNode) {
 			throw new KipperInternalError(
 				"An expression may not have the root file token as a parent. It must be child to a statement or a" +
