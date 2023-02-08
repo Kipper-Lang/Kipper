@@ -281,7 +281,7 @@ To use development versions of Kipper download the
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
-	
+
 ### Deprecated
 
 ### Removed
