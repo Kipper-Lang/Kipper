@@ -192,23 +192,23 @@ which can be included and used inside a browser without any dependencies.
    - For a stable release:
 
    ```bash
-   pnpm publish --access public && pnpm -r publish --access public
+   pnpm publish && pnpm -r publish --access public
    ```
 
    - For a release candidate:
 
    ```bash
-   pnpm publish --access public --tag rc && pnpm -r publish --access public --tag rc
+   pnpm publish --tag rc && pnpm -r publish --tag rc
    ```
 
    - For a beta release:
 
    ```bash
-   pnpm publish --access public --tag beta && pnpm -r publish --access public --tag beta
+   pnpm publish --tag beta && pnpm -r publish --tag beta
    ```
 
    - For an alpha release:
 
    ```bash
-   pnpm publish --access public --tag alpha && pnpm -r publish --access public --tag alpha
+   pnpm publish --tag alpha && pnpm -r publish --tag alpha
    ```
