@@ -76,10 +76,7 @@ describe("AST Nodes", () => {
 
 		describe("hasFailed", () => {
 			it("With no errors", async () => {
-				const result = await new KipperCompiler().compile(
-					"var valid: str = '1';",
-					{target: defaultTarget}
-				);
+				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -88,10 +85,7 @@ describe("AST Nodes", () => {
 			});
 
 			it("With errors", async () => {
-				const result = await new KipperCompiler().compile(
-					"var invalid: str = 1;",
-					{target: defaultTarget}
-				);
+				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -104,7 +98,7 @@ describe("AST Nodes", () => {
 	describe("RootASTNode", () => {
 		describe("sourceCode", () => {
 			it("With empty file", async () => {
-				const result = await new KipperCompiler().compile("", {target: defaultTarget});
+				const result = await new KipperCompiler().compile("", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -113,7 +107,7 @@ describe("AST Nodes", () => {
 
 			it("With file content", async () => {
 				const sourceCode = "var valid: str = '1';";
-				const result = await new KipperCompiler().compile(sourceCode, {target: defaultTarget});
+				const result = await new KipperCompiler().compile(sourceCode, { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -123,10 +117,7 @@ describe("AST Nodes", () => {
 
 		describe("hasFailed", () => {
 			it("With no errors", async () => {
-				const result = await new KipperCompiler().compile(
-					"var valid: str = '1';",
-					{target: defaultTarget}
-				);
+				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -134,10 +125,7 @@ describe("AST Nodes", () => {
 			});
 
 			it("With errors", async () => {
-				const result = await new KipperCompiler().compile(
-					"var invalid: str = 1;",
-					{target: defaultTarget}
-				);
+				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -147,7 +135,7 @@ describe("AST Nodes", () => {
 
 		describe("children", () => {
 			it("With empty file", async () => {
-				const result = await new KipperCompiler().compile("", {target: defaultTarget});
+				const result = await new KipperCompiler().compile("", { target: defaultTarget });
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
@@ -158,7 +146,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile(
 					// Even though this is invalid, we still expect 1 child to be present
 					"var invalid: str = 1;",
-					{target: defaultTarget}
+					{ target: defaultTarget },
 				);
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
@@ -170,7 +158,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile(
 					// Even though some of these are invalid, we still expect 3 children to be present
 					"var x1: str = 1; var x2: str = '1'; const x3: str;",
-					{target: defaultTarget}
+					{ target: defaultTarget },
 				);
 				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
 
