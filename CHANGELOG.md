@@ -277,16 +277,11 @@ To use development versions of Kipper download the
 - Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
-
-### Deprecated
-
-### Fixed
-
 - Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
-
+	
 ### Deprecated
 
 ### Removed
