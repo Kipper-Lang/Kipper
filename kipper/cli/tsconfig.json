@@ -5,6 +5,7 @@
 		"rootDir": "./src",
 		"sourceRoot": "./src",
 		"target": "es2016",
+		"noImplicitOverride": false,
 		"skipLibCheck": true,
 		"lib": [
 			"ES7" // ES7 -> ES2016

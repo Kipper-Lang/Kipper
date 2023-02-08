@@ -235,6 +235,8 @@ To use development versions of Kipper download the
 - Updated factory system for `StatementASTNodeFactory`, `DeclarationASTNodeFactory` and `ExpressionASTNodeFactory` to
   use a mapping table instead of a switch statement for better readability and accessibility. This also allows for
   easier extension of the factory system. The `create` function is now instance-based (not static anymore) as well.
+- Constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
+	allow a mismatch content between the two.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -275,6 +277,15 @@ To use development versions of Kipper download the
 - Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+
+### Deprecated
+
+### Fixed
+
+- Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+  to undefined variables and allowed the referencing of variables that were not defined or had no value set.
+- Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
 
 ### Deprecated
 
@@ -780,8 +791,7 @@ To use development versions of Kipper download the
 - New type `TargetTokenCodeGenerator`, which represents a function type that semantically analyses a
   `CompilableASTNode`.
 - Target-specific code generator `KipperTargetCodeGenerator`, which defines the functions that convert the Kipper code
-  into
-  a specific target language.
+  into a specific target language.
 - Target-specific semantic analyser class `KipperTargetSemanticAnalyser`, which can define additional semantic analysis
   logic for a compilation target.
 - Class `KipperCompileTarget` which defines the functions and classes for how to handle the translation to a
@@ -936,11 +946,9 @@ To use development versions of Kipper download the
 ### Added
 
 - Implemented simple scope logic by adding the `scope` property to all `Statement` classes and creating a tracking
-  variable
-  called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
+  variable called `_currentScope` in `KipperFileListener`, which will be updated while processing the parse tree.
 - Added variable metadata handling in `VariableDeclaration`. The class will now on construction determine its
-  identifier,
-  storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
+  identifier, storage type, value type and state (whether it was defined yet) using its antlr4 context instance.
 - Added errors `BuiltInOverwriteError`, `UnableToDetermineMetadataError` and `UnknownTypeError`.
 - Added new abstract base class `ScopeDeclaration`, which is the parent class for the already existing
   `ScopeDeclaration` and the added `ScopeFunctionDeclaration`.
@@ -951,8 +959,7 @@ To use development versions of Kipper download the
 
 - Renamed class `ScopeDeclaration` to `ScopeDeclaration` and updated its constructor to require a token
   (`VariableDeclaration` instance), which will automatically set the properties (identifier, storage type, value type,
-  scope
-  and state).
+  scope and state).
 - Rearranged constructor arguments of `KipperParseStream` to `stringContent, name, charStream`, and set `name` to
   default to `"anonymous-script"`.
 - Updated `CompoundStatement` children behaviour, by adding a new array `localScope`, which will store the metadata
@@ -986,8 +993,7 @@ To use development versions of Kipper download the
   primarily includes global functions, which can be represented using the interface `BuiltInFunction`. (In work!)
 - Implemented `**` (Power-to) as a valid arithmetic expression.
 - Implemented `RuntimeCompileConfig` and `CompileConfig`, which may be passed onto `KipperCompile.compile()` to
-  configure
-  the compilation behaviour.
+  configure the compilation behaviour.
 - Implemented new module `/compiler/tokens`, which contains the parse token implementations.
 - Implemented basic global function `print` that will be available inside a Kipper program per default (unless
   forcibly changed).

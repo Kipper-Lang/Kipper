@@ -54,7 +54,7 @@ describe("AST Nodes", () => {
 		describe("sourceCode", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-				let stream: KipperParseStream = new KipperParseStream(fileContent);
+				let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
 				let parseData: ParseData = await new KipperCompiler().parse(stream);
 				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 					target: defaultTarget,
