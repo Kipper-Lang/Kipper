@@ -48,7 +48,7 @@ export class KipperParseFile extends KipperParseStream {
 	private readonly _path: path.ParsedPath;
 
 	constructor(stringContent: string, fileLocation: string, fileName: string, encoding: BufferEncoding) {
-		super(stringContent, fileName, fileLocation);
+		super({ stringContent: stringContent, name: fileName, filePath: fileLocation });
 		this._absolutePath = path.resolve(fileLocation);
 		this._encoding = encoding;
 		this._path = path.parse(this._absolutePath);

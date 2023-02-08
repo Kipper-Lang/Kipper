@@ -4,6 +4,7 @@
  */
 import type { TranslatedCodeLine } from "../../const";
 import type { BuiltInFunction } from "../../runtime-built-ins";
+import { InternalFunction } from "../../runtime-built-ins";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.
@@ -22,7 +23,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.10.0
 	 */
-	public abstract numToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract numToStr(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'str' to 'num' type conversion functionality.
@@ -30,7 +31,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.10.0
 	 */
-	public abstract strToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract strToNum(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
@@ -38,7 +39,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.10.0
 	 */
-	public abstract boolToStr(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract boolToStr(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
@@ -46,7 +47,28 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @since 0.10.0
 	 */
-	public abstract boolToNum(func: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	public abstract boolToNum(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Slice function which provides the ability to slice an iterable object-like type.
+	 *
+	 * This function is used to slice types, such as a string or array, into a new object-like or primitive type. This is
+	 * used to get a substring from a string, or a sub-array from an array.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 */
+	public abstract slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Index function which provides the ability to index an iterable object-like type.
+	 *
+	 * This is used to get a specific index from an iterable object-like type, such as a string or array. Though unlike
+	 * in JavaScript this will assert that the index is within the bounds of the iterable object-like type. Otherwise,
+	 * an error will be thrown.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 */
+	public abstract index(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Print function which provides default IO console output functionality.

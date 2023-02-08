@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { KipperCompiler, KipperLogger, KipperParseStream, LexerOrParserSyntaxError, LogLevel } from "@kipper/core";
+import { KipperCompiler, KipperLogger, LexerOrParserSyntaxError, LogLevel } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperLogger", () => {
@@ -75,9 +75,7 @@ describe("KipperLogger", () => {
 			}, LogLevel.ERROR);
 
 			try {
-				await new KipperCompiler(logger).compile(new KipperParseStream("var x: num = 4; \nvar x: num = 5"), {
-					target: defaultTarget,
-				});
+				await new KipperCompiler(logger).compile("var x: num = 4; \nvar x: num = 5", { target: defaultTarget });
 			} catch (e) {
 				assert(
 					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",

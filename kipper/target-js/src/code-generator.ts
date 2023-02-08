@@ -3,21 +3,21 @@
  * @since 0.10.0
  */
 import type {
+	ComparativeExpressionSemantics,
+	LogicalExpressionSemantics,
+	TranslatedCodeLine,
+	TranslatedExpression,
 	AdditiveExpression,
-	ArraySpecifierExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
-	ComparativeExpressionSemantics,
 	ConditionalExpression,
 	EqualityExpression,
 	Expression,
-	ExpressionSemantics,
 	ExpressionStatement,
-	ExpressionTypeSemantics,
 	FStringPrimaryExpression,
-	FunctionCallPostfixExpression,
+	FunctionCallExpression,
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
@@ -26,10 +26,9 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ListPrimaryExpression,
+	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
-	LogicalExpressionSemantics,
 	LogicalOrExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -40,8 +39,6 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TranslatedCodeLine,
-	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 } from "@kipper/core";
@@ -52,6 +49,7 @@ import {
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
+	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -101,6 +99,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// Create global kipper object - Always prefer the global '__kipper' instance
 			["// @ts-ignore"],
 			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
+			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			[
+				'__kipper.TypeError = __kipper.TypeError ||  (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				";",
+			],
+			[
+				'__kipper.IndexError = __kipper.IndexError ||  (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				";",
+			],
 		];
 	};
 
@@ -228,6 +236,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -235,6 +244,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -253,6 +263,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -267,6 +278,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link ReturnStatement} into the JavaScript language.
+	 * @since 0.10.0
 	 */
 	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -321,9 +333,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ListPrimaryExpression} into the JavaScript language.
+	 * Translates a {@link ArrayLiteralPrimaryExpression} into the JavaScript language.
 	 */
-	listPrimaryExpression = async (node: ListPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayLiteralExpression = async (node: ArrayLiteralPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 
@@ -340,6 +352,43 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			identifier = getJavaScriptBuiltInIdentifier(identifier);
 		}
 		return [identifier];
+	};
+
+	/**
+	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
+	 * @since 0.10.0
+	 */
+	memberAccessExpression = async (node: MemberAccessExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const object = await semanticData.objectLike.translateCtxAndChildren();
+
+		switch (<"dot" | "bracket" | "slice">semanticData.accessType) {
+			case "dot":
+				return []; // TODO: Not implemented
+			case "bracket": {
+				// -> The member access is done via brackets, meaning the member name is an expression
+				// In this case, only indexes are allowed, not keys, but in the future, this will change with the implementation
+				// of objects.
+				const keyOrIndex = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
+
+				// Return the member access expression in form of a function call to the internal 'index' function
+				const sliceIdentifier = getJavaScriptBuiltInIdentifier("index");
+				return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
+			}
+			case "slice": {
+				// -> The member access is done via a slice, meaning the member name is a slice expression
+				const slice = <{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice;
+
+				// Translate the start and end expression, if they exist.
+				// If they don't, simply undefined will be passed onto the underlying function
+				const start = slice.start ? await slice.start.translateCtxAndChildren() : "undefined";
+				const end = slice.end ? await slice.end.translateCtxAndChildren() : "undefined";
+
+				// Return the slice expression in form of a function call to the internal 'slice' function
+				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
+				return [sliceIdentifier, "(", ...object, ", ", ...start, ", ", ...end, ")"];
+			}
+		}
 	};
 
 	/**
@@ -397,13 +446,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArraySpecifierExpression} into the JavaScript language.
-	 */
-	arraySpecifierExpression = async (node: ArraySpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
-	};
-
-	/**
 	 * Translates a {@link IncrementOrDecrementPostfixExpression} into the JavaScript language.
 	 */
 	voidOrNullOrUndefinedPrimaryExpression = async (
@@ -427,9 +469,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link FunctionCallPostfixExpression} into the JavaScript language.
+	 * Translates a {@link FunctionCallExpression} into the JavaScript language.
 	 */
-	functionCallPostfixExpression = async (node: FunctionCallPostfixExpression): Promise<TranslatedExpression> => {
+	functionCallExpression = async (node: FunctionCallExpression): Promise<TranslatedExpression> => {
 		// Get the function and semantic data
 		const semanticData = node.getSemanticData();
 		const func = node.getTypeSemanticData().func;
@@ -471,7 +513,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Get the operator and the operand
 		const operator: string = semanticData.operator;
-		const operand: Expression<ExpressionSemantics, ExpressionTypeSemantics> = semanticData.operand;
+		const operand: Expression = semanticData.operand;
 
 		// Return the generated unary expression
 		return [operator].concat(await operand.translateCtxAndChildren());
@@ -528,7 +570,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	protected translateOperatorExpressionWithOperands = async (
-		node: ComparativeExpression<any, any> | LogicalExpression<any, any>,
+		node: ComparativeExpression | LogicalExpression,
 	): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();

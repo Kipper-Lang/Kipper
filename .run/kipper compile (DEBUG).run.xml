@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="kipper compile (DEBUG)" type="NodeJSConfigurationType" application-parameters="compile -s &quot;&quot;" path-to-js-file="./kipper/cli/bin/run" working-dir="$PROJECT_DIR$/">
+    <envs>
+      <env name="DEBUG" value="*" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>

@@ -6,8 +6,6 @@
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 import type {
-	ExpressionSemantics,
-	ExpressionTypeSemantics,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
 	SemanticData,
@@ -29,6 +27,7 @@ import {
 	ReturnStatement,
 	Statement,
 	TangledPrimaryExpression,
+	MemberAccessExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
@@ -36,10 +35,10 @@ import {
 	KipperArithmeticOperator,
 	KipperCompilableType,
 	kipperCompilableTypes,
-	KipperFunction,
 	kipperIncrementOrDecrementOperators,
 	kipperPlusOperator,
 	KipperReferenceable,
+	KipperReferenceableFunction,
 	kipperStrType,
 	kipperSupportedConversions,
 } from "../../const";
@@ -51,14 +50,15 @@ import {
 	IncompleteReturnsInCodePathsError,
 	InvalidAmountOfArgumentsError,
 	InvalidConversionTypeError,
+	InvalidKeyTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionOperandError,
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
-	ReadOnlyTypeError,
-	TypeError,
+	ReadOnlyWriteTypeError,
 	UnknownTypeError,
+	ValueNotIndexableTypeError,
 } from "../../../errors";
 import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
 
@@ -113,7 +113,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			return CheckedType.fromCompilableType(<KipperCompilableType>type.identifier);
 		} catch (e) {
-			// If the error is not a KipperError, rethrow it (since it is not a type error and we don't know what happened)
+			// If the error is not a KipperError, rethrow it (since it is not a type error, and we don't know what happened)
 			if (!(e instanceof KipperError)) {
 				throw e;
 			}
@@ -154,6 +154,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * Asserts that the passed {@link ref} is callable. This function will only check {@link ScopeDeclaration} instances,
 	 * since {@link BuiltInFunction built-in functions} will always be callable.
 	 * @param ref The reference to check.
+	 * @throws {ExpressionNotCallableError} If the passed {@link ref} is not callable.
 	 * @since 0.10.0
 	 */
 	public refTargetCallable(ref: KipperReferenceable): void {
@@ -178,6 +179,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	/**
 	 * Asserts that the passed expression is valid and the assigned value is compatible with the identifier.
 	 * @param assignmentExp The assignment expression to check.
+	 * @throws {ArithmeticOperationTypeError} In case a arithmetic assignment operation is used with an invalid type.
+	 * @throws {AssignmentTypeError} If the value type can not be assigned to the identifier type.
 	 * @since 0.7.0
 	 */
 	public validAssignment(assignmentExp: AssignmentExpression): void {
@@ -190,7 +193,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			"storageType" in semanticData.assignTarget.refTarget &&
 			semanticData.assignTarget.refTarget.storageType === "const"
 		) {
-			throw this.assertError(new ReadOnlyTypeError(semanticData.assignTarget.refTarget.identifier));
+			throw this.assertError(new ReadOnlyWriteTypeError(semanticData.assignTarget.refTarget.identifier));
 		}
 
 		// Get the compile-types for the left and right hand side
@@ -220,12 +223,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * Asserts that this variable definition is valid and the assigned value is compatible with the identifier.
 	 * @param scopeEntry The scope entry/variable being assigned to.
 	 * @param value The right expression/value of the assignment.
+	 * @throws {AssignmentTypeError} If the assignment value type is not compatible with the definition type.
 	 * @since 0.7.0
 	 */
-	public validVariableDefinition(
-		scopeEntry: ScopeVariableDeclaration,
-		value: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-	): void {
+	public validVariableDefinition(scopeEntry: ScopeVariableDeclaration, value: Expression): void {
 		// Get the compile-types for the left and right hand side
 		const leftExpType = KipperTypeChecker.getTypeForAnalysis(scopeEntry.type);
 		const rightExpType = KipperTypeChecker.getTypeForAnalysis(value.getTypeSemanticData().evaluatedType);
@@ -237,7 +238,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure the value of the definition match the definition type
 		if (!this.checkMatchingTypes(leftExpType, rightExpType)) {
-			throw this.assertError(new TypeError(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`));
+			throw this.assertError(new AssignmentTypeError(rightExpType, leftExpType));
 		}
 	}
 
@@ -252,28 +253,28 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: CheckedType): void {
 		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
-		let valueType: CheckedType;
+		let argType: CheckedType;
 
 		// Get the proper semantic data and value type
 		if (arg instanceof ParameterDeclaration) {
 			semanticData = arg.getSemanticData();
-			valueType = arg.getTypeSemanticData().valueType;
+			argType = arg.getTypeSemanticData().valueType;
 		} else {
 			semanticData = arg;
-			valueType = CheckedType.fromCompilableType(arg.valueType);
+			argType = CheckedType.fromCompilableType(arg.valueType);
 		}
 
 		// Get the compile-types for the parameter and argument (value provided)
 		const receivedCompileType = KipperTypeChecker.getTypeForAnalysis(receivedType);
-		const valueCompileType = KipperTypeChecker.getTypeForAnalysis(valueType);
+		const argCompileType = KipperTypeChecker.getTypeForAnalysis(argType);
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (receivedCompileType === undefined || valueCompileType === undefined) {
+		if (receivedCompileType === undefined || argCompileType === undefined) {
 			return;
 		}
 
-		if (!this.checkMatchingTypes(valueCompileType, receivedCompileType)) {
-			throw this.assertError(new ArgumentTypeError(semanticData.identifier, valueCompileType, receivedCompileType));
+		if (!this.checkMatchingTypes(argCompileType, receivedCompileType)) {
+			throw this.assertError(new ArgumentTypeError(semanticData.identifier, argCompileType, receivedCompileType));
 		}
 	}
 
@@ -285,16 +286,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(
-		func: KipperFunction,
-		args: Array<Expression<ExpressionSemantics, ExpressionTypeSemantics>>,
-	): void {
+	public validFunctionCallArguments(func: KipperReferenceableFunction, args: Array<Expression>): void {
 		if (func.params.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
 		}
 
 		// Iterate through both arrays at the same type to verify each type is valid
-		args.forEach((arg: Expression<ExpressionSemantics, ExpressionTypeSemantics>, index) => {
+		args.forEach((arg: Expression, index) => {
 			const typeData = arg.getTypeSemanticData();
 
 			this.setTracebackData({ ctx: arg });
@@ -304,7 +302,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Asserts that the passed relational expression is valid.
-	 * @param exp The expression to check.
+	 * @param exp The relational expression to check.
+	 * @throws {InvalidRelationalComparisonTypeError} If the value types can not be compared.
 	 * @since 0.9.0
 	 */
 	public validRelationalExpression(exp: RelationalExpression): void {
@@ -332,13 +331,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * {@link operand.semanticData.operator operator}.
 	 * @param operand The unary expression to check. (Also includes {@link IncrementOrDecrementPostfixExpression}, since
 	 * even if it's a postfix expression, it's still a unary expression)
+	 * @throws {InvalidUnaryExpressionOperandError} If the operand is not a valid operand for the operator.
 	 * @since 0.9.0
 	 */
-	public validUnaryExpression(
-		operand:
-			| UnaryExpression<UnaryExpressionSemantics, UnaryExpressionTypeSemantics>
-			| IncrementOrDecrementPostfixExpression,
-	): void {
+	public validUnaryExpression(operand: UnaryExpression | IncrementOrDecrementPostfixExpression): void {
 		const semanticData = <UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics>(
 			operand.getSemanticData()
 		);
@@ -378,16 +374,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Asserts that the passed type allows the arithmetic operation.
-	 * @param leftOp The left operand expression.
+	 * @param leftOp The left validBracketNotationKeyoperand expression.
 	 * @param rightOp The right operand expression.
 	 * @param op The arithmetic operation that is performed.
+	 * @throws {ArithmeticOperationTypeError} If the type of the left or right operand is not a number, and the operation
+	 * is not a concatenation of strings.
 	 * @since 0.9.0
 	 */
-	public validArithmeticExpression(
-		leftOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		rightOp: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		op: KipperArithmeticOperator,
-	): void {
+	public validArithmeticExpression(leftOp: Expression, rightOp: Expression, op: KipperArithmeticOperator): void {
 		// Get the compile-types for both operands
 		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
 		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
@@ -413,12 +407,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * Asserts that the type conversion for the {@link operand} is valid.
 	 * @param operand The expression to convert.
 	 * @param targetType The type to convert to.
+	 * @throws {InvalidConversionTypeError} If the conversion is invalid/impossible.
 	 * @since 0.8.0
 	 */
-	public validConversion(
-		operand: Expression<ExpressionSemantics, ExpressionTypeSemantics>,
-		targetType: CheckedType,
-	): void {
+	public validConversion(operand: Expression, targetType: CheckedType): void {
 		// Get the compile-types for the specified conversion types
 		const originalCompileType = KipperTypeChecker.getTypeForAnalysis(operand.getTypeSemanticData().evaluatedType);
 		const targetCompileType = KipperTypeChecker.getTypeForAnalysis(targetType);
@@ -443,6 +435,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	/**
 	 * Asserts that the passed return statement is valid.
 	 * @param returnStatement The return statement to check.
+	 * @throws {AssignmentTypeError} If the type of the return value does not match the return type of the function.
 	 * @since 0.10.0
 	 */
 	public validReturnStatement(returnStatement: ReturnStatement): void {
@@ -465,9 +458,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// We need to check whether the types are matching, but *not* if the function return type is valid, since that
 		// will be done later by the function itself during the type checking.
 		if (statementValueType && !this.checkMatchingTypes(statementValueType, functionReturnType)) {
-			throw this.assertError(
-				new TypeError(`Type '${statementValueType}' is not assignable to type '${functionReturnType}'.`),
-			);
+			throw this.assertError(new AssignmentTypeError(statementValueType, functionReturnType));
 		}
 	}
 
@@ -476,6 +467,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 *
 	 * Requires {@link func.typeSemantics} to be set.
 	 * @param func The function where the body should be checked.
+	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
@@ -551,6 +543,133 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			// If not all code paths return a value, throw an error
 			if (!returnPathsCovered) {
 				throw this.assertError(new IncompleteReturnsInCodePathsError());
+			}
+		}
+	}
+
+	/**
+	 * Checks whether the members of the passed {@link objLike} can be accessed. (As well if there are members)
+	 * @param objLike The object-like expression to check.
+	 * @throws {TypeError} If the object expression is not an object.
+	 * @since 0.10.0
+	 */
+	public objectLikeIsIndexableOrAccessible(objLike: Expression): void {
+		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
+
+		// If the obj type is undefined, skip type checking (the type is invalid anyway)
+		if (objType === undefined) {
+			return;
+		}
+
+		// TODO! Add support for 'object' types once they are implemented
+		if (objType !== "str" && objType !== "list") {
+			throw this.assertError(new ValueNotIndexableTypeError(objType));
+		}
+	}
+
+	/**
+	 * Ensure the passed {@link key} may be used to access the members of the passed {@link objLike}.
+	 * @param objLike The object-like expression to check.
+	 * @param key The key that accesses the members of the object-like expression.
+	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
+	 * @since 0.10.0
+	 */
+	public validBracketNotationKey(objLike: Expression, key: Expression): void {
+		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
+		const keyType = KipperTypeChecker.getTypeForAnalysis(key.getTypeSemanticData().evaluatedType);
+
+		// If the obj or key type are undefined, skip type checking  (the types are invalid anyway)
+		if (objType === undefined || keyType === undefined) {
+			return undefined;
+		}
+
+		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
+		if (keyType !== "num") {
+			throw this.assertError(new InvalidKeyTypeError(objType, keyType));
+		}
+	}
+
+	/**
+	 * Ensure the passed {@link key slice keys} may be used to access the members of the passed {@link objLike}.
+	 * @param objLike The object-like expression to check.
+	 * @param key The key that accesses the members of the object-like expression.
+	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
+	 * @since 0.10.0
+	 */
+	public validSliceNotationKey(objLike: Expression, key: { start?: Expression; end?: Expression }): void {
+		const objType = KipperTypeChecker.getTypeForAnalysis(objLike.getTypeSemanticData().evaluatedType);
+		const startType = key.start
+			? KipperTypeChecker.getTypeForAnalysis(key.start.getTypeSemanticData().evaluatedType)
+			: undefined;
+		const endType = key.end
+			? KipperTypeChecker.getTypeForAnalysis(key.end.getTypeSemanticData().evaluatedType)
+			: undefined;
+
+		// If the obj type is undefined, skip type checking (the type is invalid anyway)
+		if (objType === undefined) {
+			return;
+		}
+
+		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
+		if (startType !== undefined && startType !== "num") {
+			throw this.assertError(new InvalidKeyTypeError(objType, startType), key.start);
+		} else if (endType !== undefined && endType !== "num") {
+			throw this.assertError(new InvalidKeyTypeError(objType, endType), key.end);
+		}
+	}
+
+	/**
+	 * Get the type that this member access expression is accessing.
+	 * @param memberAccess The member access expression to get the type for.
+	 * @since 0.10.0
+	 */
+	public getTypeOfMemberAccessExpression(memberAccess: MemberAccessExpression): CheckedType {
+		const semanticData = memberAccess.getSemanticData();
+
+		// First ensure the object is indexable
+		this.objectLikeIsIndexableOrAccessible(semanticData.objectLike);
+
+		const preAnalysisType = semanticData.objectLike.getTypeSemanticData().evaluatedType;
+		const objType = KipperTypeChecker.getTypeForAnalysis(preAnalysisType);
+
+		// If the obj type is undefined, skip type checking (the type is invalid anyway)
+		if (objType === undefined) {
+			return preAnalysisType; // Return the type that is
+		}
+
+		switch (semanticData.accessType) {
+			case "dot":
+				throw this.notImplementedError(
+					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
+				);
+			case "bracket": {
+				if (objType === "str") {
+					// Also ensure the key is valid
+					this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
+
+					return CheckedType.fromCompilableType("str");
+				} else {
+					// Must be a list -> Not implemented yet
+					throw this.notImplementedError(
+						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
+					); // TODO! Add support for lists
+				}
+			}
+			case "slice": {
+				if (objType === "str") {
+					// Also ensure the key is valid
+					this.validSliceNotationKey(
+						semanticData.objectLike,
+						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
+					);
+
+					return CheckedType.fromCompilableType("str");
+				} else {
+					// Must be a list -> Not implemented yet
+					throw this.notImplementedError(
+						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
+					); // TODO! Add support for lists
+				}
 			}
 		}
 	}

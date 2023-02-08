@@ -121,9 +121,8 @@ export class CheckedType extends Type {
 	/**
 	 * Returns whether the type is compilable.
 	 *
-	 * This function exists, since during type checking an undefined/invalid type
-	 * may be encountered that should still be stored using this class though
-	 * (but NOT compiled!).
+	 * This function exists, since during type checking an undefined/invalid type may be encountered that should still
+	 * be stored using this class though (but NOT compiled!).
 	 * @since 0.10.0
 	 */
 	public get isCompilable(): boolean {

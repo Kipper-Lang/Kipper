@@ -3,37 +3,37 @@
  * functions.
  * @since 0.8.0
  */
-import type { BuiltInFunction, TranslatedCodeLine } from "@kipper/core";
-import { getJavaScriptBuiltInIdentifier, JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
-import { getTypeScriptType } from "./tools";
+import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
+import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
+import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier } from "./tools";
+import { KipperCompilableType } from "@kipper/core";
 
 /**
- * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.
- * @param funcSpec The function spec object containing the metadata of the function.
+ * Generates a TypeScript function from the given signature and body.
+ * @param signature The signature of the function.
+ * @param body The body of the function.
+ * @since 0.10.0
  */
-function getTSFunctionSignature(funcSpec: BuiltInFunction): {
-	type: string;
-	identifier: string;
-	args: Array<[string, string]>;
-} {
-	// Translate the function signature into TypeScript
-	const identifier: string = funcSpec.identifier;
-	const type: string = getTypeScriptType(funcSpec.returnType);
-	const args: Array<[string, string]> = funcSpec.params.map((param) => [
-		param.identifier,
-		getTypeScriptType(param.valueType),
-	]);
-
-	return { type, identifier, args };
-}
-
-function createTSFunctionSignature(signature: {
-	type: string;
-	identifier: string;
-	args: Array<[string, string]>;
-}): string {
-	const { type, identifier, args } = signature;
-	return `function ${identifier}(${args.map((arg) => `${arg[0]}: ${arg[1]}`).join(", ")}): ${type}`;
+export function getTSFunction(
+	signature: {
+		identifier: string;
+		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
+		returnType: KipperCompilableType | Array<KipperCompilableType>;
+	},
+	body: string,
+): Array<TranslatedCodeLine> {
+	return [
+		[
+			getTypeScriptBuiltInIdentifier(signature.identifier),
+			" ",
+			"=",
+			" ",
+			createTSFunctionSignature(signature),
+			" ",
+			body,
+			";",
+		],
+	];
 }
 
 /**
@@ -42,98 +42,65 @@ function createTSFunctionSignature(signature: {
  * @since 0.8.0
  */
 export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGenerator {
-	override async numToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async numToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.params[0].identifier;
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createTSFunctionSignature(signature),
-				" ",
-				`{ return (${convArgIdentifier}).toString(); }`,
-				";",
-			],
-		];
+		return getTSFunction(signature, `{ return (${convArgIdentifier}).toString(); }`);
 	}
 
-	override async strToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.params[0].identifier;
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createTSFunctionSignature(signature),
-				" ",
-				`{ return parseInt(${convArgIdentifier}); }`,
-				";",
-			],
-		];
+		return getTSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
 	}
 
-	override async boolToStr(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async boolToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.params[0].identifier;
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createTSFunctionSignature(signature),
-				" ",
-				`{ return \`\${${convArgIdentifier}}\`; }`,
-				";",
-			],
-		];
+		return getTSFunction(signature, `{ return \`\${${convArgIdentifier}}\`; }`);
 	}
 
-	override async boolToNum(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+	override async boolToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.args[0][0];
+		const convArgIdentifier = signature.params[0].identifier;
 
-		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createTSFunctionSignature(signature),
-				" ",
-				`{ return ${convArgIdentifier} ? 1 : 0; }`,
-				";",
-			],
-		];
+		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO
+		return getTSFunction(signature, `{ return ${convArgIdentifier} ? 1 : 0; }`);
+	}
+
+	override async slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const objLikeIdentifier = signature.params[0].identifier;
+		const startIdentifier = signature.params[1].identifier;
+		const endIdentifier = signature.params[2].identifier;
+
+		return getTSFunction(
+			signature,
+			`{ return ${objLikeIdentifier} ? ${objLikeIdentifier}.slice(${startIdentifier}, ${endIdentifier}) : ${objLikeIdentifier}; }`,
+		);
+	}
+
+	override async index(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const arrayLikeIdentifier = signature.params[0].identifier;
+		const indexIdentifier = signature.params[1].identifier;
+
+		return getTSFunction(
+			signature,
+			`{ if (${indexIdentifier} >= ${arrayLikeIdentifier}.length) ` +
+				`throw new __kipper.IndexError(\`Index '\${${indexIdentifier}}' out of bonds of array-like.\`); ` +
+				`return ${arrayLikeIdentifier}[${indexIdentifier}]; }`,
+		);
 	}
 
 	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
-		const printArgIdentifier = signature.args[0][0];
+		const printArgIdentifier = signature.params[0].identifier;
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return [
-			[
-				getJavaScriptBuiltInIdentifier(signature.identifier),
-				" ",
-				"=",
-				" ",
-				createTSFunctionSignature(signature),
-				" ",
-				`{ console.log(${printArgIdentifier}); }`,
-				";",
-			],
-		];
+		return getTSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
 	}
 }

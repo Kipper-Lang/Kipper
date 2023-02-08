@@ -23,7 +23,6 @@ and the [Kipper website](https://kipper-lang.org)._
 <!-- toc -->
 
 - [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
-- [Kipper Docs](#kipper-docs)
 - [Usage](#usage)
 - [Commands](#commands)
 <!-- tocstop -->
@@ -46,7 +45,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.10.0-alpha.6 win32-x64 node-v18.6.0
+@kipper/cli/0.10.0-alpha.7 win32-x64 node-v18.6.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -63,7 +62,6 @@ USAGE
 - [`kipper compile [FILE]`](#kipper-compile-file)
 - [`kipper help [COMMAND]`](#kipper-help-command)
 - [`kipper run [FILE]`](#kipper-run-file)
-- [`kipper update [CHANNEL]`](#kipper-update-channel)
 - [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
@@ -86,7 +84,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [lib/commands/analyse.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/analyse.js)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -125,7 +123,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [lib/commands/compile.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/compile.js)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -136,13 +134,13 @@ USAGE
   $ kipper help [COMMAND]
 
 ARGUMENTS
-  COMMAND  Command to show help for.
+  COMMAND  command to show help for
 
 OPTIONS
-  -n, --nested-commands  Include all nested commands in the output.
+  --all  see all commands in CLI
 ```
 
-_See code: [lib/commands/help.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/help.js)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run [FILE]`
 
@@ -181,30 +179,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [lib/commands/run.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/run.js)_
-
-## `kipper update [CHANNEL]`
-
-Update the Kipper compiler and CLI.
-
-```
-USAGE
-  $ kipper update [CHANNEL]
-
-OPTIONS
-  -a, --available        Install a specific version.
-  -i, --interactive      Interactively select version to install. This is ignored if a channel is provided.
-  -v, --version=version  Install a specific version.
-  --force                Force a re-download of the requested version.
-
-EXAMPLES
-  [object Object]
-  [object Object]
-  [object Object]
-  [object Object]
-```
-
-_See code: [lib/commands/update.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/update.js)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -215,7 +190,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [lib/commands/version.js](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.6/kipper/cli/lib/commands/version.js)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.0-alpha.7/kipper/cli/src/commands/version.ts)_
 
 <!-- commandsstop -->
 

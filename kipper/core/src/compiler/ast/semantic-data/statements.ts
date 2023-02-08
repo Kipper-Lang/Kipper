@@ -5,8 +5,6 @@
 import type { SemanticData, TypeData } from "../ast-node";
 import type { Expression, FunctionDeclaration, IfStatement, Statement } from "../nodes";
 import type { JmpStatementType } from "../../const";
-import type { ExpressionSemantics } from "./expressions";
-import type { ExpressionTypeSemantics } from "../type-data";
 
 /**
  * Semantics for AST Node {@link IfStatement}.
@@ -17,7 +15,7 @@ export interface IfStatementSemantics extends SemanticData {
 	 * The condition of the if-statement.
 	 * @since 0.9.0
 	 */
-	condition: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	condition: Expression;
 	/**
 	 * The body of the if-statement.
 	 * @since 0.9.0
@@ -43,7 +41,7 @@ export interface IterationStatementSemantics extends SemanticData {
 	 * The loop condition, which, if it evaluates to true will trigger the loop to continue executing.
 	 * @since 0.10.0
 	 */
-	loopCondition: Expression<ExpressionSemantics, ExpressionTypeSemantics>;
+	loopCondition: Expression;
 	/**
 	 * The body of the loop, which is handled and executed depending on the loop type and the value of
 	 * {@link loopCondition}.
@@ -97,7 +95,7 @@ export interface ReturnStatementSemantics extends SemanticData {
 	 * The value of the {@link ReturnStatement}, which is optional, if the return type is void.
 	 * @since 0.10.0
 	 */
-	returnValue: Expression<ExpressionSemantics, ExpressionTypeSemantics> | undefined;
+	returnValue: Expression | undefined;
 	/**
 	 * The function that this return statement is in.
 	 * @since 0.10.0
