@@ -125,90 +125,104 @@ which can be included and used inside a browser without any dependencies.
 
 ## Making a new release
 
-1. Get new version for the next release
-   (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
+1.  Get new version for the next release
+    (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
 
-   ```bash
-   MAJOR.MINOR.PATCH
-   ```
+    ```bash
+    MAJOR.MINOR.PATCH
+    ```
 
-   Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
-   For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
+    Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
+    For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
-2. Update CHANGELOG.md and replace `Unreleased` with new version identifier:
+    ```
 
-   _Skip this step unless it's a stable release! No alpha, beta or rc versions should be listed here!_
+    ```
 
-   ```markdown
-   ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
+2.  Update CHANGELOG.md and replace `Unreleased` with new version identifier:
 
-   ### Added
+    _Skip this step unless it's a stable release! No alpha, beta or rc versions should be listed here!_
 
-   ### Changed
+    ```markdown
+    ## [MAJOR.MINOR.PATCH] - YEAR-MONTH-DAY
 
-   ### Removed
-   ```
+    ### Added
 
-   Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to their GitHub page!
+    ### Changed
 
-3. Updated the static `version` identifiers in the `index.ts` files of each package:
+    ### Removed
+    ```
 
-   ```ts
-   export const version = "MAJOR.MINOR.PATCH";
-   ```
+    Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to their GitHub page!
 
-   The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
-   changes must be committed yourself with a commit message preferably similar to this:
+    ```
 
-   ```
-   Bumped static index.ts versions to MAJOR.MINOR.PATCH
-   ```
+    ```
 
-   For example:
+3.  Updated the static `version` identifiers in the `index.ts` files of each package:
 
-   ```
-   Bumped static index.ts versions to 0.5.0-rc.0
-   ```
+    ```ts
+    export const version = "MAJOR.MINOR.PATCH";
+    ```
 
-4. Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
-   the remote host):
+    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
+    changes must be committed yourself with a commit message preferably similar to this:
 
-   ```bash
-   pnpm run bump MAJOR.MINOR.PATCH
-   ```
+    ```
+    Bumped static index.ts versions to MAJOR.MINOR.PATCH
+    ```
 
-   It is important that this script is run _AFTER_ the previous step, so that the commits associated with the tags
-   already have the version identifiers in the `index.ts` files updated.
+    For example:
 
-5. Then login into your account:
+    ```
+    Bumped static index.ts versions to 0.5.0-rc.0
+    ```
 
-   ```bash
-   pnpm login
-   ```
+4.  Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
+    the remote host):
 
-6. Afterwards publish each package. View for every file the specific release notes in their
-   respective `DEVELOPMENT.md` files:
+    ```bash
+    pnpm run bump MAJOR.MINOR.PATCH
+    ```
 
-   - For a stable release:
+    It is important that this script is run _AFTER_ the previous step, so that the commits associated with the tags
+    already have the version identifiers in the `index.ts` files updated.
 
-   ```bash
-   pnpm publish && pnpm -r publish --access public
-   ```
+5.  Then login into your account:
 
-   - For a release candidate:
+    ```bash
+    pnpm login
+    ```
 
-   ```bash
-   pnpm publish --tag rc && pnpm -r publish --tag rc
-   ```
+6.  Afterwards publish each package. View for every file the specific release notes in their respective `DEVELOPMENT.md`
+    files:
 
-   - For a beta release:
+    - For a stable release:
 
-   ```bash
-   pnpm publish --tag beta && pnpm -r publish --tag beta
-   ```
+    ```bash
+    pnpm publish; pnpm -r publish
+    ```
 
-   - For an alpha release:
+    - For a release candidate:
 
-   ```bash
-   pnpm publish --tag alpha && pnpm -r publish --tag alpha
-   ```
+    ```bash
+    pnpm publish --tag rc; pnpm -r publish --tag rc
+    ```
+
+    - For a beta release:
+
+    ```bash
+    pnpm publish --tag beta; pnpm -r publish --tag beta
+    ```
+
+    - For an alpha release:
+
+    ```bash
+    pnpm publish --tag alpha; pnpm -r publish --tag alpha
+    ```
+
+    Afterwards ensure the `next` tag is updated for every package using:
+
+    ```bash
+    pnpm -r dist-tag add <PACKAGE>@<VERSION> next
+    ```
