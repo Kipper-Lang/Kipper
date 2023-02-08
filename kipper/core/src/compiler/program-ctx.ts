@@ -24,7 +24,7 @@ import { ParseTreeWalker } from "antlr4ts/tree";
  * The program context class used to represent a program for a compilation.
  *
  * This stores all related data for a compilation, such as the AST, the semantic data, the type data, the scope tree,
- * etc. and will handle all issues according to the {@link compileConfig}.
+ * etc. and will handle all issues according to the {@link this.compileConfig compileConfig}.
  * @since 0.0.3
  */
 export class KipperProgramContext {
