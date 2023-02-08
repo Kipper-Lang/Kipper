@@ -22,7 +22,8 @@ describe("ArgumentTypeError", () => {
 			let result: KipperCompileResult | undefined = undefined;
 			try {
 				result = await new KipperCompiler().compile(
-					`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`, defaultConfig
+					`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`,
+					defaultConfig,
 				);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected proper error");
@@ -39,7 +40,7 @@ describe("ArgumentTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(
 					`def test(p1: str, p2: str, p3: str) -> void {}; test("Hello", "World", 1);`,
-					defaultConfig
+					defaultConfig,
 				);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected proper error");
@@ -56,8 +57,8 @@ describe("ArgumentTypeError", () => {
 		let result: KipperCompileResult | undefined = undefined;
 		try {
 			result = await new KipperCompiler().compile(
-				`def test(p1: str, p2: str, p3: str) -> void {}; test("Hello", "World", 1);`,
-				defaultConfig
+				`def test(p1: str, p2: str, p3: str) -> void {}; test("Hello", "World", "1");`,
+				defaultConfig,
 			);
 		} catch (e) {
 			assert.fail("Expected no error");
@@ -66,3 +67,4 @@ describe("ArgumentTypeError", () => {
 		assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 	});
 });
+
