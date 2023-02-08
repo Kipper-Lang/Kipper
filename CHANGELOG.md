@@ -236,7 +236,7 @@ To use development versions of Kipper download the
   use a mapping table instead of a switch statement for better readability and accessibility. This also allows for
   easier extension of the factory system. The `create` function is now instance-based (not static anymore) as well.
 - Constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
-	allow a mismatch content between the two.
+  allow a mismatch content between the two.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.

@@ -67,4 +67,3 @@ describe("ArgumentTypeError", () => {
 		assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
 	});
 });
-

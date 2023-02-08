@@ -7,7 +7,9 @@ describe("InvalidGlobalError", () => {
 		it(globalName, async () => {
 			let compiler = new KipperCompiler();
 			try {
-				const parseData: ParseData = await compiler.parse(new KipperParseStream(`var ${globalName}: num = 4;`));
+				const parseData: ParseData = await compiler.parse(
+					new KipperParseStream({ stringContent: `var ${globalName}: num = 4;` }),
+				);
 				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, defaultConfig);
 
 				// Duplicate identifier

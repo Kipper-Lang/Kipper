@@ -1,4 +1,4 @@
-import {KipperCompiler, KipperCompileResult, KipperParseStream} from "@kipper/core";
+import { KipperCompiler, KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
@@ -526,12 +526,12 @@ describe("Core functionality", () => {
 
 		describe("Bracket notation", () => {
 			it("Simple access of a string", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[1]; print(x);');
-				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+				const fileContent = 'var x: str = "1234"[1]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.index("1234", 1);',
@@ -545,12 +545,12 @@ describe("Core functionality", () => {
 
 		describe("Slice notation", () => {
 			it("Simple slice with both start and end", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[1:2]; print(x);');
-				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+				const fileContent = 'var x: str = "1234"[1:2]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.slice("1234", 1, 2);',
@@ -562,12 +562,12 @@ describe("Core functionality", () => {
 			});
 
 			it("Simple slice with only start", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[1:]; print(x);');
-				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+				const fileContent = 'var x: str = "1234"[1:]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.slice("1234", 1, undefined);',
@@ -579,12 +579,12 @@ describe("Core functionality", () => {
 			});
 
 			it("Simple slice with only end", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[:2]; print(x);');
-				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+				const fileContent = 'var x: str = "1234"[:2]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.slice("1234", undefined, 2);',
@@ -596,12 +596,12 @@ describe("Core functionality", () => {
 			});
 
 			it("Simple slice with neither start nor end", async () => {
-				const stream = new KipperParseStream('var x: str = "1234"[:]; print(x);');
-				const instance: KipperCompileResult = await compiler.compile(stream, { target: defaultTarget });
+				const fileContent = 'var x: str = "1234"[:]; print(x);';
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
-				assert(instance.programCtx.stream === stream, "Expected matching streams");
+				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
 					'let x: string = __kipper.slice("1234", undefined, undefined);',
