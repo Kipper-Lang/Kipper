@@ -84,9 +84,10 @@ export class KipperLexer extends Lexer {
 	public static readonly Whitespace = 68;
 	public static readonly BlockComment = 69;
 	public static readonly Newline = 70;
+	public static readonly COMMENT = 2;
 
 	// tslint:disable:no-trailing-whitespace
-	public static readonly channelNames: string[] = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN"];
+	public static readonly channelNames: string[] = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN", "COMMENT"];
 
 	// tslint:disable:no-trailing-whitespace
 	public static readonly modeNames: string[] = ["DEFAULT_MODE"];
@@ -659,7 +660,7 @@ export class KipperLexer extends Lexer {
 		"\x02\x02\x02\u0268\u0269\ba\x02\x02\u0269\xC2\x03\x02\x02\x02#\x02\u019F" +
 		"\u01A1\u01A8\u01B7\u01BC\u01C3\u01CA\u01D1\u01DF\u01E4\u01E7\u01EE\u01F2" +
 		"\u01FB\u0200\u0204\u0209\u0211\u0214\u021C\u0222\u022A\u0230\u0236\u023D" +
-		"\u0241\u0246\u024A\u024F\u0259\u0263\u0266\x04\x02\x03\x02\b\x02\x02";
+		"\u0241\u0246\u024A\u024F\u0259\u0263\u0266\x04\x02\x03\x02\x02\x04\x02";
 	public static readonly _serializedATN: string = Utils.join(
 		[KipperLexer._serializedATNSegment0, KipperLexer._serializedATNSegment1],
 		"",
