@@ -2,16 +2,15 @@
  * A file context for a single source code file, which stores the important information about the contents of the file.
  *
  * This may be used as an interface for semantically analysing its contents (the AST) and generating code for the
- * target language.s
+ * target language.
  * @since 0.0.3
  */
-
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
 import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
-import { KipperFileListener } from "./parser";
+import { KipperFileASTGenerator } from "./ast";
 import { CompilableASTNode, RootASTNode, type Expression } from "./ast";
 import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
@@ -226,7 +225,7 @@ export class KipperProgramContext {
 	/**
 	 * The root node of the Antlr4 generated parse tree.
 	 *
-	 * This parse tree can be used in a {@link KipperFileListener} to generate an abstract syntax tree.
+	 * This parse tree can be used in a {@link KipperFileASTGenerator} to generate an abstract syntax tree.
 	 */
 	public get antlrParseTree(): CompilationUnitContext {
 		return this._antlrParseTree;
@@ -370,7 +369,7 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private async generateAbstractSyntaxTree(
-		listener: KipperFileListener = new KipperFileListener(this, this.antlrParseTree),
+		listener: KipperFileASTGenerator = new KipperFileASTGenerator(this, this.antlrParseTree),
 	): Promise<RootASTNode> {
 		if (listener.rootNode.programCtx !== this) {
 			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");

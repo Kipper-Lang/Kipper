@@ -2,7 +2,7 @@
 
 // Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
 // possible syntax kind values.
-import { KipperParserRuleContext, ParserASTMapSyntaxKind } from "..";
+import { KipperParserRuleContext, ASTKind } from "..";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
@@ -5995,7 +5995,7 @@ export class VoidOrNullOrUndefinedPrimaryExpressionContext extends KipperParserR
 }
 
 export class ComputedPrimaryExpressionContext extends KipperParserRuleContext {
-	public _labelASTKind: ParserASTMapSyntaxKind | undefined;
+	public _labelASTKind: ASTKind | undefined;
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}

@@ -42,28 +42,7 @@ import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
 import { ScopeNode } from "../scope-node";
-
-/**
- * Union type of all usable definition/declaration rule context classes implemented by the {@link KipperParser}
- * for a {@link Declaration}.
- */
-export type ParserDeclarationContextType =
-	| FunctionDeclarationContext
-	| ParameterDeclarationContext
-	| VariableDeclarationContext;
-
-/**
- * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Declaration} AST node.
- *
- * Note that not all KipperParser rule context classes have a corresponding AST node class. For example, the
- * {@link KipperParser.declaration} rule context has no corresponding AST node class because it is a union of all
- * possible declaration types.
- * @since 0.10.0
- */
-export type ASTDeclarationKind =
-	| typeof KipperParser.RULE_functionDeclaration
-	| typeof KipperParser.RULE_parameterDeclaration
-	| typeof KipperParser.RULE_variableDeclaration;
+import { ASTDeclarationKind, ParserDeclarationContext } from "../ast-types";
 
 /**
  * The base abstract AST node class for all declarations/definitions, which wrap their corresponding
@@ -85,7 +64,7 @@ export abstract class Declaration<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ParserDeclarationContextType;
+	protected override readonly _antlrRuleCtx: ParserDeclarationContext;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -103,7 +82,7 @@ export abstract class Declaration<
 	 */
 	public abstract readonly kind: ASTDeclarationKind;
 
-	protected constructor(antlrRuleCtx: ParserDeclarationContextType, parent: CompilableNodeParent) {
+	protected constructor(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 
@@ -114,7 +93,7 @@ export abstract class Declaration<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ParserDeclarationContextType {
+	public override get antlrRuleCtx(): ParserDeclarationContext {
 		return this._antlrRuleCtx;
 	}
 

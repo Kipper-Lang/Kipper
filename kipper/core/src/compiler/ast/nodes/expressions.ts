@@ -131,73 +131,7 @@ import {
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
 import { TerminalNode } from "antlr4ts/tree";
-
-/**
- * Union type of all usable expression rule context classes implemented by the {@link KipperParser} for an
- * {@link Expression}.
- */
-export type ParserExpressionContextType =
-	| NumberPrimaryExpressionContext
-	| ArrayLiteralPrimaryExpressionContext
-	| IdentifierPrimaryExpressionContext
-	| VoidOrNullOrUndefinedPrimaryExpressionContext
-	| BoolPrimaryExpressionContext
-	| StringPrimaryExpressionContext
-	| FStringPrimaryExpressionContext
-	| TangledPrimaryExpressionContext
-	| IncrementOrDecrementPostfixExpressionContext
-	| FunctionCallExpressionContext
-	| IncrementOrDecrementUnaryExpressionContext
-	| OperatorModifiedUnaryExpressionContext
-	| CastOrConvertExpressionContext
-	| MultiplicativeExpressionContext
-	| AdditiveExpressionContext
-	| RelationalExpressionContext
-	| EqualityExpressionContext
-	| LogicalAndExpressionContext
-	| LogicalOrExpressionContext
-	| ConditionalExpressionContext
-	| AssignmentExpressionContext
-	| IdentifierTypeSpecifierContext
-	| DotNotationMemberAccessExpressionContext
-	| BracketNotationMemberAccessExpressionContext
-	| GenericTypeSpecifierContext
-	| TypeofTypeSpecifierContext;
-
-/**
- * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Expression} AST node.
- *
- * Note that not all KipperParser rule context classes have a corresponding AST node class. For example, the
- * {@link KipperParser.primaryExpression} rule context has no corresponding AST node class because it is a union of all
- * possible primary expression types.
- * @since 0.10.0
- */
-export type ASTExpressionKind =
-	| typeof ParserASTMapping.RULE_numberPrimaryExpression
-	| typeof ParserASTMapping.RULE_arrayLiteralPrimaryExpression
-	| typeof ParserASTMapping.RULE_identifierPrimaryExpression
-	| typeof ParserASTMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
-	| typeof ParserASTMapping.RULE_boolPrimaryExpression
-	| typeof ParserASTMapping.RULE_stringPrimaryExpression
-	| typeof ParserASTMapping.RULE_fStringPrimaryExpression
-	| typeof ParserASTMapping.RULE_tangledPrimaryExpression
-	| typeof ParserASTMapping.RULE_incrementOrDecrementPostfixExpression
-	| typeof ParserASTMapping.RULE_functionCallExpression
-	| typeof ParserASTMapping.RULE_incrementOrDecrementUnaryExpression
-	| typeof ParserASTMapping.RULE_operatorModifiedUnaryExpression
-	| typeof ParserASTMapping.RULE_castOrConvertExpression
-	| typeof ParserASTMapping.RULE_multiplicativeExpression
-	| typeof ParserASTMapping.RULE_additiveExpression
-	| typeof ParserASTMapping.RULE_relationalExpression
-	| typeof ParserASTMapping.RULE_equalityExpression
-	| typeof ParserASTMapping.RULE_logicalAndExpression
-	| typeof ParserASTMapping.RULE_logicalOrExpression
-	| typeof ParserASTMapping.RULE_conditionalExpression
-	| typeof ParserASTMapping.RULE_assignmentExpression
-	| typeof ParserASTMapping.RULE_identifierTypeSpecifier
-	| typeof ParserASTMapping.RULE_genericTypeSpecifier
-	| typeof ParserASTMapping.RULE_typeofTypeSpecifier
-	| typeof ParserASTMapping.RULE_memberAccessExpression;
+import { ASTExpressionKind, ParserExpressionContext } from "../ast-types";
 
 /**
  * The base abstract AST node class for all expressions, which wrap their corresponding
@@ -215,7 +149,7 @@ export abstract class Expression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ParserExpressionContextType;
+	protected override readonly _antlrRuleCtx: ParserExpressionContext;
 
 	protected override _children: Array<Expression>;
 
@@ -228,7 +162,7 @@ export abstract class Expression<
 	 */
 	public abstract readonly kind: ASTExpressionKind;
 
-	protected constructor(antlrRuleCtx: ParserExpressionContextType, parent: CompilableASTNode) {
+	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -256,7 +190,7 @@ export abstract class Expression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ParserExpressionContextType {
+	public override get antlrRuleCtx(): ParserExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -276,7 +210,7 @@ export abstract class Expression<
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ConstantExpression} AST node.
  * @since 0.10.0
  */
-export type ParserConstantExpressionContextType =
+export type ParserConstantExpressionContext =
 	| NumberPrimaryExpressionContext
 	| StringPrimaryExpressionContext
 	| BoolPrimaryExpressionContext
@@ -302,7 +236,7 @@ export abstract class ConstantExpression<
 	Semantics extends ConstantExpressionSemantics = ConstantExpressionSemantics,
 	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserConstantExpressionContextType;
+	protected abstract readonly _antlrRuleCtx: ParserConstantExpressionContext;
 	public abstract readonly kind: ASTConstantExpressionKind;
 }
 
@@ -760,7 +694,7 @@ export class IdentifierPrimaryExpression extends Expression<
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link MemberAccessExpression} AST node.
  * @since 0.10.0
  */
-export type ParserTypeSpecifierExpressionContextType =
+export type ParserTypeSpecifierExpressionContext =
 	| IdentifierTypeSpecifierContext
 	| GenericTypeSpecifierContext
 	| TypeofTypeSpecifierContext;
@@ -782,7 +716,7 @@ export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics = TypeSpecifierExpressionSemantics,
 	TypeSemantics extends TypeSpecifierExpressionTypeSemantics = TypeSpecifierExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContextType;
+	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContext;
 	public abstract readonly kind: ASTTypeSpecifierExpressionKind;
 }
 
@@ -1483,7 +1417,7 @@ export class FunctionCallExpression extends Expression<
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link UnaryExpression} AST node.
  * @since 0.10.0
  */
-export type ParserUnaryExpressionContextType =
+export type ParserUnaryExpressionContext =
 	| IncrementOrDecrementUnaryExpressionContext
 	| OperatorModifiedUnaryExpressionContext;
 
@@ -1505,7 +1439,7 @@ export abstract class UnaryExpression<
 	Semantics extends UnaryExpressionSemantics = UnaryExpressionSemantics,
 	TypeSemantics extends UnaryExpressionTypeSemantics = UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContextType;
+	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContext;
 	public abstract readonly kind: ASTUnaryExpressionKind;
 }
 
@@ -2005,7 +1939,7 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ComparativeExpression} AST node.
  * @since 0.10.0
  */
-export type ParserComparativeExpressionContextType = EqualityExpressionContext | RelationalExpressionContext;
+export type ParserComparativeExpressionContext = EqualityExpressionContext | RelationalExpressionContext;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link ComparativeExpression} AST node.
@@ -2024,7 +1958,7 @@ export abstract class ComparativeExpression<
 	Semantics extends ComparativeExpressionSemantics = ComparativeExpressionSemantics,
 	TypeSemantics extends ComparativeExpressionTypeSemantics = ComparativeExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserComparativeExpressionContextType;
+	protected abstract readonly _antlrRuleCtx: ParserComparativeExpressionContext;
 	public abstract readonly kind: ASTComparativeExpressionKind;
 }
 
@@ -2226,7 +2160,7 @@ export class EqualityExpression extends ComparativeExpression<
  * {@link LogicalExpression} AST node.
  * @since 0.10.0
  */
-export type ParserLogicalExpressionContextType = EqualityExpressionContext | RelationalExpressionContext;
+export type ParserLogicalExpressionContext = EqualityExpressionContext | RelationalExpressionContext;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link LogicalExpression} AST node.
@@ -2246,7 +2180,7 @@ export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics = LogicalExpressionSemantics,
 	TypeSemantics extends LogicalExpressionTypeSemantics = LogicalExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
-	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContextType;
+	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContext;
 	public abstract readonly kind: ASTLogicalExpressionKind;
 }
 

@@ -98,4 +98,4 @@ export const ParserASTMapping = {
  * internal purposes inside the parser. For completion’s sake, all numbers are listed here regardless.
  * @since 0.10.0
  */
-export type ParserASTMapSyntaxKind = typeof ParserASTMapping[keyof typeof ParserASTMapping];
+export type ASTKind = typeof ParserASTMapping[keyof typeof ParserASTMapping];
