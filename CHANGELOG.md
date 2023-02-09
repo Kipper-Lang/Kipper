@@ -133,25 +133,25 @@ To use development versions of Kipper download the
     node.
   - `ASTConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ConstantExpression` AST node.
-  - `ParserConstantExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
+  - `ParserConstantExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
     for a `ConstantExpression` AST node.
   - `ASTTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `TypeSpecifierExpression` AST node.
-  - `ParserTypeSpecifierExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
+  - `ParserTypeSpecifierExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
     values for a `TypeSpecifierExpression` AST node.
   - `ASTUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `UnaryExpression` AST node.
-  - `ParserUnaryExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
+  - `ParserUnaryExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
     `UnaryExpression` AST node.
   - `ASTComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ComparativeExpression` AST node.
-  - `ParserComparativeExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
-    for a `ComparativeExpression` AST node.
+  - `ParserComparativeExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` valuesASTNode.antlrRuleCtx`values for
+a`LogicalExpression` AST node.
+  - `ConstructableASTStatementClass`, which is a union type of all possible `Stat
+for a `ComparativeExpression` AST node.
   - `ASTLogicalExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `LogicalExpression` AST node.
-  - `ParserLogicalExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
-    a `LogicalExpression` AST node.
-  - `ConstructableASTStatementClass`, which is a union type of all possible `Statement` AST node classes.
+  - `ParserLogicalExpressionContext`, which is a union type of all possible `Parserement` AST node classes.
   - `ConstructableASTExpressionClass`, which is a union type of all possible `Expression` AST node classes.
   - `ConstructableASTDeclarationClass`, which is a union type of all possible `Declaration` AST node classes.
   - `ConstructableASTNodeClass`, which is a union type of all possible `ASTNode` AST node classes.
@@ -159,9 +159,13 @@ To use development versions of Kipper download the
   - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
-  - `ParserASTMapSyntaxKind`, which represents a union of all AST node kind values that can be used to map a
-    `KipperParser` rule context to an AST node. This is the type representing all values from `ParserASTMapping`.
+  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser`rule 
+context to an AST node. This is the type representing all values from`ParserASTMapping`.
+  - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
+    corresponding AST node class.
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
+  - `ASTNodeParserContext`, which represents a union of all possible `ParserASTNode.antlrRuleCtx` values implemented
+    in the `KipperParser` that have a corresponding AST node class.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -237,6 +241,7 @@ To use development versions of Kipper download the
   easier extension of the factory system. The `create` function is now instance-based (not static anymore) as well.
 - Constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
   allow a mismatch content between the two.
+- Cleaned up structure in `KipperFileASTGenerator` (previously `KipperFileListener`) and removed unnecessary code.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -254,9 +259,10 @@ To use development versions of Kipper download the
   - `antlrDefinitionCtxType` to `ParserDeclarationCtx`.
   - `antlrExpressionCtxType` to `ParserExpressionCtx`.
   - `antlrStatementCtxType` to `ParserStatementCtx`.
-  - `ParserExpressionCtx` to `ParserExpressionContextType`.
-  - `ParserStatementCtx` to `ParserStatementContextType`.
-  - `ParserDeclarationCtx` to `ParserDeclarationContextType`.
+  - `ParserExpressionCtx` to `ParserExpressionContext`.
+  - `ParserStatementCtx` to `ParserStatementContext`.
+  - `ParserDeclarationCtx` to `ParserDeclarationContext`.
+  - `KipperFileListener` to `KipperFileASTGenerator`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
@@ -293,14 +299,20 @@ To use development versions of Kipper download the
   f-strings with the same behaviour as the regular double-quoted character `"`.
 - `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
   respectively.
-- `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
-- Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
-- Removed the following fields:
-  - `Scope.functions` (replaced by hash-map implementation of `Scope`)
-  - `Scope.variables` (replaced by hash-map implementation of `Scope`)
-  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
-  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
+- The following fields:
+  - `Scope.functions` (replaced by hash-map implementation of `Scope`).
+  - `Scope.variables` (replaced by hash-map implementation of `Scope`).
+  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`).
+  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`).
+  - `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
+  - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
+- The following functions:
+  - `KipperFileASTGenerator.handleIncomingDeclarationCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleIncomingStatementCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleExitingStatementOrDefinitionCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleIncomingExpressionCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleExitingExpressionCtx` (removed in clean-up).
 - Parser rule `arraySpecifierExpression` (`ArraySpecifierExpression`), which was made obsolete with the addition of
   `bracketNotationMemberAccessExpression` (`BracketNotationMemberAccessExpression`).
 
