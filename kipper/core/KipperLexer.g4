@@ -4,6 +4,11 @@
 
 lexer grammar KipperLexer;
 
+channels {
+	// Channel for all types of comments
+	COMMENT
+}
+
 // const / var
 Const : 'const';
 Var : 'var';
@@ -104,10 +109,7 @@ GreaterEqual : '>=';
 Dot : '.';
 
 Identifier
-    :   IdentifierNondigit
-        (   IdentifierNondigit
-        |   Digit
-        )*
+    :   IdentifierNondigit (IdentifierNondigit | Digit)*
     ;
 
 fragment
@@ -134,7 +136,7 @@ IntegerConstant
     :   DecimalConstant
     |   OctalConstant
     |   HexadecimalConstant
-    |		BinaryConstant
+    |	BinaryConstant
     ;
 
 fragment
@@ -144,8 +146,8 @@ DecimalConstant
 
 fragment
 BinaryConstant
-		:		'0' [bB] BinaryDigit+
-		;
+	:	'0' [bB] BinaryDigit+
+	;
 
 fragment
 OctalConstant
@@ -164,8 +166,8 @@ NonzeroDigit
 
 fragment
 BinaryDigit
-	  :		[0-1]
-	  ;
+  	:	[0-1]
+  	;
 
 fragment
 OctalDigit
@@ -249,8 +251,8 @@ DoubleQuoteFStringLiteral
     ;
 
 SingleQuoteStringLiteral
-		:		'\'' SingleQuoteSCharSequence? '\''
-		;
+	:	'\'' SingleQuoteSCharSequence? '\''
+	;
 
 DoubleQuoteStringLiteral
     :   '"' DoubleQuoteSCharSequence? '"'
@@ -280,12 +282,12 @@ DoubleQuoteSChar
 
 Whitespace
     :   [ \t]+
-    		-> channel(HIDDEN)
+		-> channel(HIDDEN)
     ;
 
 BlockComment
     :   '/*' .*? '*/'
-        -> skip
+        -> channel(COMMENT)
     ;
 
 Newline
