@@ -21,12 +21,34 @@ describe("Core functionality", () => {
 	const compiler = new KipperCompiler();
 	const defaultTarget = new KipperTypeScriptTarget();
 
+	describe("Comment", () => {
+		it("Single line", async () => {
+			const fileContent = "var x: num = 5;\n// A comment\n print(\"\");";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
+			assert.include(instance.write(), "__kipper.print(\"\");", "Expected print call to be present in output");
+		});
+
+		it("Multi line", async () => {
+			const fileContent = "var x: num = 5;\n/* A comment\n ... \n end of comment */\n print(\"\");";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+			assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
+			assert.include(instance.write(), "__kipper.print(\"\");", "Expected print call to be present in output");
+		});
+	});
+
 	describe("Declaration", () => {
 		it("var", async () => {
 			const fileContent = "var x: num;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: number;"), "Invalid TypeScript code");
 		});
@@ -37,7 +59,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: num = 4;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: number = 4;"), "Invalid TypeScript code");
 		});
@@ -46,7 +68,7 @@ describe("Core functionality", () => {
 			const fileContent = "const x: num = 4;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("const x: number = 4;"), "Invalid TypeScript code");
 		});
@@ -57,7 +79,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: num = 4;\nx = 5;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: number = 4;\nx = 5;"), "Invalid TypeScript code");
 		});
@@ -66,7 +88,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: str = "4";\nx = "5";';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes('let x: string = "4";\nx = "5";'), "Invalid TypeScript code");
 		});
@@ -77,7 +99,7 @@ describe("Core functionality", () => {
 			const fileContent = "print = print;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("__kipper.print = __kipper.print;"), "Invalid TypeScript code");
 		});
@@ -86,7 +108,7 @@ describe("Core functionality", () => {
 			const fileContent = '12 * 93, "5" + "1";';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("12 * 93;"), "Invalid TypeScript code");
 			assert(instance.write().includes('"5" + "1";'), "Invalid TypeScript code");
@@ -96,7 +118,7 @@ describe("Core functionality", () => {
 			const fileContent = 'call print("x"), call print("y"), call print("z");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes('__kipper.print("x");'), "Invalid TypeScript code");
 			assert(instance.write().includes('__kipper.print("y");'), "Invalid TypeScript code");
@@ -109,7 +131,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: void = void; var y: void = undefined;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: void = void(0);"), "Invalid TypeScript code");
 			assert(instance.write().includes("let y: void = undefined;"), "Invalid TypeScript code");
@@ -119,7 +141,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: null = null;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: null = null;"), "Invalid TypeScript code");
 		});
@@ -128,7 +150,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: undefined = undefined; var y: void = undefined;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("let x: undefined = undefined;"), "Invalid TypeScript code");
 			assert(instance.write().includes("let y: void = undefined;"), "Invalid TypeScript code");
@@ -140,7 +162,7 @@ describe("Core functionality", () => {
 			const fileContent = "+4;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("+4;"), "Invalid TypeScript code");
 		});
@@ -149,7 +171,7 @@ describe("Core functionality", () => {
 			const fileContent = "-4;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("-4;"), "Invalid TypeScript code");
 		});
@@ -160,7 +182,7 @@ describe("Core functionality", () => {
 			const fileContent = "!true;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 			assert(instance.write().includes("!true;"), "Invalid TypeScript code");
 		});
@@ -170,7 +192,7 @@ describe("Core functionality", () => {
 				const fileContent = "var x: num = 5; var y: num = --x;";
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.write().includes("let y: number = --x;"), "Expected different TypeScript code");
 			});
@@ -179,7 +201,7 @@ describe("Core functionality", () => {
 				const fileContent = "var x: num = 5; var y: num = x--;";
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.write().includes("let y: number = x--;"), "Expected different TypeScript code");
 			});
@@ -190,7 +212,7 @@ describe("Core functionality", () => {
 				const fileContent = "var x: num = 5; var y: num = ++x;";
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.write().includes("let y: number = ++x;"), "Expected different TypeScript code");
 			});
@@ -199,7 +221,7 @@ describe("Core functionality", () => {
 				const fileContent = "var x: num = 5; var y: num = x++;";
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.write().includes("let y: number = x++;"), "Expected different TypeScript code");
 			});
@@ -212,7 +234,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 3 && x < 5) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -236,7 +258,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 3 && x < 2) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -251,7 +273,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 5 && x < 3) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -266,7 +288,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 5 && x < 8) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -283,7 +305,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 3 || x < 5) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -298,7 +320,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 3 || x < 2) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -313,7 +335,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 5 || x < 3) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -328,7 +350,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: num = 4;\nif (x > 5 || x > 8) { call print("Works"); }';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 				const code = instance.write();
@@ -346,7 +368,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 4;\nif (x == 4) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -361,7 +383,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 4;\nif (x != 5) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -376,7 +398,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 4;\nif (x < 5) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -391,7 +413,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 4;\nif (x <= 5) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -406,7 +428,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 5;\nif (x > 4) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -421,7 +443,7 @@ describe("Core functionality", () => {
 			const fileContent = 'var x: num = 5;\nif (x >= 4) call print("Works");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -438,7 +460,7 @@ describe("Core functionality", () => {
 			const fileContent = "if (true) { var x: num = 5; }";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -449,7 +471,7 @@ describe("Core functionality", () => {
 			const fileContent = "if (true) { var x: num = 5; } else { var x: num = 5; }";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -464,7 +486,7 @@ describe("Core functionality", () => {
 			const fileContent = "if (true) { var x: num = 5; } else if (true) { var x: num = 5; } else { var x: num = 5; }";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -482,7 +504,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: num = 1; while (x <= 5) { x += 1; }; print(x as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -496,7 +518,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: num = 1; while (x <= 5) x += 1; print(x as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -510,7 +532,7 @@ describe("Core functionality", () => {
 			const fileContent = "var x: num = 1; while (x < 5) if (x != 5) x += 1; print(x as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -529,7 +551,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: str = "1234"[1]; print(x);';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
@@ -548,7 +570,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: str = "1234"[1:2]; print(x);';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
@@ -565,7 +587,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: str = "1234"[1:]; print(x);';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
@@ -582,7 +604,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: str = "1234"[:2]; print(x);';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
@@ -599,7 +621,7 @@ describe("Core functionality", () => {
 				const fileContent = 'var x: str = "1234"[:]; print(x);';
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-				assert(instance.programCtx);
+				assert.isDefined(instance.programCtx);
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
@@ -619,7 +641,7 @@ describe("Core functionality", () => {
 			const fileContent = "def test() -> void { }";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -630,7 +652,7 @@ describe("Core functionality", () => {
 			const fileContent = 'def test() -> void { call print("Works"); return; }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -648,7 +670,7 @@ describe("Core functionality", () => {
 			const fileContent = "def test() -> num { return 5; }; print(test() as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
@@ -666,7 +688,7 @@ describe("Core functionality", () => {
 			const fileContent = 'def test(x: num, y: str) -> num { return x + y as num; }; print(test(1, "5") as str);';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert(instance.programCtx);
+			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
