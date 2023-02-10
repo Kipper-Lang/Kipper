@@ -1,7 +1,7 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-// Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
-// possible syntax kind values.
+// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+// kind values.
 import { KipperParserRuleContext, ASTKind } from "..";
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
