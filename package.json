@@ -100,6 +100,9 @@
     "bump": "run-script-os",
     "bump:linux:macos:default": "./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
-    "size-limit": "size-limit"
+    "size-limit": "size-limit",
+		"cleanup": "run-script-os",
+		"cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
+		"cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib"
   }
 }
