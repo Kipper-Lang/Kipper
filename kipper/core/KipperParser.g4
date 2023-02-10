@@ -10,9 +10,9 @@ options {
 }
 
 @parser::header {
-	// Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
-	// possible syntax kind values.
-	import { KipperParserRuleContext, ParserASTMapSyntaxKind } from "..";
+	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+	// kind values.
+	import { KipperParserRuleContext, ASTKind } from "..";
 }
 
 // Entry Point for an entire file
@@ -214,7 +214,7 @@ voidOrNullOrUndefinedPrimaryExpression
 //
 // Note: All AST identifier numbers are stored in the 'ParserASTMapping' object.
 computedPrimaryExpression
-	locals[_labelASTKind: ParserASTMapSyntaxKind | undefined]
+	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
 	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # functionCallExpression
 	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # explicitCallFunctionCallExpression
