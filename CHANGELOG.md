@@ -37,7 +37,7 @@ To use development versions of Kipper download the
 - Implemented member-access expressions using bracket and slice notation (`[]`, `[:]`), which can be used to access
   specific elements of a string (In the future, this will also be used to access elements of arrays and objects).
   ([#372](https://github.com/Luna-Klatzer/Kipper/issues/372)).
-- Support for single-line comments separated by a newline char. 
+- Support for single-line comments separated by a newline char.
   ([#400](https://github.com/Luna-Klatzer/Kipper/issues/400)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
