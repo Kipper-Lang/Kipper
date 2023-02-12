@@ -83,18 +83,13 @@ export abstract class CompilableASTNode<
 	 * @since 0.10.0
 	 */
 	public get errors(): Array<KipperError> {
-		// TODO! Finish implementation of this
-		let errors = this._errors;
-		for (const child of this._children) {
-			errors = errors.concat(child.errors);
-		}
-		return errors;
+		return [...this._errors, ...this._children.flatMap((child) => child.errors)];
 	}
 
 	/**
 	 * Adds the specified {@link error} to the list of errors caused by this node.
 	 *
-	 * This is not the same as {@link KipperProgramContext.addError}, since that function automatically logs the error
+	 * This is not the same as {@link KipperProgramContext.reportError}, since that function automatically logs the error
 	 * as well and this function does not! This is only intended to keep track if a node has failed.
 	 * @param error The error to add.
 	 */
