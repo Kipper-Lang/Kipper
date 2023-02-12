@@ -253,6 +253,7 @@ export class ParameterDeclaration extends Declaration<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.valueTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the value type specifier
 		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
@@ -405,6 +406,7 @@ export class FunctionDeclaration
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.returnTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
@@ -532,6 +534,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
 		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
+		this.ensureChildSemanticallyValid(typeSpecifier); // Required semantic data
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
@@ -558,11 +561,11 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			value: assignValue,
 		};
 
-		// If the storage type is 'const' ensure that the variable has a value set.
-		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
-
 		// Add scope variable entry
 		this.scopeDeclaration = this.scope.addVariable(this);
+
+		// If the storage type is 'const' ensure that the variable has a value set.
+		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
 	}
 
 	/**
@@ -572,6 +575,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.valueTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the value type specifier
 		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
@@ -581,6 +585,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
+			this.ensureChildTypeSemanticallyValid(semanticData.value); // Required type data
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}

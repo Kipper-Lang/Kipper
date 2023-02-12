@@ -143,7 +143,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	async handleSemanticError(e: Error | UndefinedSemanticsError | KipperError): Promise<void> {
 		// If it's a compile error, add it to the list of errors
 		if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
-			this.programCtx.addError(e);
+			this.programCtx.reportError(e);
 		} else {
 			// If we can't handle the error or the user wants to abort/avoid recovering, then re-throw the error
 			throw e;

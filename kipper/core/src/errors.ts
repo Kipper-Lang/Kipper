@@ -282,6 +282,22 @@ export class TypeNotCompilableError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a parent node attempts to access the {@link CompilableASTNode.semanticData} of a child,
+ * but the child had an error during semantic analysis. This is to prevent the parent from using the child's data
+ * despite the child having an error.
+ *
+ * This will unlike {@link UndefinedSemanticsError} not be thrown to indicate a fatal error/bug in the compiler, but
+ * is used to early abort the semantic analysis of a parent node. This therefore only affects the control flow of the
+ * compiler and not the correctness of the compiler.
+ * @since 0.10.0
+ */
+export class MissingRequiredSemanticDataError extends KipperInternalError {
+	constructor(msg: string = "") {
+		super(msg || "Can not analyse AST node due to missing semantic data in children.");
+	}
+}
+
+/**
  * An error that is raised whenever a feature is used that has not been implemented yet.
  * @since 0.6.0
  */

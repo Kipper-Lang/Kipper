@@ -574,7 +574,6 @@ export type KipperReferenceable =
 	| KipperReferenceableFunction
 	| KipperVariable
 	| KipperParam
-	| KipperArg
 	| ScopeDeclaration;
 
 /**

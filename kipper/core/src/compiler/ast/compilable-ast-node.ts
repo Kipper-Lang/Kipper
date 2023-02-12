@@ -11,10 +11,9 @@ import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
 import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
 import type { ScopeNode } from "./scope-node";
-import { KipperError } from "../../errors";
+import type { TargetCompilableNode } from "./target-node";
+import type { TargetASTNodeCodeGenerator } from "../target-presets";
 import { AnalysableASTNode } from "./analysable-ast-node";
-import { TargetCompilableNode } from "./target-node";
-import { TargetASTNodeCodeGenerator } from "../target-presets";
 
 /**
  * An eligible parent for a compilable AST node.
@@ -40,7 +39,6 @@ export abstract class CompilableASTNode<
 	implements TargetCompilableNode
 {
 	protected _scopeCtx: ScopeNode<LocalScope | FunctionScope> | KipperProgramContext | undefined;
-	protected _errors: Array<KipperError>;
 	protected override _parent: CompilableNodeParent;
 	protected override _children: Array<CompilableNodeChild>;
 
@@ -48,7 +46,6 @@ export abstract class CompilableASTNode<
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];
-		this._errors = [];
 	}
 
 	/**
@@ -76,37 +73,6 @@ export abstract class CompilableASTNode<
 	 */
 	public addNewChild(newChild: CompilableNodeChild): void {
 		this._children.push(newChild);
-	}
-
-	/**
-	 * The errors that were caused by this node. Includes all errors from children.
-	 * @since 0.10.0
-	 */
-	public get errors(): Array<KipperError> {
-		return [...this._errors, ...this._children.flatMap((child) => child.errors)];
-	}
-
-	/**
-	 * Adds the specified {@link error} to the list of errors caused by this node.
-	 *
-	 * This is not the same as {@link KipperProgramContext.reportError}, since that function automatically logs the error
-	 * as well and this function does not! This is only intended to keep track if a node has failed.
-	 * @param error The error to add.
-	 */
-	public addError(error: KipperError) {
-		this._errors.push(error);
-	}
-
-	/**
-	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} or
-	 * {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node} or any
-	 * {@link children children nodes} failed.
-	 *
-	 * This indicates that the node is not valid and can not be translated.
-	 * @since 0.10.0
-	 */
-	public get hasFailed(): boolean {
-		return this.errors.length > 0;
 	}
 
 	/**

@@ -93,7 +93,12 @@ import {
 	TranslatedExpression,
 } from "../../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
-import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
+import {
+	CheckedType,
+	ScopeDeclaration,
+	ScopeVariableDeclaration,
+	UncheckedType
+} from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
 import {
@@ -652,6 +657,7 @@ export class IdentifierPrimaryExpression extends Expression<
 			// (This is due to the fact that assignments to undefined variables must always be valid, unless it's a
 			// modifier assignment operator)
 			if (!(this.parent instanceof AssignmentExpression)) {
+				this.ensureChildSemanticallyValid(ref); // Required semantic data
 				this.programCtx.semanticCheck(this).refTargetDefined(ref);
 			}
 		}
@@ -665,9 +671,17 @@ export class IdentifierPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		let type: CheckedType;
+		if (semanticData.ref.refTarget instanceof ScopeDeclaration) {
+			this.ensureChildTypeSemanticallyValid(semanticData.ref.refTarget); // Required type data
+			type = semanticData.ref.refTarget.type;
+		} else {
+			// Built-in function -> type is 'func'
+			type = CheckedType.fromCompilableType("func");
+		}
+
 		this.typeSemantics = {
-			evaluatedType:
-				"type" in semanticData.ref.refTarget ? semanticData.ref.refTarget.type : CheckedType.fromCompilableType("func"),
+			evaluatedType: type
 		};
 	}
 
@@ -997,6 +1011,7 @@ export class TangledPrimaryExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const exp = this.getSemanticData().childExp;
+		this.ensureChildTypeSemanticallyValid(exp); // Required type data
 
 		this.typeSemantics = {
 			// Tangled expressions always evaluate to the type of its child expression
@@ -1150,13 +1165,13 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			// This will always be a number
 			evaluatedType: CheckedType.fromKipperType("num"),
 		};
+
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1286,9 +1301,16 @@ export class MemberAccessExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.objectLike); // Required type data
+
 		// Ensure the objectLike expression is indexable/accessible
 		// Note: This will throw an error if the objectLike expression is not indexable/accessible
-		const type = this.programCtx.typeCheck(this).getTypeOfMemberAccessExpression(this);
+		const type = this.programCtx.typeCheck(this).getTypeOfMemberAccessExpression(
+			semanticData.objectLike,
+			semanticData.propertyIndexOrKeyOrSlice,
+			semanticData.accessType,
+		);
 
 		this.typeSemantics = {
 			evaluatedType: type,
@@ -1353,6 +1375,7 @@ export class FunctionCallExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
+		this.ensureChildSemanticallyValid(this.children[0]);
 		const identifierSemantics = <IdentifierPrimaryExpressionSemantics>this.children[0].getSemanticData();
 
 		// Ensure that the identifier is present
@@ -1378,12 +1401,18 @@ export class FunctionCallExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		if (semanticData.callTarget.refTarget instanceof ScopeDeclaration) {
+			this.ensureChildTypeSemanticallyValid(semanticData.callTarget.refTarget); // Required type data
+		}
 
 		// Ensure that the reference is a callable function
 		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
 		const calledFunc = <KipperReferenceableFunction>semanticData.callTarget.refTarget;
 
 		// Ensure valid arguments are passed
+		for (const arg of semanticData.args) {
+			this.ensureChildTypeSemanticallyValid(arg); // Required type data
+		}
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
 
 		// Get the type that the function call will evaluate to
@@ -1500,13 +1529,13 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			// This will always be a number
 			evaluatedType: CheckedType.fromKipperType("num"),
 		};
+
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1599,12 +1628,12 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the operator is compatible with the type of the operand
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			evaluatedType: CheckedType.fromCompilableType(semanticData.operator === "!" ? "bool" : "num"),
 		};
+
+		// Ensure the operator is compatible with the type of the operand
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1669,6 +1698,7 @@ export class CastOrConvertExpression extends Expression<
 		const exp: Expression = this.children[0];
 
 		// Get the type using the type specifier
+		this.ensureChildSemanticallyValid(this.children[1]);
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[1];
 		const type: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
 
@@ -1691,6 +1721,8 @@ export class CastOrConvertExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.castTypeSpecifier); // Required type data
+		this.ensureChildTypeSemanticallyValid(semanticData.exp); // Required type data
 
 		// Get the type specified by the type specifier
 		const evalType = semanticData.castTypeSpecifier.getTypeSemanticData().storedType;
@@ -1806,6 +1838,8 @@ export class MultiplicativeExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.leftOp); // Required type data
+		this.ensureChildTypeSemanticallyValid(semanticData.rightOp); // Required type data
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx
@@ -1903,6 +1937,8 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		this.ensureChildTypeSemanticallyValid(semanticData.leftOp); // Required type data
+		this.ensureChildTypeSemanticallyValid(semanticData.rightOp); // Required type data
 
 		// Assert that the arithmetic expression is valid
 		this.programCtx
@@ -2035,13 +2071,13 @@ export class RelationalExpression extends ComparativeExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Type check the relational expression and ensure its operands are of type 'num'
-		this.programCtx.typeCheck(this).validRelationalExpression(this);
-
 		// Relational expressions always return 'bool'
 		this.typeSemantics = {
 			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
+
+		// Type check the relational expression and ensure its operands are of type 'num'
+		this.programCtx.typeCheck(this).validRelationalExpression(this);
 	}
 
 	/**
@@ -2479,6 +2515,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 			const exp = this.children[0];
 
 			// Ensure that the left-hand side of the expression is an identifier
+			this.ensureChildSemanticallyValid(exp);
 			this.programCtx.semanticCheck(this).validAssignment(exp);
 
 			return <IdentifierPrimaryExpression>exp;
@@ -2520,15 +2557,15 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		const valueTypeSemantics = semanticData.value.getTypeSemanticData();
-
-		// Ensure the assignment is valid and the types match up
-		this.programCtx.typeCheck(this).validAssignment(this);
+		this.ensureChildTypeSemanticallyValid(semanticData.value); // Required type data
 
 		// The evaluated type of an assignment expression is always the evaluated type assigned to the variable
 		this.typeSemantics = {
-			evaluatedType: valueTypeSemantics.evaluatedType,
+			evaluatedType: semanticData.value.getTypeSemanticData().evaluatedType,
 		};
+
+		// Ensure the assignment is valid and the types match up
+		this.programCtx.typeCheck(this).validAssignment(this);
 	}
 
 	/**
