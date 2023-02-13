@@ -223,6 +223,9 @@ export class ParameterDeclaration extends Declaration<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
@@ -249,11 +252,13 @@ export class ParameterDeclaration extends Declaration<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		this.ensureChildTypeSemanticallyValid(semanticData.valueTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the value type specifier
 		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
@@ -344,6 +349,9 @@ export class FunctionDeclaration
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
@@ -402,11 +410,13 @@ export class FunctionDeclaration
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		this.ensureChildTypeSemanticallyValid(semanticData.returnTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
@@ -516,6 +526,9 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children: Array<ParseTree> = this.getAntlrRuleChildren();
@@ -534,7 +547,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		// The type of this declaration, which should always be present, since the parser requires it during the parsing
 		// step.
 		const typeSpecifier: IdentifierTypeSpecifierExpression = <IdentifierTypeSpecifierExpression>this.children[0];
-		this.ensureChildSemanticallyValid(typeSpecifier); // Required semantic data
 
 		// There will always be only one child, which is the expression assigned.
 		// If this child is missing, then this declaration does not contain a definition.
@@ -571,13 +583,16 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		this.ensureChildTypeSemanticallyValid(semanticData.valueTypeSpecifier); // Required type data
 
 		// Get the type that will be returned using the value type specifier
+		semanticData.valueTypeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			valueType: valueType,
@@ -585,7 +600,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
-			this.ensureChildTypeSemanticallyValid(semanticData.value); // Required type data
+			semanticData.value.ensureTypeSemanticallyValid(); // Ensure the assignment didn't fail
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
