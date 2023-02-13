@@ -25,7 +25,7 @@ import {
 	ParameterDeclaration,
 	ReturnStatement,
 	Statement,
-	TangledPrimaryExpression,
+	TangledPrimaryExpression, MemberAccessExpression
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
@@ -618,20 +618,16 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Get the type that this member access expression is accessing.
-	 * @param objectLike The object-like of the member expression.
-	 * @param propertyIndexOrKeyOrSlice The property index, key or slice of the member expression.
-	 * @param accessType The type of access (dot, bracket or slice).
+	 * @param memberAccess The member access expression to get the type for.
 	 * @since 0.10.0
 	 */
-	public getTypeOfMemberAccessExpression(
-		objectLike: Expression,
-		propertyIndexOrKeyOrSlice: string | Expression | { start?: Expression; end?: Expression },
-		accessType: "dot" | "bracket" | "slice",
-	): CheckedType {
-		// First ensure the object is indexable
-		this.objectLikeIsIndexableOrAccessible(objectLike);
+	public getTypeOfMemberAccessExpression(memberAccess: MemberAccessExpression): CheckedType {
+		const semanticData = memberAccess.getSemanticData();
 
-		const preAnalysisType = objectLike.getTypeSemanticData().evaluatedType;
+		// First ensure the object is indexable
+		this.objectLikeIsIndexableOrAccessible(semanticData.objectLike);
+
+		const preAnalysisType = semanticData.objectLike.getTypeSemanticData().evaluatedType;
 		const objType = KipperTypeChecker.getTypeForAnalysis(preAnalysisType);
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
@@ -639,7 +635,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return preAnalysisType; // Return the type that is
 		}
 
-		switch (accessType) {
+		switch (semanticData.accessType) {
 			case "dot":
 				throw this.notImplementedError(
 					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
@@ -647,7 +643,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			case "bracket": {
 				if (objType === "str") {
 					// Also ensure the key is valid
-					this.validBracketNotationKey(objectLike, <Expression>propertyIndexOrKeyOrSlice);
+					this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
 
 					return CheckedType.fromCompilableType("str");
 				} else {
@@ -660,7 +656,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			case "slice": {
 				if (objType === "str") {
 					// Also ensure the key is valid
-					this.validSliceNotationKey(objectLike, <{ start?: Expression; end?: Expression }>propertyIndexOrKeyOrSlice);
+					this.validSliceNotationKey(
+						semanticData.objectLike,
+						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
+					);
 
 					return CheckedType.fromCompilableType("str");
 				} else {

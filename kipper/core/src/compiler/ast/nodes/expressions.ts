@@ -1442,17 +1442,9 @@ export class MemberAccessExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		const semanticData = this.getSemanticData();
-
 		// Ensure the objectLike expression is indexable/accessible
 		// Note: This will throw an error if the objectLike expression is not indexable/accessible
-		const type = this.programCtx
-			.typeCheck(this)
-			.getTypeOfMemberAccessExpression(
-				semanticData.objectLike,
-				semanticData.propertyIndexOrKeyOrSlice,
-				semanticData.accessType,
-			);
+		const type = this.programCtx.typeCheck(this).getTypeOfMemberAccessExpression(this);
 
 		this.typeSemantics = {
 			evaluatedType: type,
