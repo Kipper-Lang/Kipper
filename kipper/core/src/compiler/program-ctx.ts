@@ -341,7 +341,7 @@ export class KipperProgramContext {
 	 * @param error The error to add to the list of reported errors of this program.
 	 * @since 0.10.0
 	 */
-	public addError(error: KipperError): void {
+	public reportError(error: KipperError): void {
 		this.errors.push(error);
 		this.logger.reportError(LogLevel.ERROR, error);
 

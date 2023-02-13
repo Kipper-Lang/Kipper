@@ -15,8 +15,9 @@ import type { EvaluatedCompileConfig } from "../compiler";
 import type { KipperProgramContext } from "../program-ctx";
 import type { Declaration, Statement } from "./nodes";
 import type { TranslatedCodeLine } from "../const";
-import { KipperError, UndefinedSemanticsError } from "../../errors";
+import { KipperError } from "../../errors";
 import { CompilationUnitContext, KipperParser } from "../parser";
+import { handleSemanticError } from "../analysis";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
@@ -136,18 +137,12 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	}
 
 	/**
-	 * Handles a semantic error that was thrown in the function {@link this.semanticAnalysis}.
-	 * @param e The error that was thrown.
+	 * Handles the specified error that occurred during the semantic analysis of this node in a standardised way.
+	 * @param error The error to handle.
 	 * @since 0.10.0
 	 */
-	async handleSemanticError(e: Error | UndefinedSemanticsError | KipperError): Promise<void> {
-		// If it's a compile error, add it to the list of errors
-		if (e instanceof KipperError && this.compileConfig.recover && !this.compileConfig.abortOnFirstError) {
-			this.programCtx.addError(e);
-		} else {
-			// If we can't handle the error or the user wants to abort/avoid recovering, then re-throw the error
-			throw e;
-		}
+	protected handleSemanticError(error: Error | KipperError): void {
+		handleSemanticError(this, error);
 	}
 
 	/**
@@ -169,11 +164,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		// Perform type-checking based on the existing AST nodes and evaluated semantics
 		for (let child of this.children) {
 			try {
-				// If the child has failed to process, avoid type checking
-				if (!child.semanticData) {
-					continue;
-				}
-
 				await child.semanticTypeChecking();
 			} catch (e) {
 				await this.handleSemanticError(<Error>e);
@@ -183,11 +173,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		// Perform wrap-up semantic analysis for the specified target
 		for (let child of this.children) {
 			try {
-				// If the child has failed to process, avoid wrap-up semantic analysis
-				if (!child.semanticData || !child.typeSemantics) {
-					continue;
-				}
-
 				await child.wrapUpSemanticAnalysis();
 			} catch (e) {
 				await this.handleSemanticError(<Error>e);

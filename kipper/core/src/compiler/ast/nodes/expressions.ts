@@ -94,7 +94,11 @@ import {
 } from "../../const";
 import { kipperInternalBuiltIns } from "../../runtime-built-ins";
 import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
+import {
+	KipperNotImplementedError,
+	MissingRequiredSemanticDataError,
+	UnableToDetermineSemanticDataError,
+} from "../../../errors";
 import { getConversionFunctionIdentifier, getParseRuleSource } from "../../../utils";
 import {
 	AdditiveExpressionContext,
@@ -195,18 +199,97 @@ export abstract class Expression<
 	}
 
 	/**
+	 * Semantically analyses the code inside this AST node and all {@link this.children children nodes}.
+	 *
+	 * This function will recursively call itself on the {@link this.children} instances and analyse the deepest children
+	 * nodes first, working up as the tokens get more complex. This way the parent tokens can access the semantics of
+	 * the children and properly process itself.
+	 *
+	 * This function will set the {@link this.semanticData} property and allow the use of {@link this.getSemanticData},
+	 * without getting any error.
+	 * @since 0.8.0
+	 */
+	public override async semanticAnalysis(): Promise<void> {
+		// Start with the evaluation of the children
+		await this.semanticallyAnalyseChildren();
+
+		// If the semantic analysis until now hasn't failed, do the semantic analysis of this node (if defined)
+		// Note: The specific AST node will have to handle errors in their children and ensure for analysis all required
+		// data is present.
+		// This overwrites the default behaviour of every node handling the errors in the children
+		if (!this.hasFailed && this.primarySemanticAnalysis !== undefined) {
+			try {
+				await this.primarySemanticAnalysis();
+			} catch (e) {
+				if (e instanceof MissingRequiredSemanticDataError) {
+					this._skippedSemanticAnalysis = true;
+				}
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
+	 * Performs type checking on this AST node and all {@link this.children children nodes}. This uses the
+	 * {@link this.semanticData semantic data} that was evaluated during {@link this.semanticAnalysis semantic analysis}.
+	 * @since 0.10.0
+	 */
+	public override async semanticTypeChecking(): Promise<void> {
+		// Start with the evaluation of the children
+		await this.semanticallyTypeCheckChildren();
+
+		// If the semantic analysis until now hasn't failed, do the semantic type checking of this node (if defined)
+		// This overwrites the default behaviour of every node handling the errors in the children
+		if (!this.hasFailed && !this.skippedSemanticAnalysis && this.primarySemanticTypeChecking !== undefined) {
+			try {
+				await this.primarySemanticTypeChecking();
+			} catch (e) {
+				if (e instanceof MissingRequiredSemanticDataError) {
+					this._skippedSemanticAnalysis = true;
+				}
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
+	 * Wrap-up semantic analysis, which analyses this AST node and all {@link this.children children nodes}, and
+	 * checks whether they are semantically valid for the {@link this.target target language}. This uses the
+	 * {@link this.semanticData semantic data} and {@link this.typeData type data} that was evaluated during the previous
+	 * {@link this.semanticAnalysis semantic analysis} and {@link this.semanticTypeChecking type checking} steps.
+	 * @since 0.10.0
+	 */
+	public override async wrapUpSemanticAnalysis(): Promise<void> {
+		// Start with the evaluation of the children
+		await this.targetSemanticallyAnalyseChildren();
+
+		// If the semantic analysis until now hasn't failed, do the target semantic analysis of this node (if defined)
+		// This overwrites the default behaviour of every node handling the errors in the children
+		if (!this.hasFailed && !this.skippedSemanticTypeChecking && this.targetSemanticAnalysis !== undefined) {
+			try {
+				await this.targetSemanticAnalysis(this);
+			} catch (e) {
+				if (e instanceof MissingRequiredSemanticDataError) {
+					this._skippedSemanticAnalysis = true;
+				}
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 *
 	 * Every item in the array represents a token of the expression.
 	 */
-	public async translateCtxAndChildren(): Promise<TranslatedExpression> {
+	public override async translateCtxAndChildren(): Promise<TranslatedExpression> {
 		return await this.targetCodeGenerator(this);
 	}
 
 	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 }
 
-/**
+/**targetSemanticAnalysis
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ConstantExpression} AST node.
  * @since 0.10.0
  */
@@ -272,6 +355,9 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// The value should stay the same as written, and the code generator implementation should handle outputting the
@@ -284,6 +370,9 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -344,6 +433,9 @@ export class ArrayLiteralPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
@@ -354,6 +446,9 @@ export class ArrayLiteralPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -414,6 +509,9 @@ export class StringPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
@@ -425,6 +523,9 @@ export class StringPrimaryExpression extends ConstantExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -485,6 +586,9 @@ export class BoolPrimaryExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
@@ -495,6 +599,9 @@ export class BoolPrimaryExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -555,6 +662,9 @@ export class FStringPrimaryExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
@@ -565,6 +675,9 @@ export class FStringPrimaryExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -627,6 +740,9 @@ export class IdentifierPrimaryExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const identifier = this.sourceCode;
@@ -660,14 +776,24 @@ export class IdentifierPrimaryExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
+		let type: CheckedType;
+		if (semanticData.ref.refTarget instanceof ScopeDeclaration) {
+			type = semanticData.ref.refTarget.type;
+		} else {
+			// Built-in function -> type is 'func'
+			type = CheckedType.fromCompilableType("func");
+		}
+
 		this.typeSemantics = {
-			evaluatedType:
-				"type" in semanticData.ref.refTarget ? semanticData.ref.refTarget.type : CheckedType.fromCompilableType("func"),
+			evaluatedType: type,
 		};
 	}
 
@@ -757,6 +883,9 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
@@ -834,6 +963,9 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
@@ -903,6 +1035,9 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
@@ -975,6 +1110,9 @@ export class TangledPrimaryExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Tangled expressions always contain one expression child
@@ -993,6 +1131,9 @@ export class TangledPrimaryExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -1051,6 +1192,9 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
@@ -1128,6 +1272,9 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
@@ -1147,16 +1294,19 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			// This will always be a number
 			evaluatedType: CheckedType.fromKipperType("num"),
 		};
+
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1225,6 +1375,9 @@ export class MemberAccessExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Handle the different types of member access expressions
@@ -1283,12 +1436,23 @@ export class MemberAccessExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
 		// Ensure the objectLike expression is indexable/accessible
 		// Note: This will throw an error if the objectLike expression is not indexable/accessible
-		const type = this.programCtx.typeCheck(this).getTypeOfMemberAccessExpression(this);
+		const type = this.programCtx
+			.typeCheck(this)
+			.getTypeOfMemberAccessExpression(
+				semanticData.objectLike,
+				semanticData.propertyIndexOrKeyOrSlice,
+				semanticData.accessType,
+			);
 
 		this.typeSemantics = {
 			evaluatedType: type,
@@ -1350,6 +1514,9 @@ export class FunctionCallExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
@@ -1374,6 +1541,9 @@ export class FunctionCallExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -1478,6 +1648,9 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
@@ -1497,16 +1670,19 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			// This will always be a number
 			evaluatedType: CheckedType.fromKipperType("num"),
 		};
+
+		// Ensure that this expression is valid (e.g. the operand is a number)
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1564,6 +1740,9 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the raw antlr4 parse-tree children, which should store the operator
@@ -1594,17 +1773,20 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Ensure the operator is compatible with the type of the operand
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
-
 		this.typeSemantics = {
 			evaluatedType: CheckedType.fromCompilableType(semanticData.operator === "!" ? "bool" : "num"),
 		};
+
+		// Ensure the operator is compatible with the type of the operand
+		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	/**
@@ -1663,6 +1845,9 @@ export class CastOrConvertExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// The first child will always be the expression that will be converted
@@ -1687,6 +1872,9 @@ export class CastOrConvertExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -1771,6 +1959,9 @@ export class MultiplicativeExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the raw antlr4 parse-tree children, which should store the operator
@@ -1802,6 +1993,9 @@ export class MultiplicativeExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -1871,6 +2065,9 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the raw antlr4 parse-tree children, which should store the operator
@@ -1899,6 +2096,9 @@ export class AdditiveExpression extends Expression<AdditiveExpressionSemantics, 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -2005,6 +2205,9 @@ export class RelationalExpression extends ComparativeExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the raw antlr4 parse-tree children, which should store the operator
@@ -2032,16 +2235,19 @@ export class RelationalExpression extends ComparativeExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// Type check the relational expression and ensure its operands are of type 'num'
-		this.programCtx.typeCheck(this).validRelationalExpression(this);
-
 		// Relational expressions always return 'bool'
 		this.typeSemantics = {
 			evaluatedType: CheckedType.fromCompilableType("bool"),
 		};
+
+		// Type check the relational expression and ensure its operands are of type 'num'
+		this.programCtx.typeCheck(this).validRelationalExpression(this);
 	}
 
 	/**
@@ -2100,6 +2306,9 @@ export class EqualityExpression extends ComparativeExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the raw antlr4 parse-tree children, which should store the operator
@@ -2127,6 +2336,9 @@ export class EqualityExpression extends ComparativeExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -2222,6 +2434,9 @@ export class LogicalAndExpression extends LogicalExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-and expression
@@ -2243,6 +2458,9 @@ export class LogicalAndExpression extends LogicalExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -2309,6 +2527,9 @@ export class LogicalOrExpression extends LogicalExpression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the expressions of this logical-or expression
@@ -2330,6 +2551,9 @@ export class LogicalOrExpression extends LogicalExpression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -2394,6 +2618,9 @@ export class ConditionalExpression extends Expression<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		throw this.programCtx
@@ -2404,6 +2631,9 @@ export class ConditionalExpression extends Expression<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -2470,6 +2700,9 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const antlrRuleChildren = this.getAntlrRuleChildren();
@@ -2516,19 +2749,21 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		const valueTypeSemantics = semanticData.value.getTypeSemanticData();
-
-		// Ensure the assignment is valid and the types match up
-		this.programCtx.typeCheck(this).validAssignment(this);
 
 		// The evaluated type of an assignment expression is always the evaluated type assigned to the variable
 		this.typeSemantics = {
-			evaluatedType: valueTypeSemantics.evaluatedType,
+			evaluatedType: semanticData.value.getTypeSemanticData().evaluatedType,
 		};
+
+		// Ensure the assignment is valid and the types match up
+		this.programCtx.typeCheck(this).validAssignment(this);
 	}
 
 	/**

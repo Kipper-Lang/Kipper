@@ -570,12 +570,7 @@ export type KipperArg = KipperParam;
  * Represents a runtime variable or function that can be referenced.
  * @since 0.6.0
  */
-export type KipperReferenceable =
-	| KipperReferenceableFunction
-	| KipperVariable
-	| KipperParam
-	| KipperArg
-	| ScopeDeclaration;
+export type KipperReferenceable = KipperReferenceableFunction | KipperVariable | KipperParam | ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.

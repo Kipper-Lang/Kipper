@@ -428,7 +428,7 @@ export class KipperCompiler {
 			if (e instanceof KipperError) {
 				// Add the error to the programCtx, as that should not have been done yet by the semantic analysis in the
 				// RootASTNode class and CompilableASTNode classes.
-				programCtx.addError(e);
+				programCtx.reportError(e);
 
 				if (compilerOptions.recover === false) {
 					// If an error was thrown and the user does not want to recover from it, simply abort the compilation
