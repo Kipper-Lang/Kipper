@@ -124,10 +124,10 @@ To use development versions of Kipper download the
 		node.
   - `AnalysableASTNode.targetSemanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST
 		node for the target.
-  - `AnalysableASTNode.ensureSemanticallyValid()`, which throws an `MissingRequiredSemanticDataError` in case that the
+  - `AnalysableASTNode.ensureSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that the
   	specified node failed during semantic analysis. This is used by other nodes to ensure that the node is valid and
     its data can be safely accessed.
-  - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws an `MissingRequiredSemanticDataError` in case that
+  - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that
 		the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
 		its data can be safely accessed.
 - New types:
