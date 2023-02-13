@@ -69,6 +69,8 @@ To use development versions of Kipper download the
     an object-like or array-like.
   - `ValueNotIndexableTypeError`, which is thrown when a value is not indexable (not object-like), despite it being used
     in a member access expression.
+  - `MissingRequiredSemanticDataError`, which is a specific internal error used to indicate that a specified node is
+		missing required semantic data from another node and as a result failed to process itself.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -116,6 +118,18 @@ To use development versions of Kipper download the
   - `removeBraces()` for removing braces due to formatting reasons.
   - `CompilableASTNode.recursivelyCheckForWarnings()`, which recursively calls all children's `checkforWarnings()`
     functions as well as the function of the parent instance.
+  - `shouldRecoverFromError()` and `handleSemanticError()` in `handle-error.ts`.
+  - `AnalysableASTNode.semanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST node.
+  - `AnalysableASTNode.semanticallyTypeCheckChildren()`, which semantically type checks all children nodes of the AST
+		node.
+  - `AnalysableASTNode.targetSemanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST
+		node for the target.
+  - `AnalysableASTNode.ensureSemanticallyValid()`, which throws an `MissingRequiredSemanticDataError` in case that the
+  	specified node failed during semantic analysis. This is used by other nodes to ensure that the node is valid and
+    its data can be safely accessed.
+  - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws an `MissingRequiredSemanticDataError` in case that
+		the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
+		its data can be safely accessed.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -265,20 +279,24 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - `ParserStatementCtx` to `ParserStatementContext`.
   - `ParserDeclarationCtx` to `ParserDeclarationContext`.
   - `KipperFileListener` to `KipperFileASTGenerator`.
+  - `KipperProgramContext.addError` to `reportError`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
   - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
-  - Function `CompilableASTNode.semanticAnalysis` to `AnalysableASTNode.semanticAnalysis`.
-  - Function `CompilableASTNode.semanticTypeChecking` to `AnalysableASTNode.semanticTypeChecking`.
-  - Function `CompilableASTNode.wrapUpSemanticAnalysis` to `AnalysableASTNode.wrapUpSemanticAnalysis`.
-  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
-  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
-  - Abstract Function `CompilableASTNode.primarySemanticAnalysis` to `AnalysableASTNode.primarySemanticAnalysis`.
-  - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode.primarySemanticTypeChecking`.
-  - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode.checkForWarnings`.
-  - Field `CompilableASTNode.programCtx` to `AnalysableASTNode.programCtx`
-  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode.compileConfig`
+  - Function `CompilableASTNode.semanticAnalysis` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.semanticTypeChecking` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.wrapUpSemanticAnalysis` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.primarySemanticAnalysis` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.programCtx` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode`. 
+  - Field `CompilableASTNode.errors` to `AnalysableASTNode`.
+	- Field `CompilableASTNode.addError` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.hasFailed` to `AnalysableASTNode`.
 
 ### Fixed
 
