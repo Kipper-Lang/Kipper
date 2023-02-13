@@ -108,5 +108,41 @@ describe("Error recovery", () => {
 				assert(result.errors.length === 3, "Expected only one error");
 			});
 		});
+
+		describe("Scope node handling", () => {
+			it("Semantic data present after error", async () => {
+				const result = await new KipperCompiler().compile(
+					"const x: str; x + 5;",
+					activeErrorRecovery,
+				);
+
+				assert.equal(result.errors.length, 2);
+				assert.include(
+					result.errors.map((error) => error.constructor.name),
+					"UndefinedConstantError",
+				);
+				assert.include(
+					result.errors.map((error) => error.constructor.name),
+					"UndefinedReferenceError",
+				);
+			});
+
+			it("Type data present after error", async () => {
+				const result = await new KipperCompiler().compile(
+					"const x: str = '5'['5']; x + 5;",
+					activeErrorRecovery,
+				);
+
+				assert.equal(result.errors.length, 2);
+				assert.include(
+					result.errors.map((error) => error.constructor.name),
+					"InvalidKeyTypeError",
+				);
+				assert.include(
+					result.errors.map((error) => error.constructor.name),
+					"ArithmeticOperationTypeError",
+				);
+			});
+		});
 	});
 });
