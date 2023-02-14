@@ -9,7 +9,7 @@ import type {
 	NoTypeSemantics,
 	SemanticData,
 	TypeData,
-    VariableDeclaration,
+	VariableDeclaration,
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
@@ -685,7 +685,9 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 
 		// 'index++' will increase the index after the assignment, so the first assignment will be '0' and the second
 		// assignment will be '1', and so on...
-		const forDeclaration = this.antlrRuleCtx._forDeclaration ? <VariableDeclaration | Expression>this.children[index++] : undefined;
+		const forDeclaration = this.antlrRuleCtx._forDeclaration
+			? <VariableDeclaration | Expression>this.children[index++]
+			: undefined;
 		const forCondition = this.antlrRuleCtx._forCondition ? <Expression>this.children[index++] : undefined;
 		const forIterationExp = this.antlrRuleCtx._forIterationExp ? <Expression>this.children[index++] : undefined;
 		const loopBody = <Statement>this.children[index++];
