@@ -111,10 +111,7 @@ describe("Error recovery", () => {
 
 		describe("Scope node handling", () => {
 			it("Semantic data present after error", async () => {
-				const result = await new KipperCompiler().compile(
-					"const x: str; x + 5;",
-					activeErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile("const x: str; x + 5;", activeErrorRecovery);
 
 				assert.equal(result.errors.length, 2);
 				assert.include(
@@ -128,10 +125,7 @@ describe("Error recovery", () => {
 			});
 
 			it("Type data present after error", async () => {
-				const result = await new KipperCompiler().compile(
-					"const x: str = '5'['5']; x + 5;",
-					activeErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile("const x: str = '5'['5']; x + 5;", activeErrorRecovery);
 
 				assert.equal(result.errors.length, 2);
 				assert.include(

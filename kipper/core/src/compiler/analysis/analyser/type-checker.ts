@@ -25,7 +25,8 @@ import {
 	ParameterDeclaration,
 	ReturnStatement,
 	Statement,
-	TangledPrimaryExpression, MemberAccessExpression
+	TangledPrimaryExpression,
+	MemberAccessExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";

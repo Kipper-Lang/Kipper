@@ -12,7 +12,7 @@ options {
 @parser::header {
 	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 	// kind values.
-	import { KipperParserRuleContext, ASTKind } from "..";
+	import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
 }
 
 // Entry Point for an entire file
@@ -21,11 +21,19 @@ compilationUnit
     ;
 
 translationUnit
-    :   (externalItem | SemiColon)+
+    :   externalItem+
     ;
 
 externalItem
     :   blockItemList # externalBlockItem
+    ;
+
+blockItemList
+    :   blockItem+
+    ;
+
+blockItem
+    :   (statement | declaration | SemiColon)
     ;
 
 // -- Declarations
@@ -34,13 +42,18 @@ declaration
     :   variableDeclaration | functionDeclaration
     ;
 
+functionDeclaration
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier (compoundStatement | SemiColon)
+	;
+
 variableDeclaration
 	:	storageTypeSpecifier initDeclarator SemiColon
 	;
 
-functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier (compoundStatement | SemiColon)
-	;
+storageTypeSpecifier
+    :   'var'
+    |   'const'
+    ;
 
 declarator
     :   directDeclarator
@@ -48,11 +61,6 @@ declarator
 
 directDeclarator
     :   Identifier
-    ;
-
-storageTypeSpecifier
-    :   'var'
-    |   'const'
     ;
 
 initDeclarator
@@ -85,14 +93,6 @@ statement
 
 compoundStatement
     :   '{' blockItemList? '}'
-    ;
-
-blockItemList
-    :   blockItem+
-    ;
-
-blockItem
-    :   (statement | declaration)
     ;
 
 expressionStatement
@@ -135,12 +135,8 @@ doWhileLoopIterationStatement
 	;
 
 forCondition
-	:	(forDeclaration | expression?) SemiColon forExpression? SemiColon forExpression?
+	:	(variableDeclaration | (expression SemiColon)) forExpression? SemiColon forExpression?
 	;
-
-forDeclaration
-    :   storageTypeSpecifier initDeclarator
-    ;
 
 forExpression
     :   assignmentExpression (',' assignmentExpression )*
@@ -216,11 +212,11 @@ voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = 70 } # explicitCallFunctionCallExpression
-	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = 69 } # dotNotationMemberAccessExpression
-	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = 69 } # bracketNotationMemberAccessExpression
-	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = 69 } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
+	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
+	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
 	;
 
 argumentExpressionList

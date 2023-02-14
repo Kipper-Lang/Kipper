@@ -70,7 +70,7 @@ To use development versions of Kipper download the
   - `ValueNotIndexableTypeError`, which is thrown when a value is not indexable (not object-like), despite it being used
     in a member access expression.
   - `MissingRequiredSemanticDataError`, which is a specific internal error used to indicate that a specified node is
-		missing required semantic data from another node and as a result failed to process itself.
+    missing required semantic data from another node and as a result failed to process itself.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -121,15 +121,15 @@ To use development versions of Kipper download the
   - `shouldRecoverFromError()` and `handleSemanticError()` in `handle-error.ts`.
   - `AnalysableASTNode.semanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST node.
   - `AnalysableASTNode.semanticallyTypeCheckChildren()`, which semantically type checks all children nodes of the AST
-		node.
+    node.
   - `AnalysableASTNode.targetSemanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST
-		node for the target.
+    node for the target.
   - `AnalysableASTNode.ensureSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that the
-  	specified node failed during semantic analysis. This is used by other nodes to ensure that the node is valid and
+    specified node failed during semantic analysis. This is used by other nodes to ensure that the node is valid and
     its data can be safely accessed.
   - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that
-		the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
-		its data can be safely accessed.
+    the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
+    its data can be safely accessed.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -293,9 +293,9 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode`.
   - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode`.
   - Field `CompilableASTNode.programCtx` to `AnalysableASTNode`.
-  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode`. 
+  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode`.
   - Field `CompilableASTNode.errors` to `AnalysableASTNode`.
-	- Field `CompilableASTNode.addError` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.addError` to `AnalysableASTNode`.
   - Field `CompilableASTNode.hasFailed` to `AnalysableASTNode`.
 
 ### Fixed
