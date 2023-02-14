@@ -74,18 +74,4 @@ describe("NotImplemented", () => {
 		}
 		assert.fail("Expected NotImplementedError");
 	});
-
-	it("For Loop", async () => {
-		try {
-			await new KipperCompiler().compile("for (var i: num = 0; true; ) {}", {
-				abortOnFirstError: true,
-				target: defaultTarget,
-			});
-		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "KipperNotImplementedError", "Expected proper error");
-			assert.equal((<KipperError>e).name, "NotImplementedError", "Expected proper error");
-			return;
-		}
-		assert.fail("Expected NotImplementedError");
-	});
 });
