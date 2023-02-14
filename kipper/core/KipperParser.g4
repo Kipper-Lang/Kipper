@@ -135,12 +135,8 @@ doWhileLoopIterationStatement
 	;
 
 forCondition
-	:	(variableDeclaration | (expression SemiColon)) forExpression? SemiColon forExpression?
+	:	(variableDeclaration | (expression SemiColon)) expression? SemiColon expression?
 	;
-
-forExpression
-    :   assignmentExpression (',' assignmentExpression )*
-    ;
 
 jumpStatement
     :   ('continue' | 'break') SemiColon

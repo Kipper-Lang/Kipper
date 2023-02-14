@@ -58,7 +58,6 @@ import { ForLoopIterationStatementContext } from "./KipperParser";
 import { WhileLoopIterationStatementContext } from "./KipperParser";
 import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { ForConditionContext } from "./KipperParser";
-import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
@@ -496,13 +495,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitForCondition?: (ctx: ForConditionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.forExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitForExpression?: (ctx: ForExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.jumpStatement`.
