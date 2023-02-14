@@ -15,7 +15,7 @@ describe("KipperError", () => {
 				(<KipperError>e).getTraceback(),
 				`Traceback:\nFile 'anonymous-script', line 2, col 1:\n` +
 					`   var i: str = "4";\n` +
-					`   ^^^^^^^^^^^^^^^^^\n` +
+					`   ^^^^^^^^^^^^^^^^ \n` +
 					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 			);
 			return;

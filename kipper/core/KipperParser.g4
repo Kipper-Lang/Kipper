@@ -39,15 +39,16 @@ blockItem
 // -- Declarations
 
 declaration
-    :   variableDeclaration | functionDeclaration
+    :   variableDeclaration SemiColon
+    | 	functionDeclaration SemiColon?
     ;
 
 functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier (compoundStatement | SemiColon)
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier compoundStatement?
 	;
 
 variableDeclaration
-	:	storageTypeSpecifier initDeclarator SemiColon
+	:	storageTypeSpecifier initDeclarator
 	;
 
 storageTypeSpecifier
@@ -123,7 +124,12 @@ iterationStatement
     ;
 
 forLoopIterationStatement
-	:	'for' '(' forCondition ')' statement
+	locals[_forDeclaration: boolean = false, _forCondition: boolean = false, _forIterationExp: boolean = false]
+	:	'for' '('
+		((variableDeclaration | expression) { _localctx._forDeclaration = true })? SemiColon
+		(expression { _localctx._forCondition = true })? SemiColon
+		(expression { _localctx._forIterationExp = true })?
+		')' statement
 	;
 
 whileLoopIterationStatement
@@ -132,10 +138,6 @@ whileLoopIterationStatement
 
 doWhileLoopIterationStatement
 	:	'do' statement 'while' '(' expression ')' SemiColon
-	;
-
-forCondition
-	:	(variableDeclaration | (expression SemiColon)) expression? SemiColon expression?
 	;
 
 jumpStatement

@@ -57,7 +57,6 @@ import { IterationStatementContext } from "./KipperParser";
 import { ForLoopIterationStatementContext } from "./KipperParser";
 import { WhileLoopIterationStatementContext } from "./KipperParser";
 import { DoWhileLoopIterationStatementContext } from "./KipperParser";
-import { ForConditionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
@@ -714,17 +713,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.forCondition`.
-	 * @param ctx the parse tree
-	 */
-	enterForCondition?: (ctx: ForConditionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.forCondition`.
-	 * @param ctx the parse tree
-	 */
-	exitForCondition?: (ctx: ForConditionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.jumpStatement`.

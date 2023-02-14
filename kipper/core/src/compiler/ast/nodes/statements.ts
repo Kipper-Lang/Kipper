@@ -9,6 +9,7 @@ import type {
 	NoTypeSemantics,
 	SemanticData,
 	TypeData,
+    VariableDeclaration,
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
@@ -680,9 +681,21 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
+		let index = 0;
+
+		// 'index++' will increase the index after the assignment, so the first assignment will be '0' and the second
+		// assignment will be '1', and so on...
+		const forDeclaration = this.antlrRuleCtx._forDeclaration ? <VariableDeclaration | Expression>this.children[index++] : undefined;
+		const forCondition = this.antlrRuleCtx._forCondition ? <Expression>this.children[index++] : undefined;
+		const forIterationExp = this.antlrRuleCtx._forIterationExp ? <Expression>this.children[index++] : undefined;
+		const loopBody = <Statement>this.children[index++];
+
+		this.semanticData = {
+			forDeclaration: forDeclaration,
+			loopCondition: forCondition,
+			forIterationExp: forIterationExp,
+			loopBody: loopBody,
+		};
 	}
 
 	/**
@@ -693,11 +706,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
-	}
+	public primarySemanticTypeChecking = undefined; // For-loop statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
