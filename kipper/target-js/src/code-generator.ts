@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	ComparativeExpressionSemantics,
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
@@ -266,7 +266,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		// Translate the parts of the for loop statement - Everything except the loop body is optional
+		let forDeclaration: TranslatedExpression | Array<TranslatedCodeLine> = semanticData.forDeclaration ?
+			await semanticData.forDeclaration.translateCtxAndChildren() :
+			[];
+		const condition: TranslatedExpression = semanticData.loopCondition ?
+			await semanticData.loopCondition.translateCtxAndChildren() :
+			[];
+		const forIterationExp: TranslatedExpression = semanticData.forIterationExp ?
+			await semanticData.forIterationExp.translateCtxAndChildren() :
+			[];
+
+		// Remove the brackets of the loop body since it is a compound statement and to stay consistent it's better to do so
+		const loopBody = removeBrackets(await semanticData.loopBody.translateCtxAndChildren());
+
+		// Ensure the variable declaration in the for declaration is properly included in the output code
+		forDeclaration = <TranslatedExpression>(
+			// Variable declarations are already translated as a single line of code and have a semicolon at the end ->
+			// We need to ensure that the semicolon is not added twice
+			semanticData.forDeclaration instanceof VariableDeclaration ? forDeclaration[0] : [...forDeclaration, ";"]
+		);
+
+		return [
+			["for", " ", "(", ...forDeclaration, " ", ...condition, ";", " ", ...forIterationExp, ")", " ", "{"],
+			...loopBody,
+			["}"]
+		];
 	};
 
 	/**
@@ -313,7 +340,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-
 		const storage = semanticData.storageType === "const" ? "const" : "let";
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
