@@ -22,6 +22,7 @@ To use development versions of Kipper download the
   scopes/argument referencing and return-value code branch
   inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
 - Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
+- Implemented for-loop iteration statements ([#270](https://github.com/Luna-Klatzer/Kipper/issues/270)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
   analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
   as alias), which can be used as the target in
@@ -300,13 +301,14 @@ context to an AST node. This is the type representing all values from`ParserASTM
 
 ### Fixed
 
-- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+- Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
-- Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
+- Grammar bug not allowing an empty statement (`;`) in a compound statement.
 
 ### Deprecated
 
