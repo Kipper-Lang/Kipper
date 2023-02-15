@@ -192,6 +192,7 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
+		/* istanbul ignore next: super function already being run/tested */
 		return <ScopeParameterDeclaration>super.getScopeDeclaration();
 	}
 
@@ -342,6 +343,7 @@ export class FunctionDeclaration
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
+		/* istanbul ignore next: super function already being run/tested */
 		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
 	}
 
