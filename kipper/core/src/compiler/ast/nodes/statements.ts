@@ -9,6 +9,7 @@ import type {
 	NoTypeSemantics,
 	SemanticData,
 	TypeData,
+	VariableDeclaration,
 } from "..";
 import type {
 	DoWhileLoopStatementSemantics,
@@ -38,7 +39,7 @@ import {
 	WhileLoopIterationStatementContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
-import { CheckedType, LocalScope } from "../../analysis";
+import {CheckedType, FunctionScope, LocalScope} from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 
 /**
@@ -633,7 +634,17 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class ForLoopStatement extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics> {
+export class ForLoopStatement
+	extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics>
+	implements ScopeNode<LocalScope>
+{
+	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: LocalScope;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -656,6 +667,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._innerScope = new LocalScope(this);
 	}
 
 	/**
@@ -673,6 +685,14 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	}
 
 	/**
+	 * Gets the inner scope of this for-loop statement, which is automatically created when using a for loop.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): LocalScope {
+		return this._innerScope;
+	}
+
+	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 *
@@ -680,9 +700,23 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
+		let index = 0;
+
+		// 'index++' will increase the index after the assignment, so the first assignment will be '0' and the second
+		// assignment will be '1', and so on...
+		const forDeclaration = this.antlrRuleCtx._forDeclaration
+			? <VariableDeclaration | Expression>this.children[index++]
+			: undefined;
+		const forCondition = this.antlrRuleCtx._forCondition ? <Expression>this.children[index++] : undefined;
+		const forIterationExp = this.antlrRuleCtx._forIterationExp ? <Expression>this.children[index++] : undefined;
+		const loopBody = <Statement>this.children[index++];
+
+		this.semanticData = {
+			forDeclaration: forDeclaration,
+			loopCondition: forCondition,
+			forIterationExp: forIterationExp,
+			loopBody: loopBody,
+		};
 	}
 
 	/**
@@ -693,11 +727,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("For-loop statements have not been implemented yet."));
-	}
+	public primarySemanticTypeChecking = undefined; // For-loop statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

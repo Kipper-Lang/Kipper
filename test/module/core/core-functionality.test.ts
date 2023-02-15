@@ -10,7 +10,7 @@ import { KipperTypeScriptTarget } from "@kipper/target-ts";
  * @param jsProgram The program that was compiled to JavaScript that should be evaluated. This program should contain a
  * translated 'print' function call.
  */
-function testPrintOutput(newConsoleLog: (message: any) => void, jsProgram: string): void {
+export function testPrintOutput(newConsoleLog: (message: any) => void, jsProgram: string): void {
 	const oldConsoleLog = console.log;
 	console.log = newConsoleLog;
 	eval(jsProgram); // Eval the program, which should call the 'print' function.
@@ -246,7 +246,7 @@ describe("Core functionality", () => {
 				const prevLog = console.log;
 				assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 				console.log = (message: any) => {
-					assert(message === "Works", "Expected different output");
+					assert.equal(message, "Works", "Expected different output");
 				};
 
 				// Evaluate expression and restore old console.log
@@ -313,7 +313,7 @@ describe("Core functionality", () => {
 				assert(code.includes('if (x > 3 || x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				const jsCode = ts.transpile(code);
-				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
 			it("true || false", async () => {
@@ -328,7 +328,7 @@ describe("Core functionality", () => {
 				assert(code.includes('if (x > 3 || x < 2) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				const jsCode = ts.transpile(code);
-				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
 			it("false || true", async () => {
@@ -343,7 +343,7 @@ describe("Core functionality", () => {
 				assert(code.includes('if (x > 5 || x < 3) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 				const jsCode = ts.transpile(code);
-				testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
 			it("false || false", async () => {
@@ -376,7 +376,7 @@ describe("Core functionality", () => {
 			assert.include(code, 'if (x === 4) {\n  __kipper.print("Works");\n}', "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it("!=", async () => {
@@ -391,7 +391,7 @@ describe("Core functionality", () => {
 			assert(code.includes('if (x !== 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it("<", async () => {
@@ -406,7 +406,7 @@ describe("Core functionality", () => {
 			assert(code.includes('if (x < 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it("<=", async () => {
@@ -421,7 +421,7 @@ describe("Core functionality", () => {
 			assert(code.includes('if (x <= 5) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it(">", async () => {
@@ -436,7 +436,7 @@ describe("Core functionality", () => {
 			assert(code.includes('if (x > 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it(">=", async () => {
@@ -451,7 +451,7 @@ describe("Core functionality", () => {
 			assert(code.includes('if (x >= 4) {\n  __kipper.print("Works");\n}'), "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 	});
 
@@ -511,35 +511,79 @@ describe("Core functionality", () => {
 			assert.include(code, "while (x <= 5) {\n  x += 1;\n}", "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "6", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different output"), jsCode);
 		});
 
 		it("Simple Loop with expression statement", async () => {
-			const fileContent = "var x: num = 1; while (x <= 5) x += 1; print(x as str);";
+			const fileContent = "var x: num = 1; while (x <= 10) x += 1; print(x as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
-			assert.include(code, "while (x <= 5) \n  x += 1;", "Invalid TypeScript code");
+			assert.include(code, "while (x <= 10) \n  x += 1;", "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "6", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "11", "Expected different output"), jsCode);
 		});
 
 		it("Simple Loop with if statement", async () => {
-			const fileContent = "var x: num = 1; while (x < 5) if (x != 5) x += 1; print(x as str);";
+			const fileContent = "var x: num = 1; while (x < 10) if (x != 10) x += 1; print(x as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
-			assert.include(code, "while (x < 5) \n  if (x !== 5) {\n    x += 1;\n  }", "Invalid TypeScript code");
+			assert.include(code, "while (x < 10) \n  if (x !== 10) {\n    x += 1;\n  }", "Invalid TypeScript code");
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "5", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "10", "Expected different output"), jsCode);
+		});
+	});
+
+	describe("For loop", () => {
+		it("Simple Loop with compound statement", async () => {
+			const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) { x = i; }; print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "for (let i: number = 0; i < 10; i += 1) {\n  x = i;\n}", "Invalid TypeScript code");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with expression statement", async () => {
+			const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) x = i; print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "for (let i: number = 0; i < 10; i += 1) \n  x = i;", "Invalid TypeScript code");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with if statement", async () => {
+			const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) if (i != 10) x = i; print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "for (let i: number = 0; i < 10; i += 1) \n  if (i !== 10) {\n    x = i;\n  }", "Invalid TypeScript code");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
 		});
 	});
 
@@ -561,7 +605,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 			});
 		});
 
@@ -580,7 +624,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "2", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 			});
 
 			it("Simple slice with only start", async () => {
@@ -597,7 +641,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "234", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "234", "Expected different output"), jsCode);
 			});
 
 			it("Simple slice with only end", async () => {
@@ -614,7 +658,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "12", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "12", "Expected different output"), jsCode);
 			});
 
 			it("Simple slice with neither start nor end", async () => {
@@ -631,7 +675,7 @@ describe("Core functionality", () => {
 				);
 
 				const jsCode = ts.transpile(instance.write());
-				testPrintOutput((message: any) => assert(message === "1234", "Expected different output"), jsCode);
+				testPrintOutput((message: any) => assert.equal(message, "1234", "Expected different output"), jsCode);
 			});
 		});
 	});
@@ -663,7 +707,7 @@ describe("Core functionality", () => {
 			);
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "Works", "Expected different output"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
 		it("Return value", async () => {
@@ -681,7 +725,7 @@ describe("Core functionality", () => {
 			);
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "5", "Expected different result"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different result"), jsCode);
 		});
 
 		it("Parameters", async () => {
@@ -699,7 +743,9 @@ describe("Core functionality", () => {
 			);
 
 			const jsCode = ts.transpile(code);
-			testPrintOutput((message: any) => assert(message === "6", "Expected different result"), jsCode);
+			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different result"), jsCode);
 		});
 	});
+
+
 });

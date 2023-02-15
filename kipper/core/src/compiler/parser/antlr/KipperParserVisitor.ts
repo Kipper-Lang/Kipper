@@ -2,7 +2,7 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { KipperParserRuleContext, ASTKind } from "..";
+import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
@@ -34,20 +34,20 @@ import { ActualLogicalOrExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
+import { BlockItemListContext } from "./KipperParser";
+import { BlockItemContext } from "./KipperParser";
 import { DeclarationContext } from "./KipperParser";
-import { VariableDeclarationContext } from "./KipperParser";
 import { FunctionDeclarationContext } from "./KipperParser";
+import { VariableDeclarationContext } from "./KipperParser";
+import { StorageTypeSpecifierContext } from "./KipperParser";
 import { DeclaratorContext } from "./KipperParser";
 import { DirectDeclaratorContext } from "./KipperParser";
-import { StorageTypeSpecifierContext } from "./KipperParser";
 import { InitDeclaratorContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InitializerContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
-import { BlockItemListContext } from "./KipperParser";
-import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
 import { IfStatementContext } from "./KipperParser";
@@ -57,9 +57,6 @@ import { IterationStatementContext } from "./KipperParser";
 import { ForLoopIterationStatementContext } from "./KipperParser";
 import { WhileLoopIterationStatementContext } from "./KipperParser";
 import { DoWhileLoopIterationStatementContext } from "./KipperParser";
-import { ForConditionContext } from "./KipperParser";
-import { ForDeclarationContext } from "./KipperParser";
-import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
@@ -331,11 +328,32 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitExternalItem?: (ctx: ExternalItemContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `KipperParser.blockItemList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBlockItemList?: (ctx: BlockItemListContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.blockItem`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitBlockItem?: (ctx: BlockItemContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitDeclaration?: (ctx: DeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.functionDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.variableDeclaration`.
@@ -345,11 +363,11 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitVariableDeclaration?: (ctx: VariableDeclarationContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.functionDeclaration`.
+	 * Visit a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
+	visitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.declarator`.
@@ -364,13 +382,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitDirectDeclarator?: (ctx: DirectDeclaratorContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.storageTypeSpecifier`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.initDeclarator`.
@@ -413,20 +424,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitCompoundStatement?: (ctx: CompoundStatementContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.blockItemList`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBlockItemList?: (ctx: BlockItemListContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.blockItem`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitBlockItem?: (ctx: BlockItemContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.expressionStatement`.
@@ -490,27 +487,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.forCondition`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitForCondition?: (ctx: ForConditionContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.forDeclaration`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitForDeclaration?: (ctx: ForDeclarationContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `KipperParser.forExpression`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitForExpression?: (ctx: ForExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.jumpStatement`.

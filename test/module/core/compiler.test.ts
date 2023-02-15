@@ -12,6 +12,7 @@ import * as ts from "typescript";
 import * as path from "path";
 import { getTypeScriptBuiltInIdentifier, KipperTypeScriptTarget } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
+import { testPrintOutput } from "./core-functionality.test";
 
 function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
@@ -36,6 +37,8 @@ const spacedProgramFile = getFileName("spaced-program.kip");
 const expressionStatementsFile = getFileName("expression-statements.kip");
 const tangledExpressionsFile = getFileName("tangled-expressions.kip");
 const ifStatementsFile = getFileName("if-statements.kip");
+const forLoopFile = getFileName("for-loop.kip");
+const whileLoopFile = getFileName("while-loop.kip");
 
 describe("KipperCompiler", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
@@ -155,6 +158,16 @@ describe("KipperCompiler", () => {
 
 			it("If statements", async () => {
 				const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
+
+			it("For loop", async () => {
+				const fileContent = (await fs.readFile(forLoopFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
+
+			it("While loop", async () => {
+				const fileContent = (await fs.readFile(whileLoopFile, "utf8" as BufferEncoding)).toString();
 				await compiler.syntaxAnalyse(fileContent);
 			});
 		});
@@ -289,19 +302,13 @@ describe("KipperCompiler", () => {
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
-
-					// Overwrite built-in to access output
-					const prevLog = console.log;
-					console.log = (message: any) => {
-						// Assert that the output is "Hello world!"
-						assert(["Hello", "World", "!"].find((val) => val === message) !== undefined);
-					};
-
-					// Evaluate expression
-					eval(jsCode);
-
-					// Restore old console.log
-					console.log = prevLog;
+					testPrintOutput(
+						(message: any) => {
+							// Assert that the output is "Hello world!"
+							assert(["Hello", "World", "!"].find((val) => val === message) !== undefined);
+						},
+						jsCode
+					);
 				});
 
 				it(`Single Function definition (${target.fileExtension})`, async () => {
@@ -341,19 +348,13 @@ describe("KipperCompiler", () => {
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
-
-					// Overwrite built-in to access output
-					const prevLog = console.log;
-					console.log = (message: any) => {
-						// Assert that the output is "Hello world!"
-						assert(message === "Hello world!");
-					};
-
-					// Evaluate expression
-					eval(jsCode);
-
-					// Restore old console.log
-					console.log = prevLog;
+					testPrintOutput(
+						(message: any) => {
+							// Assert that the output is "Hello world!"
+							assert(message === "Hello world!")
+						},
+						jsCode
+					);
 				});
 
 				it(`Variable assignment (${target.fileExtension})`, async () => {
@@ -369,18 +370,12 @@ describe("KipperCompiler", () => {
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
-
-					// Overwrite built-in to access output
-					const prevLog = console.log;
-					console.log = (message: any) => {
-						assert(message === "45678");
-					};
-
-					// Evaluate expression
-					eval(jsCode);
-
-					// Restore old console.log
-					console.log = prevLog;
+					testPrintOutput(
+						(message: any) => {
+							assert(message === "45678");
+						},
+						jsCode
+					);
 				});
 
 				it(`Assign (${target.fileExtension})`, async () => {
@@ -454,18 +449,12 @@ describe("KipperCompiler", () => {
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
-
-					// Overwrite built-in to access output
-					const prevLog = console.log;
-					console.log = (message: any) => {
-						assert(["Hello world!", "485", "72", "955"].find((val) => val === message));
-					};
-
-					// Evaluate expression
-					eval(jsCode);
-
-					// Restore old console.log
-					console.log = prevLog;
+					testPrintOutput(
+						(message: any) => {
+							assert(["Hello world!", "485", "72", "955"].find((val) => val === message));
+						},
+						jsCode
+					);
 				});
 
 				it(`If statements (${target.fileExtension})`, async () => {
@@ -486,18 +475,53 @@ describe("KipperCompiler", () => {
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(instance.write());
-
-					// Overwrite built-in to access output
-					const prevLog = console.log;
-					console.log = (message: any) => {
+					testPrintOutput(
+						(message: any) => {
 						assert("Hello world!" === message, "Expected 'Hello world!'");
-					};
+						},
+						jsCode
+					);
+				});
 
-					// Evaluate expression
-					eval(jsCode);
+				it(`While loop (${target.fileExtension})`, async () => {
+					const fileContent = (await fs.readFile(whileLoopFile, "utf8" as BufferEncoding)).toString();
+					const stream = new KipperParseStream({ stringContent: fileContent });
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
 
-					// Restore old console.log
-					console.log = prevLog;
+					const code = instance.write();
+					assert(code);
+					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
+					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+
+					// Compile the program to JavaScript and evaluate it
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(message: any) => {
+							assert("10" === message, "Expected '10'");
+						},
+						jsCode
+					);
+				});
+
+				it(`For loop (${target.fileExtension})`, async () => {
+					const fileContent = (await fs.readFile(forLoopFile, "utf8" as BufferEncoding)).toString();
+					const stream = new KipperParseStream({ stringContent: fileContent });
+					const instance: KipperCompileResult = await compiler.compile(stream, { target: target });
+
+					const code = instance.write();
+					assert(code);
+					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
+					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+
+					// Compile the program to JavaScript and evaluate it
+					let i = 0;
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(message: any) => {
+							assert(String(i++) === message, `Expected '${String(i - 1)}' from for-loop`);
+						},
+						jsCode
+					);
 				});
 			});
 		});

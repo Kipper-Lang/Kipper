@@ -1,0 +1,5 @@
+var i: num = 0;
+while (i < 10) {
+	i++;
+}
+print(i as str);
