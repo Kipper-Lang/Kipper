@@ -39,7 +39,7 @@ import {
 	WhileLoopIterationStatementContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
-import { CheckedType, LocalScope } from "../../analysis";
+import {CheckedType, FunctionScope, LocalScope} from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 
 /**
@@ -634,7 +634,17 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class ForLoopStatement extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics> {
+export class ForLoopStatement
+	extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics>
+	implements ScopeNode<LocalScope>
+{
+	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: LocalScope;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -657,6 +667,7 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
+		this._innerScope = new LocalScope(this);
 	}
 
 	/**
@@ -671,6 +682,14 @@ export class ForLoopStatement extends IterationStatement<ForLoopStatementSemanti
 	 */
 	public override get antlrRuleCtx(): ForLoopIterationStatementContext {
 		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Gets the inner scope of this for-loop statement, which is automatically created when using a for loop.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): LocalScope {
+		return this._innerScope;
 	}
 
 	/**

@@ -192,10 +192,7 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
+		return <ScopeParameterDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -281,6 +278,13 @@ export class FunctionDeclaration
 	implements ScopeNode<FunctionScope>
 {
 	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: FunctionScope;
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
@@ -303,8 +307,6 @@ export class FunctionDeclaration
 	 */
 	public override readonly kind = KipperParser.RULE_functionDeclaration;
 
-	private readonly _innerScope: FunctionScope;
-
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -316,6 +318,14 @@ export class FunctionDeclaration
 	 */
 	public override get antlrRuleCtx(): FunctionDeclarationContext {
 		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): FunctionScope {
+		return this._innerScope;
 	}
 
 	/**
@@ -332,18 +342,7 @@ export class FunctionDeclaration
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
-	}
-
-	/**
-	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
-	 * @since 0.10.0
-	 */
-	public get innerScope(): FunctionScope {
-		return this._innerScope;
+		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -509,19 +508,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
+		return <ScopeVariableDeclaration>super.getScopeDeclaration();
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
@@ -604,6 +592,14 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.variableDeclaration;
 	readonly targetCodeGenerator = this.codeGenerator.variableDeclaration;
