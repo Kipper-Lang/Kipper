@@ -156,7 +156,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		let statement = await semanticData.ifBranch.translateCtxAndChildren();
 
 		if (semanticData.ifBranch instanceof CompoundStatement) {
-			statement = removeBrackets(statement);
+			statement = removeBrackets(statement); // remove brackets -> will be added later
 		} else {
 			statement = indentLines(statement); // Apply indent to the single statement
 		}
@@ -279,8 +279,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			await semanticData.forIterationExp.translateCtxAndChildren() :
 			[];
 
-		// Remove the brackets of the loop body since it is a compound statement and to stay consistent it's better to do so
-		const loopBody = removeBrackets(await semanticData.loopBody.translateCtxAndChildren());
+		// Apply formatting for the loop body (compound statements are formatted differently)
+		let isCompound = semanticData.loopBody instanceof CompoundStatement;
+		let loopBody = await semanticData.loopBody.translateCtxAndChildren();
+		if (isCompound) {
+			loopBody = removeBrackets(loopBody); // remove brackets -> will be added later
+		} else {
+			loopBody = indentLines(loopBody); // Indent the loop body
+		}
 
 		// Ensure the variable declaration in the for declaration is properly included in the output code
 		forDeclaration = <TranslatedExpression>(
@@ -290,9 +296,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		);
 
 		return [
-			["for", " ", "(", ...forDeclaration, " ", ...condition, ";", " ", ...forIterationExp, ")", " ", "{"],
+			["for", " ", "(", ...forDeclaration, " ", ...condition, ";", " ", ...forIterationExp, ")", " ", ...(isCompound ? ["{"] : [])],
 			...loopBody,
-			["}"]
+			isCompound ? ["}"] : [],
 		];
 	};
 
