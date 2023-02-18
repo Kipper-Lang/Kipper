@@ -40,6 +40,8 @@ To use development versions of Kipper download the
   ([#372](https://github.com/Luna-Klatzer/Kipper/issues/372)).
 - Support for single-line comments separated by a newline char.
   ([#400](https://github.com/Luna-Klatzer/Kipper/issues/400)).
+- Implemented new built-in function `len()`, which returns the length of a string (In the future also arrays).
+	([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
