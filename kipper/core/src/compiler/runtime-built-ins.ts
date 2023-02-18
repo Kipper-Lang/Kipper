@@ -140,10 +140,10 @@ export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
 			{
 				identifier: "arrayLike",
 				valueType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
-			}
+			},
 		],
 		returnType: "num",
-	}
+	},
 };
 
 /**
@@ -225,5 +225,5 @@ export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 			},
 		],
 		returnType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
-	}
+	},
 };
