@@ -18,7 +18,9 @@ import {
 	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
-	IdentifierPrimaryExpression, IterationStatement, JumpStatement,
+	IdentifierPrimaryExpression,
+	IterationStatement,
+	JumpStatement,
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
@@ -33,7 +35,8 @@ import {
 	InvalidReturnStatementError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
-	UnknownReferenceError, InvalidJumpStatementError,
+	UnknownReferenceError,
+	InvalidJumpStatementError,
 } from "../../../errors";
 
 /**

@@ -4,7 +4,7 @@
  * @since 0.8.0
  */
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
-import {genJSFunction, getJSFunctionSignature, JavaScriptTargetBuiltInGenerator} from "@kipper/target-js";
+import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier } from "./tools";
 import { KipperCompilableType } from "@kipper/core";
 
