@@ -10,7 +10,7 @@ describe("KipperSyntaxError", () => {
 		} catch (e) {
 			assert(
 				(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
-				"Expected proper error",
+				"Expected different error",
 			);
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
@@ -26,7 +26,7 @@ describe("KipperSyntaxError", () => {
 		} catch (e) {
 			assert(
 				(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
-				"Expected proper error",
+				"Expected different error",
 			);
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);

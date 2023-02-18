@@ -19,7 +19,7 @@ describe("BuiltInOverwriteError", () => {
 				try {
 					result = await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -32,7 +32,7 @@ describe("BuiltInOverwriteError", () => {
 				try {
 					result = await new KipperCompiler().compile(`def ${test.i}() -> void {};`, config);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -45,7 +45,7 @@ describe("BuiltInOverwriteError", () => {
 				try {
 					result = await new KipperCompiler().compile(`def f(${test.i}: num) -> void {};`, config);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -60,7 +60,7 @@ describe("BuiltInOverwriteError", () => {
 				try {
 					result = await new KipperCompiler().compile(`{ var ${test.i}: num = 4; }`, config);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -75,7 +75,7 @@ describe("BuiltInOverwriteError", () => {
 				try {
 					result = await new KipperCompiler().compile(`{ { var ${test.i}: num = 4; } }`, config);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;

@@ -8,8 +8,8 @@ describe("UnknownReferenceError", () => {
 		try {
 			result = await new KipperCompiler().compile("x;", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected proper error");
-			assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
+			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
@@ -22,8 +22,8 @@ describe("UnknownReferenceError", () => {
 		try {
 			result = await new KipperCompiler().compile('var x: num = call pr("pr");', defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected proper error");
-			assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
+			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
@@ -36,8 +36,8 @@ describe("UnknownReferenceError", () => {
 		try {
 			result = await new KipperCompiler().compile("var x: num = y + y;", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected proper error");
-			assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
+			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
@@ -50,8 +50,8 @@ describe("UnknownReferenceError", () => {
 		try {
 			result = await new KipperCompiler().compile("{ { { { x; } } } }", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected proper error");
-			assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
+			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;

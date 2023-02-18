@@ -269,15 +269,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = node.getSemanticData();
 
 		// Translate the parts of the for loop statement - Everything except the loop body is optional
-		let forDeclaration: TranslatedExpression | Array<TranslatedCodeLine> = semanticData.forDeclaration ?
-			await semanticData.forDeclaration.translateCtxAndChildren() :
-			[];
-		const condition: TranslatedExpression = semanticData.loopCondition ?
-			await semanticData.loopCondition.translateCtxAndChildren() :
-			[];
-		const forIterationExp: TranslatedExpression = semanticData.forIterationExp ?
-			await semanticData.forIterationExp.translateCtxAndChildren() :
-			[];
+		let forDeclaration: TranslatedExpression | Array<TranslatedCodeLine> = semanticData.forDeclaration
+			? await semanticData.forDeclaration.translateCtxAndChildren()
+			: [];
+		const condition: TranslatedExpression = semanticData.loopCondition
+			? await semanticData.loopCondition.translateCtxAndChildren()
+			: [];
+		const forIterationExp: TranslatedExpression = semanticData.forIterationExp
+			? await semanticData.forIterationExp.translateCtxAndChildren()
+			: [];
 
 		// Apply formatting for the loop body (compound statements are formatted differently)
 		let isCompound = semanticData.loopBody instanceof CompoundStatement;
@@ -292,11 +292,24 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		forDeclaration = <TranslatedExpression>(
 			// Variable declarations are already translated as a single line of code and have a semicolon at the end ->
 			// We need to ensure that the semicolon is not added twice
-			semanticData.forDeclaration instanceof VariableDeclaration ? forDeclaration[0] : [...forDeclaration, ";"]
+			(semanticData.forDeclaration instanceof VariableDeclaration ? forDeclaration[0] : [...forDeclaration, ";"])
 		);
 
 		return [
-			["for", " ", "(", ...forDeclaration, " ", ...condition, ";", " ", ...forIterationExp, ")", " ", ...(isCompound ? ["{"] : [])],
+			[
+				"for",
+				" ",
+				"(",
+				...forDeclaration,
+				" ",
+				...condition,
+				";",
+				" ",
+				...forIterationExp,
+				")",
+				" ",
+				...(isCompound ? ["{"] : []),
+			],
 			...loopBody,
 			isCompound ? ["}"] : [],
 		];

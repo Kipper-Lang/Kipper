@@ -8,8 +8,8 @@ describe("ReservedIdentifierOverwriteError", () => {
 		try {
 			result = await new KipperCompiler().compile("var instanceof: str;", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "ReservedIdentifierOverwriteError", "Expected proper error");
-			assert((<KipperError>e).name === "IdentifierError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "ReservedIdentifierOverwriteError", "Expected different error");
+			assert((<KipperError>e).name === "IdentifierError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;

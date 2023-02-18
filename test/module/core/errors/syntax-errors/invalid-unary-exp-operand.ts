@@ -9,8 +9,12 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			try {
 				result = await new KipperCompiler().compile(`5++;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionOperandError", "Expected proper error");
-				assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"InvalidUnaryExpressionOperandError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +27,12 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			try {
 				result = await new KipperCompiler().compile(`(5)++;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionOperandError", "Expected proper error");
-				assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"InvalidUnaryExpressionOperandError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -37,8 +45,12 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var x: num = 5; ++x++;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionOperandError", "Expected proper error");
-				assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"InvalidUnaryExpressionOperandError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -51,8 +63,12 @@ describe("InvalidUnaryExpressionOperandError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var x: num = 5; ((x + 5))++;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionOperandError", "Expected proper error");
-				assert((<KipperError>e).name === "SyntaxError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"InvalidUnaryExpressionOperandError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

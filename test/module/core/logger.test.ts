@@ -79,7 +79,7 @@ describe("KipperLogger", () => {
 			} catch (e) {
 				assert(
 					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
-					"Expected proper error",
+					"Expected different error",
 				);
 
 				// Check logging errors

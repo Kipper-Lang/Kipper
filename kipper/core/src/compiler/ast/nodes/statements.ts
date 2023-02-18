@@ -39,7 +39,7 @@ import {
 	WhileLoopIterationStatementContext,
 } from "../../parser";
 import { CompilableASTNode } from "../compilable-ast-node";
-import {CheckedType, FunctionScope, LocalScope} from "../../analysis";
+import { CheckedType, LocalScope } from "../../analysis";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../errors";
 
 /**

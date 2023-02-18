@@ -8,8 +8,8 @@ describe("MissingFunctionBodyError", () => {
 		try {
 			result = await new KipperCompiler().compile("def x() -> void;", defaultConfig);
 		} catch (e) {
-			assert((<KipperSyntaxError>e).constructor.name === "MissingFunctionBodyError", "Expected proper error");
-			assert((<KipperSyntaxError>e).name === "SyntaxError", "Expected proper error");
+			assert((<KipperSyntaxError>e).constructor.name === "MissingFunctionBodyError", "Expected different error");
+			assert((<KipperSyntaxError>e).name === "SyntaxError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;

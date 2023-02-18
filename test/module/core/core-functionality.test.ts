@@ -580,7 +580,11 @@ describe("Core functionality", () => {
 			assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
 
 			const code = instance.write();
-			assert.include(code, "for (let i: number = 0; i < 10; i += 1) \n  if (i !== 10) {\n    x = i;\n  }", "Invalid TypeScript code");
+			assert.include(
+				code,
+				"for (let i: number = 0; i < 10; i += 1) \n  if (i !== 10) {\n    x = i;\n  }",
+				"Invalid TypeScript code",
+			);
 
 			const jsCode = ts.transpile(code);
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
@@ -746,6 +750,4 @@ describe("Core functionality", () => {
 			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different result"), jsCode);
 		});
 	});
-
-
 });

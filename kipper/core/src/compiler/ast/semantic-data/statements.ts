@@ -2,7 +2,7 @@
  * Semantic data definitions for all statement AST nodes.
  * @since 0.10.0
  */
-import type { SemanticData, TypeData } from "../ast-node";
+import type { SemanticData } from "../ast-node";
 import type { Expression, FunctionDeclaration, IfStatement, Statement, VariableDeclaration } from "../nodes";
 import type { JmpStatementType } from "../../const";
 

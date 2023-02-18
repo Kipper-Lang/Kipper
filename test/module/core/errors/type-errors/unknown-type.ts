@@ -9,7 +9,7 @@ describe("UnknownTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var invalid: ${typeName} = 4;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "UnknownTypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "UnknownTypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

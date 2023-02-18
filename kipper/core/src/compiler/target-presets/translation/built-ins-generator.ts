@@ -77,4 +77,12 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @since 0.10.0
 	 */
 	public abstract print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Len function which provides the ability to get the length of an iterable array-like type.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @since 0.10.0
+	 */
+	public abstract len(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
 }

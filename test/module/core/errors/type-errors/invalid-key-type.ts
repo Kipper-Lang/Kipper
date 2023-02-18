@@ -9,8 +9,8 @@ describe("InvalidKeyTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a"];`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +23,8 @@ describe("InvalidKeyTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a":"b"];`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

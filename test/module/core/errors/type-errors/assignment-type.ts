@@ -10,8 +10,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: num = "5";', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -24,8 +24,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile("var x: str = 5;", defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -40,8 +40,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: num; x = "5";', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -54,8 +54,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile("var x: str; x = 5;", defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -68,8 +68,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: str = "3"; x += 4;', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -82,8 +82,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: str = "3"; x -= 4;', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -96,8 +96,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: str = "3"; x *= 4;', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -110,8 +110,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: str = "3"; x /= 4;', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -124,8 +124,8 @@ describe("AssignmentTypeError", () => {
 				try {
 					result = await new KipperCompiler().compile('var x: str = "3"; x %= 4;', defaultConfig);
 				} catch (e) {
-					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert.equal((<KipperError>e).constructor.name, "AssignmentTypeError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
