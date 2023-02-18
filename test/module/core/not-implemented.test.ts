@@ -60,18 +60,4 @@ describe("NotImplemented", () => {
 		}
 		assert.fail("Expected NotImplementedError");
 	});
-
-	it("Jump Statements", async () => {
-		try {
-			await new KipperCompiler().compile("break;", {
-				abortOnFirstError: true,
-				target: defaultTarget,
-			});
-		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "KipperNotImplementedError", "Expected different error");
-			assert.equal((<KipperError>e).name, "NotImplementedError", "Expected different error");
-			return;
-		}
-		assert.fail("Expected NotImplementedError");
-	});
 });

@@ -322,9 +322,19 @@ export class KipperSyntaxError extends KipperError {
  * Error that is thrown when a return statement is used outside a function.
  * @since 0.10.0
  */
-export class ReturnStatementError extends KipperSyntaxError {
+export class InvalidReturnStatementError extends KipperSyntaxError {
 	constructor() {
-		super("A return statement can only be used in a function.");
+		super("A return statement can only be used inside a function body.");
+	}
+}
+
+/**
+ * Error that is thrown when a jump statement (either 'break' or 'continue') are used outside a loop.
+ * @since 0.10.0
+ */
+export class InvalidJumpStatementError extends KipperSyntaxError {
+	constructor() {
+		super("A jump statement can only be used inside a loop.");
 	}
 }
 
