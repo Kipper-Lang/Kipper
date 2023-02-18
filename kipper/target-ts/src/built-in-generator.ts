@@ -4,7 +4,7 @@
  * @since 0.8.0
  */
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
-import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
+import {genJSFunction, getJSFunctionSignature, JavaScriptTargetBuiltInGenerator} from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier } from "./tools";
 import { KipperCompilableType } from "@kipper/core";
 
@@ -102,5 +102,12 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return getTSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
+	}
+
+	async len(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const lenArgIdentifier = signature.params[0].identifier;
+
+		return getTSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 }
