@@ -8,8 +8,8 @@ describe("UndefinedConstantError", () => {
 		try {
 			result = await new KipperCompiler().compile(`const invalid: str;`, defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "UndefinedConstantError", "Expected proper error");
-			assert((<KipperError>e).name === "UndefinedConstantError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "UndefinedConstantError", "Expected different error");
+			assert((<KipperError>e).name === "UndefinedConstantError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;

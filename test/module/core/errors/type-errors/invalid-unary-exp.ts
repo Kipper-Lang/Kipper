@@ -9,8 +9,8 @@ describe("InvalidUnaryExpressionTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`+"5";`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +23,8 @@ describe("InvalidUnaryExpressionTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`-"5";`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

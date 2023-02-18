@@ -9,8 +9,8 @@ describe("ArgumentTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`print(1);`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -26,8 +26,8 @@ describe("ArgumentTypeError", () => {
 					defaultConfig,
 				);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -43,8 +43,8 @@ describe("ArgumentTypeError", () => {
 					defaultConfig,
 				);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
