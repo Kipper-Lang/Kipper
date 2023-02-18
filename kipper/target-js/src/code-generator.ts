@@ -319,7 +319,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link JumpStatement} into the JavaScript language.
 	 */
 	jumpStatement = async (node: JumpStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [
+			semanticData.jmpType === "break" ? ["break", ";"] : ["continue", ";"]
+		];
 	};
 
 	/**
