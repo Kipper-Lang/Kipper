@@ -5,6 +5,7 @@
 import type { SemanticData } from "../ast-node";
 import type { Expression, FunctionDeclaration, IfStatement, Statement, VariableDeclaration } from "../nodes";
 import type { JmpStatementType } from "../../const";
+import {IterationStatement} from "../nodes";
 
 /**
  * Semantics for AST Node {@link IfStatement}.
@@ -114,6 +115,11 @@ export interface JumpStatementSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	jmpType: JmpStatementType;
+	/**
+	 * The parent statement of the {@link JumpStatement jump statement}.
+	 * @since 0.10.0
+	 */
+	parent: IterationStatement;
 }
 
 /**

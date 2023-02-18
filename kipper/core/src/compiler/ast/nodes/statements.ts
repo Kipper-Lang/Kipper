@@ -458,8 +458,8 @@ export type ParserIterationStatementKind =
  * using {@link translateCtxAndChildren}.
  */
 export abstract class IterationStatement<
-	Semantics extends IterationStatementSemantics,
-	TypeSemantics extends NoTypeSemantics,
+	Semantics extends IterationStatementSemantics = IterationStatementSemantics,
+	TypeSemantics extends NoTypeSemantics = NoTypeSemantics,
 > extends Statement<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserIterationStatementContext;
 	public abstract readonly kind: ParserIterationStatementKind;
@@ -793,16 +793,12 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const jmpType = this.sourceCode.startsWith("break") ? "break" : "continue";
+		const parent = this.programCtx.semanticCheck(this).getJumpStatementParent(this);
 
 		this.semanticData = {
 			jmpType: jmpType,
+			parent: parent,
 		};
-
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
-			);
 	}
 
 	/**
@@ -813,13 +809,7 @@ export class JumpStatement extends Statement<JumpStatementSemantics, NoTypeSeman
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(
-				new KipperNotImplementedError("Break and continue statements have not been implemented yet."),
-			);
-	}
+	public primarySemanticTypeChecking = undefined; // Jump statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
