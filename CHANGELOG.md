@@ -41,7 +41,7 @@ To use development versions of Kipper download the
 - Support for single-line comments separated by a newline char.
   ([#400](https://github.com/Luna-Klatzer/Kipper/issues/400)).
 - Implemented new built-in function `len()`, which returns the length of a string (In the future also arrays).
-	([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
+  ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
@@ -133,6 +133,7 @@ To use development versions of Kipper download the
   - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that
     the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
     its data can be safely accessed.
+  - `KipperSemanticChecker.getJumpStatementParent()`, which evaluates the parent iteration statement for a jump statement.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
