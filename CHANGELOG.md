@@ -177,10 +177,9 @@ To use development versions of Kipper download the
     `UnaryExpression` AST node.
   - `ASTComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ComparativeExpression` AST node.
-  - `ParserComparativeExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` valuesASTNode.antlrRuleCtx`values for
-a`LogicalExpression` AST node.
-  - `ConstructableASTStatementClass`, which is a union type of all possible `Stat
-for a `ComparativeExpression` AST node.
+  - `ParserComparativeExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
+    a `ComparativeExpression` AST node.
+  - `ConstructableASTStatementClass`, which is a union type of all possible `Statement` AST node classes.
   - `ASTLogicalExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `LogicalExpression` AST node.
   - `ParserLogicalExpressionContext`, which is a union type of all possible `Parserement` AST node classes.
@@ -191,8 +190,8 @@ for a `ComparativeExpression` AST node.
   - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
-  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser`rule 
-context to an AST node. This is the type representing all values from`ParserASTMapping`.
+  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context 
+    to an AST node. This is the type representing all values from `ParserASTMapping`.
   - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
     corresponding AST node class.
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
