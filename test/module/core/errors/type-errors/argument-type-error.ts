@@ -1,17 +1,15 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
 import { assert } from "chai";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 
 describe("ArgumentTypeError", () => {
 	describe("Error", () => {
 		it("Single argument (One invalid)", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(`print(1);`, defaultConfig);
+				await new KipperCompiler().compile(`print(1);`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,16 +17,11 @@ describe("ArgumentTypeError", () => {
 		});
 
 		it("Two arguments (One invalid)", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(
-					`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`,
-					defaultConfig,
-				);
+				await new KipperCompiler().compile(`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -36,16 +29,14 @@ describe("ArgumentTypeError", () => {
 		});
 
 		it("Three arguments (One invalid)", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(
+				await new KipperCompiler().compile(
 					`def test(p1: str, p2: str, p3: str) -> void {}; test("Hello", "World", 1);`,
 					defaultConfig,
 				);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

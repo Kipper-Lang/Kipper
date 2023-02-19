@@ -162,19 +162,6 @@ export class KipperError extends Error {
 }
 
 /**
- * Warning, which is thrown whenever a compiler encounters an item that could potentially be problematic that it can
- * not solve itself.
- *
- * This is primarily like a {@link KipperError}, but should be not used as one.
- * @since 0.10.0
- */
-export class KipperWarning extends KipperError {
-	constructor(msg: string) {
-		super(msg);
-	}
-}
-
-/**
  * An error that is thrown when the compiler is misconfigured or have invalid input.
  * @since 0.10.0
  */
