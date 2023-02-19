@@ -10,7 +10,7 @@ import {
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
-import { getTypeScriptBuiltInIdentifier, KipperTypeScriptTarget } from "@kipper/target-ts";
+import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { testPrintOutput } from "./core-functionality.test";
 
@@ -379,10 +379,10 @@ describe("KipperCompiler", () => {
 
 					const code = result.write();
 					assert(code);
-					assert(code.includes(getTypeScriptBuiltInIdentifier("strToNum")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("boolToStr")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("boolToNum")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("strToNum")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("boolToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("boolToNum")));
 				});
 
 				it(`Expression statements (${target.fileExtension})`, async () => {
@@ -396,8 +396,8 @@ describe("KipperCompiler", () => {
 
 					const code = result.write();
 					assert(code);
-					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
 				});
 
 				it(`Tangled expressions (${target.fileExtension})`, async () => {
@@ -427,8 +427,8 @@ describe("KipperCompiler", () => {
 
 					const code = result.write();
 					assert(code);
-					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -443,8 +443,8 @@ describe("KipperCompiler", () => {
 
 					const code = result.write();
 					assert(code);
-					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -459,8 +459,8 @@ describe("KipperCompiler", () => {
 
 					const code = result.write();
 					assert(code);
-					assert(code.includes(getTypeScriptBuiltInIdentifier("print")));
-					assert(code.includes(getTypeScriptBuiltInIdentifier("numToStr")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
 
 					// Compile the program to JavaScript and evaluate it
 					let i = 0;

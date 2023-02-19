@@ -24,8 +24,12 @@ describe("KipperProgramContext", async () => {
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 		});
@@ -36,8 +40,12 @@ describe("KipperProgramContext", async () => {
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 
@@ -47,10 +55,14 @@ describe("KipperProgramContext", async () => {
 				params: [],
 				returnType: "void",
 			};
-			programCtx.registerBuiltIns(func);
+			programCtx.registerBuiltInFunctions(func);
 
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length + 1,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length + 1,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 		});
@@ -61,8 +73,12 @@ describe("KipperProgramContext", async () => {
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 
@@ -72,15 +88,19 @@ describe("KipperProgramContext", async () => {
 				params: [],
 				returnType: "void",
 			};
-			programCtx.registerBuiltIns(func);
+			programCtx.registerBuiltInFunctions(func);
 
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length + 1,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length + 1,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 
 			try {
-				programCtx.registerBuiltIns(func);
+				programCtx.registerBuiltInFunctions(func);
 			} catch (e) {
 				if (e instanceof InvalidGlobalError) {
 					return;
@@ -100,8 +120,12 @@ describe("KipperProgramContext", async () => {
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Only the default built-in functions should be present
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
@@ -113,7 +137,7 @@ describe("KipperProgramContext", async () => {
 				params: [],
 				returnType: "void",
 			};
-			programCtx.registerBuiltIns(func);
+			programCtx.registerBuiltInFunctions(func);
 
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
@@ -130,10 +154,14 @@ describe("KipperProgramContext", async () => {
 				params: [],
 				returnType: "void",
 			};
-			programCtx.registerBuiltIns(func);
+			programCtx.registerBuiltInFunctions(func);
 
-			assert(
-				programCtx.builtIns.length === Object.values(EvaluatedCompileConfig.defaults.builtInFunctions).length + 1,
+			assert.equal(
+				programCtx.builtIns.length,
+				Object.values([
+					...EvaluatedCompileConfig.defaults.builtInFunctions,
+					...EvaluatedCompileConfig.defaults.builtInVariables,
+				]).length + 1,
 				"Expected one additional built-in function after registration",
 			);
 			assert(programCtx.getBuiltInFunction("test") === func, "The built-in function 'print' should be returned.");
