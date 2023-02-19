@@ -1,5 +1,5 @@
-import { CompileConfig, KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { CompileConfig, KipperCompiler, KipperError } from "@kipper/core";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("BuiltInOverwriteError", () => {
@@ -15,12 +15,10 @@ describe("BuiltInOverwriteError", () => {
 
 		describe(`Global Scope - ${test.t} Overwrite`, () => {
 			it("Redeclaration by variable", async () => {
-				let result: KipperCompileResult | undefined = undefined;
 				try {
-					result = await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);
+					await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);
 				} catch (e) {
 					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
@@ -28,12 +26,10 @@ describe("BuiltInOverwriteError", () => {
 			});
 
 			it("Redeclaration by function", async () => {
-				let result: KipperCompileResult | undefined = undefined;
 				try {
-					result = await new KipperCompiler().compile(`def ${test.i}() -> void {};`, config);
+					await new KipperCompiler().compile(`def ${test.i}() -> void {};`, config);
 				} catch (e) {
 					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
@@ -41,12 +37,10 @@ describe("BuiltInOverwriteError", () => {
 			});
 
 			it("Redeclaration by parameter", async () => {
-				let result: KipperCompileResult | undefined = undefined;
 				try {
-					result = await new KipperCompiler().compile(`def f(${test.i}: num) -> void {};`, config);
+					await new KipperCompiler().compile(`def f(${test.i}: num) -> void {};`, config);
 				} catch (e) {
 					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
@@ -56,12 +50,10 @@ describe("BuiltInOverwriteError", () => {
 
 		describe(`Nested Scope - ${test.t} Overwrite`, () => {
 			it("Redeclaration by variable", async () => {
-				let result: KipperCompileResult | undefined = undefined;
 				try {
-					result = await new KipperCompiler().compile(`{ var ${test.i}: num = 4; }`, config);
+					await new KipperCompiler().compile(`{ var ${test.i}: num = 4; }`, config);
 				} catch (e) {
 					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
 				}
@@ -71,12 +63,10 @@ describe("BuiltInOverwriteError", () => {
 
 		describe(`Deep Nested Scope - ${test.t} Overwrite`, () => {
 			it("Redeclaration by variable", async () => {
-				let result: KipperCompileResult | undefined = undefined;
 				try {
-					result = await new KipperCompiler().compile(`{ { var ${test.i}: num = 4; } }`, config);
+					await new KipperCompiler().compile(`{ { var ${test.i}: num = 4; } }`, config);
 				} catch (e) {
 					assert.equal((<KipperError>e).constructor.name, "BuiltInOverwriteError", "Expected different error");
-					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
 				}

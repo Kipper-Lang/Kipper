@@ -1,16 +1,14 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("ReservedIdentifierOverwriteError", () => {
 	it("Error", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile("var instanceof: str;", defaultConfig);
+			await new KipperCompiler().compile("var instanceof: str;", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "ReservedIdentifierOverwriteError", "Expected different error");
 			assert((<KipperError>e).name === "IdentifierError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}

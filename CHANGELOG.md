@@ -49,6 +49,8 @@ To use development versions of Kipper download the
   ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
+- Finished implementation of warning reporting system and added warning for useless expression statements.
+  ([#413](https://github.com/Luna-Klatzer/Kipper/issues/413)).
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
@@ -57,7 +59,7 @@ To use development versions of Kipper download the
   - `--log-timestamp`, which enables timestamps for the log messages.
   - `--recover`, which enables error recovery for the Kipper compiler.
   - `--abort-on-first-error`, which aborts the compilation on the first compiler error that is encountered.
-- New errors:
+- New errors/warnings:
   - `MissingFunctionBodyError`, which is thrown when a function declaration is missing a body (compound statement).
   - `LexerOrParserSyntaxError`, which is thrown when the lexer or parser encounters a syntax error.
   - `IdentifierAlreadyUsedByParameterError`, which is thrown when an identifier is already used by a parameter in
@@ -79,7 +81,9 @@ To use development versions of Kipper download the
     in a member access expression.
   - `MissingRequiredSemanticDataError`, which is a specific internal error used to indicate that a specified node is
     missing required semantic data from another node and as a result failed to process itself.
-- New classes:
+  - `UselessExpressionStatementWarning`, which is reported when an expression statement is used without any side-effects
+    and as such does not have any effect on the program.
+- New classes/interfaces:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
   - `ReturnStatement`, which is a subclass of `Statement` that represents a return statement. This is not anymore
@@ -97,6 +101,17 @@ To use development versions of Kipper download the
     rule `memberAccessExpression`).
   - `AnalysableASTNode`, which represents an AST node that can be semantically processed. This class was created as
     a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
+  - `KipperWarningIssuer`, which is a class similar to `KipperSemanticChecker` and checks for certain conditions and
+    reports warnings if they are met.
+	- `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
+		the definitions of its children, will be stored in the `innerScope` field of the class implementation.
+	- `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
+	- `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
+	- `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
+	- `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
+	- `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
+	- `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
+	- `InternalFunctionArgument`, which represents an internal function argument.
   - `InternalReference<T>`, which represents an indirect reference to an internal function by the user. This is
     primarily used to keep track of the internal functions that are used in the program, and to generate them in the
     target code.
@@ -197,16 +212,6 @@ To use development versions of Kipper download the
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
   - `ASTNodeParserContext`, which represents a union of all possible `ParserASTNode.antlrRuleCtx` values implemented
     in the `KipperParser` that have a corresponding AST node class.
-- New interfaces:
-  - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
-    the definitions of its children, will be stored in the `innerScope` field of the class implementation.
-  - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
-  - `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
-  - `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
-  - `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
-  - `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
-  - `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
-  - `InternalFunctionArgument`, which represents an internal function argument.
 - New fields/properties:
   - `CompileConfig.recover`, which if set enables compiler error recovery.
   - `CompileConfig.abortOnFirstError`, which changes the compiler error handling behaviour and makes it
@@ -242,6 +247,8 @@ To use development versions of Kipper download the
   - `CompileConfig.extendBuiltInFunctions`, which adds new built-in functions to the target.
   - `CompileConfig.builtInVariables`, which overwrites the built-in variables of the target.
   - `CompileConfig.extendBuiltInVariables`, which adds new built-in variables to the target.
+  - `Expression.hasSideEffects`, which returns true if the expression has side effects and as such affects the state of
+		the program. This is primarily used for reporting warnings.
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.

@@ -429,7 +429,9 @@ export class ExpressionStatement extends Statement<NoSemantics, NoTypeSemantics>
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
-	public checkForWarnings = undefined; // TODO!
+	public async checkForWarnings(): Promise<void> {
+		this.programCtx.warningCheck(this).uselessStatement(this);
+	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
 	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;

@@ -1,16 +1,14 @@
 import { KipperCompiler, KipperCompileResult, KipperError, KipperSyntaxError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("MissingFunctionBodyError", () => {
 	it("Error", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile("def x() -> void;", defaultConfig);
+			await new KipperCompiler().compile("def x() -> void;", defaultConfig);
 		} catch (e) {
 			assert((<KipperSyntaxError>e).constructor.name === "MissingFunctionBodyError", "Expected different error");
 			assert((<KipperSyntaxError>e).name === "SyntaxError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}

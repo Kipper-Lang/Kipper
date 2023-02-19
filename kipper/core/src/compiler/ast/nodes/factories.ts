@@ -134,7 +134,7 @@ export class StatementASTNodeFactory extends ASTNodeFactory<Statement, ParserExp
  * A union of all construable Statement AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTStatementClass = typeof StatementASTNodeFactory.prototype.ruleMap[ASTStatementKind];
+export type ConstructableASTStatementClass = (typeof StatementASTNodeFactory.prototype.ruleMap)[ASTStatementKind];
 
 /**
  * A union of all construable Statement AST nodes. Uses {@link ConstructableASTStatementClass} to infer the type.
@@ -206,7 +206,7 @@ export class ExpressionASTNodeFactory extends ASTNodeFactory<Expression, ParserE
  * A union of all construable Expression AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTExpressionClass = typeof ExpressionASTNodeFactory.prototype.ruleMap[ASTExpressionKind];
+export type ConstructableASTExpressionClass = (typeof ExpressionASTNodeFactory.prototype.ruleMap)[ASTExpressionKind];
 
 /**
  * A union of all construable Expression AST nodes. Uses {@link ConstructableASTExpressionClass} to infer the type.
@@ -256,7 +256,7 @@ export class DeclarationASTNodeFactory extends ASTNodeFactory<Declaration, Parse
  * A union of all construable Declaration AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTDeclarationClass = typeof DeclarationASTNodeFactory.prototype.ruleMap[ASTDeclarationKind];
+export type ConstructableASTDeclarationClass = (typeof DeclarationASTNodeFactory.prototype.ruleMap)[ASTDeclarationKind];
 
 /**
  * A union of all construable Declaration AST nodes. Uses {@link ConstructableASTDeclarationClass} to infer the type.

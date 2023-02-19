@@ -1,16 +1,14 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("UndefinedConstantError", () => {
 	it("Error", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile(`const invalid: str;`, defaultConfig);
+			await new KipperCompiler().compile(`const invalid: str;`, defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "UndefinedConstantError", "Expected different error");
 			assert((<KipperError>e).name === "UndefinedConstantError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
