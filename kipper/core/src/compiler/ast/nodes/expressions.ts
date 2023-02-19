@@ -184,6 +184,17 @@ export abstract class Expression<
 	}
 
 	/**
+	 * Returns whether this expression has any side effects. This means that the expression will change the state of the
+	 * program in some way and not only return a value.
+	 *
+	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
+	 * @since 0.10.0
+	 */
+	public hasSideEffects(): boolean {
+		return false;
+	}
+
+	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
@@ -1270,6 +1281,10 @@ export class IncrementOrDecrementPostfixExpression extends Expression<
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
+	public hasSideEffects(): boolean {
+		return true; // This expression has side effects as it modifies the value of the operand
+	}
+
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
@@ -1497,6 +1512,10 @@ export class FunctionCallExpression extends Expression<
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
+	public hasSideEffects(): boolean {
+		return true; // This expression has side effects as it calls a function
+	}
+
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
@@ -1636,6 +1655,10 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	constructor(antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	public hasSideEffects(): boolean {
+		return true; // This expression has side effects as it modifies the value of the operand
 	}
 
 	/**
@@ -2688,6 +2711,10 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
+	public hasSideEffects(): boolean {
+		return true; // This expression has side effects as it modifies the value of the operand
 	}
 
 	/**
