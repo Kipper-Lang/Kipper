@@ -16,7 +16,7 @@ specifiers:
   ts-node: 10.9.1
   tsify: 5.0.4
   tslib: ~2.4.0
-  typescript: 4.9.4
+  typescript: 4.9.5
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -36,9 +36,9 @@ devDependencies:
   prettier: 2.8.4
   run-script-os: 1.1.6
   size-limit: 8.2.4
-  ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
-  tsify: 5.0.4_g4eddkh7z3uakxvcfln5bjmn3m
-  typescript: 4.9.4
+  ts-node: 10.9.1_bdgp3l2zgaopogaavxusmetvge
+  tsify: 5.0.4_gz4av44jfgv3uhrr4mtcb6tbna
+  typescript: 4.9.5
   uuid: 9.0.0
   watchify: 4.0.0
 
@@ -2381,7 +2381,7 @@ packages:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
     dev: true
 
-  /ts-node/10.9.1_awa2wsr5thmg3i7jqycphctjfq:
+  /ts-node/10.9.1_bdgp3l2zgaopogaavxusmetvge:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -2407,7 +2407,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 4.9.4
+      typescript: 4.9.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -2421,7 +2421,7 @@ packages:
       strip-json-comments: 2.0.1
     dev: true
 
-  /tsify/5.0.4_g4eddkh7z3uakxvcfln5bjmn3m:
+  /tsify/5.0.4_gz4av44jfgv3uhrr4mtcb6tbna:
     resolution: {integrity: sha512-XAZtQ5OMPsJFclkZ9xMZWkSNyMhMxEPsz3D2zu79yoKorH9j/DT4xCloJeXk5+cDhosEibu4bseMVjyPOAyLJA==}
     engines: {node: '>=0.12'}
     peerDependencies:
@@ -2435,7 +2435,7 @@ packages:
       semver: 6.3.0
       through2: 2.0.5
       tsconfig: 5.0.3
-      typescript: 4.9.4
+      typescript: 4.9.5
     dev: true
 
   /tslib/2.4.0:
@@ -2450,8 +2450,8 @@ packages:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
     dev: true
 
-  /typescript/4.9.4:
-    resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
+  /typescript/4.9.5:
+    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
