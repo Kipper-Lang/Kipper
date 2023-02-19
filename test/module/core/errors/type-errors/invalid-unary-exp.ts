@@ -1,17 +1,15 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("InvalidUnaryExpressionTypeError", () => {
 	describe("Error", () => {
 		it("+", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(`+"5";`, defaultConfig);
+				await new KipperCompiler().compile(`+"5";`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,13 +17,11 @@ describe("InvalidUnaryExpressionTypeError", () => {
 		});
 
 		it("-", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(`-"5";`, defaultConfig);
+				await new KipperCompiler().compile(`-"5";`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidUnaryExpressionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

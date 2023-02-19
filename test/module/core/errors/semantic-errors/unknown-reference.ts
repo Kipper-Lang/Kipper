@@ -1,16 +1,14 @@
-import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { KipperCompiler, KipperError } from "@kipper/core";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("UnknownReferenceError", () => {
 	it("Simple reference", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile("x;", defaultConfig);
+			await new KipperCompiler().compile("x;", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
 			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
@@ -18,13 +16,11 @@ describe("UnknownReferenceError", () => {
 	});
 
 	it("Function Call", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile('var x: num = call pr("pr");', defaultConfig);
+			await new KipperCompiler().compile('var x: num = call pr("pr");', defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
 			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
@@ -32,13 +28,11 @@ describe("UnknownReferenceError", () => {
 	});
 
 	it("Arithmetics", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile("var x: num = y + y;", defaultConfig);
+			await new KipperCompiler().compile("var x: num = y + y;", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
 			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
@@ -46,13 +40,11 @@ describe("UnknownReferenceError", () => {
 	});
 
 	it("Nested reference", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile("{ { { { x; } } } }", defaultConfig);
+			await new KipperCompiler().compile("{ { { { x; } } } }", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "UnknownReferenceError", "Expected different error");
 			assert((<KipperError>e).name === "ReferenceError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}

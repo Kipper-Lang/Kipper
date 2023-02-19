@@ -3,8 +3,9 @@
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  */
-export * from "./compiler";
 export * from "./errors";
+export * from "./warnings";
+export * from "./compiler";
 export * from "./logger";
 export * from "./utils";
 export * from "./antlr-error-listener";
@@ -16,7 +17,7 @@ export * as utils from "./utils";
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/core";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.10.0-beta.0";
+export const version = "0.10.0-rc.0";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

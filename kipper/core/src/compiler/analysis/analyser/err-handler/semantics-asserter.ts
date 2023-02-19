@@ -24,11 +24,12 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 	}
 
 	/**
-	 * Updates the error and adds the proper traceback data, and returns it.
+	 * Updates the given error and adds the proper traceback data, and returns it.
 	 * @param error The error to update.
 	 * @param overwriteCtx The context to overwrite the current context with. This is used when a parent checks children
 	 * semantics in order to provide the correct traceback data and errors occur in the children.
 	 * @returns The Kipper error.
+	 * @protected
 	 */
 	protected assertError(error: KipperError, overwriteCtx?: CompilableASTNode): KipperError {
 		if (overwriteCtx) {
@@ -43,7 +44,6 @@ export abstract class KipperSemanticsAsserter extends KipperSemanticErrorHandler
 			streamSrc: this.programCtx.stream,
 			errorNode: this.ctx,
 		});
-
 		return error;
 	}
 

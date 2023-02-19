@@ -1,17 +1,15 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, defaultTarget, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, defaultTarget, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("ArithmeticOperationTypeError", () => {
 	describe("Error", () => {
 		it("str+num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" + 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" + 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,13 +17,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str-num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" - 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" - 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -33,13 +29,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str*num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" * 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" * 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -47,13 +41,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str**num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" ** 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" ** 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -61,13 +53,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str/num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" / 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" / 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -75,13 +65,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str%num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" % 4;', defaultConfig);
+				await new KipperCompiler().compile('"3" % 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -89,13 +77,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num+str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 + "3";', defaultConfig);
+				await new KipperCompiler().compile('4 + "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -103,13 +89,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num-str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 - "3";', defaultConfig);
+				await new KipperCompiler().compile('4 - "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -117,13 +101,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num*str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 * "3";', defaultConfig);
+				await new KipperCompiler().compile('4 * "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -131,13 +113,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num**str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 ** "3";', defaultConfig);
+				await new KipperCompiler().compile('4 ** "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -145,13 +125,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num/str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 / "3";', defaultConfig);
+				await new KipperCompiler().compile('4 / "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -159,13 +137,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("num%str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('4 % "3";', defaultConfig);
+				await new KipperCompiler().compile('4 % "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -173,13 +149,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str+bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" + true;', defaultConfig);
+				await new KipperCompiler().compile('"3" + true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -187,13 +161,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str-bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" - true;', defaultConfig);
+				await new KipperCompiler().compile('"3" - true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -201,13 +173,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str*bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" * true;', defaultConfig);
+				await new KipperCompiler().compile('"3" * true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -215,13 +185,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str**bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" ** true;', defaultConfig);
+				await new KipperCompiler().compile('"3" ** true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -229,13 +197,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str/bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" / true;', defaultConfig);
+				await new KipperCompiler().compile('"3" / true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -243,13 +209,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str%bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"3" % true;', defaultConfig);
+				await new KipperCompiler().compile('"3" % true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -257,13 +221,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool+str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true + "3";', defaultConfig);
+				await new KipperCompiler().compile('true + "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -271,13 +233,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool-str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true - "3";', defaultConfig);
+				await new KipperCompiler().compile('true - "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -285,13 +245,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool*str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true * "3";', defaultConfig);
+				await new KipperCompiler().compile('true * "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -299,13 +257,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool**str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true ** "3";', defaultConfig);
+				await new KipperCompiler().compile('true ** "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -313,13 +269,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool/str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true / "3";', defaultConfig);
+				await new KipperCompiler().compile('true / "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -327,13 +281,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("bool%str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('true % "3";', defaultConfig);
+				await new KipperCompiler().compile('true % "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -341,13 +293,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str-=str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('var x: str = "3"; x -= "4";', defaultConfig);
+				await new KipperCompiler().compile('var x: str = "3"; x -= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -355,13 +305,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str*=str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('var x: str = "3"; x *= "4";', defaultConfig);
+				await new KipperCompiler().compile('var x: str = "3"; x *= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -369,13 +317,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str/=str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('var x: str = "3"; x /= "4";', defaultConfig);
+				await new KipperCompiler().compile('var x: str = "3"; x /= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -383,13 +329,11 @@ describe("ArithmeticOperationTypeError", () => {
 		});
 
 		it("str%=str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('var x: str = "3"; x %= "4";', defaultConfig);
+				await new KipperCompiler().compile('var x: str = "3"; x %= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
