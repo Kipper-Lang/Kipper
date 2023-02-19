@@ -783,13 +783,14 @@ export class IdentifierPrimaryExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		const refTarget = semanticData.ref.refTarget;
 
 		let type: CheckedType;
-		if (semanticData.ref.refTarget instanceof ScopeDeclaration) {
-			type = semanticData.ref.refTarget.type;
+		if (refTarget instanceof ScopeDeclaration) {
+			type = refTarget.type;
 		} else {
 			// Built-in function -> type is 'func'
-			type = CheckedType.fromCompilableType("func");
+			type = CheckedType.fromCompilableType("valueType" in refTarget ? refTarget.valueType : "func");
 		}
 
 		this.typeSemantics = {
