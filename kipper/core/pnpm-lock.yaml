@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@size-limit/preset-big-lib': 8.1.1
+  '@size-limit/preset-big-lib': 8.2.4
   '@types/node': 18.11.18
   ansi-regex: 6.0.1
   antlr4ts: ^0.5.0-alpha.4
@@ -10,9 +10,9 @@ specifiers:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 2.1.3
-  prettier: 2.8.1
+  prettier: 2.8.4
   run-script-os: 1.1.6
-  size-limit: 8.1.1
+  size-limit: 8.2.4
   ts-node: 10.9.1
   tsify: 5.0.4
   tslib: ~2.4.0
@@ -25,7 +25,7 @@ dependencies:
   tslib: 2.4.0
 
 devDependencies:
-  '@size-limit/preset-big-lib': 8.1.1_size-limit@8.1.1
+  '@size-limit/preset-big-lib': 8.2.4_size-limit@8.2.4
   '@types/node': 18.11.18
   ansi-regex: 6.0.1
   antlr4ts-cli: 0.5.0-alpha.4
@@ -33,9 +33,9 @@ devDependencies:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
   mkdirp: 2.1.3
-  prettier: 2.8.1
+  prettier: 2.8.4
   run-script-os: 1.1.6
-  size-limit: 8.1.1
+  size-limit: 8.2.4
   ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
   tsify: 5.0.4_g4eddkh7z3uakxvcfln5bjmn3m
   typescript: 4.9.4
@@ -125,25 +125,25 @@ packages:
       - supports-color
     dev: true
 
-  /@size-limit/file/8.1.1_size-limit@8.1.1:
-    resolution: {integrity: sha512-4VW3r5TuKXGyycrWdhKhYaBSpWQq2sxuz0UOMoKYiTGcYBM6Sqpk4342RbnoIjVDmj7kyD4PS4eBstUnvF3TSA==}
+  /@size-limit/file/8.2.4_size-limit@8.2.4:
+    resolution: {integrity: sha512-xLuF97W7m7lxrRJvqXRlxO/4t7cpXtfxOnjml/t4aRVUCMXLdyvebRr9OM4jjoK8Fmiz8jomCbETUCI3jVhLzA==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     peerDependencies:
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     dependencies:
       semver: 7.3.8
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     dev: true
 
-  /@size-limit/preset-big-lib/8.1.1_size-limit@8.1.1:
-    resolution: {integrity: sha512-hKv8Rm8UF2iqNzQ+lhEPfjRaaxJAoWm3DSwcpSFpRgoafQLRY+v22ZvyFv2GbSQ5/5w+qkuc6cxCjis31/RLEQ==}
+  /@size-limit/preset-big-lib/8.2.4_size-limit@8.2.4:
+    resolution: {integrity: sha512-J4PTiJATEO/zoXF3tsSUy4KztvVuCw1g9ukRuDHYA+p1YYVViO4fDiSlnw4nBLN2lZoGdfQVOg12G7ta3+WwSA==}
     peerDependencies:
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     dependencies:
-      '@size-limit/file': 8.1.1_size-limit@8.1.1
-      '@size-limit/time': 8.1.1_size-limit@8.1.1
-      '@size-limit/webpack': 8.1.1_size-limit@8.1.1
-      size-limit: 8.1.1
+      '@size-limit/file': 8.2.4_size-limit@8.2.4
+      '@size-limit/time': 8.2.4_size-limit@8.2.4
+      '@size-limit/webpack': 8.2.4_size-limit@8.2.4
+      size-limit: 8.2.4
     transitivePeerDependencies:
       - '@swc/core'
       - bufferutil
@@ -155,15 +155,15 @@ packages:
       - webpack-cli
     dev: true
 
-  /@size-limit/time/8.1.1_size-limit@8.1.1:
-    resolution: {integrity: sha512-h1KUqoofcRLwmLIWHMeFHyoqQ0yhy9iq364tKe8T+dTsdwEjqZHjgCDTmkdzNsnJzjy9m6/ak9/CJ7aryjFQfQ==}
+  /@size-limit/time/8.2.4_size-limit@8.2.4:
+    resolution: {integrity: sha512-tQ5EFlN/AY8RLIJxURVfiwJpO4Q9UihtfE6c14fXL9Jy/wl2hZEhkFrUhRayNDvnZW8HWNko1Hmt7dLsY3iF8A==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     peerDependencies:
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     dependencies:
       estimo: 2.3.6
       react: 17.0.2
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -171,14 +171,14 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@size-limit/webpack/8.1.1_size-limit@8.1.1:
-    resolution: {integrity: sha512-dBwL68be6G3h2XTl+NrRH5PVBtA6Ocvd54W/mjpD9JX/ZYtKbKExYYgAlvqNmI1WFs29FV5AT4MIfCsCn2nTTQ==}
+  /@size-limit/webpack/8.2.4_size-limit@8.2.4:
+    resolution: {integrity: sha512-L6TSQpX89cSeWQ1BL31BsaYucao0MGNW1xySHVO7jlgmOwnHC7j5zq91QRN9G6eMG84W+F3uRV4AiyCdZxKz9g==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     peerDependencies:
-      size-limit: 8.1.1
+      size-limit: 8.2.4
     dependencies:
       nanoid: 3.3.4
-      size-limit: 8.1.1
+      size-limit: 8.2.4
       webpack: 5.75.0
     transitivePeerDependencies:
       - '@swc/core'
@@ -737,10 +737,6 @@ packages:
   /chrome-trace-event/1.0.3:
     resolution: {integrity: sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==}
     engines: {node: '>=6.0'}
-    dev: true
-
-  /ci-job-number/1.2.2:
-    resolution: {integrity: sha512-CLOGsVDrVamzv8sXJGaILUVI6dsuAkouJP/n6t+OxLPeeA4DDby7zn9SB6EUpa1H7oIKoE+rMmkW80zYsFfUjA==}
     dev: true
 
   /cipher-base/1.0.4:
@@ -1681,12 +1677,6 @@ packages:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: true
 
-  /mkdirp/1.0.4:
-    resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dev: true
-
   /mkdirp/2.1.3:
     resolution: {integrity: sha512-sjAkg21peAG9HS+Dkx7hlG9Ztx7HLeKnvB3NQRcu/mltCVmvkF0pisbiTSfDVYTT86XEfZrTUosLdZLStquZUw==}
     engines: {node: '>=10'}
@@ -1901,8 +1891,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /prettier/2.8.1:
-    resolution: {integrity: sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==}
+  /prettier/2.8.4:
+    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
@@ -2167,17 +2157,15 @@ packages:
     resolution: {integrity: sha512-cSFtAPtRhljv69IK0hTVZQ+OfE9nePi/rtJmw5UjHeVyVroEqJXP1sFztKUy1qU+xvz3u/sfYJLa947b7nAN2Q==}
     dev: true
 
-  /size-limit/8.1.1:
-    resolution: {integrity: sha512-8Zx+SJVxwcsDBYEl3Xt+FilpuxshVcgq446L8e1k8xD+Qa4LuUmFeesb+oiaRpoJnWCrOd7QUaiU9kFVocIeHQ==}
+  /size-limit/8.2.4:
+    resolution: {integrity: sha512-Un16nSreD1v2CYwSorattiJcHuAWqXvg4TsGgzpjnoByqQwsSfCIEQHuaD14HNStzredR8cdsO9oGH91ibypTA==}
     engines: {node: ^14.0.0 || ^16.0.0 || >=18.0.0}
     hasBin: true
     dependencies:
       bytes-iec: 3.1.1
       chokidar: 3.5.3
-      ci-job-number: 1.2.2
       globby: 11.1.0
       lilconfig: 2.0.6
-      mkdirp: 1.0.4
       nanospinner: 1.1.0
       picocolors: 1.0.0
     dev: true
