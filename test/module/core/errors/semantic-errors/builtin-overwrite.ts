@@ -10,7 +10,7 @@ describe("BuiltInOverwriteError", () => {
 		const config: CompileConfig = {
 			...defaultConfig,
 			// prettier-ignore
-			extendBuiltIns: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
+			extendBuiltInFunctions: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
 		};
 
 		describe(`Global Scope - ${test.t} Overwrite`, () => {

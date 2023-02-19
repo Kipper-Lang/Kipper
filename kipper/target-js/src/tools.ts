@@ -11,7 +11,6 @@ import type {
 	InternalFunctionArgument,
 } from "@kipper/core";
 import { TranslatedCodeLine } from "@kipper/core";
-import { TargetJS } from "./target";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an JavaScript env.
@@ -45,15 +44,6 @@ export function getJSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createJSFunctionSignature(signature: { identifier: string; params: Array<string> }): string {
 	const { identifier, params } = signature;
 	return `function ${identifier}(${params.join(", ")})`;
-}
-
-/**
- * Fetches the reserved identifier for the translated code.
- * @param identifier The identifier to translate to its TypeScript form.
- * @since 0.10.0
- */
-export function getJavaScriptBuiltInIdentifier(identifier: string): string {
-	return `${TargetJS.internalObjectIdentifier}.${identifier}`;
 }
 
 /**

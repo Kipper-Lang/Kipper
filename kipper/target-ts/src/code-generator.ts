@@ -4,8 +4,9 @@
  */
 import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";
 import { FunctionDeclaration } from "@kipper/core";
-import { createTSFunctionSignature, getTSFunctionSignature, getTypeScriptType } from "./tools";
+import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
+import { TargetTS } from "./target";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -34,7 +35,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = getTypeScriptType(typeData.valueType.getCompilableType());
+		const tsType = TargetTS.getTypeScriptType(typeData.valueType.getCompilableType());
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined

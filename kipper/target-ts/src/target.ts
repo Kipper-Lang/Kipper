@@ -2,7 +2,22 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import { KipperCompileTarget } from "@kipper/core";
+import {
+	BuiltInFunction,
+	BuiltInVariable,
+	kipperBoolType,
+	KipperCompilableType,
+	KipperCompileTarget,
+	kipperFuncType,
+	kipperListType,
+	kipperMetaType,
+	KipperNotImplementedError,
+	kipperNullType,
+	kipperNumType,
+	kipperStrType,
+	kipperUndefinedType,
+	kipperVoidType,
+} from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
@@ -31,6 +46,53 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 		builtInGenerator: TypeScriptTargetBuiltInGenerator = new TypeScriptTargetBuiltInGenerator(),
 	) {
 		super("typescript", semanticAnalyser, codeGenerator, builtInGenerator, "ts");
+	}
+
+	/**
+	 * Fetches the reserved identifier for the translated code.
+	 *
+	 * This will also ensure that {@link BuiltInVariable.local local variables} are not registered onto the global object.
+	 * Those will simply stay as local variables with the same identifier.
+	 * @param signature The identifier or signature object to translate to its TypeScript form.
+	 * @since 0.10.0
+	 */
+	public static getBuiltInIdentifier(signature: string | BuiltInVariable | BuiltInFunction): string {
+		return TargetJS.getBuiltInIdentifier(signature);
+	}
+
+	/**
+	 * Fetches the typescript equivalent for a {@link KipperCompilableType}.
+	 * @param kipperType The type to get the equivalent for.
+	 * @since 0.8.0
+	 */
+	public static getTypeScriptType(kipperType: KipperCompilableType | Array<KipperCompilableType>): string {
+		if (Array.isArray(kipperType)) {
+			// Recursively call this function for each type in the array
+			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;
+		}
+
+		switch (kipperType) {
+			case kipperBoolType:
+				return "boolean";
+			case kipperFuncType:
+				return "Function";
+			case kipperListType:
+				return "Array";
+			case kipperMetaType:
+				return "object";
+			case kipperNullType:
+				return "null";
+			case kipperNumType:
+				return "number";
+			case kipperStrType:
+				return "string";
+			case kipperUndefinedType:
+				return "undefined";
+			case kipperVoidType:
+				return "void";
+			default:
+				throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
+		}
 	}
 }
 

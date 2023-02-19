@@ -4,7 +4,7 @@
  */
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
-import { BuiltInFunction, InternalFunction } from "../runtime-built-ins";
+import { BuiltInFunction, BuiltInVariable, InternalFunction } from "../runtime-built-ins";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -54,14 +54,27 @@ export class KipperOptimiser {
 	 * @since 0.8.0
 	 */
 	private async optimiseBuiltIns(): Promise<void> {
-		const newBuiltIns: Array<BuiltInFunction> = [];
-		for (const ref of this.programCtx.builtInReferences) {
-			const alreadyIncluded: boolean = newBuiltIns.find((r) => r === ref.refTarget) !== undefined;
+		// Optimise the registered built-in variables by optimising them using the stored references.
+		const newBuiltInVariables: Array<BuiltInVariable> = [];
+		for (const ref of this.programCtx.builtInVariableReferences) {
+			const alreadyIncluded: boolean = newBuiltInVariables.find((r) => r === ref.refTarget) !== undefined;
 			if (!alreadyIncluded) {
-				newBuiltIns.push(ref.refTarget);
+				newBuiltInVariables.push(ref.refTarget);
 			}
 		}
-		this.programCtx.builtIns = newBuiltIns;
+		this.programCtx.clearBuiltInVariables();
+		this.programCtx.registerBuiltInVariables(newBuiltInVariables);
+
+		// Optimise the registered built-in functions by optimising them using the stored references.
+		const newBuiltInFunctions: Array<BuiltInFunction> = [];
+		for (const ref of this.programCtx.builtInFunctionReferences) {
+			const alreadyIncluded: boolean = newBuiltInFunctions.find((r) => r === ref.refTarget) !== undefined;
+			if (!alreadyIncluded) {
+				newBuiltInFunctions.push(ref.refTarget);
+			}
+		}
+		this.programCtx.clearBuiltInFunctions();
+		this.programCtx.registerBuiltInFunctions(newBuiltInFunctions);
 	}
 
 	/**
@@ -77,7 +90,10 @@ export class KipperOptimiser {
 				newInternals.push(ref.refTarget);
 			}
 		}
-		this.programCtx.internals = newInternals;
+
+		// Removing the old internals and replacing them with the new ones.
+		this.programCtx.internals.splice(0);
+		this.programCtx.internals.push(...newInternals);
 	}
 
 	/**

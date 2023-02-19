@@ -7,7 +7,7 @@
  */
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
-import type { BuiltInFunction, InternalFunction } from "./runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import { KipperFileASTGenerator } from "./ast";
@@ -16,7 +16,7 @@ import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecke
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";
-import { EvaluatedCompileConfig } from "./compiler";
+import { EvaluatedCompileConfig } from "./compile-config";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
@@ -35,6 +35,12 @@ export class KipperProgramContext {
 
 	private readonly _warnings: Array<KipperWarning>;
 
+	private readonly _builtInFunctionReferences: Array<Reference<BuiltInFunction>>;
+
+	private readonly _builtInVariableReferences: Array<Reference<BuiltInVariable>>;
+
+	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
+
 	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
@@ -43,28 +49,6 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private _compiledCode: Array<TranslatedCodeLine> | undefined;
-
-	/**
-	 * A list of all references to built-in functions. This is used to determine which built-in functions are
-	 * used and which aren't.
-	 *
-	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused built-in
-	 * functions, so they will not be generated.
-	 * @private
-	 * @since 0.8.0
-	 */
-	private readonly _builtInReferences: Array<Reference<BuiltInFunction>>;
-
-	/**
-	 * A list of all references to internal functions. This is used to determine which internal functions are
-	 * used and which aren't.
-	 *
-	 * This is primarily used for optimisations in {@link KipperOptimiser}, by applying tree-shaking to unused internal
-	 * functions, so they will not be generated.
-	 * @private
-	 * @since 0.8.0
-	 */
-	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
 	/**
 	 * The global scope of this program, containing all variable and function definitions
@@ -114,8 +98,8 @@ export class KipperProgramContext {
 
 	/**
 	 * The compilation config for this program.
-	 * @private
 	 * @since 0.10.0
+	 * @private
 	 */
 	public readonly compileConfig: EvaluatedCompileConfig;
 
@@ -132,17 +116,28 @@ export class KipperProgramContext {
 	 * {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.8.0
 	 */
-	public internals: Array<InternalFunction>;
+	public readonly internals: Array<InternalFunction>;
 
 	/**
 	 * Returns the built-in global functions registered for this Kipper program. These global functions defined in the
 	 * array will be available in the Kipper program and callable using their specified identifier.
 	 *
-	 * This is designed to allow calling external typescript functions, which can not be natively implemented inside
-	 * Kipper.
+	 * This is designed to allow calling external compiler-generated functions, which are natively implemented in the
+	 * {@link this.target target language}
+	 * @private
 	 * @since 0.8.0
 	 */
-	public builtIns: Array<BuiltInFunction>;
+	public readonly builtInFunctions: Array<BuiltInFunction>;
+
+	/**
+	 * Returns the built-in global variables registered for this Kipper program. These global variables defined in the
+	 * array will be available in the Kipper program and can be accessed using their specified identifier.
+	 *
+	 * This is designed to allow accessing external compiler-generated variables, which are natively implemented in the
+	 * {@link this.target target language}.
+	 * @private
+	 */
+	public readonly builtInVariables: Array<BuiltInVariable>;
 
 	constructor(
 		stream: KipperParseStream,
@@ -165,16 +160,32 @@ export class KipperProgramContext {
 		this.optimiser = optimiser ?? new KipperOptimiser(this);
 		this.parser = parser;
 		this.lexer = lexer;
-		this.builtIns = [];
 		this.compileConfig = compileConfig;
+		this.builtInVariables = [];
+		this.builtInFunctions = [];
 		this._stream = stream;
 		this._antlrParseTree = parseTreeEntry;
 		this._globalScope = new GlobalScope(this);
 		this._abstractSyntaxTree = undefined;
-		this._builtInReferences = [];
+		this._builtInFunctionReferences = [];
+		this._builtInVariableReferences = [];
 		this._internalReferences = [];
 		this._warnings = [];
 		this._errors = [];
+
+		// Register all built-in functions
+		const globalFunctions = [...compileConfig.builtInFunctions, ...compileConfig.extendBuiltInFunctions];
+		this.registerBuiltInFunctions(globalFunctions);
+		this.logger.debug(
+			`Registered ${globalFunctions.length} global function${globalFunctions.length === 1 ? "" : "s"}.`,
+		);
+
+		// Register all built-in variables
+		const globalVariables = [...compileConfig.builtInVariables, ...compileConfig.extendBuiltInVariables];
+		this.registerBuiltInVariables(globalVariables);
+		this.logger.debug(
+			`Registered ${globalVariables.length} global variable${globalVariables.length === 1 ? "" : "s"}.`,
+		);
 	}
 
 	/**
@@ -278,15 +289,27 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * A list of all references to built-in functions. This is used to determine which built-in functions are used and
-	 * which aren't.
+	 * A list of all references to built-in functions. This is used to determine which built-ins are used and which
+	 * aren't.
 	 *
 	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused built-in functions,
 	 * so they will not be generated.
-	 * @since 0.8.0
+	 * @since 0.10.0
 	 */
-	public get builtInReferences(): Array<Reference<BuiltInFunction>> {
-		return this._builtInReferences;
+	public get builtInFunctionReferences(): Array<Reference<BuiltInFunction>> {
+		return this._builtInFunctionReferences;
+	}
+
+	/**
+	 * A list of all references to built-in variables. This is used to determine which built-ins are used and which
+	 * aren't.
+	 *
+	 * This is primarily used for optimisations in KipperOptimiser, by applying tree-shaking to unused built-in variables,
+	 * so they will not be generated.
+	 * @since 0.10.0
+	 */
+	public get builtInVariableReferences(): Array<Reference<BuiltInVariable>> {
+		return this._builtInVariableReferences;
 	}
 
 	/**
@@ -311,6 +334,35 @@ export class KipperProgramContext {
 	}
 
 	/**
+	 * The list of errors that were raised during the compilation process.
+	 *
+	 * Errors are fatal errors, which are raised when the compiler encounters a situation that it considers to be
+	 * problematic, which prevents it from compiling the program.
+	 * @since 0.10.0
+	 */
+	public get errors(): Array<KipperError> {
+		return this._errors;
+	}
+
+	/**
+	 * Returns true if the file has any errors, false otherwise.
+	 *
+	 * This is equivalent to checking if the length of {@link errors} is greater than 0.
+	 * @since 0.10.0
+	 */
+	public get hasFailed(): boolean {
+		return this.errors.length > 0;
+	}
+
+	/**
+	 * Returns an array of all built-in functions and variables.
+	 * @since 0.10.0
+	 */
+	public get builtIns(): Array<BuiltInFunction | BuiltInVariable> {
+		return [...this.builtInFunctions, ...this.builtInVariables];
+	}
+
+	/**
 	 * Adds a new warning to the list of warnings for this file and reports the warning to the logger.
 	 * @param warning The warning to add to the list of reported warnings of this program.
 	 * @since 0.9.0
@@ -323,17 +375,6 @@ export class KipperProgramContext {
 		} else {
 			throw new Error("Warnings are disabled for this file.");
 		}
-	}
-
-	/**
-	 * The list of errors that were raised during the compilation process.
-	 *
-	 * Errors are fatal errors, which are raised when the compiler encounters a situation that it considers to be
-	 * problematic, which prevents it from compiling the program.
-	 * @since 0.10.0
-	 */
-	public get errors(): Array<KipperError> {
-		return this._errors;
 	}
 
 	/**
@@ -352,21 +393,13 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns true if the file has any errors, false otherwise.
-	 *
-	 * This is equivalent to checking if the length of {@link errors} is greater than 0.
-	 * @since 0.10.0
-	 */
-	public get hasFailed(): boolean {
-		return this.errors.length > 0;
-	}
-
-	/**
 	 * Converting and processing the antlr4 parse tree into a Kipper parse tree that may be used to semantically analyse
 	 * the program and compile it.
 	 * @param listener The listener instance to walk through the antlr4 parse tree. If undefined a new default one
 	 * is created based on the metadata from this {@link KipperProgramContext}.
 	 * @private
+	 * @since 0.8.0
+	 * @see {@link compileProgram}
 	 */
 	private async generateAbstractSyntaxTree(
 		listener: KipperFileASTGenerator = new KipperFileASTGenerator(this, this.antlrParseTree),
@@ -412,6 +445,7 @@ export class KipperProgramContext {
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
 	 * {@link this.generateAbstractSyntaxTree} to generate it.
 	 * @since 0.6.0
+	 * @see {@link compileProgram}
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		try {
@@ -438,6 +472,7 @@ export class KipperProgramContext {
 	 * Processes the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
 	 * @param options The options for the optimisation. If undefined, the {@link defaultOptimisationOptions} are used.
 	 * @since 0.8.0
+	 * @see {@link compileProgram}
 	 */
 	public async optimise(options?: OptimisationOptions): Promise<RootASTNode> {
 		if (!this.abstractSyntaxTree) {
@@ -469,6 +504,7 @@ export class KipperProgramContext {
 	 * If {@link this.processedParseTree} is undefined, then it will automatically run
 	 * {@link this.generateAbstractSyntaxTree} to generate it.
 	 * @since 0.6.0
+	 * @see {@link compileProgram}
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
 		if (!this.abstractSyntaxTree) {
@@ -533,30 +569,37 @@ export class KipperProgramContext {
 	 * Generates the required code for the execution of this Kipper program.
 	 *
 	 * This primarily includes the Kipper built-ins, which require
-	 * {@link KipperTargetBuiltInGenerator target-specific dependency and code generation}.
+	 * {@link KipperTargetBuiltInGenerator target-specific generation}.
+	 * @returns The generated code for the requirements.
+	 * @since 0.8.0
 	 * @private
+	 * @see {@link KipperTargetBuiltInGenerator}
 	 */
 	public async generateRequirements(): Promise<Array<Array<string>>> {
 		let code: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the builtin wrappers
 		for (const internalSpec of this.internals) {
+			this.logger.debug(`Generating code for internal function '${internalSpec.identifier}'.`);
+			this.semanticCheck(undefined).globalCanBeGenerated(internalSpec.identifier);
+
 			// Fetch the function for handling this built-in
-			const func: (funcSpec: InternalFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
-				this.target.builtInGenerator,
-				internalSpec.identifier,
-			);
-			code = [...code, ...(await func(internalSpec))];
+			const func: (func: InternalFunction, programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>> =
+				Reflect.get(this.target.builtInGenerator, internalSpec.identifier);
+			code = [...code, ...(await func(internalSpec, this))];
 		}
 
 		// Generating the code for the global functions
 		for (const builtInSpec of this.builtIns) {
+			this.logger.debug(`Generating code for built-in '${builtInSpec.identifier}'.`);
+			this.semanticCheck(undefined).globalCanBeGenerated(builtInSpec.identifier);
+
 			// Fetch the function for handling this built-in
-			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
-				this.target.builtInGenerator,
-				builtInSpec.identifier,
-			);
-			code = [...code, ...(await func(builtInSpec))];
+			const func: (
+				func: BuiltInFunction | BuiltInVariable,
+				programCtx: KipperProgramContext,
+			) => Promise<Array<TranslatedCodeLine>> = Reflect.get(this.target.builtInGenerator, builtInSpec.identifier);
+			code = [...code, ...(await func(builtInSpec, this))];
 		}
 		return code;
 	}
@@ -567,43 +610,99 @@ export class KipperProgramContext {
 	 * If the identifier is unknown, this function will return undefined.
 	 * @param identifier The identifier to search for.
 	 * @since 0.8.0
+	 * @see {@link getBuiltInVariable}
 	 */
 	public getBuiltInFunction(identifier: string): BuiltInFunction | undefined {
-		return this.builtIns.find((func) => func.identifier === identifier);
+		return this.builtInFunctions.find((funcSpec) => funcSpec.identifier === identifier);
+	}
+
+	/**
+	 * Searches for a built-in variable with the specific {@link identifier} from the {@link builtIns}.
+	 *
+	 * If the identifier is unknown, this function will return undefined.
+	 * @param identifier The identifier to search for.
+	 * @since 0.10.0
+	 * @see {@link getBuiltInFunction}
+	 */
+	public getBuiltInVariable(identifier: string): BuiltInVariable | undefined {
+		return this.builtInVariables.find((varSpec) => varSpec.identifier === identifier);
 	}
 
 	/**
 	 * Registers new builtIns that are available inside the Kipper program.
 	 *
 	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
+	 *
+	 * If {@link builtInFunctions} is an empty array, this function will do nothing.
+	 * @param builtInFunctions The built-in functions to register. May be a single value or an array.
+	 * @since 0.8.0
+	 * @see {@link registerBuiltInVariables}
 	 */
-	public registerBuiltIns(newBuiltIns: BuiltInFunction | Array<BuiltInFunction>) {
-		// If the function is not an array already, make it one
-		if (!(newBuiltIns instanceof Array)) {
-			newBuiltIns = [newBuiltIns];
-		}
+	public registerBuiltInFunctions(builtInFunctions: BuiltInFunction | Array<BuiltInFunction>) {
+		builtInFunctions = Array.isArray(builtInFunctions) ? builtInFunctions : [builtInFunctions];
 
 		// Make sure the global is valid and doesn't interfere with other identifiers
-		for (let g of newBuiltIns) {
+		// If an error occurs, line 1 and col 1 will be used, as the ctx is undefined.
+		for (let g of builtInFunctions) {
+			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
+		}
+		this.builtInFunctions.push(...builtInFunctions);
+	}
+
+	/**
+	 * Registers new built-in variables that should be available inside the Kipper program.
+	 *
+	 * Globals must be registered *before* {@link compileProgram} is run to properly include them in the result code.
+	 *
+	 * If {@link builtInVariables} is an empty array, this function will do nothing.
+	 * @param builtInVariables The built-in variables to register. May be a single value or an array.
+	 * @since 0.10.0
+	 * @see {@link registerBuiltInFunctions}
+	 */
+	public registerBuiltInVariables(builtInVariables: BuiltInVariable | Array<BuiltInVariable>) {
+		builtInVariables = Array.isArray(builtInVariables) ? builtInVariables : [builtInVariables];
+
+		// Make sure the global is valid and doesn't interfere with other identifiers
+		for (let g of builtInVariables) {
 			// If an error occurs, line 1 and col 1 will be used, as the ctx is undefined.
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
+		this.builtInVariables.push(...builtInVariables);
+	}
 
-		// Add new built-ins
-		this.builtIns.push(...newBuiltIns);
+	/**
+	 * Clears all built-in functions. This removes any built-in functions that were registered for the target.
+	 * @since 0.10.0
+	 */
+	public clearBuiltInFunctions() {
+		this.builtInFunctions.splice(0);
+	}
+
+	/**
+	 * Clears all built-in variables. This removes any built-in functions that were registered for the target.
+	 * @since 0.10.0
+	 */
+	public clearBuiltInVariables() {
+		this.builtInVariables.splice(0);
 	}
 
 	/**
 	 * Adds a new built-in reference.
-	 * @param exp The expression referencing {@link ref}.
-	 * @param ref The built-in identifier referenced.
+	 * @param exp The expression referencing {@link refTarget}.
+	 * @param refTarget The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression, ref: BuiltInFunction) {
-		this._builtInReferences.push({
-			refTarget: ref,
+	public addBuiltInReference(exp: Expression, refTarget: BuiltInFunction | BuiltInVariable) {
+		const ref = {
+			refTarget: refTarget,
 			srcExpr: exp,
-		});
+		} satisfies Reference<BuiltInFunction | BuiltInVariable>;
+
+		if ("valueType" in ref.refTarget) {
+			this._builtInVariableReferences.push(<Reference<BuiltInVariable>>ref);
+		} else {
+			this._builtInFunctionReferences.push(<Reference<BuiltInFunction>>ref);
+		}
 	}
 
 	/**

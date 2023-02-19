@@ -43,7 +43,10 @@ To use development versions of Kipper download the
 - Implemented new built-in function `len()`, which returns the length of a string (In the future also arrays).
   ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
 - Support for jump statements `continue` and `break` for iteration statements.
-	([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
+  ([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
+- New built-in variable `__name__` returning the name of the current file. This also includes in general support for 
+  built-in variables in the compiler.
+  ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
@@ -136,6 +139,13 @@ To use development versions of Kipper download the
     the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
     its data can be safely accessed.
   - `KipperSemanticChecker.getJumpStatementParent()`, which evaluates the parent iteration statement for a jump statement.
+  - `KipperProgramContext.registerBuiltInFunctions()`, which registers one or more built-in functions.
+  - `KipperProgramContext.registerBuiltInVariables()`, which registers one or more built-in variables.
+  - `KipperProgramContext.clearBuiltInFunctions()`, which clears the list of built-in functions.
+  - `KipperProgramContext.clearBuiltInVariables()`, which clears the list of built-in variables.
+  - `KipperProgramContext.getBuiltInVariable()`, which returns the built-in variable with the specified name if found.
+  - `KipperProgramContext.builtInFunctionReferences`, which stores all the references to built-in functions.
+  - `KipperProgramContext.builtInVariableReferences`, which stores all the references to built-in variables.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -229,6 +239,10 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - `StatementASTNodeFactory.statementMatchTable`, which returns the match table for the statement AST node factory.
   - `ExpressionASTNodeFactory.expressionMatchTable`, which returns the match table for the expression AST node factory.
   - `DeclarationASTNodeFactory.declarationMatchTable`, which returns the match table for the declaration AST node factory.
+  - `CompileConfig.builtInFunctions`, which overwrites the built-in functions of the target.
+  - `CompileConfig.extendBuiltInFunctions`, which adds new built-in functions to the target.
+  - `CompileConfig.builtInVariables`, which overwrites the built-in variables of the target.
+  - `CompileConfig.extendBuiltInVariables`, which adds new built-in variables to the target.
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.
@@ -286,6 +300,8 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - `ParserDeclarationCtx` to `ParserDeclarationContext`.
   - `KipperFileListener` to `KipperFileASTGenerator`.
   - `KipperProgramContext.addError` to `reportError`.
+  - `kipperRuntimeBuiltIns` to `kipperRuntimeBuiltInFunctions`.
+  - `kipperInternalBuiltIns` to `kipperInternalBuiltInFunctions`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
@@ -340,6 +356,10 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - `KipperFileASTGenerator.handleExitingStatementOrDefinitionCtx` (removed in clean-up).
   - `KipperFileASTGenerator.handleIncomingExpressionCtx` (removed in clean-up).
   - `KipperFileASTGenerator.handleExitingExpressionCtx` (removed in clean-up).
+  - `KipperProgramConext.builtInReferences` (replaced by `builtInFunctionReferences` and `builtInVariableReferences`).
+  - `KipperProgramConext.registerBuiltIns` (replaced by `registerBuiltInFunctions` and `registerBuiltInVariables`).
+  - `CompileConfig.builtIns` (replaced by `builtInFunctions` and `builtInVariables`).
+  - `CompileConfig.extendBuiltIns` (replaced by `extendBuiltInFunctions` and `extendBuiltInVariables`).
 - Parser rule `arraySpecifierExpression` (`ArraySpecifierExpression`), which was made obsolete with the addition of
   `bracketNotationMemberAccessExpression` (`BracketNotationMemberAccessExpression`).
 

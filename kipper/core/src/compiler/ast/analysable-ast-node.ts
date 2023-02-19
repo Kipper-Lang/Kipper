@@ -11,7 +11,7 @@ import { ParserASTNode, SemanticData, TypeData } from "./ast-node";
 import { KipperError, MissingRequiredSemanticDataError } from "../../errors";
 import { KipperProgramContext } from "../program-ctx";
 import { RootASTNode } from "./root-ast-node";
-import { EvaluatedCompileConfig } from "../compiler";
+import { EvaluatedCompileConfig } from "../compile-config";
 import { handleSemanticError } from "../analysis";
 
 /**

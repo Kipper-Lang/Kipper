@@ -3,8 +3,9 @@
  * @since 0.10.0
  */
 import type { TranslatedCodeLine } from "../../const";
-import type { BuiltInFunction } from "../../runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable } from "../../runtime-built-ins";
 import { InternalFunction } from "../../runtime-built-ins";
+import { KipperProgramContext } from "../../program-ctx";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.
@@ -21,33 +22,37 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * Conversion function which provides 'num' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract numToStr(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract numToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'str' to 'num' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract strToNum(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract strToNum(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract boolToStr(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract boolToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract boolToNum(func: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract boolToNum(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Slice function which provides the ability to slice an iterable object-like type.
@@ -56,8 +61,9 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * used to get a substring from a string, or a sub-array from an array.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 */
-	public abstract slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract slice(funcSpec: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Index function which provides the ability to index an iterable object-like type.
@@ -67,22 +73,34 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * an error will be thrown.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 */
-	public abstract index(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract index(funcSpec: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Print function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract print(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Len function which provides the ability to get the length of an iterable array-like type.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
-	public abstract len(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>>;
+	abstract len(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Built-in variable '__name__' that provides the name of the current file being run.
+	 * @param varSpec The specification for the variable. This contains the overall metadata for the variable that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.10.0
+	 */
+	abstract __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 }
