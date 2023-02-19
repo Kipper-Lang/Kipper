@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.10.0-alpha.7",
+  "version": "0.10.0-beta.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
@@ -22,7 +22,7 @@
     "@types/node": "18.13.0",
     "@types/sinon": "10.0.13",
     "@oclif/test": "2.2.21",
-		"ts-node": "10.9.1",
+    "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "10.0.2",
     "rimraf": "4.1.2",
     "os-tmpdir": "1.0.2",
@@ -30,7 +30,7 @@
     "typescript": "4.9.4",
     "oclif": "3.4.0",
     "json-parse-even-better-errors": "2.3.1",
-		"semver": "7.3.8"
+    "semver": "7.3.8"
   },
   "engines": {
     "node": ">=14.0.0"

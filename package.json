@@ -1,7 +1,7 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language and compiler 🦊",
-  "version": "0.10.0-alpha.7",
+  "version": "0.10.0-beta.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
@@ -101,8 +101,8 @@
     "bump:linux:macos:default": "./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
     "size-limit": "size-limit",
-		"cleanup": "run-script-os",
-		"cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
-		"cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib"
+    "cleanup": "run-script-os",
+    "cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
+    "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib"
   }
 }
