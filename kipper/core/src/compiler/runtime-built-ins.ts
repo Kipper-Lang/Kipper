@@ -114,7 +114,25 @@ export interface InternalFunction {
 	 * union.
 	 * @since 0.8.0
 	 */
-	returnType: KipperCompilableType | Array<KipperCompilableType>;
+	returnType: KipperCompilableType;
+}
+
+/**
+ * Interface representation of a {@link BuiltInVariable}, which is available inside a Kipper program using the specified
+ * metadata.
+ * @since 0.10.0
+ */
+export interface BuiltInVariable {
+	/**
+	 * The identifier of the global variable that should be available inside the program.
+	 * @since 0.10.0
+	 */
+	identifier: string;
+	/**
+	 * The type of the variable.
+	 * @since 0.10.0
+	 */
+	valueType: KipperCompilableType;
 }
 
 /**
@@ -123,7 +141,7 @@ export interface InternalFunction {
  * This contains *every* builtin that also must be implemented by every target in the {@link KipperTargetBuiltInGenerator}.
  * @since 0.7.0
  */
-export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
+export const kipperRuntimeBuiltInFunctions: Record<string, BuiltInFunction> = {
 	print: {
 		identifier: "print",
 		params: [
@@ -153,7 +171,7 @@ export const kipperRuntimeBuiltIns: Record<string, BuiltInFunction> = {
  * This contains *every* builtin that also must be implemented by every target in the {@link KipperTargetBuiltInGenerator}.
  * @since 0.8.0
  */
-export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
+export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = {
 	numToStr: {
 		identifier: "numToStr",
 		params: [
@@ -225,5 +243,16 @@ export const kipperInternalBuiltIns: Record<string, InternalFunction> = {
 			},
 		],
 		returnType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+	},
+};
+
+/**
+ * Contains all the built-in variables in Kipper that are available per default in every program.
+ * @since 0.10.0
+ */
+export const kipperRuntimeBuiltInVariables: Record<string, BuiltInVariable> = {
+	__name__: {
+		identifier: "__name__",
+		valueType: "str",
 	},
 };

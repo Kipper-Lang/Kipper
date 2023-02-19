@@ -445,6 +445,18 @@ export class InvalidGlobalError extends KipperError {
 }
 
 /**
+ * Error that is thrown when a built-in {@link BuiltInVariable variable} or {@link BuiltInFunction function} is
+ * registered that does not have a function in the {@link KipperCompileTarget.builtInGenerator} class assigned at
+ * compile start.
+ * @since 0.10.0
+ */
+export class BuiltInOrInternalGeneratorFunctionNotFoundError extends KipperError {
+	constructor(identifier: string) {
+		super(`Target built-in or internal generator does not contain a function for '${identifier}'.`);
+	}
+}
+
+/**
  * Represents all errors in the identifier error group.
  * @since 0.3.0
  */

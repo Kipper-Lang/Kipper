@@ -11,7 +11,7 @@ import type {
 	TargetSetUpCodeGenerator,
 	TargetWrapUpCodeGenerator,
 } from "../target-presets";
-import type { EvaluatedCompileConfig } from "../compiler";
+import type { EvaluatedCompileConfig } from "../compile-config";
 import type { KipperProgramContext } from "../program-ctx";
 import type { Declaration, Statement } from "./nodes";
 import type { TranslatedCodeLine } from "../const";

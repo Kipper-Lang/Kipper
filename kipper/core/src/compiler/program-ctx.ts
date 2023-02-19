@@ -16,7 +16,7 @@ import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecke
 import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";
-import { EvaluatedCompileConfig } from "./compiler";
+import { EvaluatedCompileConfig } from "./compile-config";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
@@ -541,6 +541,9 @@ export class KipperProgramContext {
 
 		// Generating the code for the builtin wrappers
 		for (const internalSpec of this.internals) {
+			this.logger.debug(`Generating code for internal function '${internalSpec.identifier}'.`);
+			this.semanticCheck(undefined).globalCanBeGenerated(internalSpec.identifier);
+
 			// Fetch the function for handling this built-in
 			const func: (funcSpec: InternalFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
 				this.target.builtInGenerator,
@@ -551,6 +554,9 @@ export class KipperProgramContext {
 
 		// Generating the code for the global functions
 		for (const builtInSpec of this.builtIns) {
+			this.logger.debug(`Generating code for built-in function '${builtInSpec.identifier}'.`);
+			this.semanticCheck(undefined).globalCanBeGenerated(builtInSpec.identifier);
+
 			// Fetch the function for handling this built-in
 			const func: (funcSpec: BuiltInFunction) => Promise<Array<TranslatedCodeLine>> = Reflect.get(
 				this.target.builtInGenerator,

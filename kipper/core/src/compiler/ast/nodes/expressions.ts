@@ -92,7 +92,7 @@ import {
 	KipperVoidType,
 	TranslatedExpression,
 } from "../../const";
-import { kipperInternalBuiltIns } from "../../runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "../../runtime-built-ins";
 import { CheckedType, ScopeDeclaration, ScopeVariableDeclaration, UncheckedType } from "../../analysis";
 import {
 	KipperNotImplementedError,
@@ -1405,7 +1405,7 @@ export class MemberAccessExpression extends Expression<
 			// Add internal reference to the program ctx for the index function, so it will be generated in the output code
 			// Note: Once objects are implemented, an if statement will be required to check if the object is an array or
 			// object-like, since for objects the 'get' function will be used instead of the 'index' function.
-			this.programCtx.addInternalReference(this, kipperInternalBuiltIns["index"]);
+			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["index"]);
 		} else {
 			const sliceNotationAntlrCtx = this.getAntlrRuleChildren()[1] as SliceNotationContext;
 			const hasStart = sliceNotationAntlrCtx.sliceStart;
@@ -1429,7 +1429,7 @@ export class MemberAccessExpression extends Expression<
 			};
 
 			// Add internal reference to the program ctx for the slice function, so it will be generated in the output code
-			this.programCtx.addInternalReference(this, kipperInternalBuiltIns["slice"]);
+			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["slice"]);
 		}
 	}
 
@@ -1888,8 +1888,8 @@ export class CastOrConvertExpression extends Expression<
 			semanticData.exp.getTypeSemanticData().evaluatedType.identifier,
 			semanticData.castType.identifier,
 		);
-		if (internalIdentifier in kipperInternalBuiltIns) {
-			this.programCtx.addInternalReference(this, kipperInternalBuiltIns[internalIdentifier]);
+		if (internalIdentifier in kipperInternalBuiltInFunctions) {
+			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions[internalIdentifier]);
 		}
 	}
 

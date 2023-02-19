@@ -10,7 +10,7 @@ import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parse
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import { KipperError } from "../errors";
-import {CompileConfig, EvaluatedCompileConfig} from "./compile-config";
+import { CompileConfig, EvaluatedCompileConfig } from "./compile-config";
 
 /**
  * The result of a {@link KipperCompiler} compilation.
@@ -189,7 +189,7 @@ export class KipperCompiler {
 		);
 
 		// Register all available built-in functions
-		let globals = [...config.builtIns, ...config.extendBuiltIns];
+		let globals = [...config.builtInFunctions, ...config.extendBuiltInFunctions];
 		if (globals.length > 0) {
 			programCtx.registerBuiltIns(globals);
 		}

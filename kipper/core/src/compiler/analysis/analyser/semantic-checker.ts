@@ -37,6 +37,7 @@ import {
 	UndefinedReferenceError,
 	UnknownReferenceError,
 	InvalidJumpStatementError,
+	BuiltInOrInternalGeneratorFunctionNotFoundError,
 } from "../../../errors";
 
 /**
@@ -145,6 +146,21 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
 			throw this.assertError(new InvalidGlobalError(identifier));
+		}
+	}
+
+	/**
+	 * Asserts that the passed identifier is a valid built-in global that has a generator function in the
+	 * {@link this.programCtx.target.builtInGenerator BuiltInGenerator} of the target.
+	 * @param identifier The identifier to check.
+	 * @throws {BuiltInOrInternalGeneratorFunctionNotFoundError} If there is no generator function for the passed
+	 * identifier.
+	 * @since 0.10.0
+	 */
+	public globalCanBeGenerated(identifier: string): void {
+		const generator = Reflect.get(this.programCtx.target.builtInGenerator, identifier);
+		if (generator === undefined) {
+			throw this.assertError(new BuiltInOrInternalGeneratorFunctionNotFoundError(identifier));
 		}
 	}
 

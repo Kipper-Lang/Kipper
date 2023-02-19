@@ -2,9 +2,14 @@
  * Configuration for a Kipper program that can be passed to {@link KipperCompiler.compile}.
  * @since 0.10.0
  */
-import {BuiltInFunction, kipperRuntimeBuiltInFunctions} from "./runtime-built-ins";
-import {KipperCompileTarget} from "./target-presets";
-import {defaultOptimisationOptions, OptimisationOptions} from "./optimiser";
+import {
+	BuiltInFunction,
+	BuiltInVariable,
+	kipperRuntimeBuiltInFunctions,
+	kipperRuntimeBuiltInVariables,
+} from "./runtime-built-ins";
+import { KipperCompileTarget } from "./target-presets";
+import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileConfig}
@@ -13,32 +18,50 @@ import {defaultOptimisationOptions, OptimisationOptions} from "./optimiser";
  */
 export interface CompileConfig {
 	/**
-	 * The built-in functions that will be available in a Kipper program. This option overwrites the default built-ins,
-	 * if you wish to only add new built-in functions write to {@link extendBuiltIns}.
-	 *
-	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
+	 * The translation languages for the compilation.
+	 * @since 0.5.0
 	 */
-	builtIns?: Array<BuiltInFunction>;
+	target: KipperCompileTarget;
 
 	/**
-	 * Extends the {@link builtIns} with the specified items. If {@link builtIns} is undefined, then it will simply extend
-	 * the default array.
+	 * The built-in functions that will be available in a Kipper program. This option overwrites the default built-ins,
+	 * if you wish to only add new built-in functions write to {@link extendBuiltInFunctions}.
 	 *
 	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
 	 */
-	extendBuiltIns?: Array<BuiltInFunction>;
+	builtInFunctions?: Array<BuiltInFunction>;
+
+	/**
+	 * Extends the {@link builtInFunctions} with the specified items. If {@link builtInFunctions} is undefined, then it
+	 * will simply extend the default array.
+	 *
+	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
+	 */
+	extendBuiltInFunctions?: Array<BuiltInFunction>;
+
+	/**
+	 * The built-in variables that will be available in a Kipper program. This option overwrites the default built-ins,
+	 * if you wish to only add new built-in variables write to {@link extendBuiltInVariables}.
+	 *
+	 * All built-in variables defined here must be implemented by the {@link target.builtInGenerator}.
+	 * @since 0.10.0
+	 */
+	builtInVariables?: Array<BuiltInVariable>;
+
+	/**
+	 * Extends the {@link builtInVariables} with the specified items. If {@link builtInVariables} is undefined, then it
+	 * will simply extend the default array.
+	 *
+	 * All built-in variables defined here must be implemented by the {@link target.builtInGenerator}.
+	 * @since 0.10.0
+	 */
+	extendBuiltInVariables?: Array<BuiltInVariable>;
 
 	/**
 	 * The filename that should be used to represent the program.
 	 * @since 0.2.0
 	 */
 	fileName?: string;
-
-	/**
-	 * The translation languages for the compilation.
-	 * @since 0.5.0
-	 */
-	target: KipperCompileTarget;
 
 	/**
 	 * Options for the {@link KipperOptimiser}.
@@ -98,41 +121,61 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		builtIns: kipperRuntimeBuiltInFunctions, // Default built-in globals
-		extendGlobals: [], // Use no custom globals per default
+		builtInFunctions: Object.values(kipperRuntimeBuiltInFunctions), // Default built-in global functions
+		builtInVariables: Object.values(kipperRuntimeBuiltInVariables), // Default built-in global variables
+		extendBuiltInFunctions: <Array<BuiltInFunction>>[], // Use no custom built-in functions per default
+		extendBuiltInVariables: <Array<BuiltInVariable>>[], // Use no custom built-in variables per default
 		fileName: "anonymous-script", // Default name if no name is specified
 		optimisationOptions: defaultOptimisationOptions,
 		warnings: true, // Always generate warnings by default
 		recover: true, // Always try to recover from compilation errors
 		abortOnFirstError: false, // This should never be enabled per default
-	};
-
-	/**
-	 * The built-in functions that will be available in a Kipper program.
-	 *
-	 * This will be extended by {@link extendBuiltIns}. All built-in functions defined here must be implemented by the
-	 * {@link target.builtInGenerator}.
-	 */
-	public readonly builtIns: Array<BuiltInFunction>;
-
-	/**
-	 * Extensions to the global built-in functions that should not replace the primary {@link builtIns}.
-	 *
-	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
-	 */
-	public readonly extendBuiltIns: Array<BuiltInFunction>;
-
-	/**
-	 * The filename that should be used to represent the program.
-	 * @since 0.2.0
-	 */
-	public readonly fileName: string;
+	} satisfies { [k: string]: CompileConfig[keyof CompileConfig] };
 
 	/**
 	 * The translation languages for the compilation.
 	 * @since 0.5.0
 	 */
 	public readonly target: KipperCompileTarget;
+
+	/**
+	 * The built-in functions that will be available in a Kipper program.
+	 *
+	 * This will be extended by {@link extendBuiltInFunctions}. All built-in functions defined here must be implemented by the
+	 * {@link target.builtInGenerator}.
+	 */
+	public readonly builtInFunctions: Array<BuiltInFunction>;
+
+	/**
+	 * The built-in variables that will be available in a Kipper program. This option overwrites the default built-ins,
+	 * if you wish to only add new built-in variables write to {@link extendBuiltInVariables}.
+	 *
+	 * All built-in variables defined here must be implemented by the {@link target.builtInGenerator}.
+	 * @since 0.10.0
+	 */
+	public readonly builtInVariables: Array<BuiltInVariable>;
+
+	/**
+	 * Extensions to the global built-in functions that should not replace the primary {@link builtInFunctions}.
+	 *
+	 * All built-in functions defined here must be implemented by the {@link target.builtInGenerator}.
+	 */
+	public readonly extendBuiltInFunctions: Array<BuiltInFunction>;
+
+	/**
+	 * Extends the {@link builtInVariables} with the specified items. If {@link builtInVariables} is undefined, then it
+	 * will simply extend the default array.
+	 *
+	 * All built-in variables defined here must be implemented by the {@link target.builtInGenerator}.
+	 * @since 0.10.0
+	 */
+	public readonly extendBuiltInVariables: Array<BuiltInVariable>;
+
+	/**
+	 * The filename that should be used to represent the program.
+	 * @since 0.2.0
+	 */
+	public readonly fileName: string;
 
 	/**
 	 * Options for the {@link KipperOptimiser}.
@@ -166,17 +209,34 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 */
 	public readonly abortOnFirstError: boolean;
 
-	constructor(options: CompileConfig) {
-		this.userOptions = options;
+	/**
+	 * Gets a non-undefined config option from the specified config object. If the option is undefined, then the default
+	 * value will be returned.
+	 * @param option The option key to get the option for.
+	 * @param rawConfig The raw config object to get the option from.
+	 * @since 0.10.0
+	 * @private
+	 */
+	private getConfigOption<T>(option: keyof typeof EvaluatedCompileConfig["defaults"], rawConfig: CompileConfig): T {
+		if (rawConfig[option] !== undefined) {
+			return rawConfig[option] as T;
+		}
+		return EvaluatedCompileConfig.defaults[option] as T;
+	}
+
+	constructor(rawConfig: CompileConfig) {
+		this.userOptions = rawConfig;
 
 		// Evaluate all config options
-		this.target = options.target;
-		this.builtIns = options.builtIns ?? Object.values(EvaluatedCompileConfig.defaults.builtIns);
-		this.extendBuiltIns = options.extendBuiltIns ?? EvaluatedCompileConfig.defaults.extendGlobals;
-		this.fileName = options.fileName ?? EvaluatedCompileConfig.defaults.fileName;
-		this.optimisationOptions = options.optimisationOptions ?? EvaluatedCompileConfig.defaults.optimisationOptions;
-		this.warnings = options.warnings ?? EvaluatedCompileConfig.defaults.warnings;
-		this.recover = options.recover ?? EvaluatedCompileConfig.defaults.recover;
-		this.abortOnFirstError = options.abortOnFirstError ?? EvaluatedCompileConfig.defaults.abortOnFirstError;
+		this.target = rawConfig.target;
+		this.builtInFunctions = this.getConfigOption("builtInFunctions", rawConfig);
+		this.builtInVariables = this.getConfigOption("builtInVariables", rawConfig);
+		this.extendBuiltInFunctions = this.getConfigOption("extendBuiltInFunctions", rawConfig);
+		this.extendBuiltInVariables = this.getConfigOption("extendBuiltInVariables", rawConfig);
+		this.fileName = this.getConfigOption("fileName", rawConfig);
+		this.optimisationOptions = this.getConfigOption("optimisationOptions", rawConfig);
+		this.warnings = this.getConfigOption("warnings", rawConfig);
+		this.recover = this.getConfigOption("recover", rawConfig);
+		this.abortOnFirstError = this.getConfigOption("abortOnFirstError", rawConfig);
 	}
 }
