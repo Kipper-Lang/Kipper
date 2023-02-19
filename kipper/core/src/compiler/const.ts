@@ -9,7 +9,7 @@ import type {
 	ScopeVariableDeclaration,
 	UndefinedCustomType,
 } from "./analysis";
-import type { BuiltInFunction } from "./runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
 import { InternalFunction } from "./runtime-built-ins";
 
 /**
@@ -550,7 +550,7 @@ export type KipperFunction = InternalFunction | KipperReferenceableFunction;
  * Represents a Kipper variable that can be either declared or defined.
  * @since 0.6.0
  */
-export type KipperVariable = ScopeVariableDeclaration;
+export type KipperVariable = BuiltInVariable | ScopeVariableDeclaration;
 
 /**
  * Represents a Kipper parameter inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.

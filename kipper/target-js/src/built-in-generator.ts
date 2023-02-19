@@ -3,9 +3,10 @@
  * functions.
  * @since 0.10.0
  */
-import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
-import { KipperTargetBuiltInGenerator } from "@kipper/core";
-import { createJSFunctionSignature, getJavaScriptBuiltInIdentifier, getJSFunctionSignature } from "./tools";
+import type { BuiltInFunction, BuiltInVariable, InternalFunction, TranslatedCodeLine } from "@kipper/core";
+import { KipperProgramContext, KipperTargetBuiltInGenerator } from "@kipper/core";
+import { createJSFunctionSignature, getJSFunctionSignature } from "./tools";
+import { TargetJS } from "./target";
 
 /**
  * Generates a JavaScript function from the given signature and body.
@@ -19,7 +20,7 @@ export function genJSFunction(
 ): Array<TranslatedCodeLine> {
 	return [
 		[
-			getJavaScriptBuiltInIdentifier(signature.identifier),
+			TargetJS.getBuiltInIdentifier(signature.identifier),
 			" ",
 			"=",
 			" ",
@@ -29,6 +30,15 @@ export function genJSFunction(
 			";",
 		],
 	];
+}
+
+/**
+ * Generates a JavaScript local or global variable from the given variable and value.
+ * @param varSpec The variable to generate.
+ * @param value The value of the variable.
+ */
+export function genJSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
+	return [...(varSpec.local ? ["const", " "] : []), TargetJS.getBuiltInIdentifier(varSpec), " ", "=", " ", value, ";"];
 }
 
 /**
@@ -103,5 +113,9 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const lenArgIdentifier = signature.params[0];
 
 		return genJSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
+	}
+
+	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
+		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
 }

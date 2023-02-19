@@ -3,7 +3,7 @@
  * @since 0.0.1
  */
 import type { TranslatedCodeLine } from "./const";
-import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
+import { InternalFunction, kipperInternalBuiltInFunctions } from "./runtime-built-ins";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
@@ -109,6 +109,15 @@ export class KipperCompiler {
 	}
 
 	/**
+	 * An array of all internal functions that are available to the compiler
+	 * @since 0.10.0
+	 * @private
+	 */
+	private get internalFunctions(): Array<InternalFunction> {
+		return Object.values(kipperInternalBuiltInFunctions);
+	}
+
+	/**
 	 * Handles the input for a file-based function of the {@link KipperCompiler}.
 	 * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @param name The encoding to read the file with.
@@ -177,25 +186,16 @@ export class KipperCompiler {
 			compilerOptions instanceof EvaluatedCompileConfig ? compilerOptions : new EvaluatedCompileConfig(compilerOptions);
 
 		// Creates a new program context using the parse data and compilation configuration
-		let programCtx = new KipperProgramContext(
+		return new KipperProgramContext(
 			parseData.parseStream,
 			parseData.parseTree,
 			parseData.parser,
 			parseData.lexer,
 			this.logger,
 			config.target,
-			Object.values(kipperInternalBuiltInFunctions),
+			this.internalFunctions,
 			config,
 		);
-
-		// Register all available built-in functions
-		let globals = [...config.builtInFunctions, ...config.extendBuiltInFunctions];
-		if (globals.length > 0) {
-			programCtx.registerBuiltIns(globals);
-		}
-		this.logger.debug(`Registered ${globals.length} global function${globals.length === 1 ? "" : "s"}.`);
-
-		return programCtx;
 	}
 
 	/**

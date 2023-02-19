@@ -27,8 +27,8 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	/**
 	 * The semantic data of this declaration.
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
-	 * @private
 	 * @since 0.10.0
+	 * @private
 	 */
 	private get semanticData(): ParameterDeclarationSemantics {
 		return this._node.getSemanticData();
@@ -37,8 +37,8 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	/**
 	 * The type data of this declaration.
 	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
-	 * @private
 	 * @since 0.10.0
+	 * @private
 	 */
 	private get typeData(): ParameterDeclarationTypeSemantics {
 		return this._node.getTypeSemanticData();

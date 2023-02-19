@@ -4,57 +4,13 @@
  */
 import {
 	FunctionDeclaration,
-	KipperNotImplementedError,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	kipperBoolType,
 	KipperCompilableType,
-	kipperFuncType,
-	kipperListType,
-	kipperMetaType,
-	kipperNullType,
-	kipperNumType,
-	kipperStrType,
-	kipperUndefinedType,
-	kipperVoidType,
 	InternalFunction,
 	InternalFunctionArgument,
 } from "@kipper/core";
-
-/**
- * Fetches the typescript equivalent for a {@link KipperCompilableType}.
- * @param kipperType The type to get the equivalent for.
- * @since 0.8.0
- */
-export function getTypeScriptType(kipperType: KipperCompilableType | Array<KipperCompilableType>): string {
-	if (Array.isArray(kipperType)) {
-		// Recursively call this function for each type in the array
-		return `${kipperType.map(getTypeScriptType).join(" | ")}`;
-	}
-
-	switch (kipperType) {
-		case kipperBoolType:
-			return "boolean";
-		case kipperFuncType:
-			return "Function";
-		case kipperListType:
-			return "Array";
-		case kipperMetaType:
-			return "object";
-		case kipperNullType:
-			return "null";
-		case kipperNumType:
-			return "number";
-		case kipperStrType:
-			return "string";
-		case kipperUndefinedType:
-			return "undefined";
-		case kipperVoidType:
-			return "void";
-		default:
-			throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
-	}
-}
+import { TargetTS } from "./target";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.
@@ -102,9 +58,7 @@ export function createTSFunctionSignature(signature: {
 	returnType: KipperCompilableType | Array<KipperCompilableType>;
 }): string {
 	const { identifier, params } = signature;
-	const argsSignature = `${params.map((p) => `${p.identifier}: ${getTypeScriptType(p.type)}`).join(", ")}`;
+	const argsSignature = `${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
 
-	return `function ${identifier}(${argsSignature}): ${getTypeScriptType(signature.returnType)}`;
+	return `function ${identifier}(${argsSignature}): ${TargetTS.getTypeScriptType(signature.returnType)}`;
 }
-
-export { getJavaScriptBuiltInIdentifier as getTypeScriptBuiltInIdentifier } from "@kipper/target-js";

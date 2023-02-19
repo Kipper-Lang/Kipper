@@ -133,6 +133,16 @@ export interface BuiltInVariable {
 	 * @since 0.10.0
 	 */
 	valueType: KipperCompilableType;
+	/**
+	 * If true then the variable is local to the current file. If false then the variable is global and can be accessed
+	 * from any file.
+	 *
+	 * This is primarily used to differentiate between local and global variables during the code generation process,
+	 * since local ones will usually be initialised like any other variables, while globals will be registered on a global
+	 * object.
+	 * @since 0.10.0
+	 */
+	local: boolean;
 }
 
 /**
@@ -254,5 +264,6 @@ export const kipperRuntimeBuiltInVariables: Record<string, BuiltInVariable> = {
 	__name__: {
 		identifier: "__name__",
 		valueType: "str",
+		local: true,
 	},
 };

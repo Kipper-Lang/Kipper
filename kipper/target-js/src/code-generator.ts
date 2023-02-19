@@ -55,14 +55,8 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 } from "@kipper/core";
-import {
-	createJSFunctionSignature,
-	getJavaScriptBuiltInIdentifier,
-	getJSFunctionSignature,
-	indentLines,
-	removeBraces,
-} from "./tools";
-import { version } from "./index";
+import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
+import { TargetJS, version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -395,7 +389,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
-			identifier = getJavaScriptBuiltInIdentifier(identifier);
+			identifier = TargetJS.getBuiltInIdentifier(semanticData.ref.refTarget);
 		}
 		return [identifier];
 	};
@@ -418,7 +412,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const keyOrIndex = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
 
 				// Return the member access expression in form of a function call to the internal 'index' function
-				const sliceIdentifier = getJavaScriptBuiltInIdentifier("index");
+				const sliceIdentifier = TargetJS.getBuiltInIdentifier("index");
 				return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
 			}
 			case "slice": {
@@ -431,7 +425,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const end = slice.end ? await slice.end.translateCtxAndChildren() : "undefined";
 
 				// Return the slice expression in form of a function call to the internal 'slice' function
-				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
+				const sliceIdentifier = TargetJS.getBuiltInIdentifier("slice");
 				return [sliceIdentifier, "(", ...object, ", ", ...start, ", ", ...end, ")"];
 			}
 		}
@@ -524,7 +518,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Get the proper identifier for the function
 		const identifier =
-			func instanceof ScopeFunctionDeclaration ? func.identifier : getJavaScriptBuiltInIdentifier(func.identifier);
+			func instanceof ScopeFunctionDeclaration ? func.identifier : TargetJS.getBuiltInIdentifier(func.identifier);
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
@@ -580,7 +574,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
 			return exp;
 		} else {
-			const func: string = getJavaScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			const func: string = TargetJS.getBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
 			return [func, "(", ...exp, ")"];
 		}
 	};
@@ -612,8 +606,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates any form of operator-based expression with two operands into the JavaScript language.
 	 * @param node The node to translate.
-	 * @private
 	 * @since 0.10.0
+	 * @private
 	 */
 	protected translateOperatorExpressionWithOperands = async (
 		node: ComparativeExpression | LogicalExpression,
@@ -680,7 +674,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
-			identifier = getJavaScriptBuiltInIdentifier(identifier);
+			identifier = TargetJS.getBuiltInIdentifier(identifier);
 		}
 
 		// The expression that is assigned to the reference

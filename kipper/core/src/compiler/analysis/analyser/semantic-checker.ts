@@ -141,7 +141,9 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 */
 	public globalCanBeRegistered(identifier: string): void {
 		let identifierAlreadyExists: boolean = this.programCtx.globalScope.getEntry(identifier) !== undefined;
-		let globalAlreadyExists: boolean = this.programCtx.getBuiltInFunction(identifier) !== undefined;
+		let globalAlreadyExists: boolean =
+			this.programCtx.getBuiltInFunction(identifier) !== undefined ||
+			this.programCtx.getBuiltInVariable(identifier) !== undefined;
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
