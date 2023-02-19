@@ -44,7 +44,7 @@ To use development versions of Kipper download the
   ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
 - Support for jump statements `continue` and `break` for iteration statements.
   ([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
-- New built-in variable `__name__` returning the name of the current file. This also includes in general support for 
+- New built-in variable `__name__` returning the name of the current file. This also includes general support for 
   built-in variables in the compiler.
   ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
