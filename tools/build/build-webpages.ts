@@ -83,8 +83,8 @@ async function getBuildData(dataFile: string): Promise<Record<string, any>> {
     versions: {
 			"next": json["dist-tags"]["next"],
 			"latest": json["dist-tags"]["latest"],
+			"0.10.0": "0.10.0",
 			"0.9.2": "0.9.2",
-			"0.8.3": "0.8.3"
 		}
 	};
 }
