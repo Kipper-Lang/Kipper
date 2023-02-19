@@ -62,7 +62,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 				? scopeCtx.innerScope.getEntryRecursively(identifier)
 				: this.programCtx.globalScope.getEntry(identifier)) ??
 			this.programCtx.globalScope.getEntry(identifier) ?? // Fall back to looking globally
-			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
+			this.programCtx.getBuiltInFunction(identifier) ?? // Fall back to searching through built-in functions
+			this.programCtx.getBuiltInVariable(identifier) // Fall back to searching through built-in variables
 		);
 	}
 
