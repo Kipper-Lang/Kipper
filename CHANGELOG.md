@@ -248,6 +248,7 @@ context to an AST node. This is the type representing all values from`ParserASTM
   - `kipperUndefinedType`, which represents the Kipper undefined type.
   - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
+	- `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
 
 ### Changed
 
