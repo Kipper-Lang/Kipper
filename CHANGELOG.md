@@ -103,15 +103,15 @@ To use development versions of Kipper download the
     a parent class for `CompilableASTNode`, as a way to split up the semantic analysis and code generation.
   - `KipperWarningIssuer`, which is a class similar to `KipperSemanticChecker` and checks for certain conditions and
     reports warnings if they are met.
-	- `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
-		the definitions of its children, will be stored in the `innerScope` field of the class implementation.
-	- `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
-	- `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
-	- `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
-	- `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
-	- `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
-	- `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
-	- `InternalFunctionArgument`, which represents an internal function argument.
+  - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
+    the definitions of its children, will be stored in the `innerScope` field of the class implementation.
+  - `SymbolTable`, which implements the basic functionality of a symbol table containing the metadata for a scope.
+  - `MemberAccessExpressionSemantics`, which represents the semantics for `MemberAccessExpression`.
+  - `MemberAccessExpressionTypeSemantics`, which represents the type semantics for `MemberAccessExpression`.
+  - `TargetAnalysableNode`, which represents an AST node that has a target-specific semantic analysis function.
+  - `TargetCompilableNode`, which represents an AST node that has a target-specific code generation function.
+  - `ASTNodeFactory`, which represents a basic factory for creating AST nodes.
+  - `InternalFunctionArgument`, which represents an internal function argument.
   - `InternalReference<T>`, which represents an indirect reference to an internal function by the user. This is
     primarily used to keep track of the internal functions that are used in the program, and to generate them in the
     target code.
@@ -248,7 +248,7 @@ To use development versions of Kipper download the
   - `CompileConfig.builtInVariables`, which overwrites the built-in variables of the target.
   - `CompileConfig.extendBuiltInVariables`, which adds new built-in variables to the target.
   - `Expression.hasSideEffects`, which returns true if the expression has side effects and as such affects the state of
-		the program. This is primarily used for reporting warnings.
+    the program. This is primarily used for reporting warnings.
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.
