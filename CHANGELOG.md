@@ -18,6 +18,20 @@ To use development versions of Kipper download the
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+</details>
+
+## [0.10.0] - 2023-02-19
+
+### Added
+
 - Added full support for custom-defined functions, function arguments, function return evaluation, function
   scopes/argument referencing and return-value code branch
   inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
@@ -338,8 +352,6 @@ To use development versions of Kipper download the
 - A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
 - Grammar bug not allowing an empty statement (`;`) in a compound statement.
 
-### Deprecated
-
 ### Removed
 
 - Kipper CLI command `update`, as it was not needed since there are no plans to deploy S3 distributions of Kipper.
@@ -369,8 +381,6 @@ To use development versions of Kipper download the
   - `CompileConfig.extendBuiltIns` (replaced by `extendBuiltInFunctions` and `extendBuiltInVariables`).
 - Parser rule `arraySpecifierExpression` (`ArraySpecifierExpression`), which was made obsolete with the addition of
   `bracketNotationMemberAccessExpression` (`BracketNotationMemberAccessExpression`).
-
-</details>
 
 ## [0.9.2] - 2022-07-23
 
