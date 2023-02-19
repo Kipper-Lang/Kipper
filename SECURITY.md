@@ -13,8 +13,7 @@ The following versions are supported and will get bug-fixes and security updates
 | Version | Supported          |
 | ------- | ------------------ |
 | 0.9.x   | :heavy_check_mark: |
-| 0.8.3   | :heavy_check_mark: |
-| <0.8.3  | :x:                |
+| <0.9.0  | :x:                |
 
 ### NPM Deprecation
 
