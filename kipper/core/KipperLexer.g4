@@ -9,6 +9,17 @@ channels {
 	COMMENT
 }
 
+// Comments are at the lowest priority of lexing
+BlockComment
+    :   '/*' .*? '*/'
+    	-> channel(COMMENT)
+    ;
+
+LineComment
+	:	'//' ~[\r\n\u2028\u2029]*
+		-> channel(COMMENT)
+	;
+
 // const / var
 Const : 'const';
 Var : 'var';
@@ -105,18 +116,51 @@ LessEqual : '<=';
 Greater : '>';
 GreaterEqual : '>=';
 
-// property accessing
+// Property accessing
 Dot : '.';
 
 Identifier
     :   IdentifierNondigit (IdentifierNondigit | Digit)*
     ;
 
-fragment
-ExtensionTaskBlock
-    :   '{' [\u0000-\uFFFE]* '}'
+IntegerConstant
+    :   DecimalConstant
+    |   OctalConstant
+    |   HexadecimalConstant
+    |	BinaryConstant
     ;
 
+SingleQuoteFStringLiteral
+    :   'f\'' SingleQuoteSCharSequence? '\''
+    ;
+
+DoubleQuoteFStringLiteral
+    :   'f"' DoubleQuoteSCharSequence? '"'
+    ;
+
+SingleQuoteStringLiteral
+	:	'\'' SingleQuoteSCharSequence? '\''
+	;
+
+DoubleQuoteStringLiteral
+    :   '"' DoubleQuoteSCharSequence? '"'
+    ;
+
+FloatingConstant
+    :   DecimalFloatingConstant
+    ;
+
+Whitespace
+    :   [\t\u000B\u000C\u0020\u00A0]+
+		-> channel(HIDDEN)
+    ;
+
+Newline
+    :   [\r\n\u2028\u2029]
+        -> channel(HIDDEN)
+    ;
+
+// Fragment rules for the lexer
 fragment
 IdentifierNondigit
     :   Nondigit
@@ -130,13 +174,6 @@ Nondigit
 fragment
 Digit
     :   [0-9]
-    ;
-
-IntegerConstant
-    :   DecimalConstant
-    |   OctalConstant
-    |   HexadecimalConstant
-    |	BinaryConstant
     ;
 
 fragment
@@ -179,10 +216,6 @@ HexadecimalDigit
     :   [0-9a-fA-F]
     ;
 
-FloatingConstant
-    :   DecimalFloatingConstant
-    ;
-
 fragment
 DecimalFloatingConstant
     :   FractionalConstant ExponentPart?
@@ -201,12 +234,13 @@ ExponentPart
     ;
 
 fragment
-Sign
-    :   [+-]
-    ;
-
 DigitSequence
     :   Digit+
+    ;
+
+fragment
+Sign
+    :   [+-]
     ;
 
 fragment
@@ -242,22 +276,6 @@ HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit+
     ;
 
-SingleQuoteFStringLiteral
-    :   'f\'' SingleQuoteSCharSequence? '\''
-    ;
-
-DoubleQuoteFStringLiteral
-    :   'f"' DoubleQuoteSCharSequence? '"'
-    ;
-
-SingleQuoteStringLiteral
-	:	'\'' SingleQuoteSCharSequence? '\''
-	;
-
-DoubleQuoteStringLiteral
-    :   '"' DoubleQuoteSCharSequence? '"'
-    ;
-
 fragment
 SingleQuoteSCharSequence
     :   SingleQuoteSChar+
@@ -278,19 +296,4 @@ fragment
 DoubleQuoteSChar
     :   ~["\\\r\n]
     |   EscapeSequence
-    ;
-
-Whitespace
-    :   [ \t]+
-		-> channel(HIDDEN)
-    ;
-
-BlockComment
-    :   '/*' .*? '*/'
-        -> channel(COMMENT)
-    ;
-
-Newline
-    :   (  '\r' '\n'? | '\n')
-        -> channel(HIDDEN)
     ;

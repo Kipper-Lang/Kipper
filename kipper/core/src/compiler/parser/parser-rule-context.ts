@@ -1,5 +1,5 @@
 import { ParserRuleContext } from "antlr4ts";
-import { ParserASTMapSyntaxKind } from "./parser-ast-mapping";
+import { ASTKind } from "./parser-ast-mapping";
 
 /**
  * A custom implementation of the Antlr4 {@link ParserRuleContext} class, representing a node in the parse tree.
@@ -23,7 +23,7 @@ export abstract class KipperParserRuleContext extends ParserRuleContext {
 	 * alternative of a rule and the {@link ruleIndex} would only return the parent rule's kind number.
 	 * @since 0.10.0
 	 */
-	public get labelASTKind(): ParserASTMapSyntaxKind | undefined {
+	public get labelASTKind(): ASTKind | undefined {
 		// @ts-ignore
 		return "_labelASTKind" in this ? this._labelASTKind : undefined;
 	}
@@ -34,7 +34,7 @@ export abstract class KipperParserRuleContext extends ParserRuleContext {
 	 * For more info on this, see {@link ParserASTMapping} and the documentation provided.
 	 * @since 0.10.0
 	 */
-	public get astSyntaxKind(): ParserASTMapSyntaxKind {
-		return this.labelASTKind ?? <ParserASTMapSyntaxKind>this.ruleIndex;
+	public get astSyntaxKind(): ASTKind {
+		return this.labelASTKind ?? <ASTKind>this.ruleIndex;
 	}
 }

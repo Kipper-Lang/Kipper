@@ -9,8 +9,12 @@ describe("IncompleteReturnsInCodePathsError", () => {
 			try {
 				result = await new KipperCompiler().compile(`def x() -> num {};`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "IncompleteReturnsInCodePathsError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"IncompleteReturnsInCodePathsError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -25,8 +29,12 @@ describe("IncompleteReturnsInCodePathsError", () => {
 				// will always be true, but here we don't have that luxury (for now).
 				result = await new KipperCompiler().compile(`def x() -> num { if (true) { return 1; } };`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "IncompleteReturnsInCodePathsError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"IncompleteReturnsInCodePathsError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -42,8 +50,12 @@ describe("IncompleteReturnsInCodePathsError", () => {
 					defaultConfig,
 				);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "IncompleteReturnsInCodePathsError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"IncompleteReturnsInCodePathsError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -59,8 +71,12 @@ describe("IncompleteReturnsInCodePathsError", () => {
 					defaultConfig,
 				);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "IncompleteReturnsInCodePathsError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal(
+					(<KipperError>e).constructor.name,
+					"IncompleteReturnsInCodePathsError",
+					"Expected different error",
+				);
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -77,8 +93,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -94,8 +110,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -113,8 +129,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -130,8 +146,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -149,8 +165,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;
@@ -166,8 +182,8 @@ describe("IncompleteReturnsInCodePathsError", () => {
 						defaultConfig,
 					);
 				} catch (e) {
-					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected proper error");
-					assert((<KipperError>e).name === "TypeError", "Expected proper error");
+					assert((<KipperError>e).constructor.name === "IncompleteReturnsInCodePathsError", "Expected different error");
+					assert((<KipperError>e).name === "TypeError", "Expected different error");
 					ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 					ensureTracebackDataExists(<KipperError>e);
 					return;

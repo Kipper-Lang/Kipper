@@ -5,8 +5,9 @@
  */
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
-import { getTSFunctionSignature, createTSFunctionSignature, getTypeScriptBuiltInIdentifier } from "./tools";
-import { KipperCompilableType } from "@kipper/core";
+import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
+import { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import { TargetTS } from "./target";
 
 /**
  * Generates a TypeScript function from the given signature and body.
@@ -24,7 +25,7 @@ export function getTSFunction(
 ): Array<TranslatedCodeLine> {
 	return [
 		[
-			getTypeScriptBuiltInIdentifier(signature.identifier),
+			TargetTS.getBuiltInIdentifier(signature.identifier),
 			" ",
 			"=",
 			" ",
@@ -33,6 +34,26 @@ export function getTSFunction(
 			body,
 			";",
 		],
+	];
+}
+
+/**
+ * Generates a JavaScript local or global variable from the given variable and value.
+ * @param varSpec The variable to generate.
+ * @param value The value of the variable.
+ */
+export function genTSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
+	return [
+		...(varSpec.local ? ["const", " "] : []),
+		TargetTS.getBuiltInIdentifier(varSpec),
+		":",
+		" ",
+		TargetTS.getTypeScriptType(varSpec.valueType),
+		" ",
+		"=",
+		" ",
+		value,
+		";",
 	];
 }
 
@@ -102,5 +123,16 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
 		return getTSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
+	}
+
+	async len(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const lenArgIdentifier = signature.params[0].identifier;
+
+		return getTSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
+	}
+
+	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
+		return [genTSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
 }

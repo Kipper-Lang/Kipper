@@ -9,8 +9,8 @@ describe("InvalidAmountOfArgumentsError", () => {
 			try {
 				result = await new KipperCompiler().compile('call print("x", "x");', defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected proper error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
+				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +23,8 @@ describe("InvalidAmountOfArgumentsError", () => {
 			try {
 				result = await new KipperCompiler().compile('call print("x", "x", "x");', defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected proper error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
+				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -37,8 +37,8 @@ describe("InvalidAmountOfArgumentsError", () => {
 			try {
 				result = await new KipperCompiler().compile('call print("x", "x", "x", "x");', defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected proper error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
+				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -51,8 +51,8 @@ describe("InvalidAmountOfArgumentsError", () => {
 			try {
 				result = await new KipperCompiler().compile("call print();", defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected proper error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
+				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

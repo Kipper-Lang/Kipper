@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	ComparativeExpressionSemantics,
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
@@ -55,14 +55,8 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopStatement,
 } from "@kipper/core";
-import {
-	createJSFunctionSignature,
-	getJavaScriptBuiltInIdentifier,
-	getJSFunctionSignature,
-	indentLines,
-	removeBraces,
-} from "./tools";
-import { version } from "./index";
+import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
+import { TargetJS, version } from "./index";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -156,7 +150,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		let statement = await semanticData.ifBranch.translateCtxAndChildren();
 
 		if (semanticData.ifBranch instanceof CompoundStatement) {
-			statement = removeBrackets(statement);
+			statement = removeBrackets(statement); // remove brackets -> will be added later
 		} else {
 			statement = indentLines(statement); // Apply indent to the single statement
 		}
@@ -266,14 +260,61 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		// Translate the parts of the for loop statement - Everything except the loop body is optional
+		let forDeclaration: TranslatedExpression | Array<TranslatedCodeLine> = semanticData.forDeclaration
+			? await semanticData.forDeclaration.translateCtxAndChildren()
+			: [];
+		const condition: TranslatedExpression = semanticData.loopCondition
+			? await semanticData.loopCondition.translateCtxAndChildren()
+			: [];
+		const forIterationExp: TranslatedExpression = semanticData.forIterationExp
+			? await semanticData.forIterationExp.translateCtxAndChildren()
+			: [];
+
+		// Apply formatting for the loop body (compound statements are formatted differently)
+		let isCompound = semanticData.loopBody instanceof CompoundStatement;
+		let loopBody = await semanticData.loopBody.translateCtxAndChildren();
+		if (isCompound) {
+			loopBody = removeBrackets(loopBody); // remove brackets -> will be added later
+		} else {
+			loopBody = indentLines(loopBody); // Indent the loop body
+		}
+
+		// Ensure the variable declaration in the for declaration is properly included in the output code
+		forDeclaration = <TranslatedExpression>(
+			// Variable declarations are already translated as a single line of code and have a semicolon at the end ->
+			// We need to ensure that the semicolon is not added twice
+			(semanticData.forDeclaration instanceof VariableDeclaration ? forDeclaration[0] : [...forDeclaration, ";"])
+		);
+
+		return [
+			[
+				"for",
+				" ",
+				"(",
+				...forDeclaration,
+				" ",
+				...condition,
+				";",
+				" ",
+				...forIterationExp,
+				")",
+				" ",
+				...(isCompound ? ["{"] : []),
+			],
+			...loopBody,
+			isCompound ? ["}"] : [],
+		];
 	};
 
 	/**
 	 * Translates a {@link JumpStatement} into the JavaScript language.
 	 */
 	jumpStatement = async (node: JumpStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [semanticData.jmpType === "break" ? ["break", ";"] : ["continue", ";"]];
 	};
 
 	/**
@@ -313,7 +354,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-
 		const storage = semanticData.storageType === "const" ? "const" : "let";
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
@@ -349,7 +389,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
-			identifier = getJavaScriptBuiltInIdentifier(identifier);
+			identifier = TargetJS.getBuiltInIdentifier(semanticData.ref.refTarget);
 		}
 		return [identifier];
 	};
@@ -372,7 +412,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const keyOrIndex = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
 
 				// Return the member access expression in form of a function call to the internal 'index' function
-				const sliceIdentifier = getJavaScriptBuiltInIdentifier("index");
+				const sliceIdentifier = TargetJS.getBuiltInIdentifier("index");
 				return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
 			}
 			case "slice": {
@@ -385,7 +425,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const end = slice.end ? await slice.end.translateCtxAndChildren() : "undefined";
 
 				// Return the slice expression in form of a function call to the internal 'slice' function
-				const sliceIdentifier = getJavaScriptBuiltInIdentifier("slice");
+				const sliceIdentifier = TargetJS.getBuiltInIdentifier("slice");
 				return [sliceIdentifier, "(", ...object, ", ", ...start, ", ", ...end, ")"];
 			}
 		}
@@ -478,7 +518,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Get the proper identifier for the function
 		const identifier =
-			func instanceof ScopeFunctionDeclaration ? func.identifier : getJavaScriptBuiltInIdentifier(func.identifier);
+			func instanceof ScopeFunctionDeclaration ? func.identifier : TargetJS.getBuiltInIdentifier(func.identifier);
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
@@ -534,7 +574,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
 			return exp;
 		} else {
-			const func: string = getJavaScriptBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			const func: string = TargetJS.getBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
 			return [func, "(", ...exp, ")"];
 		}
 	};
@@ -566,8 +606,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates any form of operator-based expression with two operands into the JavaScript language.
 	 * @param node The node to translate.
-	 * @private
 	 * @since 0.10.0
+	 * @private
 	 */
 	protected translateOperatorExpressionWithOperands = async (
 		node: ComparativeExpression | LogicalExpression,
@@ -634,7 +674,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
 		// accordingly.
 		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
-			identifier = getJavaScriptBuiltInIdentifier(identifier);
+			identifier = TargetJS.getBuiltInIdentifier(identifier);
 		}
 
 		// The expression that is assigned to the reference

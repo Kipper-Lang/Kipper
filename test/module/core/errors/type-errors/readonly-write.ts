@@ -8,8 +8,8 @@ describe("ReadOnlyWriteTypeError", () => {
 		try {
 			result = await new KipperCompiler().compile(`const invalid: str = "3"; invalid = "5";`, defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "ReadOnlyWriteTypeError", "Expected proper error");
-			assert((<KipperError>e).name === "TypeError", "Expected proper error");
+			assert.equal((<KipperError>e).constructor.name, "ReadOnlyWriteTypeError", "Expected different error");
+			assert((<KipperError>e).name === "TypeError", "Expected different error");
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;

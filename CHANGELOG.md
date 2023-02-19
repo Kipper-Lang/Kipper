@@ -22,6 +22,7 @@ To use development versions of Kipper download the
   scopes/argument referencing and return-value code branch
   inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
 - Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
+- Implemented for-loop iteration statements ([#270](https://github.com/Luna-Klatzer/Kipper/issues/270)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
   analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
   as alias), which can be used as the target in
@@ -37,6 +38,15 @@ To use development versions of Kipper download the
 - Implemented member-access expressions using bracket and slice notation (`[]`, `[:]`), which can be used to access
   specific elements of a string (In the future, this will also be used to access elements of arrays and objects).
   ([#372](https://github.com/Luna-Klatzer/Kipper/issues/372)).
+- Support for single-line comments separated by a newline char.
+  ([#400](https://github.com/Luna-Klatzer/Kipper/issues/400)).
+- Implemented new built-in function `len()`, which returns the length of a string (In the future also arrays).
+  ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
+- Support for jump statements `continue` and `break` for iteration statements.
+  ([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
+- New built-in variable `__name__` returning the name of the current file. This also includes general support for
+  built-in variables in the compiler.
+  ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
@@ -67,6 +77,8 @@ To use development versions of Kipper download the
     an object-like or array-like.
   - `ValueNotIndexableTypeError`, which is thrown when a value is not indexable (not object-like), despite it being used
     in a member access expression.
+  - `MissingRequiredSemanticDataError`, which is a specific internal error used to indicate that a specified node is
+    missing required semantic data from another node and as a result failed to process itself.
 - New classes:
   - `KipperWarning`, which is a subclass of `KipperError` that is used to indicate a warning.
     This replaces the use of `KipperError` for warnings.
@@ -114,6 +126,26 @@ To use development versions of Kipper download the
   - `removeBraces()` for removing braces due to formatting reasons.
   - `CompilableASTNode.recursivelyCheckForWarnings()`, which recursively calls all children's `checkforWarnings()`
     functions as well as the function of the parent instance.
+  - `shouldRecoverFromError()` and `handleSemanticError()` in `handle-error.ts`.
+  - `AnalysableASTNode.semanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST node.
+  - `AnalysableASTNode.semanticallyTypeCheckChildren()`, which semantically type checks all children nodes of the AST
+    node.
+  - `AnalysableASTNode.targetSemanticallyAnalyseChildren()`, which semantically analyses all children nodes of the AST
+    node for the target.
+  - `AnalysableASTNode.ensureSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that the
+    specified node failed during semantic analysis. This is used by other nodes to ensure that the node is valid and
+    its data can be safely accessed.
+  - `AnalysableASTNode.ensureTypeSemanticallyValid()`, which throws a `MissingRequiredSemanticDataError` in case that
+    the specified node failed during type checking. This is used by other nodes to ensure that the node is valid and
+    its data can be safely accessed.
+  - `KipperSemanticChecker.getJumpStatementParent()`, which evaluates the parent iteration statement for a jump statement.
+  - `KipperProgramContext.registerBuiltInFunctions()`, which registers one or more built-in functions.
+  - `KipperProgramContext.registerBuiltInVariables()`, which registers one or more built-in variables.
+  - `KipperProgramContext.clearBuiltInFunctions()`, which clears the list of built-in functions.
+  - `KipperProgramContext.clearBuiltInVariables()`, which clears the list of built-in variables.
+  - `KipperProgramContext.getBuiltInVariable()`, which returns the built-in variable with the specified name if found.
+  - `KipperProgramContext.builtInFunctionReferences`, which stores all the references to built-in functions.
+  - `KipperProgramContext.builtInVariableReferences`, which stores all the references to built-in variables.
 - New types:
   - `TypeData`, which represents the type data of an `ASTNode`.
   - `NoTypeSemantics`, which hints that an `ASTNode` has no type semantic data.
@@ -133,25 +165,24 @@ To use development versions of Kipper download the
     node.
   - `ASTConstantExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ConstantExpression` AST node.
-  - `ParserConstantExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
+  - `ParserConstantExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
     for a `ConstantExpression` AST node.
   - `ASTTypeSpecifierExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `TypeSpecifierExpression` AST node.
-  - `ParserTypeSpecifierExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
+  - `ParserTypeSpecifierExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx`
     values for a `TypeSpecifierExpression` AST node.
   - `ASTUnaryExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `UnaryExpression` AST node.
-  - `ParserUnaryExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
+  - `ParserUnaryExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for a
     `UnaryExpression` AST node.
   - `ASTComparativeExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `ComparativeExpression` AST node.
-  - `ParserComparativeExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values
-    for a `ComparativeExpression` AST node.
+  - `ParserComparativeExpressionContext`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
+    a `ComparativeExpression` AST node.
+  - `ConstructableASTStatementClass`, which is a union type of all possible `Statement` AST node classes.
   - `ASTLogicalExpressionKind`, which is a union type of all possible `ParserASTNode.kind` values for a
     `LogicalExpression` AST node.
-  - `ParserLogicalExpressionContextType`, which is a union type of all possible `ParserASTNode.antlrRuleCtx` values for
-    a `LogicalExpression` AST node.
-  - `ConstructableASTStatementClass`, which is a union type of all possible `Statement` AST node classes.
+  - `ParserLogicalExpressionContext`, which is a union type of all possible `Parserement` AST node classes.
   - `ConstructableASTExpressionClass`, which is a union type of all possible `Expression` AST node classes.
   - `ConstructableASTDeclarationClass`, which is a union type of all possible `Declaration` AST node classes.
   - `ConstructableASTNodeClass`, which is a union type of all possible `ASTNode` AST node classes.
@@ -159,9 +190,13 @@ To use development versions of Kipper download the
   - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
-  - `ParserASTMapSyntaxKind`, which represents a union of all AST node kind values that can be used to map a
-    `KipperParser` rule context to an AST node. This is the type representing all values from `ParserASTMapping`.
+  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context
+    to an AST node. This is the type representing all values from `ParserASTMapping`.
+  - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
+    corresponding AST node class.
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
+  - `ASTNodeParserContext`, which represents a union of all possible `ParserASTNode.antlrRuleCtx` values implemented
+    in the `KipperParser` that have a corresponding AST node class.
 - New interfaces:
   - `ScopeNode<T>`, which is an interface representing an AST node that implements its own local scope. This means that
     the definitions of its children, will be stored in the `innerScope` field of the class implementation.
@@ -203,11 +238,16 @@ To use development versions of Kipper download the
   - `StatementASTNodeFactory.statementMatchTable`, which returns the match table for the statement AST node factory.
   - `ExpressionASTNodeFactory.expressionMatchTable`, which returns the match table for the expression AST node factory.
   - `DeclarationASTNodeFactory.declarationMatchTable`, which returns the match table for the declaration AST node factory.
+  - `CompileConfig.builtInFunctions`, which overwrites the built-in functions of the target.
+  - `CompileConfig.extendBuiltInFunctions`, which adds new built-in functions to the target.
+  - `CompileConfig.builtInVariables`, which overwrites the built-in variables of the target.
+  - `CompileConfig.extendBuiltInVariables`, which adds new built-in variables to the target.
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.
   - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
+  - `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
 
 ### Changed
 
@@ -237,6 +277,7 @@ To use development versions of Kipper download the
   easier extension of the factory system. The `create` function is now instance-based (not static anymore) as well.
 - Constructor in `KipperParseStream` to allow either an `CharPointCharStream` or a `string` as input, but not
   allow a mismatch content between the two.
+- Cleaned up structure in `KipperFileASTGenerator` (previously `KipperFileListener`) and removed unnecessary code.
 - Renamed:
   - `EvaluatedCompileOptions` to `EvaluatedCompileConfig`.
   - `UnableToDetermineMetadataError` to `UndefinedSemanticsError`.
@@ -254,33 +295,41 @@ To use development versions of Kipper download the
   - `antlrDefinitionCtxType` to `ParserDeclarationCtx`.
   - `antlrExpressionCtxType` to `ParserExpressionCtx`.
   - `antlrStatementCtxType` to `ParserStatementCtx`.
-  - `ParserExpressionCtx` to `ParserExpressionContextType`.
-  - `ParserStatementCtx` to `ParserStatementContextType`.
-  - `ParserDeclarationCtx` to `ParserDeclarationContextType`.
+  - `ParserExpressionCtx` to `ParserExpressionContext`.
+  - `ParserStatementCtx` to `ParserStatementContext`.
+  - `ParserDeclarationCtx` to `ParserDeclarationContext`.
+  - `KipperFileListener` to `KipperFileASTGenerator`.
+  - `KipperProgramContext.addError` to `reportError`.
+  - `kipperRuntimeBuiltIns` to `kipperRuntimeBuiltInFunctions`.
+  - `kipperInternalBuiltIns` to `kipperInternalBuiltInFunctions`.
 - Moved:
   - Function `KipperSemanticsAsserter.getReference` to class `KipperSemanticChecker`.
   - Function `KipperSemanticsAsserter.getExistingReference` to class `KipperSemanticChecker`.
   - Function `indentLines` to file `tools.ts` of `@kipper/target-js`.
-  - Function `CompilableASTNode.semanticAnalysis` to `AnalysableASTNode.semanticAnalysis`.
-  - Function `CompilableASTNode.semanticTypeChecking` to `AnalysableASTNode.semanticTypeChecking`.
-  - Function `CompilableASTNode.wrapUpSemanticAnalysis` to `AnalysableASTNode.wrapUpSemanticAnalysis`.
-  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
-  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode.recursivelyCheckForWarnings`.
-  - Abstract Function `CompilableASTNode.primarySemanticAnalysis` to `AnalysableASTNode.primarySemanticAnalysis`.
-  - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode.primarySemanticTypeChecking`.
-  - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode.checkForWarnings`.
-  - Field `CompilableASTNode.programCtx` to `AnalysableASTNode.programCtx`
-  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode.compileConfig`
+  - Function `CompilableASTNode.semanticAnalysis` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.semanticTypeChecking` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.wrapUpSemanticAnalysis` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode`.
+  - Function `CompilableASTNode.recursivelyCheckForWarnings` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.primarySemanticAnalysis` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.primarySemanticTypeChecking` to `AnalysableASTNode`.
+  - Abstract Function `CompilableASTNode.checkForWarnings` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.programCtx` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.compileConfig` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.errors` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.addError` to `AnalysableASTNode`.
+  - Field `CompilableASTNode.hasFailed` to `AnalysableASTNode`.
 
 ### Fixed
 
-- Fixed multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
+- Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
-- Fixed grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
+- Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - Multiple reference and declaration bugs, which resulted in invalid handling of declarations and assignments
   to undefined variables and allowed the referencing of variables that were not defined or had no value set.
 - Grammar bug which didn't allow the representation of empty lists (e.g. `[]`).
 - A bug where using a `KipperParseStream` multiple times would result in the `CodePointCharStream` being empty.
+- Grammar bug not allowing an empty statement (`;`) in a compound statement.
 
 ### Deprecated
 
@@ -293,14 +342,24 @@ To use development versions of Kipper download the
   f-strings with the same behaviour as the regular double-quoted character `"`.
 - `KipperReturnType` and `kipperReturnTypes`, as they are always identical to the `KipperType` and `kipperTypes`
   respectively.
-- `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
 - `FunctionReturnTypeError`, as it is obsolete since all return types are valid.
-- Field `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
-- Removed the following fields:
-  - `Scope.functions` (replaced by hash-map implementation of `Scope`)
-  - `Scope.variables` (replaced by hash-map implementation of `Scope`)
-  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`)
-  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`)
+- The following fields:
+  - `Scope.functions` (replaced by hash-map implementation of `Scope`).
+  - `Scope.variables` (replaced by hash-map implementation of `Scope`).
+  - `Scope.getVariable` (replaced by hash-map implementation of `Scope`).
+  - `Scope.getFunction` (replaced by hash-map implementation of `Scope`).
+  - `KipperError.antlrCtx`, as it was replaced by `TracebackMetadata.errorNode`.
+  - `KipperTypeChecker.validReturnType`, as it is obsolete due to the absence of `KipperReturnType`.
+- The following functions:
+  - `KipperFileASTGenerator.handleIncomingDeclarationCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleIncomingStatementCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleExitingStatementOrDefinitionCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleIncomingExpressionCtx` (removed in clean-up).
+  - `KipperFileASTGenerator.handleExitingExpressionCtx` (removed in clean-up).
+  - `KipperProgramConext.builtInReferences` (replaced by `builtInFunctionReferences` and `builtInVariableReferences`).
+  - `KipperProgramConext.registerBuiltIns` (replaced by `registerBuiltInFunctions` and `registerBuiltInVariables`).
+  - `CompileConfig.builtIns` (replaced by `builtInFunctions` and `builtInVariables`).
+  - `CompileConfig.extendBuiltIns` (replaced by `extendBuiltInFunctions` and `extendBuiltInVariables`).
 - Parser rule `arraySpecifierExpression` (`ArraySpecifierExpression`), which was made obsolete with the addition of
   `bracketNotationMemberAccessExpression` (`BracketNotationMemberAccessExpression`).
 

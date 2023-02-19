@@ -2,9 +2,10 @@
  * Semantic data definitions for all statement AST nodes.
  * @since 0.10.0
  */
-import type { SemanticData, TypeData } from "../ast-node";
-import type { Expression, FunctionDeclaration, IfStatement, Statement } from "../nodes";
+import type { SemanticData } from "../ast-node";
+import type { Expression, FunctionDeclaration, IfStatement, Statement, VariableDeclaration } from "../nodes";
 import type { JmpStatementType } from "../../const";
+import { IterationStatement } from "../nodes";
 
 /**
  * Semantics for AST Node {@link IfStatement}.
@@ -20,7 +21,7 @@ export interface IfStatementSemantics extends SemanticData {
 	 * The body of the if-statement.
 	 * @since 0.9.0
 	 */
-	ifBranch: Statement<SemanticData, TypeData>;
+	ifBranch: Statement;
 	/**
 	 * The alternative (optional) branch of the if-statement. This alternative branch can either be:
 	 * - An else branch, if the type is a regular {@link Statement} (the statement that should be
@@ -29,7 +30,7 @@ export interface IfStatementSemantics extends SemanticData {
 	 * - Nothing (undefined), if it wasn't specified and the if statement does not have any more branches.
 	 * @since 0.9.0
 	 */
-	elseBranch?: IfStatement | Statement<SemanticData, TypeData>;
+	elseBranch?: IfStatement | Statement;
 }
 
 /**
@@ -41,13 +42,13 @@ export interface IterationStatementSemantics extends SemanticData {
 	 * The loop condition, which, if it evaluates to true will trigger the loop to continue executing.
 	 * @since 0.10.0
 	 */
-	loopCondition: Expression;
+	loopCondition: Expression | undefined;
 	/**
 	 * The body of the loop, which is handled and executed depending on the loop type and the value of
 	 * {@link loopCondition}.
 	 * @since 0.10.0
 	 */
-	loopBody: Statement<SemanticData, TypeData>;
+	loopBody: Statement;
 }
 
 /**
@@ -62,17 +63,47 @@ export interface DoWhileLoopStatementSemantics extends IterationStatementSemanti
  */
 export interface WhileLoopStatementSemantics extends IterationStatementSemantics {
 	/**
+	 * The loop condition, which, if it evaluates to true will trigger the loop to continue executing.
+	 * @since 0.10.0
+	 */
+	loopCondition: Expression;
+	/**
 	 * The body of the loop, which is executed as long as {@link loopCondition} is true.
 	 * @since 0.10.0
 	 */
-	loopBody: Statement<SemanticData, TypeData>;
+	loopBody: Statement;
 }
 
 /**
  * Semantics for AST Node {@link ForLoopStatement}.
  * @since 0.10.0
  */
-export interface ForLoopStatementSemantics extends IterationStatementSemantics {}
+export interface ForLoopStatementSemantics extends IterationStatementSemantics {
+	/**
+	 * The declaration/first statement of the loop, which is executed before the loop condition is evaluated.
+	 *
+	 * This may also simply be a single expression, if the loop does not have a declaration.
+	 * @since 0.10.0
+	 */
+	forDeclaration: VariableDeclaration | Expression | undefined;
+	/**
+	 * The for iteration expression of the loop, which is executed after the loop body is executed. This is used to
+	 * update the loop variable or execute any other code that should be executed after each loop iteration.
+	 * @since 0.10.0
+	 */
+	forIterationExp: Expression | undefined;
+	/**
+	 * The for condition of the loop, which is evaluated after the loop body is executed. If this evaluates to true,
+	 * the loop will continue executing.
+	 * @since 0.10.0
+	 */
+	loopCondition: Expression | undefined;
+	/**
+	 * The body of the loop, which is executed as long as {@link loopCondition} is true.
+	 * @since 0.10.0
+	 */
+	loopBody: Statement;
+}
 
 /**
  * Semantics for AST Node {@link JumpStatement}.
@@ -84,6 +115,11 @@ export interface JumpStatementSemantics extends SemanticData {
 	 * @since 0.10.0
 	 */
 	jmpType: JmpStatementType;
+	/**
+	 * The parent statement of the {@link JumpStatement jump statement}.
+	 * @since 0.10.0
+	 */
+	parent: IterationStatement;
 }
 
 /**

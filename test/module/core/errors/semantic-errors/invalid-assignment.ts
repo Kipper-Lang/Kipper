@@ -9,8 +9,8 @@ describe("InvalidAssignmentError", () => {
 			try {
 				result = await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true, target: defaultTarget });
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected proper error");
-				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
+				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -26,8 +26,8 @@ describe("InvalidAssignmentError", () => {
 					target: defaultTarget,
 				});
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected proper error");
-				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
+				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

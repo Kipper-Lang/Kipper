@@ -9,7 +9,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("var x: num = 5; var x: num = 5;", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -22,7 +25,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("var x: num; def x() -> void {};", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -35,7 +41,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("var x: num; def f(x: num) -> void {};", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -50,7 +59,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("{ var x: num = 5; var x: num = 5; }", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -67,7 +79,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("var x: num = 5; { var x: num = 5; }", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -84,7 +99,10 @@ describe("IdentifierAlreadyUsedByVariableError", () => {
 			try {
 				result = await new KipperCompiler().compile("var x: num = 5; { { var x: num = 5; } }", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByVariableError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

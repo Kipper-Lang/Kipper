@@ -9,8 +9,8 @@ describe("ValueNotIndexableTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`const invalid: num = 1; invalid[0];`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ValueNotIndexableTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "ValueNotIndexableTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +23,8 @@ describe("ValueNotIndexableTypeError", () => {
 			try {
 				result = await new KipperCompiler().compile(`const invalid: num = 1; invalid[0:1];`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ValueNotIndexableTypeError", "Expected proper error");
-				assert((<KipperError>e).name === "TypeError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "ValueNotIndexableTypeError", "Expected different error");
+				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

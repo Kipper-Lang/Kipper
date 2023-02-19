@@ -11,7 +11,6 @@ import type {
 	SemanticData,
 	TypeData,
 	UnaryExpressionSemantics,
-	UnaryExpressionTypeSemantics,
 } from "../../ast";
 import {
 	AssignmentExpression,
@@ -121,7 +120,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			if (this.programCtx.compileConfig.recover && !this.programCtx.compileConfig.abortOnFirstError) {
 				// Add the error, but still recover (This is so that the compiler doesn't simply proceed without
 				// throwing any errors, which would be VERY bad.)
-				this.programCtx.addError(e);
+				this.programCtx.reportError(e);
 
 				// Recover from the error by wrapping the undefined type
 				return CheckedType.fromKipperType(new UndefinedCustomType(type.identifier));

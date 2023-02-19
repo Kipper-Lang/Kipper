@@ -9,8 +9,8 @@ describe("UndefinedReferenceError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var x: str; x += "5";`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected proper error");
-				assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected different error");
+				assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -23,8 +23,8 @@ describe("UndefinedReferenceError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var x: num; x + 5;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected proper error");
-				assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected different error");
+				assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -37,8 +37,8 @@ describe("UndefinedReferenceError", () => {
 			try {
 				result = await new KipperCompiler().compile(`var x: str; x;`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected proper error");
-				assert((<KipperError>e).name === "ReferenceError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "UndefinedReferenceError", "Expected different error");
+				assert((<KipperError>e).name === "ReferenceError", "Expected different error");
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

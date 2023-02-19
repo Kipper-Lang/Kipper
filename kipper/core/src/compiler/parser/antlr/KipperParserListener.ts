@@ -1,8 +1,8 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-// Import the required class for the ctx super class, as well as the 'ParserASTMapSyntaxKind' type defining all
-// possible syntax kind values.
-import { KipperParserRuleContext, ParserASTMapSyntaxKind } from "..";
+// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+// kind values.
+import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
@@ -34,20 +34,20 @@ import { ActualLogicalOrExpressionContext } from "./KipperParser";
 import { CompilationUnitContext } from "./KipperParser";
 import { TranslationUnitContext } from "./KipperParser";
 import { ExternalItemContext } from "./KipperParser";
+import { BlockItemListContext } from "./KipperParser";
+import { BlockItemContext } from "./KipperParser";
 import { DeclarationContext } from "./KipperParser";
-import { VariableDeclarationContext } from "./KipperParser";
 import { FunctionDeclarationContext } from "./KipperParser";
+import { VariableDeclarationContext } from "./KipperParser";
+import { StorageTypeSpecifierContext } from "./KipperParser";
 import { DeclaratorContext } from "./KipperParser";
 import { DirectDeclaratorContext } from "./KipperParser";
-import { StorageTypeSpecifierContext } from "./KipperParser";
 import { InitDeclaratorContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InitializerContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
-import { BlockItemListContext } from "./KipperParser";
-import { BlockItemContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
 import { SelectionStatementContext } from "./KipperParser";
 import { IfStatementContext } from "./KipperParser";
@@ -57,9 +57,6 @@ import { IterationStatementContext } from "./KipperParser";
 import { ForLoopIterationStatementContext } from "./KipperParser";
 import { WhileLoopIterationStatementContext } from "./KipperParser";
 import { DoWhileLoopIterationStatementContext } from "./KipperParser";
-import { ForConditionContext } from "./KipperParser";
-import { ForDeclarationContext } from "./KipperParser";
-import { ForExpressionContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
@@ -465,6 +462,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitExternalItem?: (ctx: ExternalItemContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.blockItemList`.
+	 * @param ctx the parse tree
+	 */
+	enterBlockItemList?: (ctx: BlockItemListContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.blockItemList`.
+	 * @param ctx the parse tree
+	 */
+	exitBlockItemList?: (ctx: BlockItemListContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.blockItem`.
+	 * @param ctx the parse tree
+	 */
+	enterBlockItem?: (ctx: BlockItemContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.blockItem`.
+	 * @param ctx the parse tree
+	 */
+	exitBlockItem?: (ctx: BlockItemContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx the parse tree
 	 */
@@ -474,6 +493,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDeclaration?: (ctx: DeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.variableDeclaration`.
@@ -487,15 +517,15 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitVariableDeclaration?: (ctx: VariableDeclarationContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
+	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+	enterStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
+	 * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+	exitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarator`.
@@ -518,17 +548,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDirectDeclarator?: (ctx: DirectDeclaratorContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	enterStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	exitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initDeclarator`.
@@ -595,28 +614,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCompoundStatement?: (ctx: CompoundStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.blockItemList`.
-	 * @param ctx the parse tree
-	 */
-	enterBlockItemList?: (ctx: BlockItemListContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.blockItemList`.
-	 * @param ctx the parse tree
-	 */
-	exitBlockItemList?: (ctx: BlockItemListContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.blockItem`.
-	 * @param ctx the parse tree
-	 */
-	enterBlockItem?: (ctx: BlockItemContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.blockItem`.
-	 * @param ctx the parse tree
-	 */
-	exitBlockItem?: (ctx: BlockItemContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.expressionStatement`.
@@ -716,39 +713,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitDoWhileLoopIterationStatement?: (ctx: DoWhileLoopIterationStatementContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.forCondition`.
-	 * @param ctx the parse tree
-	 */
-	enterForCondition?: (ctx: ForConditionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.forCondition`.
-	 * @param ctx the parse tree
-	 */
-	exitForCondition?: (ctx: ForConditionContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.forDeclaration`.
-	 * @param ctx the parse tree
-	 */
-	enterForDeclaration?: (ctx: ForDeclarationContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.forDeclaration`.
-	 * @param ctx the parse tree
-	 */
-	exitForDeclaration?: (ctx: ForDeclarationContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.forExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterForExpression?: (ctx: ForExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.forExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitForExpression?: (ctx: ForExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.jumpStatement`.

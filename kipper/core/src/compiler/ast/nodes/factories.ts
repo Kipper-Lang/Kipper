@@ -3,7 +3,16 @@
  * @since 0.10.0
  */
 import type { CompilableASTNode, CompilableNodeParent } from "../compilable-ast-node";
-import { ParserASTMapping, KipperParserRuleContext } from "../../parser";
+import type {
+	ASTDeclarationKind,
+	ASTExpressionKind,
+	ASTStatementKind,
+	ConstructableASTKind,
+	ParserDeclarationContext,
+	ParserExpressionContext,
+	ParserStatementContext,
+} from "../ast-types";
+import { KipperParserRuleContext, ParserASTMapping } from "../../parser";
 import {
 	AdditiveExpression,
 	ArrayLiteralPrimaryExpression,
@@ -26,22 +35,13 @@ import {
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	OperatorModifiedUnaryExpression,
-	ParserExpressionContextType,
-	ASTExpressionKind,
 	RelationalExpression,
 	StringPrimaryExpression,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 } from "./expressions";
-import {
-	Declaration,
-	FunctionDeclaration,
-	ParameterDeclaration,
-	ParserDeclarationContextType,
-	ASTDeclarationKind,
-	VariableDeclaration,
-} from "./definitions";
+import { Declaration, FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "./definitions";
 import {
 	CompoundStatement,
 	DoWhileLoopStatement,
@@ -49,8 +49,6 @@ import {
 	ForLoopStatement,
 	IfStatement,
 	JumpStatement,
-	ParserStatementContextType,
-	ASTStatementKind,
 	ReturnStatement,
 	Statement,
 	SwitchStatement,
@@ -61,30 +59,44 @@ import {
  * A simple blueprint for a factory for creating AST nodes from a parser context.
  * @since 0.10.0
  */
-export interface ASTNodeFactory<
+export abstract class ASTNodeFactory<
 	T extends CompilableASTNode = CompilableASTNode,
 	U extends KipperParserRuleContext = KipperParserRuleContext,
 > {
+	/**
+	 * A map of all {@link ParserASTMapping AST node kind ids} mapped to their respective constructable AST node classes.
+	 * @since 0.10.0
+	 */
+	public abstract readonly ruleMap: Record<number, ConstructableASTNodeClass>;
+
+	/**
+	 * Returns an array of all {@link ParserASTMapping AST node kind ids} that this factory can process.
+	 * @since 0.10.0
+	 */
+	public get ruleIds(): Array<ConstructableASTKind> {
+		return Object.keys(this.ruleMap).map((key: string) => <ConstructableASTKind>parseInt(key));
+	}
+
 	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
 	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
 	 * @param parent The parent of the AST node that is being created.
 	 * @since 0.9.0
 	 */
-	create(antlrRuleCtx: U, parent: CompilableASTNode): T;
+	public abstract create(antlrRuleCtx: U, parent: CompilableASTNode): T;
 }
 
 /**
  * Factory class which generates statement class instances using {@link StatementASTNodeFactory.create StatementASTNodeFactory.create()}.
  * @since 0.9.0
  */
-export class StatementASTNodeFactory implements ASTNodeFactory<Statement, ParserExpressionContextType> {
+export class StatementASTNodeFactory extends ASTNodeFactory<Statement, ParserExpressionContext> {
 	/**
 	 * A table matching all {@link ASTStatementKind statement kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
-	public readonly statementMatchTable = {
+	public readonly ruleMap = {
 		[ParserASTMapping.RULE_compoundStatement]: CompoundStatement,
 		[ParserASTMapping.RULE_ifStatement]: IfStatement,
 		[ParserASTMapping.RULE_switchStatement]: SwitchStatement,
@@ -97,16 +109,24 @@ export class StatementASTNodeFactory implements ASTNodeFactory<Statement, Parser
 	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
+	 * Returns an array of all {@link ParserASTMapping AST node kind ids} that this factory can process.
+	 * @since 0.10.0
+	 */
+	public get ruleIds(): Array<ASTStatementKind> {
+		return <Array<ASTStatementKind>>super.ruleIds;
+	}
+
+	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
 	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
 	 * @param parent The parent of the AST node that is being created.
 	 * @since 0.9.0
 	 */
-	public create(antlrRuleCtx: ParserStatementContextType, parent: CompilableNodeParent): ConstructableASTStatement {
-		const astSyntaxKind = <keyof typeof this.statementMatchTable>antlrRuleCtx.astSyntaxKind;
+	public create(antlrRuleCtx: ParserStatementContext, parent: CompilableNodeParent): ConstructableASTStatement {
+		const astSyntaxKind = <keyof typeof this.ruleMap>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.statementMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
+		return new this.ruleMap[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -114,8 +134,7 @@ export class StatementASTNodeFactory implements ASTNodeFactory<Statement, Parser
  * A union of all construable Statement AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTStatementClass =
-	typeof StatementASTNodeFactory.prototype.statementMatchTable[ASTStatementKind];
+export type ConstructableASTStatementClass = typeof StatementASTNodeFactory.prototype.ruleMap[ASTStatementKind];
 
 /**
  * A union of all construable Statement AST nodes. Uses {@link ConstructableASTStatementClass} to infer the type.
@@ -127,13 +146,13 @@ export type ConstructableASTStatement = InstanceType<ConstructableASTStatementCl
  * Factory class which generates expression class instances using {@link ExpressionASTNodeFactory.create ExpressionASTNodeFactory.create()}.
  * @since 0.9.0
  */
-export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, ParserExpressionContextType> {
+export class ExpressionASTNodeFactory extends ASTNodeFactory<Expression, ParserExpressionContext> {
 	/**
 	 * A table matching all {@link ASTExpressionKind expression kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
-	public readonly expressionMatchTable = {
+	public readonly ruleMap = {
 		[ParserASTMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
 		[ParserASTMapping.RULE_arrayLiteralPrimaryExpression]: ArrayLiteralPrimaryExpression,
 		[ParserASTMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
@@ -162,16 +181,24 @@ export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, Pars
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
+	 * Returns an array of all {@link ParserASTMapping AST node kind ids} that this factory can process.
+	 * @since 0.10.0
+	 */
+	public get ruleIds(): Array<ASTExpressionKind> {
+		return <Array<ASTExpressionKind>>super.ruleIds;
+	}
+
+	/**
 	 * Fetches the AST node class and creates a new instance based on the {@link antlrRuleCtx}.
 	 * @param antlrRuleCtx The context instance that the handler class should be fetched for.
 	 * @param parent The parent of the AST node that is being created.
 	 * @since 0.9.0
 	 */
-	public create(antlrRuleCtx: ParserExpressionContextType, parent: CompilableASTNode): ConstructableASTExpression {
-		const astSyntaxKind = <keyof typeof this.expressionMatchTable>antlrRuleCtx.astSyntaxKind;
+	public create(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode): ConstructableASTExpression {
+		const astSyntaxKind = <keyof typeof this.ruleMap>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.expressionMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
+		return new this.ruleMap[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -179,8 +206,7 @@ export class ExpressionASTNodeFactory implements ASTNodeFactory<Expression, Pars
  * A union of all construable Expression AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTExpressionClass =
-	typeof ExpressionASTNodeFactory.prototype.expressionMatchTable[ASTExpressionKind];
+export type ConstructableASTExpressionClass = typeof ExpressionASTNodeFactory.prototype.ruleMap[ASTExpressionKind];
 
 /**
  * A union of all construable Expression AST nodes. Uses {@link ConstructableASTExpressionClass} to infer the type.
@@ -192,17 +218,25 @@ export type ConstructableASTExpression = InstanceType<ConstructableASTExpression
  * Factory class which generates definition class instances using {@link DeclarationASTNodeFactory.create DefinitionASTNodeFactory.create()}.
  * @since 0.9.0
  */
-export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, ParserExpressionContextType> {
+export class DeclarationASTNodeFactory extends ASTNodeFactory<Declaration, ParserExpressionContext> {
 	/**
 	 * A table matching all {@link ASTDeclarationKind declaration kinds} to their respective constructable AST node
 	 * classes.
 	 * @since 0.10.0
 	 */
-	public readonly declarationMatchTable = {
+	public readonly ruleMap = {
 		[ParserASTMapping.RULE_functionDeclaration]: FunctionDeclaration,
 		[ParserASTMapping.RULE_variableDeclaration]: VariableDeclaration,
 		[ParserASTMapping.RULE_parameterDeclaration]: ParameterDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
+
+	/**
+	 * Returns an array of all {@link ParserASTMapping AST node kind ids} that this factory can process.
+	 * @since 0.10.0
+	 */
+	public get ruleIds(): Array<ASTDeclarationKind> {
+		return <Array<ASTDeclarationKind>>super.ruleIds;
+	}
 
 	/**
 	 * Fetches the AST node and creates a new instance based on the {@link antlrRuleCtx}.
@@ -210,11 +244,11 @@ export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, Pa
 	 * @param parent The parent of the AST node that is being created.
 	 * @since 0.9.0
 	 */
-	public create(antlrRuleCtx: ParserDeclarationContextType, parent: CompilableNodeParent): ConstructableASTDeclaration {
-		const astSyntaxKind = <keyof typeof this.declarationMatchTable>antlrRuleCtx.astSyntaxKind;
+	public create(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent): ConstructableASTDeclaration {
+		const astSyntaxKind = <keyof typeof this.ruleMap>antlrRuleCtx.astSyntaxKind;
 
 		// Forcing compatibility using 'any', since it's not already inferred
-		return new this.declarationMatchTable[astSyntaxKind](<any>antlrRuleCtx, parent);
+		return new this.ruleMap[astSyntaxKind](<any>antlrRuleCtx, parent);
 	}
 }
 
@@ -222,8 +256,7 @@ export class DeclarationASTNodeFactory implements ASTNodeFactory<Declaration, Pa
  * A union of all construable Declaration AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTDeclarationClass =
-	typeof DeclarationASTNodeFactory.prototype.declarationMatchTable[ASTDeclarationKind];
+export type ConstructableASTDeclarationClass = typeof DeclarationASTNodeFactory.prototype.ruleMap[ASTDeclarationKind];
 
 /**
  * A union of all construable Declaration AST nodes. Uses {@link ConstructableASTDeclarationClass} to infer the type.

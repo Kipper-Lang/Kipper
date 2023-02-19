@@ -282,6 +282,22 @@ export class TypeNotCompilableError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a parent node attempts to access the {@link CompilableASTNode.semanticData} of a child,
+ * but the child had an error during semantic analysis. This is to prevent the parent from using the child's data
+ * despite the child having an error.
+ *
+ * This will unlike {@link UndefinedSemanticsError} not be thrown to indicate a fatal error/bug in the compiler, but
+ * is used to early abort the semantic analysis of a parent node. This therefore only affects the control flow of the
+ * compiler and not the correctness of the compiler.
+ * @since 0.10.0
+ */
+export class MissingRequiredSemanticDataError extends KipperInternalError {
+	constructor(msg: string = "") {
+		super(msg || "Can not analyse AST node due to missing semantic data in children.");
+	}
+}
+
+/**
  * An error that is raised whenever a feature is used that has not been implemented yet.
  * @since 0.6.0
  */
@@ -306,9 +322,19 @@ export class KipperSyntaxError extends KipperError {
  * Error that is thrown when a return statement is used outside a function.
  * @since 0.10.0
  */
-export class ReturnStatementError extends KipperSyntaxError {
+export class InvalidReturnStatementError extends KipperSyntaxError {
 	constructor() {
-		super("A return statement can only be used in a function.");
+		super("A return statement can only be used inside a function body.");
+	}
+}
+
+/**
+ * Error that is thrown when a jump statement (either 'break' or 'continue') are used outside a loop.
+ * @since 0.10.0
+ */
+export class InvalidJumpStatementError extends KipperSyntaxError {
+	constructor() {
+		super("A jump statement can only be used inside a loop.");
 	}
 }
 
@@ -415,6 +441,18 @@ export class LexerOrParserSyntaxError<Token> extends KipperSyntaxError {
 export class InvalidGlobalError extends KipperError {
 	constructor(identifier: string) {
 		super(`Global definition '${identifier}' already exists or identifier is already in use.`);
+	}
+}
+
+/**
+ * Error that is thrown when a built-in {@link BuiltInVariable variable} or {@link BuiltInFunction function} is
+ * registered that does not have a function in the {@link KipperCompileTarget.builtInGenerator} class assigned at
+ * compile start.
+ * @since 0.10.0
+ */
+export class BuiltInOrInternalGeneratorFunctionNotFoundError extends KipperError {
+	constructor(identifier: string) {
+		super(`Target built-in or internal generator does not contain a function for '${identifier}'.`);
 	}
 }
 

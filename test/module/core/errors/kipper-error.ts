@@ -8,14 +8,18 @@ describe("KipperError", () => {
 		try {
 			result = await new KipperCompiler().compile('var i: str = "4";\n var i: str = "4";', defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "IdentifierAlreadyUsedByVariableError", "Expected proper error");
+			assert.equal(
+				(<KipperError>e).constructor.name,
+				"IdentifierAlreadyUsedByVariableError",
+				"Expected different error",
+			);
 			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			assert.equal(
 				(<KipperError>e).getTraceback(),
 				`Traceback:\nFile 'anonymous-script', line 2, col 1:\n` +
 					`   var i: str = "4";\n` +
-					`   ^^^^^^^^^^^^^^^^^\n` +
+					`   ^^^^^^^^^^^^^^^^ \n` +
 					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 			);
 			return;

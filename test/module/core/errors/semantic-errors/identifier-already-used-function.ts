@@ -9,7 +9,10 @@ describe("IdentifierAlreadyUsedByFunctionError", () => {
 			try {
 				result = await new KipperCompiler().compile("def x() -> void {}; var x: num = 4;", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -22,7 +25,10 @@ describe("IdentifierAlreadyUsedByFunctionError", () => {
 			try {
 				result = await new KipperCompiler().compile("def x() -> void {} def x() -> void {}", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -35,7 +41,10 @@ describe("IdentifierAlreadyUsedByFunctionError", () => {
 			try {
 				result = await new KipperCompiler().compile("def x() -> void {} def f(x: num) -> void {}", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -50,7 +59,10 @@ describe("IdentifierAlreadyUsedByFunctionError", () => {
 			try {
 				result = await new KipperCompiler().compile("def x() -> void {}; { var x: num = 4; }", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
@@ -65,7 +77,10 @@ describe("IdentifierAlreadyUsedByFunctionError", () => {
 			try {
 				result = await new KipperCompiler().compile("def x() -> void {}; { { var x: num = 4; } }", defaultConfig);
 			} catch (e) {
-				assert((<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError", "Expected proper error");
+				assert(
+					(<KipperError>e).constructor.name === "IdentifierAlreadyUsedByFunctionError",
+					"Expected different error",
+				);
 				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;

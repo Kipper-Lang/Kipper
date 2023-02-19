@@ -42,28 +42,7 @@ import { UnableToDetermineSemanticDataError, UndefinedDeclarationCtxError } from
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";
 import { ScopeNode } from "../scope-node";
-
-/**
- * Union type of all usable definition/declaration rule context classes implemented by the {@link KipperParser}
- * for a {@link Declaration}.
- */
-export type ParserDeclarationContextType =
-	| FunctionDeclarationContext
-	| ParameterDeclarationContext
-	| VariableDeclarationContext;
-
-/**
- * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Declaration} AST node.
- *
- * Note that not all KipperParser rule context classes have a corresponding AST node class. For example, the
- * {@link KipperParser.declaration} rule context has no corresponding AST node class because it is a union of all
- * possible declaration types.
- * @since 0.10.0
- */
-export type ASTDeclarationKind =
-	| typeof KipperParser.RULE_functionDeclaration
-	| typeof KipperParser.RULE_parameterDeclaration
-	| typeof KipperParser.RULE_variableDeclaration;
+import { ASTDeclarationKind, ParserDeclarationContext } from "../ast-types";
 
 /**
  * The base abstract AST node class for all declarations/definitions, which wrap their corresponding
@@ -85,7 +64,7 @@ export abstract class Declaration<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ParserDeclarationContextType;
+	protected override readonly _antlrRuleCtx: ParserDeclarationContext;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -103,7 +82,7 @@ export abstract class Declaration<
 	 */
 	public abstract readonly kind: ASTDeclarationKind;
 
-	protected constructor(antlrRuleCtx: ParserDeclarationContextType, parent: CompilableNodeParent) {
+	protected constructor(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 
@@ -114,7 +93,7 @@ export abstract class Declaration<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ParserDeclarationContextType {
+	public override get antlrRuleCtx(): ParserDeclarationContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -213,10 +192,8 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
+		/* istanbul ignore next: super function already being run/tested */
+		return <ScopeParameterDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -244,6 +221,9 @@ export class ParameterDeclaration extends Declaration<
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
@@ -270,6 +250,9 @@ export class ParameterDeclaration extends Declaration<
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -296,6 +279,13 @@ export class FunctionDeclaration
 	implements ScopeNode<FunctionScope>
 {
 	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: FunctionScope;
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
@@ -318,8 +308,6 @@ export class FunctionDeclaration
 	 */
 	public override readonly kind = KipperParser.RULE_functionDeclaration;
 
-	private readonly _innerScope: FunctionScope;
-
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
@@ -331,6 +319,14 @@ export class FunctionDeclaration
 	 */
 	public override get antlrRuleCtx(): FunctionDeclarationContext {
 		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): FunctionScope {
+		return this._innerScope;
 	}
 
 	/**
@@ -347,23 +343,16 @@ export class FunctionDeclaration
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
-	}
-
-	/**
-	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
-	 * @since 0.10.0
-	 */
-	public get innerScope(): FunctionScope {
-		return this._innerScope;
+		/* istanbul ignore next: super function already being run/tested */
+		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
@@ -422,6 +411,9 @@ export class FunctionDeclaration
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
@@ -518,23 +510,15 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {
-		if (!this.scopeDeclaration) {
-			throw new UndefinedDeclarationCtxError();
-		}
-		return this.scopeDeclaration;
+		return <ScopeVariableDeclaration>super.getScopeDeclaration();
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children: Array<ParseTree> = this.getAntlrRuleChildren();
@@ -579,22 +563,26 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			value: assignValue,
 		};
 
-		// If the storage type is 'const' ensure that the variable has a value set.
-		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
-
 		// Add scope variable entry
 		this.scopeDeclaration = this.scope.addVariable(this);
+
+		// If the storage type is 'const' ensure that the variable has a value set.
+		this.programCtx.semanticCheck(this).validVariableDeclaration(this);
 	}
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Get the type that will be returned using the value type specifier
+		semanticData.valueTypeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			valueType: valueType,
@@ -602,9 +590,18 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
+			semanticData.value.ensureTypeSemanticallyValid(); // Ensure the assignment didn't fail
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.variableDeclaration;
 	readonly targetCodeGenerator = this.codeGenerator.variableDeclaration;

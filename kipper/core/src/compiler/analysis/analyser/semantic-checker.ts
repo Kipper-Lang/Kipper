@@ -19,6 +19,8 @@ import {
 	Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
+	IterationStatement,
+	JumpStatement,
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
@@ -30,10 +32,12 @@ import {
 	InvalidAssignmentError,
 	InvalidGlobalError,
 	MissingFunctionBodyError,
-	ReturnStatementError,
+	InvalidReturnStatementError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
 	UnknownReferenceError,
+	InvalidJumpStatementError,
+	BuiltInOrInternalGeneratorFunctionNotFoundError,
 } from "../../../errors";
 
 /**
@@ -58,7 +62,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 				? scopeCtx.innerScope.getEntryRecursively(identifier)
 				: this.programCtx.globalScope.getEntry(identifier)) ??
 			this.programCtx.globalScope.getEntry(identifier) ?? // Fall back to looking globally
-			this.programCtx.getBuiltInFunction(identifier) // Fall back to searching through built-in functions
+			this.programCtx.getBuiltInFunction(identifier) ?? // Fall back to searching through built-in functions
+			this.programCtx.getBuiltInVariable(identifier) // Fall back to searching through built-in variables
 		);
 	}
 
@@ -137,11 +142,28 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 */
 	public globalCanBeRegistered(identifier: string): void {
 		let identifierAlreadyExists: boolean = this.programCtx.globalScope.getEntry(identifier) !== undefined;
-		let globalAlreadyExists: boolean = this.programCtx.getBuiltInFunction(identifier) !== undefined;
+		let globalAlreadyExists: boolean =
+			this.programCtx.getBuiltInFunction(identifier) !== undefined ||
+			this.programCtx.getBuiltInVariable(identifier) !== undefined;
 
 		// If the identifier is already used or the global already exists, throw an error
 		if (identifierAlreadyExists || globalAlreadyExists) {
 			throw this.assertError(new InvalidGlobalError(identifier));
+		}
+	}
+
+	/**
+	 * Asserts that the passed identifier is a valid built-in global that has a generator function in the
+	 * {@link this.programCtx.target.builtInGenerator BuiltInGenerator} of the target.
+	 * @param identifier The identifier to check.
+	 * @throws {BuiltInOrInternalGeneratorFunctionNotFoundError} If there is no generator function for the passed
+	 * identifier.
+	 * @since 0.10.0
+	 */
+	public globalCanBeGenerated(identifier: string): void {
+		const generator = Reflect.get(this.programCtx.target.builtInGenerator, identifier);
+		if (generator === undefined) {
+			throw this.assertError(new BuiltInOrInternalGeneratorFunctionNotFoundError(identifier));
 		}
 	}
 
@@ -186,8 +208,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Searches for the parent of the specified return statement and asserts that it is a function.
 	 * @param retStatement The return statement.
+	 * @throws {InvalidReturnStatementError} If the parent is not a function.
 	 * @returns The parent function if found.
-	 * @throws {ReturnStatementError} If the parent is not a function.
 	 * @since 0.10.0
 	 */
 	public getReturnStatementParent(retStatement: ReturnStatement): FunctionDeclaration {
@@ -199,7 +221,29 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		}
 
 		if (currentParent === undefined) {
-			throw this.assertError(new ReturnStatementError());
+			throw this.assertError(new InvalidReturnStatementError());
+		}
+		return currentParent;
+	}
+
+	/**
+	 * Searches for the parent of the specified jump statement (either 'break' or 'continue' and asserts that it is an
+	 * iteration statement.)
+	 * @param jmpStatement The jump statement.
+	 * @throws {InvalidJumpStatementError} If the parent is not an iteration statement.
+	 * @returns The parent iteration statement if found.
+	 * @since 0.10.0
+	 */
+	public getJumpStatementParent(jmpStatement: JumpStatement): IterationStatement {
+		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
+		// declaration. This is to ensure a return statement is always used inside a function.
+		let currentParent: CompilableNodeParent | undefined = jmpStatement.parent;
+		while (!(currentParent instanceof IterationStatement) && currentParent) {
+			currentParent = currentParent.parent;
+		}
+
+		if (currentParent === undefined) {
+			throw this.assertError(new InvalidJumpStatementError());
 		}
 		return currentParent;
 	}

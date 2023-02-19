@@ -13,10 +13,10 @@ describe("InvalidGlobalError", () => {
 				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, defaultConfig);
 
 				// Duplicate identifier
-				programCtx.registerBuiltIns({ identifier: globalName, params: [], returnType: "void" });
-				programCtx.registerBuiltIns({ identifier: globalName, params: [], returnType: "void" });
+				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: "void" });
+				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: "void" });
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "InvalidGlobalError", "Expected proper error");
+				assert.equal((<KipperError>e).constructor.name, "InvalidGlobalError", "Expected different error");
 				assert((<KipperError>e).line !== undefined, "Expected existing 'line' meta field");
 				assert((<KipperError>e).col !== undefined, "Expected existing 'col' meta field");
 				assert((<KipperError>e).filePath !== undefined, "Expected existing 'filePath' meta field");
