@@ -335,7 +335,7 @@ export abstract class AnalysableASTNode<
 		}
 
 		// If the check for warnings function is defined, then call it
-		if (this.checkForWarnings) {
+		if (this.checkForWarnings && !this.hasFailed) {
 			await this.checkForWarnings();
 		}
 	}
