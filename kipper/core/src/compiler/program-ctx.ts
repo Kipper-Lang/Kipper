@@ -10,13 +10,15 @@ import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStre
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
+import type { KipperWarning } from "../warnings";
+import type { CompilableASTNode, RootASTNode, Expression } from "./ast";
+import type { EvaluatedCompileConfig } from "./compile-config";
 import { KipperFileASTGenerator } from "./ast";
-import { CompilableASTNode, RootASTNode, type Expression } from "./ast";
 import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
-import { KipperError, KipperInternalError, KipperWarning, UndefinedSemanticsError } from "../errors";
+import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
 import { KipperLogger, LogLevel } from "../logger";
-import { EvaluatedCompileConfig } from "./compile-config";
+import { KipperWarningIssuer } from "./analysis/analyser/warning-issuer";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
@@ -85,6 +87,12 @@ export class KipperProgramContext {
 	public readonly optimiser: KipperOptimiser;
 
 	/**
+	 * The warning issuer, which is used to check for certain conditions and issues if needed.
+	 * @since 0.10.0
+	 */
+	public readonly warningIssuer: KipperWarningIssuer;
+
+	/**
 	 * Returns the {@link KipperParser}, which parsed this program and generated the
 	 * {@link this.antlrParseTree parse tree}.
 	 */
@@ -151,6 +159,7 @@ export class KipperProgramContext {
 		semanticChecker?: KipperSemanticChecker,
 		typeChecker?: KipperTypeChecker,
 		optimiser?: KipperOptimiser,
+		warningIssuer?: KipperWarningIssuer,
 	) {
 		this.logger = logger;
 		this.target = target;
@@ -158,6 +167,7 @@ export class KipperProgramContext {
 		this.semanticChecker = semanticChecker ?? new KipperSemanticChecker(this);
 		this.typeChecker = typeChecker ?? new KipperTypeChecker(this);
 		this.optimiser = optimiser ?? new KipperOptimiser(this);
+		this.warningIssuer = warningIssuer ?? new KipperWarningIssuer(this);
 		this.parser = parser;
 		this.lexer = lexer;
 		this.compileConfig = compileConfig;
@@ -191,8 +201,8 @@ export class KipperProgramContext {
 	/**
 	 * Asserts a certain truth.
 	 * @param ctx The AST node context item.
-	 * @returns The {@link this._semanticChecker default semantic checker instance}, which contains the functions that
-	 * may be used to check semantic integrity and cohesion.
+	 * @returns The {@link this.semanticChecker semantic checker instance}, which contains the functions that may be used
+	 * to check semantic integrity and cohesion.
 	 */
 	public semanticCheck(ctx: CompilableASTNode | undefined): KipperSemanticChecker {
 		// Set the active traceback data on the item
@@ -203,13 +213,26 @@ export class KipperProgramContext {
 	/**
 	 * Performs a type check on {@link CompilableASTNode the ctx argument}.
 	 * @param ctx The AST node context item.
-	 * @returns The {@link this._typeChecker default type checker instance}, which contains the functions that may be used
-	 * to check certain types.
+	 * @returns The {@link this.typeChecker type checker instance}, which contains the functions that may be used to check
+	 * certain types.
 	 */
 	public typeCheck(ctx: CompilableASTNode | undefined): KipperTypeChecker {
 		// Set the active traceback data on the item
 		this.typeChecker.setTracebackData({ ctx });
 		return this.typeChecker;
+	}
+
+	/**
+	 * Performs a warning check on {@link CompilableASTNode the ctx argument}.
+	 * @param ctx The AST node context item.
+	 * @returns The {@link this.warningIssuer warning issuer instance}, which contains the functions that may be used to
+	 * issue warnings.
+	 * @param ctx
+	 */
+	public warningCheck(ctx: CompilableASTNode | undefined): KipperWarningIssuer {
+		// Set the active traceback data on the item
+		this.warningIssuer.setTracebackData({ ctx });
+		return this.warningIssuer;
 	}
 
 	/**
@@ -367,14 +390,9 @@ export class KipperProgramContext {
 	 * @param warning The warning to add to the list of reported warnings of this program.
 	 * @since 0.9.0
 	 */
-	public addWarning(warning: KipperWarning): void {
-		// Only log warnings if they are enabled
-		if (this.compileConfig.warnings) {
-			this.warnings.push(warning);
-			this.logger.reportWarning(warning);
-		} else {
-			throw new Error("Warnings are disabled for this file.");
-		}
+	public reportWarning(warning: KipperWarning): void {
+		this.warnings.push(warning);
+		this.logger.reportWarning(warning);
 	}
 
 	/**
