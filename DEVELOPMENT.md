@@ -135,10 +135,6 @@ which can be included and used inside a browser without any dependencies.
     Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
     For example `0.5.0-alpha.0`, `0.5.0-beta.0`, `0.5.0-beta.1` or `0.5.0-rc.0`.
 
-    ```
-
-    ```
-
 2.  Update CHANGELOG.md and replace `Unreleased` with new version identifier:
 
     _Skip this step unless it's a stable release! No alpha, beta or rc versions should be listed here!_
@@ -154,10 +150,6 @@ which can be included and used inside a browser without any dependencies.
     ```
 
     Also update the links at the bottom of the CHANGELOG.md file to properly link the releases to their GitHub page!
-
-    ```
-
-    ```
 
 3.  Updated the static `version` identifiers in the `index.ts` files of each package:
 
