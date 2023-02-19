@@ -5,13 +5,11 @@ import { assert } from "chai";
 describe("InvalidAssignmentError", () => {
 	describe("Error", () => {
 		it("NumberConstant", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true, target: defaultTarget });
+				await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true, target: defaultTarget });
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
 				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,16 +17,14 @@ describe("InvalidAssignmentError", () => {
 		});
 
 		it("StringConstant", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"4" = "4";', {
+				await new KipperCompiler().compile('"4" = "4";', {
 					abortOnFirstError: true,
 					target: defaultTarget,
 				});
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
 				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

@@ -1,17 +1,15 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, defaultTarget, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, defaultTarget, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("InvalidConversionTypeError", () => {
 	describe("Error", () => {
 		it("str as func", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile('"5" as func;', defaultConfig);
+				await new KipperCompiler().compile('"5" as func;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,13 +17,11 @@ describe("InvalidConversionTypeError", () => {
 		});
 
 		it("num as func", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("5 as func;", defaultConfig);
+				await new KipperCompiler().compile("5 as func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -33,13 +29,11 @@ describe("InvalidConversionTypeError", () => {
 		});
 
 		it("bool as func", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("true as func;", defaultConfig);
+				await new KipperCompiler().compile("true as func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -47,13 +41,11 @@ describe("InvalidConversionTypeError", () => {
 		});
 
 		it("func as str", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("print as str;", defaultConfig);
+				await new KipperCompiler().compile("print as str;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -61,13 +53,11 @@ describe("InvalidConversionTypeError", () => {
 		});
 
 		it("func as num", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("print as bool;", defaultConfig);
+				await new KipperCompiler().compile("print as bool;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -75,13 +65,11 @@ describe("InvalidConversionTypeError", () => {
 		});
 
 		it("func as bool", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile("print as bool;", defaultConfig);
+				await new KipperCompiler().compile("print as bool;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

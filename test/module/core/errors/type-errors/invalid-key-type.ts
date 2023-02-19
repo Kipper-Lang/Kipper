@@ -1,17 +1,15 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
 import { assert } from "chai";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 
 describe("InvalidKeyTypeError", () => {
 	describe("Error", () => {
 		it("Bracket Notation Member Access", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a"];`, defaultConfig);
+				await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a"];`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -19,13 +17,11 @@ describe("InvalidKeyTypeError", () => {
 		});
 
 		it("Slice Notation Member Access", async () => {
-			let result: KipperCompileResult | undefined = undefined;
 			try {
-				result = await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a":"b"];`, defaultConfig);
+				await new KipperCompiler().compile(`const invalid: str = "3"; invalid["a":"b"];`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidKeyTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

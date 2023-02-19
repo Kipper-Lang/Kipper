@@ -37,7 +37,11 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected different error");
+						assert.equal(
+							(<KipperError>e).constructor.name,
+							"InvalidAmountOfArgumentsError",
+							"Expected different error",
+						);
 						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 						return;
 					}
@@ -49,7 +53,11 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected different error");
+						assert.equal(
+							(<KipperError>e).constructor.name,
+							"InvalidAmountOfArgumentsError",
+							"Expected different error",
+						);
 						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 						return;
 					}
@@ -61,7 +69,7 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "ArgumentTypeError", "Expected different error");
+						assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
 						assert((<KipperError>e).name === "TypeError", "Expected different error");
 						return;
 					}
@@ -83,7 +91,11 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected different error");
+						assert.equal(
+							(<KipperError>e).constructor.name,
+							"InvalidAmountOfArgumentsError",
+							"Expected different error",
+						);
 						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 						return;
 					}
@@ -95,7 +107,11 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "InvalidAmountOfArgumentsError", "Expected different error");
+						assert.equal(
+							(<KipperError>e).constructor.name,
+							"InvalidAmountOfArgumentsError",
+							"Expected different error",
+						);
 						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
 						return;
 					}
@@ -107,7 +123,7 @@ describe("Built-ins", () => {
 					try {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
-						assert((<KipperError>e).constructor.name === "ArgumentTypeError", "Expected different error");
+						assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
 						assert((<KipperError>e).name === "TypeError", "Expected different error");
 						return;
 					}

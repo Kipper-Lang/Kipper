@@ -4,9 +4,8 @@ import { assert } from "chai";
 
 describe("InvalidRelationalComparisonTypeError", () => {
 	it("Error", async () => {
-		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile(`"5" > 5;`, defaultConfig);
+			await new KipperCompiler().compile(`"5" > 5;`, defaultConfig);
 		} catch (e) {
 			assert.equal(
 				(<KipperError>e).constructor.name,
@@ -14,7 +13,6 @@ describe("InvalidRelationalComparisonTypeError", () => {
 				"Expected different error",
 			);
 			assert((<KipperError>e).name === "TypeError", "Expected different error");
-			ensureErrorWasReported(typeof result === "object" ? result?.programCtx : undefined);
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
