@@ -216,5 +216,5 @@ which can be included and used inside a browser without any dependencies.
     Afterwards ensure the `next` tag is updated for every package using:
 
     ```bash
-    pnpm -r dist-tag add <PACKAGE>@<VERSION> next
+    npm dist-tag add <PACKAGE>@<VERSION> next
     ```
