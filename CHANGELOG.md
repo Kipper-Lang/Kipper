@@ -44,7 +44,7 @@ To use development versions of Kipper download the
   ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
 - Support for jump statements `continue` and `break` for iteration statements.
   ([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
-- New built-in variable `__name__` returning the name of the current file. This also includes general support for 
+- New built-in variable `__name__` returning the name of the current file. This also includes general support for
   built-in variables in the compiler.
   ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
@@ -190,7 +190,7 @@ To use development versions of Kipper download the
   - `ConstructableASTExpression`, which is a union type of all possible `Expression` AST node instances.
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
-  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context 
+  - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context
     to an AST node. This is the type representing all values from `ParserASTMapping`.
   - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
     corresponding AST node class.
@@ -247,7 +247,7 @@ To use development versions of Kipper download the
   - `kipperUndefinedType`, which represents the Kipper undefined type.
   - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
-	- `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
+  - `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
 
 ### Changed
 
