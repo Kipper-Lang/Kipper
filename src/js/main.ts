@@ -8,9 +8,6 @@ export const isDocsFile: boolean = ((array: string[]) => {
 	return array[array.length - 2] == "docs";
 })(path.split("/"));
 
-// Alias for 'isDocsFile' to signalise the local file is nested
-export const isNestedDir: boolean = isDocsFile;
-
 // The document title
 export const documentTitle = document.title;
 

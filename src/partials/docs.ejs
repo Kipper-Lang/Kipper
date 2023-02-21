@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
     <%- include('./head', { title: title, description: description }) %>
-    <link rel="stylesheet" href="../css/docs.scss" />
+    <link rel="stylesheet" href="<%= rootDir %>/css/docs.scss" />
 </head>
 <body>
-<script src="../js/plugins.ts"></script>
-<script src="../js/markdown.ts"></script>
-<script src="../prism/prism.js"></script>
+<script src="<%= rootDir %>/js/plugins.ts"></script>
+<script src="<%= rootDir %>/js/markdown.ts"></script>
+<script src="<%= rootDir %>/prism/prism.js"></script>
+
+<% let docsRoot = `${rootDir}/docs`; %>
+<% let thisVersion = `${docsRoot}/${docsVersion}`; %>
+<% let thisVersionFile = `${thisVersion}/${filename}`; %>
+<% let thisVersionIndex = `${thisVersion}/index.html`; %>
+<% let thisFile = `${rootDir}${urlParentDir}/${filename}`; %>
 
 <div id="main-frame">
     <div id="actual-content">
@@ -18,19 +24,19 @@
         <div class="flex-parent-container flex-fill-to-parent">
             <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
                 <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
-                <script type="module" src="../js/gen-sidebar-docs-nav.ts"></script>
+                <script type="module" src="<%= rootDir %>/js/gen-sidebar-docs-nav.ts"></script>
                 <li class="docs-page-content-container">
                     <div id="docs-content" class="shadowed-box">
                         <!-- Content -->
                         <section>
                             <nav id="docs-page-nav">
                                 <ul class="flex-row no-style-list">
-                                    <li class="gray-text"><a id="docs-page-nav-kipper-origin" href="./index.html">Kipper Docs /</a></li>
-                                    <li><a class="docs-page-nav-header" href="<%= `../${filePath}` %>"><%= title %></a></li>
+                                    <li><a id="docs-page-nav-kipper-version" href="<%= thisVersionIndex %>"><%= docsVersion %> /</a></li>
+                                    <li><a class="docs-page-nav-header" href="<%= thisFile %>"><%= title %></a></li>
                                 </ul>
                                 <a
                                     id="edit-page-on-github"
-                                    href="<%= `https://github.com/Luna-Klatzer/Kipper/edit/docs${srcFile}` %>"
+                                    href="<%= editPath %>"
                                     title="Edit this page on GitHub"
                                 >
                                     <i class="fa-brands fa-github"></i>

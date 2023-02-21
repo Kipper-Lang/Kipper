@@ -4,6 +4,7 @@
   "securityURL": "https://github.com/Luna-Klatzer/Kipper/security/policy",
   "issueTracker": "https://github.com/Luna-Klatzer/Kipper/issues",
   "licenseURL": "https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE",
+	"docsEditURL": "https://github.com/Luna-Klatzer/Kipper/edit/docs",
   "websitePublicURL": "https://kipper-lang.org",
-  "copyright": "Copyright © 2021-2022 Luna Klatzer"
+  "copyright": "Copyright © 2021-2023 Luna Klatzer"
 }

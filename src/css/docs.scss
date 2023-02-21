@@ -71,15 +71,18 @@
 		align-content: center;
 		justify-content: space-between;
 
-		#docs-page-nav-kipper-origin,
-		#docs-page-nav-kipper-origin:active,
-		#docs-page-nav-kipper-origin:visited {
-			color: var(--scheme-dark-gray);
-			text-decoration: none !important;
-		}
+		#docs-page-nav-kipper-version {
+			text-decoration: none;
 
-		#docs-page-nav-kipper-origin:hover {
-			color: var(--scheme-primary);
+			&,
+			&:active,
+			&:visited {
+				color: var(--scheme-dark-gray);
+			}
+
+			&:hover {
+				color: var(--scheme-primary);
+			}
 		}
 
 		.docs-page-nav-header,
