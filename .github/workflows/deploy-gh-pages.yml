@@ -3,6 +3,8 @@ name: Deploy GH-Pages
 on:
   push:
     branches: [ docs, workflow_dispatch ]
+  schedule:
+    - cron: '1 18 * * *'  # Run at 6:01 pm every day.
 
 jobs:
   build:
