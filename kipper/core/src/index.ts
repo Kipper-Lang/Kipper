@@ -3,6 +3,13 @@
  * @author Luna Klatzer
  * @copyright 2021-2022 Luna Klatzer
  */
+
+// Load the module 'antlr4ts', as it has sometimes issues with circular dependencies and we need to make sure it
+// loads in a specific way that doesn't break it.
+import "antlr4ts/atn/ATNDeserializer";
+import "antlr4ts/tree/xpath/XPathLexer";
+import "antlr4ts";
+
 export * from "./errors";
 export * from "./warnings";
 export * from "./compiler";

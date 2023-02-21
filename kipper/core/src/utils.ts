@@ -2,11 +2,10 @@
  * Utility functions for the Kipper core package.
  * @since 0.9.0
  */
-import type { Token } from "antlr4ts";
+import type { Token, CharStream } from "antlr4ts";
 import type { ParseTree } from "antlr4ts/tree";
-import type { CharStream } from "antlr4ts/CharStream";
 import type { KipperParserRuleContext } from "./compiler";
-import { Interval } from "antlr4ts/misc/Interval";
+import { Interval } from "antlr4ts/misc";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.

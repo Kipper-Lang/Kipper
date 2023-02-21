@@ -7,7 +7,7 @@ import type { KipperCompileTarget, KipperTargetCodeGenerator, KipperTargetSemant
 import type { KipperParser, KipperParserRuleContext } from "../parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
-import type { TokenStream } from "antlr4ts/TokenStream";
+import type { TokenStream } from "antlr4ts";
 import type { RootASTNode, SemanticData } from "./index";
 import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
 import type { ScopeNode } from "./scope-node";
