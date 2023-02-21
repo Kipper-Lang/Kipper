@@ -66,10 +66,10 @@ export class KipperWarningIssuer extends KipperSemanticErrorHandler {
 	 */
 	public uselessStatement(expStatement: ExpressionStatement): void {
 		const hasSideEffects = (node: Expression): boolean =>
-			node.children.some((child) => child.hasSideEffects || hasSideEffects(child));
+			node.hasSideEffects() || node.children.some((child) => hasSideEffects(child));
 
 		// Check whether the expression statement has side effects
-		const expStatementHasSideEffects = expStatement.children.some((child) => hasSideEffects(child));
+		const expStatementHasSideEffects = expStatement.children.some(hasSideEffects);
 		if (!expStatementHasSideEffects) {
 			this.issueWarning(new UselessExpressionStatementWarning());
 		}

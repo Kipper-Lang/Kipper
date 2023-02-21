@@ -22,6 +22,9 @@ To use development versions of Kipper download the
 
 ### Fixed
 
+- Bug causing the compiler to not detect the expected useless statement warning for a useless arithmetic 
+  expression. ([#426](https://github.com/Luna-Klatzer/Kipper/issues/426)).
+
 ### Deprecated
 
 ### Removed
