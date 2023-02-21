@@ -22,14 +22,18 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-- Bug causing the compiler to not detect the expected useless statement warning for a useless arithmetic 
-  expression. ([#426](https://github.com/Luna-Klatzer/Kipper/issues/426)).
-
 ### Deprecated
 
 ### Removed
 
 </details>
+
+## [0.10.1] - 2023-02-21
+
+### Fixed
+
+- Bug causing the compiler to not detect the expected useless statement warning for a useless arithmetic
+	expression. ([#426](https://github.com/Luna-Klatzer/Kipper/issues/426)).
 
 ## [0.10.0] - 2023-02-19
 
@@ -1152,7 +1156,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.0...v0.9.1
