@@ -4,7 +4,7 @@ import { assert } from "chai";
 
 describe("UselessExpressionStatementWarning", () => {
 	describe("Warning", () => {
-		it("Useless arithmetic expression", async () => {
+		it("Useless constant", async () => {
 			let result = await new KipperCompiler().compile("1;", defaultConfig);
 
 			// Ensure a warning is given and is not undefined
@@ -15,7 +15,41 @@ describe("UselessExpressionStatementWarning", () => {
 				"UselessExpressionStatementWarning",
 				"Expected different warning",
 			);
-			return;
+		});
+		[
+			{ code: "1 + 2;", name: "Single" },
+			{ code: "1 + 2 + 3 / 4 * 5 ** 6;", name: "Chained" },
+		].forEach((o) => {
+			it(`Useless arithmetic expression (${o.name})`, async () => {
+				let result = await new KipperCompiler().compile(o.code, defaultConfig);
+
+				// Ensure a warning is given and is not undefined
+				ensureTracebackDataExists(result.warnings[0]);
+				ensureWarningWasReported(result.programCtx);
+				assert.equal(
+					result.warnings[0].constructor.name,
+					"UselessExpressionStatementWarning",
+					"Expected different warning",
+				);
+			});
+		});
+
+		[
+			{ code: "true && false;", name: "Single" },
+			{ code: "true && false && true && false;", name: "Chained" },
+		].forEach((o) => {
+			it(`Useless boolean expression (${o.name})`, async () => {
+				let result = await new KipperCompiler().compile(o.code, defaultConfig);
+
+				// Ensure a warning is given and is not undefined
+				ensureTracebackDataExists(result.warnings[0]);
+				ensureWarningWasReported(result.programCtx);
+				assert.equal(
+					result.warnings[0].constructor.name,
+					"UselessExpressionStatementWarning",
+					"Expected different warning",
+				);
+			});
 		});
 
 		it("Useless identifier reference", async () => {
@@ -29,7 +63,6 @@ describe("UselessExpressionStatementWarning", () => {
 				"UselessExpressionStatementWarning",
 				"Expected different warning",
 			);
-			return;
 		});
 	});
 
