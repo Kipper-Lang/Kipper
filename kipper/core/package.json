@@ -5,7 +5,7 @@
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"antlr4ts": "^0.5.0-alpha.4",
-		"tslib": "~2.4.0"
+		"tslib": "~2.5.0"
 	},
 	"devDependencies": {
 		"typescript": "4.9.5",
