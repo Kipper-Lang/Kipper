@@ -5,6 +5,7 @@ import * as ejs from "ejs";
 import * as lru from "lru-cache";
 import * as path from "path";
 import * as showdown from "showdown";
+import * as yaml from "js-yaml";
 import { existsSync, promises as fs } from "fs";
 import fetch from "node-fetch";
 
@@ -30,12 +31,14 @@ interface DocumentMetaData {
 // Add new extension to showdown
 showdown.extension("line-numbers", () => {
 	// Add 'line-numbers' class to all pre html tags of the code blocks
-	return [{
-		type: "output",
-		filter: (text: string) => {
-			return text.replace(/<pre><code class="/g, "<pre class=\"line-numbers\"><code class=\"");
-		}
-	}];
+	return [
+		{
+			type: "output",
+			filter: (text: string) => {
+				return text.replace(/<pre><code class="/g, '<pre class="line-numbers"><code class="');
+			},
+		},
+	];
 });
 
 // Configure showdown
@@ -83,9 +86,7 @@ function getParentDir(absolutePath: string): string {
 function getRelativePathToSrc(rootDir: string, currPath: string): string {
 	rootDir = path.resolve(rootDir) + path.sep;
 	currPath = getParentDir(currPath);
-	return removeTrailingSlash(
-		path.relative(currPath, rootDir).replace(/\\/g, "/")
-	) || ".";
+	return removeTrailingSlash(path.relative(currPath, rootDir).replace(/\\/g, "/")) || ".";
 }
 
 /**
@@ -149,11 +150,11 @@ async function getBuildData(dataFile: string): Promise<Record<string, any>> {
 		docsVersion: undefined, // Unless we are in a docs folder, this will be undefined
 		devVersion: json["dist-tags"]["next"],
 		versions: {
-			"next": json["dist-tags"]["next"],
-			"latest": json["dist-tags"]["latest"],
+			next: json["dist-tags"]["next"],
+			latest: json["dist-tags"]["latest"],
 			"0.10.0": "0.10.0",
 			"0.9.2": "0.9.2",
-		}
+		},
 	};
 }
 
@@ -226,9 +227,8 @@ async function buildEjsFiles(src: string, dest: string, data: Record<string, any
  * @param markdownHtml The HTML for the Markdown file.
  * @returns The metadata for the file.
  */
-async function determineMarkdownFileMetadata(markdownHtml: string): Promise<DocumentMetaData> {
+function determineMarkdownFileMetadata(markdownHtml: string): DocumentMetaData {
 	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
-
 	let metaData: DocumentMetaData = { title: "", description: "" };
 	let isTitle = false;
 	let isDescription = false;
@@ -271,7 +271,7 @@ class DocsBuilder {
 
 	public constructor(docsEJSTemplate: string) {
 		// Create new converted - Note: Extension 'line-numbers' is disabled for now
-		this.converter = new showdown.Converter(/* { extensions: ['line-numbers'] } */);
+		this.converter = new showdown.Converter({ metadata: true, /* extensions: ['line-numbers'] } */ });
 
 		// Get base Docs template
 		this.baseTemplate = path.resolve(docsEJSTemplate);
@@ -279,6 +279,18 @@ class DocsBuilder {
 			throw new Error(`Docs EJS template not found. Expected '${this.baseTemplate}' to exist.`);
 		}
 	}
+
+  /**
+   * Gets the metadata of the last markdown file that was converted to HTML.
+   * @private
+   */
+  private getMetadataOfLastFile(): showdown.Metadata {
+    const raw = this.converter.getMetadata(true);
+    if (!raw) {
+      return {};
+    }
+    return yaml.load(raw);
+  }
 
 	/**
 	 * Render the passed Markdown file to HTML.
@@ -300,19 +312,47 @@ class DocsBuilder {
 	 */
 	private async renderEJSFile(markdownHtml: string, data: Record<string, any>): Promise<string> {
 		// File metadata which can be set inside the file and can overwrite the file defaults
-		const fileMetadata = this.converter.getMetadata();
+		const fileMetadata = this.getMetadataOfLastFile();
 
 		// Set markdown content to the generated HTML and render it again if there are any ejs tags
 		data["markdownContent"] = ejs.render(markdownHtml, data);
 
 		// Evaluate title and description
-		const metadata = await determineMarkdownFileMetadata(data["markdownContent"]);
+		const metadata = determineMarkdownFileMetadata(data["markdownContent"]);
 
 		// File metadata can overwrite the default title and description evaluated by 'determineFileMetadata'
 		data["title"] = fileMetadata["title"] ?? metadata.title;
 		data["description"] = fileMetadata["description"] ?? metadata.description;
 
 		return await ejs.renderFile(this.baseTemplate, data);
+	}
+
+	/**
+	 * Gets the build data for a single docs file.
+	 * @param htmlFilename The filename of the output HTML file.
+	 * @param pathSrc The path to the source file.
+	 * @param pathDest The path to the destination file.
+	 * @param version The version of the docs file.
+	 * @param existingData The existing data to merge with.
+	 * @private
+	 */
+	private getDocsFileBuildData(
+		htmlFilename: string,
+		pathSrc: string,
+		pathDest: string,
+		version: string,
+		existingData: Record<string, any>,
+	): Record<string, any> {
+		return {
+			...existingData,
+			rootDir: getRelativePathToSrc(destDir, pathDest), // Relative path to the root directory
+			filename: htmlFilename, // This should only contain the filename without any directory
+			urlPath: getURLPath(pathDest),
+			urlParentDir: getURLParentPath(pathDest),
+			editPath: getEditURL(existingData["docsEditURL"], pathSrc),
+			docsVersion: version,
+			isDocsFile: true,
+		};
 	}
 
 	/**
@@ -325,21 +365,16 @@ class DocsBuilder {
 	 * @private
 	 */
 	private async buildDocsFile(
-		mdFile: string, versionSrc: string, versionDest: string, version: string, data: Record<string, any>
+		mdFile: string,
+		versionSrc: string,
+		versionDest: string,
+		version: string,
+		data: Record<string, any>,
 	): Promise<void> {
 		const htmlFilename = mdFile.replace(".md", ".html");
 		const pathSrc = `${versionSrc}/${mdFile}`;
 		const pathDest = `${versionDest}/${htmlFilename}`;
-		const itemData = {
-			...data,
-			rootDir: getRelativePathToSrc(destDir, pathDest), // Relative path to the root directory
-			filename: htmlFilename, // This should only contain the filename without any directory
-			urlPath: getURLPath(pathDest),
-			urlParentDir: getURLParentPath(pathDest),
-			editPath: getEditURL(data["docsEditURL"], pathSrc),
-			docsVersion: version,
-			isDocsFile: true,
-		};
+		const itemData = this.getDocsFileBuildData(htmlFilename, pathSrc, pathDest, version, data);
 
 		// Convert markdown to HTML
 		const html = await this.renderMarkdownFile(pathSrc);
@@ -349,10 +384,77 @@ class DocsBuilder {
 		await fs.writeFile(pathDest, result);
 	}
 
+  /**
+   * Gets an array of all files that should be displayed in the sidebar/left navigation bar.
+   * @param pathSrc The path to the version specific source directory.
+   * @param pathDest The path to the version specific destination directory.
+   * @private
+   */
+  private async getStaticSidebarHeaderFiles(pathSrc: string, pathDest: string): Promise<Array<string>> {
+    const indexFile = path.resolve(`${pathSrc}/index.md`);
+    const content = (await fs.readFile(indexFile)).toString();
+
+    // Get the metadata from the index file (we need to convert it to HTML first, so we can get the metadata)
+    this.converter.makeHtml(content);
+    const metadata = <showdown.Metadata & { nav: Array<string> }>this.getMetadataOfLastFile();
+    if (!("nav" in metadata)) {
+      throw new Error(`No navigation bar defined in '${indexFile}'`);
+    }
+
+    return metadata["nav"].map((entry) => {
+      return path.resolve(`${pathDest}/${entry}`.replace(".md", ".html"));
+    });
+  }
+
+	/**
+	 * Gets a list of all headings that should be displayed in the sidebar/left navigation bar.
+	 * @param mdFiles The list of all markdown files in form of simple file names (without path).
+	 * @param pathSrc The path to the version specific source directory.
+	 * @param pathDest The path to the version specific destination directory.
+	 * @private
+	 */
+	private async getSidebarHeadings(
+		mdFiles: Array<string>,
+		pathSrc: string,
+		pathDest: string,
+	): Promise<Array<{ title: string; path: string }>> {
+    // Get the headers defined in the markdown index.md file
+    const navBarHeaders = await this.getStaticSidebarHeaderFiles(pathSrc, pathDest);
+
+		const headings: Array<{ title: string; path: string }> = [];
+		for (let file of navBarHeaders) {
+      const mdName = path.basename(file).replace(".html", ".md");
+      const mdFileToRead = path.resolve(pathSrc, mdName);
+
+      // Ensure that there is a corresponding markdown file
+      if (!mdFiles.includes(mdName)) {
+        throw new Error(`File '${file}' does not have a corresponding markdown file.`);
+      }
+
+			const content = (await fs.readFile(mdFileToRead)).toString();
+
+			// Parse markdown to HTML, as the headings are only available after the conversion
+			const html = this.converter.makeHtml(content);
+
+			// Push the new heading
+			const title = this.getMetadataOfLastFile()["title"] || determineMarkdownFileMetadata(html).title;
+			const fileURLPath = getURLPath(file);
+			headings.push({
+				title: title,
+				path: fileURLPath
+			});
+
+			if (!title) {
+				throw new Error(`No title found for file: ${mdFileToRead} - Please add a title attribute or a clear top heading.`);
+			}
+		}
+		return headings;
+	}
+
 	/**
 	 * Builds a specific version of the docs and places them in the specified target folder with the following path:
-	 * '/{docsDestRoot}/{version}/'. If the version is 'latest' or 'next' then it will be both placed in the root
-	 * folder and in the specific version folder, with the version being the resolved version based on the npm tag.
+	 * '/{docsDestRoot}/{version}/'. If the version is 'latest' then it will be both placed in the root folder and in
+   * the specific version folder, with the version being the resolved version based on the npm tag.
 	 * @param docsSrcRoot The root folder of the docs. All versions should be placed there in the following format:
 	 * '/{docsSrcRoot}/{version}/'.
 	 * @param docsDestRoot The root folder of the docs. All versions will be placed there in the following format:
@@ -361,25 +463,38 @@ class DocsBuilder {
 	 * @param data The data to pass to the ejs renderer.
 	 * @private
 	 */
-	private async builtSpecificDocsVersion(docsSrcRoot: string, docsDestRoot: string, version: string, data: Record<string, any>): Promise<void> {
+	private async builtSpecificDocsVersion(
+		docsSrcRoot: string,
+		docsDestRoot: string,
+		version: string,
+		data: Record<string, any>,
+	): Promise<void> {
 		const versionSrc = `${docsSrcRoot}/${version}`;
 		const versionDest = `${docsDestRoot}/${version}`;
 
 		// Ensure the src and dest folders are valid, and the dest folder exists
 		await ensureValidSrcAndDest(versionSrc, versionDest);
 
-		// If the version is 'latest' or 'next' then also build the docs in the root folder
+		// If the version is 'latest' then also build the docs in the root folder
 		const copyToRoot = version === "latest" || version === "next";
 
 		// The contents of the src folder
 		const dirContents = await fs.readdir(versionSrc);
-		for (let file of dirContents) {
-			// If the file is an ejs file compile it to HTML
-			if (file.endsWith(".md")) {
-				await this.buildDocsFile(file, versionSrc, versionDest, version, data);
-				if (copyToRoot) {
-					await this.buildDocsFile(file, versionSrc, docsDestRoot, version, data);
-				}
+		const mdFiles = dirContents.filter((file) => file.endsWith(".md"));
+
+		// Get the headings for the sidebar, which are unique for each version
+		const sidebarHeadings = await this.getSidebarHeadings(mdFiles, versionSrc, versionDest);
+    const sidebarHeadingsForRoot = copyToRoot ? await this.getSidebarHeadings(mdFiles, versionSrc, docsDestRoot) : { };
+
+		// Build the docs files
+		for (let file of mdFiles) {
+      data["sidebarHeadings"] = sidebarHeadings;
+			await this.buildDocsFile(file, versionSrc, versionDest, version, data);
+
+      // If the version is 'latest' then also build the docs in the root folder
+			if (copyToRoot) {
+        data["sidebarHeadings"] = sidebarHeadingsForRoot;
+				await this.buildDocsFile(file, versionSrc, docsDestRoot, version, data);
 			}
 		}
 	}
