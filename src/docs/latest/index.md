@@ -1,5 +1,23 @@
 ---
 title: Overview
+nav:
+- ./index.md
+- ./quickstart.md
+- ./goals-and-roadmap.md
+- ./supported-platforms.md
+- ./usage-examples.md
+- ./compiler.md
+- ./variables.md
+- ./datatypes.md
+- ./expressions.md
+- ./statements.md
+- ./if-statement.md
+- ./while-loop.md
+- ./do-while-loop.md
+- ./for-loop.md
+- ./functions.md
+- ./comments.md
+- ./built-in-functions.md
 ---
 
 # Welcome to the Kipper Docs
@@ -36,4 +54,5 @@ explain the implementation, functionality and details for Kipper.
 </p>
 
 <!-- Temporary fix -->
+
 View docs of previous version: <a href="<%= rootDir %>/docs/0.9.2/index.html">v0.9.2</a>

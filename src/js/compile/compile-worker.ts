@@ -108,7 +108,7 @@ onmessage = async function (event) {
 	try {
 		// @ts-ignore
 		// eslint-disable-next-line no-undef
-		if (typeof KipperJS === "object" && typeof KipperJS.KipperJavaScriptTarget === "function")  {
+		if (typeof KipperJS === "object" && typeof KipperJS.KipperJavaScriptTarget === "function") {
 			// @ts-ignore
 			// eslint-disable-next-line no-undef
 			config.target = new KipperJS.KipperJavaScriptTarget();

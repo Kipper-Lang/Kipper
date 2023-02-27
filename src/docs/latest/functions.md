@@ -33,7 +33,7 @@ Rules for defining a Kipper function:
 
 ### Calling a function
 
-*See also [Function call expression](./expressions.html).*
+_See also [Function call expression](./expressions.html)._
 
 ```ts
 call NAME(ARG1, ARG2, ARGn, ...);
@@ -43,10 +43,10 @@ NAME(ARGS, ARG2, ARGn, ...);
 
 ## Behaviour
 
-Functions are executable segments of code that are only executed when their identifier is referenced and called as shown above. 
+Functions are executable segments of code that are only executed when their identifier is referenced and called as shown above.
 
 When calling them all arguments have to be passed with the argument types matching. Once the function has been called,
-the variables are going to be copied to the local function stack (local scope) and be available to the body of the function. 
+the variables are going to be copied to the local function stack (local scope) and be available to the body of the function.
 This means that the arguments will also be referencable by statements inside the function body.
 
 <div class="red-highlight-text">
@@ -62,7 +62,7 @@ This means that the arguments will also be referencable by statements inside the
 Like many other languages, Kipper allows some form of identifier/variable shadowing, though it's heavily restricted to
 avoid confusion in many cases. An exception though is the shadowing of the function identifier inside its own scope.
 
-That means that the following code is valid and that the variable `x` is *not* going to throw an `IdentifierError`:
+That means that the following code is valid and that the variable `x` is _not_ going to throw an `IdentifierError`:
 
 ```ts
 def x() -> void {

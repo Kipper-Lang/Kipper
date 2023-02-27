@@ -356,8 +356,9 @@ function enableVersionDropdownVisibility(): void {
  * Toggles on or off the dropdown for the version picker.
  */
 function toggleVersionDropdownVisibility(): void {
-  const isVisible = versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
-  if (isVisible) {
+	const isVisible =
+		versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
+	if (isVisible) {
 		disableVersionDropdownVisibility();
 	} else {
 		enableVersionDropdownVisibility();
@@ -420,9 +421,10 @@ function writeConsoleOutputDefaultMessage(): void {
  * Escapes all '&', '<' and '>' characters.
  */
 function escapeHTMLChars(str: string): string {
-  return str.replace(new RegExp("&", "g"), "&amp;")
-    .replace(new RegExp("<", "g"), "&lt;")
-    .replace(new RegExp(">", "g"), "&gt;");
+	return str
+		.replace(new RegExp("&", "g"), "&amp;")
+		.replace(new RegExp("<", "g"), "&lt;")
+		.replace(new RegExp(">", "g"), "&gt;");
 }
 
 /**
@@ -518,7 +520,7 @@ function writeConsoleResultAndHighlight(value: string): void {
 	// Write content to the console
 	shellOutputResult.innerHTML = escapeHTMLChars(value);
 
-  console.log(shellOutputResult);
+	console.log(shellOutputResult);
 
 	// Highlight output field
 	prism.highlightElement(shellOutputResult);

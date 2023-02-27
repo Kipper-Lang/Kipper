@@ -247,11 +247,16 @@ code {
 	background-color: var(--scheme-gray);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  & code {
-    /* Prefer Inter over monospace in headers */
-    font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", "Inter", monospace;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	& code {
+		/* Prefer Inter over monospace in headers */
+		font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", "Inter", monospace;
+	}
 }
 
 pre[class*="language-"] {

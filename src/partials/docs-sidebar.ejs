@@ -1,0 +1,18 @@
+<nav id="docs-sidebar-nav">
+    <h6 id="nav-kipper-header">
+        <a class="docs-page-nav-header" href="./index.html">Kipper Docs</a>
+    </h6>
+    <ul class="no-style-list flex-column">
+        <% sidebarHeadings.forEach((file) => { %>
+            <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
+            <% const pathParts = file.path.split("/"); %>
+            <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
+            <li>
+                <p class="sidebar-nav-header <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
+                    <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
+                    <a href="<%= rootDir %><%= file.path %>"><%= file.title %></a>
+                </p>
+            </li>
+        <% }); %>
+    </ul>
+</nav>

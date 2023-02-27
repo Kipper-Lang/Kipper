@@ -23,8 +23,14 @@
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="flex-parent-container flex-fill-to-parent">
             <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
-                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container"></li>
-                <script type="module" src="<%= rootDir %>/js/gen-sidebar-docs-nav.ts"></script>
+                <li id="docs-sidebar-nav-wrapper" class="flex-parent-container">
+                    <%- include('./docs-sidebar', {
+                        sidebarHeadings: sidebarHeadings,
+                        header: false,
+                        title: title,
+                        description: description
+                    }) %>
+                </li>
                 <li class="docs-page-content-container">
                     <div id="docs-content" class="shadowed-box">
                         <!-- Content -->

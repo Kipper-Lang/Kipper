@@ -12,10 +12,10 @@ if they occur.)
 
 ## Browser Support
 
-Generally speaking, Kipper should work in any browser that supports the `ES2016` (ES7) standard. However, there may 
+Generally speaking, Kipper should work in any browser that supports the `ES2016` (ES7) standard. However, there may
 be some exceptions to this rule, so it is recommended to use the latest version of a browser.
 
-List of all browsers that were tested for support of Kipper 
+List of all browsers that were tested for support of Kipper
 ([_Please report any mistakes_](https://github.com/Luna-Klatzer/Kipper/issues/new/choose)):
 
 <table>
