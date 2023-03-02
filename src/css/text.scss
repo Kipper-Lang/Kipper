@@ -45,7 +45,13 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
 	display: block;
 	align-items: center;
 	margin-bottom: 0.5em;
@@ -66,42 +72,42 @@ h6 {
 	}
 }
 
-h1 {
+h1, .h1 {
 	font-style: normal;
 	font-size: 40px;
 	line-height: 1.2;
 	font-weight: 600;
 }
 
-h2 {
+h2, .h2 {
 	font-style: normal;
 	font-size: 28px;
 	line-height: 1.2;
 	font-weight: 500;
 }
 
-h3 {
+h3, .h3 {
 	font-style: normal;
 	font-size: 24px;
 	line-height: 1.2;
 	font-weight: 300;
 }
 
-h4 {
+h4, .h4 {
 	font-style: normal;
 	font-size: 20px;
 	line-height: 1.2;
 	font-weight: 300;
 }
 
-h5 {
+h5, .h5 {
 	font-style: normal;
 	font-size: 18px;
 	line-height: 1.2;
 	font-weight: 300;
 }
 
-h6 {
+h6, .h6 {
 	font-style: normal;
 	font-size: 18px;
 	line-height: 1.2;
@@ -109,7 +115,7 @@ h6 {
 }
 
 /* Block the CSS from applying text link formatting on buttons and docs headers */
-:not(.sidebar-nav-header) {
+:not(.sidebar-nav-header-list-item) {
 	& > a {
 		&:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
 		&:link:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
@@ -252,7 +258,13 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
 	& code {
 		/* Prefer Inter over monospace in headers */
 		font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", "Inter", monospace;

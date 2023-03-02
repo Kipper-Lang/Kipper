@@ -30,8 +30,8 @@ const copyCodeButton: HTMLButtonElement = document.querySelector("#copy-code-lis
 const clearContentButton: HTMLButtonElement = document.querySelector("#clear-content-list-item button");
 
 // Version selector button
-const versionSelectorButton: HTMLButtonElement = document.querySelector("#versions-button button");
-const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#versions-button button span");
+const versionSelectorButton: HTMLButtonElement = document.querySelector("#version-selector-button button");
+const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#version-selector-button button span");
 
 // Sidebar editor fields
 const shellOutput: HTMLDivElement = document.querySelector("#shell-output");
