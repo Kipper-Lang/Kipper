@@ -10,9 +10,9 @@ import { existsSync, promises as fs } from "fs";
 import fetch from "node-fetch";
 
 const rootDir = path.resolve(__dirname, "..", "..");
-const srcDir = `${rootDir}/src`;
-const destDir = `${rootDir}/build`;
-const configPath = `${srcDir}/config.json`;
+const srcRootDir = path.resolve(`${rootDir}/src`);
+const destRootDir = path.resolve(`${rootDir}/build`);
+const configPath = path.resolve(`${srcRootDir}/config.json`);
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
@@ -60,11 +60,22 @@ showdown.setOption("customizedHeaderId", true);
 showdown.setOption("emoji", true);
 
 /**
+ * Ensures that the given URL does not use Windows-style slashes and has URL-conforming slashes.
+ * @param url The URL to ensure the correct slashes are used.
+ */
+function ensureURLSlashes(url: string): string {
+	return url.replace(/\\/g, "/");
+}
+
+/**
  * Removes the trailing slash from the given string if it exists.
  * @param str The string to remove the trailing slash from.
  */
 function removeTrailingSlash(str: string): string {
-	if (str.endsWith("/")) {
+	if (str.length === 1)
+		return str; // Don't remove the trailing slash if it is the only character in the string.
+
+	if (str.endsWith("/") || str.endsWith("\\")) {
 		return str.slice(0, -1);
 	}
 	return str;
@@ -86,30 +97,32 @@ function getParentDir(absolutePath: string): string {
 function getRelativePathToSrc(rootDir: string, currPath: string): string {
 	rootDir = path.resolve(rootDir) + path.sep;
 	currPath = getParentDir(currPath);
-	return removeTrailingSlash(path.relative(currPath, rootDir).replace(/\\/g, "/")) || ".";
+	return removeTrailingSlash(path.relative(currPath, rootDir)) || ".";
 }
 
 /**
- * Get the edit URL for the given file.
+ * Gets the URL path for the given absolute path by removing the root directory.
+ * @param absolutePath The absolute path to get the URL path of.
+ * @param rootDir The root directory to remove from the absolute path. Per default, it will be the {@link destRootDir},
+ * as this function primarily is used for getting URLs of compiled output files that will be accessed in the browser.
+ */
+function getURLPath(absolutePath: string, rootDir: string = destRootDir): string {
+	return ensureURLSlashes(absolutePath.replace(rootDir, ""));
+}
+
+/**
+ * Get the edit URL for the given file. This is the URL to the file on GitHub and uses {@link srcRootDir} to get the
+ * relative path to the file.
  * @param docsEditURL The base URL for editing the docs.
  * @param absolutePath The absolute path to the file.
  */
 function getEditURL(docsEditURL: string, absolutePath: string): string {
-	return absolutePath.replace(rootDir, "").replace("\\", "/");
-}
-
-/**
- * Gets the URL path for the given absolute path by removing the root directory (In this case as it should be a build
- * file, it is the {@link destDir}).
- * @param absolutePath The absolute path to get the URL path of.
- */
-function getURLPath(absolutePath: string): string {
-	return absolutePath.replace(destDir, "").replace("\\", "/");
+	return `${docsEditURL}${getURLPath(absolutePath, srcRootDir)}`;
 }
 
 /**
  * Gets the parent URL path for the given absolute path by removing the root directory (In this case as it should be a
- * build file, it is the {@link destDir}).
+ * build file, it is the {@link destRootDir}).
  * @param absolutePath The absolute path to get the parent URL path of.
  */
 function getURLParentPath(absolutePath: string): string {
@@ -189,7 +202,7 @@ async function copyFiles(src: string, dest: string): Promise<void> {
 }
 
 /**
- * Builds all ejs files and copies all dependencies to the {@link destDir} folder.
+ * Builds all ejs files and copies all dependencies to the {@link destRootDir} folder.
  * @param src The source directory of the ejs files.
  * @param dest The destination directory of the ejs files.
  * @param data The data to pass to the ejs renderer.
@@ -203,16 +216,16 @@ async function buildEjsFiles(src: string, dest: string, data: Record<string, any
 		// If the file is an ejs file compile it to HTML
 		if (file.endsWith(".ejs")) {
 			const htmlFile = file.replace(".ejs", ".html");
-			const pathSrc = `${src}/${file}`;
-			const pathDest = `${dest}/${htmlFile}`;
+			const pathSrc = path.resolve(`${src}/${file}`);
+			const pathDest =  path.resolve(`${dest}/${htmlFile}`);
 			const itemData = {
 				...data,
 				filename: htmlFile, // This should only contain the filename without any directory
-				urlPath: getURLPath(pathDest),
-				urlParentDir: getURLParentPath(pathDest),
-				editPath: getEditURL(data["docsEditURL"], pathSrc),
+				urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
+				urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
+				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 				isDocsFile: false,
-				rootDir: getRelativePathToSrc(destDir, pathDest), // Relative path to the root directory
+				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
 			};
 
 			// Build ejs file
@@ -345,11 +358,11 @@ class DocsBuilder {
 	): Record<string, any> {
 		return {
 			...existingData,
-			rootDir: getRelativePathToSrc(destDir, pathDest), // Relative path to the root directory
+			rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
 			filename: htmlFilename, // This should only contain the filename without any directory
-			urlPath: getURLPath(pathDest),
-			urlParentDir: getURLParentPath(pathDest),
-			editPath: getEditURL(existingData["docsEditURL"], pathSrc),
+			urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
+			urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
+			editPath: getEditURL(existingData["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 			docsVersion: version,
 			isDocsFile: true,
 		};
@@ -372,8 +385,8 @@ class DocsBuilder {
 		data: Record<string, any>,
 	): Promise<void> {
 		const htmlFilename = mdFile.replace(".md", ".html");
-		const pathSrc = `${versionSrc}/${mdFile}`;
-		const pathDest = `${versionDest}/${htmlFilename}`;
+		const pathSrc = path.resolve(`${versionSrc}/${mdFile}`);
+		const pathDest = path.resolve(`${versionDest}/${htmlFilename}`);
 		const itemData = this.getDocsFileBuildData(htmlFilename, pathSrc, pathDest, version, data);
 
 		// Convert markdown to HTML
@@ -469,8 +482,8 @@ class DocsBuilder {
 		version: string,
 		data: Record<string, any>,
 	): Promise<void> {
-		const versionSrc = `${docsSrcRoot}/${version}`;
-		const versionDest = `${docsDestRoot}/${version}`;
+		const versionSrc = path.resolve(`${docsSrcRoot}/${version}`);
+		const versionDest = path.resolve(`${docsDestRoot}/${version}`);
 
 		// Ensure the src and dest folders are valid, and the dest folder exists
 		await ensureValidSrcAndDest(versionSrc, versionDest);
@@ -528,14 +541,14 @@ class DocsBuilder {
 	const data = await getBuildData(configPath);
 
 	// Build all ejs files (Convert from EJS to HTML)
-	await buildEjsFiles(srcDir, destDir, data);
+	await buildEjsFiles(srcRootDir, destRootDir, data);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
-	const docsBuilder = new DocsBuilder(`${srcDir}/partials/docs.ejs`);
-	const srcDocs = `${srcDir}/docs`;
-	const destDocs = `${destDir}/docs`;
+	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs.ejs`);
+	const srcDocs = `${srcRootDir}/docs`;
+	const destDocs = `${destRootDir}/docs`;
 	await docsBuilder.build(srcDocs, destDocs, data);
 
 	// Copy all remaining files
-	await copyFiles(srcDir, destDir);
+	await copyFiles(srcRootDir, destRootDir);
 })();
