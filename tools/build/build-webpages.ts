@@ -6,12 +6,15 @@ import * as lru from "lru-cache";
 import * as path from "path";
 import * as showdown from "showdown";
 import * as yaml from "js-yaml";
+import { statSync } from "fs";
 import { existsSync, promises as fs } from "fs";
 import fetch from "node-fetch";
 
 const rootDir = path.resolve(__dirname, "..", "..");
 const srcRootDir = path.resolve(`${rootDir}/src`);
 const destRootDir = path.resolve(`${rootDir}/build`);
+const srcRootDocs = `${srcRootDir}/docs`;
+const destRootDocs = `${destRootDir}/docs`;
 const configPath = path.resolve(`${srcRootDir}/config.json`);
 
 // @ts-ignore
@@ -168,6 +171,18 @@ async function getBuildData(dataFile: string): Promise<Record<string, any>> {
 			"0.10.0": "0.10.0",
 			"0.9.2": "0.9.2",
 		},
+    docsVersions: await (async () => {
+      // Get all directories in the docs folder that are not current, next, or latest,
+      let entries = await fs.readdir(srcRootDocs);
+
+      // Filter out  non-directories
+      entries = entries.filter((entry) => {
+        const entryPath = path.join(srcRootDocs, entry);
+        return (statSync(entryPath)).isDirectory();
+      });
+
+      return entries;
+    })()
 	};
 }
 
@@ -545,9 +560,7 @@ class DocsBuilder {
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs.ejs`);
-	const srcDocs = `${srcRootDir}/docs`;
-	const destDocs = `${destRootDir}/docs`;
-	await docsBuilder.build(srcDocs, destDocs, data);
+	await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
 	// Copy all remaining files
 	await copyFiles(srcRootDir, destRootDir);

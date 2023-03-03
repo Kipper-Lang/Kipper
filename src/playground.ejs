@@ -4,13 +4,14 @@
 <html lang="en">
 <head>
     <%- include('./partials/head', { title: title, description: description }) %>
-    <link rel="stylesheet" href="css/playground.scss" />
-    <link rel="stylesheet" href="css/spinner.scss" />
-    <link rel="stylesheet" href="./prism/shades-of-purple.css" />
+    <link rel="stylesheet" href="<%= rootDir %>/css/playground.scss" />
+    <link rel="stylesheet" href="<%= rootDir %>/css/spinner.scss" />
+    <link rel="stylesheet" href="<%= rootDir %>/prism/shades-of-purple.css" />
 </head>
 <body>
 <script src="./js/plugins.ts"></script>
 <script src="./prism/prism.js"></script>
+<script defer type="module" src="<%= rootDir %>/js/playground.ts"></script>
 
 <!-- Show Error if JS is disabled or blocked -->
 <noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
@@ -25,7 +26,7 @@
             <div id="left-console-interface" class="flex-column">
                 <div id="playground-option-menu" class="flex-row">
                     <div id="version-selection">
-                        <div class="playground-button-wrapper" id="version-selector-button">
+                        <div class="playground-button-wrapper" id="version-selector-root-button-wrapper">
                             <button>
                                 <span><%= `v${latestVersion}` %></span>
                                 <i class="fa-solid fa-xs fa-caret-down"></i>
@@ -33,11 +34,9 @@
                         </div>
                         <ul id="versions-dropdown" class="no-style-list flex-column">
                             <% Object.keys(versions).forEach((v) => { %>
-                                <%-
-                                `<li id="version-selector-${v}" class="version-selector-button-wrapper" data-version="${versions[v]}">
-                                  <button>${v}</button>
-                                </li>`
-                                %>
+                                <li id="version-selector-<%= v %>" class="version-selector-button-wrapper" data-version="<%= versions[v] %>">
+                                    <button><%= v %></button>
+                                </li>
                             <% }); %>
                         </ul>
                     </div>
@@ -92,8 +91,6 @@
                 </div>
             </div>
         </div>
-
-        <script type="module" src="js/playground.ts"></script>
 
         <!-- Footer bar - contains some links and general copyright notice -->
         <%- include('./partials/footer') %>

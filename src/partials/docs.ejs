@@ -8,6 +8,7 @@
 <script src="<%= rootDir %>/js/plugins.ts"></script>
 <script src="<%= rootDir %>/js/markdown.ts"></script>
 <script src="<%= rootDir %>/prism/prism.js"></script>
+<script defer type="module" src="<%= rootDir %>/js/docs.ts"></script>
 
 <% let docsRoot = `${rootDir}/docs`; %>
 <% let thisVersion = `${docsRoot}/${docsVersion}`; %>
@@ -28,7 +29,9 @@
                         sidebarHeadings: sidebarHeadings,
                         header: false,
                         title: title,
-                        description: description
+                        description: description,
+                        thisFile: thisFile,
+                        docsRoot: docsRoot,
                     }) %>
                 </li>
                 <li class="docs-page-content-container">

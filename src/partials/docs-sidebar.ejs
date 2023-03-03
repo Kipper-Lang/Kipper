@@ -1,13 +1,22 @@
 <nav id="docs-sidebar-nav">
     <div id="docs-sidebar-nav-head">
         <h6><a class="docs-page-nav-header" href="./index.html">Kipper Docs</a></h6>
-        <div id="docs-version-selector-button-wrapper">
-            <button>
+        <div id="docs-version-selection">
+            <div id="docs-version-selector-root-button-wrapper">
+                <button>
                 <span class="h6">
-                    <%= `${docsVersion}` %>
+                    <span><%= `${docsVersion}` %></span>
                     <i class="fa-solid fa-xs fa-caret-down"></i>
                 </span>
-            </button>
+                </button>
+            </div>
+            <ul id="docs-versions-dropdown" class="no-style-list flex-column">
+                <% docsVersions.forEach((v) => { %>
+                    <li id="docs-version-selector-<%= v %>" class="docs-version-selector-button-wrapper" data-version="<%= v %>">
+                        <a href="<%= thisFile.replace(`/${docsVersion}`, "").replace(docsRoot, `${docsRoot}/${v}`) %>"><%= v %></a>
+                    </li>
+                <% }); %>
+            </ul>
         </div>
     </div>
     <ul class="no-style-list flex-column">

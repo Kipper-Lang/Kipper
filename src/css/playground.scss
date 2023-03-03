@@ -23,7 +23,7 @@
 				position: relative;
 				z-index: 2;
 
-				#versions-dropdown {
+				& > #versions-dropdown {
 					/* Hide the dropdown at first */
 					display: none;
 					visibility: hidden;
@@ -38,6 +38,7 @@
 					box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
 					&:last-child.version-selector-button-wrapper {
+            /* Remove the border from the last element */
 						border-bottom: none;
 					}
 
@@ -65,7 +66,7 @@
 					}
 				}
 
-				#version-selector-button {
+				#version-selector-root-button-wrapper {
 					/* A minimum width to prevent the button from being too small with short versions */
 					min-width: 5rem;
 					display: flex;
