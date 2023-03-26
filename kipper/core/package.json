@@ -64,7 +64,7 @@
 		"build": "tsc",
 		"version": "pnpm version",
 		"antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./KipperLexer.g4 ./KipperParser.g4",
-		"postantlr4ts": "pnpm run build && run-script-os",
+		"postantlr4ts": "run-script-os",
 		"postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./",
 		"postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\ && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\",
 		"lint": "pnpm run tslint",
