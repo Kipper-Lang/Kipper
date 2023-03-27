@@ -18,6 +18,10 @@ To use development versions of Kipper download the
 
 ### Added
 
+- New field:
+  - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
+     context of the error.
+
 ### Changed
 
 ### Fixed
