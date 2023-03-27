@@ -20,13 +20,13 @@ To use development versions of Kipper download the
 
 - New field:
   - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
-     context of the error.
+    context of the error.
 
 ### Changed
 
 ### Fixed
 
-- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead 
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
   of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
 
 ### Deprecated
