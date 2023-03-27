@@ -8,7 +8,7 @@ import type { FailedPredicateException } from "antlr4ts/FailedPredicateException
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import type { KipperParseStream } from "./compiler";
-import { CompilableASTNode } from "./compiler";
+import { CompilableASTNode, KipperProgramContext } from "./compiler";
 import { getParseRuleSource } from "./utils";
 
 /**
@@ -158,6 +158,14 @@ export class KipperError extends Error {
 				? getParseRuleSource(this.tracebackData.errorNode.antlrRuleCtx)
 				: undefined)
 		);
+	}
+
+	/**
+	 * Returns the program ctx containing the metadata of the program compilation in which the error occurred.
+	 * @since 0.11.0
+	 */
+	public get programCtx(): KipperProgramContext | undefined {
+		return this.tracebackData.errorNode?.programCtx;
 	}
 }
 
