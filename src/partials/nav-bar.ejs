@@ -1,10 +1,9 @@
-<% let relativePath = isNestedDir ? ".." : "."; %>
-
 <header id="home-page-header" class="page-header">
     <nav id="header-nav-bar">
         <ul>
             <li>
-                <a  href="index.html"
+                <a
+                    href="index.html"
                     class="
                     no-style-list
                     flex-row
@@ -13,65 +12,68 @@
                     kipper-logo-container
                     "
                 >
-                    <img id="kipper-logo" src="<%= relativePath; %>/img/icons/kipper-base-head.png" alt="" />
+                    <img id="kipper-logo" src="<%= rootDir; %>/img/icons/kipper-base-head.png" alt="" />
                 </a>
-                <a class="
-                         underline-button kipper-logo-identifier
-                         "
-                   href="<%= relativePath; %>/index.html"
+                <a
+                    class="
+                    underline-button kipper-logo-identifier
+                    "
+                    href="<%= rootDir %>/index.html"
                 >
                     <h2>Kipper</h2>
                 </a>
                 <a class="version-identifier"
-                   href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v<%= version; %>">
-                    <small>v<%= version; %></small>
+                   href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v<%= latestVersion; %>">
+                    <small>v<%= latestVersion %></small>
                 </a>
             </li>
             <li>
                 <a
-                        href="<%= relativePath; %>/download.html"
-                        class="
-                        underline-button
-                        <%= filename.endsWith("download.html") ? "selected-nav-page" : ""; %>
-                        top-nav-menu-item
-                        top-nav-button
-                        "
-                ><h4>Downloads</h4></a
+                    href="<%= rootDir; %>/download.html"
+                    class="
+                    underline-button
+                    <%= filename.endsWith("download.html") ? "selected-nav-page" : ""; %>
+                    top-nav-menu-item
+                    top-nav-button
+                    "
                 >
+                    <h4>Downloads</h4>
+                </a>
             </li>
             <li>
                 <a
-                        href="<%= relativePath %>/docs/index.html"
-                        class="
-                        underline-button
-                        <%= isDocsFile ? "selected-nav-page" : ""; %>
-                        top-nav-menu-item
-                        top-nav-button
-                        "
-                ><h4>Docs</h4></a
+                    href="<%= rootDir %>/docs/index.html"
+                    class="
+                    underline-button
+                    <%= isDocsFile ? "selected-nav-page" : ""; %>
+                    top-nav-menu-item
+                    top-nav-button
+                    "
                 >
+                    <h4>Docs</h4>
+                </a>
             </li>
             <li>
                 <a
-                        href="<%= relativePath %>/playground.html"
-                        class="
-                        underline-button
-                        <%= filename.endsWith("playground.html") ? "selected-nav-page" : ""; %>
-                        top-nav-menu-item
-                        top-nav-button
-                        "
+                    href="<%= rootDir %>/playground.html"
+                    class="
+                    underline-button
+                    <%= filename.endsWith("playground.html") ? "selected-nav-page" : ""; %>
+                    top-nav-menu-item
+                    top-nav-button
+                    "
                 >
                     <h4>Playground</h4>
                 </a>
             </li>
             <li>
-                <a href="<%= relativePath %>/changelog.html"
+                <a href="<%= rootDir %>/changelog.html"
                    class="
-                        underline-button
-                        <%= filename.endsWith("changelog.html") ? "selected-nav-page" : ""; %>
-                        top-nav-menu-item
-                        top-nav-button
-                        "
+                    underline-button
+                    <%= filename.endsWith("changelog.html") ? "selected-nav-page" : ""; %>
+                    top-nav-menu-item
+                    top-nav-button
+                    "
                 >
                     <h4>Changelog</h4>
                 </a>
@@ -85,10 +87,10 @@
                 <li id="search-bar">
                     <label for="search-bar-input"></label>
                     <input
-                            id="search-bar-input"
-                            type="search"
-                            placeholder="Search..."
-                            spellcheck="false"
+                        id="search-bar-input"
+                        type="search"
+                        placeholder="Search..."
+                        spellcheck="false"
                     />
                 </li>
             </ul>

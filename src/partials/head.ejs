@@ -1,31 +1,32 @@
-<% let relativePath = isNestedDir ? ".." : "."; %>
-<% let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}` + `v${version}` %>
+<%# The title suffix, which will use the specified docsVersion if defined (only for documentation files) %>
+<% let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}` + `v${!docsVersion || docsVersion === "latest" ? latestVersion : docsVersion}` %>
 
 <meta charset="utf-8" />
+<%# Use the custom title if it defined as a prefix %>
 <title><%= (typeof title != "undefined" ? title + " - " : "") + titleSuffix ;%></title>
 <meta
-        name="description"
-        content="<%= typeof description != "undefined" ? description : "The new customisable and easy to use type-safe language for the web and Node.js! " ;%>"
+    name="description"
+    content="<%= typeof description != "undefined" ? description : "The new customisable and easy to use type-safe language for the web and Node.js! " ;%>"
 />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link rel="manifest" href="../<%= relativePath ;%>/site.webmanifest" />
-<link rel="apple-touch-icon" href="<%= relativePath ;%>/img/icons/kipper-icon.png" />
-<link rel="shortcut icon" type="image/ico" href="../<%= relativePath ;%>/favicon.ico" />
+<link rel="manifest" href="../<%= rootDir %>/site.webmanifest" />
+<link rel="apple-touch-icon" href="<%= rootDir %>/img/icons/kipper-icon.png" />
+<link rel="shortcut icon" type="image/ico" href="../<%= rootDir %>/favicon.ico" />
 
-<link rel="stylesheet" href="<%= relativePath ;%>/css/normalize.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/main.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/screen.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/buttons.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/nav-bar.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/text.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/lists.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/footer.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/table.scss" />
-<link rel="stylesheet" href="<%= relativePath ;%>/css/markdown.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/normalize.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/main.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/screen.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/buttons.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/nav-bar.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/text.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/lists.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/footer.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/table.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/markdown.scss" />
 
 <!-- Loading the prism highlighting style-sheet -->
-<link rel="stylesheet" href="<%= relativePath ;%>/prism/prism.css" />
+<link rel="stylesheet" href="<%= rootDir %>/prism/prism.css" />
 
 <!-- Font Awesome Icons -->
 <script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
@@ -41,11 +42,10 @@ See main.scss for the --scheme-primary variable
 
 <!-- Meta fields -->
 <meta property="og:site_name" content="Kipper">
-<meta property="og:title" content="<%= (typeof title != "undefined" ? title + " - " : "") + `Kipper v${version}` ;%>">
+<meta property="og:title" content="<%= (typeof title != "undefined" ? title + " - " : "") + `Kipper v${docsVersion ?? latestVersion}` ;%>">
 <meta property="og:description"
       content="<%= typeof description != "undefined" ? description : "The new customisable and easy to use type-safe language for the web and Node.js! " ;%>">
 <meta property="og:type" content="website">
-<meta property="og:url" content="<%= `${websitePublicURL}/${filePath}` ;%>">
-<meta property="og:image"
-      content="https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/src/img/icons/kipper-head-icon.png">
+<meta property="og:url" content="<%= `${websitePublicURL}${urlPath}` ;%>">
+<meta property="og:image" content="<%= `${rootDir}/img/icons/kipper-head-icon.png` %>">
 <meta property="og:locale" content="en_GB">

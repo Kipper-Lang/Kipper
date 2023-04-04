@@ -1,256 +1,257 @@
 /*! Configuration for the Playground */
 
 #interactive-console {
-  #left-console-interface {
-    margin: 0;
-    display: flex;
-    flex-grow: 2;
+	#left-console-interface {
+		margin: 0;
+		display: flex;
+		flex-grow: 2;
 
-    #playground-option-menu {
-      display: flex;
-      flex-direction: row;
-      align-content: center;
-      justify-content: flex-start;
-      border-bottom: 2px solid var(--scheme-gray);
+		#playground-option-menu {
+			display: flex;
+			flex-direction: row;
+			align-content: center;
+			justify-content: flex-start;
+			border-bottom: 2px solid var(--scheme-gray);
 
-      #clear-content-list-item {
-        margin-right: 1rem;
-      }
+			#clear-content-list-item {
+				margin-right: 1rem;
+			}
 
-      #version-selection {
-        margin-bottom: 0;
-        margin-left: 0;
-        position: relative;
-        z-index: 2;
+			#version-selection {
+				margin-bottom: 0;
+				margin-left: 0;
+				position: relative;
+				z-index: 2;
 
-        #versions-dropdown {
-          /* Hide the dropdown at first */
-          display: none;
-          visibility: hidden;
-          position: absolute;
-          top: 100%;
-          width: calc(100% - 8px);
-          margin: 4px 0 0 4px;
-          z-index: 2;
-          overflow-y: auto;
-          max-height: 60vh;
-          border-radius: 5px;
-          box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+				& > #versions-dropdown {
+					/* Hide the dropdown at first */
+					display: none;
+					visibility: hidden;
+					position: absolute;
+					top: 100%;
+					width: calc(100% - 8px);
+					margin: 4px 0 0 4px;
+					z-index: 2;
+					overflow-y: auto;
+					max-height: 60vh;
+					border-radius: 5px;
+					box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-          &:last-child.version-selector-button-wrapper {
-            border-bottom: none;
-          }
+					&:last-child.version-selector-button-wrapper {
+            /* Remove the border from the last element */
+						border-bottom: none;
+					}
 
-          li.version-selector-button-wrapper {
-            display: flex;
-            align-content: center;
-            justify-content: center;
-            border-bottom: 2px solid var(--scheme-gray);
+					li.version-selector-button-wrapper {
+						display: flex;
+						align-content: center;
+						justify-content: center;
+						border-bottom: 2px solid var(--scheme-gray);
 
-            button {
-              /* Similar styles like in the playground button */
-              padding: 0.8rem 0.8rem;
-              background-color: white;
-              border: none;
-              cursor: pointer;
+						button {
+							/* Similar styles like in the playground button */
+							padding: 0.8rem 0.8rem;
+							background-color: white;
+							border: none;
+							cursor: pointer;
 
-              /* Make the button grow to the size of the parent */
-              flex-grow: 1;
+							/* Make the button grow to the size of the parent */
+							flex-grow: 1;
 
-              &:hover {
-                color: var(--scheme-primary);
-                background-color: var(--scheme-gray);
-              }
-            }
-          }
-        }
+							&:hover {
+								color: var(--scheme-primary);
+								background-color: var(--scheme-gray);
+							}
+						}
+					}
+				}
 
-        #versions-button {
-          /* A minimum width to prevent the button from being too small with short versions */
-          min-width: 5rem;
-          display: flex;
+				#version-selector-root-button-wrapper {
+					/* A minimum width to prevent the button from being too small with short versions */
+					min-width: 5rem;
+					display: flex;
 
-          button {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: row;
-            align-content: center;
-            justify-content: center;
-            column-gap: 0.4rem;
+					button {
+						flex-grow: 1;
+						display: flex;
+						flex-direction: row;
+						align-content: center;
+						justify-content: center;
+						column-gap: 0.4rem;
 
-            .fa-caret-down::before {
-              display: block;
-              margin-top: 0.7em;
-            }
-          }
-        }
-      }
-    }
+						.fa-caret-down::before {
+							display: block;
+							margin-top: 0.7em;
+						}
+					}
+				}
+			}
+		}
 
-    /* The entire code entire window -> parent of the label and textarea */
-    #code-editor {
-      display: flex;
-      flex-grow: 1;
-      min-width: 0;
-      min-height: 0;
+		/* The entire code entire window -> parent of the label and textarea */
+		#code-editor {
+			display: flex;
+			flex-grow: 1;
+			min-width: 0;
+			min-height: 0;
 
-      .line-numbers .line-numbers-rows {
-        /* Disable the border for the line-numbers sidebar */
-        border-right: none;
+			.line-numbers .line-numbers-rows {
+				/* Disable the border for the line-numbers sidebar */
+				border-right: none;
 
-        /* Remove the additional spacing which was used for the border */
-        left: -2.8em;
-        width: 2em;
-      }
+				/* Remove the additional spacing which was used for the border */
+				left: -2.8em;
+				width: 2em;
+			}
 
-      /*
+			/*
        * The user input fields - the two fields will be put over each other to make it look
        * like a single field
       */
-      #code-editor-textarea,
-      #highlighting-field {
-        /* Putting them on top of each other */
-        position: absolute;
-        flex-grow: 0;
+			#code-editor-textarea,
+			#highlighting-field {
+				/* Putting them on top of each other */
+				position: absolute;
+				flex-grow: 0;
 
-        /* Allow scrolling */
-        overflow: auto;
+				/* Allow scrolling */
+				overflow: auto;
 
-        /* Identical styling */
-        margin: 0;
-        padding: 1rem 1rem 1rem 3rem;
-        resize: none;
-        border: none;
-        outline: none;
-        max-height: 60vh;
-        max-width: 70vw;
-      }
+				/* Identical styling */
+				margin: 0;
+				padding: 1rem 1rem 1rem 3rem;
+				resize: none;
+				border: none;
+				outline: none;
+				max-height: 60vh;
+				max-width: 70vw;
+			}
 
-      #code-editor-textarea,
-      #highlighting-field,
-      #highlighting-field * {
-        /* Also add text styles to highlighting tokens */
-        font-size: 14px;
-        font-family: consolas, monospace;
-        line-height: 18px;
-        background-color: white;
-        tab-size: 2;
-      }
+			#code-editor-textarea,
+			#highlighting-field,
+			#highlighting-field * {
+				/* Also add text styles to highlighting tokens */
+				font-size: 14px;
+				font-family: consolas, monospace;
+				line-height: 18px;
+				background-color: white;
+				tab-size: 2;
+			}
 
-      #code-editor-textarea {
-        /* Move the textarea in front of the result */
-        z-index: 1;
-        color: transparent;
-        background: transparent;
-        caret-color: var(--scheme-primary);
+			#code-editor-textarea {
+				/* Move the textarea in front of the result */
+				z-index: 1;
+				color: transparent;
+				background: transparent;
+				caret-color: var(--scheme-primary);
 
-        &::selection {
-          text-shadow: none;
-          background: rgba(70, 93, 160, 0.2);
-        }
-      }
+				&::selection {
+					text-shadow: none;
+					background: rgba(70, 93, 160, 0.2);
+				}
+			}
 
-      #highlighting-field {
-        z-index: 0;
+			#highlighting-field {
+				z-index: 0;
 
-        #highlighting-field-content {
-          margin: 0 !important;
-          padding: 0 !important;
-          border-radius: 0 !important;
-        }
-      }
-    }
-  }
+				#highlighting-field-content {
+					margin: 0 !important;
+					padding: 0 !important;
+					border-radius: 0 !important;
+				}
+			}
+		}
+	}
 
-  .playground-button-wrapper {
-    display: flex;
-    align-content: center;
-    justify-content: center;
+	.playground-button-wrapper {
+		display: flex;
+		align-content: center;
+		justify-content: center;
 
-    button {
-      flex-grow: 1;
-      padding: 1rem 1rem;
-      background-color: white;
-      border: none;
-      cursor: pointer;
+		button {
+			flex-grow: 1;
+			padding: 1rem 1rem;
+			background-color: white;
+			border: none;
+			cursor: pointer;
 
-      &:hover {
-        color: var(--scheme-primary);
-        background-color: var(--scheme-gray);
-      }
-    }
-  }
+			&:hover {
+				color: var(--scheme-primary);
+				background-color: var(--scheme-gray);
+			}
+		}
+	}
 
-  /* Sidebar styling */
-  #shell-sidebar {
-    margin: 0;
-    display: flex;
+	/* Sidebar styling */
+	#shell-sidebar {
+		margin: 0;
+		display: flex;
 
-    #shell-sidebar-menu {
-      padding: 0;
-      width: inherit;
+		#shell-sidebar-menu {
+			padding: 0;
+			width: inherit;
 
-      .playground-button-wrapper {
-        display: flex;
-        flex-grow: 1;
-      }
+			.playground-button-wrapper {
+				display: flex;
+				flex-grow: 1;
+			}
 
-      button {
-        border-bottom: 2px solid var(--scheme-gray);
-        flex-grow: 1;
-      }
-    }
+			button {
+				border-bottom: 2px solid var(--scheme-gray);
+				flex-grow: 1;
+			}
+		}
 
-    #shell-output {
-      & > .code-toolbar {
-        color: #9efeff; /* Shades of purple - Console theme color */
+		#shell-output {
+			& > .code-toolbar {
+				color: #9efeff; /* Shades of purple - Console theme color */
 
-        & pre,
-        & code {
-          border-radius: 0;
-        }
-      }
-    }
+				& pre,
+				& code {
+					border-radius: 0;
+				}
+			}
+		}
 
-    #shell-output {
-      &,
-      & > .code-toolbar,
-      & > .code-toolbar > pre {
-        display: flex;
-        flex-grow: 1;
-      }
+		#shell-output {
+			&,
+			& > .code-toolbar,
+			& > .code-toolbar > pre {
+				display: flex;
+				flex-grow: 1;
+			}
 
-      #shell-sidebar-highlight-field {
-        background-color: var(--scheme-console-blue);
-        display: flex;
-        flex-grow: 1;
-        margin: 0;
-        padding: 0;
-        width: inherit;
+			#shell-sidebar-highlight-field {
+				background-color: var(--scheme-console-blue);
+				display: flex;
+				flex-grow: 1;
+				margin: 0;
+				padding: 0;
+				width: inherit;
 
-        & > #shell-sidebar-highlight-field-content {
-          border-radius: 0;
-          align-self: flex-start;
-          overflow: auto;
-          overflow-wrap: break-word;
-          word-wrap: break-word; /* For IE */
+				& > #shell-sidebar-highlight-field-content {
+					border-radius: 0;
+					align-self: flex-start;
+					overflow: auto;
+					overflow-wrap: break-word;
+					word-wrap: break-word; /* For IE */
 
-          /* Apply proper formatting */
-          margin: 0;
-          padding: 1rem;
-          width: 30vw;
-          min-height: 0;
-          min-width: 0;
-          flex-grow: 1;
+					/* Apply proper formatting */
+					margin: 0;
+					padding: 1rem;
+					width: 30vw;
+					min-height: 0;
+					min-width: 0;
+					flex-grow: 1;
 
-          /* Update font */
-          font-size: 14px;
-          line-height: 18px;
+					/* Update font */
+					font-size: 14px;
+					line-height: 18px;
 
-          /* Tabs should be handled like spaces */
-          tab-size: 1;
-        }
-      }
-    }
-  }
+					/* Tabs should be handled like spaces */
+					tab-size: 1;
+				}
+			}
+		}
+	}
 }

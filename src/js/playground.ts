@@ -24,14 +24,14 @@ const textSavingState: HTMLDivElement = document.querySelector("#text-saving-sta
 const versionSelectorDropdown: HTMLUListElement = document.querySelector("#versions-dropdown");
 
 // Menu buttons
-const runCodeListItem: HTMLLIElement = document.querySelector("#run-code-list-item");
 let runCodeButton: HTMLButtonElement = document.querySelector("#run-code-list-item button");
+const runCodeListItem: HTMLLIElement = document.querySelector("#run-code-list-item");
 const copyCodeButton: HTMLButtonElement = document.querySelector("#copy-code-list-item button");
 const clearContentButton: HTMLButtonElement = document.querySelector("#clear-content-list-item button");
 
 // Version selector button
-const versionSelectorButton: HTMLButtonElement = document.querySelector("#versions-button button");
-const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#versions-button button span");
+const versionSelectorButton: HTMLButtonElement = document.querySelector("#version-selector-root-button-wrapper button");
+const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#version-selector-root-button-wrapper button span");
 
 // Sidebar editor fields
 const shellOutput: HTMLDivElement = document.querySelector("#shell-output");
@@ -67,6 +67,7 @@ let warmUp: Promise<void> | undefined = undefined;
 function ensureVersionIsSet(): void {
 	if (!localStorage.getItem("kipperVersion")) {
 		// Get the default version from the dropdown (EJS will have handled this and rendered the correct version)
+    // Remove the 'v' prefix, as for NPM versions, the 'v' prefix is not used.
 		const defaultVersion = versionSelectorButtonVersionText.innerText.replace("v", "");
 
 		localStorage.setItem("kipperVersion", defaultVersion);
@@ -356,12 +357,27 @@ function enableVersionDropdownVisibility(): void {
  * Toggles on or off the dropdown for the version picker.
  */
 function toggleVersionDropdownVisibility(): void {
-  const isVisible = versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
-  if (isVisible) {
+	const isVisible =
+		versionSelectorDropdown.style.visibility === "visible" && versionSelectorDropdown.style.display !== "none";
+	if (isVisible) {
 		disableVersionDropdownVisibility();
 	} else {
 		enableVersionDropdownVisibility();
 	}
+}
+
+/**
+ * Sets the version of the playground to the version that was selected.
+ * @param versionListItem The list item that was clicked.
+ */
+async function selectPlaygroundVersion(versionListItem: HTMLLIElement): Promise<void> {
+  // Set the version based on the data field of the element
+  const version = versionListItem.getAttribute("data-version");
+  console.log(version);
+  if (version !== null) {
+    setKipperVersion(version);
+    disableVersionDropdownVisibility(); // Hide the dropdown
+  }
 }
 
 let consoleOutput = "";
@@ -420,9 +436,10 @@ function writeConsoleOutputDefaultMessage(): void {
  * Escapes all '&', '<' and '>' characters.
  */
 function escapeHTMLChars(str: string): string {
-  return str.replace(new RegExp("&", "g"), "&amp;")
-    .replace(new RegExp("<", "g"), "&lt;")
-    .replace(new RegExp(">", "g"), "&gt;");
+	return str
+		.replace(new RegExp("&", "g"), "&amp;")
+		.replace(new RegExp("<", "g"), "&lt;")
+		.replace(new RegExp(">", "g"), "&gt;");
 }
 
 /**
@@ -518,7 +535,7 @@ function writeConsoleResultAndHighlight(value: string): void {
 	// Write content to the console
 	shellOutputResult.innerHTML = escapeHTMLChars(value);
 
-  console.log(shellOutputResult);
+	console.log(shellOutputResult);
 
 	// Highlight output field
 	prism.highlightElement(shellOutputResult);
@@ -645,15 +662,8 @@ compilerOutputButton.addEventListener("click", switchToCompilerOutput);
 
 // Version selector dropdown handling (clicking on a version)
 const versionSelectorDropdownItems = document.querySelectorAll("#versions-dropdown .version-selector-button-wrapper");
-versionSelectorDropdownItems.forEach((item) => {
-	item.addEventListener("click", async () => {
-		// Set the version based on the data field of the element
-		const version = item.getAttribute("data-version");
-		if (version !== null) {
-			setKipperVersion(version);
-			disableVersionDropdownVisibility(); // Hide the dropdown
-		}
-	});
+versionSelectorDropdownItems.forEach((item: HTMLLIElement) => {
+	item.addEventListener("click", async () => await selectPlaygroundVersion(item));
 });
 
 // Highlight new input

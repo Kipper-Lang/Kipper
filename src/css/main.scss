@@ -55,7 +55,9 @@
 	}
 }
 
-*, ::after, ::before {
+*,
+::after,
+::before {
 	transition: background-color 0.24s ease;
 }
 
