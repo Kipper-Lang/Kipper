@@ -2,7 +2,7 @@
  * AST Node factories which are used to create AST nodes from the ANTLR4 parse tree.
  * @since 0.10.0
  */
-import type { CompilableASTNode, CompilableNodeParent } from "../compilable-ast-node";
+import type { CompilableASTNode, CompilableNodeParent } from "./compilable-ast-node";
 import type {
 	ASTDeclarationKind,
 	ASTExpressionKind,
@@ -11,8 +11,8 @@ import type {
 	ParserDeclarationContext,
 	ParserExpressionContext,
 	ParserStatementContext,
-} from "../ast-types";
-import { KipperParserRuleContext, ParserASTMapping } from "../../parser";
+} from "./ast-types";
+import { KipperParserRuleContext, ParserASTMapping } from "../parser";
 import {
 	AdditiveExpression,
 	ArrayLiteralPrimaryExpression,
@@ -40,9 +40,10 @@ import {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
-} from "./expressions";
-import { Declaration, FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "./definitions";
-import {
+	Declaration,
+	FunctionDeclaration,
+	ParameterDeclaration,
+	VariableDeclaration,
 	CompoundStatement,
 	DoWhileLoopStatement,
 	ExpressionStatement,
@@ -53,7 +54,7 @@ import {
 	Statement,
 	SwitchStatement,
 	WhileLoopStatement,
-} from "./statements";
+} from "./nodes";
 
 /**
  * A simple blueprint for a factory for creating AST nodes from a parser context.

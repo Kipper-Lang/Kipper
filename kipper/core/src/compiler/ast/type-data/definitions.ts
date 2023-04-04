@@ -1,5 +1,5 @@
 /**
- * Semantic type data definitions for all definition AST nodes.
+ * Semantic type data declarations for all definition AST nodes.
  * @since 0.10.0
  */
 import type { TypeData } from "../../ast";

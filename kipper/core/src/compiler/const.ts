@@ -1,5 +1,5 @@
 /**
- * Constant definitions and types for the compiler implementation.
+ * Constant declarations and types for the compiler implementation.
  * @since 0.3.0
  */
 import type {

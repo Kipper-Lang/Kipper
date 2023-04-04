@@ -1,5 +1,5 @@
 /**
- * Semantic data definitions for all expression AST nodes.
+ * Semantic data declarations for all expression AST nodes.
  * @since 0.10.0
  */
 import type {
@@ -49,7 +49,7 @@ export interface ConstantExpressionSemantics extends ExpressionSemantics {
  * Semantics for AST Node {@link NumberPrimaryExpression}.
  * @since 0.5.0
  */
-export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
+export interface NumberPrimaryExpressionSemantics extends ConstantExpressionSemantics {
 	/**
 	 * The value of the constant number expression.
 	 *
@@ -70,7 +70,7 @@ export interface NumberPrimaryExpressionSemantics extends ExpressionSemantics {
  * Semantics for AST Node {@link ArrayLiteralPrimaryExpression}.
  * @since 0.5.0
  */
-export interface ArrayLiteralPrimaryExpressionSemantics extends ExpressionSemantics {
+export interface ArrayLiteralPrimaryExpressionSemantics extends ConstantExpressionSemantics {
 	/**
 	 * The value of the constant list expression.
 	 * @since 0.5.0
@@ -82,7 +82,7 @@ export interface ArrayLiteralPrimaryExpressionSemantics extends ExpressionSemant
  * Semantics for AST Node {@link StringPrimaryExpression}.
  * @since 0.5.0
  */
-export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
+export interface StringPrimaryExpressionSemantics extends ConstantExpressionSemantics {
 	/**
 	 * The value of the constant string expression.
 	 * @since 0.5.0
@@ -102,12 +102,24 @@ export interface StringPrimaryExpressionSemantics extends ExpressionSemantics {
  * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
  */
-export interface BoolPrimaryExpressionSemantics extends ExpressionSemantics {
+export interface BoolPrimaryExpressionSemantics extends ConstantExpressionSemantics {
 	/**
 	 * The value of this boolean constant expression.
 	 * @since 0.8.0
 	 */
 	value: KipperBoolTypeLiterals;
+}
+
+/**
+ * Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
+ * @since 0.10.0
+ */
+export interface VoidOrNullOrUndefinedPrimaryExpressionSemantics extends ConstantExpressionSemantics {
+	/**
+	 * The constant identifier of this expression.
+	 * @since 0.10.0
+	 */
+	constantIdentifier: KipperVoidType | KipperNullType | KipperUndefinedType;
 }
 
 /**
@@ -183,18 +195,6 @@ export interface TangledPrimaryExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.10.0
 	 */
 	childExp: Expression;
-}
-
-/**
- * Semantics for AST Node {@link VoidOrNullOrUndefinedPrimaryExpression}.
- * @since 0.10.0
- */
-export interface VoidOrNullOrUndefinedPrimaryExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The constant identifier of this expression.
-	 * @since 0.10.0
-	 */
-	constantIdentifier: KipperVoidType | KipperNullType | KipperUndefinedType;
 }
 
 /**

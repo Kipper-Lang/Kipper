@@ -1,5 +1,5 @@
 /**
- * Semantic type data definitions for all expression AST nodes.
+ * Semantic type data declarations for all expression AST nodes.
  * @since 0.10.0
  */
 import type { KipperFunction } from "../../const";
@@ -129,7 +129,7 @@ export interface MemberAccessExpressionTypeSemantics extends ExpressionTypeSeman
  * Type Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */
-export interface FunctionCallPostfixTypeSemantics extends ExpressionTypeSemantics {
+export interface FunctionCallExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
 	 * The function that this expression calls. Can be either a {@link ScopeFunctionDeclaration function declaration} or
 	 * a {@link ScopeVariableDeclaration function in a variable}.

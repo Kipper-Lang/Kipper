@@ -1,10 +1,11 @@
 /**
- * Semantic data definitions for all statement AST nodes.
+ * Semantic data declarations for all statement AST nodes.
  * @since 0.10.0
  */
 import type { SemanticData } from "../ast-node";
-import type { Expression, FunctionDeclaration, IfStatement, Statement, VariableDeclaration } from "../nodes";
+import type { Expression, IfStatement, Statement } from "../nodes";
 import type { JmpStatementType } from "../../const";
+import type { FunctionDeclaration, VariableDeclaration } from "../nodes/declarations";
 import { IterationStatement } from "../nodes";
 
 /**
