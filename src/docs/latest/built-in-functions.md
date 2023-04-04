@@ -29,8 +29,8 @@ This function under the hood `console.log()` in both Node.js and Browser environ
 
 Returns the length of the specified iterable `iterable`.
 
-Though note that at the current stage of development only strings are supported, since iterables are yet to be
-implemented with the next releases. For more info regarding the development please go
+Though note that at the current stage of development, only strings are supported, since iterables such as lists are yet
+to be implemented and will be released in the future. For more info regarding the development schedule please go
 [here](https://github.com/Luna-Klatzer/Kipper/discussions/139).
 
 #### List of supported environments
