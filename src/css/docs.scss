@@ -120,6 +120,27 @@
       }
     }
   }
+
+  #markdown-content {
+    h1, h2, h3, h4, h5, h6 {
+      /* Adjust spacing for code in headers */
+      & > :first-child:is(code) {
+        margin: -0.2em;
+      }
+    }
+
+    .docs-version-indicator {
+      font-size: 0.96em;
+      font-weight: 500;
+      font-style: italic;
+      color: var(--scheme-dark-gray);
+      margin-top: -0.2em; /* Align with the header - Better visible separation */
+    }
+
+    .docs-version-indicator + p {
+      margin-top: calc(var(--default-parapgraph-margin) - 0.4em);
+    }
+  }
 }
 
 #docs-sidebar-nav-head {
@@ -271,3 +292,4 @@
 .api-docs-description {
   margin-left: 1rem;
 }
+

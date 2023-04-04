@@ -10,13 +10,32 @@ List of all built-in functions, which are usable in the current release of Kippe
 
 ### `print(msg: str) -> void`
 
-Prints the specified string `msg` onto stdout/the console of the specific
-platform. This function under the hood `console.log()` in both Node.js and
-Browser environments.
+<p class="docs-version-indicator">Since v0.1.0</p>
+
+Prints the specified string `msg` onto stdout/the console of the specific platform. 
+
+This function under the hood `console.log()` in both Node.js and Browser environments.
 
 #### List of supported environments
 
 | Platform            | Status                                       |
-| ------------------- | -------------------------------------------- |
+|---------------------|----------------------------------------------|
+| Node.js             | Supported <em class="green-checkmark">✓</em> |
+| Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
+
+### `len(iterable: str) -> num`
+
+<p class="docs-version-indicator">Since v0.10.0</p>
+
+Returns the length of the specified iterable `iterable`.
+
+Though note that at the current stage of development only strings are supported, since iterables are yet to be
+implemented with the next releases. For more info regarding the development please go
+[here](https://github.com/Luna-Klatzer/Kipper/discussions/139).
+
+#### List of supported environments
+
+| Platform            | Status                                       |
+|---------------------|----------------------------------------------|
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
 | Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
