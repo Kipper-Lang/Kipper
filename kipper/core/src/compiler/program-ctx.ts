@@ -53,7 +53,7 @@ export class KipperProgramContext {
 	private _compiledCode: Array<TranslatedCodeLine> | undefined;
 
 	/**
-	 * The global scope of this program, containing all variable and function definitions
+	 * The global scope of this program, containing all variable and function declarations
 	 * @private
 	 */
 	private readonly _globalScope: GlobalScope;

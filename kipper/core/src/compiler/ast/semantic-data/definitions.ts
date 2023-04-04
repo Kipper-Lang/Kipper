@@ -1,11 +1,12 @@
 /**
- * Semantic data definitions for all definition AST nodes.
+ * Semantic data declarations for all definition AST nodes.
  * @since 0.10.0
  */
 import type { SemanticData } from "../ast-node";
 import type { KipperStorageType } from "../../const";
 import type { Scope } from "../../analysis";
-import type { CompoundStatement, Expression, FunctionDeclaration, ParameterDeclaration } from "../nodes";
+import type { CompoundStatement, Expression } from "../nodes";
+import type { FunctionDeclaration, ParameterDeclaration } from "../nodes/declarations";
 import { IdentifierTypeSpecifierExpression } from "../nodes";
 import { UncheckedType } from "../../analysis";
 

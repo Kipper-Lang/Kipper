@@ -24,6 +24,12 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Made `VoidOrNullOrUndefinedPrimaryExpression` a constant expression and inherit from the `ConstantExpression` class.
+  This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
+  also part of the `ParserConstantExpressionContext` type.
+- Renamed:
+  - `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+
 ### Fixed
 
 - Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead

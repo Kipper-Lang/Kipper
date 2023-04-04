@@ -147,7 +147,7 @@ export abstract class AnalysableASTNode<
 
 	/**
 	 * Ensures that this node successfully passed the semantic analysis. This will be primarily used by statements and
-	 * definitions, which depend on other nodes to be semantically valid.
+	 * declarations, which depend on other nodes to be semantically valid.
 	 *
 	 * This is done by checking if the {@link AnalysableASTNode.hasFailed hasFailed} property is set to true and if the
 	 * {@link AnalysableASTNode.semanticData semanticData} property is undefined. If both of these conditions are met,
@@ -174,7 +174,7 @@ export abstract class AnalysableASTNode<
 
 	/**
 	 * Ensures that this node successfully passed the type checking step of semantic analysis. This will be primarily used
-	 * by statements and definitions, which depend on other nodes to be semantically valid.
+	 * by statements and declarations, which depend on other nodes to be semantically valid.
 	 *
 	 * This is done by checking if the {@link AnalysableASTNode.hasFailed hasFailed} property is set to true and if the
 	 * {@link AnalysableASTNode.typeSemantics typeSemantics} property is undefined. If both of these conditions are met,
