@@ -120,7 +120,7 @@ function getURLPath(absolutePath: string, rootDir: string = destRootDir): string
  * @param absolutePath The absolute path to the file.
  */
 function getEditURL(docsEditURL: string, absolutePath: string): string {
-	return `${docsEditURL}${getURLPath(absolutePath, srcRootDir)}`;
+	return `${docsEditURL}/src${getURLPath(absolutePath, srcRootDir)}`;
 }
 
 /**
