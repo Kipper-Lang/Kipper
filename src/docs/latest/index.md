@@ -8,7 +8,7 @@ nav:
 - ./usage-examples.md
 - ./compiler.md
 - ./variables.md
-- ./datatypes.md
+- ./datatypes/
 - ./expressions.md
 - ./statements.md
 - ./if-statement.md
@@ -42,7 +42,7 @@ information.</p>
 ## Kipper Language Reference
 
 - [Variables](./variables.html)
-- [Variable Datatypes](./datatypes.html)
+- [Datatypes](./datatypes/index.html)
 - [Expressions](./expressions.html)
 - [Statements](./statements.html)
 - [If-Statement](./if-statement.html)
