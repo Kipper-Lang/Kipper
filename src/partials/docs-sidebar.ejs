@@ -20,7 +20,7 @@
         </div>
     </div>
     <ul class="no-style-list flex-column">
-        <% sidebarHeadings.forEach((file) => { %>
+        <% sidebarNav.items.forEach((file) => { %>
             <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
             <% const pathParts = file.path.split("/"); %>
             <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
