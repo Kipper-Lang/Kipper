@@ -13,7 +13,7 @@ nav:
 
 # Datatypes
 
-As previously shown in the docs page [Variables](./variables.html), every variable always has a type that defines what
+As previously shown in the docs page [Variables](../variables.html), every variable always has a type that defines what
 values it can store. This also means that you often can not mix variables of different data types together, as they
 fundamentally represent different things.
 

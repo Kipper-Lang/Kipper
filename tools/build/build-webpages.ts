@@ -8,7 +8,7 @@ import * as showdown from "showdown";
 import * as yaml from "js-yaml";
 import { existsSync, promises as fs, statSync } from "fs";
 import fetch from "node-fetch";
-import { md } from "@parcel/diagnostic";
+import { Options } from "ejs";
 
 const rootDir = path.resolve(__dirname, "..", "..");
 const srcRootDir = path.resolve(`${rootDir}/src`);
@@ -22,6 +22,8 @@ const configPath = path.resolve(`${srcRootDir}/config.json`);
 ejs.cache = new lru({
 	max: 500,
 });
+
+const ejsOptions: Options = { beautify: true, root: path.resolve(`${srcRootDir}/partials/`) };
 
 /**
  * The metadata for a documentation file, which contains the {@link title} and {@link description}.
@@ -235,6 +237,9 @@ async function getBuildData(dataFile: Path): Promise<Record<string, any>> {
 
 	return {
 		...data,
+    path: path,
+    existsSync: existsSync,
+    absoluteSrcRootDir: srcRootDir,
 		latestVersion: json["dist-tags"]["latest"],
 		docsVersion: undefined, // Unless we are in a docs folder, this will be undefined
 		devVersion: json["dist-tags"]["next"],
@@ -317,7 +322,7 @@ async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data: Record
 			};
 
 			// Build ejs file
-			const result: string = await ejs.renderFile(pathSrc, itemData);
+			const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
 			await fs.writeFile(pathDest, result);
 		}
 	}
@@ -366,9 +371,9 @@ function determineMarkdownFileMetadata(markdownHtml: string): DocumentMetaData {
 class DocsSidebar {
 	private readonly src: string;
 	private readonly dest: string;
-	private readonly inputFiles: Array<PathTreeItem>;
 	private readonly builder: DocsBuilder;
 	private sidebarTree: Array<SidebarFile>;
+  public readonly inputFiles: Array<PathTreeItem>;
 
 	constructor(
 		src: AbsolutePath,
@@ -396,7 +401,7 @@ class DocsSidebar {
 	 * Builds the sidebar for the documentation and evaluates the metadata required.
 	 * @returns This instance of the {@link DocsSidebar} class.
 	 */
-	public async build(): Promise<ThisType<DocsSidebar>> {
+	public async build(): Promise<DocsSidebar> {
 		this.sidebarTree = await this.evaluateNavTree(this.src, this.dest);
 		return this;
 	}
@@ -527,7 +532,7 @@ class DocsBuilder {
 		const fileMetadata = this.getMetadataOfLastFile();
 
 		// Set markdown content to the generated HTML and render it again if there are any ejs tags
-		data["markdownContent"] = ejs.render(markdownHtml, data);
+		data["markdownContent"] = ejs.render(markdownHtml, data, ejsOptions);
 
 		// Evaluate title and description
 		const metadata = determineMarkdownFileMetadata(data["markdownContent"]);
@@ -536,7 +541,7 @@ class DocsBuilder {
 		data["title"] = fileMetadata["title"] ?? metadata.title;
 		data["description"] = fileMetadata["description"] ?? metadata.description;
 
-		return await ejs.renderFile(this.baseTemplate, data);
+		return await ejs.renderFile(this.baseTemplate, data, ejsOptions);
 	}
 
 	/**
@@ -597,26 +602,70 @@ class DocsBuilder {
 	}
 
 	/**
-	 * Builds the specified nested directory and its content. This method may be called recursively.
-	 * @param dirPath The path to the directory to build. This path is relative to the version specific source directory.
-	 * @param versionSrc The path to the version specific source directory.
-	 * @param versionDest The path to the version specific destination directory.
-	 * @param version The version of the docs.
-	 * @param data The data to pass to the ejs renderer.
-	 * @param copyToRoot If set to true, the directory will be copied to the root directory. This is used for the
-	 * 'latest' version.
-	 * @private
-	 */
-	private async buildNestedDirectory(
-		dirPath: string,
-		versionSrc: string,
-		versionDest: string,
+   * Builds the specified nested directory and its content. This method may be called recursively.
+   * @param dirPath The path to the directory to build. This path is relative to the version specific source directory.
+   * @param localTree The tree of Markdown files from this directory to build.
+   * @param versionSrc The path to the version specific source directory.
+   * @param versionDest The path to the version specific destination directory.
+   * @param version The version of the docs.
+   * @param data The data to pass to the ejs renderer.
+   * @param sidebarHeadings The sidebar headings for the current version.
+   * @param sidebarHeadingsForCopyToDir The sidebar headings for the copy-to directory, which should be specified only
+   * if the docs should be copied to another location.
+   * @param copyToDir The copy-to directory, which should be specified only if the docs should be copied to another
+   * location.
+   * @private
+   */
+	private async buildDocsDirectory(
+		dirPath: RelativePath,
+    localTree: Array<PathTreeItem> | DirTreeItem,
+		versionSrc: AbsolutePath,
+		versionDest: AbsolutePath,
 		version: string,
 		data: Record<string, any>,
-		copyToRoot: boolean = false,
+    sidebarHeadings: DocsSidebar,
+    sidebarHeadingsForCopyToDir: DocsSidebar | undefined,
+    copyToDir?: AbsolutePath | undefined,
 	): Promise<void> {
-		// TODO!
-	}
+    const dirSrc = path.resolve(`${versionSrc}/${dirPath}`);
+    const dirDest = path.resolve(`${versionDest}/${dirPath}`);
+
+    // The directory to copy to - may be undefined
+    copyToDir = copyToDir ? path.resolve(`${copyToDir}/${dirPath}`) : undefined;
+
+    for (const dirItem of Array.isArray(localTree) ? localTree : localTree.items) {
+      if (typeof dirItem !== "string") {
+        // Create the directory in the destination folder
+        await fs.mkdir(path.resolve(`${dirDest}/${dirItem.name}`), { recursive: true });
+
+        // First build the top-level directory
+        data["sidebarNav"] = sidebarHeadings;
+        await this.buildDocsDirectory(
+          dirItem.name, dirItem, dirSrc, dirDest, version, data, sidebarHeadings, sidebarHeadingsForCopyToDir
+        );
+
+        // If the version is 'latest' then also build the docs in the root folder
+        if (copyToDir) {
+          // Create the directory in the destination folder
+          await fs.mkdir(path.resolve(`${copyToDir}/${dirItem.name}`), { recursive: true });
+
+          data["sidebarNav"] = sidebarHeadingsForCopyToDir;
+          await this.buildDocsDirectory(
+            dirItem.name, dirItem, dirSrc, copyToDir, version, data, sidebarHeadings, sidebarHeadingsForCopyToDir
+          );
+        }
+      } else {
+        data["sidebarNav"] = sidebarHeadings;
+        await this.buildDocsFile(dirItem, dirSrc, dirDest, version, data);
+
+        // If the version is 'latest' then also build the docs in the root folder
+        if (copyToDir) {
+          data["sidebarNav"] = sidebarHeadingsForCopyToDir;
+          await this.buildDocsFile(dirItem, dirSrc, copyToDir, version, data);
+        }
+      }
+    }
+  }
 
 	/**
 	 * Builds a specific version of the docs and places them in the specified target folder with the following path:
@@ -673,26 +722,13 @@ class DocsBuilder {
 		let mdFiles: Array<PathTreeItem> = await processDirContents(dirContents, versionSrc);
 
 		// Get the headings for the sidebar, which are unique for each version
-		const sidebarHeadings = await new DocsSidebar(versionSrc, versionDest, mdFiles, this).build();
-    const sidebarHeadingsForRoot = copyToRoot ? await new DocsSidebar(versionSrc, docsDestRoot, mdFiles, this).build() : sidebarHeadings;
+		const sidebarHeadings: DocsSidebar = await new DocsSidebar(versionSrc, versionDest, mdFiles, this).build();
+    const sidebarHeadingsForRoot: DocsSidebar = copyToRoot ? await new DocsSidebar(versionSrc, docsDestRoot, mdFiles, this).build() : sidebarHeadings;
 
-		// Build the top-level and nested docs files
-		for (let pathItem of mdFiles) {
-			if (typeof pathItem !== "string") {
-				const absolutePath = path.resolve(`${versionSrc}/${pathItem.name}`);
-
-				await this.buildNestedDirectory(absolutePath, versionSrc, versionDest, version, data, copyToRoot);
-			} else {
-				data["sidebarNav"] = sidebarHeadings;
-				await this.buildDocsFile(pathItem, versionSrc, versionDest, version, data);
-
-				// If the version is 'latest' then also build the docs in the root folder
-				if (copyToRoot) {
-					data["sidebarNav"] = sidebarHeadingsForRoot;
-					await this.buildDocsFile(pathItem, versionSrc, docsDestRoot, version, data);
-				}
-			}
-		}
+    // Build the top-level and nested docs files
+    await this.buildDocsDirectory(
+      ".", mdFiles, versionSrc, versionDest, version, data, sidebarHeadings, sidebarHeadingsForRoot, docsDestRoot
+    );
 	}
 
 	/**
@@ -727,7 +763,7 @@ class DocsBuilder {
 	await buildEjsFiles(srcRootDir, destRootDir, data);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
-	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs.ejs`);
+	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs/page.ejs`);
 	await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
 	// Copy all remaining files

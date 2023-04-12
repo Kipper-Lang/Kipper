@@ -4,7 +4,7 @@ title: Number Type
 # Number Type - `num`
 
 Represents a number (both floating point and integer) in the Kipper language. This datatype may always be used with the
-standard mathematical [expressions](./expressions.html).
+standard mathematical [expressions](../expressions.html).
 
 ## Examples
 
