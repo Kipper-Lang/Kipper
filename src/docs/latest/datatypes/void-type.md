@@ -1,6 +1,7 @@
 ---
 title: Void Type
 ---
+
 # Void Type - `void`
 
 The `void` type represents a value that is nothing and may only be `void`.
@@ -30,4 +31,3 @@ def func2() -> void {
 // ✓ Assigning void return to variable of type 'void'
 var var23: void = func2();
 ```
-

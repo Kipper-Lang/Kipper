@@ -12,14 +12,14 @@ List of all built-in functions, which are usable in the current release of Kippe
 
 <p class="docs-version-indicator">Since v0.1.0</p>
 
-Prints the specified string `msg` onto stdout/the console of the specific platform. 
+Prints the specified string `msg` onto stdout/the console of the specific platform.
 
 This function under the hood `console.log()` in both Node.js and Browser environments.
 
 #### List of supported environments
 
 | Platform            | Status                                       |
-|---------------------|----------------------------------------------|
+| ------------------- | -------------------------------------------- |
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
 | Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
 
@@ -36,6 +36,6 @@ to be implemented and will be released in the future. For more info regarding th
 #### List of supported environments
 
 | Platform            | Status                                       |
-|---------------------|----------------------------------------------|
+| ------------------- | -------------------------------------------- |
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
 | Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |

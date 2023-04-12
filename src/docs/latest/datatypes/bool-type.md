@@ -1,6 +1,7 @@
 ---
 title: Boolean Type
 ---
+
 # Boolean Type - `bool`
 
 The boolean is a simple binary value that may be either `true` or `false`.
@@ -23,4 +24,3 @@ var is_equal: bool = var10 <= var11; // 3 smaller than 48 -> True
 var var19: bool = True;
 var var20: num = (var18 as num) + 2; // -> 3
 ```
-

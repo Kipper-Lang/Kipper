@@ -1,6 +1,7 @@
 ---
 title: Array Type
 ---
+
 # Array Type - `Array<T>`
 
 <p class="red-highlight-text">

@@ -1,6 +1,7 @@
 ---
 title: String Type
 ---
+
 # String Type - `str`
 
 A string is a simple sequence of characters in UTF-16. A string may be any length, as underneath the length of the list that represents the string will always be increased as needed.
@@ -21,4 +22,3 @@ var kipper: str = "Kipper is 🦊💘";
 ```
 
 Strings are defined using quotation marks (`""`) , which automatically hint the `str` type.
-

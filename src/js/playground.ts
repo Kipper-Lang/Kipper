@@ -31,7 +31,9 @@ const clearContentButton: HTMLButtonElement = document.querySelector("#clear-con
 
 // Version selector button
 const versionSelectorButton: HTMLButtonElement = document.querySelector("#version-selector-root-button-wrapper button");
-const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector("#version-selector-root-button-wrapper button span");
+const versionSelectorButtonVersionText: HTMLSpanElement = document.querySelector(
+	"#version-selector-root-button-wrapper button span",
+);
 
 // Sidebar editor fields
 const shellOutput: HTMLDivElement = document.querySelector("#shell-output");
@@ -67,7 +69,7 @@ let warmUp: Promise<void> | undefined = undefined;
 function ensureVersionIsSet(): void {
 	if (!localStorage.getItem("kipperVersion")) {
 		// Get the default version from the dropdown (EJS will have handled this and rendered the correct version)
-    // Remove the 'v' prefix, as for NPM versions, the 'v' prefix is not used.
+		// Remove the 'v' prefix, as for NPM versions, the 'v' prefix is not used.
 		const defaultVersion = versionSelectorButtonVersionText.innerText.replace("v", "");
 
 		localStorage.setItem("kipperVersion", defaultVersion);
@@ -371,13 +373,13 @@ function toggleVersionDropdownVisibility(): void {
  * @param versionListItem The list item that was clicked.
  */
 async function selectPlaygroundVersion(versionListItem: HTMLLIElement): Promise<void> {
-  // Set the version based on the data field of the element
-  const version = versionListItem.getAttribute("data-version");
-  console.log(version);
-  if (version !== null) {
-    setKipperVersion(version);
-    disableVersionDropdownVisibility(); // Hide the dropdown
-  }
+	// Set the version based on the data field of the element
+	const version = versionListItem.getAttribute("data-version");
+	console.log(version);
+	if (version !== null) {
+		setKipperVersion(version);
+		disableVersionDropdownVisibility(); // Hide the dropdown
+	}
 }
 
 let consoleOutput = "";

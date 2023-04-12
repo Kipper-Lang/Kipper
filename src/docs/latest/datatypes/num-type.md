@@ -1,6 +1,7 @@
 ---
 title: Number Type
 ---
+
 # Number Type - `num`
 
 Represents a number (both floating point and integer) in the Kipper language. This datatype may always be used with the
@@ -60,4 +61,3 @@ var hex: num = 0xffa2; // -> 65442
 // ✓ Octal Number Support
 var octal: num = 0o347; // -> 231
 ```
-

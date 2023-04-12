@@ -1,23 +1,23 @@
 ---
 title: Overview
 nav:
- - ./index.md
- - ./quickstart.md
- - ./goals-and-roadmap.md
- - ./supported-platforms.md
- - ./usage-examples.md
- - ./compiler.md
- - ./variables.md
- - ./datatypes.md
- - ./expressions.md
- - ./statements.md
- - ./if-statement.md
- - ./while-loop.md
- - ./do-while-loop.md
- - ./for-loop.md
- - ./functions.md
- - ./comments.md
- - ./built-in-functions.md
+  - ./index.md
+  - ./quickstart.md
+  - ./goals-and-roadmap.md
+  - ./supported-platforms.md
+  - ./usage-examples.md
+  - ./compiler.md
+  - ./variables.md
+  - ./datatypes.md
+  - ./expressions.md
+  - ./statements.md
+  - ./if-statement.md
+  - ./while-loop.md
+  - ./do-while-loop.md
+  - ./for-loop.md
+  - ./functions.md
+  - ./comments.md
+  - ./built-in-functions.md
 ---
 
 # Welcome to the Kipper Docs

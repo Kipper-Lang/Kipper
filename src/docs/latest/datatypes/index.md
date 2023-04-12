@@ -1,14 +1,14 @@
 ---
 title: Datatypes
 nav:
-- ./index.md
-- ./str-type.md
-- ./num-type.md
-- ./bool-type.md
-- ./void-type.md
-- ./null-type.md
-- ./undefined-type.md
-- ./array-type.md
+  - ./index.md
+  - ./str-type.md
+  - ./num-type.md
+  - ./bool-type.md
+  - ./void-type.md
+  - ./null-type.md
+  - ./undefined-type.md
+  - ./array-type.md
 ---
 
 # Datatypes

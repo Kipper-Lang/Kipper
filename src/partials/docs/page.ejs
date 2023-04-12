@@ -33,7 +33,7 @@
                         thisFile: thisFile,
                         docsRoot: docsRoot,
                         existsSync: existsSync,
-                        absoluteSrcRootDir: absoluteSrcRootDir
+                        absoluteSrcRootDir: absoluteSrcRootDir,
                     }) %>
                 </li>
                 <li class="docs-page-content-container">
@@ -41,10 +41,16 @@
                         <!-- Content -->
                         <section>
                             <nav id="docs-page-nav">
-                                <ul class="flex-row no-style-list">
-                                    <li><a id="docs-page-nav-kipper-version" href="<%= thisVersionIndex %>"><%= docsVersion %> /</a></li>
-                                    <li><a class="docs-page-nav-header" href="<%= thisFile %>"><%= title %></a></li>
-                                </ul>
+                                <%- include('./nav-path', {
+                                    sidebarNav: sidebarNav,
+                                    thisFile: thisFile,
+                                    rootDir: rootDir,
+                                    thisVersionIndex: thisVersionIndex,
+                                    absoluteSrcRootDir: absoluteSrcRootDir,
+                                    thisNavTreeItem: thisNavTreeItem,
+                                    isIndexFile: isIndexFile,
+                                    isHiddenFile: isHiddenFile,
+                                }) %>
                                 <a
                                     id="edit-page-on-github"
                                     href="<%= editPath %>"
