@@ -148,150 +148,169 @@
 	}
 }
 
-#docs-sidebar-nav-head {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding-bottom: 0.5rem;
-	margin: 0 0 1rem;
-	font-weight: 500;
-	border-bottom: 1px var(--scheme-dark-primary) solid;
-	color: var(--scheme-dark-primary) !important;
+#docs-sidebar-nav-wrapper > #docs-sidebar-nav {
+	#docs-sidebar-nav-head {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding-bottom: 0.5rem;
+		margin: 0 0 1rem;
+		font-weight: 500;
+		border-bottom: 1px var(--scheme-dark-primary) solid;
+		color: var(--scheme-dark-primary) !important;
 
-	#docs-version-selection {
-		margin-bottom: 0;
-		margin-left: 0;
-		position: relative;
-		z-index: 2;
-
-		& > #docs-version-selector-root-button-wrapper {
-			/* A minimum width to prevent the button from being too small with short versions */
-			min-width: 5rem;
-			display: flex;
-			align-content: center;
-			justify-content: center;
-
-			button {
-				display: flex;
-				flex-direction: row;
-				align-content: center;
-				justify-content: center;
-				column-gap: 0.4rem;
-				padding: 0 0.5rem 0 0.5rem;
-				background-color: white;
-				border: none;
-				cursor: pointer;
-
-				&:hover {
-					color: var(--scheme-primary);
-					background-color: var(--scheme-gray);
-				}
-
-				.fa-caret-down::before {
-					display: block;
-					margin-top: 0.7em;
-				}
-			}
-		}
-
-		& > #docs-versions-dropdown {
-			/* Hide the dropdown at first */
-			display: none;
-			visibility: hidden;
-			position: absolute;
-			top: 100%;
-			width: calc(100% - 8px);
-			margin: 4px 0 0 4px;
+		#docs-version-selection {
+			margin-bottom: 0;
+			margin-left: 0;
+			position: relative;
 			z-index: 2;
-			overflow-y: auto;
-			max-height: 60vh;
-			border-radius: 5px;
-			box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-			&:last-child.docs-version-selector-button-wrapper {
-				/* Remove the border from the last element */
-				border-bottom: none;
-			}
-
-			li.docs-version-selector-button-wrapper {
+			& > #docs-version-selector-root-button-wrapper {
+				/* A minimum width to prevent the button from being too small with short versions */
+				min-width: 5rem;
 				display: flex;
 				align-content: center;
 				justify-content: center;
-				border-bottom: 2px solid var(--scheme-gray);
 
-				a {
-					/* Similar styles like in the playground button */
-					padding: 0.8rem 0.8rem;
-					color: black;
+				button {
+					display: flex;
+					flex-direction: row;
+					align-content: center;
+					justify-content: center;
+					column-gap: 0.4rem;
+					padding: 0 0.5rem 0 0.5rem;
 					background-color: white;
 					border: none;
 					cursor: pointer;
 
-					/* Styling copied from button styling, similar to the one from the playground select buttons */
-					font-family: inherit;
-					font-size: 100%;
-					line-height: 1.15;
-					margin: 0;
-					box-sizing: border-box;
-
-					/* Ensure the same sizing/layout like with a standard button */
-					display: flex;
-					align-content: center;
-					justify-content: center;
-
-					/* Make the button grow to the size of the parent */
-					flex-grow: 1;
-
 					&:hover {
 						color: var(--scheme-primary);
 						background-color: var(--scheme-gray);
-						text-decoration: none;
+					}
+
+					.fa-caret-down::before {
+						display: block;
+						margin-top: 0.7em;
+					}
+				}
+			}
+
+			& > #docs-versions-dropdown {
+				/* Hide the dropdown at first */
+				display: none;
+				visibility: hidden;
+				position: absolute;
+				top: 100%;
+				width: calc(100% - 8px);
+				margin: 4px 0 0 4px;
+				z-index: 2;
+				overflow-y: auto;
+				max-height: 60vh;
+				border-radius: 5px;
+				box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+
+				&:last-child.docs-version-selector-button-wrapper {
+					/* Remove the border from the last element */
+					border-bottom: none;
+				}
+
+				li.docs-version-selector-button-wrapper {
+					display: flex;
+					align-content: center;
+					justify-content: center;
+					border-bottom: 2px solid var(--scheme-gray);
+
+					a {
+						/* Similar styles like in the playground button */
+						padding: 0.8rem;
+						color: black;
+						background-color: white;
+						border: none;
+						cursor: pointer;
+
+						/* Styling copied from button styling, similar to the one from the playground select buttons */
+						font-family: inherit;
+						font-size: 100%;
+						line-height: 1.15;
+						margin: 0;
+						box-sizing: border-box;
+
+						/* Ensure the same sizing/layout like with a standard button */
+						display: flex;
+						align-content: center;
+						justify-content: center;
+
+						/* Make the button grow to the size of the parent */
+						flex-grow: 1;
+
+						&:hover {
+							color: var(--scheme-primary);
+							background-color: var(--scheme-gray);
+							text-decoration: none;
+						}
 					}
 				}
 			}
 		}
-	}
 
-	& h6,
-	& .h6 {
-		margin-top: 0.5rem;
-	}
-
-	& > a,
-	& > a:visited {
-		color: var(--scheme-dark-primary) !important;
-	}
-}
-
-.sidebar-nav-header-list-item {
-	display: flex;
-	padding: 0.2rem 0;
-	margin: 0;
-	background-color: transparent;
-
-	& > a {
-		&,
-		&:visited,
-		&:active {
-			color: rgba(75, 85, 99);
-			text-decoration: none;
-			padding: 0.25rem 0 0.25rem 1rem;
-			border-radius: 6px;
-			flex-grow: 1;
-			font-size: 16px;
+		& h6,
+		& .h6 {
+			margin-top: 0.5rem;
 		}
 
-		&:hover {
-			text-decoration: none;
-			color: rgb(17, 24, 39);
-			background-color: rgb(var(--scheme-primary-rgb), 0.12);
+		& > a,
+		& > a:visited {
+			color: var(--scheme-dark-primary) !important;
 		}
 	}
-}
 
-.sidebar-nav-current-header-list-item a {
-	color: rgb(17, 24, 39) !important;
-	background-color: rgba(255, 0, 79, 0.16) !important;
+	ul.docs-sidebar-nav-list {
+		& > li > ul.docs-sidebar-nav-list {
+			margin-left: 0.75rem;
+		}
+
+		.sidebar-nav-header-list-item {
+			display: flex;
+			padding: 0.2rem 0;
+			margin: 0;
+			background-color: transparent;
+
+			/* Padding for the left side of the sidebar list item */
+			$left-nav-list-item-padding: 1rem;
+
+			& > a {
+				&,
+				&:visited,
+				&:active {
+					color: rgba(75, 85, 99);
+					text-decoration: none;
+					padding: 0.25rem 0 0.25rem calc(1rem + $left-nav-list-item-padding);
+					border-radius: 6px;
+					flex-grow: 1;
+					font-size: 16px;
+				}
+
+				&:hover {
+					text-decoration: none;
+					color: rgb(17, 24, 39);
+					background-color: rgb(var(--scheme-primary-rgb), 0.12);
+				}
+			}
+
+			& > a.sidebar-nav-header-dir-item {
+				padding: 0.25rem 0 0.25rem $left-nav-list-item-padding;
+
+				.fa-caret-down {
+					width: 11px;
+				}
+			}
+		}
+
+		.sidebar-nav-current-header-list-item a {
+			color: rgb(17, 24, 39) !important;
+			background-color: rgba(255, 0, 79, 0.16) !important;
+		}
+	}
 }
 
 .api-docs-description {

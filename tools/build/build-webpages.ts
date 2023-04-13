@@ -10,20 +10,20 @@ import { promises as fs, statSync } from "fs";
 
 // Local dependencies
 import type {
-  AbsolutePath,
-  DirTreeItem,
-  Path,
-  PathTreeItem,
-  RelativePath,
-  SidebarDir,
-  SidebarFile,
-  SidebarTreeItem,
+	AbsolutePath,
+	DirTreeItem,
+	Path,
+	PathTreeItem,
+	RelativePath,
+	SidebarDir,
+	SidebarFile,
+	SidebarTreeItem,
 } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
 import {
 	buildEjsFiles,
 	copyFiles,
-	determineMarkdownFileMetadata,
+	determineMarkdownFileMetadata, ensureURLSlashes,
 	ensureValidSrcAndDest,
 	getBuildData,
 	getEditURL,
@@ -155,7 +155,9 @@ export class DocsBuilder {
 	): Record<string, any> {
 		return {
 			...existingData,
-			rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
+			rootDir: ensureURLSlashes(
+				getRelativePathToSrc(destRootDir, pathDest)
+			), // Relative path to the root directory
 			filename: htmlFilename, // This should only contain the filename without any directory
 			urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
 			urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
@@ -163,8 +165,8 @@ export class DocsBuilder {
 			docsVersion: version,
 			thisNavTreeItem: navTreeItem,
 			isDocsFile: true,
-      isHiddenFile: navTreeItem === undefined,
-      isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
+			isHiddenFile: navTreeItem === undefined,
+			isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
 		};
 	}
 
@@ -242,11 +244,11 @@ export class DocsBuilder {
 		const copyToDir = options.copyToDir ? path.resolve(`${options.copyToDir}/${dirPath}`) : undefined;
 
 		for (const dirItem of Array.isArray(localTree) ? localTree : localTree.items) {
-      // Find the corresponding navigation bar item for this directory item (perhaps undefined, as not all pages may
-      // be included in the navigation bar - for example migration notice pages are hidden unless found with specific
-      // URLs)
+			// Find the corresponding navigation bar item for this directory item (perhaps undefined, as not all pages may
+			// be included in the navigation bar - for example migration notice pages are hidden unless found with specific
+			// URLs)
 			const findNavItem = (i: SidebarTreeItem) => {
-        const srcFileName = i.filename.replace(".html", ".md");
+				const srcFileName = i.filename.replace(".html", ".md");
 				return srcFileName === dirItem || (typeof dirItem !== "string" && srcFileName === dirItem.name);
 			};
 			const navItem = options.parentSidebarItem

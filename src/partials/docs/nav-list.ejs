@@ -1,21 +1,36 @@
-<% sidebarNav.items.forEach((file) => { %>
-    <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
-    <% const pathParts = file.path.split("/"); %>
-    <% const isDir = "items" in file; %>
-    <% if (!isDir) { %>
-        <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
-        <li>
-            <p class="sidebar-nav-header-list-item <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
-                <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
-                <a href="<%= rootDir %><%= file.path %>"><%= file.title %></a>
-            </p>
-        </li>
-    <% } else { %>
-        <li>
-            <p class="sidebar-nav-header-list-item <%= file.path === filename ? "selected-page-sidebar-nav-header" : "" %>">
-                <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
-                <a href="<%= rootDir %><%= file.path %>/index.html"><%= file.title %></a>
-            </p>
-        </li>
-    <% } %>
-<% }); %>
+<ul class="docs-sidebar-nav-list no-style-list flex-column">
+    <% sidebarNav.items.forEach((fileOrDir) => { %>
+        <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
+        <% const pathParts = fileOrDir.path.split("/"); %>
+        <% const isDir = "items" in fileOrDir; %>
+        <% if (!isDir) { %>
+            <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
+            <li>
+                <p class="sidebar-nav-header-list-item <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
+                    <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
+                    <a href="<%= rootDir %><%= fileOrDir.path %>"><%= fileOrDir.title %></a>
+                </p>
+            </li>
+        <% } else { %>
+            <li>
+                <p class="sidebar-nav-header-list-item <%= fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>">
+                    <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
+                    <a href="<%= rootDir %><%= fileOrDir.path %>/index.html" class="sidebar-nav-header-dir-item">
+                        <i class="fa-solid fa-xs fa-caret-down"></i> <%= fileOrDir.title %>
+                    </a>
+                </p>
+                <%- include('./nav-list', {
+                    sidebarNav: {
+                        items: fileOrDir.items.filter(item => item.filename !== "index.html") // Remove the index .html file from the list, as it is already included in the parent
+                    },
+                    header: false,
+                    title: title,
+                    description: description,
+                    thisFile: thisFile,
+                    docsRoot: docsRoot,
+                    inRootDir: false,
+                }) %>
+            </li>
+        <% } %>
+    <% }); %>
+</ul>

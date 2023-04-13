@@ -80,22 +80,22 @@ export class DocsSidebar {
 
 				// If the entry is a directory, we need to recursively get all files in this directory
 				if (statSync(srcPath).isDirectory()) {
-          const dir: SidebarDir = {
-            title: '',
-            filename: path.basename(destPath),
-            path: getURLPath(destPath),
-            items: [],
-            parent: parent,
-          };
+					const dir: SidebarDir = {
+						title: "",
+						filename: path.basename(destPath),
+						path: getURLPath(destPath),
+						items: [],
+						parent: parent,
+					};
 
-          // After creating the parent object, we will recursively evaluate all children of this directory
+					// After creating the parent object, we will recursively evaluate all children of this directory
 					dir.items = await this.evaluateNavTree(srcPath, destPath, dir);
 
-          // Settings the title / display name of the directory (not the filename)
-          if (!dir.items[0].path.endsWith("index.html")) {
+					// Settings the title / display name of the directory (not the filename)
+					if (!dir.items[0].path.endsWith("index.html")) {
 						throw new Error("First item in nav tree must be the index file.");
 					}
-          dir.title = dir.items[0].title; // The first item is always the index file
+					dir.title = dir.items[0].title; // The first item is always the index file
 
 					return dir;
 				} else {
