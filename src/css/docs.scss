@@ -269,7 +269,7 @@
 			margin-left: 0.75rem;
 		}
 
-		.sidebar-nav-header-list-item {
+		p.sidebar-nav-header-list-item {
 			display: flex;
 			padding: 0.2rem 0;
 			margin: 0;
@@ -278,7 +278,8 @@
 			/* Padding for the left side of the sidebar list item */
 			$left-nav-list-item-padding: 1rem;
 
-			& > a {
+			& > a,
+			& > button {
 				&,
 				&:visited,
 				&:active {
@@ -293,22 +294,35 @@
 				&:hover {
 					text-decoration: none;
 					color: rgb(17, 24, 39);
-					background-color: rgb(var(--scheme-primary-rgb), 0.12);
+					background-color: rgb(var(--scheme-primary-rgb), 0.12) !important;
 				}
 			}
 
-			& > a.sidebar-nav-header-dir-item {
-				padding: 0.25rem 0 0.25rem $left-nav-list-item-padding;
+			&.sidebar-nav-header-dir-item {
+				& > a,
+				& > button {
+					padding: 0.25rem 0 0.25rem $left-nav-list-item-padding;
+					background: transparent none;
+					border: none;
+					cursor: pointer;
+					text-align: left;
+					line-height: 1.5;
 
-				.fa-caret-down {
-					width: 11px;
+					.fa-caret-down {
+						width: 11px;
+					}
 				}
 			}
-		}
 
-		.sidebar-nav-current-header-list-item a {
-			color: rgb(17, 24, 39) !important;
-			background-color: rgba(255, 0, 79, 0.16) !important;
+			& + .docs-sidebar-nav-list {
+				visibility: hidden;
+				display: none;
+
+				&.selected-sidebar-nav-dir-parent {
+					visibility: visible;
+					display: block;
+				}
+			}
 		}
 	}
 }

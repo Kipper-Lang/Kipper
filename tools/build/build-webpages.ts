@@ -23,7 +23,8 @@ import { DocsSidebar } from "./ext/docs-sidebar";
 import {
 	buildEjsFiles,
 	copyFiles,
-	determineMarkdownFileMetadata, ensureURLSlashes,
+	determineMarkdownFileMetadata,
+	ensureURLSlashes,
 	ensureValidSrcAndDest,
 	getBuildData,
 	getEditURL,
@@ -155,9 +156,7 @@ export class DocsBuilder {
 	): Record<string, any> {
 		return {
 			...existingData,
-			rootDir: ensureURLSlashes(
-				getRelativePathToSrc(destRootDir, pathDest)
-			), // Relative path to the root directory
+			rootDir: ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest)), // Relative path to the root directory
 			filename: htmlFilename, // This should only contain the filename without any directory
 			urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
 			urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
@@ -311,6 +310,33 @@ export class DocsBuilder {
 		}
 	}
 
+  /**
+   * Returns a tree representing the content of the specified directory, which should represent the data returned from
+   * a {@link fs.readdir} call.
+   * @param dirContents The contents of the directory to process.
+   * @param dirPath The absolute path of the current directory.
+   * @private
+   */
+	private async processDirContents(dirContents: Array<string>, dirPath: AbsolutePath): Promise<Array<PathTreeItem>> {
+		const mdFiles = [];
+		for (const fileOrDir of dirContents) {
+			if (fileOrDir.endsWith(".md")) {
+				mdFiles.push(<Path>fileOrDir);
+			}
+
+			const absolutePath: AbsolutePath = path.resolve(`${dirPath}/${fileOrDir}/`);
+			if (statSync(absolutePath).isDirectory()) {
+				// Process nested directories recursively
+				const pathItems = await this.processDirContents(await fs.readdir(absolutePath), absolutePath);
+				mdFiles.push(<DirTreeItem>{
+					name: fileOrDir,
+					items: pathItems,
+				});
+			}
+		}
+		return mdFiles;
+	}
+
 	/**
 	 * Builds a specific version of the docs and places them in the specified target folder with the following path:
 	 * '/{docsDestRoot}/{version}/'. If the version is 'latest' then it will be both placed in the root folder and in
@@ -342,29 +368,7 @@ export class DocsBuilder {
 		const dirContents = await fs.readdir(versionSrc);
 
 		// Evaluate the markdown files in the src folder
-		const processDirContents = async (
-			dirContents: Array<string>,
-			parent: AbsolutePath,
-		): Promise<Array<PathTreeItem>> => {
-			const mdFiles = [];
-			for (const fileOrDir of dirContents) {
-				if (fileOrDir.endsWith(".md")) {
-					mdFiles.push(<Path>fileOrDir);
-				}
-
-				const absolutePath: AbsolutePath = path.resolve(`${parent}/${fileOrDir}/`);
-				if (statSync(absolutePath).isDirectory()) {
-					// Process nested directories recursively
-					const pathItems = await processDirContents(await fs.readdir(absolutePath), absolutePath);
-					mdFiles.push(<DirTreeItem>{
-						name: fileOrDir,
-						items: pathItems,
-					});
-				}
-			}
-			return mdFiles;
-		};
-		let mdFiles: Array<PathTreeItem> = await processDirContents(dirContents, versionSrc);
+		let mdFiles: Array<PathTreeItem> = await this.processDirContents(dirContents, versionSrc);
 
 		// Get the headings for the sidebar, which are unique for each version
 		const sidebarHeadings: DocsSidebar = await new DocsSidebar(versionSrc, versionDest, mdFiles, this).build();

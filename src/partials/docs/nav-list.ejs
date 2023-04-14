@@ -1,4 +1,16 @@
-<ul class="docs-sidebar-nav-list no-style-list flex-column">
+<%# Get all the parents of this dir/file and see if the currently rendering elements need to be visible or not %>
+<% const getParentList = (item) => {
+  return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
+} %>
+<% const parentNavDirs = getParentList(thisNavTreeItem);%>
+<!-- <%= parentNavDirs.map(i => Object.keys(i).map(k => `${k}: ${i[k]}`)) %>-->
+
+<ul class="
+    docs-sidebar-nav-list
+    no-style-list
+    flex-column
+    <%= parentNavDirs.find(e => e === sidebarNav) ? "selected-sidebar-nav-dir-parent" : "" %>
+">
     <% sidebarNav.items.forEach((fileOrDir) => { %>
         <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
         <% const pathParts = fileOrDir.path.split("/"); %>
@@ -13,16 +25,17 @@
             </li>
         <% } else { %>
             <li>
-                <p class="sidebar-nav-header-list-item <%= fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>">
-                    <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
-                    <a href="<%= rootDir %><%= fileOrDir.path %>/index.html" class="sidebar-nav-header-dir-item">
+                <p class="
+                    sidebar-nav-header-list-item
+                    <%= fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>
+                    sidebar-nav-header-dir-item
+                ">
+                    <button>
                         <i class="fa-solid fa-xs fa-caret-down"></i> <%= fileOrDir.title %>
-                    </a>
+                    </button>
                 </p>
                 <%- include('./nav-list', {
-                    sidebarNav: {
-                        items: fileOrDir.items.filter(item => item.filename !== "index.html") // Remove the index .html file from the list, as it is already included in the parent
-                    },
+                    sidebarNav: fileOrDir,
                     header: false,
                     title: title,
                     description: description,
