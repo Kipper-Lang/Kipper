@@ -2,14 +2,13 @@
 <% const getParentList = (item) => {
   return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
 } %>
-<% const parentNavDirs = getParentList(thisNavTreeItem);%>
-<!-- <%= parentNavDirs.map(i => Object.keys(i).map(k => `${k}: ${i[k]}`)) %>-->
-
+<% const parentNavDirs = getParentList(thisNavTreeItem); %>
+<% const selectedFileInDir = parentNavDirs.find(e => e === sidebarNav); %>
 <ul class="
     docs-sidebar-nav-list
     no-style-list
     flex-column
-    <%= parentNavDirs.find(e => e === sidebarNav) ? "selected-sidebar-nav-dir-parent" : "" %>
+    <%= selectedFileInDir ? "selected-sidebar-nav-dir" : "" %>
 ">
     <% sidebarNav.items.forEach((fileOrDir) => { %>
         <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
@@ -27,7 +26,7 @@
             <li>
                 <p class="
                     sidebar-nav-header-list-item
-                    <%= fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>
+                    <%= selectedFileInDir || fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>
                     sidebar-nav-header-dir-item
                 ">
                     <button>

@@ -298,6 +298,7 @@
 				}
 			}
 
+      /* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
 			&.sidebar-nav-header-dir-item {
 				& > a,
 				& > button {
@@ -312,13 +313,25 @@
 						width: 11px;
 					}
 				}
+
+        & > button > i.fa-caret-down {
+          /* Closed dropdown */
+          rotate: 0deg;
+          padding: 0;
+        }
+
+        &.selected-page-sidebar-nav-header > button > i.fa-caret-down {
+          /* Rotating the caret so it shows the dropdown is open */
+          rotate: 270deg;
+          padding: 0 0 0 4px;
+        }
 			}
 
 			& + .docs-sidebar-nav-list {
 				visibility: hidden;
 				display: none;
 
-				&.selected-sidebar-nav-dir-parent {
+				&.selected-sidebar-nav-dir {
 					visibility: visible;
 					display: block;
 				}
