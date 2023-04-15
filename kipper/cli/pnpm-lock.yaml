@@ -12,7 +12,7 @@ specifiers:
   '@oclif/plugin-warn-if-update-available': 2.0.4
   '@oclif/test': 2.2.21
   '@sinonjs/fake-timers': 10.0.2
-  '@types/node': 18.13.0
+  '@types/node': 18.15.11
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
   oclif: 3.4.0
@@ -39,7 +39,7 @@ dependencies:
 devDependencies:
   '@oclif/test': 2.2.21
   '@sinonjs/fake-timers': 10.0.2
-  '@types/node': 18.13.0
+  '@types/node': 18.15.11
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
   oclif: 3.4.0
@@ -47,7 +47,7 @@ devDependencies:
   pseudomap: 1.0.2
   rimraf: 4.1.2
   semver: 7.3.8
-  ts-node: 10.9.1_4bewfcp2iebiwuold25d6rgcsy
+  ts-node: 10.9.1_o6avl3oodj6mwqsx3rm2wfkgv4
   typescript: 4.9.5
 
 packages:
@@ -723,7 +723,7 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.1
       '@types/keyv': 3.1.4
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
       '@types/responselike': 1.0.0
     dev: true
 
@@ -734,7 +734,7 @@ packages:
   /@types/cli-progress/3.11.0:
     resolution: {integrity: sha512-XhXhBv1R/q2ahF3BM7qT5HLzJNlIL0wbcGyZVjqOTqAybAnsLisd7gy1UCyIqpL+5Iv6XhlSyzjLCnI2sIdbCg==}
     dependencies:
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
     dev: true
 
   /@types/expect/1.20.4:
@@ -748,7 +748,7 @@ packages:
   /@types/keyv/3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
     dev: true
 
   /@types/lodash/4.14.182:
@@ -763,8 +763,8 @@ packages:
     resolution: {integrity: sha512-qjd88DrCxupx/kJD5yQgZdcYKZKSIGBVDIBE1/LTGcNm3d2Np/jxojkdePDdfnBHJc5W7vSMpbJ1aB7p/Py69A==}
     dev: true
 
-  /@types/node/18.13.0:
-    resolution: {integrity: sha512-gC3TazRzGoOnoKAhUx+Q0t8S9Tzs74z7m0ipwGpSqQrleP14hKxP4/JUeEQcD3W1/aIpnWl8pHowI7WokuZpXg==}
+  /@types/node/18.15.11:
+    resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
@@ -774,7 +774,7 @@ packages:
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
     dev: true
 
   /@types/sinon/10.0.13:
@@ -791,7 +791,7 @@ packages:
     resolution: {integrity: sha512-4UqPv+2567NhMQuMLdKAyK4yzrfCqwaTt6bLhHEs8PFcxbHILsrxaY63n4wgE/BRLDWDQeI+WcTmkXKExh9hQg==}
     dependencies:
       '@types/expect': 1.20.4
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
     dev: true
 
   /abbrev/1.1.1:
@@ -1549,7 +1549,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
       '@types/sinon': 10.0.13
       lodash: 4.17.21
       mock-stdin: 1.0.0
@@ -3600,7 +3600,7 @@ packages:
     resolution: {integrity: sha512-whw60l7r+8ZU8Tu/Uc2yxtc4ZTZbR/PF3u1IPNKGQ6p8EICLb3Z2lAgoqw9bqYd8IkgnsaOcLzYHFckjqNsf0g==}
     dev: true
 
-  /ts-node/10.9.1_4bewfcp2iebiwuold25d6rgcsy:
+  /ts-node/10.9.1_o6avl3oodj6mwqsx3rm2wfkgv4:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
@@ -3619,7 +3619,7 @@ packages:
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.3
-      '@types/node': 18.13.0
+      '@types/node': 18.15.11
       acorn: 8.8.2
       acorn-walk: 8.2.0
       arg: 4.1.3
