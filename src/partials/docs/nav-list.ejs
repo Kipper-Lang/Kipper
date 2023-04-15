@@ -13,7 +13,8 @@
         %>
         <!-- <%= parentNavDirsOfProcessFile.map(e => e.filename).join(", ") %> -->
         <!-- <%= parentNavDirsOfIterFile.map(e => e.filename).join(", ") %> -->
-        <% const iterFileIsSelected = parentNavDirsOfProcessFile.every((e, i) => {
+        <% const iterFileIsSelected = parentNavDirsOfIterFile.length === parentNavDirsOfProcessFile.length
+        && parentNavDirsOfProcessFile.every((e, i) => {
             return e &&
                 "path" in e &&
                 parentNavDirsOfIterFile[i] !== undefined &&
