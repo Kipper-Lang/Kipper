@@ -54,14 +54,14 @@ The following table shows all valid operators and expressions in the Kipper lang
 </thead>
 <tbody>
   <tr>
-    <td>13</td>
+    <td>14</td>
     <td><code>( ... )</code></td>
     <td>
       Tangled expression - Forced increased precedence
     <td>n/a</td>
   </tr>
   <tr>
-    <td>12</td>
+    <td>13</td>
     <td>
       <code>++ ...</code> / <code>-- ...</code><br />
       <code>call ... ( ... )</code><br />
@@ -77,7 +77,7 @@ The following table shows all valid operators and expressions in the Kipper lang
     <td>Left-To-Right</td>
   </tr>
   <tr>
-    <td>11</td>
+    <td>12</td>
     <td>
       <code>... ++</code>/ <code>... --</code><br />
     </td>
@@ -87,18 +87,26 @@ The following table shows all valid operators and expressions in the Kipper lang
     <td>n/a</td>
   </tr>
   <tr>
-    <td>10</td>
+    <td>11</td>
     <td>
       <code>+ ...</code> / <code>- ...</code><br />
       <code>! ...</code><br />
-      <code>... as ...</code>
     </td>
     <td>
       Unary plus and minus<br />
       Logical NOT<br />
-      Type conversion
     </td>
     <td>Right-To-Left</td>
+  </tr>
+    <tr>
+    <td>10</td>
+    <td>
+      <code>... as ...</code>
+    </td>
+    <td>
+      Type conversion
+    </td>
+    <td>Left-To-Right</td>
   </tr>
   <tr>
     <td>9</td>
