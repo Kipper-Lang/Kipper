@@ -37,14 +37,6 @@ Converts a number to an identical string representation of the number.
 203 as str; // -> "203"
 ```
 
-### From `char` to `str`
-
-Converts a single character to a string.
-
-```ts
-"c" as str; // -> "c"
-```
-
 ### From `num` to `bool`
 
 Converts a number to a bool. This evaluates to `true` if it's a non-zero value.
