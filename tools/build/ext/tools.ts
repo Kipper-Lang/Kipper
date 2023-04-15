@@ -226,9 +226,9 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 			if (line.endsWith("</h1>")) {
 				isTitle = false;
 			}
+		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
 			// If there is a p tag, no description has been found yet and a title has been already created, make this the
 			// new description
-		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
 			isDescription = true;
 			metaData.description += line.replace(/<\/?[0-9A-Za-z-_=/"' ]+>/g, "").trim() + " ";
 

@@ -58,18 +58,25 @@ export type WebURLPath = URLPath;
 /**
  * A sidebar file, which is a file that is displayed in the sidebar. This is a single file.
  */
-export type SidebarFile = { title: string; filename: string; path: URLPath; parent?: SidebarDir };
+export interface SidebarFile {
+	title: string;
+	filename: string;
+	path: URLPath;
+	parent?: SidebarDir;
+	dropdownTitle?: string;
+}
 
 /**
  * A sidebar directory, which is a collection of sidebar items. This should represent a directory-like structure.
  */
-export type SidebarDir = {
+export interface SidebarDir {
 	title: string;
 	filename: string;
 	path: URLPath;
 	items: Array<SidebarTreeItem>;
 	parent?: SidebarDir;
-};
+	dropdownTitle?: string;
+}
 
 /**
  * A sidebar item, which can be a sidebar object or an array of sidebar items. This should represent a directory-like

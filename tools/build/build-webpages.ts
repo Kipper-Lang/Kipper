@@ -166,6 +166,7 @@ export class DocsBuilder {
 			isDocsFile: true,
 			isHiddenFile: navTreeItem === undefined,
 			isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
+			dropdownTitle: navTreeItem?.dropdownTitle,
 		};
 	}
 

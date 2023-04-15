@@ -96,6 +96,7 @@ export class DocsSidebar {
 						throw new Error("First item in nav tree must be the index file.");
 					}
 					dir.title = dir.items[0].title; // The first item is always the index file
+					dir.dropdownTitle = dir.items[0].dropdownTitle; // It also contains the dropdown title (not always present)
 
 					return dir;
 				} else {
@@ -112,13 +113,20 @@ export class DocsSidebar {
 
 					// Push the new heading
 					const title = this.builder.getMetadataOfLastFile()["title"] || determineMarkdownFileMetadata(html).title;
+					const dropdownTitle = <string | undefined>this.builder.getMetadataOfLastFile()["dropdownTitle"];
 					if (!title) {
 						throw new Error(
 							`No title found for file '${srcPath}' - Please add a title attribute or a clear top heading.`,
 						);
 					}
 
-					return { title: title, filename: path.basename(destPath), path: getURLPath(destPath), parent: parent };
+					return {
+						title: title,
+						filename: path.basename(destPath),
+						path: getURLPath(destPath),
+						parent: parent,
+						dropdownTitle: dropdownTitle
+					};
 				}
 			}),
 		);
