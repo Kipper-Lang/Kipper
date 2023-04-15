@@ -5,7 +5,7 @@ that do-while loops run the statement once before starting evaluating its condit
 statement is only run if the `CONDITION` is met.
 
 <p class="important">
-  Scheduled for release in Kipper v0.12.0
+  Released in v0.10.0 - Please update your version to access this feature.
 </p>
 
 ## Syntax
