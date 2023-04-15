@@ -90,7 +90,7 @@ if (var2 < 5) {
 ### For-loop Statement
 
 <p class="important">
-  Scheduled for release in Kipper v0.11.0
+  Released in v0.10.0 - Please update your version to access this feature.
 </p>
 
 _This also has its own docs page, which can be accessed [here](./for-loop.html)._
@@ -118,7 +118,7 @@ The execution of a for-loop follows this schema:
 ### While-loop Statement
 
 <p class="important">
-  Scheduled for release in Kipper v0.11.0
+  Released in v0.10.0 - Please update your version to access this feature.
 </p>
 
 _This also has its own docs page, which can be accessed [here](./while-loop.html)._
@@ -141,7 +141,7 @@ The execution of a while-loop follows this schema:
 ### Do-while-loop Statement
 
 <p class="important">
-  Scheduled for release in Kipper v0.12.0
+  Released in v0.10.0 - Please update your version to access this feature.
 </p>
 
 _This also has its own docs page, which can be accessed [here](./do-while-loop.html)._
