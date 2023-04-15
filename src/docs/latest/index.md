@@ -9,7 +9,7 @@ nav:
   - ./compiler.md
   - ./variables.md
   - ./datatypes/
-  - ./expressions.md
+  - ./expressions/
   - ./statements.md
   - ./if-statement.md
   - ./while-loop.md

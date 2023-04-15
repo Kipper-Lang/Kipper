@@ -310,13 +310,13 @@ export class DocsBuilder {
 		}
 	}
 
-  /**
-   * Returns a tree representing the content of the specified directory, which should represent the data returned from
-   * a {@link fs.readdir} call.
-   * @param dirContents The contents of the directory to process.
-   * @param dirPath The absolute path of the current directory.
-   * @private
-   */
+	/**
+	 * Returns a tree representing the content of the specified directory, which should represent the data returned from
+	 * a {@link fs.readdir} call.
+	 * @param dirContents The contents of the directory to process.
+	 * @param dirPath The absolute path of the current directory.
+	 * @private
+	 */
 	private async processDirContents(dirContents: Array<string>, dirPath: AbsolutePath): Promise<Array<PathTreeItem>> {
 		const mdFiles = [];
 		for (const fileOrDir of dirContents) {
@@ -332,6 +332,11 @@ export class DocsBuilder {
 					name: fileOrDir,
 					items: pathItems,
 				});
+
+				// Ensure there is an index.md file in the directory
+				if (!pathItems.find((i) => i === "index.md" || (typeof i !== "string" && i.name === "index.md"))) {
+					throw new Error(`No index.md file found in directory '${absolutePath}'`);
+				}
 			}
 		}
 		return mdFiles;
