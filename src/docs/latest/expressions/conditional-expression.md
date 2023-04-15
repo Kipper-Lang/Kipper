@@ -1,6 +1,6 @@
 # Conditional Expressions (Ternary conditional)
 
-Conditional expressions are like [if-statements](../if-statement.html) with the major difference and advantage of being
+Conditional expressions are like [if-statements](../statements/if-statement.html) with the major difference and advantage of being
 in-line and allowing evaluation of specific expressions based on a condition.
 
 If the `CONDITION` evaluates to `true`, the left side of the `:` operator is evaluated and returned, otherwise the

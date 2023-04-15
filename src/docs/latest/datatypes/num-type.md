@@ -5,7 +5,7 @@ title: Number Type
 # Number Type - `num`
 
 Represents a number (both floating point and integer) in the Kipper language. This datatype may always be used with the
-standard mathematical [expressions](../expressions.html).
+standard mathematical [expressions](../expressions/index.html).
 
 ## Examples
 
@@ -38,7 +38,7 @@ var var2: num = 2 ** 8; // -> 256
 var var2: num = 51 % 10; // -> 1
 ```
 
-<div class="red-highlight-text">
+<div class="important">
   <h3>Important</h3>
   <p>
     Remember that Kipper will interpret mathematical calculations as defined in the standard

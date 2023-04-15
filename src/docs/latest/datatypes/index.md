@@ -1,5 +1,6 @@
 ---
-title: Datatypes
+title: Overview
+dropdownTitle: Datatypes
 nav:
   - ./index.md
   - ./str-type.md
@@ -11,7 +12,7 @@ nav:
   - ./array-type.md
 ---
 
-# Datatypes
+# Overview - Datatypes
 
 As previously shown in the docs page [Variables](../variables.html), every variable always has a type that defines what
 values it can store. This also means that you often can not mix variables of different data types together, as they
@@ -25,7 +26,7 @@ A variable with the datatype `num`, for example, can only contain numbers. A var
 contain text, symbols or numbers, but saves them as text. This makes them for example impossible to use for calculations
 and as such using them in arithmetic expression is invalid.
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
   Data types can not be mixed together and must be converted before being used with another type.

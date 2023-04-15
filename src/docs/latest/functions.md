@@ -31,7 +31,7 @@ Rules for defining a Kipper function:
 
 ### Calling a function
 
-_See also [Function call expression](./expressions.html)._
+_See also [Function call expression](./expressions/index.html)._
 
 ```ts
 call NAME(ARG1, ARG2, ARGn, ...);

@@ -3,7 +3,7 @@
 Welcome to the Quickstart Guide for the Kipper programming language! Here you will find a concise guide on how to
 install Kipper and start using it for your own projects.
 
-<p class="red-highlight-text">
+<p class="important">
   Before using Kipper make sure your system or browser is supported! View support list
   <a href="./supported-platforms.html">here</a>.
 </p>
@@ -111,7 +111,7 @@ If you intend to only try out Kipper, you can also simply install Kipper globall
 npm install -g @kipper/cli
 ```
 
-<article class="red-highlight-text">
+<article class="important">
   <h2>Important</h2>
   <p>
   If possible avoid installing Kipper globally if you intend to use it inside your own projects, as it can cause issues with locally installed versions (node project dependencies). For a localised and project-dependent kipper installation add kipper to your dependencies as shown previously.

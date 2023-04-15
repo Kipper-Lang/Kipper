@@ -1,5 +1,6 @@
 ---
-title: Expressions
+title: Overview
+dropdownTitle: Expressions
 nav:
 - ./index.md
 - ./arithmetic-expression.md
@@ -10,7 +11,7 @@ nav:
 - ./function-call-expression.md
 ---
 
-# Expressions
+# Overview - Expressions
 
 Expressions are the basis of Kipper, as every operation in a program is made up of single expressions that perform
 certain actions, like reading a value, calculating something, calling a function, comparing values...
@@ -30,7 +31,7 @@ var result: num = val1 + val2 * val3;
 
 In this case, we also now created an expression statement (ends in `;`), which wraps an expression and allows it
 to be used inside a program. Expression statements will be explained further in the docs page
-[Statements](../statements.html).
+[Statements](../statements/index.html).
 
 ## Kipper Operators and Expressions Precedence
 

@@ -4,7 +4,7 @@ title: Array Type
 
 # Array Type - `Array<T>`
 
-<p class="red-highlight-text">
+<p class="important">
 Scheduled for release in Kipper v0.12.0
 </p>
 

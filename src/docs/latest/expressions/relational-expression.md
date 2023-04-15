@@ -6,10 +6,10 @@ evaluate to `false` if the condition is false, for example `>` (greater than) wi
 
 Such expressions are essential for conditional expressions that are used in statements such as:
 
-- [If-statements](../if-statement.html)
-- [While-loops](../while-loop.html)
-- [Do-while-loops](../while-loop.html)
-- [For-loops](../for-loop.html)
+- [If-statements](../statements/if-statement.html)
+- [While-loops](../statements/while-loop.html)
+- [Do-while-loops](../statements/while-loop.html)
+- [For-loops](../statements/for-loop.html)
 
 ## Syntax
 
