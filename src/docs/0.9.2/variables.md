@@ -26,7 +26,7 @@ In this case, we have now also defined the scope and visibility of the variable,
 value yet, attempting to read from a variable will result in a compiler error, as you can not read from a variable with
 no value.
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
     You may re-declare a variable as often as you want, as long as the types match and the scope is identical. If
@@ -69,7 +69,7 @@ again, the following is also valid code:
 NAME = VALUE;
 ```
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
     When you already have defined or declared a variable, you may not change its type anymore, but only overwrite its
@@ -185,7 +185,7 @@ var var9: num = var7 + var8; // 1 + 3 -> 4
 const var10: num = var9 + var8; // 4 + 3 -> 4
 ```
 
-<div class="red-highlight-text">
+<div class="important">
   ## Important
   <p>
   You may not overwrite the value of a constant or declare it without a value.

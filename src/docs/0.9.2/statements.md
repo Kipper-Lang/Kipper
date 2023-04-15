@@ -89,7 +89,7 @@ if (var2 < 5) {
 
 ### For-loop Statement
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.11.0
 </p>
 
@@ -117,7 +117,7 @@ The execution of a for-loop follows this schema:
 
 ### While-loop Statement
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.11.0
 </p>
 
@@ -140,7 +140,7 @@ The execution of a while-loop follows this schema:
 
 ### Do-while-loop Statement
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.12.0
 </p>
 

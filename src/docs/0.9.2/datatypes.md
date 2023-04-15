@@ -12,7 +12,7 @@ A variable with the datatype `num`, for example, can only contain numbers. A var
 contain text, symbols or numbers, but saves them as text. This makes them for example impossible to use for calculations
 and as such using them in arithmetic expression is invalid.
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
   Data types can not be mixed together and must be converted before being used with another type.
@@ -89,7 +89,7 @@ var var2: num = 2 ** 8; // -> 256
 var var2: num = 51 % 10; // -> 1
 ```
 
-<div class="red-highlight-text">
+<div class="important">
   <h3>Important</h3>
   <p>
     Remember that Kipper will interpret mathematical calculations as defined in the standard
@@ -136,7 +136,7 @@ Strings are defined using quotation marks (`""`) , which automatically hint the 
 
 ### Char Type - `char`
 
-<p class="red-highlight-text">
+<p class="important">
 Scheduled for release in Kipper v0.10.0
 </p>
 
@@ -229,7 +229,7 @@ var var23: void = func2();
 
 ### List Type - `list<type>`
 
-<p class="red-highlight-text">
+<p class="important">
 Scheduled for release in Kipper v0.12.0
 </p>
 

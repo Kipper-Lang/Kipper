@@ -7,7 +7,7 @@ For-loops have the unique attribute, unlike [while-loops](./while-loop.html) and
 of having an executable `LOOP_EXPRESSION`, which is evaluated at the end of every loop cycle. This `LOOP_EXPRESSION` can
 be used to do repeating tasks at the end of a loop cycle, like calling a function or increasing a counter.
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.11.0
 </p>
 

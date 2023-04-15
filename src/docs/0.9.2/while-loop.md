@@ -4,7 +4,7 @@ While-loops are code blocks that are executed multiple times as long as the spec
 of while-loops is very similar to [do-while-loops](./do-while-loop.html), and in some cases it even might be better to
 use do-while than while-loops, so watch out for opportunities to replace while-loops with do-while loops.
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.11.0
 </p>
 

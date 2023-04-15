@@ -47,7 +47,7 @@ explain the implementation, functionality and details for Kipper.
 - [Comments](./comments.html)
 - [Built-in Functions](./built-in-functions.html)
 
-<p class="red-highlight-text">
+<p class="important">
   Not all features shown in the docs are implemented yet. View the
   <a href="https://github.com/Luna-Klatzer/Kipper/discussions/139">Roadmap for Kipper</a>
   for info about the active development of Kipper.
