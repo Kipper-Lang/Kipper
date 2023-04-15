@@ -47,7 +47,7 @@ When calling them all arguments have to be passed with the argument types matchi
 the variables are going to be copied to the local function stack (local scope) and be available to the body of the function.
 This means that the arguments will also be referencable by statements inside the function body.
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
     A function allows for an infinite amount of arguments, though at the current stage of development, no optional or
@@ -75,68 +75,89 @@ def x() -> void {
 
 ## Examples
 
+### Simple function
+
 ```ts
-// ✓ Simple function
 def func1() -> void {
 	return;
 }
-  
+
 // May call with either 'call' prefix keyword or without
 func1();
 call func1();
+```
 
-// ✓ Function with parameters
+### Function with parameters
+
+```ts
 def func2(param1: num, param2: str) -> void {
 	return;
 }
 
-var result: void = func2(4, "string"); // -> void
+var result: void = func2(4, "string"); // -> void (no meaningful return value)
+```
 
-// ✓ Function with return value
+### Function with return value
+
+```ts
 def func3() -> num {
 	return 4;
 }
 
 var result = func3(); // -> 4
+```
 
-// ✓ Function with parameters and return value
+### Function with parameters and return value
+
+```ts
 def func4(param1: num, param2: str) -> str {
 	return param1 as str + param2;
 }
 
 var result: str = func4(4, "string"); // -> "4string"
+```
 
-// X May not call a function without parameters with parameters
+### <em class="red-checkmark">X</em> May not call a function without parameters with parameters
+
+```ts
 def func5() -> void {
 	return;
 }
 
 func5(4, "string");
+```
 
-// X May not call a function without the required parameters
+### <em class="red-checkmark">X</em> May not call a function without the required parameters
+
+```ts
 def func6(param1: num, param2: str) -> void {
-	return;
+    return;
 }
 
 func6(4);
+```
 
-// X May not call a function with invalid parameters/types
+### <em class="red-checkmark">X</em> May not call a function with invalid parameters/types
+
+```ts
 def func7(param1: num, param2: str) -> void {
 	return;
 }
 
 func7("string", 4);
+```
 
-// X The return of the function must match the return type
+### <em class="red-checkmark">X</em> May not return a value of a different type than the return type
+
+```ts
 def func8() -> num {
     return "string";
 }
 ```
 
-More complex example:
+### More complex example
 
 ```ts
-// ✓ Simple function with arguments and return-type
 // Note: It is good to always document your functions
 /*
  * @brief Adds the prefix before the main_str
