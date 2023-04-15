@@ -60,15 +60,22 @@ h6,
 	section &,
 	article &,
 	li &,
+	.important &,
 	.red-highlight-text & {
 		margin-top: 1.2em;
 	}
 
-	#markdown-content div &:first-child,
-	#markdown-content .red-highlight-text &:first-child,
-	article .red-highlight-text &:first-child,
-	section .red-highlight-text &:first-child {
+	#markdown-content div &:first-child {
 		margin-top: 0;
+	}
+
+	.red-highlight-text &,
+	.important & {
+		#markdown-content &:first-child,
+		article &:first-child,
+		section &:first-child {
+			margin-top: 0;
+		}
 	}
 }
 
@@ -227,7 +234,8 @@ p {
 	text-align: center;
 }
 
-.red-highlight-text {
+.red-highlight-text,
+.important { /* Important is a simplified alias */
 	border-radius: var(--default-border-radius);
 	margin-right: var(--default-text-margin);
 	border: 1px solid;
