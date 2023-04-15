@@ -12,7 +12,8 @@
             }) %>
         </div>
     </div>
-    <%- include('./nav-list', {
+    <ul class="docs-sidebar-nav-list no-style-list flex-column">
+        <%- include('./nav-list', {
         sidebarNav: sidebarNav,
         header: false,
         title: title,
@@ -21,5 +22,6 @@
         docsRoot: docsRoot,
         inRootDir: false,
         thisNavTreeItem: thisNavTreeItem,
-    }) %>
+        }) %>
+    </ul>
 </nav>

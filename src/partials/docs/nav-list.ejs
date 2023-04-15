@@ -1,38 +1,41 @@
-<%# Get all the parents of this dir/file and see if the currently rendering elements need to be visible or not %>
-<% const getParentList = (item) => {
-  return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
-} %>
-<% const parentNavDirs = getParentList(thisNavTreeItem); %>
-<% const selectedFileInDir = parentNavDirs.find(e => e === sidebarNav); %>
-<ul class="
-    docs-sidebar-nav-list
-    no-style-list
-    flex-column
-    <%= selectedFileInDir ? "selected-sidebar-nav-dir" : "" %>
-">
-    <% sidebarNav.items.forEach((fileOrDir) => { %>
-        <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
-        <% const pathParts = fileOrDir.path.split("/"); %>
-        <% const isDir = "items" in fileOrDir; %>
-        <% if (!isDir) { %>
-            <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
-            <li>
-                <p class="sidebar-nav-header-list-item <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
-                    <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
-                    <a href="<%= rootDir %><%= fileOrDir.path %>"><%= fileOrDir.title %></a>
-                </p>
-            </li>
-        <% } else { %>
-            <li>
-                <p class="
-                    sidebar-nav-header-list-item
-                    <%= selectedFileInDir || fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>
-                    sidebar-nav-header-dir-item
-                ">
-                    <button>
-                        <i class="fa-solid fa-xs fa-caret-down"></i> <%= fileOrDir.title %>
-                    </button>
-                </p>
+<% sidebarNav.items.forEach((fileOrDir) => { %>
+    <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
+    <% const pathParts = fileOrDir.path.split("/"); %>
+    <% const isDir = "items" in fileOrDir; %>
+    <% if (!isDir) { %>
+        <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
+        <li>
+            <p class="sidebar-nav-header-list-item <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
+                <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
+                <a href="<%= rootDir %><%= fileOrDir.path %>"><%= fileOrDir.title %></a>
+            </p>
+        </li>
+    <% } else { %>
+        <li>
+            <%# Get all the parents of the current docs file and see if the currently rendering dropdowns need to be %>
+            <%# visible or not. Note that the current docs file means the file of the render invocation, as this is %>
+            <%# still only the naviagation bar and not the actual documentation page shown the user. %>
+            <% const getParentList = (item) => {
+                return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
+            } %>
+            <% const parentNavDirs = getParentList(thisNavTreeItem); %>
+            <% const selectedFileInDir = parentNavDirs.find(e => e === fileOrDir); %>
+
+            <p class="
+                sidebar-nav-header-list-item
+                <%= selectedFileInDir || fileOrDir.path === filename ? "selected-page-sidebar-nav-header" : "" %>
+                sidebar-nav-header-dir-item
+            ">
+                <button>
+                    <i class="fa-solid fa-xs fa-caret-down"></i> <%= fileOrDir.title %>
+                </button>
+            </p>
+            <ul class="
+                docs-sidebar-nav-list
+                no-style-list
+                flex-column
+                <%= selectedFileInDir ? "selected-sidebar-nav-dir" : "" %>
+            ">
                 <%- include('./nav-list', {
                     sidebarNav: fileOrDir,
                     header: false,
@@ -42,7 +45,7 @@
                     docsRoot: docsRoot,
                     inRootDir: false,
                 }) %>
-            </li>
-        <% } %>
-    <% }); %>
-</ul>
+            </ul>
+        </li>
+    <% } %>
+<% }); %>
