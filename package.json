@@ -28,7 +28,7 @@
     "coverage-badge-creator": "1.0.15",
     "typescript": "4.9.5",
     "eslint": "8.35.0",
-    "minimist": "1.2.7",
+    "minimist": "1.2.8",
     "mkdirp": "2.1.3",
     "mocha": "10.2.0",
     "nyc": "15.1.0",
