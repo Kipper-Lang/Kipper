@@ -106,7 +106,7 @@ The following table shows all valid operators and expressions in the Kipper lang
     <td>
       Type conversion
     </td>
-    <td>Left-To-Right</td>
+    <td rowspan="7">Left-To-Right</td>
   </tr>
   <tr>
     <td>9</td>
@@ -122,7 +122,6 @@ The following table shows all valid operators and expressions in the Kipper lang
       Modulus<br />
       Power-To<br />
     </td>
-    <td rowspan="6">Left-To-Right</td>
   </tr>
   <tr>
     <td>8</td>
