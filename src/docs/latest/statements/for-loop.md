@@ -4,12 +4,8 @@ For-loops are statements with a loop-expression, a loop condition and a statemen
 specified condition is met.
 
 For-loops have the unique attribute, unlike [while-loops](./while-loop.html) and [do-while-loops](./do-while-loop.html),
-of having an executable `LOOP_EXPRESSION`, which is evaluated at the end of every loop cycle. This `LOOP_EXPRESSION` can
+of having an executable loop expression, which is evaluated at the end of every loop cycle. This loop expression can
 be used to do repeating tasks at the end of a loop cycle, like calling a function or increasing a counter.
-
-<p class="important">
-  Scheduled for release in Kipper v0.11.0
-</p>
 
 ## Syntax
 

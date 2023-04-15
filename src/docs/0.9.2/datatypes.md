@@ -137,7 +137,7 @@ Strings are defined using quotation marks (`""`) , which automatically hint the 
 ### Char Type - `char`
 
 <p class="important">
-Scheduled for release in Kipper v0.10.0
+Removed starting with v0.10.0
 </p>
 
 A character is a simple UTF-16 character, which may represent any Unicode character that is defined in the UTF-16
