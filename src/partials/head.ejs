@@ -10,7 +10,7 @@ let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}`
 <%# Defining the title %>
 <%
 // The dropdown title should be prefixed if it exists (for the docs)
-let displayTitle = typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` : ""
+let displayTitle = (typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` : "")
     + (typeof title !== "undefined" ? title + " - " : "")
     + titleSuffix;
 %>
