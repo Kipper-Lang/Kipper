@@ -1,16 +1,23 @@
 <%# The title suffix, which will use the specified docsVersion if defined (only for documentation files) %>
-<% let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}` + `v${!docsVersion || docsVersion === "latest" ? latestVersion : docsVersion}` %>
+<!-- isDocsFile: <%= isDocsFile %> -->
+<!-- docsVersion: <%= docsVersion %> -->
+<!-- latestVersion: <%= latestVersion %> -->
+<%
+let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}`
+    + `v${!docsVersion || docsVersion === "latest" ? latestVersion : docsVersion}`
+%>
+
+<%# Defining the title %>
+<%
+// The dropdown title should be prefixed if it exists (for the docs)
+let displayTitle = typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` : ""
+    + (typeof title !== "undefined" ? title + " - " : "")
+    + titleSuffix;
+%>
 
 <meta charset="utf-8" />
 <%# Use the custom title if it defined as a prefix %>
-<title>
-    <%=
-        // The dropdown title should be prefixed if it exists (for the docs)
-        typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` : ""
-        + (typeof title !== "undefined" ? title + " - " : "")
-        + titleSuffix
-    %>
-</title>
+<title><%= displayTitle %></title>
 <meta
     name="description"
     content="<%= typeof description != "undefined" ? description : "The new customisable and easy to use type-safe language for the web and Node.js! " ;%>"
@@ -49,7 +56,7 @@ See main.scss for the --scheme-primary variable
 
 <!-- Meta fields -->
 <meta property="og:site_name" content="Kipper">
-<meta property="og:title" content="<%= (typeof title != "undefined" ? title + " - " : "") + `Kipper v${docsVersion ?? latestVersion}` ;%>">
+<meta property="og:title" content="<%= displayTitle %>">
 <meta property="og:description"
       content="<%= typeof description != "undefined" ? description : "The new customisable and easy to use type-safe language for the web and Node.js! " ;%>">
 <meta property="og:type" content="website">
