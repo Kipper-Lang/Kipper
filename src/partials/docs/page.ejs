@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./head', { title: title, description: description }) %>
+    <%- include('../head', { title: title, description: description }) %>
     <link rel="stylesheet" href="<%= rootDir %>/css/docs.scss" />
 </head>
 <body>
@@ -19,19 +19,22 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('./nav-bar', { header: false, title: title, description: description }) %>
+        <%- include('../nav-bar', { header: false, title: title, description: description }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="flex-parent-container flex-fill-to-parent">
             <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
                 <li id="docs-sidebar-nav-wrapper" class="flex-parent-container">
-                    <%- include('./docs-sidebar', {
-                        sidebarHeadings: sidebarHeadings,
+                    <%- include('./nav', {
+                        sidebarNav: sidebarNav,
                         header: false,
                         title: title,
                         description: description,
                         thisFile: thisFile,
                         docsRoot: docsRoot,
+                        existsSync: existsSync,
+                        absoluteSrcRootDir: absoluteSrcRootDir,
+                        thisNavTreeItem: thisNavTreeItem,
                     }) %>
                 </li>
                 <li class="docs-page-content-container">
@@ -39,10 +42,16 @@
                         <!-- Content -->
                         <section>
                             <nav id="docs-page-nav">
-                                <ul class="flex-row no-style-list">
-                                    <li><a id="docs-page-nav-kipper-version" href="<%= thisVersionIndex %>"><%= docsVersion %> /</a></li>
-                                    <li><a class="docs-page-nav-header" href="<%= thisFile %>"><%= title %></a></li>
-                                </ul>
+                                <%- include('./nav-path', {
+                                    sidebarNav: sidebarNav,
+                                    thisFile: thisFile,
+                                    rootDir: rootDir,
+                                    thisVersionIndex: thisVersionIndex,
+                                    absoluteSrcRootDir: absoluteSrcRootDir,
+                                    thisNavTreeItem: thisNavTreeItem,
+                                    isIndexFile: isIndexFile,
+                                    isHiddenFile: isHiddenFile,
+                                }) %>
                                 <a
                                     id="edit-page-on-github"
                                     href="<%= editPath %>"
@@ -61,11 +70,11 @@
             </ul>
         </div>
         <!-- Footer bar - contains some links and general copyright notice -->
-        <%- include('./footer') %>
+        <%- include('../footer') %>
     </div>
 </div>
 
 <!-- Overlay for displaying search results -->
-<%- include('./search-bar-overlay') %>
+<%- include('../search-bar-overlay') %>
 </body>
 </html>

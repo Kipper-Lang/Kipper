@@ -1,0 +1,27 @@
+<nav id="docs-sidebar-nav">
+    <div id="docs-sidebar-nav-head">
+        <h6><a class="docs-page-nav-header" href="./index.html">Kipper Docs</a></h6>
+        <div id="docs-version-selection">
+            <%- include('./version-dropdown', {
+                docsRoot: docsRoot,
+                docsVersions: docsVersions,
+                docsVersion: docsVersion,
+                existsSync: existsSync,
+                docsRoot: docsRoot,
+                absoluteSrcRootDir: absoluteSrcRootDir,
+            }) %>
+        </div>
+    </div>
+    <ul class="docs-sidebar-nav-list no-style-list flex-column">
+        <%- include('./nav-list', {
+        sidebarNav: sidebarNav,
+        header: false,
+        title: title,
+        description: description,
+        thisFile: thisFile,
+        docsRoot: docsRoot,
+        inRootDir: false,
+        thisNavTreeItem: thisNavTreeItem,
+        }) %>
+    </ul>
+</nav>

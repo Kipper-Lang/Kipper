@@ -1,0 +1,25 @@
+<div id="docs-version-selector-root-button-wrapper">
+    <button>
+        <span class="h6">
+            <span><%= `${docsVersion}` %></span>
+            <i class="fa-solid fa-xs fa-caret-down"></i>
+        </span>
+    </button>
+</div>
+<ul id="docs-versions-dropdown" class="no-style-list flex-column">
+    <% docsVersions.forEach((v) => { %>
+        <li id="docs-version-selector-<%= v %>" class="docs-version-selector-button-wrapper" data-version="<%= v %>">
+            <% let thisVersionEdition = thisFile.replace(`/${docsVersion}`, "").replace(docsRoot, `${docsRoot}/${v}`); %>
+            <% let thisSourceMdFile = path.resolve(
+                 `${absoluteSrcRootDir}/${thisVersionEdition.replace(/\.\./g, ".").replace(".html", ".md")}`
+               );
+            %>
+
+            <% if (existsSync(thisSourceMdFile)) { %>
+                <a href="<%= thisVersionEdition %>"><%= v %></a>
+            <% } else { %>
+                <a href="<%= `${docsRoot}/${v}/index.html` %>"><%= v %></a>
+            <% } %>
+        </li>
+    <% }); %>
+</ul>

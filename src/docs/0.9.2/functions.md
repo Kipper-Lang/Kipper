@@ -7,7 +7,7 @@ Functions are essential for every program, as the ability to re-execute statemen
 powerful tool for every program allowing the creation of complex behaviour fairly easily and avoiding ugly code
 repetition.
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.10.0
 </p>
 
@@ -49,7 +49,7 @@ When calling them all arguments have to be passed with the argument types matchi
 the variables are going to be copied to the local function stack (local scope) and be available to the body of the function.
 This means that the arguments will also be referencable by statements inside the function body.
 
-<div class="red-highlight-text">
+<div class="important">
   <h2>Important</h2>
   <p>
     A function allows for an infinite amount of arguments, though at the current stage of development, no optional or

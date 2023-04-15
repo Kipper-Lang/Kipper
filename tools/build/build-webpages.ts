@@ -6,30 +6,39 @@ import * as lru from "lru-cache";
 import * as path from "path";
 import * as showdown from "showdown";
 import * as yaml from "js-yaml";
-import { statSync } from "fs";
-import { existsSync, promises as fs } from "fs";
-import fetch from "node-fetch";
+import { promises as fs, statSync } from "fs";
 
-const rootDir = path.resolve(__dirname, "..", "..");
-const srcRootDir = path.resolve(`${rootDir}/src`);
-const destRootDir = path.resolve(`${rootDir}/build`);
-const srcRootDocs = `${srcRootDir}/docs`;
-const destRootDocs = `${destRootDir}/docs`;
-const configPath = path.resolve(`${srcRootDir}/config.json`);
+// Local dependencies
+import type {
+	AbsolutePath,
+	DirTreeItem,
+	Path,
+	PathTreeItem,
+	RelativePath,
+	SidebarDir,
+	SidebarFile,
+	SidebarTreeItem,
+} from "./ext/base-types";
+import { DocsSidebar } from "./ext/docs-sidebar";
+import {
+	buildEjsFiles,
+	copyFiles,
+	determineMarkdownFileMetadata,
+	ensureURLSlashes,
+	ensureValidSrcAndDest,
+	getBuildData,
+	getEditURL,
+	getRelativePathToSrc,
+	getURLParentPath,
+	getURLPath,
+} from "./ext/tools";
+import { configPath, destRootDir, destRootDocs, ejsOptions, srcRootDir, srcRootDocs } from "./ext/const-config";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
 ejs.cache = new lru({
 	max: 500,
 });
-
-/**
- * The metadata for a documentation file, which contains the {@link title} and {@link description}.
- */
-interface DocumentMetaData {
-	title: string;
-	description: string;
-}
 
 // Add new extension to showdown
 showdown.extension("line-numbers", () => {
@@ -63,243 +72,15 @@ showdown.setOption("customizedHeaderId", true);
 showdown.setOption("emoji", true);
 
 /**
- * Ensures that the given URL does not use Windows-style slashes and has URL-conforming slashes.
- * @param url The URL to ensure the correct slashes are used.
- */
-function ensureURLSlashes(url: string): string {
-	return url.replace(/\\/g, "/");
-}
-
-/**
- * Removes the trailing slash from the given string if it exists.
- * @param str The string to remove the trailing slash from.
- */
-function removeTrailingSlash(str: string): string {
-	if (str.length === 1)
-		return str; // Don't remove the trailing slash if it is the only character in the string.
-
-	if (str.endsWith("/") || str.endsWith("\\")) {
-		return str.slice(0, -1);
-	}
-	return str;
-}
-
-/**
- * Gets the parent directory of the given absolute path.
- * @param absolutePath The absolute path to get the parent directory of.
- */
-function getParentDir(absolutePath: string): string {
-	return path.resolve(absolutePath).replace(path.basename(absolutePath), "");
-}
-
-/**
- * Gets the relative path from {@link currPath} to {@link rootDir} in a relative format.
- * @param rootDir The root directory.
- * @param currPath The current file path which must be a subdirectory of {@link rootDir}.
- */
-function getRelativePathToSrc(rootDir: string, currPath: string): string {
-	rootDir = path.resolve(rootDir) + path.sep;
-	currPath = getParentDir(currPath);
-	return removeTrailingSlash(path.relative(currPath, rootDir)) || ".";
-}
-
-/**
- * Gets the URL path for the given absolute path by removing the root directory.
- * @param absolutePath The absolute path to get the URL path of.
- * @param rootDir The root directory to remove from the absolute path. Per default, it will be the {@link destRootDir},
- * as this function primarily is used for getting URLs of compiled output files that will be accessed in the browser.
- */
-function getURLPath(absolutePath: string, rootDir: string = destRootDir): string {
-	return ensureURLSlashes(absolutePath.replace(rootDir, ""));
-}
-
-/**
- * Get the edit URL for the given file. This is the URL to the file on GitHub and uses {@link srcRootDir} to get the
- * relative path to the file.
- * @param docsEditURL The base URL for editing the docs.
- * @param absolutePath The absolute path to the file.
- */
-function getEditURL(docsEditURL: string, absolutePath: string): string {
-	return `${docsEditURL}/src${getURLPath(absolutePath, srcRootDir)}`;
-}
-
-/**
- * Gets the parent URL path for the given absolute path by removing the root directory (In this case as it should be a
- * build file, it is the {@link destRootDir}).
- * @param absolutePath The absolute path to get the parent URL path of.
- */
-function getURLParentPath(absolutePath: string): string {
-	return removeTrailingSlash(getURLPath(getParentDir(absolutePath)));
-}
-
-/**
- * Ensures the given arguments are valid directories and creates the destination directory if it does not exist.
- * @param src The source directory of a copy operation.
- * @param dest The destination directory of a copy operation.
- */
-async function ensureValidSrcAndDest(src: string, dest: string): Promise<void> {
-	if (!existsSync(dest)) {
-		await fs.mkdir(dest);
-	} else if (!(await fs.stat(dest)).isDirectory()) {
-		throw new Error("Destination must be a directory");
-	}
-
-	if (!(await fs.stat(src)).isDirectory()) {
-		throw new Error("Source must be a directory");
-	}
-}
-
-/**
- * Gets the data for the ejs build. This simply is a JSON file with some additional data.
- * @param dataFile The path to the data file.
- */
-async function getBuildData(dataFile: string): Promise<Record<string, any>> {
-	// Read const config.json
-	const data = JSON.parse((await fs.readFile(dataFile)).toString());
-
-	const resp = await fetch("https://registry.npmjs.org/kipper");
-	const json = await resp.json();
-
-	return {
-		...data,
-		latestVersion: json["dist-tags"]["latest"],
-		docsVersion: undefined, // Unless we are in a docs folder, this will be undefined
-		devVersion: json["dist-tags"]["next"],
-		versions: {
-			next: json["dist-tags"]["next"],
-			latest: json["dist-tags"]["latest"],
-			"0.10.0": "0.10.0",
-			"0.9.2": "0.9.2",
-		},
-    docsVersions: await (async () => {
-      // Get all directories in the docs folder that are not current, next, or latest,
-      let entries = await fs.readdir(srcRootDocs);
-
-      // Filter out  non-directories
-      entries = entries.filter((entry) => {
-        const entryPath = path.join(srcRootDocs, entry);
-        return (statSync(entryPath)).isDirectory();
-      });
-
-      return entries;
-    })()
-	};
-}
-
-/**
- * Copies all non-ejs files to the destination folder.
- * @param src The source directory of a copy operation.
- * @param dest The destination directory of a copy operation.
- */
-async function copyFiles(src: string, dest: string): Promise<void> {
-	// Generate the dest folder if it does not exist
-	await ensureValidSrcAndDest(src, dest);
-
-	const result = await fs.readdir(src);
-	for (let file of result) {
-		// If the file is an ejs file or a partials' folder skip it, as it will be compiled into HTML
-		if (file.endsWith(".ejs") || file === "partials" || file === "docs") {
-			continue;
-		}
-
-		const itemSrc = `${src}/${file}`;
-		const itemDest = `${dest}/${file}`;
-
-		if ((await fs.stat(itemSrc)).isDirectory()) {
-			if (!existsSync(itemDest)) {
-				await fs.mkdir(itemDest);
-			}
-			await copyFiles(itemSrc, itemDest);
-		} else {
-			await fs.copyFile(itemSrc, itemDest);
-		}
-	}
-}
-
-/**
- * Builds all ejs files and copies all dependencies to the {@link destRootDir} folder.
- * @param src The source directory of the ejs files.
- * @param dest The destination directory of the ejs files.
- * @param data The data to pass to the ejs renderer.
- */
-async function buildEjsFiles(src: string, dest: string, data: Record<string, any>): Promise<void> {
-	// Generate the dest folder if it does not exist
-	await ensureValidSrcAndDest(src, dest);
-
-	const result = await fs.readdir(src);
-	for (let file of result) {
-		// If the file is an ejs file compile it to HTML
-		if (file.endsWith(".ejs")) {
-			const htmlFile = file.replace(".ejs", ".html");
-			const pathSrc = path.resolve(`${src}/${file}`);
-			const pathDest =  path.resolve(`${dest}/${htmlFile}`);
-			const itemData = {
-				...data,
-				filename: htmlFile, // This should only contain the filename without any directory
-				urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
-				urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
-				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
-				isDocsFile: false,
-				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
-			};
-
-			// Build ejs file
-			const result: string = await ejs.renderFile(pathSrc, itemData);
-			await fs.writeFile(pathDest, result);
-		}
-	}
-}
-
-/**
- * Tries to determine the file metadata of the passed Markdown HTML file.
- * @param markdownHtml The HTML for the Markdown file.
- * @returns The metadata for the file.
- */
-function determineMarkdownFileMetadata(markdownHtml: string): DocumentMetaData {
-	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
-	let metaData: DocumentMetaData = { title: "", description: "" };
-	let isTitle = false;
-	let isDescription = false;
-	for (let line of htmlContent) {
-		line = line.trim();
-
-		// If there is a h1 tag and no title has been found yet, make this the new title
-		if ((line.startsWith(`<h1`) && !metaData.title) || isTitle) {
-			isTitle = true;
-			metaData.title += line.replace(/<\/?[0-9A-Za-z-_=/"' ]+>/g, "").trim() + " ";
-
-			if (line.endsWith("</h1>")) {
-				isTitle = false;
-			}
-			// If there is a p tag, no description has been found yet and a title has been already created, make this the
-			// new description
-		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
-			isDescription = true;
-			metaData.description += line.replace(/<\/?[0-9A-Za-z-_=/"' ]+>/g, "").trim() + " ";
-
-			if (line.endsWith("</p>")) {
-				isDescription = false;
-			}
-		}
-	}
-
-	// Ensure any left-over whitespaces are removed
-	metaData.title = metaData.title.trim();
-	metaData.description = metaData.description.trim();
-
-	return metaData;
-}
-
-/**
  * The docs builder class managing the build process for the Markdown documentation files.
  */
-class DocsBuilder {
+export class DocsBuilder {
 	public readonly converter: showdown.Converter;
 	public readonly baseTemplate: string;
 
 	public constructor(docsEJSTemplate: string) {
 		// Create new converted - Note: Extension 'line-numbers' is disabled for now
-		this.converter = new showdown.Converter({ metadata: true, /* extensions: ['line-numbers'] } */ });
+		this.converter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
 
 		// Get base Docs template
 		this.baseTemplate = path.resolve(docsEJSTemplate);
@@ -308,17 +89,17 @@ class DocsBuilder {
 		}
 	}
 
-  /**
-   * Gets the metadata of the last markdown file that was converted to HTML.
-   * @private
-   */
-  private getMetadataOfLastFile(): showdown.Metadata {
-    const raw = this.converter.getMetadata(true);
-    if (!raw) {
-      return {};
-    }
-    return yaml.load(raw);
-  }
+	/**
+	 * Gets the metadata of the last markdown file that was converted to HTML.
+	 * @private
+	 */
+	public getMetadataOfLastFile(): showdown.Metadata {
+		const raw = this.converter.getMetadata(true);
+		if (!raw) {
+			return {};
+		}
+		return yaml.load(raw);
+	}
 
 	/**
 	 * Render the passed Markdown file to HTML.
@@ -343,7 +124,7 @@ class DocsBuilder {
 		const fileMetadata = this.getMetadataOfLastFile();
 
 		// Set markdown content to the generated HTML and render it again if there are any ejs tags
-		data["markdownContent"] = ejs.render(markdownHtml, data);
+		data["markdownContent"] = ejs.render(markdownHtml, data, ejsOptions);
 
 		// Evaluate title and description
 		const metadata = determineMarkdownFileMetadata(data["markdownContent"]);
@@ -352,7 +133,7 @@ class DocsBuilder {
 		data["title"] = fileMetadata["title"] ?? metadata.title;
 		data["description"] = fileMetadata["description"] ?? metadata.description;
 
-		return await ejs.renderFile(this.baseTemplate, data);
+		return await ejs.renderFile(this.baseTemplate, data, ejsOptions);
 	}
 
 	/**
@@ -362,6 +143,7 @@ class DocsBuilder {
 	 * @param pathDest The path to the destination file.
 	 * @param version The version of the docs file.
 	 * @param existingData The existing data to merge with.
+	 * @param navTreeItem The nav tree item storing the data of this item.
 	 * @private
 	 */
 	private getDocsFileBuildData(
@@ -370,22 +152,28 @@ class DocsBuilder {
 		pathDest: string,
 		version: string,
 		existingData: Record<string, any>,
+		navTreeItem: SidebarFile,
 	): Record<string, any> {
 		return {
 			...existingData,
-			rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
+			rootDir: ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest)), // Relative path to the root directory
 			filename: htmlFilename, // This should only contain the filename without any directory
 			urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
 			urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
 			editPath: getEditURL(existingData["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 			docsVersion: version,
+			thisNavTreeItem: navTreeItem,
 			isDocsFile: true,
+			isHiddenFile: navTreeItem === undefined,
+			isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
+			dropdownTitle: navTreeItem?.dropdownTitle,
 		};
 	}
 
 	/**
 	 * Builds a single docs file and writes it to the destination folder.
 	 * @param mdFile The Markdown file to build.
+	 * @param navTreeItem
 	 * @param versionSrc The source directory of the version.
 	 * @param versionDest The destination directory of the version.
 	 * @param version The version of the docs.
@@ -394,6 +182,7 @@ class DocsBuilder {
 	 */
 	private async buildDocsFile(
 		mdFile: string,
+		navTreeItem: SidebarFile,
 		versionSrc: string,
 		versionDest: string,
 		version: string,
@@ -402,7 +191,7 @@ class DocsBuilder {
 		const htmlFilename = mdFile.replace(".md", ".html");
 		const pathSrc = path.resolve(`${versionSrc}/${mdFile}`);
 		const pathDest = path.resolve(`${versionDest}/${htmlFilename}`);
-		const itemData = this.getDocsFileBuildData(htmlFilename, pathSrc, pathDest, version, data);
+		const itemData = this.getDocsFileBuildData(htmlFilename, pathSrc, pathDest, version, data, navTreeItem);
 
 		// Convert markdown to HTML
 		const html = await this.renderMarkdownFile(pathSrc);
@@ -412,77 +201,152 @@ class DocsBuilder {
 		await fs.writeFile(pathDest, result);
 	}
 
-  /**
-   * Gets an array of all files that should be displayed in the sidebar/left navigation bar.
-   * @param pathSrc The path to the version specific source directory.
-   * @param pathDest The path to the version specific destination directory.
-   * @private
-   */
-  private async getStaticSidebarHeaderFiles(pathSrc: string, pathDest: string): Promise<Array<string>> {
-    const indexFile = path.resolve(`${pathSrc}/index.md`);
-    const content = (await fs.readFile(indexFile)).toString();
-
-    // Get the metadata from the index file (we need to convert it to HTML first, so we can get the metadata)
-    this.converter.makeHtml(content);
-    const metadata = <showdown.Metadata & { nav: Array<string> }>this.getMetadataOfLastFile();
-    if (!("nav" in metadata)) {
-      throw new Error(`No navigation bar defined in '${indexFile}'`);
-    }
-
-    return metadata["nav"].map((entry) => {
-      return path.resolve(`${pathDest}/${entry}`.replace(".md", ".html"));
-    });
-  }
-
 	/**
-	 * Gets a list of all headings that should be displayed in the sidebar/left navigation bar.
-	 * @param mdFiles The list of all markdown files in form of simple file names (without path).
-	 * @param pathSrc The path to the version specific source directory.
-	 * @param pathDest The path to the version specific destination directory.
+	 * Builds the specified nested directory and its content. This method may be called recursively.
+	 * @param dirPath The path to the directory to build. This path is relative to the version specific source directory.
+	 * @param localTree The tree of Markdown files from this directory to build.
+	 * @param versionSrc The path to the version specific source directory.
+	 * @param versionDest The path to the version specific destination directory.
+	 * @param version The version of the docs.
+	 * @param data The data to pass to the ejs renderer.
+	 * @param sidebarHeadings The sidebar headings for the current version.
+	 * @param sidebarHeadingsForCopyToDir The sidebar headings for the copy-to directory, which should be specified only
+	 * if the docs should be copied to another location.
+	 * @param options The additional optional arguments available for this method.
+	 * @param options.copyToDir The copy-to directory, which should be specified only if the docs should be copied to
+	 * another location.
+	 * @param options.parentSidebarTreeItem The parent sidebar tree item of the current directory (This should usually be
+	 * only specified if this is a recursive call). This is used to generate the nav path on top of the docs page.
+	 * @param options.parentSidebarTreeItemForCopyToDir The parent sidebar tree item of the current directory for the
+	 * copy-to directory (This should usually be only specified if this is a recursive call). This is used to generate
+	 * the nav path on top of the docs page.
 	 * @private
 	 */
-	private async getSidebarHeadings(
-		mdFiles: Array<string>,
-		pathSrc: string,
-		pathDest: string,
-	): Promise<Array<{ title: string; path: string }>> {
-    // Get the headers defined in the markdown index.md file
-    const navBarHeaders = await this.getStaticSidebarHeaderFiles(pathSrc, pathDest);
+	private async buildDocsDirectory(
+		dirPath: RelativePath,
+		localTree: Array<PathTreeItem> | DirTreeItem,
+		versionSrc: AbsolutePath,
+		versionDest: AbsolutePath,
+		version: string,
+		data: Record<string, any>,
+		sidebarHeadings: DocsSidebar,
+		sidebarHeadingsForCopyToDir: DocsSidebar | undefined,
+		options?: {
+			parentSidebarItem?: SidebarDir;
+			parentSidebarForCopyToDir?: SidebarDir;
+			copyToDir?: AbsolutePath;
+		},
+	): Promise<void> {
+		const dirSrc = path.resolve(`${versionSrc}/${dirPath}`);
+		const dirDest = path.resolve(`${versionDest}/${dirPath}`);
 
-		const headings: Array<{ title: string; path: string }> = [];
-		for (let file of navBarHeaders) {
-      const mdName = path.basename(file).replace(".html", ".md");
-      const mdFileToRead = path.resolve(pathSrc, mdName);
+		// The directory to copy to - may be undefined
+		const copyToDir = options.copyToDir ? path.resolve(`${options.copyToDir}/${dirPath}`) : undefined;
 
-      // Ensure that there is a corresponding markdown file
-      if (!mdFiles.includes(mdName)) {
-        throw new Error(`File '${file}' does not have a corresponding markdown file.`);
-      }
+		for (const dirItem of Array.isArray(localTree) ? localTree : localTree.items) {
+			// Find the corresponding navigation bar item for this directory item (perhaps undefined, as not all pages may
+			// be included in the navigation bar - for example migration notice pages are hidden unless found with specific
+			// URLs)
+			const findNavItem = (i: SidebarTreeItem) => {
+				const srcFileName = i.filename.replace(".html", ".md");
+				return srcFileName === dirItem || (typeof dirItem !== "string" && srcFileName === dirItem.name);
+			};
+			const navItem = options.parentSidebarItem
+				? options.parentSidebarItem.items.find(findNavItem)
+				: sidebarHeadings.items.find(findNavItem);
+			const copyNavItem = options.parentSidebarForCopyToDir
+				? options.parentSidebarForCopyToDir.items.find(findNavItem)
+				: sidebarHeadingsForCopyToDir?.items.find(findNavItem);
 
-			const content = (await fs.readFile(mdFileToRead)).toString();
+			if (typeof dirItem !== "string") {
+				// Create the directory in the destination folder
+				await fs.mkdir(path.resolve(`${dirDest}/${dirItem.name}`), { recursive: true });
 
-			// Parse markdown to HTML, as the headings are only available after the conversion
-			const html = this.converter.makeHtml(content);
+				// First build the top-level directory
+				data["sidebarNav"] = sidebarHeadings;
+				await this.buildDocsDirectory(
+					dirItem.name,
+					dirItem,
+					dirSrc,
+					dirDest,
+					version,
+					data,
+					sidebarHeadings,
+					sidebarHeadingsForCopyToDir,
+					{
+						parentSidebarItem: <SidebarDir>navItem,
+					},
+				);
 
-			// Push the new heading
-			const title = this.getMetadataOfLastFile()["title"] || determineMarkdownFileMetadata(html).title;
-			const fileURLPath = getURLPath(file);
-			headings.push({
-				title: title,
-				path: fileURLPath
-			});
+				// If the version is 'latest' then also build the docs in the root folder
+				if (copyToDir) {
+					// Create the directory in the destination folder
+					await fs.mkdir(path.resolve(`${copyToDir}/${dirItem.name}`), { recursive: true });
 
-			if (!title) {
-				throw new Error(`No title found for file: ${mdFileToRead} - Please add a title attribute or a clear top heading.`);
+					data["sidebarNav"] = sidebarHeadingsForCopyToDir;
+					await this.buildDocsDirectory(
+						dirItem.name,
+						dirItem,
+						dirSrc,
+						copyToDir,
+						version,
+						data,
+						sidebarHeadings,
+						sidebarHeadingsForCopyToDir,
+						{
+							parentSidebarItem: <SidebarDir>navItem,
+						},
+					);
+				}
+			} else {
+				data["sidebarNav"] = sidebarHeadings;
+				await this.buildDocsFile(dirItem, <SidebarFile>navItem, dirSrc, dirDest, version, data);
+
+				// If the version is 'latest' then also build the docs in the root folder
+				if (copyToDir) {
+					data["sidebarNav"] = sidebarHeadingsForCopyToDir;
+					await this.buildDocsFile(dirItem, <SidebarFile>copyNavItem, dirSrc, copyToDir, version, data);
+				}
 			}
 		}
-		return headings;
+	}
+
+	/**
+	 * Returns a tree representing the content of the specified directory, which should represent the data returned from
+	 * a {@link fs.readdir} call.
+	 * @param dirContents The contents of the directory to process.
+	 * @param dirPath The absolute path of the current directory.
+	 * @private
+	 */
+	private async processDirContents(dirContents: Array<string>, dirPath: AbsolutePath): Promise<Array<PathTreeItem>> {
+		const mdFiles = [];
+		for (const fileOrDir of dirContents) {
+			if (fileOrDir.endsWith(".md")) {
+				mdFiles.push(<Path>fileOrDir);
+			}
+
+			const absolutePath: AbsolutePath = path.resolve(`${dirPath}/${fileOrDir}/`);
+			if (statSync(absolutePath).isDirectory()) {
+				// Process nested directories recursively
+				const pathItems = await this.processDirContents(await fs.readdir(absolutePath), absolutePath);
+				mdFiles.push(<DirTreeItem>{
+					name: fileOrDir,
+					items: pathItems,
+				});
+
+				// Ensure there is an index.md file in the directory
+				if (!pathItems.find((i) => i === "index.md" || (typeof i !== "string" && i.name === "index.md"))) {
+					throw new Error(`No index.md file found in directory '${absolutePath}'`);
+				}
+			}
+		}
+		return mdFiles;
 	}
 
 	/**
 	 * Builds a specific version of the docs and places them in the specified target folder with the following path:
 	 * '/{docsDestRoot}/{version}/'. If the version is 'latest' then it will be both placed in the root folder and in
-   * the specific version folder, with the version being the resolved version based on the npm tag.
+	 * the specific version folder, with the version being the resolved version based on the npm tag.
 	 * @param docsSrcRoot The root folder of the docs. All versions should be placed there in the following format:
 	 * '/{docsSrcRoot}/{version}/'.
 	 * @param docsDestRoot The root folder of the docs. All versions will be placed there in the following format:
@@ -491,7 +355,7 @@ class DocsBuilder {
 	 * @param data The data to pass to the ejs renderer.
 	 * @private
 	 */
-	private async builtSpecificDocsVersion(
+	private async buildSpecificDocsVersion(
 		docsSrcRoot: string,
 		docsDestRoot: string,
 		version: string,
@@ -508,23 +372,30 @@ class DocsBuilder {
 
 		// The contents of the src folder
 		const dirContents = await fs.readdir(versionSrc);
-		const mdFiles = dirContents.filter((file) => file.endsWith(".md"));
+
+		// Evaluate the markdown files in the src folder
+		let mdFiles: Array<PathTreeItem> = await this.processDirContents(dirContents, versionSrc);
 
 		// Get the headings for the sidebar, which are unique for each version
-		const sidebarHeadings = await this.getSidebarHeadings(mdFiles, versionSrc, versionDest);
-    const sidebarHeadingsForRoot = copyToRoot ? await this.getSidebarHeadings(mdFiles, versionSrc, docsDestRoot) : { };
+		const sidebarHeadings: DocsSidebar = await new DocsSidebar(versionSrc, versionDest, mdFiles, this).build();
+		const sidebarHeadingsForRoot: DocsSidebar = copyToRoot
+			? await new DocsSidebar(versionSrc, docsDestRoot, mdFiles, this).build()
+			: sidebarHeadings;
 
-		// Build the docs files
-		for (let file of mdFiles) {
-      data["sidebarHeadings"] = sidebarHeadings;
-			await this.buildDocsFile(file, versionSrc, versionDest, version, data);
-
-      // If the version is 'latest' then also build the docs in the root folder
-			if (copyToRoot) {
-        data["sidebarHeadings"] = sidebarHeadingsForRoot;
-				await this.buildDocsFile(file, versionSrc, docsDestRoot, version, data);
-			}
-		}
+		// Build the top-level and nested docs files
+		await this.buildDocsDirectory(
+			".",
+			mdFiles,
+			versionSrc,
+			versionDest,
+			version,
+			data,
+			sidebarHeadings,
+			sidebarHeadingsForRoot,
+			{
+				copyToDir: copyToRoot ? docsDestRoot : undefined,
+			},
+		);
 	}
 
 	/**
@@ -543,9 +414,9 @@ class DocsBuilder {
 			const versionPath = path.resolve(`${docsSrc}/${version}`);
 
 			// Ensure the path is a directory and not a file
-			if ((await fs.stat(versionPath)).isDirectory()) {
+			if (statSync(versionPath).isDirectory()) {
 				// Build the docs for the specific version
-				await this.builtSpecificDocsVersion(docsSrc, docsDest, version, data);
+				await this.buildSpecificDocsVersion(docsSrc, docsDest, version, data);
 			}
 		}
 	}
@@ -559,7 +430,7 @@ class DocsBuilder {
 	await buildEjsFiles(srcRootDir, destRootDir, data);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
-	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs.ejs`);
+	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs/page.ejs`);
 	await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
 	// Copy all remaining files

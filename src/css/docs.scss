@@ -1,295 +1,345 @@
 /*! Docs Formatting */
 
 .docs-page-content-container {
-  display: flex;
+	display: flex;
 }
 
 #docs-sidebar-nav-wrapper {
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(25, 25, 28, 0.2);
-  max-width: 16rem;
-  min-width: 200px;
-  padding: 2em 1.5em;
+	display: flex;
+	flex-direction: column;
+	border-right: 1px solid rgba(25, 25, 28, 0.2);
+	max-width: 16rem;
+	min-width: 200px;
+	padding: 2em 1.5em;
 }
 
 @media (max-width: 920px) {
-  .docs-page-content-container {
-    width: 60vw;
-    padding: 2rem;
-  }
+	.docs-page-content-container {
+		width: 60vw;
+		padding: 2rem;
+	}
 
-  #docs-sidebar-nav-wrapper {
-    width: 20vw;
-  }
+	#docs-sidebar-nav-wrapper {
+		width: 20vw;
+	}
 }
 
 @media (min-width: 920px) {
-  .docs-page-content-container {
-    width: 55vw;
-    padding: 4vw 4vw 4vw 6vw;
-  }
+	.docs-page-content-container {
+		width: 55vw;
+		padding: 4vw 4vw 4vw 6vw;
+	}
 
-  #docs-sidebar-nav-wrapper {
-    width: 25vw;
-  }
+	#docs-sidebar-nav-wrapper {
+		width: 25vw;
+	}
 }
 
 #docs-content {
-  flex-grow: 1;
-  width: inherit;
+	flex-grow: 1;
+	width: inherit;
 
-  & > section > article :first-child h1 {
-    margin-top: 0.6rem;
-  }
+	& > section > article :first-child h1 {
+		margin-top: 0.6rem;
+	}
 
-  img {
-    width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-  }
+	img {
+		width: 100%;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
 
-  p,
-  div {
-    & + p,
+	p,
+	div {
+		& + p,
     & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
     & + div.code-toolbar pre[class*="language-"] {
-      margin: var(--default-parapgraph-margin) 0 0 0;
-    }
-  }
+			margin: var(--default-parapgraph-margin) 0 0 0;
+		}
+	}
 
-  div:last-child,
-  article:last-child {
-    &,
-    & div.code-toolbar pre[class*="language-"] {
-      margin-bottom: 0 !important;
-    }
-  }
+	div:last-child,
+	article:last-child {
+		&,
+		& div.code-toolbar pre[class*="language-"] {
+			margin-bottom: 0 !important;
+		}
+	}
 
-  #docs-page-nav {
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
+	#docs-page-nav {
+		display: flex;
+		align-content: center;
+		justify-content: space-between;
 
-    #docs-page-nav-kipper-version {
-      text-decoration: none;
+		#docs-page-nav-kipper-version {
+			text-decoration: none;
 
-      &,
-      &:active,
-      &:visited {
-        color: var(--scheme-dark-gray);
-      }
+			&,
+			&:active,
+			&:visited {
+				color: var(--scheme-dark-gray);
+			}
 
-      &:hover {
-        color: var(--scheme-primary);
-      }
-    }
+			&:hover {
+				color: var(--scheme-primary);
+			}
+		}
 
-    .docs-page-nav-header,
-    .docs-page-nav-header:active,
-    .docs-page-nav-header:visited {
-      color: black;
-      text-decoration: none !important;
-    }
+		.docs-page-nav-header,
+		.docs-page-nav-header:active,
+		.docs-page-nav-header:visited {
+			color: black;
+			text-decoration: none !important;
+		}
 
-    .docs-page-nav-header:hover {
-      color: var(--scheme-primary);
-    }
+		.docs-page-nav-header:hover {
+			color: var(--scheme-primary);
+		}
 
-    ul li {
-      padding-right: 0.25em;
-    }
+		ul li {
+			padding-right: 0.25em;
+		}
 
-    #edit-page-on-github {
-      display: flex;
-      align-content: center;
-      align-items: center;
-      flex-direction: row;
-      column-gap: 0.4rem;
-      text-decoration: none;
-      color: black;
+		#edit-page-on-github {
+			display: flex;
+			align-content: center;
+			align-items: center;
+			flex-direction: row;
+			column-gap: 0.4rem;
+			text-decoration: none;
+			color: black;
 
-      i.fa-brands.fa-github {
-        margin: 0;
-        padding: 0;
-        line-height: unset;
-      }
+			i.fa-brands.fa-github {
+				margin: 0;
+				padding: 0;
+				line-height: unset;
+			}
 
-      &:hover {
-        color: var(--scheme-primary);
-      }
-    }
-  }
+			&:hover {
+				color: var(--scheme-primary);
+			}
+		}
+	}
 
-  #markdown-content {
-    h1, h2, h3, h4, h5, h6 {
-      /* Adjust spacing for code in headers */
-      & > :first-child:is(code) {
-        margin: -0.2em;
-      }
-    }
+	#markdown-content {
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			/* Adjust spacing for code in headers */
+			& > :first-child:is(code) {
+				margin: -0.2em;
+			}
+		}
 
-    .docs-version-indicator {
-      font-size: 0.96em;
-      font-weight: 500;
-      font-style: italic;
-      color: var(--scheme-dark-gray);
-      margin-top: -0.2em; /* Align with the header - Better visible separation */
-    }
+		.docs-version-indicator {
+			font-size: 0.96em;
+			font-weight: 500;
+			font-style: italic;
+			color: var(--scheme-dark-gray);
+			margin-top: -0.2em; /* Align with the header - Better visible separation */
+		}
 
-    .docs-version-indicator + p {
-      margin-top: calc(var(--default-parapgraph-margin) - 0.4em);
-    }
-  }
+		.docs-version-indicator + p {
+			margin-top: calc(var(--default-parapgraph-margin) - 0.4em);
+		}
+	}
 }
 
-#docs-sidebar-nav-head {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-bottom: 0.5rem;
-  margin: 0 0 1rem;
-  font-weight: 500;
-  border-bottom: 1px var(--scheme-dark-primary) solid;
-  color: var(--scheme-dark-primary) !important;
+#docs-sidebar-nav-wrapper > #docs-sidebar-nav {
+	#docs-sidebar-nav-head {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding-bottom: 0.5rem;
+		margin: 0 0 1rem;
+		font-weight: 500;
+		border-bottom: 1px var(--scheme-dark-primary) solid;
+		color: var(--scheme-dark-primary) !important;
 
-  #docs-version-selection {
-    margin-bottom: 0;
-    margin-left: 0;
-    position: relative;
-    z-index: 2;
+		#docs-version-selection {
+			margin-bottom: 0;
+			margin-left: 0;
+			position: relative;
+			z-index: 2;
 
-    & > #docs-version-selector-root-button-wrapper {
-      /* A minimum width to prevent the button from being too small with short versions */
-      min-width: 5rem;
-      display: flex;
-      align-content: center;
-      justify-content: center;
+			& > #docs-version-selector-root-button-wrapper {
+				/* A minimum width to prevent the button from being too small with short versions */
+				min-width: 5rem;
+				display: flex;
+				align-content: center;
+				justify-content: center;
 
-      button {
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
-        column-gap: 0.4rem;
-        padding: 0 0.5rem 0 0.5rem;
-        background-color: white;
-        border: none;
-        cursor: pointer;
+				button {
+					display: flex;
+					flex-direction: row;
+					align-content: center;
+					justify-content: center;
+					column-gap: 0.4rem;
+					padding: 0 0.5rem 0 0.5rem;
+					background-color: white;
+					border: none;
+					cursor: pointer;
 
-        &:hover {
-          color: var(--scheme-primary);
-          background-color: var(--scheme-gray);
-        }
+					&:hover {
+						color: var(--scheme-primary);
+						background-color: var(--scheme-gray);
+					}
 
-        .fa-caret-down::before {
-          display: block;
-          margin-top: 0.7em;
-        }
-      }
-    }
+					.fa-caret-down::before {
+						display: block;
+						margin-top: 0.7em;
+					}
+				}
+			}
 
-    & > #docs-versions-dropdown {
-      /* Hide the dropdown at first */
-      display: none;
-      visibility: hidden;
-      position: absolute;
-      top: 100%;
-      width: calc(100% - 8px);
-      margin: 4px 0 0 4px;
-      z-index: 2;
-      overflow-y: auto;
-      max-height: 60vh;
-      border-radius: 5px;
-      box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+			& > #docs-versions-dropdown {
+				/* Hide the dropdown at first */
+				display: none;
+				visibility: hidden;
+				position: absolute;
+				top: 100%;
+				width: calc(100% - 8px);
+				margin: 4px 0 0 4px;
+				z-index: 2;
+				overflow-y: auto;
+				max-height: 60vh;
+				border-radius: 5px;
+				box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-      &:last-child.docs-version-selector-button-wrapper {
-        /* Remove the border from the last element */
-        border-bottom: none;
-      }
+				&:last-child.docs-version-selector-button-wrapper {
+					/* Remove the border from the last element */
+					border-bottom: none;
+				}
 
-      li.docs-version-selector-button-wrapper {
-        display: flex;
-        align-content: center;
-        justify-content: center;
-        border-bottom: 2px solid var(--scheme-gray);
+				li.docs-version-selector-button-wrapper {
+					display: flex;
+					align-content: center;
+					justify-content: center;
+					border-bottom: 2px solid var(--scheme-gray);
 
-        a {
-          /* Similar styles like in the playground button */
-          padding: 0.8rem 0.8rem;
-          color: black;
-          background-color: white;
-          border: none;
-          cursor: pointer;
+					a {
+						/* Similar styles like in the playground button */
+						padding: 0.8rem;
+						color: black;
+						background-color: white;
+						border: none;
+						cursor: pointer;
 
-          /* Styling copied from button styling, similar to the one from the playground select buttons */
-          font-family: inherit;
-          font-size: 100%;
-          line-height: 1.15;
-          margin: 0;
-          box-sizing: border-box;
+						/* Styling copied from button styling, similar to the one from the playground select buttons */
+						font-family: inherit;
+						font-size: 100%;
+						line-height: 1.15;
+						margin: 0;
+						box-sizing: border-box;
 
-          /* Ensure the same sizing/layout like with a standard button */
-          display: flex;
-          align-content: center;
-          justify-content: center;
+						/* Ensure the same sizing/layout like with a standard button */
+						display: flex;
+						align-content: center;
+						justify-content: center;
 
-          /* Make the button grow to the size of the parent */
-          flex-grow: 1;
+						/* Make the button grow to the size of the parent */
+						flex-grow: 1;
 
-          &:hover {
-            color: var(--scheme-primary);
-            background-color: var(--scheme-gray);
-            text-decoration: none;
-          }
-        }
-      }
-    }
-  }
+						&:hover {
+							color: var(--scheme-primary);
+							background-color: var(--scheme-gray);
+							text-decoration: none;
+						}
+					}
+				}
+			}
+		}
 
-  & h6,
-  & .h6 {
-    margin-top: 0.5rem;
-  }
+		& h6,
+		& .h6 {
+			margin-top: 0.5rem;
+		}
 
-  & > a,
-  & > a:visited {
-    color: var(--scheme-dark-primary) !important;
-  }
-}
+		& > a,
+		& > a:visited {
+			color: var(--scheme-dark-primary) !important;
+		}
+	}
 
-.sidebar-nav-header-list-item {
-  display: flex;
-  padding: 0.2rem 0;
-  margin: 0;
-  background-color: transparent;
+	ul.docs-sidebar-nav-list {
+		& > li > ul.docs-sidebar-nav-list {
+			margin-left: 0.75rem;
+		}
 
-  & > a {
-    &,
-    &:visited,
-    &:active {
-      color: rgba(75, 85, 99);
-      text-decoration: none;
-      padding: 0.25rem 0 0.25rem 1rem;
-      border-radius: 6px;
-      flex-grow: 1;
-      font-size: 16px;
-    }
+		p.sidebar-nav-header-list-item {
+			display: flex;
+			padding: 0.2rem 0;
+			margin: 0;
+			background-color: transparent;
 
-    &:hover {
-      text-decoration: none;
-      color: rgb(17, 24, 39);
-      background-color: rgb(var(--scheme-primary-rgb), 0.12);
-    }
-  }
-}
+			/* Padding for the left side of the sidebar list item */
+			$left-nav-list-item-padding: 1rem;
 
-.sidebar-nav-current-header-list-item a {
-  color: rgb(17, 24, 39) !important;
-  background-color: rgba(255, 0, 79, 0.16) !important;
+			& > a,
+			& > button {
+				&,
+				&:visited,
+				&:active {
+					color: rgba(75, 85, 99);
+					text-decoration: none;
+					padding: 0.25rem 1rem 0.25rem calc(1rem + $left-nav-list-item-padding);
+					border-radius: 6px;
+					flex-grow: 1;
+					font-size: 16px;
+				}
+
+				&:hover {
+					text-decoration: none;
+					color: rgb(17, 24, 39);
+					background-color: rgb(var(--scheme-primary-rgb), 0.12) !important;
+				}
+			}
+
+			/* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
+			&.sidebar-nav-header-dir-item {
+				& > a,
+				& > button {
+					padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
+					background: transparent none;
+					border: none;
+					cursor: pointer;
+					text-align: left;
+					line-height: 1.5;
+
+					.fa-caret-down {
+						width: 11px;
+					}
+				}
+
+				& > button > i.fa-caret-down {
+					/* Closed dropdown */
+					rotate: 0deg;
+					padding: 0;
+				}
+
+				&.selected-page-sidebar-nav-header > button > i.fa-caret-down {
+					/* Rotating the caret so it shows the dropdown is open */
+					rotate: 270deg;
+					padding: 0 0 0 4px;
+				}
+			}
+
+			& + .docs-sidebar-nav-list {
+				visibility: hidden;
+				display: none;
+
+				&.selected-sidebar-nav-dir {
+					visibility: visible;
+					display: block;
+				}
+			}
+		}
+	}
 }
 
 .api-docs-description {
-  margin-left: 1rem;
+	margin-left: 1rem;
 }
-

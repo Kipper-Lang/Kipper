@@ -4,7 +4,7 @@ Do-while-loops are loops with a similar behaviour to [while-loops](./while-loop.
 that do-while loops run the statement once before starting evaluating its condition. Afterwards the
 statement is only run if the `CONDITION` is met.
 
-<p class="red-highlight-text">
+<p class="important">
   Scheduled for release in Kipper v0.12.0
 </p>
 

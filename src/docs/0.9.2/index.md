@@ -1,23 +1,23 @@
 ---
 title: Overview
 nav:
- - ./index.md
- - ./quickstart.md
- - ./goals-and-roadmap.md
- - ./supported-platforms.md
- - ./usage-examples.md
- - ./compiler.md
- - ./variables.md
- - ./datatypes.md
- - ./expressions.md
- - ./statements.md
- - ./if-statement.md
- - ./while-loop.md
- - ./do-while-loop.md
- - ./for-loop.md
- - ./functions.md
- - ./comments.md
- - ./built-in-functions.md
+  - ./index.md
+  - ./quickstart.md
+  - ./goals-and-roadmap.md
+  - ./supported-platforms.md
+  - ./usage-examples.md
+  - ./compiler.md
+  - ./variables.md
+  - ./datatypes.md
+  - ./index.md
+  - ./statements.md
+  - ./if-statement.md
+  - ./while-loop.md
+  - ./do-while-loop.md
+  - ./for-loop.md
+  - ./functions.md
+  - ./comments.md
+  - ./built-in-functions.md
 ---
 
 # Welcome to the Kipper Docs
@@ -47,7 +47,7 @@ explain the implementation, functionality and details for Kipper.
 - [Comments](./comments.html)
 - [Built-in Functions](./built-in-functions.html)
 
-<p class="red-highlight-text">
+<p class="important">
   Not all features shown in the docs are implemented yet. View the
   <a href="https://github.com/Luna-Klatzer/Kipper/discussions/139">Roadmap for Kipper</a>
   for info about the active development of Kipper.
