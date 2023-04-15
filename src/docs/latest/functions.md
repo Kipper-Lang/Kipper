@@ -1,15 +1,13 @@
 # Functions
 
-Functions are an easy way to re-use code and provide interface to do certain things over and over again. These functions
-may also accept arguments/parameters to change the functions behaviour and also return values after execution.
+A function is a block of code that can be called by name. It can be passed data to operate on (i.e. the parameters) and
+can optionally return data (the return value).
 
-Functions are essential for every program, as the ability to re-execute statements over and over again, makes them an
-powerful tool for every program allowing the creation of complex behaviour fairly easily and avoiding ugly code
-repetition.
+All data that is passed to a function is explicitly passed.
 
-<p class="red-highlight-text">
-  Scheduled for release in Kipper v0.10.0
-</p>
+Functions are an easy way to re-use code and provide interface to do certain things over and over again. They are 
+essential for every program, as the ability to re-execute statements over and over again, makes them a powerful tool 
+for every program allowing the creation of complex behaviour fairly easily and avoiding ugly or tedious code repetition.
 
 ## Syntax
 
@@ -78,18 +76,66 @@ def x() -> void {
 ## Examples
 
 ```ts
-// ✓ Simple void function with no arguments and return
-def print_banner() -> void {
-  call print("Welcome to Kipper!");
-  return; // Optional
+// ✓ Simple function
+def func1() -> void {
+	return;
+}
+  
+// May call with either 'call' prefix keyword or without
+func1();
+call func1();
+
+// ✓ Function with parameters
+def func2(param1: num, param2: str) -> void {
+	return;
 }
 
-// ✓ Calling the function
-call print_banner();
+var result: void = func2(4, "string"); // -> void
 
-// ✓ Without 'call' keyword
-print_banner();
+// ✓ Function with return value
+def func3() -> num {
+	return 4;
+}
 
+var result = func3(); // -> 4
+
+// ✓ Function with parameters and return value
+def func4(param1: num, param2: str) -> str {
+	return param1 as str + param2;
+}
+
+var result: str = func4(4, "string"); // -> "4string"
+
+// X May not call a function without parameters with parameters
+def func5() -> void {
+	return;
+}
+
+func5(4, "string");
+
+// X May not call a function without the required parameters
+def func6(param1: num, param2: str) -> void {
+	return;
+}
+
+func6(4);
+
+// X May not call a function with invalid parameters/types
+def func7(param1: num, param2: str) -> void {
+	return;
+}
+
+func7("string", 4);
+
+// X The return of the function must match the return type
+def func8() -> num {
+    return "string";
+}
+```
+
+More complex example:
+
+```ts
 // ✓ Simple function with arguments and return-type
 // Note: It is good to always document your functions
 /*
@@ -102,7 +148,7 @@ def add_prefix(prefix: str, main_str: str) -> str {
 }
 
 // ✓ Calling the function with all the required arguments and passing the result to a variable
-var result_str: str = call add_prefix("pre", "fix"); // -> "prefix"
+var result_str: str = add_prefix("pre", "fix"); // -> "prefix"
 
 // X May not call a function without its required arguments!
 var any_var: str = add_prefix();
