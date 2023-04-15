@@ -15,12 +15,12 @@
                 <% if (!lastItem) { %>
                     <!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
                     <a class="docs-page-nav-header" href="<%= `${rootDir}${pathItem.path}/index.html` %>">
-                        <%= pathItem.title %>
+                        <%= pathItem.dropdownTitle || pathItem.title %>
                     </a>
                     <%= " /" %>
                 <% } else { %>
                     <a class="docs-page-nav-header" href="<%= `${rootDir}${pathItem.path}` %>">
-                        <%= isIndexFile ? "Index" : pathItem.title %>
+                        <%= pathItem.title || "Index" %>
                     </a>
                 <% }%>
             </li>

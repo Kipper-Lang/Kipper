@@ -1,11 +1,28 @@
 <% sidebarNav.items.forEach((fileOrDir) => { %>
-    <%# The current file is selected if the current filename (where the ejs file is included) matches the name in 'file.path' %>
-    <% const pathParts = fileOrDir.path.split("/"); %>
+    <% const getParentList = (item) => {
+        return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
+    } %>
+    <% const parentNavDirsOfProcessFile = getParentList(thisNavTreeItem); /* Parents of entire process file */ %>
+    <% const parentNavDirsOfIterFile = getParentList(fileOrDir); /* Parents of the currently iterating file */ %>
+
     <% const isDir = "items" in fileOrDir; %>
     <% if (!isDir) { %>
-        <% const isCurrentFile = pathParts[pathParts.length - 1] === filename; %>
+        <%#
+        The current file is selected if all the parents match with the current item being iterated over and they
+        have the same filename.
+        %>
+        <!-- <%= parentNavDirsOfProcessFile.map(e => e.filename).join(", ") %> -->
+        <!-- <%= parentNavDirsOfIterFile.map(e => e.filename).join(", ") %> -->
+        <% const iterFileIsSelected = parentNavDirsOfProcessFile.every((e, i) => {
+            return e &&
+                "path" in e &&
+                parentNavDirsOfIterFile[i] !== undefined &&
+                e.path === parentNavDirsOfIterFile[i].path
+            }
+        ) && (fileOrDir.filename === filename);
+        %>
         <li>
-            <p class="sidebar-nav-header-list-item <%= isCurrentFile ? "selected-page-sidebar-nav-header" : "" %>">
+            <p class="sidebar-nav-header-list-item <%= iterFileIsSelected ? "selected-page-sidebar-nav-header" : "" %>">
                 <%# The file path is an absolute format, like for example: '/.../.../*.html' %>
                 <a href="<%= rootDir %><%= fileOrDir.path %>"><%= fileOrDir.title %></a>
             </p>
@@ -15,11 +32,7 @@
             <%# Get all the parents of the current docs file and see if the currently rendering dropdowns need to be %>
             <%# visible or not. Note that the current docs file means the file of the render invocation, as this is %>
             <%# still only the naviagation bar and not the actual documentation page shown the user. %>
-            <% const getParentList = (item) => {
-                return item && "parent" in item && item.parent ? [item.parent, ...getParentList(item.parent)] : [];
-            } %>
-            <% const parentNavDirs = getParentList(thisNavTreeItem); %>
-            <% const selectedFileInDir = parentNavDirs.find(e => e === fileOrDir); %>
+            <% const selectedFileInDir = parentNavDirsOfProcessFile.find(e => e === fileOrDir); %>
 
             <p class="
                 sidebar-nav-header-list-item
