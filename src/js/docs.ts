@@ -47,21 +47,22 @@ function toggleVersionDropdownVisibility(): void {
 function dropdownButtonHandler(dirElement: HTMLParagraphElement): void {
 	const contentOfDir = <HTMLDivElement>dirElement.nextElementSibling;
 	const caretDown = <HTMLElement>dirElement.children[0].children[0];
-	console.log(caretDown);
+
+	// Only if the dir has content (i.e. is not empty) we want to toggle the visibility
 	if (contentOfDir) {
 		let style = window.getComputedStyle(contentOfDir);
 		if (style.visibility === "visible") {
 			/* Hide dropdown */
 			contentOfDir.style.visibility = "hidden";
 			contentOfDir.style.display = "none";
-			caretDown.style.rotate = "0deg";
-			caretDown.style.padding = "0";
+			caretDown.style.rotate = "-90deg";
+			caretDown.style.top = "-1px";
 		} else {
 			/* Show dropdown */
 			contentOfDir.style.visibility = "visible";
 			contentOfDir.style.display = "block";
-			caretDown.style.rotate = "270deg";
-			caretDown.style.padding = "0 0 0 4px";
+			caretDown.style.rotate = "0deg";
+			caretDown.style.top = "0";
 		}
 	}
 }
