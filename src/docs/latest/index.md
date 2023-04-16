@@ -50,7 +50,3 @@ information.</p>
   <a href="https://github.com/Luna-Klatzer/Kipper/discussions/139">Roadmap for Kipper</a>
   for info about the active development of Kipper.
 </p>
-
-<!-- Temporary fix -->
-
-View docs of previous version: <a href="<%= rootDir %>/docs/0.9.2/index.html">v0.9.2</a>
