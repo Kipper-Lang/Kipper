@@ -1,28 +1,54 @@
 /*! Footer Bar Configuration and Styling */
+@use "./foundation/var" as *;
+@use "./mixins/phone-presets" as *;
 
 #footer-bar {
 	margin-top: auto;
-	background-color: var(--scheme-background-gray);
+	background-color: $scheme-background-gray;
 
 	#footer-content {
 		padding: 0.5rem 1.5rem 1.5rem;
 		flex-shrink: 1;
 
-		#htl-leonding-logo {
+		img#htl-leonding-logo {
 			margin: 1rem;
 			height: 2.5rem;
 		}
 
-		#footer-bar-list li {
+		ul#footer-bar-list li {
 			margin-left: 2rem;
 			margin-right: 2rem;
 			font-weight: 400;
 		}
 
-		#copyright {
+		li#copyright {
 			border-top: 1px solid #f4f4f4;
 			margin-top: 1em;
 			padding-top: 1rem;
+		}
+	}
+}
+
+/* For phones */
+@media screen and (max-width: $small-screen-size) {
+	#footer-bar {
+		width: $phone-content-width;
+
+		#footer-content {
+			padding: 0.5rem 1rem 1rem;
+			width: calc($phone-content-width - 2rem);
+
+			ul#footer-bar-list {
+				flex-direction: column;
+			}
+
+			li#copyright {
+				display: flex;
+				border: none;
+				align-items: center;
+				justify-content: center;
+				padding: 0;
+			}
 		}
 	}
 }

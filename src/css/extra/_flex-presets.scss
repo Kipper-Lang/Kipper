@@ -1,0 +1,42 @@
+/* Preset classes for flexbox */
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: inherit;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: inherit;
+}
+
+.flex-start {
+  display: inherit;
+  flex-shrink: inherit;
+  align-items: flex-start;
+}
+
+.flex-end {
+  display: inherit;
+  flex-shrink: inherit;
+  align-items: flex-end;
+}
+
+.flex-parent-container {
+  display: flex;
+}
+
+.flex-fill-to-parent {
+  flex-grow: 1;
+}

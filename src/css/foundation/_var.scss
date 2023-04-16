@@ -1,0 +1,35 @@
+/* Standard variables for the global scope */
+
+/* Color Scheme */
+$scheme-primary: #e01a4f;
+$scheme-primary-rgb: rgb(224, 26, 79);
+$scheme-dark-primary: #c71242;
+$scheme-dark-primary-rgb: rgb(199, 18, 66);
+$scheme-secondary: #ffe74c; /* Get new secondary */
+$scheme-secondary-rgb: rgb(255, 231, 76); /* Get new secondary */
+$scheme-url-blue: #002240;
+$scheme-background-gray: #002240;
+$scheme-shadow-gray: #ccc;
+$scheme-shadow-gray-rgb: rgb(204, 204, 204);
+$scheme-gray: #f0f0f0;
+$scheme-gray-rgb: rgb(240, 240, 240);
+$scheme-dark-gray: #787878;
+$scheme-dark-gray-rgb: rgb(120, 120, 120);
+$scheme-white: #e9eaed;
+$scheme-white-rgb: rgb(233, 234, 237);
+$scheme-dark: #1a1f36;
+$scheme-dark-rgb: rgb(26, 31, 54);
+$scheme-console-blue: #1e1e3f;
+$scheme-console-blue-rgb: rgb(30, 30, 63);
+
+/* Border & Margin */
+$default-border-radius: 0.5em;
+$default-text-margin: 2em;
+
+/* Screen size presets */
+$large-screen-size: 1200px;
+$medium-screen-size: 920px;
+$small-screen-size: 600px;
+
+/* Buttons */
+$button-dark-primary: #c71242;

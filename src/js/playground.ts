@@ -390,8 +390,8 @@ let compilerOutput = "";
  */
 function switchToConsoleOutput() {
 	// Change styling
-	compilerOutputButton.style.borderBottom = "2px solid var(--scheme-gray)";
-	consoleOutputButton.style.borderBottom = "3px solid var(--scheme-primary)";
+	compilerOutputButton.style.borderBottom = "2px solid $scheme-gray";
+	consoleOutputButton.style.borderBottom = "3px solid $scheme-primary";
 
 	writeConsoleResultAndHighlight(consoleOutput);
 	consoleOutputSelected = true;
@@ -402,8 +402,8 @@ function switchToConsoleOutput() {
  */
 function switchToCompilerOutput() {
 	// Change styling console
-	consoleOutputButton.style.borderBottom = "2px solid var(--scheme-gray)";
-	compilerOutputButton.style.borderBottom = "3px solid var(--scheme-primary)";
+	consoleOutputButton.style.borderBottom = "2px solid $scheme-gray";
+	compilerOutputButton.style.borderBottom = "3px solid $scheme-primary";
 
 	writeConsoleResultAndHighlight(compilerOutput);
 	consoleOutputSelected = false;

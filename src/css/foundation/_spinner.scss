@@ -1,9 +1,10 @@
 /*! Defines the pure CSS Spinners - Origin: https://loading.io/css/ */
+@use "./var" as *;
 
 .spinner {
-	color: var(--scheme-dark-gray);
-	border: 0.25em solid var(--scheme-gray); /* Light grey */
-	border-top: 0.25em solid var(--scheme-dark-gray); /* Blue */
+	color: $scheme-dark-gray;
+	border: 0.25em solid $scheme-gray; /* Light grey */
+	border-top: 0.25em solid $scheme-dark-gray; /* Blue */
 	border-radius: 50%;
 	width: 1em;
 	height: 1em;

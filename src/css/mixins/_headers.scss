@@ -1,0 +1,82 @@
+/* Default definitions for the header sizes */
+
+/* Font weights for headers */
+$large-h-font-weight: 600;
+$medium-h-font-weight: 500;
+$small-h-font-weight: 300;
+
+/* Line height is equal for all headers */
+$h-line-height: 1.2;
+
+$h-margin-bottom: 0.5em;
+@mixin h-display {
+  display: block;
+  align-items: center;
+  margin-bottom: $h-margin-bottom;
+}
+
+$h1-font-size: 40px;
+$h2-phone-font-size: 32px;
+@mixin h1 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: $h1-font-size;
+  line-height: $h-line-height;
+  font-weight: $large-h-font-weight;
+}
+
+$h2-font-size: 28px;
+$h2-phone-font-size: 26px;
+@mixin h2 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: $h2-font-size;
+  line-height: $h-line-height;
+  font-weight: $medium-h-font-weight;
+}
+
+$h3-font-size: 24px;
+$h3-phone-font-size: 22px;
+@mixin h3 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: 24px;
+  line-height: $h-line-height;
+  font-weight: $small-h-font-weight;
+}
+
+$h4-font-size: 20px;
+$h4-phone-font-size: $h4-font-size;  /* The same, as otherwise it would be too small */
+@mixin h4 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: 20px;
+  line-height: $h-line-height;
+  font-weight: $small-h-font-weight;
+}
+
+$h5-font-size: 18px;
+$h5-phone-font-size: $h5-font-size; /* The same, as otherwise it would be too small */
+@mixin h5 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: 18px;
+  line-height: $h-line-height;
+  font-weight: $small-h-font-weight;
+}
+
+$h6-font-size: 18px;
+$h6-phone-font-size: $h6-font-size;  /* The same, as otherwise it would be too small */
+@mixin h6 {
+  @include h-display;
+
+  font-style: normal;
+  font-size: 18px;
+  line-height: $h-line-height;
+  font-weight: $small-h-font-weight;
+}

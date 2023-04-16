@@ -1,25 +1,33 @@
 /*! Text and Header Formatting */
+@use "./var" as *;
+@use "../mixins/headers" as header-presets;
+@use "../extra/super-large-header";
 
-:root {
-	--default-section-margin: 1.6rem;
-	--default-article-margin: 0.8rem;
-	--default-parapgraph-margin: 1rem;
-}
+$default-section-margin: 1.6rem;
+$default-article-margin: 0.8rem;
+$default-paragraph-margin: 1rem;
 
 html {
 	font-family: "Inter", Georgia, Verdana, monospace;
 }
 
 section {
-	margin: var(--default-section-margin);
+	margin: $default-section-margin;
 }
 
 article {
-	margin-bottom: var(--default-article-margin);
+	margin-bottom: $default-article-margin;
 }
 
 #docs-page-nav + article > :first-child {
 	margin-top: 1rem;
+}
+
+.text-page-content-container {
+	display: flex;
+	flex-grow: 1;
+	align-content: center;
+	justify-content: center;
 }
 
 p,
@@ -36,8 +44,38 @@ image {
 	& + input,
 	& + textarea,
 	& + image {
-		margin: var(--default-parapgraph-margin) 0 0 0;
+		margin: $default-paragraph-margin 0 0 0;
 	}
+}
+
+h1,
+.h1 {
+	@include header-presets.h1;
+}
+
+h2,
+.h2 {
+	@include header-presets.h2;
+}
+
+h3,
+.h3 {
+	@include header-presets.h3;
+}
+
+h4,
+.h4 {
+	@include header-presets.h4;
+}
+
+h5,
+.h5 {
+	@include header-presets.h5;
+}
+
+h6,
+.h6 {
+	@include header-presets.h6;
 }
 
 h1,
@@ -52,9 +90,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-	display: block;
-	align-items: center;
-	margin-bottom: 0.5em;
+	@include header-presets.h-display;
 
 	div &,
 	section &,
@@ -79,68 +115,20 @@ h6,
 	}
 }
 
-h1,
-.h1 {
-	font-style: normal;
-	font-size: 40px;
-	line-height: 1.2;
-	font-weight: 600;
-}
-
-h2,
-.h2 {
-	font-style: normal;
-	font-size: 28px;
-	line-height: 1.2;
-	font-weight: 500;
-}
-
-h3,
-.h3 {
-	font-style: normal;
-	font-size: 24px;
-	line-height: 1.2;
-	font-weight: 300;
-}
-
-h4,
-.h4 {
-	font-style: normal;
-	font-size: 20px;
-	line-height: 1.2;
-	font-weight: 300;
-}
-
-h5,
-.h5 {
-	font-style: normal;
-	font-size: 18px;
-	line-height: 1.2;
-	font-weight: 300;
-}
-
-h6,
-.h6 {
-	font-style: normal;
-	font-size: 18px;
-	line-height: 1.2;
-	font-weight: 300;
-}
-
 /* Block the CSS from applying text link formatting on buttons and docs headers */
 :not(.sidebar-nav-header-list-item) {
-	& > a {
-		&:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
-		&:link:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
-		&:active:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button),
-		&:visited:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
-			color: var(--scheme-dark-primary);
+	& > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
+		&,
+		&:link,
+		&:active,
+		&:visited {
+			color: $scheme-dark-primary;
 			text-decoration: none;
 			background-color: transparent;
 		}
 
-		&:hover:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
-			color: var(--scheme-primary);
+		&:hover {
+			color: $scheme-primary;
 			text-decoration: underline;
 		}
 	}
@@ -148,28 +136,6 @@ h6,
 
 p {
 	margin: 0;
-}
-
-.super-large-header {
-	font-style: normal;
-	font-weight: bold;
-	display: flex;
-	align-items: center;
-	text-align: center;
-	line-height: 120%;
-	font-size: 2.2rem; /* Smallest font size */
-
-	@media screen and (min-width: 427px) {
-		font-size: 2.5rem;
-	}
-
-	@media screen and (min-width: 800px) {
-		font-size: 3.5rem;
-	}
-
-	@media screen and (min-width: 1400px) {
-		font-size: 4.5rem;
-	}
 }
 
 /* Dynamic screen size definitions */
@@ -206,20 +172,20 @@ p {
 }
 
 .shadowed-box {
-	border-radius: var(--default-border-radius);
-	box-shadow: 0 0 0.5em var(--scheme-shadow-gray);
+	border-radius: $default-border-radius;
+	box-shadow: 0 0 0.5em $scheme-shadow-gray;
 }
 
 .gray-text {
-	color: var(--scheme-dark-gray);
+	color: $scheme-dark-gray;
 }
 
 .red-text {
-	color: var(--scheme-primary);
+	color: $scheme-primary;
 }
 
 .yellow-text {
-	color: var(--scheme-secondary);
+	color: $scheme-secondary;
 }
 
 .white-text {
@@ -236,15 +202,15 @@ p {
 
 .red-highlight-text,
 .important { /* Important is a simplified alias */
-	border-radius: var(--default-border-radius);
-	margin-right: var(--default-text-margin);
+	border-radius: $default-border-radius;
+	margin-right: $default-text-margin;
 	border: 1px solid;
-	border-color: var(--scheme-primary);
-	color: var(--scheme-primary);
+	border-color: $scheme-primary;
+	color: $scheme-primary;
 	padding: 2rem;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
-	width: calc(100% - 4rem);
+	width: calc(100% - 4rem - 2px); /* Full-width - 2 * padding - 2 * border */
 
 	& a {
 		&:link,
@@ -263,8 +229,8 @@ code {
 	padding: 0.2em 0.4em;
 	font-size: 85%;
 	font-family: Consolas, "Operator Mono", "Fira code.console-bash", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-	border-radius: var(--default-border-radius);
-	background-color: var(--scheme-gray);
+	border-radius: $default-border-radius;
+	background-color: $scheme-gray;
 }
 
 h1,
@@ -289,8 +255,8 @@ pre[class*="language-"] {
 	margin: 1em 0;
 	padding: 1em;
 	overflow: auto;
-	border-radius: var(--default-border-radius);
-	background-color: var(--scheme-gray);
+	border-radius: $default-border-radius;
+	background-color: $scheme-gray;
 
 	& code {
 		margin: 0;
@@ -317,5 +283,5 @@ pre[class*="language-"] {
 
 .red-checkmark {
 	text-emphasis: none;
-	color: var(--scheme-primary);
+	color: $scheme-primary;
 }

@@ -1,4 +1,6 @@
 /* Formatting for html-tables */
+@use "./var" as *;
+
 table {
 	border-color: black;
 	border-collapse: collapse;
@@ -8,7 +10,7 @@ table {
 	margin-bottom: 1rem;
 
 	& thead tr th {
-		color: var(--scheme-primary);
+		color: $scheme-primary;
 		overflow: hidden;
 		word-break: normal;
 		font-weight: 700;

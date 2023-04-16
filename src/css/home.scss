@@ -1,0 +1,76 @@
+/* Homepage styling */
+@use "./foundation/var" as *;
+
+#homepage-content {
+  padding: 0;
+
+  ul {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    column-gap: 2rem;
+    padding: 0;
+  }
+
+  #welcome-image {
+    margin-bottom: 0;
+    margin-top: 0;
+    visibility: hidden;
+    display: none;
+  }
+
+  #welcome-text {
+    margin: 4rem 0 0;
+
+    #welcome-header {
+      text-align: start;
+      margin-top: 0;
+    }
+
+    #welcome-description {
+      text-align: start;
+      font-size: 1.4em;
+    }
+
+    .button,
+    .inverted-button {
+      margin-bottom: 0;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    padding-top: 5vw;
+    padding-bottom: 5vw;
+
+    #welcome-text {
+      margin: 0;
+      max-width: 500px;
+    }
+
+    #welcome-image {
+      visibility: unset;
+      display: unset;
+      width: 45vw;
+      padding: 0;
+      border-radius: $default-border-radius;
+      box-shadow: rgba($scheme-primary-rgb, 0.6) -5px 5px, rgba($scheme-primary-rgb, 0.4) -10px 10px,
+      rgba($scheme-primary-rgb, 0.3) -15px 15px, rgba($scheme-primary-rgb, 0.2) -20px 20px,
+      rgba($scheme-primary-rgb, 0.1) -25px 25px;
+      transition: width 1s ease-in-out, box-shadow 1s ease-in-out;
+    }
+
+    #welcome-image:hover {
+      width: 48vw;
+      box-shadow: rgba($scheme-primary-rgb, 0.8) -5px 5px, rgba($scheme-primary-rgb, 0.6) -10px 10px,
+      rgba($scheme-primary-rgb, 0.5) -15px 15px, rgba($scheme-primary-rgb, 0.4) -20px 20px,
+      rgba($scheme-primary-rgb, 0.3) -25px 25px, rgba($scheme-primary-rgb, 0.2) -30px 30px,
+      rgba($scheme-primary-rgb, 0.1) -30px 30px;
+    }
+  }
+
+  @media screen and (min-width: 1300px) {
+    #welcome-text {
+      max-width: 600px;
+    }
+  }
+}

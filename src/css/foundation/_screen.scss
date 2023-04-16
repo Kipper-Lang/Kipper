@@ -1,23 +1,18 @@
 /* Defines Screen-Specific size variables and overwrites */
-
-:root {
-	--large-screen-size: 1200px;
-	--middle-screen-size: 800px;
-	--small-screen-size: 600px;
-}
+@use "./var" as *;
 
 #main-frame {
 	display: flex;
 
-	& #actual-content {
+	#actual-content {
 		display: flex;
 		height: 100vh;
 		flex-grow: 1;
 		flex-direction: column;
 
-		& .page-header,
-		& #nav-header {
-			background-color: var(--scheme-primary);
+		.page-header,
+		#page-header {
+			background-color: $scheme-primary;
 			display: flex;
 			flex-direction: column;
 		}

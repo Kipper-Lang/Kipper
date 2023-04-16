@@ -1,4 +1,5 @@
 /*! Configuration for the Playground */
+@use "./foundation/var" as *;
 
 #interactive-console {
 	#left-console-interface {
@@ -11,7 +12,7 @@
 			flex-direction: row;
 			align-content: center;
 			justify-content: flex-start;
-			border-bottom: 2px solid var(--scheme-gray);
+			border-bottom: 2px solid $scheme-gray;
 
 			#clear-content-list-item {
 				margin-right: 1rem;
@@ -46,7 +47,7 @@
 						display: flex;
 						align-content: center;
 						justify-content: center;
-						border-bottom: 2px solid var(--scheme-gray);
+						border-bottom: 2px solid $scheme-gray;
 
 						button {
 							/* Similar styles like in the playground button */
@@ -59,8 +60,8 @@
 							flex-grow: 1;
 
 							&:hover {
-								color: var(--scheme-primary);
-								background-color: var(--scheme-gray);
+								color: $scheme-primary;
+								background-color: $scheme-gray;
 							}
 						}
 					}
@@ -143,7 +144,7 @@
 				z-index: 1;
 				color: transparent;
 				background: transparent;
-				caret-color: var(--scheme-primary);
+				caret-color: $scheme-primary;
 
 				&::selection {
 					text-shadow: none;
@@ -176,8 +177,8 @@
 			cursor: pointer;
 
 			&:hover {
-				color: var(--scheme-primary);
-				background-color: var(--scheme-gray);
+				color: $scheme-primary;
+				background-color: $scheme-gray;
 			}
 		}
 	}
@@ -197,7 +198,7 @@
 			}
 
 			button {
-				border-bottom: 2px solid var(--scheme-gray);
+				border-bottom: 2px solid $scheme-gray;
 				flex-grow: 1;
 			}
 		}
@@ -222,7 +223,7 @@
 			}
 
 			#shell-sidebar-highlight-field {
-				background-color: var(--scheme-console-blue);
+				background-color: $scheme-console-blue;
 				display: flex;
 				flex-grow: 1;
 				margin: 0;

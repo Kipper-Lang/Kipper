@@ -1,4 +1,7 @@
 /*! Docs Formatting */
+@use "./mixins/phone-presets" as *;
+@use "./foundation/var" as *;
+@use "./foundation/text" as *;
 
 .docs-page-content-container {
 	display: flex;
@@ -13,18 +16,7 @@
 	padding: 2em 1.5em;
 }
 
-@media (max-width: 920px) {
-	.docs-page-content-container {
-		width: 60vw;
-		padding: 2rem;
-	}
-
-	#docs-sidebar-nav-wrapper {
-		width: 20vw;
-	}
-}
-
-@media (min-width: 920px) {
+@media screen and (min-width: $medium-screen-size) {
 	.docs-page-content-container {
 		width: 55vw;
 		padding: 4vw 4vw 4vw 6vw;
@@ -32,6 +24,17 @@
 
 	#docs-sidebar-nav-wrapper {
 		width: 25vw;
+	}
+}
+
+@media screen and (max-width: $medium-screen-size) {
+	.docs-page-content-container {
+		width: 60vw;
+		padding: 2rem;
+	}
+
+	#docs-sidebar-nav-wrapper {
+		width: 20vw;
 	}
 }
 
@@ -54,7 +57,7 @@
 		& + p,
     & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
     & + div.code-toolbar pre[class*="language-"] {
-			margin: var(--default-parapgraph-margin) 0 0 0;
+			margin: $default-paragraph-margin 0 0 0;
 		}
 	}
 
@@ -77,11 +80,11 @@
 			&,
 			&:active,
 			&:visited {
-				color: var(--scheme-dark-gray);
+				color: $scheme-dark-gray;
 			}
 
 			&:hover {
-				color: var(--scheme-primary);
+				color: $scheme-primary;
 			}
 		}
 
@@ -93,7 +96,7 @@
 		}
 
 		.docs-page-nav-header:hover {
-			color: var(--scheme-primary);
+			color: $scheme-primary;
 		}
 
 		ul li {
@@ -116,7 +119,7 @@
 			}
 
 			&:hover {
-				color: var(--scheme-primary);
+				color: $scheme-primary;
 			}
 		}
 	}
@@ -138,12 +141,12 @@
 			font-size: 0.96em;
 			font-weight: 500;
 			font-style: italic;
-			color: var(--scheme-dark-gray);
+			color: $scheme-dark-gray;
 			margin-top: -0.2em; /* Align with the header - Better visible separation */
 		}
 
 		.docs-version-indicator + p {
-			margin-top: calc(var(--default-parapgraph-margin) - 0.4em);
+			margin-top: calc($default-paragraph-margin - 0.4em);
 		}
 	}
 }
@@ -156,8 +159,8 @@
 		padding-bottom: 0.5rem;
 		margin: 0 0 1rem;
 		font-weight: 500;
-		border-bottom: 1px var(--scheme-dark-primary) solid;
-		color: var(--scheme-dark-primary) !important;
+		border-bottom: 1px $scheme-dark-primary solid;
+		color: $scheme-dark-primary !important;
 
 		#docs-version-selection {
 			margin-bottom: 0;
@@ -184,8 +187,8 @@
 					cursor: pointer;
 
 					&:hover {
-						color: var(--scheme-primary);
-						background-color: var(--scheme-gray);
+						color: $scheme-primary;
+						background-color: $scheme-gray;
 					}
 
 					.fa-caret-down::before {
@@ -218,7 +221,7 @@
 					display: flex;
 					align-content: center;
 					justify-content: center;
-					border-bottom: 2px solid var(--scheme-gray);
+					border-bottom: 2px solid $scheme-gray;
 
 					a {
 						/* Similar styles like in the playground button */
@@ -244,8 +247,8 @@
 						flex-grow: 1;
 
 						&:hover {
-							color: var(--scheme-primary);
-							background-color: var(--scheme-gray);
+							color: $scheme-primary;
+							background-color: $scheme-gray;
 							text-decoration: none;
 						}
 					}
@@ -260,7 +263,7 @@
 
 		& > a,
 		& > a:visited {
-			color: var(--scheme-dark-primary) !important;
+			color: $scheme-dark-primary !important;
 		}
 	}
 
@@ -303,7 +306,7 @@
 				&:hover {
 					text-decoration: none;
 					color: rgb(17, 24, 39);
-					background-color: rgb(var(--scheme-primary-rgb), 0.12);
+					background-color: rgb($scheme-primary-rgb, 0.12);
 				}
 			}
 
@@ -335,7 +338,7 @@
 
 			&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > a,
 			&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > button {
-				background-color: rgb(var(--scheme-primary-rgb), 0.16); /* Highlight the selected page */
+				background-color: rgb($scheme-primary-rgb, 0.16); /* Highlight the selected page */
 			}
 
 			& + .docs-sidebar-nav-list {
@@ -353,4 +356,45 @@
 
 .api-docs-description {
 	margin-left: 1rem;
+}
+
+/* Phone overwrites */
+@media screen and (max-width: $small-screen-size) {
+	.docs-page-content-container {
+		width: $phone-content-width;
+		padding: $phone-docs-padding;
+		margin: $phone-docs-margin;
+
+		/* Align content to the center */
+		display: flex;
+		align-content: center;
+		justify-content: center;
+
+		& > div#docs-content {
+			width: inherit;
+			padding: inherit;
+			margin: inherit;
+			box-shadow: none;
+			border-radius: unset;
+
+			section {
+				margin: $default-section-margin;
+				width: calc($phone-content-width - $default-section-margin * 2);
+
+				#docs-page-nav {
+					/* Make the path and the github edit button be underneath each other */
+					flex-direction: column;
+
+					& > ul {
+						margin-bottom: 0.5rem;
+					}
+				}
+			}
+		}
+	}
+
+	#docs-sidebar-nav-wrapper {
+		visibility: hidden;
+		display: none;
+	}
 }
