@@ -5,8 +5,8 @@ can optionally return data (the return value).
 
 All data that is passed to a function is explicitly passed.
 
-Functions are an easy way to re-use code and provide interface to do certain things over and over again. They are 
-essential for every program, as the ability to re-execute statements over and over again, makes them a powerful tool 
+Functions are an easy way to re-use code and provide interface to do certain things over and over again. They are
+essential for every program, as the ability to re-execute statements over and over again, makes them a powerful tool
 for every program allowing the creation of complex behaviour fairly easily and avoiding ugly or tedious code repetition.
 
 ## Syntax

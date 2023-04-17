@@ -2,24 +2,24 @@
 @use "../mixins/headers" as *;
 
 .super-large-header {
-  @include h-display;
+	@include h-display;
 
-  display: flex; /* Overwrites default 'block' */
-  font-style: normal;
-  font-weight: $large-h-font-weight;
-  align-items: center;
-  line-height: 120%;
-  font-size: 2.2rem; /* Smallest font size */
+	display: flex; /* Overwrites default 'block' */
+	font-style: normal;
+	font-weight: $large-h-font-weight;
+	align-items: center;
+	line-height: 120%;
+	font-size: 2.2rem; /* Smallest font size */
 
-  @media screen and (min-width: 427px) {
-    font-size: 2.5rem;
-  }
+	@media screen and (min-width: 427px) {
+		font-size: 2.5rem;
+	}
 
-  @media screen and (min-width: 800px) {
-    font-size: 3.5rem;
-  }
+	@media screen and (min-width: 800px) {
+		font-size: 3.5rem;
+	}
 
-  @media screen and (min-width: 1400px) {
-    font-size: 4.5rem;
-  }
+	@media screen and (min-width: 1400px) {
+		font-size: 4.5rem;
+	}
 }

@@ -1,9 +1,9 @@
 # While Loop
 
-While-loops are code blocks that are executed multiple times as long as the specified condition is met. 
+While-loops are code blocks that are executed multiple times as long as the specified condition is met.
 
-The behaviour of while-loops is very similar to [do-while-loops](./do-while-loop.html), and in some cases 
-it even might be better to use do-while than while-loops, so watch out for opportunities to replace 
+The behaviour of while-loops is very similar to [do-while-loops](./do-while-loop.html), and in some cases
+it even might be better to use do-while than while-loops, so watch out for opportunities to replace
 while-loops with do-while loops.
 
 ## Syntax

@@ -10,7 +10,7 @@ the statement is invalid and an error will be thrown.
 These jump statements are:
 
 - `break` \- Stops a [while-loop](./while-loop.html), [do-while-loop](./do-while-loop.html) or [for-loop](./for-loop.html).
-- `return` \- Returns from a [functions](../functions.html) with an optional specific return value (Must match 
+- `return` \- Returns from a [functions](../functions.html) with an optional specific return value (Must match
   function return type).
 - `continue` \- Jumps directly to the execution of the next loop cycle and will compare the loop-condition again.
 
