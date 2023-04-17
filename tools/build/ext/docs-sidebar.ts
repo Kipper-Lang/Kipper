@@ -125,7 +125,7 @@ export class DocsSidebar {
 						filename: path.basename(destPath),
 						path: getURLPath(destPath),
 						parent: parent,
-						dropdownTitle: dropdownTitle
+						dropdownTitle: dropdownTitle,
 					};
 				}
 			}),

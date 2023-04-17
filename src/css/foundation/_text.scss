@@ -201,7 +201,8 @@ p {
 }
 
 .red-highlight-text,
-.important { /* Important is a simplified alias */
+.important {
+	/* Important is a simplified alias */
 	border-radius: $default-border-radius;
 	margin-right: $default-text-margin;
 	border: 1px solid;

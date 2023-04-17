@@ -268,7 +268,8 @@
 	}
 
 	ul.docs-sidebar-nav-list {
-		& > li > ul.docs-sidebar-nav-list { /* Nested lists which increase for every level of dropdown nesting */
+		& > li > ul.docs-sidebar-nav-list {
+			/* Nested lists which increase for every level of dropdown nesting */
 			margin-left: 0.75rem;
 		}
 
@@ -338,7 +339,7 @@
 				}
 
 				&.selected-page-sidebar-nav-header > button {
-					&	> i.fa-caret-down {
+					& > i.fa-caret-down {
 						/* Rotating the caret so it shows the dropdown is open */
 						rotate: 0deg;
 						position: relative;
