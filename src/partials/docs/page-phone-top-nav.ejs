@@ -2,15 +2,19 @@
 <nav id="phone-docs-nav">
     <ul class="no-style-list">
         <li id="phone-docs-nav-bars-menu"><i class="fa-solid fa-bars"></i></li>
-        <%- include('./page-nav-path', {
-            sidebarNav: sidebarNav,
-            thisFile: thisFile,
-            rootDir: rootDir,
-            thisVersionIndex: thisVersionIndex,
-            absoluteSrcRootDir: absoluteSrcRootDir,
-            thisNavTreeItem: thisNavTreeItem,
-            isIndexFile: isIndexFile,
-            isHiddenFile: isHiddenFile,
-        }) %>
+        <li>
+            <ul id="phone-docs-nav-path">
+                <%- include('./page-nav-path', {
+                sidebarNav: sidebarNav,
+                thisFile: thisFile,
+                rootDir: rootDir,
+                thisVersionIndex: thisVersionIndex,
+                absoluteSrcRootDir: absoluteSrcRootDir,
+                thisNavTreeItem: thisNavTreeItem,
+                isIndexFile: isIndexFile,
+                isHiddenFile: isHiddenFile,
+                }) %>
+            </ul>
+        </li>
     </ul>
 </nav>
