@@ -413,22 +413,14 @@ li#docs-sidebar-nav-wrapper > nav#docs-sidebar-nav {
       border-bottom: 1px solid rgb(var(--scheme-dark-gray-rgb), 0.4);
 
       ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
         display: flex;
         flex-direction: row;
         column-gap: 0.5rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
 
-        li > a {
-          height: 100%;
-          align-content: center;
-          display: flex;
-        }
-
-        li#phone-docs-nav-bars-menu,
-        li a.docs-page-header-path-item,
-        li a.docs-page-header-kipper-version {
+        @mixin li-item {
           padding: 0;
           margin: 0;
           font-size: 1.2rem;
@@ -445,14 +437,33 @@ li#docs-sidebar-nav-wrapper > nav#docs-sidebar-nav {
           }
         }
 
-        :first-child:is(li#phone-docs-nav-bars-menu) {
-          padding-right: 0.5rem;
+        li > ul#phone-docs-nav-path {
+          li a.docs-page-header-path-item,
+          li a.docs-page-header-kipper-version {
+            @include li-item;
+
+            height: 100%;
+            align-content: center;
+            display: flex;
+          }
+
+          :first-child:is(li) > a.docs-page-header-kipper-version {
+            @include li-item;
+
+            &, &:active, &:visited {
+              color: $scheme-dark-gray;
+            }
+
+            &:hover {
+              color: $scheme-primary;
+            }
+          }
         }
 
-        :nth-child(2):is(li) > a.docs-page-header-kipper-version {
-          &, &:active, &:visited {
-            color: $scheme-dark-gray;
-          }
+        li#phone-docs-nav-bars-menu {
+          @include li-item;
+          padding-right: 0.5rem;
+          cursor: pointer;
         }
       }
     }
