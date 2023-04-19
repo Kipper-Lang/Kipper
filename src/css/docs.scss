@@ -3,21 +3,17 @@
 @use "./foundation/var" as *;
 @use "./foundation/text" as *;
 
-.docs-page-content-container {
-	display: flex;
-}
-
 #docs-sidebar-nav-wrapper {
 	display: flex;
 	flex-direction: column;
-	border-right: 1px solid rgba(25, 25, 28, 0.2);
+	border-right: 2px solid $scheme-gray;
 	max-width: 16rem;
 	min-width: 200px;
 	padding: 2em 1.5em;
 }
 
 @media screen and (min-width: $medium-screen-size) {
-	.docs-page-content-container {
+	.docs-page-content-wrapper {
 		width: 55vw;
 		padding: 4vw 4vw 4vw 6vw;
 	}
@@ -28,7 +24,7 @@
 }
 
 @media screen and (max-width: $medium-screen-size) {
-	.docs-page-content-container {
+	.docs-page-content-wrapper {
 		width: 60vw;
 		padding: 2rem;
 	}
@@ -38,333 +34,346 @@
 	}
 }
 
-#docs-content {
-	flex-grow: 1;
-	width: inherit;
+li#docs-sidebar-nav-wrapper > nav#docs-sidebar-nav {
+  #docs-sidebar-nav-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+    margin: 0 0 1rem;
+    font-weight: 500;
+    border-bottom: 1px $scheme-dark-primary solid;
+    color: $scheme-dark-primary !important;
 
-	& > section > article :first-child h1 {
-		margin-top: 0.6rem;
-	}
+    #docs-version-selection {
+      margin-bottom: 0;
+      margin-left: 0;
+      position: relative;
+      z-index: 2;
 
-	img {
-		width: 100%;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-	}
+      & > #docs-version-selector-root-button-wrapper {
+        /* A minimum width to prevent the button from being too small with short versions */
+        min-width: 5rem;
+        display: flex;
+        align-content: center;
+        justify-content: center;
 
-	p,
-	div {
-		& + p,
-    & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
-    & + div.code-toolbar pre[class*="language-"] {
-			margin: $default-paragraph-margin 0 0 0;
-		}
-	}
+        button {
+          display: flex;
+          flex-direction: row;
+          align-content: center;
+          justify-content: center;
+          column-gap: 0.4rem;
+          padding: 0 0.5rem 0 0.5rem;
+          background-color: white;
+          border: none;
+          cursor: pointer;
 
-	div:last-child,
-	article:last-child {
-		&,
-		& div.code-toolbar pre[class*="language-"] {
-			margin-bottom: 0 !important;
-		}
-	}
+          &:hover {
+            color: $scheme-primary;
+            background-color: $scheme-gray;
+          }
 
-	#docs-page-nav {
-		display: flex;
-		align-content: center;
-		justify-content: space-between;
+          .fa-caret-down::before {
+            display: block;
+            margin-top: 0.7em;
+          }
+        }
+      }
 
-		#docs-page-nav-kipper-version {
-			text-decoration: none;
+      & > #docs-versions-dropdown {
+        /* Hide the dropdown at first */
+        display: none;
+        visibility: hidden;
+        position: absolute;
+        top: 100%;
+        width: calc(100% - 8px);
+        margin: 4px 0 0 4px;
+        z-index: 2;
+        overflow-y: auto;
+        max-height: 60vh;
+        border-radius: 5px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-			&,
-			&:active,
-			&:visited {
-				color: $scheme-dark-gray;
-			}
+        &:last-child.docs-version-selector-button-wrapper {
+          /* Remove the border from the last element */
+          border-bottom: none;
+        }
 
-			&:hover {
-				color: $scheme-primary;
-			}
-		}
+        li.docs-version-selector-button-wrapper {
+          display: flex;
+          align-content: center;
+          justify-content: center;
+          border-bottom: 2px solid $scheme-gray;
 
-		.docs-page-nav-header,
-		.docs-page-nav-header:active,
-		.docs-page-nav-header:visited {
-			color: black;
-			text-decoration: none !important;
-		}
+          a {
+            /* Similar styles like in the playground button */
+            padding: 0.8rem;
+            color: black;
+            background-color: white;
+            border: none;
+            cursor: pointer;
 
-		.docs-page-nav-header:hover {
-			color: $scheme-primary;
-		}
+            /* Styling copied from button styling, similar to the one from the playground select buttons */
+            font-family: inherit;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+            box-sizing: border-box;
 
-		ul li {
-			padding-right: 0.25em;
-		}
+            /* Ensure the same sizing/layout like with a standard button */
+            display: flex;
+            align-content: center;
+            justify-content: center;
 
-		#edit-page-on-github {
-			display: flex;
-			align-content: center;
-			align-items: center;
-			flex-direction: row;
-			column-gap: 0.4rem;
-			text-decoration: none;
-			color: black;
+            /* Make the button grow to the size of the parent */
+            flex-grow: 1;
 
-			i.fa-brands.fa-github {
-				margin: 0;
-				padding: 0;
-				line-height: unset;
-			}
+            &:hover {
+              color: $scheme-primary;
+              background-color: $scheme-gray;
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
 
-			&:hover {
-				color: $scheme-primary;
-			}
-		}
-	}
+    & h6,
+    & .h6 {
+      margin-top: 0.5rem;
+    }
 
-	#markdown-content {
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6 {
-			/* Adjust spacing for code in headers */
-			& > :first-child:is(code) {
-				margin: -0.2em;
-			}
-		}
+    & > a,
+    & > a:visited {
+      color: $scheme-dark-primary !important;
+    }
+  }
 
-		.docs-version-indicator {
-			font-size: 0.96em;
-			font-weight: 500;
-			font-style: italic;
-			color: $scheme-dark-gray;
-			margin-top: -0.2em; /* Align with the header - Better visible separation */
-		}
+  ul.docs-sidebar-nav-list {
+    & > li > ul.docs-sidebar-nav-list {
+      /* Nested lists which increase for every level of dropdown nesting */
+      margin-left: 0.75rem;
+    }
 
-		.docs-version-indicator + p {
-			margin-top: calc($default-paragraph-margin - 0.4em);
-		}
-	}
+    p.sidebar-nav-header-list-item {
+      display: flex;
+      padding: 0.2rem 0;
+      margin: 0;
+      background-color: transparent;
+
+      /* Padding for the left side of the sidebar list item */
+      $left-nav-list-item-padding: 1rem;
+
+      & > button {
+        /* Remove the default button styling */
+        background: transparent none;
+        border: none;
+        cursor: pointer;
+        outline: none;
+      }
+
+      & > a,
+      & > button {
+        &,
+        &:visited,
+        &:active {
+          color: rgba(75, 85, 99);
+          text-decoration: none;
+          cursor: pointer;
+          padding: 0.25rem 1rem 0.25rem calc(1rem + $left-nav-list-item-padding);
+          border-radius: 6px;
+          flex-grow: 1;
+          font-size: 16px;
+        }
+
+        &:hover {
+          text-decoration: none;
+          color: rgb(17, 24, 39);
+          background-color: rgb($scheme-primary-rgb, 0.12);
+        }
+      }
+
+      /* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
+      &.sidebar-nav-header-dir-item {
+        & > a,
+        & > button {
+          padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
+          text-align: left;
+          line-height: 1.5;
+
+          .fa-caret-down {
+            width: 11px;
+          }
+        }
+
+        & > button {
+          & > i.fa-caret-down {
+            /* Closed dropdown */
+            rotate: -90deg;
+            padding: 0;
+            top: -1px;
+            transition: rotate 0.4s ease 0s;
+          }
+
+          & > span {
+            padding-left: 4.5px;
+          }
+        }
+
+        &.selected-page-sidebar-nav-header > button {
+          & > i.fa-caret-down {
+            /* Rotating the caret so it shows the dropdown is open */
+            rotate: 0deg;
+            position: relative;
+            padding: 0;
+            top: 0;
+          }
+        }
+      }
+
+      &.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > a,
+      &.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > button {
+        background-color: rgb($scheme-primary-rgb, 0.16); /* Highlight the selected page */
+      }
+
+      & + .docs-sidebar-nav-list {
+        visibility: hidden;
+        display: none;
+
+        &.selected-sidebar-nav-dir {
+          visibility: visible;
+          display: block;
+        }
+      }
+    }
+  }
 }
+.docs-page-content-wrapper {
+  display: flex;
+  flex-direction: column;
 
-#docs-sidebar-nav-wrapper > #docs-sidebar-nav {
-	#docs-sidebar-nav-head {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		padding-bottom: 0.5rem;
-		margin: 0 0 1rem;
-		font-weight: 500;
-		border-bottom: 1px $scheme-dark-primary solid;
-		color: $scheme-dark-primary !important;
+  nav#phone-docs-nav {
+    visibility: hidden;
+    display: none;
+  }
 
-		#docs-version-selection {
-			margin-bottom: 0;
-			margin-left: 0;
-			position: relative;
-			z-index: 2;
+  section#docs-content {
+    flex-grow: 1;
+    width: inherit;
 
-			& > #docs-version-selector-root-button-wrapper {
-				/* A minimum width to prevent the button from being too small with short versions */
-				min-width: 5rem;
-				display: flex;
-				align-content: center;
-				justify-content: center;
+    /* We replace the margin with padding to add spacing between the borders and the content */
+    margin: 0;
+    padding: 1.6rem;
 
-				button {
-					display: flex;
-					flex-direction: row;
-					align-content: center;
-					justify-content: center;
-					column-gap: 0.4rem;
-					padding: 0 0.5rem 0 0.5rem;
-					background-color: white;
-					border: none;
-					cursor: pointer;
+    img {
+      width: 100%;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
 
-					&:hover {
-						color: $scheme-primary;
-						background-color: $scheme-gray;
-					}
+    p,
+    div {
+      & + p,
+      & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
+      & + div.code-toolbar pre[class*="language-"] {
+        margin: $default-paragraph-margin 0 0 0;
+      }
+    }
 
-					.fa-caret-down::before {
-						display: block;
-						margin-top: 0.7em;
-					}
-				}
-			}
+    div:last-child,
+    article:last-child {
+      &,
+      & div.code-toolbar pre[class*="language-"] {
+        margin-bottom: 0 !important;
+      }
+    }
 
-			& > #docs-versions-dropdown {
-				/* Hide the dropdown at first */
-				display: none;
-				visibility: hidden;
-				position: absolute;
-				top: 100%;
-				width: calc(100% - 8px);
-				margin: 4px 0 0 4px;
-				z-index: 2;
-				overflow-y: auto;
-				max-height: 60vh;
-				border-radius: 5px;
-				box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+    nav#docs-page-header {
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
 
-				&:last-child.docs-version-selector-button-wrapper {
-					/* Remove the border from the last element */
-					border-bottom: none;
-				}
+      .docs-page-header-kipper-version {
+        text-decoration: none;
 
-				li.docs-version-selector-button-wrapper {
-					display: flex;
-					align-content: center;
-					justify-content: center;
-					border-bottom: 2px solid $scheme-gray;
+        &,
+        &:active,
+        &:visited {
+          color: $scheme-dark-gray;
+        }
 
-					a {
-						/* Similar styles like in the playground button */
-						padding: 0.8rem;
-						color: black;
-						background-color: white;
-						border: none;
-						cursor: pointer;
+        &:hover {
+          color: $scheme-primary;
+        }
+      }
 
-						/* Styling copied from button styling, similar to the one from the playground select buttons */
-						font-family: inherit;
-						font-size: 100%;
-						line-height: 1.15;
-						margin: 0;
-						box-sizing: border-box;
+      .docs-page-header-path-item,
+      .docs-page-header-path-item:active,
+      .docs-page-header-path-item:visited {
+        color: black;
+        text-decoration: none !important;
+      }
 
-						/* Ensure the same sizing/layout like with a standard button */
-						display: flex;
-						align-content: center;
-						justify-content: center;
+      .docs-page-header-path-item:hover {
+        color: $scheme-primary;
+      }
 
-						/* Make the button grow to the size of the parent */
-						flex-grow: 1;
+      ul li {
+        padding-right: 0.25em;
+      }
 
-						&:hover {
-							color: $scheme-primary;
-							background-color: $scheme-gray;
-							text-decoration: none;
-						}
-					}
-				}
-			}
-		}
+      #edit-page-on-github {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        flex-direction: row;
+        column-gap: 0.4rem;
+        text-decoration: none;
+        color: black;
 
-		& h6,
-		& .h6 {
-			margin-top: 0.5rem;
-		}
+        i.fa-brands.fa-github {
+          margin: 0;
+          padding: 0;
+          line-height: unset;
+        }
 
-		& > a,
-		& > a:visited {
-			color: $scheme-dark-primary !important;
-		}
-	}
+        &:hover {
+          color: $scheme-primary;
+        }
+      }
+    }
 
-	ul.docs-sidebar-nav-list {
-		& > li > ul.docs-sidebar-nav-list {
-			/* Nested lists which increase for every level of dropdown nesting */
-			margin-left: 0.75rem;
-		}
+    article#markdown-content {
+      :first-child h1 {
+        margin-top: 0.6rem;
+      }
 
-		p.sidebar-nav-header-list-item {
-			display: flex;
-			padding: 0.2rem 0;
-			margin: 0;
-			background-color: transparent;
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        /* Adjust spacing for code in headers */
+        & > :first-child:is(code) {
+          margin: -0.2em;
+        }
+      }
 
-			/* Padding for the left side of the sidebar list item */
-			$left-nav-list-item-padding: 1rem;
+      .docs-version-indicator {
+        font-size: 0.96em;
+        font-weight: 500;
+        font-style: italic;
+        color: $scheme-dark-gray;
+        margin-top: -0.2em; /* Align with the header - Better visible separation */
+      }
 
-			& > button {
-				/* Remove the default button styling */
-				background: transparent none;
-				border: none;
-				cursor: pointer;
-				outline: none;
-			}
-
-			& > a,
-			& > button {
-				&,
-				&:visited,
-				&:active {
-					color: rgba(75, 85, 99);
-					text-decoration: none;
-					cursor: pointer;
-					padding: 0.25rem 1rem 0.25rem calc(1rem + $left-nav-list-item-padding);
-					border-radius: 6px;
-					flex-grow: 1;
-					font-size: 16px;
-				}
-
-				&:hover {
-					text-decoration: none;
-					color: rgb(17, 24, 39);
-					background-color: rgb($scheme-primary-rgb, 0.12);
-				}
-			}
-
-			/* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
-			&.sidebar-nav-header-dir-item {
-				& > a,
-				& > button {
-					padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
-					text-align: left;
-					line-height: 1.5;
-
-					.fa-caret-down {
-						width: 11px;
-					}
-				}
-
-				& > button {
-					& > i.fa-caret-down {
-						/* Closed dropdown */
-						rotate: -90deg;
-						padding: 0;
-						top: -1px;
-						transition: rotate 0.4s ease 0s;
-					}
-
-					& > span {
-						padding-left: 4.5px;
-					}
-				}
-
-				&.selected-page-sidebar-nav-header > button {
-					& > i.fa-caret-down {
-						/* Rotating the caret so it shows the dropdown is open */
-						rotate: 0deg;
-						position: relative;
-						padding: 0;
-						top: 0;
-					}
-				}
-			}
-
-			&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > a,
-			&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > button {
-				background-color: rgb($scheme-primary-rgb, 0.16); /* Highlight the selected page */
-			}
-
-			& + .docs-sidebar-nav-list {
-				visibility: hidden;
-				display: none;
-
-				&.selected-sidebar-nav-dir {
-					visibility: visible;
-					display: block;
-				}
-			}
-		}
-	}
+      .docs-version-indicator + p {
+        margin-top: calc($default-paragraph-margin - 0.4em);
+      }
+    }
+  }
 }
 
 .api-docs-description {
@@ -378,12 +387,14 @@
 		max-width: $phone-sidebar-width;
 		padding: $phone-sidebar-padding;
 		margin: $phone-sidebar-margin;
-		visibility: hidden;
-		display: none;
 		z-index: 1;
-	}
 
-	.docs-page-content-container {
+    /* Hide it per default - should be shown by clicking the menu button */
+    visibility: hidden;
+    display: none;
+  }
+
+	.docs-page-content-wrapper {
 		width: $phone-content-width;
 		padding: $phone-docs-padding;
 		margin: $phone-docs-margin;
@@ -393,26 +404,87 @@
 		align-content: center;
 		justify-content: center;
 
-		& > div#docs-content {
-			width: inherit;
+    & > nav#phone-docs-nav {
+      visibility: visible;
+      display: flex;
+      padding: 0.8rem 1.6rem;
+
+      /* Bottom separation border */
+      border-bottom: 1px solid rgb(var(--scheme-dark-gray-rgb), 0.4);
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        column-gap: 0.5rem;
+
+        li > a {
+          height: 100%;
+          align-content: center;
+          display: flex;
+        }
+
+        li#phone-docs-nav-bars-menu,
+        li a.docs-page-header-path-item,
+        li a.docs-page-header-kipper-version {
+          padding: 0;
+          margin: 0;
+          font-size: 1.2rem;
+          font-weight: 500;
+
+          &, &:active, &:visited {
+            color: unset; /* Should not have the default link color */
+            text-decoration: none;
+          }
+
+          &:hover {
+            text-decoration: none;
+            color: $scheme-primary;
+          }
+        }
+
+        :first-child:is(li#phone-docs-nav-bars-menu) {
+          padding-right: 0.5rem;
+        }
+
+        :nth-child(2):is(li) > a.docs-page-header-kipper-version {
+          &, &:active, &:visited {
+            color: $scheme-dark-gray;
+          }
+        }
+      }
+    }
+
+    & > section#docs-content {
+      margin: $default-section-margin;
+      width: calc($phone-content-width - $default-section-margin * 2);
 			padding: inherit;
-			margin: inherit;
 			box-shadow: none;
 			border-radius: unset;
 
-			section {
-				margin: $default-section-margin;
-				width: calc($phone-content-width - $default-section-margin * 2);
+      /*
+        Show the phone docs nav instead of the desktop/tablet path indicator,
+        as the sidebar is not per default shown
+      */
+      ul#docs-nav-current-page-path {
+        visibility: hidden;
+        display: none;
+      }
 
-				#docs-page-nav {
-					/* Make the path and the github edit button be underneath each other */
-					flex-direction: column;
+      nav#docs-page-header {
+        /* Make the path and the github edit button be underneath each other */
+        flex-direction: column;
 
-					& > ul {
-						margin-bottom: 0.5rem;
-					}
-				}
-			}
+        #edit-page-on-github {
+          font-size: 1.2rem;
+        }
+
+        & > ul {
+          margin-bottom: 0.5rem;
+        }
+      }
 		}
 	}
 }

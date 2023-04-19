@@ -430,7 +430,7 @@ export class DocsBuilder {
 	await buildEjsFiles(srcRootDir, destRootDir, data);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
-	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs/page.ejs`);
+	const docsBuilder = new DocsBuilder(`${srcRootDir}/partials/docs/page-template.ejs`);
 	await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
 	// Copy all remaining files

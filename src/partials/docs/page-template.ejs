@@ -25,7 +25,7 @@
         <div class="flex-parent-container flex-fill-to-parent">
             <ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
                 <li id="docs-sidebar-nav-wrapper" class="flex-parent-container">
-                    <%- include('./nav', {
+                    <%- include('./sidebar-nav', {
                         sidebarNav: sidebarNav,
                         header: false,
                         title: title,
@@ -37,12 +37,22 @@
                         thisNavTreeItem: thisNavTreeItem,
                     }) %>
                 </li>
-                <li class="docs-page-content-container">
-                    <div id="docs-content" class="shadowed-box">
-                        <!-- Content -->
-                        <section>
-                            <nav id="docs-page-nav">
-                                <%- include('./nav-path', {
+                <li class="docs-page-content-wrapper">
+                    <!-- Phone-specific navigation bar, for the top of the page -->
+                    <%- include('./page-phone-top-nav', {
+                        sidebarNav: sidebarNav,
+                        thisFile: thisFile,
+                        rootDir: rootDir,
+                        thisVersionIndex: thisVersionIndex,
+                        absoluteSrcRootDir: absoluteSrcRootDir,
+                        thisNavTreeItem: thisNavTreeItem,
+                        isIndexFile: isIndexFile,
+                        isHiddenFile: isHiddenFile,
+                    }) %>
+                    <section id="docs-content" class="shadowed-box">
+                        <nav id="docs-page-header">
+                            <ul id="docs-nav-current-page-path" class="flex-row no-style-list">
+                                <%- include('./page-nav-path', {
                                     sidebarNav: sidebarNav,
                                     thisFile: thisFile,
                                     rootDir: rootDir,
@@ -52,20 +62,20 @@
                                     isIndexFile: isIndexFile,
                                     isHiddenFile: isHiddenFile,
                                 }) %>
-                                <a
-                                    id="edit-page-on-github"
-                                    href="<%= editPath %>"
-                                    title="Edit this page on GitHub"
-                                >
-                                    <i class="fa-brands fa-github"></i>
-                                    <p>Edit page</p>
-                                </a>
-                            </nav>
-                            <article id="markdown-content">
-                                <%- markdownContent %>
-                            </article>
-                        </section>
-                    </div>
+                            </ul>
+                            <a
+                                id="edit-page-on-github"
+                                href="<%= editPath %>"
+                                title="Edit this page on GitHub"
+                            >
+                                <i class="fa-brands fa-github"></i>
+                                <p>Edit page</p>
+                            </a>
+                        </nav>
+                        <article id="markdown-content">
+                            <%- markdownContent %>
+                        </article>
+                    </section>
                 </li>
             </ul>
         </div>
