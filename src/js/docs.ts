@@ -101,7 +101,7 @@ function toggleVisibilityOfSidebarNav(): void {
 versionSelectorButton.addEventListener("click", toggleVersionDropdownVisibility);
 
 // Phone menu toggle
-phoneMenuToggle.forEach(e => e.addEventListener("click", toggleVisibilityOfSidebarNav));
+phoneMenuToggle.forEach((e) => e.addEventListener("click", toggleVisibilityOfSidebarNav));
 
 // Add button handler for each dir dropdown button
 navDirDropdownButtons.forEach((button: HTMLParagraphElement) => {
