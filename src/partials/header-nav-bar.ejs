@@ -1,0 +1,40 @@
+<%
+const pages = {
+    "download.html": "Downloads",
+    "docs/index.html": "Docs",
+    "playground.html": "Playground",
+    "changelog.html": "Changelog"
+};
+%>
+
+<header id="primary-page-header" class="page-header">
+    <nav id="header-nav-bar">
+        <ul>
+            <!-- Kipper logo + version identifier -->
+            <%- include('./logo-header', { rootDir: rootDir, latestVersion: latestVersion }) %>
+
+            <!-- Main navigation links -->
+            <% for (const page in pages) { %>
+            <%  const pageName = pages[page]; %>
+            <%  const pagePath = rootDir + "/" + page; %>
+                <li>
+                    <a href="<%= pagePath %>"
+                       class="underline-button top-nav-menu-item top-nav-button
+                       <%= urlPath.endsWith(page) ? "selected-nav-page" : ""; %>
+                       "
+                    >
+                        <h4><%= pageName %></h4>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+         <%- include('./search-bar') %>
+    </nav>
+
+    <!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+    <%- include('./phone-header-nav-bar', { pages: pages, header: false }) %>
+
+    <div id="header-description-content" class="text-page-content-container">
+        <%- typeof header !== undefined && header ? include('./header') : "" %>
+    </div>
+</header>

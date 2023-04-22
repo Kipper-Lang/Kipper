@@ -1,6 +1,12 @@
 /*! Navigation Bar Styling */
 @use "./foundation/var" as *;
 
+/* Per default hide the phone header nav bar */
+#phone-header-nav-bar {
+	display: none;
+	visibility: hidden;
+}
+
 @media screen and (min-width: $large-screen-size) {
 	$search-bar-size: 14vw;
 	$search-bar-size-expanded: 22vw;
@@ -34,6 +40,16 @@
 	/* Disable animation for screens that are too small */
 	#search-bar-wrapper > ul > #search-bar > #search-bar-input {
 		width: $search-bar-size-expanded;
+	}
+}
+
+@media screen and (max-width: $small-screen-size) {
+ 	#phone-header-nav-bar {
+		display: flex;
+		visibility: visible;
+		justify-content: space-between;
+		padding-right: 1rem;
+		padding-left: 1rem;
 	}
 }
 

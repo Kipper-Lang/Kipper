@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head', { title: title, description: description }) %>
+    <%- include('./partials/meta-head', { title: title, description: description }) %>
 </head>
 <body>
 <script src="./js/plugins.ts"></script>
@@ -15,7 +15,7 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('./partials/nav-bar', { header: false }) %>
+        <%- include('./partials/header-nav-bar', { header: false }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="text-page-content-container">

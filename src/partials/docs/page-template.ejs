@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('../head', { title: title, description: description }) %>
+    <%- include('../meta-head', { title: title, description: description }) %>
     <link rel="stylesheet" href="<%= rootDir %>/css/docs.scss" />
 </head>
 <body>
@@ -19,7 +19,7 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('../nav-bar', { header: false, title: title, description: description }) %>
+        <%- include('../header-nav-bar', { header: false, title: title, description: description }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="flex-parent-container flex-fill-to-parent">
