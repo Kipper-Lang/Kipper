@@ -9,6 +9,15 @@ const versionSelectorButton: HTMLButtonElement = document.querySelector(
 );
 const navDirDropdownButtons = document.querySelectorAll("p.sidebar-nav-header-dir-item");
 
+// Docs sidebar navigation
+const docsSidebarNav: HTMLDivElement = document.querySelector("#docs-sidebar-nav-wrapper");
+
+// Docs content wrapper
+const docsContentWrapper: HTMLDivElement = document.querySelector("#docs-page-content-wrapper");
+
+// Phone menu toggle
+const phoneMenuToggle = <NodeList>document.querySelectorAll(".phone-docs-nav-bars-menu-toggle");
+
 /**
  * Disables the visibility of the dropdown menu.
  */
@@ -67,8 +76,32 @@ function dropdownButtonHandler(dirElement: HTMLParagraphElement): void {
 	}
 }
 
+function toggleVisibilityOfSidebarNav(): void {
+	const isVisible = window.getComputedStyle(docsSidebarNav).visibility === "visible";
+	if (isVisible) {
+		// Make the docs sidebar nav invisible
+		docsSidebarNav.classList.remove("visible");
+		docsSidebarNav.classList.add("invisible");
+
+		// Make the docs content wrapper visible
+		docsContentWrapper.classList.add("visible");
+		docsContentWrapper.classList.remove("invisible");
+	} else {
+		// Make the docs sidebar nav visible
+		docsSidebarNav.classList.add("visible");
+		docsSidebarNav.classList.remove("invisible");
+
+		// Make the docs content wrapper invisible
+		docsContentWrapper.classList.add("invisible");
+		docsContentWrapper.classList.remove("visible");
+	}
+}
+
 // Version selector button
 versionSelectorButton.addEventListener("click", toggleVersionDropdownVisibility);
+
+// Phone menu toggle
+phoneMenuToggle.forEach(e => e.addEventListener("click", toggleVisibilityOfSidebarNav));
 
 // Add button handler for each dir dropdown button
 navDirDropdownButtons.forEach((button: HTMLParagraphElement) => {

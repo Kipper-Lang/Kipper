@@ -1,27 +1,40 @@
 <nav id="docs-sidebar-nav">
-    <div id="docs-sidebar-nav-head">
-        <h6><a class="docs-page-header-path-item" href="./index.html">Kipper Docs</a></h6>
-        <div id="docs-version-selection">
-            <%- include('./sidebar-version-dropdown', {
+    <!-- Only visible on small screens to enhance navigability -->
+    <%- include('./page-phone-top-nav', {
+        sidebarNav: sidebarNav,
+        thisFile: thisFile,
+        rootDir: rootDir,
+        thisVersionIndex: thisVersionIndex,
+        absoluteSrcRootDir: absoluteSrcRootDir,
+        thisNavTreeItem: thisNavTreeItem,
+        isIndexFile: isIndexFile,
+        isHiddenFile: isHiddenFile,
+    }) %>
+    <div id="docs-sidebar-std-nav"> <!-- Standard sidebar nav visible on all screen sizes -->
+        <div id="docs-sidebar-nav-head">
+            <h6><a class="docs-page-header-path-item" href="./index.html">Kipper Docs</a></h6>
+            <div id="docs-version-selection">
+                <%- include('./sidebar-version-dropdown', {
                 docsRoot: docsRoot,
                 docsVersions: docsVersions,
                 docsVersion: docsVersion,
                 existsSync: existsSync,
                 docsRoot: docsRoot,
                 absoluteSrcRootDir: absoluteSrcRootDir,
-            }) %>
+                }) %>
+            </div>
         </div>
+        <ul class="docs-sidebar-nav-list no-style-list flex-column">
+            <%- include('./sidebar-nav-list', {
+            sidebarNav: sidebarNav,
+            header: false,
+            title: title,
+            description: description,
+            thisFile: thisFile,
+            docsRoot: docsRoot,
+            inRootDir: false,
+            thisNavTreeItem: thisNavTreeItem,
+            }) %>
+        </ul>
     </div>
-    <ul class="docs-sidebar-nav-list no-style-list flex-column">
-        <%- include('./sidebar-nav-list', {
-        sidebarNav: sidebarNav,
-        header: false,
-        title: title,
-        description: description,
-        thisFile: thisFile,
-        docsRoot: docsRoot,
-        inRootDir: false,
-        thisNavTreeItem: thisNavTreeItem,
-        }) %>
-    </ul>
 </nav>

@@ -2,10 +2,13 @@
 
 /* All content should take up the entire available width */
 $phone-content-width: 100vw;
-$phone-sidebar-width: 80vw;
+$phone-sidebar-width: 100vw;
 
 /* Docs variables */
 $phone-docs-padding: 0;
-$phone-sidebar-padding: 2em 1.5em;
+$phone-sidebar-padding-top: 1em;
+$phone-sidebar-padding-bottom: 2em;
+$phone-sidebar-padding-left-right: 1.5em;
+$phone-sidebar-padding: $phone-sidebar-padding-top $phone-sidebar-padding-left-right $phone-sidebar-padding-left-right;
 $phone-docs-margin: 0 0 2rem 0;
 $phone-sidebar-margin: 0;
