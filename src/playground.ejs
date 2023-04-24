@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head', { title: title, description: description }) %>
+    <%- include('./partials/meta-head', { title: title, description: description }) %>
     <link rel="stylesheet" href="<%= rootDir %>/css/playground.scss" />
     <link rel="stylesheet" href="<%= rootDir %>/prism/shades-of-purple.css" />
 </head>
@@ -18,7 +18,7 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('./partials/nav-bar', { header: true, title: title, description: description })  %>
+        <%- include('./partials/header-nav-bar', { header: true, title: title, description: description })  %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div id="interactive-console" class="flex-parent-container flex-fill-to-parent flex-row">

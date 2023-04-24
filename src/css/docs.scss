@@ -26,355 +26,353 @@
 }
 
 #docs-sidebar-nav-wrapper {
-	flex-direction: column;
-	border-right: 2px solid $scheme-gray;
-	max-width: 16rem;
-	min-width: 200px;
-	padding: 2em 1.5em;
+  flex-direction: column;
+  border-right: 2px solid $scheme-gray;
+  max-width: 16rem;
+  min-width: 200px;
+  padding: 2em 1.5em;
 
-	& > nav#docs-sidebar-nav {
-		#docs-sidebar-nav-head {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			padding-bottom: 0.5rem;
-			margin: 0 0 1rem;
-			font-weight: 500;
-			border-bottom: 1px $scheme-dark-primary solid;
-			color: $scheme-dark-primary !important;
+  & > nav#docs-sidebar-nav {
+    #docs-sidebar-nav-head {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding-bottom: 0.5rem;
+      margin: 0 0 1rem;
+      font-weight: 500;
+      border-bottom: 1px $scheme-dark-primary solid;
+      color: $scheme-dark-primary !important;
 
-			#docs-version-selection {
-				margin-bottom: 0;
-				margin-left: 0;
-				position: relative;
-				z-index: 2;
+      #docs-version-selection {
+        margin-bottom: 0;
+        margin-left: 0;
+        position: relative;
+        z-index: 2;
 
-				& > #docs-version-selector-root-button-wrapper {
-					/* A minimum width to prevent the button from being too small with short versions */
-					min-width: 5rem;
-					display: flex;
-					align-content: center;
-					justify-content: center;
+        & > #docs-version-selector-root-button-wrapper {
+          /* A minimum width to prevent the button from being too small with short versions */
+          min-width: 5rem;
+          display: flex;
+          align-content: center;
+          justify-content: center;
 
-					button {
-						display: flex;
-						flex-direction: row;
-						align-content: center;
-						justify-content: center;
-						column-gap: 0.4rem;
-						padding: 0 0.5rem 0 0.5rem;
-						background-color: white;
-						border: none;
-						cursor: pointer;
+          button {
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            justify-content: center;
+            column-gap: 0.4rem;
+            padding: 0 0.5rem 0 0.5rem;
+            background-color: white;
+            border: none;
+            cursor: pointer;
 
-						&:hover {
-							color: $scheme-primary;
-							background-color: $scheme-gray;
-						}
+            &:hover {
+              color: $scheme-primary;
+              background-color: $scheme-gray;
+            }
 
-						.fa-caret-down::before {
-							display: block;
-							margin-top: 0.7em;
-						}
-					}
-				}
+            .fa-caret-down::before {
+              display: block;
+              margin-top: 0.7em;
+            }
+          }
+        }
 
-				& > #docs-versions-dropdown {
-					/* Hide the dropdown at first */
-					display: none;
-					visibility: hidden;
-					position: absolute;
-					top: 100%;
-					width: calc(100% - 8px);
-					margin: 4px 0 0 4px;
-					z-index: 2;
-					overflow-y: auto;
-					max-height: 60vh;
-					border-radius: 5px;
-					box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+        & > #docs-versions-dropdown {
+          /* Hide the dropdown at first */
+          display: none;
+          visibility: hidden;
+          position: absolute;
+          top: 100%;
+          width: calc(100% - 8px);
+          margin: 4px 0 0 4px;
+          z-index: 2;
+          overflow-y: auto;
+          max-height: 60vh;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-					&:last-child.docs-version-selector-button-wrapper {
-						/* Remove the border from the last element */
-						border-bottom: none;
-					}
+          &:last-child.docs-version-selector-button-wrapper {
+            /* Remove the border from the last element */
+            border-bottom: none;
+          }
 
-					li.docs-version-selector-button-wrapper {
-						display: flex;
-						align-content: center;
-						justify-content: center;
-						border-bottom: 2px solid $scheme-gray;
+          li.docs-version-selector-button-wrapper {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            border-bottom: 2px solid $scheme-gray;
 
-						a {
-							/* Similar styles like in the playground button */
-							padding: 0.8rem;
-							color: black;
-							background-color: white;
-							border: none;
-							cursor: pointer;
+            a {
+              /* Similar styles like in the playground button */
+              padding: 0.8rem;
+              color: black;
+              background-color: white;
+              border: none;
+              cursor: pointer;
 
-							/* Styling copied from button styling, similar to the one from the playground select buttons */
-							font-family: inherit;
-							font-size: 100%;
-							line-height: 1.15;
-							margin: 0;
-							box-sizing: border-box;
+              /* Styling copied from button styling, similar to the one from the playground select buttons */
+              font-family: inherit;
+              font-size: 100%;
+              line-height: 1.15;
+              margin: 0;
+              box-sizing: border-box;
 
-							/* Ensure the same sizing/layout like with a standard button */
-							display: flex;
-							align-content: center;
-							justify-content: center;
+              /* Ensure the same sizing/layout like with a standard button */
+              display: flex;
+              align-content: center;
+              justify-content: center;
 
-							/* Make the button grow to the size of the parent */
-							flex-grow: 1;
+              /* Make the button grow to the size of the parent */
+              flex-grow: 1;
 
-							&:hover {
-								color: $scheme-primary;
-								background-color: $scheme-gray;
-								text-decoration: none;
-							}
-						}
-					}
-				}
-			}
+              &:hover {
+                color: $scheme-primary;
+                background-color: $scheme-gray;
+                text-decoration: none;
+              }
+            }
+          }
+        }
+      }
 
-			& h6,
-			& .h6 {
-				margin-top: 0.5rem;
-			}
+      & h6,
+      & .h6 {
+        margin-top: 0.5rem;
+      }
 
-			& > a,
-			& > a:visited {
-				color: $scheme-dark-primary !important;
-			}
-		}
+      & > a,
+      & > a:visited {
+        color: $scheme-dark-primary !important;
+      }
+    }
 
-		ul.docs-sidebar-nav-list {
-			& > li > ul.docs-sidebar-nav-list {
-				/* Nested lists which increase for every level of dropdown nesting */
-				margin-left: 0.75rem;
-			}
+    ul.docs-sidebar-nav-list {
+      & > li > ul.docs-sidebar-nav-list {
+        /* Nested lists which increase for every level of dropdown nesting */
+        margin-left: 0.75rem;
+      }
 
-			p.sidebar-nav-header-list-item {
-				display: flex;
-				padding: 0.2rem 0;
-				margin: 0;
-				background-color: transparent;
+      p.sidebar-nav-header-list-item {
+        display: flex;
+        padding: 0.2rem 0;
+        margin: 0;
+        background-color: transparent;
 
-				/* Padding for the left side of the sidebar list item */
-				$left-nav-list-item-padding: 1rem;
+        /* Padding for the left side of the sidebar list item */
+        $left-nav-list-item-padding: 1rem;
 
-				& > button {
-					/* Remove the default button styling */
-					background: transparent none;
-					border: none;
-					cursor: pointer;
-					outline: none;
-				}
+        & > button {
+          /* Remove the default button styling */
+          background: transparent none;
+          border: none;
+          cursor: pointer;
+          outline: none;
+        }
 
-				& > a,
-				& > button {
-					&,
-					&:visited,
-					&:active {
-						color: rgba(75, 85, 99);
-						text-decoration: none;
-						cursor: pointer;
-						padding: 0.25rem 1rem 0.25rem calc(1rem + $left-nav-list-item-padding);
-						border-radius: 6px;
-						flex-grow: 1;
-						font-size: 16px;
-					}
+        & > a,
+        & > button {
+          &,
+          &:visited,
+          &:active {
+            color: rgba(75, 85, 99);
+            text-decoration: none;
+            cursor: pointer;
+            padding: 0.25rem 1rem 0.25rem calc(1rem + $left-nav-list-item-padding);
+            border-radius: 6px;
+            flex-grow: 1;
+            font-size: 16px;
+          }
 
-					&:hover {
-						text-decoration: none;
-						color: rgb(17, 24, 39);
-						background-color: rgb($scheme-primary-rgb, 0.12);
-					}
-				}
+          &:hover {
+            text-decoration: none;
+            color: rgb(17, 24, 39);
+            background-color: rgb($scheme-primary-rgb, 0.12);
+          }
+        }
 
-				/* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
-				&.sidebar-nav-header-dir-item {
-					& > a,
-					& > button {
-						padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
-						text-align: left;
-						line-height: 1.5;
+        /* Selected nav header, which is representing a parent directory, where a dropdown can show its contents */
+        &.sidebar-nav-header-dir-item {
+          & > a,
+          & > button {
+            padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
+            text-align: left;
+            line-height: 1.5;
+          }
 
-						.fa-caret-down {
-							width: 11px;
-						}
-					}
+          & > button {
+            & > i.fa-caret-down {
+              /* Closed dropdown */
+              position: relative;
+              rotate: -90deg;
+              padding: 0;
+              top: 1px;
 
-					& > button {
-						& > i.fa-caret-down {
-							/* Closed dropdown */
-							rotate: -90deg;
-							padding: 0;
-							top: -1px;
-							transition: rotate 0.4s ease 0s;
-						}
+              /* Smooth the rotation with a transition */
+              transition: all 0.4s ease-in-out;
+            }
 
-						& > span {
-							padding-left: 4.5px;
-						}
-					}
+            & > span {
+              padding-left: 8px;
+            }
+          }
 
-					&.selected-page-sidebar-nav-header > button {
-						& > i.fa-caret-down {
-							/* Rotating the caret so it shows the dropdown is open */
-							rotate: 0deg;
-							position: relative;
-							padding: 0;
-							top: 0;
-						}
-					}
-				}
+          &.selected-page-sidebar-nav-header > button {
+            & > i.fa-caret-down {
+              /* Rotating the caret so it shows the dropdown is open */
+              position: relative;
+              rotate: 0deg;
+              padding: 0;
+              top: 0;
+            }
+          }
+        }
 
-				&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > a,
-				&.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > button {
-					background-color: rgb($scheme-primary-rgb, 0.16); /* Highlight the selected page */
-				}
+        &.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > a,
+        &.selected-page-sidebar-nav-header:not(.sidebar-nav-header-dir-item) > button {
+          background-color: rgb($scheme-primary-rgb, 0.16); /* Highlight the selected page */
+        }
 
-				& + .docs-sidebar-nav-list {
-					visibility: hidden;
-					display: none;
+        & + .docs-sidebar-nav-list {
+          visibility: hidden;
+          display: none;
 
-					&.selected-sidebar-nav-dir {
-						visibility: visible;
-						display: block;
-					}
-				}
-			}
-		}
-	}
+          &.selected-sidebar-nav-dir {
+            visibility: visible;
+            display: block;
+          }
+        }
+      }
+    }
+  }
 }
 
-nav.phone-docs-nav {
-	/* Mobile navigation - Both hidden in the docs sidebar and in the docs page header */
-	visibility: hidden;
-	display: none;
+nav.phone-docs-nav { /* Mobile navigation - Both hidden in the docs sidebar and in the docs page header */
+  visibility: hidden;
+  display: none;
 }
 
 #docs-page-content-wrapper {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-	section#docs-content {
-		flex-grow: 1;
-		width: inherit;
+  section#docs-content {
+    flex-grow: 1;
+    width: inherit;
 
-		/* We replace the margin with padding to add spacing between the borders and the content */
-		margin: 0;
-		padding: 1.6rem;
+    /* We replace the margin with padding to add spacing between the borders and the content */
+    margin: 0;
+    padding: 1.6rem;
 
-		img {
-			width: 100%;
-			margin-top: 1rem;
-			margin-bottom: 1rem;
-		}
+    img {
+      width: 100%;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
 
-		p,
-		div {
-			& + p,
+    p,
+    div {
+      & + p,
       & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
       & + div.code-toolbar pre[class*="language-"] {
-				margin: $default-paragraph-margin 0 0 0;
-			}
-		}
+        margin: $default-paragraph-margin 0 0 0;
+      }
+    }
 
-		div:last-child,
-		article:last-child {
-			&,
-			& div.code-toolbar pre[class*="language-"] {
-				margin-bottom: 0 !important;
-			}
-		}
+    div:last-child,
+    article:last-child {
+      &,
+      & div.code-toolbar pre[class*="language-"] {
+        margin-bottom: 0 !important;
+      }
+    }
 
-		nav#docs-page-header {
-			display: flex;
-			align-content: center;
-			justify-content: space-between;
+    nav#docs-page-header {
+      display: flex;
+      align-content: center;
+      justify-content: space-between;
 
-			.docs-page-header-kipper-version {
-				text-decoration: none;
+      .docs-page-header-kipper-version {
+        text-decoration: none;
 
-				&,
-				&:active,
-				&:visited {
-					color: $scheme-dark-gray;
-				}
+        &,
+        &:active,
+        &:visited {
+          color: $scheme-dark-gray;
+        }
 
-				&:hover {
-					color: $scheme-primary;
-				}
-			}
+        &:hover {
+          color: $scheme-primary;
+        }
+      }
 
-			.docs-page-header-path-item,
-			.docs-page-header-path-item:active,
-			.docs-page-header-path-item:visited {
-				color: black;
-				text-decoration: none !important;
-			}
+      .docs-page-header-path-item,
+      .docs-page-header-path-item:active,
+      .docs-page-header-path-item:visited {
+        color: black;
+        text-decoration: none !important;
+      }
 
-			.docs-page-header-path-item:hover {
-				color: $scheme-primary;
-			}
+      .docs-page-header-path-item:hover {
+        color: $scheme-primary;
+      }
 
-			ul li {
-				padding-right: 0.25em;
-			}
+      ul li {
+        padding-right: 0.25em;
+      }
 
-			#edit-page-on-github {
-				display: flex;
-				align-content: center;
-				align-items: center;
-				flex-direction: row;
-				column-gap: 0.4rem;
-				text-decoration: none;
-				color: black;
+      #edit-page-on-github {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        flex-direction: row;
+        column-gap: 0.4rem;
+        text-decoration: none;
+        color: black;
 
-				i.fa-brands.fa-github {
-					margin: 0;
-					padding: 0;
-					line-height: unset;
-				}
+        i.fa-brands.fa-github {
+          margin: 0;
+          padding: 0;
+          line-height: unset;
+        }
 
-				&:hover {
-					color: $scheme-primary;
-				}
-			}
-		}
+        &:hover {
+          color: $scheme-primary;
+        }
+      }
+    }
 
-		article#markdown-content {
-			:first-child h1 {
-				margin-top: 0.6rem;
-			}
+    article#markdown-content {
+      :first-child h1 {
+        margin-top: 0.6rem;
+      }
 
-			h1,
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				/* Adjust spacing for code in headers */
-				& > :first-child:is(code) {
-					margin: -0.2em;
-				}
-			}
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        /* Adjust spacing for code in headers */
+        & > :first-child:is(code) {
+          margin: -0.2em;
+        }
+      }
 
-			.docs-version-indicator {
-				font-size: 0.96em;
-				font-weight: 500;
-				font-style: italic;
-				color: $scheme-dark-gray;
-				margin-top: -0.2em; /* Align with the header - Better visible separation */
-			}
+      .docs-version-indicator {
+        font-size: 0.96em;
+        font-weight: 500;
+        font-style: italic;
+        color: $scheme-dark-gray;
+        margin-top: -0.2em; /* Align with the header - Better visible separation */
+      }
 
-			.docs-version-indicator + p {
-				margin-top: calc($default-paragraph-margin - 0.4em);
-			}
-		}
-	}
+      .docs-version-indicator + p {
+        margin-top: calc($default-paragraph-margin - 0.4em);
+      }
+    }
+  }
 }
 
 .api-docs-description {
@@ -389,112 +387,108 @@ nav.phone-docs-nav {
 		padding: 0;
 		margin: 0;
 
-		/* Hide it per default - should be shown by clicking the menu button */
-		visibility: hidden;
-		display: none;
+    /* Hide it per default - should be shown by clicking the menu button */
+    visibility: hidden;
+    display: none;
 
-		#docs-sidebar-std-nav {
-			padding: $phone-sidebar-padding;
-			margin: $phone-sidebar-margin;
-		}
+    #docs-sidebar-std-nav {
+      padding: $phone-sidebar-padding;
+      margin: $phone-sidebar-margin;
+    }
 
-		&.visible {
-			visibility: visible;
-			display: block;
+    &.visible {
+      visibility: visible;
+      display: block;
 
-			& > #docs-sidebar-nav > #docs-sidebar-std-nav {
-				/* Slide-in animation */
-				position: relative;
-				animation: animate_left 0.4s;
-				@keyframes animate_left {
-					from {
-						left: -100vw;
-						opacity: 0;
-					}
-					to {
-						left: 0;
-						opacity: 1;
-					}
-				}
-			}
-		}
+      & > #docs-sidebar-nav > #docs-sidebar-std-nav {
+        /* Slide-in animation */
+        position: relative;
+        animation: animate_left 0.4s;
+        @keyframes animate_left {
+          from {
+            left: -100vw;
+            opacity: 0;
+          }
+          to {
+            left: 0;
+            opacity: 1;
+          }
+        }
+      }
+    }
 
-		&.invisible {
-			visibility: hidden;
-			display: none;
-		}
-	}
+    &.invisible {
+      visibility: hidden;
+      display: none;
+    }
+  }
 
-	#docs-sidebar-nav > nav.phone-docs-nav,
-	#docs-page-content-wrapper > nav.phone-docs-nav {
-		visibility: visible;
-		display: flex;
-		padding: 0.8rem 1.6rem;
+  #docs-sidebar-nav > nav.phone-docs-nav,
+  #docs-page-content-wrapper > nav.phone-docs-nav {
+    visibility: visible;
+    display: flex;
+    padding: 0.8rem 1.6rem;
 
-		/* Bottom separation border */
-		border-bottom: 1px solid rgb(var(--scheme-dark-gray-rgb), 0.4);
+    /* Bottom separation border */
+    border-bottom: 1px solid rgb(var(--scheme-dark-gray-rgb), 0.4);
 
-		ul {
-			display: flex;
-			flex-direction: row;
-			column-gap: 0.5rem;
-			list-style: none;
-			margin: 0;
-			padding: 0;
+    ul {
+      display: flex;
+      flex-direction: row;
+      column-gap: 0.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
 
-			@mixin li-item {
-				padding: 0;
-				margin: 0;
-				font-size: 1.2rem;
-				font-weight: 500;
+      @mixin li-item {
+        padding: 0;
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
 
-				&,
-				&:active,
-				&:visited {
-					color: unset; /* Should not have the default link color */
-					text-decoration: none;
-				}
+        &, &:active, &:visited {
+          color: unset; /* Should not have the default link color */
+          text-decoration: none;
+        }
 
-				&:hover {
-					text-decoration: none;
-					color: $scheme-primary;
-				}
-			}
+        &:hover {
+          text-decoration: none;
+          color: $scheme-primary;
+        }
+      }
 
-			li > ul.phone-docs-nav-path {
-				li a.docs-page-header-path-item,
-				li a.docs-page-header-kipper-version {
-					@include li-item;
+      li > ul.phone-docs-nav-path {
+        li a.docs-page-header-path-item,
+        li a.docs-page-header-kipper-version {
+          @include li-item;
 
-					height: 100%;
-					align-content: center;
-					display: flex;
-				}
+          height: 100%;
+          align-content: center;
+          display: flex;
+        }
 
-				:first-child:is(li) > a.docs-page-header-kipper-version {
-					@include li-item;
+        :first-child:is(li) > a.docs-page-header-kipper-version {
+          @include li-item;
 
-					&,
-					&:active,
-					&:visited {
-						color: $scheme-dark-gray;
-					}
+          &, &:active, &:visited {
+            color: $scheme-dark-gray;
+          }
 
-					&:hover {
-						color: $scheme-primary;
-					}
-				}
-			}
+          &:hover {
+            color: $scheme-primary;
+          }
+        }
+      }
 
-			li.phone-docs-nav-bars-menu-toggle {
-				@include li-item;
-				padding-right: 0.5rem;
-				cursor: pointer;
-			}
-		}
-	}
+      li.phone-docs-nav-bars-menu-toggle {
+        @include li-item;
+        padding-right: 0.5rem;
+        cursor: pointer;
+      }
+    }
+  }
 
-	#docs-page-content-wrapper {
+  #docs-page-content-wrapper {
 		width: $phone-content-width;
 		padding: $phone-docs-padding;
 		margin: $phone-docs-margin;
@@ -504,44 +498,44 @@ nav.phone-docs-nav {
 		align-content: center;
 		justify-content: center;
 
-		& > section#docs-content {
-			margin: $default-section-margin;
-			width: calc($phone-content-width - $default-section-margin * 2);
+    & > section#docs-content {
+      margin: $default-section-margin;
+      width: calc($phone-content-width - $default-section-margin * 2);
 			padding: inherit;
 			box-shadow: none;
 			border-radius: unset;
 
-			/*
+      /*
         Show the phone docs nav instead of the desktop/tablet path indicator,
         as the sidebar is not per default shown
       */
-			ul#docs-nav-current-page-path {
-				visibility: hidden;
-				display: none;
-			}
+      ul#docs-nav-current-page-path {
+        visibility: hidden;
+        display: none;
+      }
 
-			nav#docs-page-header {
-				/* Make the path and the github edit button be underneath each other */
-				flex-direction: column;
+      nav#docs-page-header {
+        /* Make the path and the github edit button be underneath each other */
+        flex-direction: column;
 
-				#edit-page-on-github {
-					font-size: 1.2rem;
-				}
+        #edit-page-on-github {
+          font-size: 1.2rem;
+        }
 
-				& > ul {
-					margin-bottom: 0.5rem;
-				}
-			}
+        & > ul {
+          margin-bottom: 0.5rem;
+        }
+      }
 		}
 
-		&.visible {
-			visibility: visible;
-			display: flex;
-		}
+    &.visible {
+      visibility: visible;
+      display: flex;
+    }
 
-		&.invisible {
-			visibility: hidden;
-			display: none;
-		}
+    &.invisible {
+      visibility: hidden;
+      display: none;
+    }
 	}
 }
