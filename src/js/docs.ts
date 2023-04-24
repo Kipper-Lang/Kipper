@@ -65,7 +65,7 @@ function dropdownButtonHandler(dirElement: HTMLParagraphElement): void {
 			contentOfDir.style.visibility = "hidden";
 			contentOfDir.style.display = "none";
 			caretDown.style.rotate = "-90deg";
-			caretDown.style.top = "-1px";
+			caretDown.style.top = "1px";
 		} else {
 			/* Show dropdown */
 			contentOfDir.style.visibility = "visible";
@@ -80,7 +80,7 @@ function toggleVisibilityOfSidebarNav(): void {
 	const isVisible = window.getComputedStyle(docsSidebarNav).visibility === "visible";
 	if (isVisible) {
 		// Make the docs sidebar nav invisible
-		docsSidebarNav.classList.remove("visible");
+		docsSidebarNav.classList.remove("visibleh");
 		docsSidebarNav.classList.add("invisible");
 
 		// Make the docs content wrapper visible

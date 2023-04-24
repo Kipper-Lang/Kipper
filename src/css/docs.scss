@@ -199,31 +199,30 @@
             padding: 0.25rem 1rem 0.25rem $left-nav-list-item-padding;
             text-align: left;
             line-height: 1.5;
-
-            .fa-caret-down {
-              width: 11px;
-            }
           }
 
           & > button {
             & > i.fa-caret-down {
               /* Closed dropdown */
+              position: relative;
               rotate: -90deg;
               padding: 0;
-              top: -1px;
-              transition: rotate 0.4s ease 0s;
+              top: 1px;
+
+              /* Smooth the rotation with a transition */
+              transition: all 0.4s ease-in-out;
             }
 
             & > span {
-              padding-left: 4.5px;
+              padding-left: 8px;
             }
           }
 
           &.selected-page-sidebar-nav-header > button {
             & > i.fa-caret-down {
               /* Rotating the caret so it shows the dropdown is open */
-              rotate: 0deg;
               position: relative;
+              rotate: 0deg;
               padding: 0;
               top: 0;
             }
