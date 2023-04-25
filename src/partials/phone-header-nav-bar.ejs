@@ -1,5 +1,5 @@
 <nav id="phone-header-nav-bar">
-    <div id="phone-header-primary-content">
+    <ul id="phone-header-primary-content"  class="no-style-list">
         <!-- Kipper logo + version identifier -->
         <%- include('./logo-header', { rootDir: rootDir, latestVersion: latestVersion }) %>
 
@@ -7,13 +7,13 @@
         Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
         Additionally, the search bar is shown in the dropdown menu.
         -->
-        <li class="phone-docs-nav-bars-menu-toggle">
+        <li class="phone-header-nav-bar-menu-toggle">
             <i class="fa-solid fa-bars"></i>
         </li>
-    </div>
+    </ul>
 
     <!-- Dropdown menu -->
-    <ul id="phone-header-dropdown" class="no-style-list">
+    <ul id="phone-header-nav-bar-menu" class="no-style-list">
         <li>
             <ul id="phone-header-dropdown-urls" class="no-style-list">
                 <!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
@@ -34,7 +34,7 @@
         </li>
         <li>
             <!-- Search bar -->
-            <%- include('./search-bar') %>
+            <%- include('./search-bar', { searchBarId: "phone-search-bar" }) %>
         </li>
     </ul>
 </nav>

@@ -2,69 +2,23 @@
 @use "./foundation/var" as *;
 
 /* Per default hide the phone header nav bar */
-#phone-header-nav-bar {
+nav#phone-header-nav-bar {
 	display: none;
 	visibility: hidden;
-}
-
-@media screen and (min-width: $large-screen-size) {
-	$search-bar-size: 14vw;
-	$search-bar-size-expanded: 22vw;
-
-	#search-bar-wrapper > ul > #search-bar > #search-bar-input {
-		width: $search-bar-size;
-		max-width: $search-bar-size;
-		transition: width 0.5s ease-in-out;
-
-		&:focus {
-			width: $search-bar-size-expanded;
-			max-width: $search-bar-size-expanded;
-		}
-	}
-
-	#header-nav-bar {
-		padding-right: 2rem;
-		padding-left: 2rem;
-	}
-}
-
-@media screen and (max-width: $large-screen-size) {
-	$search-bar-size: 10vw;
-	$search-bar-size-expanded: 16vw;
-
-	#header-nav-bar {
-		padding-right: 1rem;
-		padding-left: 1rem;
-	}
-
-	/* Disable animation for screens that are too small */
-	#search-bar-wrapper > ul > #search-bar > #search-bar-input {
-		width: $search-bar-size-expanded;
-	}
-}
-
-@media screen and (max-width: $small-screen-size) {
- 	#phone-header-nav-bar {
-		display: flex;
-		visibility: visible;
-		justify-content: space-between;
-		padding-right: 1rem;
-		padding-left: 1rem;
-	}
 }
 
 #page-header {
 	clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
 }
 
-@media screen and (max-width: 780px) {
+@media screen and (max-width: $medium-screen-size) {
 	#header-nav-bar {
 		padding-right: 0.5rem;
 		padding-left: 0.5rem;
 	}
 }
 
-@media screen and (min-width: 780px) {
+@media screen and (min-width: $medium-screen-size) {
 	#header-nav-bar {
 		padding-right: 2rem;
 		padding-left: 2rem;
@@ -95,11 +49,6 @@
 		}
 	}
 
-	#kipper-logo {
-		height: 4rem;
-		margin-right: 0.5rem;
-	}
-
 	ul {
 		list-style-type: none;
 		margin: 0;
@@ -108,48 +57,6 @@
 		flex-direction: row;
 		overflow: hidden;
 	}
-
-	li {
-		float: left;
-		display: inherit;
-		justify-content: center;
-		align-items: center;
-		flex-shrink: inherit;
-
-		a,
-		h1 {
-			color: white;
-			text-align: center;
-			text-decoration: none;
-		}
-	}
-
-	.version-identifier {
-		display: flex;
-		align-items: flex-start;
-		justify-content: flex-start;
-
-		& > small {
-			font-family: "Noto Sans", "Inter", Georgia, Verdana, serif;
-			font-size: 14px !important;
-			line-height: 18px !important;
-			padding-left: 0.4rem;
-			margin-top: -12px;
-			text-decoration: none;
-			letter-spacing: -0.01em;
-			color: rgba(255, 255, 255, 0.8);
-			transition: ease-in-out 300ms;
-
-			&:hover {
-				color: white;
-			}
-		}
-	}
-
-	.kipper-logo-identifier h1 {
-		font-size: 28px;
-		line-height: 34px;
-	}
 }
 
 .underline-button.selected-nav-page::before {
@@ -157,8 +64,8 @@
 	background-color: transparent !important;
 }
 
-/* Search Bar */
-#search-bar-wrapper {
+/* Search Bar - Default presets */
+.search-bar-wrapper {
 	display: flex;
 	flex-grow: 1;
 	flex-direction: row;
@@ -173,14 +80,14 @@
 		box-shadow: rgba(9, 30, 66, 0.25) 0 4px 8px -2px, rgba(9, 30, 66, 0.08) 0 0 0 1px;
 		flex-direction: row;
 
-		#search-bar {
+		.search-bar {
 			display: flex;
 			flex-direction: row;
 			justify-content: right;
 			align-items: end;
 			align-content: end;
 
-			#search-bar-input {
+			.search-bar-input {
 				background-color: white;
 				color: $scheme-primary;
 				border: none;
@@ -190,10 +97,6 @@
 				overflow-wrap: break-word;
 				word-wrap: break-word; /* For IE */
 			}
-		}
-
-		#search-icon {
-			margin-left: 0.5rem;
 		}
 	}
 }
@@ -219,4 +122,229 @@
 			}
 		}
 	}
+}
+
+/* Styling for both desktop and phone nav bar */
+nav#header-nav-bar,
+nav#phone-header-nav-bar {
+  ul#std-header-primary-content,
+  ul#phone-header-primary-content {
+    & > li {
+      float: left;
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: inherit;
+
+      a,
+      h1 {
+        color: white;
+        text-align: center;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .version-identifier {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    & > small {
+      font-size: 14px;
+      line-height: 18px;
+      padding-left: 0.4rem;
+      margin-top: -12px;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.8);
+      transition: ease-in-out 300ms;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+
+  /* The search bar styling for all screens */
+  div.search-bar-wrapper > ul {
+    padding-right: 0.5rem;
+
+    .search-icon-wrapper {
+      float: left;
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-icon {
+      margin-left: 0.5rem;
+    }
+
+    .search-bar {
+      &, .search-bar-input {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
+/* Only tablets and desktops are targeted with this */
+@media screen and (min-width: $large-screen-size) {
+  $search-bar-size: 14vw;
+  $search-bar-size-expanded: 22vw;
+
+  .search-bar-wrapper > ul > li.search-bar > .search-bar-input {
+    width: $search-bar-size;
+    max-width: $search-bar-size;
+    transition: width 0.5s ease-in-out;
+
+    &:focus {
+      width: $search-bar-size-expanded;
+      max-width: $search-bar-size-expanded;
+    }
+  }
+
+  #header-nav-bar {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+}
+
+/* For small and middle-sized screens */
+@media screen and (max-width: $large-screen-size) {
+  $search-bar-size: 10vw;
+  $search-bar-size-expanded: 16vw;
+
+  #header-nav-bar {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  /* Disable animation for screens that are too small */
+  .search-bar-wrapper > ul > .search-bar > .search-bar-input {
+    width: $search-bar-size-expanded;
+  }
+}
+
+@media screen and (max-width: $small-screen-size) {
+  #header-nav-bar {
+    display: none;
+    visibility: hidden;
+  }
+
+  nav#phone-header-nav-bar {
+    display: flex;
+    visibility: visible;
+    flex-direction: column;
+    justify-content: space-between;
+
+    ul#phone-header-primary-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      align-content: center;
+      z-index: 1;
+
+      li.kipper-version-and-logo {
+        display: flex;
+        flex-direction: row;
+      }
+
+      li.phone-header-nav-bar-menu-toggle {
+        & > .fa-bars {
+          font-size: 1.5rem;
+          color: white;
+        }
+      }
+    }
+
+    ul#phone-header-nav-bar-menu {
+      padding: 0.5rem 0 1rem 0;
+
+      /* Hide per default */
+      display: none;
+      visibility: hidden;
+
+      #phone-header-dropdown-urls {
+        :first-child:is(li) {
+          border-top: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        li {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+
+          &:hover {
+            background-color: rgba(var(--scheme-primary-rgb), 0.8);
+          }
+        }
+      }
+
+      .top-nav-button.underline-button {
+        &:hover {
+          /* !important as the buttons have a higher specificity - needs to be overwritten */
+          color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        &::before {
+          content: none;
+          display: none;
+          visibility: hidden;
+          color: transparent;
+          transform: none;
+        }
+      }
+
+      &.visible {
+        visibility: visible;
+        display: block;
+        z-index: 0;
+
+        /* Slide-in animation */
+        position: relative;
+        animation: animate_top 0.4s;
+        @keyframes animate_top {
+          from {
+            top: -20rem;
+            opacity: 0;
+          }
+          to {
+            top: 0;
+            opacity: 1;
+          }
+        }
+      }
+
+      &.invisible {
+        visibility: hidden;
+        display: none;
+      }
+    }
+
+    .search-bar-wrapper {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+
+      ul {
+        display: flex;
+        width: 60%;
+        min-width: 20rem;
+      }
+    }
+  }
+
+  #primary-page-header {
+    /* Remove the background color - this is to make the animation of the children look better */
+    background-color: transparent;
+  }
+
+  /* Setting the background color and padding independently for the animation */
+  #phone-header-primary-content,
+  #phone-header-nav-bar-menu {
+    background-color: $scheme-primary;
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+  }
 }

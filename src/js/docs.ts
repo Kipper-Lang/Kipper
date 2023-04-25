@@ -16,7 +16,7 @@ const docsSidebarNav: HTMLDivElement = document.querySelector("#docs-sidebar-nav
 const docsContentWrapper: HTMLDivElement = document.querySelector("#docs-page-content-wrapper");
 
 // Phone menu toggle
-const phoneMenuToggle = <NodeList>document.querySelectorAll(".phone-docs-nav-bars-menu-toggle");
+const phoneMenuToggle = <NodeList>document.querySelectorAll(".phone-docs-nav-bar-menu-toggle");
 
 /**
  * Disables the visibility of the dropdown menu.
@@ -80,10 +80,10 @@ function toggleVisibilityOfSidebarNav(): void {
 	const isVisible = window.getComputedStyle(docsSidebarNav).visibility === "visible";
 	if (isVisible) {
 		// Make the docs sidebar nav invisible
-		docsSidebarNav.classList.remove("visibleh");
+		docsSidebarNav.classList.remove("visible");
 		docsSidebarNav.classList.add("invisible");
 
-		// Make the docs content wrapper visible
+		// Make the docs content wrapper visible - class for handling the animation
 		docsContentWrapper.classList.add("visible");
 		docsContentWrapper.classList.remove("invisible");
 	} else {
@@ -91,7 +91,7 @@ function toggleVisibilityOfSidebarNav(): void {
 		docsSidebarNav.classList.add("visible");
 		docsSidebarNav.classList.remove("invisible");
 
-		// Make the docs content wrapper invisible
+		// Make the docs content wrapper invisible - removing the animation class
 		docsContentWrapper.classList.add("invisible");
 		docsContentWrapper.classList.remove("visible");
 	}

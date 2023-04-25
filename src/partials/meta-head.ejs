@@ -30,7 +30,6 @@ let displayTitle = (typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` :
 
 <!-- Loading the main stylesheets -->
 <link rel="stylesheet" href="<%= rootDir %>/css/main.scss" />
-<link rel="stylesheet" href="<%= rootDir %>/css/footer.scss" />
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_screen.scss" />
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_button.scss" />
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_text.scss" />
@@ -38,12 +37,17 @@ let displayTitle = (typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` :
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_table.scss" />
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_logo.scss" />
 <link rel="stylesheet" href="<%= rootDir %>/css/foundation/_spinner.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/nav-bar.scss" />
+<link rel="stylesheet" href="<%= rootDir %>/css/footer.scss" />
 
 <!-- Loading the prism highlighting style-sheet -->
 <link rel="stylesheet" href="<%= rootDir %>/prism/prism.css" />
 
 <!-- Font Awesome Icons -->
 <script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+<!-- Phone header nav bar functionality script -->
+<script defer src="<%= rootDir %>/js/header-nav.ts"></script>
 
 <!-- Including stylesheet for the Inter-Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
