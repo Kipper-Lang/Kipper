@@ -9,7 +9,7 @@ const pages = {
 
 <header id="primary-page-header" class="page-header">
     <nav id="header-nav-bar">
-        <ul>
+        <ul id="std-header-primary-content">
             <!-- Kipper logo + version identifier -->
             <%- include('./logo-header', { rootDir: rootDir, latestVersion: latestVersion }) %>
 
@@ -28,7 +28,7 @@ const pages = {
                 </li>
             <% } %>
         </ul>
-         <%- include('./search-bar') %>
+        <%- include('./search-bar', { searchBarId: "std-search-bar" }) %>
     </nav>
 
     <!-- Per default invisible phone nav bar, which is shown on smaller screens -->
