@@ -5,6 +5,7 @@
 <html lang="en">
 <head>
     <%- include('./partials/meta-head', { title: title, description: description }) %>
+    <link rel="stylesheet" href="<%= rootDir %>/css/home.scss" />
 </head>
 <body>
 <script src="./js/plugins.ts"></script>
@@ -27,9 +28,9 @@
                             <p id="welcome-description">
                                 The new customisable and easy to use type-safe language for the web and Node.js!
                             </p>
-                            <p class="flex-parent-container flex-row flex-start">
+                            <p id="welcome-buttons" class="flex-parent-container flex-row flex-start">
                                 <a href="./playground.html" class="button"> Try our Playground </a>
-                                <a href="./docs/index.html" class="inverted-button"> View the Kipper docs </a>
+                                <a href="./docs/index.html" class="inverted-button"> View the Docs </a>
                             </p>
                         </section>
                     </li>

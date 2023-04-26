@@ -11,20 +11,6 @@ nav#phone-header-nav-bar {
 	clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
 }
 
-@media screen and (max-width: $medium-screen-size) {
-	#header-nav-bar {
-		padding-right: 0.5rem;
-		padding-left: 0.5rem;
-	}
-}
-
-@media screen and (min-width: $medium-screen-size) {
-	#header-nav-bar {
-		padding-right: 2rem;
-		padding-left: 2rem;
-	}
-}
-
 #header-description-content #page-header h1 {
 	margin-top: 1rem;
 }
@@ -227,7 +213,14 @@ nav#phone-header-nav-bar {
   }
 }
 
-@media screen and (max-width: $small-screen-size) {
+@media screen and (min-width: $medium-screen-size) {
+  #header-nav-bar {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+}
+
+@media screen and (max-width: $medium-screen-size) {
   #header-nav-bar {
     display: none;
     visibility: hidden;
@@ -253,6 +246,15 @@ nav#phone-header-nav-bar {
       }
 
       li.phone-header-nav-bar-menu-toggle {
+        &:hover {
+          cursor: pointer;
+
+          & > .fa-bars {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.24s ease;
+          }
+        }
+
         & > .fa-bars {
           font-size: 1.5rem;
           color: white;
