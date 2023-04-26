@@ -4,25 +4,14 @@
 @use "./foundation/text" as *;
 
 @media screen and (min-width: $medium-screen-size) {
-	#docs-page-content-wrapper {
-		width: 50vw;
-		padding: 4vw 4vw 4vw 6vw;
-	}
+  #docs-page-content-wrapper {
+    width: 50vw;
+    padding: 4vw 4vw 4vw 6vw;
+  }
 
-	#docs-sidebar-nav-wrapper {
-		width: 25vw;
-	}
-}
-
-@media screen and (max-width: $medium-screen-size) {
-	#docs-page-content-wrapper {
-		width: 60vw;
-		padding: 2rem;
-	}
-
-	#docs-sidebar-nav-wrapper {
-		width: 20vw;
-	}
+  #docs-sidebar-nav-wrapper {
+    width: 25vw;
+  }
 }
 
 #docs-sidebar-nav-wrapper {
@@ -380,7 +369,7 @@ nav.phone-docs-nav { /* Mobile navigation - Both hidden in the docs sidebar and 
 }
 
 /* Phone overwrites */
-@media screen and (max-width: $small-screen-size) {
+@media screen and (max-width: $medium-screen-size) {
 	#docs-sidebar-nav-wrapper {
 		width: calc($phone-sidebar-width);
 		max-width: calc($phone-sidebar-width);
