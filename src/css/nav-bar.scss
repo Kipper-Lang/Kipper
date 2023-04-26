@@ -246,6 +246,15 @@ nav#phone-header-nav-bar {
       }
 
       li.phone-header-nav-bar-menu-toggle {
+        &:hover {
+          cursor: pointer;
+
+          & > .fa-bars {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.24s ease;
+          }
+        }
+
         & > .fa-bars {
           font-size: 1.5rem;
           color: white;
