@@ -286,3 +286,20 @@ pre[class*="language-"] {
 	text-emphasis: none;
 	color: $scheme-primary;
 }
+
+/* Shadowed text content should not take up 100% of the space - slight margins needed */
+@media screen and (min-width: $medium-screen-size) {
+  .text-content {
+    max-width: 92vw;
+  }
+}
+
+/* Make shadow boxes better viewable on phones */
+@media screen and (max-width: $medium-screen-size) {
+  .shadowed-box {
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
