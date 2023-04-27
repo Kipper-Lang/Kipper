@@ -37,6 +37,7 @@ to be used inside a program. Expression statements will be explained further in 
 
 The following table shows all valid operators and expressions in the Kipper language, with their respective precedence. The higher the precedence the higher the importance of the item, and the order of evaluation.
 
+<div class="table-wrapper">
 <table>
 <colgroup>
   <col />
@@ -186,6 +187,7 @@ The following table shows all valid operators and expressions in the Kipper lang
   </tr>
 </tbody>
 </table>
+</div>
 
 ## How does precedence of operators and expressions affect a program?
 
