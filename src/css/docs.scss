@@ -380,6 +380,9 @@ nav.phone-docs-nav { /* Mobile navigation - Both hidden in the docs sidebar and 
     visibility: hidden;
     display: none;
 
+    /* Remove sidebar border */
+    border-right: none;
+
     #docs-sidebar-std-nav {
       padding: $phone-sidebar-padding;
       margin: $phone-sidebar-margin;
@@ -420,6 +423,13 @@ nav.phone-docs-nav { /* Mobile navigation - Both hidden in the docs sidebar and 
 
     /* Bottom separation border */
     border-bottom: 1px solid rgb(var(--scheme-dark-gray-rgb), 0.4);
+
+    /* Make the navigation scrollable, if the path is too long */
+    overflow: hidden;
+    overflow-x: scroll;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: nowrap;
 
     ul {
       display: flex;
