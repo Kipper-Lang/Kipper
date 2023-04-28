@@ -2,7 +2,7 @@
 title: Overview
 dropdownTitle: Kipper API
 nav:
--	index.md
+- index.md
 - compiler-setup.md
 - module/
 - cli/
