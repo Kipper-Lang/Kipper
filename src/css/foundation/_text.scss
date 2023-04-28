@@ -267,6 +267,12 @@ pre[class*="language-"] {
 	}
 }
 
+.code-toolbar > .toolbar {
+  .copy-to-clipboard-button:hover {
+    cursor: pointer;
+  }
+}
+
 /* Overwrite unfitting coloring */
 .language-css .token.string,
 .style .token.string,

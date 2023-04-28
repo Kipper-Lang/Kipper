@@ -6,7 +6,7 @@ As this is not in the docs, it does not have the same build process, but will st
 ## Overview
 
 - [Installing the NPM module](#installing-the-npm-module)
-- [Including the Web bundle](#including-the-web-bundle)
+- [Including the Web Bundle](#including-the-web-bundle)
 - [Download Source Code](#download-source-code)
 
 ## Installing the NPM module
@@ -67,7 +67,7 @@ kipper/0.8.1 win32-x64 node-v16.13.0
   <pre><code class="language-bash">yarn kipper</code></pre>
 </div>
 
-## Including the Web bundle
+## Including the Web Bundle
 
 If you want to use Kipper inside your browser, then you can include the browser-standalone version of Kipper into
 your HTML file with the following script tag:
@@ -96,6 +96,7 @@ Quickstart guide.
 
 &lt;!-- Kipper --&gt;
 &lt;script src="https://cdn.jsdelivr.net/npm/@kipper/core@0.9.2/kipper-standalone.min.js"&gt;&lt;/script&gt;</code></pre>
+
   <p>
   This was changed with the release of
   <a href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.10.0">v0.10.0</a>,

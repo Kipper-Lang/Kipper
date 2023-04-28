@@ -261,19 +261,26 @@ nav.phone-docs-nav {
 			margin-bottom: 1rem;
 		}
 
+    ul,
+    ol {
+      & > li:last-child:is(.code-toolbar) {
+        margin-bottom: 1rem;
+      }
+    }
+
 		p,
 		div {
 			& + p,
       & + div:not(.code-toolbar, .toolbar, .toolbar-item), /* Avoid affecting Prism toolbar */
-      & + div.code-toolbar pre[class*="language-"] {
+      & + div.code-toolbar > pre[class*="language-"] {
 				margin: $default-paragraph-margin 0 0 0;
 			}
 		}
 
-		div:last-child,
-		article:last-child {
+		& > div:last-child,
+		& > article:last-child {
 			&,
-			& div.code-toolbar pre[class*="language-"] {
+			&:is(div).code-toolbar > pre[class*="language-"] {
 				margin-bottom: 0 !important;
 			}
 		}

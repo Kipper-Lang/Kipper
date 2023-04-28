@@ -60,8 +60,10 @@ different code, which may be specified inside an `else` code block.
 They must have a single starting `if`, may have multiple extending `else if` branches and can have a single ending `else` branch, which is evaluated if the previous condition were all `false`.
 
 ```ts
-if (CONDITION) STATEMENT; // Required
-else if (CONDITION) STATEMENT; // Optional - No limit for the amount of 'else if' branches
+if (CONDITION) STATEMENT;
+// Required
+else if (CONDITION) STATEMENT;
+// Optional - No limit for the amount of 'else if' branches
 else STATEMENT; // Optional
 ```
 

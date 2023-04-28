@@ -6,7 +6,7 @@ nav:
   - ./goals-and-roadmap.md
   - ./supported-platforms.md
   - ./usage-examples.md
-  - ./compiler.md
+  - ./api/
   - ./variables.md
   - ./datatypes/
   - ./expressions/
@@ -22,7 +22,7 @@ This is the in-depth documentation and API reference for the Kipper programming 
 explain the implementation, functionality and details for Kipper.
 
 <div class="important">
-<p>Please note that due to active development, these docs are still not fully up-to-date and may show v0.9.2 
+<p>Please note that due to active development, these docs are still not fully up-to-date and may show v0.9.2
 information.</p>
 <p>This should be changed during the time frame of April 2023.</p>
 </div>
