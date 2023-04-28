@@ -10,9 +10,9 @@ nav:
 
 # Kipper Compiler API
 
-The Compiler API of Kipper enables you to interact with the core compiler, which is the core element
-of the language that can compile your program code into TypeScript or JavaScript, as well as generate the required overhead for your
-programs.
+The Compiler API of Kipper enables you to interact with the primary language compiler, which is the core element
+of Kipper that translates your program code into TypeScript or JavaScript, as well as generates the required
+overhead for your target environment.
 
 This API is per default shipped with the `@kipper/core` package and the `kipper-standalone.js` file, or wrapped using
 flags with the CLI provided by the `@kipper/cli` package.
