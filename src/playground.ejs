@@ -8,12 +8,10 @@
     <link rel="stylesheet" href="<%= rootDir %>/prism/shades-of-purple.css" />
 </head>
 <body>
-<script src="./js/plugins.ts"></script>
-<script src="./prism/prism.js"></script>
-<script defer type="module" src="<%= rootDir %>/js/playground.ts"></script>
+<%- include('./partials/default-body-top', { rootDir: rootDir }) %>
 
-<!-- Show Error if JS is disabled or blocked -->
-<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
+<!-- Playground Scripts -->
+<script defer type="module" src="<%= rootDir %>/js/playground.ts"></script>
 
 <div id="main-frame">
     <div id="actual-content">

@@ -20,7 +20,7 @@ ol {
 }
 
 li {
-	#markdown-content & + & {
+	.markdown-content & + & {
 		margin-top: 0.25em;
 	}
 }

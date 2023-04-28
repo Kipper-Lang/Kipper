@@ -101,13 +101,13 @@ h6,
 		margin-top: 1.2em;
 	}
 
-	#markdown-content div &:first-child {
+	.markdown-content div &:first-child {
 		margin-top: 0;
 	}
 
 	.red-highlight-text &,
 	.important & {
-		#markdown-content &:first-child,
+		.markdown-content &:first-child,
 		article &:first-child,
 		section &:first-child {
 			margin-top: 0;
@@ -253,7 +253,7 @@ h6,
 }
 
 pre[class*="language-"] {
-	margin: 1em 0;
+  margin: 1em 0;
 	padding: 1em;
 	overflow: auto;
 	border-radius: $default-border-radius;
@@ -289,17 +289,17 @@ pre[class*="language-"] {
 
 /* Shadowed text content should not take up 100% of the space - slight margins needed */
 @media screen and (min-width: $medium-screen-size) {
-  .text-content {
-    max-width: 92vw;
-  }
+	.text-content {
+		max-width: 92vw;
+	}
 }
 
 /* Make shadow boxes better viewable on phones */
 @media screen and (max-width: $medium-screen-size) {
-  .shadowed-box {
-    margin: 0;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
+	.shadowed-box {
+		margin: 0;
+		padding: 0;
+		border-radius: 0;
+		box-shadow: none;
+	}
 }

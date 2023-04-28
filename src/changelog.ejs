@@ -9,12 +9,7 @@
     <link rel="stylesheet" href="./css/changelog.scss" />
 </head>
 <body>
-<script src="./js/plugins.ts"></script>
-<script src="./js/markdown.ts"></script>
-<script src="./prism/prism.js"></script>
-
-<!-- Show Error if JS is disabled or blocked -->
-<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
+<%- include('./partials/default-body-top', { rootDir: rootDir }) %>
 
 <div id="main-frame">
     <div id="actual-content">
@@ -44,7 +39,7 @@
                         });
                     </script>
                     <!-- Markdown will be added here -->
-                    <article id="markdown-content"></article>
+                    <article class="markdown-content"></article>
                 </section>
             </div>
         </div>

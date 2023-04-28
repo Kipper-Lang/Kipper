@@ -8,11 +8,8 @@
     <link rel="stylesheet" href="<%= rootDir %>/css/home.scss" />
 </head>
 <body>
-<script src="./js/plugins.ts"></script>
-<script src="./prism/prism.js"></script>
+<%- include('./partials/default-body-top', { rootDir: rootDir }) %>
 
-<!-- Show Error if JS is disabled or blocked -->
-<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our Site!</noscript>
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->

@@ -80,7 +80,9 @@ export class DocsBuilder {
 
 	public constructor(docsEJSTemplate: string) {
 		// Create new converted - Note: Extension 'line-numbers' is disabled for now
-		this.converter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
+		this.converter = new showdown.Converter(
+      { metadata: true /* extensions: ['line-numbers'] } */ }
+    );
 
 		// Get base Docs template
 		this.baseTemplate = path.resolve(docsEJSTemplate);
@@ -116,13 +118,13 @@ export class DocsBuilder {
 	 * Renders the EJS file with the passed data and the generated HTML from the Markdown file.
 	 * @param markdownHtml The generated HTML from the Markdown file that should be inserted into
 	 * the EJS {@link this.baseTemplate base template}.
+   * @param fileMetadata The metadata of the Markdown file.
 	 * @param data The data to pass to the EJS renderer.
 	 * @private
 	 */
-	private async renderEJSFile(markdownHtml: string, data: Record<string, any>): Promise<string> {
-		// File metadata which can be set inside the file and can overwrite the file defaults
-		const fileMetadata = this.getMetadataOfLastFile();
-
+	private async renderEJSFile(
+    markdownHtml: string, fileMetadata: showdown.Metadata, data: Record<string, any>
+  ): Promise<string> {
 		// Set markdown content to the generated HTML and render it again if there are any ejs tags
 		data["markdownContent"] = ejs.render(markdownHtml, data, ejsOptions);
 
@@ -195,9 +197,10 @@ export class DocsBuilder {
 
 		// Convert markdown to HTML
 		const html = await this.renderMarkdownFile(pathSrc);
+    const fileMetadata = this.getMetadataOfLastFile();
 
 		// Build ejs file
-		const result: string = await this.renderEJSFile(html, itemData);
+		const result: string = await this.renderEJSFile(html, fileMetadata, itemData);
 		await fs.writeFile(pathDest, result);
 	}
 

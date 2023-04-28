@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="<%= rootDir %>/css/docs.scss" />
 </head>
 <body>
-<script src="<%= rootDir %>/js/plugins.ts"></script>
-<script src="<%= rootDir %>/js/markdown.ts"></script>
-<script src="<%= rootDir %>/prism/prism.js"></script>
+<%- include('../default-body-top', { rootDir: rootDir }) %>
+
+<!-- Docs specific scripts -->
 <script defer type="module" src="<%= rootDir %>/js/docs.ts"></script>
 
 <% let docsRoot = `${rootDir}/docs`; %>
@@ -73,7 +73,7 @@
                                 <p>Edit page</p>
                             </a>
                         </nav>
-                        <article id="markdown-content">
+                        <article class="markdown-content">
                             <%- markdownContent %>
                         </article>
                     </section>

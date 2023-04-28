@@ -1,12 +1,12 @@
 import {
-	AbsolutePath,
-	DocumentMetaData,
-	FileOrDirName,
-	Path,
-	RelativeDocsURLPath,
-	RelativePath,
-	URLPath,
-	WebURLPath,
+  AbsolutePath,
+  DocumentMetaData,
+  FileOrDirName,
+  Path,
+  RelativeDocsURLPath,
+  RelativePath, SimplePath,
+  URLPath,
+  WebURLPath
 } from "./base-types";
 import * as path from "path";
 import { destRootDir, ejsOptions, srcRootDir, srcRootDocs } from "./const-config";
@@ -14,6 +14,7 @@ import { existsSync, statSync } from "fs";
 import fetch from "node-fetch";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
+import * as showdown from "showdown";
 
 /**
  * Ensures that the given URL does not use Windows-style slashes and has URL-conforming slashes.
@@ -181,13 +182,29 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
+  // Content of the root src folder
 	const result: Array<FileOrDirName> = await fs.readdir(src);
+
+  // First get all the markdown files and add them to a list
+  const mdFiles: Array<SimplePath> = [];
+  for (let file of result) {
+    if (file.endsWith(".md")) {
+      mdFiles.push(file);
+    }
+  }
+
+  // The converter for the markdown files
+  const markdownConverter =  new showdown.Converter(
+    { metadata: true /* extensions: ['line-numbers'] } */ }
+  );
+
+  // Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
 	for (let file of result) {
 		// If the file is an ejs file compile it to HTML
 		if (file.endsWith(".ejs")) {
 			const htmlFile: FileOrDirName = file.replace(".ejs", ".html");
-			const pathSrc: AbsolutePath = path.resolve(`${src}/${file}`);
-			const pathDest: AbsolutePath = path.resolve(`${dest}/${htmlFile}`);
+			const pathSrc: AbsolutePath = path.resolve(src, file);
+			const pathDest: AbsolutePath = path.resolve(dest, htmlFile);
 			const itemData = {
 				...data,
 				filename: htmlFile, // This should only contain the filename without any directory
@@ -196,7 +213,18 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 				isDocsFile: false,
 				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
+        markdownContent: undefined,
 			};
+
+      // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
+      // and insert it into the ejs file
+      let mdFile = mdFiles.find(
+        (mdFile) => mdFile === file.replace(".ejs", ".md")
+      );
+      if (mdFile !== undefined) {
+        const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+        itemData.markdownContent = markdownConverter.makeHtml(md);
+      }
 
 			// Build ejs file
 			const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);

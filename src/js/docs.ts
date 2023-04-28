@@ -80,7 +80,7 @@ function dropdownButtonHandler(dirElement: HTMLParagraphElement): void {
  * Returns true if the {@link docsSidebarNav} object is visible.
  */
 function sidebarIsVisible(): boolean {
-  return window.getComputedStyle(docsSidebarNav).visibility === "visible";
+	return window.getComputedStyle(docsSidebarNav).visibility === "visible";
 }
 
 /**
@@ -121,11 +121,11 @@ navDirDropdownButtons.forEach((button: HTMLParagraphElement) => {
 
 // Ensure on resizing the phone sidebar menu is closed (as it covers the whole screen only on phones)
 window.addEventListener("resize", () => {
-  if (window.innerWidth > 920 && sidebarIsVisible()) {
-    // Remove any class specific to the phone sidebar
-    docsSidebarNav.classList.remove("visible");
-    docsSidebarNav.classList.remove("invisible");
-    docsContentWrapper.classList.remove("visible");
-    docsContentWrapper.classList.remove("invisible");
-  }
+	if (window.innerWidth > 920 && sidebarIsVisible()) {
+		// Remove any class specific to the phone sidebar
+		docsSidebarNav.classList.remove("visible");
+		docsSidebarNav.classList.remove("invisible");
+		docsContentWrapper.classList.remove("visible");
+		docsContentWrapper.classList.remove("invisible");
+	}
 });

@@ -2,24 +2,24 @@
 @use "./var" as *;
 
 .table-wrapper {
-  overflow: hidden;
-  overflow-x: scroll;
+	overflow: hidden;
+	overflow-x: scroll;
 }
 
 @media screen and (max-width: $small-screen-size) {
-  /* Add small note below the table to indicate that you can scroll horizontally */
-  .table-wrapper::after {
-    content: "Scroll horizontally to see more";
-    display: block;
-    text-align: center;
-    font-size: 0.8rem;
-    color: $scheme-dark-gray;
-    margin: 0.5rem 0;
-  }
+	/* Add small note below the table to indicate that you can scroll horizontally */
+	.table-wrapper::after {
+		content: "Scroll horizontally to see more";
+		display: block;
+		text-align: center;
+		font-size: 0.8rem;
+		color: $scheme-dark-gray;
+		margin: 0.5rem 0;
+	}
 
-  .table-wrapper > table {
-    margin-bottom: 0;
-  }
+	.table-wrapper > table {
+		margin-bottom: 0;
+	}
 }
 
 table {
