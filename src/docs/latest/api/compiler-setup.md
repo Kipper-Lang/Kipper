@@ -218,9 +218,9 @@ kipper compile sample.kip
 ```
 - Simple compilation from a string (will generate `./build/anonymous-script.js`):
 ```bash
-kipper compile -s 'print("Hello world!");' 
+kipper compile -s "print('Hello world!');"
 ```
 - Generating a UTF16-encoded program, where both internals and built-in are optimised (will generate `./build/anonymous-script.js`):
 ```bash
-kipper compile -s 'print("Hello world!");' -e utf16le -i -b
+kipper compile -s "print('Hello world!');" -e utf16le -i -b
 ```
