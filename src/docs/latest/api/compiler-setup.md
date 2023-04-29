@@ -1,7 +1,5 @@
 ---
 title: Compiler Setup
-nav:
--	index.md
 ---
 
 # Setting up your compiler
