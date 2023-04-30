@@ -30,6 +30,8 @@ process.
 
 ## Overview
 
+The subsections of the Kipper Compiler API documentation:
+
 - [Compiler Setup](./compiler-setup.html)
 - [Module API](./module/index.html)
 - [CLI API](./cli/index.html)
