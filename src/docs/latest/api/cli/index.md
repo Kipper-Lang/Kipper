@@ -2,7 +2,7 @@
 title: Overview
 dropdownTitle: CLI
 nav:
--	index.md
+  - index.md
 ---
 
 # Kipper CLI API

@@ -1,12 +1,13 @@
 import {
-  AbsolutePath,
-  DocumentMetaData,
-  FileOrDirName,
-  Path,
-  RelativeDocsURLPath,
-  RelativePath, SimplePath,
-  URLPath,
-  WebURLPath
+	AbsolutePath,
+	DocumentMetaData,
+	FileOrDirName,
+	Path,
+	RelativeDocsURLPath,
+	RelativePath,
+	SimplePath,
+	URLPath,
+	WebURLPath,
 } from "./base-types";
 import * as path from "path";
 import { destRootDir, ejsOptions, srcRootDir, srcRootDocs } from "./const-config";
@@ -95,9 +96,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
 		await fs.mkdir(dest);
 	} else if (!statSync(dest).isDirectory()) {
 		throw new Error("Destination must be a directory");
-	}
-
-	if (!statSync(src).isDirectory()) {
+	} else if (!statSync(src).isDirectory()) {
 		throw new Error("Source must be a directory");
 	}
 }
@@ -152,14 +151,15 @@ export async function copyFiles(src: AbsolutePath, dest: AbsolutePath): Promise<
 	await ensureValidSrcAndDest(src, dest);
 
 	const result = await fs.readdir(src);
-	for (let file of result) {
-		// If the file is an ejs file or a partials' folder skip it, as it will be compiled into HTML
-		if (file.endsWith(".ejs") || file === "partials" || file === "docs") {
+	for (let fileOrDir of result) {
+		// If the file is an ejs file, ejs partial or in the docs, skip it as it will be compiled into HTML
+		// in a different step
+		if (fileOrDir.endsWith(".ejs") || fileOrDir === "partials" || fileOrDir === "docs") {
 			continue;
 		}
 
-		const itemSrc = `${src}/${file}`;
-		const itemDest = `${dest}/${file}`;
+		const itemSrc = `${src}/${fileOrDir}`;
+		const itemDest = `${dest}/${fileOrDir}`;
 
 		if (statSync(itemSrc).isDirectory()) {
 			if (!existsSync(itemDest)) {
@@ -182,23 +182,21 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
-  // Content of the root src folder
+	// Content of the root src folder
 	const result: Array<FileOrDirName> = await fs.readdir(src);
 
-  // First get all the markdown files and add them to a list
-  const mdFiles: Array<SimplePath> = [];
-  for (let file of result) {
-    if (file.endsWith(".md")) {
-      mdFiles.push(file);
-    }
-  }
+	// First get all the markdown files and add them to a list
+	const mdFiles: Array<SimplePath> = [];
+	for (let file of result) {
+		if (file.endsWith(".md")) {
+			mdFiles.push(file);
+		}
+	}
 
-  // The converter for the markdown files
-  const markdownConverter =  new showdown.Converter(
-    { metadata: true /* extensions: ['line-numbers'] } */ }
-  );
+	// The converter for the markdown files
+	const markdownConverter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
 
-  // Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
+	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
 	for (let file of result) {
 		// If the file is an ejs file compile it to HTML
 		if (file.endsWith(".ejs")) {
@@ -213,18 +211,16 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 				isDocsFile: false,
 				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
-        markdownContent: undefined,
+				markdownContent: undefined,
 			};
 
-      // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
-      // and insert it into the ejs file
-      let mdFile = mdFiles.find(
-        (mdFile) => mdFile === file.replace(".ejs", ".md")
-      );
-      if (mdFile !== undefined) {
-        const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
-        itemData.markdownContent = markdownConverter.makeHtml(md);
-      }
+			// If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
+			// and insert it into the ejs file
+			let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
+			if (mdFile !== undefined) {
+				const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+				itemData.markdownContent = markdownConverter.makeHtml(md);
+			}
 
 			// Build ejs file
 			const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
@@ -271,4 +267,12 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 	metaData.description = metaData.description.trim();
 
 	return metaData;
+}
+
+/**
+ * Gets the versions of the docs.
+ * @param docsSrc The source directory of the docs.
+ */
+export async function getDocsVersions(docsSrc: string): Promise<Array<string>> {
+	return await fs.readdir(docsSrc);
 }

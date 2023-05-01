@@ -2,7 +2,7 @@
 title: Overview
 dropdownTitle: Module
 nav:
--	index.md
+  - index.md
 ---
 
 # Kipper Module API

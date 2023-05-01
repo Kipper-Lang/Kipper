@@ -261,12 +261,12 @@ nav.phone-docs-nav {
 			margin-bottom: 1rem;
 		}
 
-    ul,
-    ol {
-      & > li:last-child:is(.code-toolbar) {
-        margin-bottom: 1rem;
-      }
-    }
+		ul,
+		ol {
+			& > li:last-child:is(.code-toolbar) {
+				margin-bottom: 1rem;
+			}
+		}
 
 		p,
 		div {

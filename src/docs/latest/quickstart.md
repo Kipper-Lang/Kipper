@@ -28,7 +28,6 @@ View the [support list](./supported-platforms.html) to make sure your browser is
 The following script tag will include the latest version of the Kipper Compiler for the browser:
 
 ```html
-
 <script src="https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js"></script>
 ```
 
@@ -86,20 +85,22 @@ to the browser console:
 	const compiler = new Kipper.KipperCompiler(logger, {});
 
 	// Compile the code to Typescript - With a callback
-	compiler.compile(
-		`print("Hello world!");`,
-		{ target: new KipperJS.TargetJS() }, // Configure the compiler to compile to JavaScript
-	).then(
-		(result) => {
-			const jsCode = result.write();
+	compiler
+		.compile(
+			`print("Hello world!");`,
+			{ target: new KipperJS.TargetJS() }, // Configure the compiler to compile to JavaScript
+		)
+		.then(
+			(result) => {
+				const jsCode = result.write();
 
-			// Finally, run your program
-			eval(jsCode);
-		},
-		(rejected) => {
-			console.error(rejected);
-		},
-	);
+				// Finally, run your program
+				eval(jsCode);
+			},
+			(rejected) => {
+				console.error(rejected);
+			},
+		);
 </script>
 ```
 
@@ -133,10 +134,7 @@ Example `package.json`:
 	"name": "example",
 	"version": "0.1.0",
 	"description": "An example program using Kipper",
-	"keywords": [
-		"kipper",
-		"example"
-	],
+	"keywords": ["kipper", "example"],
 	"license": "GPL-3.0",
 	"dependencies": {
 		"@kipper/cli": "latest" // <-- Add this line to your dependencies (latest version or specific version)
@@ -189,10 +187,7 @@ Example package.json:
 	"name": "example",
 	"version": "0.1.0",
 	"description": "An example program using Kipper",
-	"keywords": [
-		"kipper",
-		"example"
-	],
+	"keywords": ["kipper", "example"],
 	"license": "GPL-3.0",
 	"dependencies": {
 		"@kipper/core": "latest"
@@ -226,7 +221,7 @@ fs.readFile(path, "utf8").then(async (fileContent) => {
 	// Compile the code string or stream
 	let result = await compiler.compile(fileContent, {
 		/* Config - Target must always be specified */
-		target: kipperJS.TargetJS
+		target: kipperJS.TargetJS,
 	});
 	let jsCode = result.write();
 
@@ -253,7 +248,7 @@ fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => 
 	// Compile the code string or stream
 	let result = await compiler.compile(fileContent, {
 		/* Config - Target must always be specified */
-		target: kipperJS.TargetJS
+		target: kipperJS.TargetJS,
 	});
 	let jsCode = result.write();
 
