@@ -242,7 +242,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 		await ensureValidSrcAndDest(versionSrc, versionDest);
 
 		// If the version is 'latest' then also build the docs in the root folder
-		const copyToRoot = version === "latest" || version === "next";
+		const copyToRoot = version === "latest";
 
 		// The contents of the src folder
 		const dirContents = await fs.readdir(versionSrc);
