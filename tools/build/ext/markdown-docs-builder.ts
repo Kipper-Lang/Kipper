@@ -6,7 +6,8 @@ import { promises as fs } from "fs";
 import { destRootDir, ejsOptions } from "./const-config";
 import {
 	determineMarkdownFileMetadata,
-	ensureURLSlashes, getEditURL,
+	ensureURLSlashes,
+	getEditURL,
 	getRelativePathToSrc,
 	getURLParentPath,
 	getURLPath,

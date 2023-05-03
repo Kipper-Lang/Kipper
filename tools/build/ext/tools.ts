@@ -18,6 +18,14 @@ import * as ejs from "ejs";
 import * as showdown from "showdown";
 
 /**
+ * Returns whether 'copyToRoot' is true for the specified version.
+ * @param version
+ */
+export function shouldCopyToRoot(version: string): boolean {
+	return version === "latest";
+}
+
+/**
  * Ensures that the given URL does not use Windows-style slashes and has URL-conforming slashes.
  * @param url The URL to ensure the correct slashes are used.
  */

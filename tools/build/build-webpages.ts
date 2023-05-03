@@ -19,13 +19,7 @@ import type {
 	SidebarTreeItem,
 } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
-import {
-	buildEjsFiles,
-	copyFiles,
-	ensureValidSrcAndDest,
-	getBuildData,
-	getDocsVersions,
-} from "./ext/tools";
+import { buildEjsFiles, copyFiles, ensureValidSrcAndDest, getBuildData, getDocsVersions } from "./ext/tools";
 import { configPath, destRootDir, destRootDocs, srcRootDir, srcRootDocs } from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
@@ -311,11 +305,18 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	// Build API docs
 	const exclusions: Array<string> = ["0.9.2"]; // Versions to exclude from the API docs (as they are too outdated)
 	const apiPath: string = `/api/module/`; // Path to the API docs of the kipper package
-	const versions: Array<string> = (await getDocsVersions(srcRootDocs))
-		.filter((v) => !exclusions.includes(v));
+	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
 	const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
-	await apiDocsBuilder.buildAPIDocs(versions, srcRootDocs, destRootDocs, apiPath, data);
+	await apiDocsBuilder.buildAPIDocs(
+    versions,
+    {
+      srcRootDocs,
+      destRootDocs,
+      apiPath,
+      buildData: data,
+    }
+  );
 
 	// Copy all remaining files
 	await copyFiles(srcRootDir, destRootDir);

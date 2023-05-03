@@ -1,4 +1,4 @@
-import { AbsolutePath, RelativePath } from "./base-types";
+import { AbsolutePath, RelativePath, WebURLPath } from "./base-types";
 import * as path from "path";
 import * as typedoc from "typedoc";
 import * as fsSync from "fs";
@@ -8,8 +8,77 @@ import { finished } from "stream/promises";
 import { Readable } from "stream";
 import { MarkdownDocsBuilder } from "./markdown-docs-builder";
 import { spawn } from "child_process";
+import { shouldCopyToRoot } from "./tools";
 
 export const PROJECT_ZIP_PATH: string = "https://github.com/Luna-Klatzer/Kipper/zipball/$VERSION/";
+
+/**
+ * The options for the API docs builder.
+ */
+export interface APIDocsBuilderOptions {
+	/**
+	 * The source path to the root docs.
+	 */
+	srcRootDocs: AbsolutePath;
+	/**
+	 * The destination path to the root docs.
+	 */
+	destRootDocs: AbsolutePath;
+	/**
+	 * The relative web path for the API docs directory, where it should be located.
+	 */
+	apiPath: WebURLPath;
+	/**
+	 * The build data for the Markdown-to-HTML build.
+	 */
+	buildData: Record<string, any>;
+}
+
+/**
+ * Internal options for the API docs builder to avoid requiring the arguments to be passed around everywhere.
+ */
+interface APIDocsInternalOptions extends APIDocsBuilderOptions {
+	/**
+	 * The version of the docs.
+	 */
+	version: string;
+	/**
+	 * The git version of the docs.
+	 */
+	gitVersion: string;
+	/**
+	 * The source path to the root docs.
+	 */
+	srcRootDocs: AbsolutePath;
+	/**
+	 * The destination path to the root docs.
+	 */
+	destRootDocs: AbsolutePath;
+	/**
+	 * The source path to the version docs. Should be a sub-folder of the {@link srcRootDocs}.
+	 */
+	srcVersionDocs: AbsolutePath;
+	/**
+	 * The destination path to the version docs. Should be a sub-folder of the {@link destRootDocs}.
+	 */
+	destVersionDocs: AbsolutePath;
+	/**
+	 * The relative web path for the API docs directory, where it should be located.
+	 */
+	apiPath: WebURLPath;
+	/**
+	 * The absolute path for the API docs output directory specific for the specified version.
+	 */
+	apiVersionDestPath: AbsolutePath;
+	/**
+	 * The absolute path for the API docs output directory.
+	 */
+	apiRootDestPath: AbsolutePath;
+	/**
+	 * The build data for the Markdown-to-HTML build.
+	 */
+	buildData: Record<string, any>;
+}
 
 /**
  * The API docs builder, which builds the API documentation from the Kipper source code.
@@ -31,8 +100,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * with the specified version name.
 	 * @param url The URL to the Kipper git repository zip file. ($VERSION will be replaced with the specified version)
 	 * @returns The path to the folder where the version was extracted to.
+	 * @protected
 	 */
-	async downloadProjectVersion(
+	protected async downloadProjectVersion(
 		version: string,
 		destPath: AbsolutePath,
 		url: string = PROJECT_ZIP_PATH,
@@ -41,19 +111,19 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		const targetZipPath = path.resolve(destPath, `${version}.zip`);
 		const targetOutPath = path.resolve(destPath, version);
 
-    // Skip this step if the version is already down/home/luna/.docker/loaded
-    try {
-      await fs.access(targetOutPath);
+		// Skip this step if the version is already down/home/luna/.docker/loaded
+		try {
+			await fs.access(targetOutPath);
 
-      // Return the first child folder of the target out path
-      const fileOrDirs = await fs.readdir(targetOutPath);
-      const firstChild = path.resolve(targetOutPath, fileOrDirs[0]);
-      await fs.access(firstChild);
+			// Return the first child folder of the target out path
+			const fileOrDirs = await fs.readdir(targetOutPath);
+			const firstChild = path.resolve(targetOutPath, fileOrDirs[0]);
+			await fs.access(firstChild);
 
-      return firstChild;
-    } catch (e) {
-      // Ignore
-    }
+			return firstChild;
+		} catch (e) {
+			// Ignore
+		}
 
 		// First download the temp zip file
 		const { body } = await fetch(zipDownloadPath);
@@ -69,57 +139,61 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		await fs.rm(targetZipPath);
 
 		// Return the path to the extracted project version - the first child folder is the git url with the commit hash
-    const fileOrDirs = await fs.readdir(targetOutPath);
-    return path.resolve(targetOutPath, fileOrDirs[0]);
+		const fileOrDirs = await fs.readdir(targetOutPath);
+		return path.resolve(targetOutPath, fileOrDirs[0]);
 	}
 
-  /**
-   * Installs the node modules in the specified project path using PNPM.
-   * @param projectPath
-   */
-  async installNodeModules(projectPath: AbsolutePath): Promise<void> {
-    const process = spawn(
-      // Start the process with working directory equal to the project path
-      "pnpm", ["install"], { cwd: projectPath, detached: true }
-    );
+	/**
+	 * Installs the node modules in the specified project path using PNPM.
+	 * @param projectPath
+	 * @protected
+	 */
+	protected async installNodeModules(projectPath: AbsolutePath): Promise<void> {
+		const process = spawn(
+			// Start the process with working directory equal to the project path
+			"pnpm",
+			["install"],
+			{ cwd: projectPath, detached: true },
+		);
 
-    // Don't handle the stdout
-    process.stdout.on('data', () => void 1);
+		// Don't handle the stdout
+		process.stdout.on("data", () => void 1);
 
-    // Handle any errors though
-    let hasFailed = false;
-    process.stderr.on('data', (data) => {
-      const debuggerMessage = [
-        "Debugger listening on ws://",
-        "For help, see: https://nodejs.org/en/docs/inspector",
-        "Debugger attached.",
-        "Waiting for the debugger to disconnect...",
-      ];
+		// Handle any errors though
+		let hasFailed = false;
+		process.stderr.on("data", (data) => {
+			const debuggerMessage = [
+				"Debugger listening on ws://",
+				"For help, see: https://nodejs.org/en/docs/inspector",
+				"Debugger attached.",
+				"Waiting for the debugger to disconnect...",
+			];
 
-      if (debuggerMessage.some((msg: string) => data.toString().includes(msg))) {
-        return; // Ignore debugger messages - this is not an error
-      }
+			if (debuggerMessage.some((msg: string) => data.toString().includes(msg))) {
+				return; // Ignore debugger messages - this is not an error
+			}
 
-      console.error(`Subprocess 'stderr': ${data}`);
-      hasFailed = true;
-    });
+			console.error(`Subprocess 'stderr': ${data}`);
+			hasFailed = true;
+		});
 
-    // Await the process to finish
-    await new Promise<void>( (resolve) => {
-      process.on('close', resolve);
-    });
+		// Await the process to finish
+		await new Promise<void>((resolve) => {
+			process.on("close", resolve);
+		});
 
-    if (hasFailed) {
-      throw new Error("Failed to install node modules");
-    }
-    return;
-  }
+		if (hasFailed) {
+			throw new Error("Failed to install node modules");
+		}
+		return;
+	}
 
 	/**
 	 * Ensures the specified temp folder exists, which should be used to store the various unzipped project versions.
 	 * @param destVersionDocsTmp The path to the temp folder.
+	 * @protected
 	 */
-	async ensureTempFolderExists(destVersionDocsTmp: AbsolutePath): Promise<void> {
+	protected async ensureTempFolderExists(destVersionDocsTmp: AbsolutePath): Promise<void> {
 		// Ensure the temp folder exists
 		try {
 			await fs.access(destVersionDocsTmp);
@@ -128,116 +202,158 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		}
 	}
 
-  /**
-   * Builds the API documentation for the specified version of the Kipper git repository.
-   * @param version The version of the Kipper git repository that should be downloaded.
-   * @param srcRootDocs The path to the root folder of the primary documentation, where the input should be read from.
-   * @param destRootDocs The path to the root folder of the primary documentation, where the output should be placed.
-   * @param srcVersionDocs The path to the primary documentation of the specified version.
-   * @param destVersionDocs The path to the destination documentation of the specified version.
-   * @param apiDestPath The path to the destination folder where the API documentation should be placed.
-   * @param buildData The build data for the build process.
-   */
-	async buildSpecificAPIVersion(
-		version: string,
-    srcRootDocs: AbsolutePath,
-    destRootDocs: AbsolutePath,
-		srcVersionDocs: AbsolutePath,
-		destVersionDocs: AbsolutePath,
-		apiDestPath: AbsolutePath,
-		buildData: Record<string, any>,
-	): Promise<void> {
+	/**
+	 * Generates the API documentation for the specified version of the Kipper git repository using TypeDoc.
+	 *
+	 * This will put the output in the specified {@link options.apiRootDestPath}.
+	 * @param rootProjectPath The path to the root of the Kipper git repository. This is usually inside a temp folder.
+	 * @param options The options to use when generating the API documentation.
+	 * @param copyToRoot If enabled the entire API documentation will be copied to the {@link destVersionDocs} folder
+	 * with the same child-path as  {@link destVersionDocs}.
+	 * @protected
+	 */
+	private async typedocBuild(
+		rootProjectPath: AbsolutePath,
+		options: APIDocsInternalOptions,
+		copyToRoot: boolean = false,
+	) {
+		// Create a new typedoc app
+		const app = new typedoc.Application();
+
+		// Load the project tsconfig.json
+		app.options.addReader(new typedoc.TSConfigReader());
+
+		const entryFile = `${rootProjectPath}/kipper/core/src/index.ts`;
+		const tsconfig = `${rootProjectPath}/kipper/core/tsconfig.json`;
+		const typedocOptions: Partial<typedoc.TypeDocOptions> = {
+			entryPoints: [entryFile],
+			plugin: ["typedoc-plugin-markdown"],
+			tsconfig: tsconfig,
+			skipErrorChecking: true,
+			githubPages: false,
+			basePath: rootProjectPath,
+			exclude: ["**/node_modules/**"],
+		};
+		await app.bootstrapWithPlugins(typedocOptions);
+
+		// The project that should be converted
+		const project = app.convert();
+		const outputDir = options.apiVersionDestPath;
+		if (project) {
+			// Rendered markdown files
+			const tmpOutput = path.resolve(`${outputDir}/tmp`);
+			await fs.mkdir(tmpOutput, { recursive: true });
+			await app.generateDocs(project, tmpOutput);
+
+			// Copy all files from tmp to the root folder
+			await fs.cp(tmpOutput, outputDir, { recursive: true });
+
+			// Copy the directory to the root folder if the version is "latest" or "next"
+			if (copyToRoot) {
+				const rootOutputDir = options.apiRootDestPath;
+
+				// Copy every file from the version directory
+				await fs.cp(tmpOutput, rootOutputDir, { recursive: true });
+			}
+
+			// Remove the tmp folder in the end
+			await fs.rm(tmpOutput, { recursive: true });
+		}
+	}
+
+	/**
+	 * Generates the raw markdown files for the API documentation for the specified version of the Kipper git repository
+	 * using TypeDoc.
+	 * @param options The options to use when generating the API documentation.
+	 * @protected
+	 */
+	protected async generateAPIMarkdownDocsFiles(options: APIDocsInternalOptions) {
 		// Ensure the temp folder exists
 		const temp = path.resolve(this.destRootDir, "temp");
 		await this.ensureTempFolderExists(temp);
 
-		// Download the project version to the temp folder - Before that also ensure the 'latest' and 'next' version is
-		// replaced with a real version number
-    let copyToRoot: boolean = false;
-		if (version === "latest") {
-      copyToRoot = true;
-			version = buildData.versions["latest"];
-		} else if (version === "next") {
-			version = buildData.versions["next"];
-		}
-		const destVersionDocsTmp = await this.downloadProjectVersion(`v${version}`, temp);
-    await this.installNodeModules(destVersionDocsTmp);
+		// Download the project version to the temp folder
+		const destVersionDocsTmp = await this.downloadProjectVersion(`v${options.gitVersion}`, temp);
+		await this.installNodeModules(destVersionDocsTmp);
 
-    // Create a new typedoc app
-    const app = new typedoc.Application();
+		// Change work directory to the project folder
+		const prevWorkDir: string = process.cwd();
+		process.chdir(destVersionDocsTmp);
 
-    // Load the project tsconfig.json
-    app.options.addReader(new typedoc.TSConfigReader());
+		// Generate the API documentation using TypeDoc
+		await this.typedocBuild(destVersionDocsTmp, options, shouldCopyToRoot(options.version));
 
-    // Change work directory to the project folder
-    const prevWorkDir: string = process.cwd();
-    process.chdir(destVersionDocsTmp);
+		// Change work directory back to the root folder
+		process.chdir(prevWorkDir);
+	}
 
-    const entryFile = `${destVersionDocsTmp}/kipper/core/src/index.ts`;
-    const tsconfig = `${destVersionDocsTmp}/kipper/core/tsconfig.json`;
-    const options: Partial<typedoc.TypeDocOptions> = {
-      entryPoints: [entryFile],
-      plugin: ["typedoc-plugin-markdown"],
-      tsconfig: tsconfig,
-      skipErrorChecking: true,
-      githubPages: false,
-      basePath: destVersionDocsTmp,
-      exclude: ["**/node_modules/**"],
-    };
-    await app.bootstrapWithPlugins(options);
+	/**
+	 * Builds a directory with all the markdown files for the API documentation.
+	 * @param options The object storing the options for the API docs builder.
+	 * @protected
+	 */
+	protected async buildMarkdownDirectory(options: APIDocsInternalOptions) {
+		return; // TODO!
+	}
 
-    // The project that should be converted
-    const project = app.convert();
-    const outputDir = path.resolve(`${destVersionDocs}/${apiDestPath}`);
-    if (project) {
-      // Rendered markdown files
-      const tmpOutput = path.resolve(`${outputDir}/tmp`);
-      await fs.mkdir(tmpOutput, { recursive: true });
-      await app.generateDocs(project, tmpOutput);
+	/**
+	 * Builds the HTML files for the API documentation by transforming the markdown files found in the specified
+	 * {@link options.apiPath} located inside the {@link options.destVersionDocs} or {@link options.destRootDocs} folder.
+	 * @param options The object storing the options for the API docs builder.
+	 * @protected
+	 */
+	protected async buildAPIMarkdownDocs(options: APIDocsInternalOptions) {
+		// Build the markdown directory - Works recursively
+		await this.buildMarkdownDirectory(options);
+	}
 
-      // Copy all files from tmp to the root folder
-      await fs.cp(tmpOutput, outputDir, { recursive: true });
+	/**
+	 * Builds the API documentation for the specified version of the Kipper git repository.
+	 * @param options The object storing the options for the API docs builder.
+	 * @protected
+	 */
+	protected async buildSpecificAPIVersion(options: APIDocsInternalOptions): Promise<void> {
+		// First generate the API docs in Markdown format using TypeDoc
+		await this.generateAPIMarkdownDocsFiles(options);
 
-      // Copy the directory to the root folder if the version is "latest" or "next"
-      if (copyToRoot) {
-        const rootOutputDir = path.resolve(`${destRootDocs}/${apiDestPath}`);
-
-        // Copy every file from the version directory
-        await fs.cp(tmpOutput, rootOutputDir, { recursive: true });
-      }
-
-      // Remove the tmp folder in the end
-      await fs.rm(tmpOutput, { recursive: true });
-    }
-
-    // Change work directory back to the root folder
-    process.chdir(prevWorkDir);
+		// Afterwards, convert the Markdown files to HTML files
+		await this.buildAPIMarkdownDocs(options);
 	}
 
 	/**
 	 * Builds the API docs for the specified versions using the package 'typedoc', which generates for '@kipper/core',
 	 * '@kipper/target-js' and '@kipper/target-js' the API docs in the specified destination folder.
-	 * @param versions The versions for which the API docs are generated.
-	 * @param srcRootDocs The root folder of the source API docs.
-	 * @param destRootDocs The root folder of the destination API docs.
-	 * @param apiPath The relative path where in each version of the docs the API docs should be generated.
-	 * @param buildData The build data.
+	 * @param versions The array of versions that should be built.
+	 * @param options The object storing the options for the API docs builder.
+	 * @param options.srcRootDocs The root folder of the source API docs.
+	 * @param options.destRootDocs The root folder of the destination API docs.
+	 * @param options.apiPath The relative path where in each version of the docs the API docs should be generated.
+	 * @param options.buildData The build data.
 	 */
-	async buildAPIDocs(
-		versions: Array<string>,
-		srcRootDocs: AbsolutePath,
-		destRootDocs: AbsolutePath,
-		apiPath: RelativePath,
-		buildData: Record<string, any>,
-	): Promise<void> {
+	public async buildAPIDocs(versions: Array<string>, options: APIDocsBuilderOptions): Promise<void> {
 		for (const version of versions) {
-			const srcVersionDocs = path.resolve(srcRootDocs, version);
-			const destVersionDocs = path.resolve(destRootDocs, version);
-			const apiDestPath = path.resolve(destVersionDocs, apiPath);
+			const srcVersionDocs = path.resolve(options.srcRootDocs, version);
+			const destVersionDocs = path.resolve(options.destRootDocs, version);
+			const apiVersionDestPath = path.resolve(`${destVersionDocs}/${options.apiPath}`);
+			const apiRootDestPath = path.resolve(`${options.destRootDocs}/${options.apiPath}`);
 
-			await this.buildSpecificAPIVersion(
-        version, srcRootDocs, destRootDocs, srcVersionDocs, destVersionDocs, apiDestPath, buildData
-      );
+			// Ensure that tre the 'latest' and 'next' version is replaced with a real version number (required for git)
+			let gitVersion = version;
+			if (gitVersion === "latest") {
+				gitVersion = options.buildData.versions["latest"];
+			} else if (gitVersion === "next") {
+				gitVersion = options.buildData.versions["next"];
+			}
+
+			await this.buildSpecificAPIVersion({
+				...options,
+				version,
+				srcVersionDocs,
+				destVersionDocs,
+				apiVersionDestPath,
+				apiRootDestPath,
+				gitVersion,
+			});
 		}
 	}
 }
