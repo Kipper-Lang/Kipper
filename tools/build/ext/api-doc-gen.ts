@@ -248,7 +248,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			// Copy all files from tmp to the root folder
 			await fs.cp(tmpOutput, outputDir, { recursive: true });
 
-			// Copy the directory to the root folder if the version is "latest" or "next"
+			// Copy the directory to the root folder if the version is "latest"
 			if (copyToRoot) {
 				const rootOutputDir = options.apiRootDestPath;
 
@@ -289,11 +289,23 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 	/**
 	 * Builds a directory with all the markdown files for the API documentation.
+   * @param dirToBuild The directory to build. This will be searched recursively.
 	 * @param options The object storing the options for the API docs builder.
 	 * @protected
 	 */
-	protected async buildMarkdownDirectory(options: APIDocsInternalOptions) {
-		return; // TODO!
+	protected async buildMarkdownDirectory(dirToBuild: AbsolutePath, options: APIDocsInternalOptions) {
+		// Process every item in the directory
+    const fileOrDirs = await fs.readdir(dirToBuild);
+    for (const fileOrDir of fileOrDirs) {
+      const fileOrDirPath = path.resolve(dirToBuild, fileOrDir);
+      const stat = await fs.stat(fileOrDirPath);
+      if (stat.isDirectory()) {
+        await this.buildMarkdownDirectory(fileOrDirPath, options);
+      } else {
+        // Process the specific file
+        // TODO!
+      }
+    }
 	}
 
 	/**
@@ -303,8 +315,15 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @protected
 	 */
 	protected async buildAPIMarkdownDocs(options: APIDocsInternalOptions) {
-		// Build the markdown directory - Works recursively
-		await this.buildMarkdownDirectory(options);
+    // Recursive build the markdown files in the version folder
+    await this.buildMarkdownDirectory(options.apiVersionDestPath, options);
+
+    // Also build the markdown files in the root folder if the version is "latest"
+    const copyToRoot = shouldCopyToRoot(options.version);
+    if (copyToRoot) {
+      // Build the markdown files in the root folder
+      await this.buildMarkdownDirectory(options.apiRootDestPath, options);
+    }
 	}
 
 	/**
