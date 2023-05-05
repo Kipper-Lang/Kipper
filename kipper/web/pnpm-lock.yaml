@@ -9,7 +9,7 @@ specifiers:
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
-  mkdirp: 2.1.3
+  mkdirp: 2.1.6
   prettier: 2.8.4
   run-script-os: 1.1.6
   ts-node: 10.9.1
@@ -27,7 +27,7 @@ devDependencies:
   browserify: 17.0.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
-  mkdirp: 2.1.3
+  mkdirp: 2.1.6
   prettier: 2.8.4
   run-script-os: 1.1.6
   ts-node: 10.9.1_o6avl3oodj6mwqsx3rm2wfkgv4
@@ -988,8 +988,8 @@ packages:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
     dev: true
 
-  /mkdirp/2.1.3:
-    resolution: {integrity: sha512-sjAkg21peAG9HS+Dkx7hlG9Ztx7HLeKnvB3NQRcu/mltCVmvkF0pisbiTSfDVYTT86XEfZrTUosLdZLStquZUw==}
+  /mkdirp/2.1.6:
+    resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
     hasBin: true
     dev: true
