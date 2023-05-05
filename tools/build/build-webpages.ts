@@ -19,10 +19,19 @@ import type {
 	SidebarTreeItem,
 } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
-import { buildEjsFiles, copyFiles, ensureValidSrcAndDest, getBuildData, getDocsVersions } from "./ext/tools";
+import {
+	buildEjsFiles,
+	copyFiles,
+	ensureValidSrcAndDest,
+	getBuildData,
+	getDocsVersions,
+	processDirContents,
+} from "./ext/tools";
 import { configPath, destRootDir, destRootDocs, srcRootDir, srcRootDocs } from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
+import { TupleType } from "typedoc";
+import { RelativeDocsURLPath, WebURLPath } from "./ext/base-types";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
@@ -116,7 +125,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 			// be included in the navigation bar - for example migration notice pages are hidden unless found with specific
 			// URLs)
 			const findNavItem = (i: SidebarTreeItem) => {
-				const srcFileName = i.filename.replace(".html", ".md");
+				const srcFileName = i.filename.replace(/\.html$/, ".md");
 				return srcFileName === dirItem || (typeof dirItem !== "string" && srcFileName === dirItem.name);
 			};
 			const navItem = options.parentSidebarItem
@@ -180,38 +189,6 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	}
 
 	/**
-	 * Returns a tree representing the content of the specified directory, which should represent the data returned from
-	 * a {@link fs.readdir} call.
-	 * @param dirContents The contents of the directory to process.
-	 * @param dirPath The absolute path of the current directory.
-	 * @private
-	 */
-	private async processDirContents(dirContents: Array<string>, dirPath: AbsolutePath): Promise<Array<PathTreeItem>> {
-		const mdFiles = [];
-		for (const fileOrDir of dirContents) {
-			if (fileOrDir.endsWith(".md")) {
-				mdFiles.push(<Path>fileOrDir);
-			}
-
-			const absolutePath: AbsolutePath = path.resolve(`${dirPath}/${fileOrDir}/`);
-			if (statSync(absolutePath).isDirectory()) {
-				// Process nested directories recursively
-				const pathItems = await this.processDirContents(await fs.readdir(absolutePath), absolutePath);
-				mdFiles.push(<DirTreeItem>{
-					name: fileOrDir,
-					items: pathItems,
-				});
-
-				// Ensure there is an index.md file in the directory
-				if (!pathItems.find((i) => i === "index.md" || (typeof i !== "string" && i.name === "index.md"))) {
-					throw new Error(`No index.md file found in directory '${absolutePath}'`);
-				}
-			}
-		}
-		return mdFiles;
-	}
-
-	/**
 	 * Builds a specific version of the docs and places them in the specified target folder with the following path:
 	 * '/{docsDestRoot}/{version}/'. If the version is 'latest' then it will be both placed in the root folder and in
 	 * the specific version folder, with the version being the resolved version based on the npm tag.
@@ -221,6 +198,8 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	 * '/{docsDestRoot}/{version}/'.
 	 * @param version The version to build.
 	 * @param data The data to pass to the ejs renderer.
+	 * @returns The sidebar headings for the version. (Can be a tuple if the version is 'latest', with the second item
+	 * being for the root folder.)
 	 * @private
 	 */
 	private async buildSpecificDocsVersion(
@@ -228,7 +207,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 		docsDestRoot: string,
 		version: string,
 		data: Record<string, any>,
-	): Promise<void> {
+	): Promise<DocsSidebar | [DocsSidebar, DocsSidebar]> {
 		const versionSrc = path.resolve(`${docsSrcRoot}/${version}`);
 		const versionDest = path.resolve(`${docsDestRoot}/${version}`);
 
@@ -242,7 +221,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 		const dirContents = await fs.readdir(versionSrc);
 
 		// Evaluate the markdown files in the src folder
-		let mdFiles: Array<PathTreeItem> = await this.processDirContents(dirContents, versionSrc);
+		let mdFiles: Array<PathTreeItem> = await processDirContents(dirContents, versionSrc);
 
 		// Get the headings for the sidebar, which are unique for each version
 		const sidebarHeadings: DocsSidebar = await new DocsSidebar(versionSrc, versionDest, mdFiles, this).build();
@@ -264,6 +243,8 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 				copyToDir: copyToRoot ? docsDestRoot : undefined,
 			},
 		);
+
+		return copyToRoot ? [sidebarHeadings, sidebarHeadingsForRoot] : sidebarHeadings;
 	}
 
 	/**
@@ -272,21 +253,36 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	 * @param docsDest The dest folder which should contain the HTML files.
 	 * @param data The data for the EJS template.
 	 */
-	public async build(docsSrc: string, docsDest: string, data: Record<string, any>): Promise<void> {
+	public async build(
+		docsSrc: string,
+		docsDest: string,
+		data: Record<string, any>,
+	): Promise<{ [v: string]: DocsSidebar }> {
 		// Generate the dest folder if it does not exist
 		await ensureValidSrcAndDest(docsSrc, docsDest);
 
 		// For every version build the docs (every folder in the docs folder)
 		const versions = await getDocsVersions(docsSrc);
+		const versionSidebars: { [v: string]: DocsSidebar } = {};
 		for (let version of versions) {
 			const versionPath = path.resolve(`${docsSrc}/${version}`);
 
 			// Ensure the path is a directory and not a file
 			if (statSync(versionPath).isDirectory()) {
 				// Build the docs for the specific version
-				await this.buildSpecificDocsVersion(docsSrc, docsDest, version, data);
+				const sidebar = await this.buildSpecificDocsVersion(docsSrc, docsDest, version, data);
+
+				// Add the sidebar/sidebars (if the version is 'latest') to the versionSidebars object
+				if (Array.isArray(sidebar)) {
+					versionSidebars[version] = sidebar[0];
+					versionSidebars["root"] = sidebar[1];
+				} else {
+					versionSidebars[version] = sidebar;
+				}
 			}
 		}
+
+		return versionSidebars;
 	}
 }
 
@@ -300,23 +296,22 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const ejsDocsTemplate = path.resolve(`${srcRootDir}/partials/docs/page-template.ejs`);
 	const docsBuilder = new DocsBuilder(ejsDocsTemplate);
-	await docsBuilder.build(srcRootDocs, destRootDocs, data);
+	const versionSidebars = await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
 	// Build API docs
 	const exclusions: Array<string> = ["0.9.2"]; // Versions to exclude from the API docs (as they are too outdated)
-	const apiPath: string = `/api/module/`; // Path to the API docs of the kipper package
+	const apiPath: RelativeDocsURLPath = `/api/module/core/`; // Path to the API docs of the @kipper/core package
 	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
 	const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
-	await apiDocsBuilder.buildAPIDocs(
-    versions,
-    {
-      srcRootDocs,
-      destRootDocs,
-      apiPath,
-      buildData: data,
-    }
-  );
+	await apiDocsBuilder.buildAPIDocs(versions, versionSidebars, {
+		srcRootDocs,
+		destRootDocs,
+		apiPath,
+		docsPath: "/docs/",
+		buildData: data,
+    versionSidebars,
+	});
 
 	// Copy all remaining files
 	await copyFiles(srcRootDir, destRootDir);

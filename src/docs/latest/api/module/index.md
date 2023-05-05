@@ -3,6 +3,7 @@ title: Overview
 dropdownTitle: Module
 nav:
   - index.md
+  - core/
 ---
 
 # Kipper Module API
@@ -26,3 +27,9 @@ Please go <a href="../compiler-setup.html#configuring-the-kipper-compiler-in-nod
 configuration info.
 </p>
 </div>
+
+## Overview
+
+- [`@kipper/core`](./core/index.html)
+- [`@kipper/target-js`](.) (Not yet available)
+- [`@kipper/target-ts`](.) (Not yet available)

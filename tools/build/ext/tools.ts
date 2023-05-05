@@ -1,8 +1,10 @@
 import {
 	AbsolutePath,
+	DirTreeItem,
 	DocumentMetaData,
 	FileOrDirName,
 	Path,
+	PathTreeItem,
 	RelativeDocsURLPath,
 	RelativePath,
 	SimplePath,
@@ -33,15 +35,34 @@ export function ensureURLSlashes(url: URLPath): URLPath {
 	return url.replace(/\\/g, "/");
 }
 
+export function removeLeadingAndTrailingSlashes(str: URLPath): URLPath {
+	return removeTrailingSlash(removeLeadingSlash(str));
+}
+
 /**
  * Removes the trailing slash from the given string if it exists.
+ *
+ * If the string is only one character long and equal to a slash, it will not be removed.
  * @param str The string to remove the trailing slash from.
  */
-export function removeTrailingSlash(str: string): string {
+export function removeTrailingSlash(str: Path): Path {
 	if (str.length === 1) return str; // Don't remove the trailing slash if it is the only character in the string.
 
 	if (str.endsWith("/") || str.endsWith("\\")) {
 		return str.slice(0, -1);
+	}
+	return str;
+}
+
+/**
+ * Removes the leading slash from the given string if it exists.
+ *
+ * This will unlike {@link removeTrailingSlash} still remove the slash even if it is the only character in the string.
+ * @param str The string to remove the leading slash from.
+ */
+export function removeLeadingSlash(str: Path): Path {
+	if (str.startsWith("/") || str.startsWith("\\")) {
+		return str.slice(1);
 	}
 	return str;
 }
@@ -283,4 +304,38 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
  */
 export async function getDocsVersions(docsSrc: string): Promise<Array<string>> {
 	return await fs.readdir(docsSrc);
+}
+
+/**
+ * Returns a tree representing the content of the specified directory, which should represent the data returned from
+ * a {@link fs.readdir} call.
+ * @param dirContents The contents of the directory to process.
+ * @param dirPath The absolute path of the current directory.
+ */
+export async function processDirContents(
+	dirContents: Array<string>,
+	dirPath: AbsolutePath,
+): Promise<Array<PathTreeItem>> {
+	const mdFiles = [];
+	for (const fileOrDir of dirContents) {
+		if (fileOrDir.endsWith(".md")) {
+			mdFiles.push(<Path>fileOrDir);
+		}
+
+		const absolutePath: AbsolutePath = path.resolve(`${dirPath}/${fileOrDir}/`);
+		if (statSync(absolutePath).isDirectory()) {
+			// Process nested directories recursively
+			const pathItems = await processDirContents(await fs.readdir(absolutePath), absolutePath);
+			mdFiles.push(<DirTreeItem>{
+				name: fileOrDir,
+				items: pathItems,
+			});
+
+			// Ensure there is an index.md file in the directory
+			if (!pathItems.find((i) => i === "index.md" || (typeof i !== "string" && i.name === "index.md"))) {
+				throw new Error(`No index.md file found in directory '${absolutePath}'`);
+			}
+		}
+	}
+	return mdFiles;
 }

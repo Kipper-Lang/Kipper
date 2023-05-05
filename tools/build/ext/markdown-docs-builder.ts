@@ -12,7 +12,7 @@ import {
 	getURLParentPath,
 	getURLPath,
 } from "./tools";
-import { SidebarFile } from "./base-types";
+import { AbsolutePath, RelativePath, SidebarFile } from "./base-types";
 
 /**
  * The Markdown docs builder, which converts Markdown files to HTML and renders them with the EJS template.
@@ -118,7 +118,7 @@ export class MarkdownDocsBuilder {
 	/**
 	 * Builds a single docs file and writes it to the destination folder.
 	 * @param mdFile The Markdown file to build.
-	 * @param navTreeItem
+	 * @param navTreeItem The nav tree item storing the data of this item.
 	 * @param versionSrc The source directory of the version.
 	 * @param versionDest The destination directory of the version.
 	 * @param version The version of the docs.
@@ -126,14 +126,14 @@ export class MarkdownDocsBuilder {
 	 * @protected
 	 */
 	protected async buildFile(
-		mdFile: string,
+		mdFile: RelativePath,
 		navTreeItem: SidebarFile,
-		versionSrc: string,
-		versionDest: string,
+		versionSrc: AbsolutePath,
+		versionDest: AbsolutePath,
 		version: string,
 		data: Record<string, any>,
 	): Promise<void> {
-		const htmlFilename = mdFile.replace(".md", ".html");
+		const htmlFilename = mdFile.replace(/\.md$/, ".html");
 		const pathSrc = path.resolve(`${versionSrc}/${mdFile}`);
 		const pathDest = path.resolve(`${versionDest}/${htmlFilename}`);
 		const itemData = this.getFileBuildData(htmlFilename, pathSrc, pathDest, version, data, navTreeItem);
