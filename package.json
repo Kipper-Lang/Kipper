@@ -11,12 +11,12 @@
   "license": "GPL-3.0",
   "author": "Luna Klatzer",
   "engines": {
-    "node": ">= 16.0.0",
+    "node": ">=16.0.0",
     "pnpm": ">=7"
   },
   "scripts": {
     "prebuild": "ts-node ./tools/build/build-webpages.ts && pnpm run tslint:fix && pnpm run prettier-build",
-    "build": "parcel build ./build/index.html --no-content-hash --no-optimize --no-scope-hoist",
+    "build": "parcel build ./build/index.html --no-content-hash --no-optimize --no-scope-hoist --no-minify",
     "gh-pages-build": "parcel build build/index.html --public-url https://kipper-lang.org --dist-dir . --no-content-hash --no-optimize --no-scope-hoist",
     "watch": "parcel watch src/index.html",
     "start": "pnpm run build && pnpm run dev",
@@ -30,7 +30,6 @@
     "dev": "parcel ./build/index.html --open --no-cache"
   },
   "devDependencies": {
-    "@parcel/babel-ast-utils": "2.2.1",
     "@parcel/babylon-walk": "2.2.1",
     "@parcel/bundler-default": "2.2.1",
     "@parcel/cache": "2.2.1",
@@ -68,16 +67,12 @@
     "@parcel/runtime-react-refresh": "2.2.1",
     "@parcel/runtime-service-worker": "2.2.1",
     "@parcel/source-map": "2.0.2",
-    "@parcel/transformer-babel": "2.2.1",
     "@parcel/transformer-css": "2.2.1",
     "@parcel/transformer-html": "2.2.1",
     "@parcel/transformer-image": "2.2.1",
     "@parcel/transformer-js": "2.2.1",
     "@parcel/transformer-json": "2.2.1",
-    "@parcel/transformer-postcss": "2.2.1",
-    "@parcel/transformer-posthtml": "2.2.1",
     "@parcel/transformer-raw": "2.2.1",
-    "@parcel/transformer-react-refresh-wrap": "2.2.1",
     "@parcel/transformer-sass": "2.2.1",
     "@parcel/transformer-svg": "2.2.1",
     "@parcel/transformer-webmanifest": "2.2.1",
