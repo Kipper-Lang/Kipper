@@ -18,6 +18,7 @@ import fetch from "node-fetch";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
 import * as showdown from "showdown";
+import { log } from "./logger";
 
 /**
  * Returns whether 'copyToRoot' is true for the specified version.
@@ -136,6 +137,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
  */
 export async function getBuildData(dataFile: Path): Promise<Record<string, any>> {
 	// Read const config.json
+	log.debug("Request package metadata from registry.npmjs.org");
 	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
 	const resp = await fetch("https://registry.npmjs.org/kipper");

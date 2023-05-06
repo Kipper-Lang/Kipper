@@ -11,13 +11,13 @@ import { promises as fs, statSync } from "fs";
 import type {
 	AbsolutePath,
 	DirTreeItem,
-	Path,
 	PathTreeItem,
 	RelativePath,
 	SidebarDir,
 	SidebarFile,
 	SidebarTreeItem,
 } from "./ext/base-types";
+import type { RelativeDocsURLPath } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
 import {
 	buildEjsFiles,
@@ -30,8 +30,7 @@ import {
 import { configPath, destRootDir, destRootDocs, srcRootDir, srcRootDocs } from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
-import { TupleType } from "typedoc";
-import { RelativeDocsURLPath, WebURLPath } from "./ext/base-types";
+import { log } from "./ext/logger";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
@@ -291,6 +290,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	const data = await getBuildData(configPath);
 
 	// Build all ejs files (Convert from EJS to HTML)
+	log.info("Building static EJS files");
 	await buildEjsFiles(srcRootDir, destRootDir, data);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
@@ -298,11 +298,14 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	const docsBuilder = new DocsBuilder(ejsDocsTemplate);
 	const versionSidebars = await docsBuilder.build(srcRootDocs, destRootDocs, data);
 
+	log.info("Built docs for versions: " + Object.keys(versionSidebars).join(", "));
+
 	// Build API docs
 	const exclusions: Array<string> = ["0.9.2"]; // Versions to exclude from the API docs (as they are too outdated)
 	const apiPath: RelativeDocsURLPath = `/api/module/core/`; // Path to the API docs of the @kipper/core package
 	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
+	log.info("Preparing to build API docs for versions: " + versions.join(", "));
 	const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
 	await apiDocsBuilder.buildAPIDocs(versions, versionSidebars, {
 		srcRootDocs,
@@ -310,7 +313,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 		apiPath,
 		docsPath: "/docs/",
 		buildData: data,
-    versionSidebars,
+		versionSidebars,
 	});
 
 	// Copy all remaining files

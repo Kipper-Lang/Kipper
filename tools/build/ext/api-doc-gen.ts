@@ -1,9 +1,9 @@
-import type { AbsolutePath, FileOrDirName, SidebarDir, SidebarFile, URLPath, WebURLPath } from "./base-types";
+import type { AbsolutePath, FileOrDirName, SidebarDir, SidebarFile, WebURLPath } from "./base-types";
 import { finished } from "stream/promises";
 import { Readable } from "stream";
 import { MarkdownDocsBuilder } from "./markdown-docs-builder";
 import { spawn } from "child_process";
-import { ensureURLSlashes, processDirContents, removeLeadingAndTrailingSlashes, shouldCopyToRoot } from "./tools";
+import { ensureURLSlashes, removeLeadingAndTrailingSlashes, shouldCopyToRoot } from "./tools";
 import * as path from "path";
 import * as fsSync from "fs";
 import * as fs from "fs/promises";
@@ -11,6 +11,7 @@ import * as extractZip from "extract-zip";
 import { typedoc } from "./overwrite/typedoc";
 import { DocsSidebar } from "./docs-sidebar";
 import { RelativeDocsURLPath } from "./base-types";
+import { log } from "./logger";
 
 export const PROJECT_ZIP_PATH: string = "https://github.com/Luna-Klatzer/Kipper/zipball/$VERSION/";
 
@@ -38,10 +39,10 @@ export interface APIDocsBuilderOptions {
 	 * The build data for the Markdown-to-HTML build.
 	 */
 	buildData: Record<string, any>;
-  /**
-   * The sidebars for every version of the docs.
-   */
-  versionSidebars: Record<string, DocsSidebar>;
+	/**
+	 * The sidebars for every version of the docs.
+	 */
+	versionSidebars: Record<string, DocsSidebar>;
 }
 
 /**
@@ -123,6 +124,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		destPath: AbsolutePath,
 		url: string = PROJECT_ZIP_PATH,
 	): Promise<string> {
+		log.debug(`Downloading Kipper source code for version '${version}'`);
+
 		const zipDownloadPath = url.replace("$VERSION", version);
 		const targetZipPath = path.resolve(destPath, `${version}.zip`);
 		const targetOutPath = path.resolve(destPath, version);
@@ -165,6 +168,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @protected
 	 */
 	protected async installNodeModules(projectPath: AbsolutePath): Promise<void> {
+		log.debug(`Installing node modules for Kipper source code - '${projectPath}'`);
+
 		const process = spawn(
 			// Start the process with working directory equal to the project path
 			"pnpm",
@@ -230,6 +235,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		// Create a new typedoc app
 		const app = new typedoc.Application();
 
+		log.debug(`Building API docs using typedoc for '${options.version}'`);
+
 		// Load the project tsconfig.json
 		app.options.addReader(new typedoc.TSConfigReader());
 
@@ -277,45 +284,44 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @param options The options to use when generating the API documentation.
 	 */
 	async createAPIDocsEntryFiles(apiOutputDir: AbsolutePath, options: APIDocsInternalOptions): Promise<void> {
-    // First copy the content of 'modules.md' and append it to 'index.html' - Afterwards remove 'modules.md'
-    const modulesMdPath = path.resolve(`${options.apiVersionDestPath}/modules.md`);
-    const indexHTMLPath = path.resolve(`${options.apiVersionDestPath}/index.html`);
-    const indexMdContent = await fs.readFile(indexHTMLPath, "utf-8");
+		log.debug(`Merging entry files and restructuring typedoc build for '${options.version}'`);
 
-    // Append the content of 'modules.md' to 'index.md'
-    await fs.writeFile(
-      indexHTMLPath,
-      indexMdContent.replace(
-        "<!-- Replace this with API docs generation -->",
-        await this.renderMarkdownFile(modulesMdPath), // Convert the markdown to HTML
-      ),
-    );
-    await fs.rm(modulesMdPath);
+		// First copy the content of 'modules.md' and append it to 'index.html' - Afterwards remove 'modules.md'
+		const modulesMdPath = path.resolve(`${apiOutputDir}/modules.md`);
+		const indexHTMLPath = path.resolve(`${apiOutputDir}/index.html`);
+		const indexMdContent = await fs.readFile(indexHTMLPath, "utf-8");
 
-    // Merge the root folder .md files with the .html files
-    const fileOrDirs = await fs.readdir(options.apiVersionDestPath);
-    for (const fileOrDir of fileOrDirs) {
-      const fileOrDirPath = path.resolve(`${options.apiVersionDestPath}/${fileOrDir}`);
-      const stat = await fs.stat(fileOrDirPath);
-      if (!stat.isDirectory() && fileOrDir.endsWith(".md")) {
-        // Build the markdown file
-        const convertedMd = await this.renderMarkdownFile(fileOrDirPath);
+		// Append the content of 'modules.md' to 'index.md'
+		await fs.writeFile(
+			indexHTMLPath,
+			indexMdContent.replace(
+				"<!-- Replace this with API docs generation -->",
+				await this.renderMarkdownFile(modulesMdPath), // Convert the markdown to HTML
+			),
+		);
+		await fs.rm(modulesMdPath);
 
-        // Insert the converted markdown into the HTML file
-        const htmlPath = fileOrDirPath.replace(".md", ".html");
-        const sourceHTML = await fs.readFile(htmlPath, "utf-8");
-        await fs.writeFile(
-          htmlPath,
-          sourceHTML.replace("<!-- Replace this with API docs generation -->", convertedMd),
-        );
+		// Merge the root folder .md files with the .html files
+		const fileOrDirs = await fs.readdir(apiOutputDir);
+		for (const fileOrDir of fileOrDirs) {
+			const fileOrDirPath = path.resolve(`${apiOutputDir}/${fileOrDir}`);
+			const stat = await fs.stat(fileOrDirPath);
+			if (!stat.isDirectory() && fileOrDir.endsWith(".md")) {
+				// Build the markdown file
+				const convertedMd = await this.renderMarkdownFile(fileOrDirPath);
 
-        // Remove the markdown file
-        await fs.rm(fileOrDirPath);
-      }
-    }
+				// Insert the converted markdown into the HTML file
+				const htmlPath = fileOrDirPath.replace(".md", ".html");
+				const sourceHTML = await fs.readFile(htmlPath, "utf-8");
+				await fs.writeFile(htmlPath, sourceHTML.replace("<!-- Replace this with API docs generation -->", convertedMd));
 
-    // Remove the '/modules' folder
-    await fs.rm(path.resolve(`${options.apiVersionDestPath}/modules`), { recursive: true });
+				// Remove the markdown file
+				await fs.rm(fileOrDirPath);
+			}
+		}
+
+		// Remove the '/modules' folder
+		await fs.rm(path.resolve(`${apiOutputDir}/modules`), { recursive: true });
 	}
 
 	/**
@@ -344,92 +350,97 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		process.chdir(prevWorkDir);
 	}
 
-  /**
-   * Gets the parent of the specified file for the sidebar.
-   *
-   * This is intended for the API files, where the file name starts with the module name, like for example:
-   * 'compiler.ParserASTNode.md', where the parent should be the 'compiler' module.
-   * @param fileName The file name to get the parent for.
-   * @param moduleSidebarItems The sidebar items for the modules.
-   * @param fallback The fallback sidebar item to use if the parent could not be found. This is usually the index file.
-   * @protected
-   */
-  protected getModuleParentSidebarFile(
-    fileName: FileOrDirName, moduleSidebarItems: Array<SidebarFile>, fallback: SidebarFile,
-  ): SidebarFile {
-    const moduleName = fileName.split(".")[0];
-    const moduleSidebarItem = moduleSidebarItems.find(
-      (item) => path.basename(item.filename) === moduleName
-    );
+	/**
+	 * Gets the parent of the specified file for the sidebar.
+	 *
+	 * This is intended for the API files, where the file name starts with the module name, like for example:
+	 * 'compiler.ParserASTNode.md', where the parent should be the 'compiler' module.
+	 * @param fileName The file name to get the parent for.
+	 * @param moduleSidebarItems The sidebar items for the modules.
+	 * @param fallback The fallback sidebar item to use if the parent could not be found. This is usually the index file.
+	 * @protected
+	 */
+	protected getModuleParentSidebarFile(
+		fileName: FileOrDirName,
+		moduleSidebarItems: Array<SidebarFile>,
+		fallback: SidebarFile,
+	): SidebarFile {
+		const moduleName = fileName.split(".")[0];
+		const moduleSidebarItem = moduleSidebarItems.find((item) => path.basename(item.filename) === moduleName);
 
-    if (!moduleSidebarItem) {
-      // If the module sidebar item could not be found, return the fallback - usually the index file
-      return fallback;
-    }
-    return moduleSidebarItem;
-  }
-
-  /**
-   * Gets the sidebar item for the specified {@link DocsSidebar} or {@link SidebarDir}.
-   *
-   * This method works recursively.
-   * @param urlPath The path to the sidebar item.
-   * @param sidebar The sidebar or sidebar dir to search in.
-   * @protected
-   */
-  protected getDocsSidebarItem(
-    urlPath: RelativeDocsURLPath,
-    sidebar: DocsSidebar | SidebarDir,
-  ): SidebarDir | SidebarFile {
-    const pathItems = removeLeadingAndTrailingSlashes(ensureURLSlashes(urlPath)).split("/");
-    if (pathItems.length === 1) {
-      const sidebarItem = sidebar.items.find(
-        (item) => item.filename === pathItems[0]
-      );
-
-      if (sidebarItem) {
-        return sidebarItem;
-      } else {
-        throw new Error("Invalid path - no such sidebar item exists in given object");
-      }
-    } else {
-      // For the directory simply go one level deeper and search for the next lowest path item
-      const dir = sidebar.items.find(
-        (item) => item.filename === pathItems[0]
-      ) as SidebarDir;
-
-      if (dir) {
-        return this.getDocsSidebarItem(pathItems.slice(1).join("/"), dir);
-      } else {
-        throw new Error("Invalid path - no such sidebar item exists in given object");
-      }
-    }
-  }
+		if (!moduleSidebarItem) {
+			// If the module sidebar item could not be found, return the fallback - usually the index file
+			return fallback;
+		}
+		return moduleSidebarItem;
+	}
 
 	/**
-   * Builds a directory with all the markdown files for the API documentation.
-   *
-   * This method works recursively.
-   * @param dirToBuild The directory to build. This will be searched recursively.
-   * @param currentRelativeURLPath The relative URL path to the current directory. This is relative to the source/dest
-   * root.
-   * @param moduleAPIIndexSidebarItem The index file for the sidebar that is located at the root of the API docs of the
-   * package. This is the fallback sidebar item for any file that does not have a proper parent module.
-   * @param moduleSidebarItems The module sidebar items for the current file. These represent the parents for all API
-   * documentation files that are children of that module.
-   * @param rootSidebar The root sidebar for the API docs. This is always located at the root of the entire website.
-   * @param options The object storing the options for the API docs builder.
-   * @protected
-   */
+	 * Gets the sidebar item for the specified {@link DocsSidebar} or {@link SidebarDir}.
+	 *
+	 * This method works recursively.
+	 * @param urlPath The path to the sidebar item.
+	 * @param sidebar The sidebar or sidebar dir to search in.
+	 * @protected
+	 */
+	protected getDocsSidebarItem(
+		urlPath: RelativeDocsURLPath,
+		sidebar: DocsSidebar | SidebarDir,
+	): SidebarDir | SidebarFile {
+		const pathItems = removeLeadingAndTrailingSlashes(ensureURLSlashes(urlPath)).split("/");
+		if (pathItems.length === 1) {
+			const sidebarItem = sidebar.items.find((item) => item.filename === pathItems[0]);
+
+			if (sidebarItem) {
+				return sidebarItem;
+			} else {
+				throw new Error("Invalid path - no such sidebar item exists in given object");
+			}
+		} else {
+			// For the directory simply go one level deeper and search for the next lowest path item
+			const dir = sidebar.items.find((item) => item.filename === pathItems[0]) as SidebarDir;
+
+			if (dir) {
+				return this.getDocsSidebarItem(pathItems.slice(1).join("/"), dir);
+			} else {
+				throw new Error("Invalid path - no such sidebar item exists in given object");
+			}
+		}
+	}
+
+	/**
+	 * Builds a directory with all the markdown files for the API documentation.
+	 *
+	 * This method works recursively.
+	 * @param dirToBuild The directory to build. This will be searched recursively.
+	 * @param currentRelativeURLPath The relative URL path to the current directory. This is relative to the source/dest
+	 * root.
+	 * @param moduleAPIIndexSidebarItem The index file for the sidebar that is located at the root of the API docs of the
+	 * package. This is the fallback sidebar item for any file that does not have a proper parent module.
+	 * @param moduleSidebarItems The module sidebar items for the current file. These represent the parents for all API
+	 * documentation files that are children of that module.
+	 * @param versionDocsSidebar The root sidebar for the API docs. This is always located at the root of the entire website.
+	 * @param rootDocsVersion Whether the current API docs are the root docs version. This means that
+	 * {@link options.shouldCopyToRoot} is true and the current API docs are the latest version of the API docs.
+	 * @param options The object storing the options for the API docs builder.
+	 * @protected
+	 */
 	protected async buildMarkdownDirectory(
 		dirToBuild: AbsolutePath,
 		currentRelativeURLPath: RelativeDocsURLPath,
-    moduleAPIIndexSidebarItem: SidebarFile,
-    moduleSidebarItems: Array<SidebarFile>,
-		rootSidebar: DocsSidebar,
+		moduleAPIIndexSidebarItem: SidebarFile,
+		moduleSidebarItems: Array<SidebarFile>,
+		versionDocsSidebar: DocsSidebar,
+		rootDocsVersion: boolean,
 		options: APIDocsInternalOptions,
 	) {
+		log.info(
+			`Building API docs directory '${currentRelativeURLPath}' ` +
+      `(Version: ${options.version} - CopyToRoot Edition: ${options.shouldCopyToRoot})`,
+		);
+
 		// Process every item in the directory
+    log.debug(`Reading Markdown build data from directory '${dirToBuild}'`);
 		const fileOrDirs = await fs.readdir(dirToBuild);
 		for (const fileOrDir of fileOrDirs) {
 			const fileOrDirPath = path.resolve(dirToBuild, fileOrDir);
@@ -439,26 +450,36 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			// Process any directory recursively
 			if (stat.isDirectory()) {
 				await this.buildMarkdownDirectory(
-          fileOrDirPath, fileOrDirURLPath, moduleAPIIndexSidebarItem, moduleSidebarItems, rootSidebar, options
-        );
+					fileOrDirPath,
+					fileOrDirURLPath,
+					moduleAPIIndexSidebarItem,
+					moduleSidebarItems,
+					versionDocsSidebar,
+					rootDocsVersion,
+					options,
+				);
 			} else if (stat.isFile() && fileOrDir.endsWith(".md")) {
-        const moduleSidebarItem = this.getModuleParentSidebarFile(
-          fileOrDir, moduleSidebarItems, moduleAPIIndexSidebarItem
+				const moduleSidebarItem = this.getModuleParentSidebarFile(
+					fileOrDir,
+					moduleSidebarItems,
+					moduleAPIIndexSidebarItem,
         );
+        const buildDir = rootDocsVersion ? options.destRootDocs : options.destVersionDocs;
 
 				// Build the file
-				options.buildData["sidebarNav"] = rootSidebar;
+				log.debug(`Building API docs file for '${fileOrDirURLPath}'`);
+				options.buildData["sidebarNav"] = versionDocsSidebar;
 				await this.buildFile(
 					fileOrDirURLPath,
-          moduleSidebarItem, // Parent module sidebar should represent the current file
-					options.destVersionDocs,
-					options.destVersionDocs,
+					moduleSidebarItem, // Parent module sidebar should represent the current file
+          buildDir,
+          buildDir,
 					options.version,
 					options.buildData,
 				);
 
-        // Delete the source file - we don't need it anymore
-        await fs.rm(fileOrDirPath);
+				// Delete the source file - we don't need it anymore
+				await fs.rm(fileOrDirPath);
 			}
 		}
 	}
@@ -470,42 +491,44 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @protected
 	 */
 	protected async buildAPIMarkdownDocs(options: APIDocsInternalOptions) {
-    // Create the entry files and merge the templates with the API docs
-    await this.createAPIDocsEntryFiles(options.apiVersionDestPath, options);
+		// Create the entry files and merge the templates with the API docs
+		await this.createAPIDocsEntryFiles(options.apiVersionDestPath, options);
 
-    // The callback function to get the index file of the API docs
-    const getSidebarIndex = (item) => item.filename === "index.html";
+		// The callback function to get the index file of the API docs
+		const getSidebarIndex = (item) => item.filename === "index.html";
 
-    // Recursive build the markdown files in the version folder
-    let docsSidebar = options.versionSidebars[options.version];
-    let apiModule = <SidebarDir>this.getDocsSidebarItem(options.apiPath, docsSidebar);
-    let apiModuleEntry = apiModule.items.find(getSidebarIndex) as SidebarFile;
-    let moduleSidebarItems = apiModule.items as Array<SidebarFile>;
+		// Recursive build the markdown files in the version folder
+		let docsSidebar = options.versionSidebars[options.version];
+		let apiModule = <SidebarDir>this.getDocsSidebarItem(options.apiPath, docsSidebar);
+		let apiModuleEntry = apiModule.items.find(getSidebarIndex) as SidebarFile;
+		let moduleSidebarItems = apiModule.items as Array<SidebarFile>;
 		await this.buildMarkdownDirectory(
 			options.apiVersionDestPath,
 			options.apiPath,
-      apiModuleEntry,
-			moduleSidebarItems,// Parent sidebar should represent the current file
+			apiModuleEntry,
+			moduleSidebarItems, // Parent sidebar should represent the current file
 			docsSidebar,
+      false,
 			options,
 		);
 
 		// Also build the markdown files in the root folder if the version is "latest"
 		if (options.shouldCopyToRoot) {
-      // Create the entry files and merge the templates with the API docs
-      await this.createAPIDocsEntryFiles(options.apiRootDestPath, options);
+			// Create the entry files and merge the templates with the API docs
+			await this.createAPIDocsEntryFiles(options.apiRootDestPath, options);
 
-      // Build the markdown files in the root folder
-      docsSidebar = options.versionSidebars["root"];
-      apiModule = <SidebarDir>this.getDocsSidebarItem(options.apiPath, docsSidebar);
-      apiModuleEntry = apiModule.items.find(getSidebarIndex) as SidebarFile;
-      moduleSidebarItems = apiModule.items as Array<SidebarFile>;
+			// Build the markdown files in the root folder
+			docsSidebar = options.versionSidebars["root"];
+			apiModule = <SidebarDir>this.getDocsSidebarItem(options.apiPath, docsSidebar);
+			apiModuleEntry = apiModule.items.find(getSidebarIndex) as SidebarFile;
+			moduleSidebarItems = apiModule.items as Array<SidebarFile>;
 			await this.buildMarkdownDirectory(
 				options.apiRootDestPath,
 				options.apiPath,
-        apiModuleEntry,
-        moduleSidebarItems,
-        docsSidebar,
+				apiModuleEntry,
+				moduleSidebarItems,
+				docsSidebar,
+        true,
 				options,
 			);
 		}
@@ -517,6 +540,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @protected
 	 */
 	protected async buildSpecificAPIVersion(options: APIDocsInternalOptions): Promise<void> {
+		log.info(`Building API docs for version '${options.version}'`);
+
 		// First generate the API docs in Markdown format using TypeDoc
 		await this.generateAPIMarkdownDocsFiles(options);
 

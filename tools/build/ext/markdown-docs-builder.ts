@@ -13,6 +13,7 @@ import {
 	getURLPath,
 } from "./tools";
 import { AbsolutePath, RelativePath, SidebarFile } from "./base-types";
+import { log } from "./logger";
 
 /**
  * The Markdown docs builder, which converts Markdown files to HTML and renders them with the EJS template.
@@ -145,5 +146,7 @@ export class MarkdownDocsBuilder {
 		// Build ejs file
 		const result: string = await this.renderEJSFile(html, fileMetadata, itemData);
 		await fs.writeFile(pathDest, result);
+
+		log.debug(`Successfully built Docs Markdown file '${mdFile}' - Wrote to '${pathDest}'`);
 	}
 }

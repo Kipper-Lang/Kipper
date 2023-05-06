@@ -14,4 +14,3 @@ kipper-standalone.js
 *.yaml
 *.json
 build/temp/
-build/docs/**/api/module/
