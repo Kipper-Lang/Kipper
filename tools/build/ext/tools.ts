@@ -137,7 +137,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
  */
 export async function getBuildData(dataFile: Path): Promise<Record<string, any>> {
 	// Read const config.json
-	log.debug("Request package metadata from registry.npmjs.org");
+	log.debug("Requesting package metadata from registry.npmjs.org");
 	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
 	const resp = await fetch("https://registry.npmjs.org/kipper");
@@ -263,10 +263,21 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 /**
  * Tries to determine the file metadata of the passed Markdown HTML file.
  * @param markdownHtml The HTML for the Markdown file.
+ * @param apiFile If set to true, that means the first <p> tag is a URL and not a description, as such it will be
+ * skipped to ensure the correct description is found.
  * @returns The metadata for the file.
  */
-export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMetaData {
+export function determineMarkdownFileMetadata(
+	markdownHtml: string,
+	apiFile: boolean = false,
+): DocumentMetaData {
+	// Ensure consistent line endings
 	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
+
+	// Skip the first <p> tag if this is an API file
+	let skipFirstPTag = apiFile;
+
+	// The metadata for the file
 	let metaData: DocumentMetaData = { title: "", description: "" };
 	let isTitle = false;
 	let isDescription = false;
@@ -281,7 +292,10 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 			if (line.endsWith("</h1>")) {
 				isTitle = false;
 			}
-		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
+		} else if (
+			(line.startsWith(`<p`) && !metaData.description && metaData.title) ||
+			isDescription
+		) {
 			// If there is a p tag, no description has been found yet and a title has been already created, make this the
 			// new description
 			isDescription = true;
@@ -289,6 +303,12 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 
 			if (line.endsWith("</p>")) {
 				isDescription = false;
+
+				// Unset the description if this is an API file - Skipping the first <p> tag block
+				if (skipFirstPTag) {
+					skipFirstPTag = false;
+					metaData.description = "";
+				}
 			}
 		}
 	}

@@ -15,11 +15,14 @@
     "pnpm": ">=7"
   },
   "scripts": {
-    "prebuild": "ts-node ./tools/build/build-webpages.ts && pnpm run tslint:fix && pnpm run prettier-build",
-    "build": "parcel build ./build/index.html --no-content-hash --no-optimize --no-scope-hoist --no-minify",
+    "build": "ts-node ./tools/build/build-webpages.ts",
+    "postbuild": "pnpm run tslint:fix && pnpm run prettier-build",
+    "parcel-dev-build": "parcel build ./build/index.html --no-content-hash --no-optimize --no-scope-hoist",
+    "prod-build": "pnpm run build --prod",
+    "postprod-build": "pnpm run postbuild",
     "gh-pages-build": "parcel build build/index.html --public-url https://kipper-lang.org --dist-dir . --no-content-hash --no-optimize --no-scope-hoist",
     "watch": "parcel watch src/index.html",
-    "start": "pnpm run build && pnpm run dev",
+    "start": "pnpm run dev",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "prettier": "prettier --write ./src/ && prettier --write ./tools/",
@@ -27,7 +30,8 @@
     "tslint": "eslint ./src/ --ext .ts --config .eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config .eslintrc --fix",
     "posttest": "pnpm run lint & pnpm run prettier",
-    "dev": "parcel ./build/index.html --open --no-cache"
+    "predev": "pnpm run build",
+    "dev": "http-server ./dist -p 1234 -e html --cors"
   },
   "devDependencies": {
     "@parcel/babylon-walk": "2.2.1",
@@ -112,7 +116,8 @@
     "typescript": "4.9.4",
     "uuid": "8.3.2",
     "ws": "7.4.6",
-    "html-minifier": "4.0.0",
-    "tslog": "3.3.4"
+    "tslog": "3.3.4",
+    "http-server": "14.1.1",
+    "cheerio": "1.0.0-rc.12"
   }
 }

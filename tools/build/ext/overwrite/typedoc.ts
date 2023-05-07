@@ -1,5 +1,6 @@
 import * as typedoc from "typedoc";
 import * as fs from "fs";
+import { ensureURLSlashes } from "../tools";
 
 // Overwrite 'renderDocument' to modify the markdown output
 // @ts-ignore
@@ -14,24 +15,27 @@ typedoc.Renderer.prototype.renderDocument = function renderDocument(template, pa
 	const success: boolean = originalRenderDocument.call(this, template, page);
 	if (success !== false) {
 		let fileContent = page.contents;
-		let outPath = page.filename;
+		let outPath = ensureURLSlashes(page.filename);
 
 		// Ensure that the module folder files are written to the root folder
 		if (outPath.includes("modules/")) {
 			outPath = outPath.replace("modules/", "");
 
-      // Properly adjust the links as the files were moved one level up
-      fileContent = fileContent.replace(/(\[[^\]]*]\()(\.\.\/)([^)]*\))/g, "$1./$3");
+			// Properly adjust the links as the files were moved one level up
+			fileContent = fileContent.replace(/(\[[^\]]*]\()(\.\.\/)([^)]*\))/g, "$1./$3");
 
 			// Remove original file
 			fs.rmSync(page.filename);
 		}
 
+		// Always remove the first two lines as they represent a TypeScript module path which is not needed
+		fileContent = fileContent.replace(/^.*\n.*\n/, "");
+
 		// Replace 'README.md' with 'index.html'
 		fileContent = fileContent.replace(/(\[[^\]]*]\([^)]*)(README\.md)((#[^\\)]*)?\))/g, "$1index.html$3");
 
-    // Replace 'modules.md' with 'index.html'
-    fileContent = fileContent.replace(/(\[[^\]]*]\([^)]*)(modules\.md)((#[^\\)]*)?\))/g, "$1index.html$3");
+		// Replace 'modules.md' with 'index.html'
+		fileContent = fileContent.replace(/(\[[^\]]*]\([^)]*)(modules\.md)((#[^\\)]*)?\))/g, "$1index.html$3");
 
 		// Ensure that any references to 'modules/' are replaced
 		fileContent = fileContent.replace(/(\[[^\]]*]\([^)]*)(modules\/)([^)]*\))/g, "$1$3");

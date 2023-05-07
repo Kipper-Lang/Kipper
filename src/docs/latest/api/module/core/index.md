@@ -1,6 +1,6 @@
 ---
-title: core
-dropdownTitle: core
+title: index
+dropdownTitle: "@kipper/core"
 nav:
   - index.md
   - compiler.md

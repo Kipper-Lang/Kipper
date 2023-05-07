@@ -27,10 +27,20 @@ import {
 	getDocsVersions,
 	processDirContents,
 } from "./ext/tools";
-import { configPath, destRootDir, destRootDocs, srcRootDir, srcRootDocs } from "./ext/const-config";
+import {
+	configPath,
+	destRootDir,
+	destRootDocs, distRootDocs,
+	noAPIDocsFlag,
+	prodFlag,
+	rootDir,
+	srcRootDir,
+	srcRootDocs,
+} from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
 import { log } from "./ext/logger";
+import { parcelBuild } from "./ext/parcel-build";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
@@ -305,17 +315,23 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	const apiPath: RelativeDocsURLPath = `/api/module/core/`; // Path to the API docs of the @kipper/core package
 	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
-	log.info("Preparing to build API docs for versions: " + versions.join(", "));
-	const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
-	await apiDocsBuilder.buildAPIDocs(versions, versionSidebars, {
-		srcRootDocs,
-		destRootDocs,
-		apiPath,
-		docsPath: "/docs/",
-		buildData: data,
-		versionSidebars,
-	});
-
 	// Copy all remaining files
 	await copyFiles(srcRootDir, destRootDir);
+
+	// Build using Parcel - API Docs are too large to be directly built using Parcel
+	log.info("Building using Parcel");
+	await parcelBuild();
+
+	// Only if '--no-api-docs' is not specified then we build the API docs
+	if (!noAPIDocsFlag) {
+		// Build the API docs - Injecting the API docs into the already compiled build folder
+		log.info("Preparing to inject API docs for versions: " + versions.join(", "));
+		const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
+		await apiDocsBuilder.buildAPIDocs(versions, versionSidebars, {
+			apiPath,
+			docsPath: "/docs/",
+			buildData: data,
+			destRootDocs: prodFlag ? rootDir : distRootDocs, // Using 'dist' as this modifies the already built files
+		});
+	}
 })();
