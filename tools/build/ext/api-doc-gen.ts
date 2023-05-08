@@ -98,6 +98,39 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		this.destRootDir = destRootDir;
 	}
 
+  /**
+   * Renders a Markdown file according to the requirements of this class.
+   *
+   * This means the output may slightly differ to the base function
+   * {@link MarkdownDocsBuilder.renderMarkdownFile}.
+   * @param filePath The path to the Markdown path.
+   */
+  public override async renderMarkdownFile(filePath: string): Promise<string> {
+    const output = super.renderMarkdownFile(filePath);
+
+    // Replace the ID of any 'constructor' header with 'constructor' (due to showdown bug it's 'constructor-NaN')
+    const $ = cheerio.load(await output);
+    for (const header of ["h1", "h2", "h3", "h4", "h5", "h6"]) {
+      $(`${header}#constructor-NaN`).attr("id", "constructor");
+    }
+
+    // Due to a minor bug in the typedoc markdown generation, we need to add the id for the local variables in the file
+    // 'compiler.html' manually
+    let html = $.html();
+    if (filePath.endsWith("compiler.md")) {
+      html = html.replace(
+        /(<td style=".+">.*)<code>(RULE_[A-z]*)<\/code>(.*<\/td>)/g,
+        (substring: string, pre: string, ruleName: string, after: string) => {
+          return `${pre}<code id="${ruleName.toLowerCase()}">${ruleName}</code>${after}`;
+        }
+      );
+    }
+
+    // Returning the slightly modified HTML
+    return html;
+  }
+
+
 	/**
 	 * Downloads a specific version of the Kipper git repository, where the environment matches the specified version.
 	 * @param version The version of the Kipper git repository that should be downloaded.
