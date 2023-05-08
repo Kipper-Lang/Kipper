@@ -7,7 +7,7 @@ import { typedoc } from "./overwrite/typedoc";
 import { DocsSidebar } from "./docs-sidebar";
 import { RelativeDocsURLPath } from "./base-types";
 import { MarkdownDocsBuilder } from "./markdown-docs-builder";
-import { debuggerMessage } from "./const-config";
+import { debuggerMessage, rootDir } from "./const-config";
 import { log } from "./logger";
 import * as cheerio from "cheerio";
 import * as path from "path";
@@ -204,6 +204,15 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		}
 	}
 
+  /**
+   * Reads in the given JSON file and returns the parsed JSON object.
+   * @param jsonPath The path to the JSON file.
+   * @protected
+   */
+  protected async readInJSON(jsonPath: AbsolutePath): Promise<Record<string, any>> {
+    return JSON.parse(await fs.readFile(jsonPath, "utf-8"));
+  }
+
 	/**
 	 * Generates the API documentation for the specified version of the Kipper git repository using TypeDoc.
 	 *
@@ -223,7 +232,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 		const entryFile = `${rootProjectPath}/kipper/core/src/index.ts`;
 		const tsconfig = `${rootProjectPath}/kipper/core/tsconfig.json`;
+    const typedocJSON = await this.readInJSON(`${rootDir}/typedoc.json`);
 		const typedocOptions: Partial<typedoc.TypeDocOptions> = {
+      ...typedocJSON,
 			entryPoints: [entryFile],
 			plugin: ["typedoc-plugin-markdown"],
 			tsconfig: tsconfig,
@@ -231,6 +242,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			githubPages: false,
 			basePath: rootProjectPath,
 			exclude: ["**/node_modules/**"],
+      titleLink: "https://npmjs.com/package/kipper",
 		};
 		await app.bootstrapWithPlugins(typedocOptions);
 
