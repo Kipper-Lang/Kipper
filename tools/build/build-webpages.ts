@@ -5,7 +5,7 @@ import * as ejs from "ejs";
 import * as lru from "lru-cache";
 import * as path from "path";
 import * as showdown from "showdown";
-import { promises as fs, statSync } from "fs";
+import { constants, promises as fs, statSync } from "fs";
 
 // Local dependencies
 import type {
@@ -28,14 +28,15 @@ import {
 	processDirContents,
 } from "./ext/tools";
 import {
-	configPath,
-	destRootDir,
-	destRootDocs, distRootDocs,
-	noAPIDocsFlag,
-	prodFlag,
-	rootDir,
-	srcRootDir,
-	srcRootDocs,
+  configPath,
+  destRootDir,
+  destRootDocs, distRootDir,
+  distRootDocs,
+  noAPIDocsFlag,
+  prodFlag,
+  rootDir,
+  srcRootDir,
+  srcRootDocs
 } from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
@@ -295,7 +296,42 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 	}
 }
 
+/**
+ * Ensures that the output directory is clean and no old files are interfering with it.
+ * @param dir The build directory that should be cleaned.
+ * @param exclude An array of files that should not be deleted.
+ */
+async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePath> = []) {
+  const docsPath = path.resolve(dir);
+
+  // Make exclude contain only absolute paths
+  exclude = exclude.map((item) => path.resolve(`${docsPath}/${item}`));
+  try {
+    await fs.access(docsPath, constants.R_OK | constants.W_OK);
+
+    // Delete every item in the directory except the excluded ones
+    const dirContents = await fs.readdir(docsPath);
+    for (let item of dirContents) {
+      const absolutePath = path.resolve(`${docsPath}/${item}`);
+      if (!exclude.includes(absolutePath)) {
+        await fs.rm(
+          path.resolve(`${docsPath}/${item}`),
+          { recursive: true, force: true }
+        );
+      }
+    }
+  } catch (e) {
+    return; // Directory does not exist
+  }
+}
+
 (async () => {
+  await ensureCleanDirectory( // Clean the docs folder (will keep the temp project dir in-tact though)
+    destRootDir,
+    ["temp"]
+  );
+  await ensureCleanDirectory(distRootDir); // Clean the dist folder
+
 	// Get data for the ejs build
 	const data = await getBuildData(configPath);
 

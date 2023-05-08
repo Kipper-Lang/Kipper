@@ -399,7 +399,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		buildData: Record<string, any>,
 		options: APIDocsInternalOptions,
 	) {
-		const templateHTML = await this.getModuleTemplateFile(fileOrDirURLPath, moduleTemplateFiles);
+		const templateHTML = await this.getModuleTemplateFile(
+      path.basename(fileOrDirURLPath), moduleTemplateFiles
+    );
 
 		// Build the markdown file and modify it based on the metadata of it
 		const mdFilePath = path.resolve(`${srcDir}/${fileOrDirURLPath}`);
@@ -522,7 +524,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		const parts = filename.split(".");
 		if (parts.length >= 3) {
 			const moduleName = parts[0];
-			if (moduleName in moduleTemplateFiles) {
+      const module: string | undefined = moduleTemplateFiles[moduleName];
+			if (module) {
 				return moduleTemplateFiles[moduleName];
 			}
 		}
@@ -556,7 +559,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		// Also build the markdown files in the root folder if the version is "latest"
 		if (options.shouldCopyToRoot) {
 			// Fetch the module template files before the entry points are built
-			moduleTemplateFiles = await this.getModuleTemplateFiles(options.apiVersionDestPath);
+			moduleTemplateFiles = await this.getModuleTemplateFiles(options.apiRootDestPath);
 
 			// Create the entry files and merge the templates with the API docs
 			await this.createAPIDocsEntryFiles(options.apiRootDestPath, options);
@@ -585,20 +588,6 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 		// Afterwards, convert the Markdown files to HTML files
 		await this.buildAPIMarkdownDocs(options);
-	}
-
-	/**
-	 * Ensures that the output directory is clean and no old files are interfering with it.
-	 * @param dir The build directory that should be cleaned.
-	 */
-	protected async ensureCleanDirectory(dir: AbsolutePath) {
-		const docsPath = path.resolve(`${dir}/docs`);
-		try {
-			await fs.access(docsPath, constants.R_OK | constants.W_OK);
-			await fs.rm(docsPath, { recursive: true, force: true });
-		} catch (e) {
-			return; // Directory does not exist
-		}
 	}
 
 	/**
@@ -631,7 +620,6 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 				gitVersion = options.buildData.versions["next"];
 			}
 
-			await this.ensureCleanDirectory(apiVersionDestPath);
 			await this.buildSpecificAPIVersion({
 				...options,
 				version,
