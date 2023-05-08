@@ -120,7 +120,7 @@ export abstract class AnalysableASTNode<
 	/**
 	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} of {@link CompilableASTNode this node}
 	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to analyse
-	 * as required semantic data from other nodes is missing.
+	 * as the required semantic data from other nodes is missing.
 	 */
 	public get skippedSemanticAnalysis(): boolean {
 		return this._skippedSemanticAnalysis;
@@ -129,7 +129,7 @@ export abstract class AnalysableASTNode<
 	/**
 	 * Returns true if the {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node}
 	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to type check
-	 * as required semantic data from other nodes is missing.
+	 * as the required semantic data from other nodes is missing.
 	 * @since 0.10.0
 	 */
 	public get skippedSemanticTypeChecking(): boolean {
