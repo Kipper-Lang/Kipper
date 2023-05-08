@@ -15,7 +15,7 @@ specifiers:
   '@types/node': 18.15.11
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
-  oclif: 3.8.1
+  oclif: 3.9.0
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
   rimraf: 4.1.2
@@ -42,7 +42,7 @@ devDependencies:
   '@types/node': 18.15.11
   '@types/sinon': 10.0.13
   json-parse-even-better-errors: 2.3.1
-  oclif: 3.8.1_o6avl3oodj6mwqsx3rm2wfkgv4
+  oclif: 3.9.0_o6avl3oodj6mwqsx3rm2wfkgv4
   os-tmpdir: 1.0.2
   pseudomap: 1.0.2
   rimraf: 4.1.2
@@ -394,8 +394,8 @@ packages:
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
 
-  /@oclif/core/2.8.2_o6avl3oodj6mwqsx3rm2wfkgv4:
-    resolution: {integrity: sha512-g50NrCdEcFlBfuwZb9RxLmxPNQ9wIaBPOiwbxlGYRkHMnsC6LNHcvVtyDnmndU8qoXrmCOZ6ocSZenOMlG+G1w==}
+  /@oclif/core/2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4:
+    resolution: {integrity: sha512-316DLfrHQDYmWDriI4Woxk9y1wVUrPN1sZdbQLHdOdlTA9v/twe7TdHpWOriEypfl6C85NWEJKc1870yuLtjrQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@types/cli-progress': 3.11.0
@@ -509,7 +509,7 @@ packages:
     resolution: {integrity: sha512-7fVB/M1cslwHJTmyNGGDYBizi54NHcKCxHAbDSD16EbjosKxFwncRylVC/nsMgKZEufMDKZaVYI2lYRY3GHlSQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 2.8.2_o6avl3oodj6mwqsx3rm2wfkgv4
+      '@oclif/core': 2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -522,7 +522,7 @@ packages:
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/color': 1.0.4
-      '@oclif/core': 2.8.2_o6avl3oodj6mwqsx3rm2wfkgv4
+      '@oclif/core': 2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4
       fast-levenshtein: 3.0.0
       lodash: 4.17.21
     transitivePeerDependencies:
@@ -536,7 +536,7 @@ packages:
     resolution: {integrity: sha512-eMwDOzxPdN1X0y5G0W/GJXFRUvevT6gOrbbRLPoboTUwcFRqhFOJ7jCqGUTomeDfMRgAb3O+3bcD64lIb/y+FA==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 2.8.2_o6avl3oodj6mwqsx3rm2wfkgv4
+      '@oclif/core': 2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4
       chalk: 4.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
@@ -2381,6 +2381,27 @@ packages:
       - supports-color
     dev: true
 
+  /mem-fs-editor/9.6.0:
+    resolution: {integrity: sha512-CsuAd+s0UPZnGzm3kQ5X7gGmVmwiX9XXRAmXj9Mbq0CJa8YWUkPqneelp0aG2g+7uiwCBHlJbl30FYtToLT3VQ==}
+    engines: {node: '>=12.10.0'}
+    peerDependencies:
+      mem-fs: ^2.1.0
+    peerDependenciesMeta:
+      mem-fs:
+        optional: true
+    dependencies:
+      binaryextensions: 4.18.0
+      commondir: 1.0.1
+      deep-extend: 0.6.0
+      ejs: 3.1.8
+      globby: 11.1.0
+      isbinaryfile: 4.0.10
+      minimatch: 3.1.2
+      multimatch: 5.0.0
+      normalize-path: 3.0.0
+      textextensions: 5.15.0
+    dev: true
+
   /mem-fs-editor/9.6.0_mem-fs@2.2.1:
     resolution: {integrity: sha512-CsuAd+s0UPZnGzm3kQ5X7gGmVmwiX9XXRAmXj9Mbq0CJa8YWUkPqneelp0aG2g+7uiwCBHlJbl30FYtToLT3VQ==}
     engines: {node: '>=12.10.0'}
@@ -2770,12 +2791,12 @@ packages:
     resolution: {integrity: sha512-EFVjAYfzWqWsBMRHPMAXLCDIJnpMhdWAqR7xG6M6a2cs6PMFpl/+Z20w9zDW4vkxOFfddegBKq9Rehd0bxWE7A==}
     engines: {node: '>= 10'}
 
-  /oclif/3.8.1_o6avl3oodj6mwqsx3rm2wfkgv4:
-    resolution: {integrity: sha512-1yc1rtsQrou6t21WYM6JM2fUzK3GKhGboB/A6ZeTFyC3VJb39fUWcRrQYE1JEoNlBHk5Z5hok8PEq09Vhm4ZZA==}
+  /oclif/3.9.0_o6avl3oodj6mwqsx3rm2wfkgv4:
+    resolution: {integrity: sha512-fsFyHVQYJdE50EcKrBjwzl2WT5sZUtTiRY1vqMwykgLFUDYrQS0lj7yqy2IgcPSmAWaLQryODdfBujCWOU98Ww==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
-      '@oclif/core': 2.8.2_o6avl3oodj6mwqsx3rm2wfkgv4
+      '@oclif/core': 2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4
       '@oclif/plugin-help': 5.2.4_o6avl3oodj6mwqsx3rm2wfkgv4
       '@oclif/plugin-not-found': 2.3.18_o6avl3oodj6mwqsx3rm2wfkgv4
       '@oclif/plugin-warn-if-update-available': 2.0.26_o6avl3oodj6mwqsx3rm2wfkgv4
@@ -2791,8 +2812,8 @@ packages:
       semver: 7.3.8
       shelljs: 0.8.5
       tslib: 2.5.0
-      yeoman-environment: 3.13.0
-      yeoman-generator: 5.7.0_yeoman-environment@3.13.0
+      yeoman-environment: 3.15.1
+      yeoman-generator: 5.8.0_yeoman-environment@3.15.1
       yosay: 2.0.2
     transitivePeerDependencies:
       - '@swc/core'
@@ -2800,6 +2821,7 @@ packages:
       - '@types/node'
       - bluebird
       - encoding
+      - mem-fs
       - supports-color
       - typescript
     dev: true
@@ -3958,8 +3980,8 @@ packages:
       yargs-parser: 21.1.1
     dev: true
 
-  /yeoman-environment/3.13.0:
-    resolution: {integrity: sha512-eBPpBZCvFzx6yk17x+ZrOHp8ADDv6qHradV+SgdugaQKIy9NjEX5AkbwdTHLOgccSTkQ9rN791xvYOu6OmqjBg==}
+  /yeoman-environment/3.15.1:
+    resolution: {integrity: sha512-P4DTQxqCxNTBD7gph+P+dIckBdx0xyHmvOYgO3vsc9/Sl67KJ6QInz5Qv6tlXET3CFFJ/YxPIdl9rKb0XwTRLg==}
     engines: {node: '>=12.10.0'}
     hasBin: true
     dependencies:
@@ -4004,8 +4026,8 @@ packages:
       - supports-color
     dev: true
 
-  /yeoman-generator/5.7.0_yeoman-environment@3.13.0:
-    resolution: {integrity: sha512-z9ZwgKoDOd+llPDCwn8Ax2l4In5FMhlslxdeByW4AMxhT+HbTExXKEAahsClHSbwZz1i5OzRwLwRIUdOJBr5Bw==}
+  /yeoman-generator/5.8.0_yeoman-environment@3.15.1:
+    resolution: {integrity: sha512-dsrwFn9/c2/MOe80sa2nKfbZd/GaPTgmmehdgkFifs1VN/I7qPsW2xcBfvSkHNGK+PZly7uHyH8kaVYSFNUDhQ==}
     engines: {node: '>=12.10.0'}
     peerDependencies:
       yeoman-environment: ^3.2.0
@@ -4019,6 +4041,7 @@ packages:
       execa: 5.1.1
       github-username: 6.0.0
       lodash: 4.17.21
+      mem-fs-editor: 9.6.0
       minimist: 1.2.7
       read-pkg-up: 7.0.1
       run-async: 2.4.1
@@ -4026,9 +4049,10 @@ packages:
       shelljs: 0.8.5
       sort-keys: 4.2.0
       text-table: 0.2.0
-      yeoman-environment: 3.13.0
+      yeoman-environment: 3.15.1
     transitivePeerDependencies:
       - encoding
+      - mem-fs
       - supports-color
     dev: true
 
