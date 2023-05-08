@@ -1,5 +1,5 @@
 /* Super large headers for the homepage */
-@use "../mixins/headers" as *;
+@use "../mixins/header-presets" as *;
 
 .super-large-header {
 	@include h-display;
