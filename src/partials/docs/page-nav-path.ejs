@@ -1,6 +1,9 @@
-<li><a class="docs-page-header-kipper-version" href="<%= thisVersionIndex %>"><%= docsVersion %>  /</a></li>
-<!-- <%= thisNavTreeItem %> <%= thisNavTreeItem?.parent %> <%= thisNavTreeItem?.path %> -->
-
+<li>
+    <a class="docs-page-header-kipper-version" href="<%= thisVersionIndex %>">
+        <%= docsVersion %>
+    </a>
+    <span> /</span>
+</li>
 <% if (!isHiddenFile) { %>
     <%# Getting a list that starts with the root item and ends with the current file %>
     <% const pathItems = []; %>
@@ -14,8 +17,9 @@
             <% if (!lastItem) { %>
                 <!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
                 <a class="docs-page-header-path-item" href="<%= `${rootDir}${pathItem.path}/index.html` %>">
-                    <%= pathItem.dropdownTitle || pathItem.title %> /
+                    <%= pathItem.dropdownTitle || pathItem.title %>
                 </a>
+                <span> /</span>
             <% } else { %>
                 <a class="docs-page-header-path-item" href="<%= `${rootDir}${pathItem.path}` %>">
                     <%= pathItem.title || "Index" %>
