@@ -18,7 +18,6 @@ specifiers:
   antlr4ts-cli: 0.5.0-alpha.4
   browserify: 17.0.0
   chai: 4.3.6
-  coverage-badge-creator: 1.0.15
   eslint: 8.32.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
@@ -59,7 +58,6 @@ devDependencies:
   antlr4ts-cli: 0.5.0-alpha.4
   browserify: 17.0.0
   chai: 4.3.6
-  coverage-badge-creator: 1.0.15
   eslint: 8.32.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.7
@@ -1519,7 +1517,7 @@ packages:
     dev: true
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
 
   /concat-stream/1.6.2:
@@ -1550,11 +1548,6 @@ packages:
 
   /core-util-is/1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
-    dev: true
-
-  /coverage-badge-creator/1.0.15:
-    resolution: {integrity: sha512-J6D3ZXJt2JfhBX8klkFGg+NbE9zYkfRsesWOB2+Pt7udCr7g1KBrSkG1P9WyZfiBrEb2pILmLgw9fXVlIHiIog==}
-    hasBin: true
     dev: true
 
   /create-ecdh/4.0.4:
@@ -2051,7 +2044,7 @@ packages:
     dev: true
 
   /fast-levenshtein/2.0.6:
-    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
+    resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==, tarball: fast-levenshtein/-/fast-levenshtein-2.0.6.tgz}
     dependencies:
       fastest-levenshtein: 1.0.16
     dev: true
