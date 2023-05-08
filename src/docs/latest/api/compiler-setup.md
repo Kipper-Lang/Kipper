@@ -1,7 +1,5 @@
 ---
 title: Compiler Setup
-nav:
-  - index.md
 ---
 
 # Setting up your compiler
@@ -140,14 +138,14 @@ parameters for a compilation.
 
 ```ts
 import { KipperCompiler } from "@kipper/core";
-import { TSTarget } from "@kipper/target-js";
+import { JSTarget } from "@kipper/target-js";
 
 const compiler = new KipperCompiler();
 const result = compiler.compile(
 	kipperCode, // A string or a KipperParseStream containing the source code
 	{
 		fileName: "myProgram.kip",
-		target: new TSTarget(),
+		target: new JSTarget(),
 		optimisationOptions: {
 			optimiseInternals: true, // Removes any unused internal function
 			optimiseBuiltIns: true, // Removes any unused built-in function
@@ -213,6 +211,15 @@ Parameters for the Kipper Compiler CLI in the console.
 
 ### Example CLI Command
 
+- Simple compilation of a single file (will generate `./build/sample.js`):
 ```bash
-kipper compile -s 'call print("Hello world!");' -e utf16le -i -b
+kipper compile sample.kip
+```
+- Simple compilation from a string (will generate `./build/anonymous-script.js`):
+```bash
+kipper compile -s "print('Hello world!');"
+```
+- Generating a UTF16-encoded program, where both internals and built-in are optimised (will generate `./build/anonymous-script.js`):
+```bash
+kipper compile -s "print('Hello world!');" -e utf16le -i -b
 ```
