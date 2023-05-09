@@ -177,7 +177,7 @@ export async function getBuildData(dataFile: Path): Promise<Record<string, any>>
  * @param src The source directory of a copy operation.
  * @param dest The destination directory of a copy operation.
  */
-export async function copyFiles(src: AbsolutePath, dest: AbsolutePath): Promise<void> {
+export async function copyNonEJSFiles(src: AbsolutePath, dest: AbsolutePath): Promise<void> {
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
@@ -196,7 +196,7 @@ export async function copyFiles(src: AbsolutePath, dest: AbsolutePath): Promise<
 			if (!existsSync(itemDest)) {
 				await fs.mkdir(itemDest);
 			}
-			await copyFiles(itemSrc, itemDest);
+			await copyNonEJSFiles(itemSrc, itemDest);
 		} else {
 			await fs.copyFile(itemSrc, itemDest);
 		}

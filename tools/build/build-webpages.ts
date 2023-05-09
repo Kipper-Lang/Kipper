@@ -21,7 +21,7 @@ import type { RelativeDocsURLPath } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
 import {
 	buildEjsFiles,
-	copyFiles,
+	copyNonEJSFiles,
 	ensureValidSrcAndDest,
 	getBuildData,
 	getDocsVersions,
@@ -342,7 +342,9 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const ejsDocsTemplate = path.resolve(`${srcRootDir}/partials/docs/page-template.ejs`);
 	const docsBuilder = new DocsBuilder(ejsDocsTemplate);
-	const versionSidebars = await docsBuilder.build(srcRootDocs, destRootDocs, data);
+	const versionSidebars = await docsBuilder.build(
+    srcRootDocs, destRootDocs, data
+  );
 
 	log.info("Built docs for versions: " + Object.keys(versionSidebars).join(", "));
 
@@ -352,11 +354,11 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
 	// Copy all remaining files
-	await copyFiles(srcRootDir, destRootDir);
+	await copyNonEJSFiles(srcRootDir, destRootDir);
 
 	// Build using Parcel - API Docs are too large to be directly built using Parcel
 	log.info("Building using Parcel");
-	await parcelBuild();
+	await parcelBuild(); // Builds to 'distRootDir'
 
 	// Only if '--no-api-docs' is not specified then we build the API docs
 	if (!noAPIDocsFlag) {
@@ -371,7 +373,13 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 			docsPath: "/docs/",
 			buildData: data,
       packageProjectPath,
-			destRootDocs: prodFlag ? rootDir : distRootDocs, // Using 'dist' as this modifies the already built files
+			destRootDocs: distRootDocs,
 		});
 	}
+
+  // If '--prod' is specified then we copy everything to the root of the docs folder
+  if (prodFlag) {
+    log.info("Copying to root folder - '--prod' flag specified");
+    await fs.cp(distRootDir, rootDir, { recursive: true, force: true });
+  }
 })();
