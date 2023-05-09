@@ -1,12 +1,15 @@
 import {
-  AbsolutePath,
-  DocumentMetaData,
-  FileOrDirName,
-  Path,
-  RelativeDocsURLPath,
-  RelativePath, SimplePath,
-  URLPath,
-  WebURLPath
+	AbsolutePath,
+	DirTreeItem,
+	DocumentMetaData,
+	FileOrDirName,
+	Path,
+	PathTreeItem,
+	RelativeDocsURLPath,
+	RelativePath,
+	SimplePath,
+	URLPath,
+	WebURLPath,
 } from "./base-types";
 import * as path from "path";
 import { destRootDir, ejsOptions, srcRootDir, srcRootDocs } from "./const-config";
@@ -15,6 +18,15 @@ import fetch from "node-fetch";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
 import * as showdown from "showdown";
+import { log } from "./logger";
+
+/**
+ * Returns whether 'copyToRoot' is true for the specified version.
+ * @param version
+ */
+export function shouldCopyToRoot(version: string): boolean {
+	return version === "latest";
+}
 
 /**
  * Ensures that the given URL does not use Windows-style slashes and has URL-conforming slashes.
@@ -24,15 +36,34 @@ export function ensureURLSlashes(url: URLPath): URLPath {
 	return url.replace(/\\/g, "/");
 }
 
+export function removeLeadingAndTrailingSlashes(str: URLPath): URLPath {
+	return removeTrailingSlash(removeLeadingSlash(str));
+}
+
 /**
  * Removes the trailing slash from the given string if it exists.
+ *
+ * If the string is only one character long and equal to a slash, it will not be removed.
  * @param str The string to remove the trailing slash from.
  */
-export function removeTrailingSlash(str: string): string {
+export function removeTrailingSlash(str: Path): Path {
 	if (str.length === 1) return str; // Don't remove the trailing slash if it is the only character in the string.
 
 	if (str.endsWith("/") || str.endsWith("\\")) {
 		return str.slice(0, -1);
+	}
+	return str;
+}
+
+/**
+ * Removes the leading slash from the given string if it exists.
+ *
+ * This will unlike {@link removeTrailingSlash} still remove the slash even if it is the only character in the string.
+ * @param str The string to remove the leading slash from.
+ */
+export function removeLeadingSlash(str: Path): Path {
+	if (str.startsWith("/") || str.startsWith("\\")) {
+		return str.slice(1);
 	}
 	return str;
 }
@@ -95,9 +126,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
 		await fs.mkdir(dest);
 	} else if (!statSync(dest).isDirectory()) {
 		throw new Error("Destination must be a directory");
-	}
-
-	if (!statSync(src).isDirectory()) {
+	} else if (!statSync(src).isDirectory()) {
 		throw new Error("Source must be a directory");
 	}
 }
@@ -108,6 +137,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
  */
 export async function getBuildData(dataFile: Path): Promise<Record<string, any>> {
 	// Read const config.json
+	log.debug("Requesting package metadata from registry.npmjs.org");
 	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
 	const resp = await fetch("https://registry.npmjs.org/kipper");
@@ -147,25 +177,26 @@ export async function getBuildData(dataFile: Path): Promise<Record<string, any>>
  * @param src The source directory of a copy operation.
  * @param dest The destination directory of a copy operation.
  */
-export async function copyFiles(src: AbsolutePath, dest: AbsolutePath): Promise<void> {
+export async function copyNonEJSFiles(src: AbsolutePath, dest: AbsolutePath): Promise<void> {
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
 	const result = await fs.readdir(src);
-	for (let file of result) {
-		// If the file is an ejs file or a partials' folder skip it, as it will be compiled into HTML
-		if (file.endsWith(".ejs") || file === "partials" || file === "docs") {
+	for (let fileOrDir of result) {
+		// If the file is an ejs file, ejs partial or in the docs, skip it as it will be compiled into HTML
+		// in a different step
+		if (fileOrDir.endsWith(".ejs") || fileOrDir === "partials" || fileOrDir === "docs") {
 			continue;
 		}
 
-		const itemSrc = `${src}/${file}`;
-		const itemDest = `${dest}/${file}`;
+		const itemSrc = `${src}/${fileOrDir}`;
+		const itemDest = `${dest}/${fileOrDir}`;
 
 		if (statSync(itemSrc).isDirectory()) {
 			if (!existsSync(itemDest)) {
 				await fs.mkdir(itemDest);
 			}
-			await copyFiles(itemSrc, itemDest);
+			await copyNonEJSFiles(itemSrc, itemDest);
 		} else {
 			await fs.copyFile(itemSrc, itemDest);
 		}
@@ -182,23 +213,21 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
-  // Content of the root src folder
+	// Content of the root src folder
 	const result: Array<FileOrDirName> = await fs.readdir(src);
 
-  // First get all the markdown files and add them to a list
-  const mdFiles: Array<SimplePath> = [];
-  for (let file of result) {
-    if (file.endsWith(".md")) {
-      mdFiles.push(file);
-    }
-  }
+	// First get all the markdown files and add them to a list
+	const mdFiles: Array<SimplePath> = [];
+	for (let file of result) {
+		if (file.endsWith(".md")) {
+			mdFiles.push(file);
+		}
+	}
 
-  // The converter for the markdown files
-  const markdownConverter =  new showdown.Converter(
-    { metadata: true /* extensions: ['line-numbers'] } */ }
-  );
+	// The converter for the markdown files
+	const markdownConverter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
 
-  // Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
+	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
 	for (let file of result) {
 		// If the file is an ejs file compile it to HTML
 		if (file.endsWith(".ejs")) {
@@ -213,18 +242,16 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
 				isDocsFile: false,
 				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
-        markdownContent: undefined,
+				markdownContent: undefined,
 			};
 
-      // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
-      // and insert it into the ejs file
-      let mdFile = mdFiles.find(
-        (mdFile) => mdFile === file.replace(".ejs", ".md")
-      );
-      if (mdFile !== undefined) {
-        const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
-        itemData.markdownContent = markdownConverter.makeHtml(md);
-      }
+			// If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
+			// and insert it into the ejs file
+			let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
+			if (mdFile !== undefined) {
+				const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+				itemData.markdownContent = markdownConverter.makeHtml(md);
+			}
 
 			// Build ejs file
 			const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
@@ -236,10 +263,21 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 /**
  * Tries to determine the file metadata of the passed Markdown HTML file.
  * @param markdownHtml The HTML for the Markdown file.
+ * @param apiFile If set to true, that means the first <p> tag is a URL and not a description, as such it will be
+ * skipped to ensure the correct description is found.
  * @returns The metadata for the file.
  */
-export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMetaData {
+export function determineMarkdownFileMetadata(
+	markdownHtml: string,
+	apiFile: boolean = false,
+): DocumentMetaData {
+	// Ensure consistent line endings
 	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
+
+	// Skip the first <p> tag if this is an API file
+	let skipFirstPTag = apiFile;
+
+	// The metadata for the file
 	let metaData: DocumentMetaData = { title: "", description: "" };
 	let isTitle = false;
 	let isDescription = false;
@@ -254,7 +292,10 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 			if (line.endsWith("</h1>")) {
 				isTitle = false;
 			}
-		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
+		} else if (
+			(line.startsWith(`<p`) && !metaData.description && metaData.title) ||
+			isDescription
+		) {
 			// If there is a p tag, no description has been found yet and a title has been already created, make this the
 			// new description
 			isDescription = true;
@@ -262,6 +303,12 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 
 			if (line.endsWith("</p>")) {
 				isDescription = false;
+
+				// Unset the description if this is an API file - Skipping the first <p> tag block
+				if (skipFirstPTag) {
+					skipFirstPTag = false;
+					metaData.description = "";
+				}
 			}
 		}
 	}
@@ -271,4 +318,46 @@ export function determineMarkdownFileMetadata(markdownHtml: string): DocumentMet
 	metaData.description = metaData.description.trim();
 
 	return metaData;
+}
+
+/**
+ * Gets the versions of the docs.
+ * @param docsSrc The source directory of the docs.
+ */
+export async function getDocsVersions(docsSrc: string): Promise<Array<string>> {
+	return await fs.readdir(docsSrc);
+}
+
+/**
+ * Returns a tree representing the content of the specified directory, which should represent the data returned from
+ * a {@link fs.readdir} call.
+ * @param dirContents The contents of the directory to process.
+ * @param dirPath The absolute path of the current directory.
+ */
+export async function processDirContents(
+	dirContents: Array<string>,
+	dirPath: AbsolutePath,
+): Promise<Array<PathTreeItem>> {
+	const mdFiles = [];
+	for (const fileOrDir of dirContents) {
+		if (fileOrDir.endsWith(".md")) {
+			mdFiles.push(<Path>fileOrDir);
+		}
+
+		const absolutePath: AbsolutePath = path.resolve(`${dirPath}/${fileOrDir}/`);
+		if (statSync(absolutePath).isDirectory()) {
+			// Process nested directories recursively
+			const pathItems = await processDirContents(await fs.readdir(absolutePath), absolutePath);
+			mdFiles.push(<DirTreeItem>{
+				name: fileOrDir,
+				items: pathItems,
+			});
+
+			// Ensure there is an index.md file in the directory
+			if (!pathItems.find((i) => i === "index.md" || (typeof i !== "string" && i.name === "index.md"))) {
+				throw new Error(`No index.md file found in directory '${absolutePath}'`);
+			}
+		}
+	}
+	return mdFiles;
 }

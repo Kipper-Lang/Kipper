@@ -27,6 +27,7 @@ compilation of a program. This API is per default shipped with the `@kipper/core
 `kipper-standalone.js` file, as well is provided using flags with the CLI (`@kipper/cli`).
 
 For more info view the following sections of this page:
+
 - [Configuring the Kipper Compiler in Node.js](#configuring-the-kipper-compiler-in-nodejs)
 - [Configuring the Kipper Compiler CLI](#configuring-the-kipper-compiler-cli)
 

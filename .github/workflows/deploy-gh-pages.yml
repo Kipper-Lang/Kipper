@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18.15.0]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -28,10 +28,8 @@ jobs:
             - recursive: true
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Compile Templates and Markdown
-        run: pnpm run build
-      - name: Build Files using Parcel
-        run: pnpm run gh-pages-build
+      - name: Build files and bundle them using Parcel
+        run: pnpm run prod-build
       - name: Add Local Identification Config
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"

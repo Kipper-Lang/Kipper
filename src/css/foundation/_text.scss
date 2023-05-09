@@ -1,6 +1,6 @@
 /*! Text and Header Formatting */
 @use "./var" as *;
-@use "../mixins/headers" as header-presets;
+@use "../mixins/header-presets" as header-presets;
 @use "../extra/super-large-header";
 
 $default-section-margin: 1.6rem;
@@ -253,7 +253,7 @@ h6,
 }
 
 pre[class*="language-"] {
-  margin: 1em 0;
+	margin: 1em 0;
 	padding: 1em;
 	overflow: auto;
 	border-radius: $default-border-radius;
@@ -268,9 +268,9 @@ pre[class*="language-"] {
 }
 
 .code-toolbar > .toolbar {
-  .copy-to-clipboard-button:hover {
-    cursor: pointer;
-  }
+	.copy-to-clipboard-button:hover {
+		cursor: pointer;
+	}
 }
 
 /* Overwrite unfitting coloring */

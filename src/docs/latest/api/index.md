@@ -2,10 +2,10 @@
 title: Overview
 dropdownTitle: Kipper API
 nav:
-- index.md
-- compiler-setup.md
-- module/
-- cli/
+  - index.md
+  - compiler-setup.md
+  - module/
+  - cli/
 ---
 
 # Kipper Compiler API
@@ -35,4 +35,3 @@ The subsections of the Kipper Compiler API documentation:
 - [Compiler Setup](./compiler-setup.html)
 - [Module API](./module/index.html)
 - [CLI API](./cli/index.html)
-
