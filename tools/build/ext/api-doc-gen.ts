@@ -39,6 +39,10 @@ export interface APIDocsBuilderOptions {
 	 * The build data for the Markdown-to-HTML build.
 	 */
 	buildData: Record<string, any>;
+  /**
+   * The path to the project directory.
+   */
+  packageProjectPath: string;
 }
 
 /**
@@ -53,6 +57,10 @@ interface APIDocsInternalOptions extends APIDocsBuilderOptions {
 	 * The git version of the docs.
 	 */
 	gitVersion: string;
+  /**
+   * The name of the package that should be documented.
+   */
+  packageName: string;
 	/**
 	 * Whether the docs should be copied to the root directory.
 	 */
@@ -263,8 +271,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		// Load the project tsconfig.json
 		app.options.addReader(new typedoc.TSConfigReader());
 
-		const entryFile = `${rootProjectPath}/kipper/core/src/index.ts`;
-		const tsconfig = `${rootProjectPath}/kipper/core/tsconfig.json`;
+		const entryFile = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/src/index.ts`;
+		const tsconfig = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/tsconfig.json`;
     const typedocJSON = await this.readInJSON(`${rootDir}/typedoc.json`);
 		const typedocOptions: Partial<typedoc.TypeDocOptions> = {
       ...typedocJSON,
@@ -275,7 +283,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			githubPages: false,
 			basePath: rootProjectPath,
 			exclude: ["**/node_modules/**"],
-      titleLink: "https://npmjs.com/package/kipper",
+      titleLink: `https://npmjs.com/package/@kipper/${options.packageName}`,
 		};
 		await app.bootstrapWithPlugins(typedocOptions);
 
@@ -346,8 +354,14 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			}
 		}
 
-		// Remove the '/modules' folder
-		await fs.rm(path.resolve(`${apiOutputDir}/modules`), { recursive: true });
+		// Remove the '/modules' folder - if it exists
+    const modulesFolder = path.resolve(`${apiOutputDir}/modules`);
+    try {
+      await fs.access(modulesFolder);
+      await fs.rm(modulesFolder, { recursive: true });
+    } catch (e) {
+      return; // Ignore the error - the folder does not exist
+    }
 	}
 
 	/**
@@ -627,6 +641,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * Builds the API docs for the specified versions using the package 'typedoc', which generates for '@kipper/core',
 	 * '@kipper/target-js' and '@kipper/target-js' the API docs in the specified destination folder.
 	 * @param versions The array of versions that should be built.
+   * @param packages The array of packages that should be built.
 	 * @param versionSidebars List of all sidebars generated for the static documentation. The {@link APIDocsBuilder}
 	 * will use the information stored for every version to generate the sidebar for the API docs.
 	 * @param options The object storing the options for the API docs builder.
@@ -637,31 +652,39 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 */
 	public async buildAPIDocs(
 		versions: Array<string>,
+    packages: Array<string>,
 		versionSidebars: { [v: string]: DocsSidebar },
 		options: APIDocsBuilderOptions,
 	): Promise<void> {
-		for (const version of versions) {
-			const destVersionDocs: AbsolutePath = path.resolve(options.destRootDocs, version);
-			const apiVersionDestPath: AbsolutePath = path.resolve(`${destVersionDocs}/${options.apiPath}`);
-			const apiRootDestPath: AbsolutePath = path.resolve(`${options.destRootDocs}/${options.apiPath}`);
+    for (const packageToBuild of packages) {
+      for (const version of versions) {
+        const apiPath = path.join(`${options.apiPath}/${packageToBuild}`);
 
-			// Ensure that tre the 'latest' and 'next' version is replaced with a real version number (required for git)
-			let gitVersion = version;
-			if (gitVersion === "latest") {
-				gitVersion = options.buildData.versions["latest"];
-			} else if (gitVersion === "next") {
-				gitVersion = options.buildData.versions["next"];
-			}
+        // Absolute paths
+        const destVersionDocs: AbsolutePath = path.resolve(options.destRootDocs, version);
+        const apiVersionDestPath: AbsolutePath = path.resolve(`${destVersionDocs}/${apiPath}`);
+        const apiRootDestPath: AbsolutePath = path.resolve(`${options.destRootDocs}/${apiPath}`);
 
-			await this.buildSpecificAPIVersion({
-				...options,
-				version,
-				destVersionDocs,
-				apiVersionDestPath,
-				apiRootDestPath,
-				gitVersion,
-				shouldCopyToRoot: shouldCopyToRoot(version),
-			});
-		}
+        // Ensure that tre the 'latest' and 'next' version is replaced with a real version number (required for git)
+        let gitVersion = version;
+        if (gitVersion === "latest") {
+          gitVersion = options.buildData.versions["latest"];
+        } else if (gitVersion === "next") {
+          gitVersion = options.buildData.versions["next"];
+        }
+
+        await this.buildSpecificAPIVersion({
+          ...options,
+          apiPath, // '$API_PATH/$PACKAGE'
+          version,
+          destVersionDocs,
+          apiVersionDestPath,
+          apiRootDestPath,
+          gitVersion,
+          shouldCopyToRoot: shouldCopyToRoot(version),
+          packageName: packageToBuild,
+        });
+      }
+    }
 	}
 }

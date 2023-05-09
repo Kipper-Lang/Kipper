@@ -348,7 +348,7 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 
 	// Build API docs
 	const exclusions: Array<string> = ["0.9.2"]; // Versions to exclude from the API docs (as they are too outdated)
-	const apiPath: RelativeDocsURLPath = `/api/module/core/`; // Path to the API docs of the @kipper/core package
+	const apiPath: RelativeDocsURLPath = `/api/module/`; // Path to the API docs of the @kipper/core package
 	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
 
 	// Copy all remaining files
@@ -360,13 +360,17 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 
 	// Only if '--no-api-docs' is not specified then we build the API docs
 	if (!noAPIDocsFlag) {
+    const packagesToDocument = ["core", "target-ts", "target-js"];
+    const packageProjectPath: RelativePath = "/kipper/";
+
 		// Build the API docs - Injecting the API docs into the already compiled build folder
 		log.info("Preparing to inject API docs for versions: " + versions.join(", "));
 		const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
-		await apiDocsBuilder.buildAPIDocs(versions, versionSidebars, {
+		await apiDocsBuilder.buildAPIDocs(versions, packagesToDocument, versionSidebars, {
 			apiPath,
 			docsPath: "/docs/",
 			buildData: data,
+      packageProjectPath,
 			destRootDocs: prodFlag ? rootDir : distRootDocs, // Using 'dist' as this modifies the already built files
 		});
 	}
