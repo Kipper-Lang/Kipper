@@ -30,7 +30,8 @@ import {
 import {
   configPath,
   destRootDir,
-  destRootDocs, distRootDir,
+  destRootDocs,
+  distRootDir,
   distRootDocs,
   noAPIDocsFlag,
   prodFlag,

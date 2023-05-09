@@ -11,14 +11,15 @@ import {
 	URLPath,
 	WebURLPath,
 } from "./base-types";
-import * as path from "path";
+import { log } from "./logger";
 import { destRootDir, ejsOptions, srcRootDir, srcRootDocs } from "./const-config";
 import { existsSync, statSync } from "fs";
-import fetch from "node-fetch";
+import * as cheerio from "cheerio";
+import * as path from "path";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
 import * as showdown from "showdown";
-import { log } from "./logger";
+import fetch from "node-fetch";
 
 /**
  * Returns whether 'copyToRoot' is true for the specified version.
@@ -360,4 +361,25 @@ export async function processDirContents(
 		}
 	}
 	return mdFiles;
+}
+
+/**
+ * Wraps all tables in the given HTML with a div element that has the class 'table-wrapper'.
+ * @param html The HTML to wrap the tables in.
+ */
+export async function wrapAllTables(html: string): Promise<string> {
+  const $ = cheerio.load(html);
+
+  // Wrap all tables in a div with the class 'table-wrapper'
+  $("table").wrap("<div class='table-wrapper'></div>");
+
+  return $.html();
+}
+
+/**
+ * Removes the <html>, <head> and <body> tag, as they are automatically inserted by {@link cheerio.load}.
+ * @param html The HTML to sanitize.
+ */
+export function removeHTMLHeadAndBodyTag(html: string): string {
+  return html.replace(/<\/?((head)|(html)|(body))>/g, "");
 }

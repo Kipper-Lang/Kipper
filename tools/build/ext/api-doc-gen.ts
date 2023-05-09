@@ -2,7 +2,13 @@ import type { AbsolutePath, DocumentMetaData, FileOrDirName, WebURLPath } from "
 import { finished } from "stream/promises";
 import { Readable } from "stream";
 import { spawn } from "child_process";
-import { determineMarkdownFileMetadata, ensureURLSlashes, shouldCopyToRoot } from "./tools";
+import {
+  determineMarkdownFileMetadata,
+  ensureURLSlashes,
+  removeHTMLHeadAndBodyTag,
+  shouldCopyToRoot,
+  wrapAllTables
+} from "./tools";
 import { typedoc } from "./overwrite/typedoc";
 import { DocsSidebar } from "./docs-sidebar";
 import { RelativeDocsURLPath } from "./base-types";
@@ -18,6 +24,7 @@ import { constants } from "fs";
 
 export const PROJECT_ZIP_PATH: string = "https://github.com/Luna-Klatzer/Kipper/zipball/$VERSION/";
 export const REPLACE_TEMPLATE: string = "<!-- Replace this with API docs generation -->";
+export const NPM_KIPPER_SCOPE_URL: string = "https://npmjs.com/package/@kipper";
 
 /**
  * The options for the API docs builder.
@@ -122,9 +129,11 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
       $(`${header}#constructor-NaN`).attr("id", "constructor");
     }
 
+    // Wrap all HTML tables with the 'table-wrapper' class
+    let html = await wrapAllTables($.html());
+
     // Due to a minor bug in the typedoc markdown generation, we need to add the id for the local variables in the file
     // 'compiler.html' manually
-    let html = $.html();
     if (filePath.endsWith("compiler.md")) {
       html = html.replace(
         /(<td style=".+">.*)<code>(RULE_[A-z]*)<\/code>(.*<\/td>)/g,
@@ -133,6 +142,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
         }
       );
     }
+
+    // Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
+    html = removeHTMLHeadAndBodyTag(html);
 
     // Returning the slightly modified HTML
     return html;
@@ -283,7 +295,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			githubPages: false,
 			basePath: rootProjectPath,
 			exclude: ["**/node_modules/**"],
-      titleLink: `https://npmjs.com/package/@kipper/${options.packageName}`,
+      titleLink: `${NPM_KIPPER_SCOPE_URL}/${options.packageName}`,
 		};
 		await app.bootstrapWithPlugins(typedocOptions);
 
@@ -413,7 +425,10 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		$("meta[property='og:title']").attr("content", title);
 		$("meta[property='og:description']").attr("content", markdownMetadata.description);
 
-		return $.html();
+    // Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
+    html = removeHTMLHeadAndBodyTag(html);
+
+		return html;
 	}
 
 	/**

@@ -467,28 +467,42 @@ nav.phone-docs-nav {
 			}
 
 			li > ul.phone-docs-nav-path {
-				li a.docs-page-header-path-item,
-				li a.docs-page-header-kipper-version {
-					@include li-item;
+        column-gap: 0.25rem;
 
-					height: 100%;
-					align-content: center;
-					display: flex;
-				}
+        li {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-content: center;
 
-				:first-child:is(li) > a.docs-page-header-kipper-version {
-					@include li-item;
+          a.docs-page-header-path-item,
+          a.docs-page-header-kipper-version {
+            @include li-item;
 
-					&,
-					&:active,
-					&:visited {
-						color: $scheme-dark-gray;
-					}
+            height: 100%;
+            align-content: center;
+            display: flex;
+          }
 
-					&:hover {
-						color: $scheme-primary;
-					}
-				}
+          span {
+            font-size: 1.2rem;
+            margin-left: 0.25rem;
+          }
+        }
+
+        :first-child:is(li) > a.docs-page-header-kipper-version {
+          @include li-item;
+
+          &,
+          &:active,
+          &:visited {
+            color: $scheme-dark-gray;
+          }
+
+          &:hover {
+            color: $scheme-primary;
+          }
+        }
 			}
 
 			li.phone-docs-nav-bar-menu-toggle {
