@@ -1,8 +1,9 @@
 {
   "releasesURL": "https://github.com/Luna-Klatzer/Kipper/releases",
   "kipperGithubURL": "https://github.com/Luna-Klatzer/Kipper",
+  "projectPanelURL": "https://github.com/users/Luna-Klatzer/projects/2",
   "securityURL": "https://github.com/Luna-Klatzer/Kipper/security/policy",
-  "issueTracker": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "issueTrackerURL": "https://github.com/Luna-Klatzer/Kipper/issues",
   "licenseURL": "https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE",
   "docsEditURL": "https://github.com/Luna-Klatzer/Kipper/edit/docs",
   "roadmapURL": "https://github.com/Luna-Klatzer/Kipper/discussions/139",
