@@ -3,11 +3,11 @@
 A function is a block of code that can be called by name. It can be passed data to operate on (i.e. the parameters) and
 can optionally return data (the return value).
 
-All data that is passed to a function is explicitly passed.
-
-Functions are an easy way to re-use code and provide interface to do certain things over and over again. They are
+Functions are an easy way to re-use code and provide an interface to do certain things multiple times. They are
 essential for every program, as the ability to re-execute statements over and over again, makes them a powerful tool
 for every program allowing the creation of complex behaviour fairly easily and avoiding ugly or tedious code repetition.
+
+All data that is passed to a function is explicitly passed.
 
 ## Syntax
 
@@ -25,13 +25,15 @@ def NAME(ARG_NAME: TYPE, ...) -> RETURN_TYPE {
 Rules for defining a Kipper function:
 
 - A function body/statement must exist.
-- An identifier must be specified.
+- An unique identifier must be specified.
 - The return type must be specified.
-- Arguments are optional.
+- Arguments are optional for the definition, but all specified arguments must be provided when calling the function.
+- Return statements are optional if the return type is [`void`](./datatypes/void-type.html).
+- The return type must match the type of the return statement.
 
 ### Calling a function
 
-_See also [Function call expression](./expressions/index.html)._
+_See also [Function call expression](./expressions/function-call-expression.html)._
 
 ```ts
 call NAME(ARG1, ARG2, ARGn, ...);
@@ -53,12 +55,16 @@ This means that the arguments will also be referencable by statements inside the
     A function allows for an infinite amount of arguments, though at the current stage of development, no optional or
     default arguments are available. Meaning <em>all</em> arguments have to be defined when calling a function!
   </p>
+	<p>
+	This will likely change in the future, view the <a href="<%- roadmapURL %>">roadmap of Kipper</a> for more info.
+	</p>
 </div>
 
 ### Function name shadowing
 
 Like many other languages, Kipper allows some form of identifier/variable shadowing, though it's heavily restricted to
-avoid confusion in many cases. An exception though is the shadowing of the function identifier inside its own scope.
+avoid confusion in many cases. One of the few exceptions to this is the shadowing of the function identifier inside its
+own scope.
 
 That means that the following code is valid and that the variable `x` is _not_ going to throw an `IdentifierError`:
 
@@ -82,7 +88,7 @@ def func1() -> void {
 	return;
 }
 
-// May call with either 'call' prefix keyword or without
+// May call with either 'call' prefix keyword or without - Always optional
 func1();
 call func1();
 ```
@@ -155,25 +161,20 @@ def func8() -> num {
 }
 ```
 
-### More complex example
+### Documented Function
+
+Remember! It is good to always document your functions.
 
 ```ts
-// Note: It is good to always document your functions
-/*
- * @brief Adds the prefix before the main_str
- * @param prefix The prefix that shall be added
- * @param main_str The main_str to append to
+/**
+ * Adds the prefix to the main string.
+ * @param pre The prefix that shall be added.
+ * @param main The string to append the prefix to.
  */
-def add_prefix(prefix: str, main_str: str) -> str {
-  return prefix + main_str;
+def prefix(pre: str, main: str) -> str {
+  return pre + main;
 }
 
 // ✓ Calling the function with all the required arguments and passing the result to a variable
-var result_str: str = add_prefix("pre", "fix"); // -> "prefix"
-
-// X May not call a function without its required arguments!
-var any_var: str = add_prefix();
-
-// X May not pass the function itself to a variable!
-var any_var: str = add_prefix;
+var result: str = prefix("pre", "fix"); // -> "prefix"
 ```
