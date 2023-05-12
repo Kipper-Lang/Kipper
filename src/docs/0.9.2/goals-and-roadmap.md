@@ -19,6 +19,6 @@ secure as possible with features, such as:
 All active changes, issues and development plans are tracked on the following sites on GitHub. If any changes occur
 they will be reported there first:
 
-- [Project Roadmap](<%- roadmapURL %>)
-- [Issues Tracker](https://github.com/Luna-Klatzer/Kipper/issues/)
-- [GitHub Project Panel](https://github.com/users/Luna-Klatzer/projects/2)
+- <a href="<%- roadmapURL %>">Project Roadmap</a>
+- <a href="<%- issueTrackerURL %>">Issues Tracker</a>
+- <a href="<%- projectPanelURL %>">GitHub Project Panel</a>
