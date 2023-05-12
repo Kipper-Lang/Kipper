@@ -67,7 +67,7 @@ print("It spans multiple lines.");
  * @param val The list of numbers.
  * @returns The sum of all numbers.
  */
-def sum(val: list<num>) -> num {
+def sum(val: Array<num>) -> num {
   var sum: num = 0;
   for (var i: num = 0; i < call len(val); i++) {
     sum += i;
