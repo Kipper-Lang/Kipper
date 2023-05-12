@@ -19,8 +19,25 @@ ol {
 	}
 }
 
-li {
-	.markdown-content & + & {
-		margin-top: 0.25em;
-	}
+.markdown-content {
+  ul li, ol li {
+    margin-bottom: 0;
+
+    .code-toolbar {
+      margin-bottom: 1rem;
+    }
+  }
+
+  /* If the <li> is the last child of a <ul> or <ol> */
+  ul :last-child:is(li),
+  ol :last-child:is(li) {
+    /* Last child of the <li> */
+    & :last-child:is(.code-toolbar) {
+      margin-bottom: 0;
+    }
+  }
+
+  li + li {
+    margin-top: 0.25em;
+  }
 }
