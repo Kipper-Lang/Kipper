@@ -12,36 +12,61 @@ The `Array<T>` data type is a unique data type, as it does not represent itself 
 multiple values. As a result of that an array has also a length and an index for each item, which you may use to access
 them using the following syntax:
 
+## Array Indexing Syntax
+
 ```ts
 VAR[INDEX];
 ```
 
 ## Examples
 
-```ts
-// ✓ Creating a simple list
-var var24: Array<num> = [2, 3, 4];
+### Simple constant array definition
 
-// ✓ Accessing item of value per index (0 = first item)
+```ts
+var var24: Array<num> = [2, 3, 4];
+```
+
+### Accessing elements of an array
+
+```ts
 var var25: Array<num> = [2, 3, 4];
 var item_of_list: num = var26[2]; // -> 4
+```
 
-// ✓ Accessing the length of the list using 'len()'
+### Calling [`len`](../built-in-functions.html#len) function on an array
+
+```ts
 var len_of_list: num = len(var26); // -> 3
+```
 
-// ✓ Accessing the last item of the list using 'last()'
+### Calling `last` function on an array
+
+```ts
 var len_of_list: num = last(var26); // -> 4
+```
 
+### Calling `first` function on an array
+
+```ts
 // ✓ Accessing the first item of the list using 'first()'
 var len_of_list: num = first(var26); // -> 2
+```
 
-// X May not set a list to a single value
+### <em class="red-checkmark">X</em> May not set a list to a single value
+
+```ts
 var var26: Array<num> = 2;
+```
 
-// X May not set item of list to an invalid type
+### <em class="red-checkmark">X</em> May not set item of list to an invalid type
+
+```ts
 var var27: Array<num> = ["string"];
+```
 
-// X May not convert list to another type as a whole!
+### <em class="red-checkmark">X</em> May not convert list to another type as a whole
+
+```ts
 var var28: Array<str> = ["99", "1893", "4"];
 var var29: Array<num> = var27 as Array<num>; // -> Invalid conversion
 ```
