@@ -1,17 +1,48 @@
 # Variables
 
-Variables are data items, which can contain data based on their [data type](./datatypes.html). The value of a variable
-is dynamic and can be changed as often as you want throughout the code. Variables are essential for a program to store
-data, read data and use data inside our programs.
+Variables are named storage items, which can contain data based on their [data type](./datatypes.html). They are
+declared and defined using the `var` keyword, which is followed by the name of the variable, its type and optionally a
+value.
 
-## What are Declarations and Definitions?
+They may also be constant and immutable, which means that they can not be changed after they have been defined. This is
+done by using the `const` keyword instead of `var`.
 
-There are two ways to create a variable in Kipper, like in many other languages as well. This is the simple concept of
-so-called declarations and definitions.
+## Syntax
 
-- Declaring a variable = Reserving the name of the variable and setting its type.
-- Defining a variable = Defining and setting the value of a variable. Can be combined with the declaration in a single
-  line.
+### Declaration
+
+```ts
+var NAME: TYPE;
+```
+
+### Definition
+
+- Dynamic:
+
+	```ts
+	var NAME: TYPE = VALUE;
+	```
+
+- Constant (One-time definitions which can never be changed):
+
+	```ts
+	const NAME: TYPE = VALUE;
+	```
+
+## Difference - Declarations & Definitions
+
+### Declarations
+
+A declaration is the process of defining a variable, but without setting a value. This is done by specifying the name
+and type of the variable, but leaving it as is without any assignment expression.
+
+### Definitions
+
+A definition is the process of defining a variable, but this time with a value. This is done by specifying the name,
+type and value of the variable, which is done by using the assignment operator `=`.
+
+Note though once a variable has been declared or defined, it may not be re-declared or re-defined in the same scope.
+Only reassignments using a [assignment expression](./expressions/assignment-expression.html) are allowed.
 
 ## How to declare variables in Kipper
 
@@ -21,10 +52,12 @@ To declare a variable you simply specify its name and its type, but don't set a 
 var NAME: TYPE;
 ```
 
-In this case, we have now also defined the scope and visibility of the variable, which will be explained later in
-[Scopes and Visibility of Variables](#scopes-and-visibility-of-variables). Though, due to the fact we have not set a
-value yet, attempting to read from a variable will result in a compiler error, as you can not read from a variable with
-no value.
+In this case, we have now also defined the scope and visibility of the variable, as the direct parent (either a code
+block or the root of the file) is now able to see the variable. These scopes are explained more in-depth here:
+[Scopes and Visibility of Variables](#scopes-and-visibility-of-variables).
+
+Though, due to the fact we have not set a value yet, attempting to read from a variable will result in a compiler error,
+as you can not read from a variable with no value.
 
 <div class="important">
   <h2>Important</h2>
@@ -105,10 +138,8 @@ Before we can get to using our own variables, the concept of so-called scopes ha
 variable defines simply where your code can access a variable, and not interfere with other variables.
 
 ```ts
-// This is a simple scope or also called "block of code"
-{
-	// Variable that is bound to this scope
-	var var1: num = 0;
+{ // <-- This is a simple scope or also called "block of code"
+	var var1: num = 0; // <-- Variable that is bound to this scope
 
 	// ✓ 'var2' is able to see 'var1' as it's in the same scope, and as such the value may be copied!
 	var var2: num = var1;
@@ -116,17 +147,16 @@ variable defines simply where your code can access a variable, and not interfere
 ```
 
 In this code-block, you may only reference/use variables that were defines in this scope, or a scope that is above it
-(parent scope).
+(parent scopes).
 
-The scope that you can always access is the highest scope and is called "global scope". It's where you define variables
-for your entire file/program. An example of a global would be simply this:
+The scope that you can always access is the highest scope and is called the "global scope". It's where you define
+variables for your entire file. An example of a global would be simply this:
 
 ```ts
 // Global variable
 var var3: num = 0;
 
-// This is another simple scope
-{
+{ // <-- This is another simple scope
 	// ✓ 'var4' is able to see 'var3' as it's in the parent scope, and as such the value may be copied!
 	var var4: num = var3;
 
@@ -135,9 +165,8 @@ var var3: num = 0;
 }
 ```
 
-Though, if you try to access a variable in another scope, you will get a compiler error, as you may not access variables
-from other scopes. They are invisible to you, so you will get an `Undefined Reference` error, saying the value is not
-defined in your or any other parent scope!
+If you now try to access a variable from another scope, it will result in a compiler error, as the variable is not
+visible in your current scope:
 
 ```ts
 // Global variable
@@ -153,7 +182,7 @@ var var3: num = 0;
 // This is another simple scope
 {
 	// X 'var5' is NOT able to see 'var4' as it's not in this or any parent's scope,
-	// and as such the value may NOT be copied!
+	// and as such the value may NOT be accessed!
 	var var5: num = var4;
 }
 ```
