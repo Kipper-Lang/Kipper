@@ -31,7 +31,7 @@ Returns the length of the specified iterable `iterable`.
 
 Though note that at the current stage of development, only strings are supported, since iterables such as lists are yet
 to be implemented and will be released in the future. For more info regarding the development schedule please go
-[here](https://github.com/Luna-Klatzer/Kipper/discussions/139).
+[here](<%- roadmapURL %>).
 
 #### List of supported environments
 
