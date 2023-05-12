@@ -4,6 +4,7 @@ dropdownTitle: Expressions
 nav:
   - ./index.md
   - ./arithmetic-expression.md
+  - ./assignment-expression.md
   - ./conditional-expression.md
   - ./logical-expression.md
   - ./relational-expression.md
