@@ -23,29 +23,45 @@ EXP ( == | != | > | >= | < | <= ) EXP
 
 ## Examples
 
+### Equal-to Operator
+
 ```ts
-// Equal to
 20 == 20; // -> true
 92 == 20; // -> false
+```
 
-// Not equal to
+### Not Equal-to Operator
+
+```ts
 21 != 9; // -> true
 21 != 21; // -> false
+```
 
-// Is greater than
+### Greater-than Operator
+
+```ts
 20 > 5; // -> true
 20 > 20; // -> false
+```
 
-// Is greater or equal to
+### Greater-than or Equal-to Operator
+
+```ts
 11 >= 5; // -> true
 20 >= 20; // -> true
 32 >= 99; // -> false
+```
 
-// Is less than
+### Less-than Operator
+
+```ts
 10 < 78; // -> true
 43 < 14; // -> false
+```
 
-// Is less or equal to
+### Less-than or Equal-to Operator
+
+```ts
 12 <= 29; // -> true
 56 <= 56; // -> true
 21 <= 13; // -> false
