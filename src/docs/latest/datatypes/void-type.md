@@ -11,23 +11,38 @@ should be not be used.
 
 ## Examples
 
+### Creating a `void` variable
+
 ```ts
-// ✓ Creating a void variable - This may only be 'void'
-var var21: void = void;
+var var1: void = void;
+```
 
-// X May not set a 'void' variable to anything except 'void'
-var var22: void = 4;
+### Using `void` to indicate a function has no return
 
-// ✓ Returning void for a function - Returns 'void' per default
+```ts
 def func1() -> void {
   return;
 }
+```
 
-// ✓ Returning void for a function manually
+### Explicitly returning `void` for a function
+
+```ts
 def func2() -> void {
   return void;
 }
+```
 
-// ✓ Assigning void return to variable of type 'void'
+### Assigning `void` value to a `void` variable
+
+```ts
 var var23: void = func2();
 ```
+
+### <em class="red-checkmark">X</em> Can not assign to a `void` variable anything but `void`
+
+```ts
+// X May not set a 'void' variable to anything except 'void'
+var var2: void = 4;
+```
+
