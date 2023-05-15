@@ -22,7 +22,7 @@ Converts a string to a number, if it meets the following requirements:
 - Only contains numeric characters (`0 - 9`)
 - Is not empty (length > 0)
 
-Otherwise if the string does not meet the above requirements, it will return `NaN` (Not a number). In future releases,
+Otherwise, if the string does not meet the above requirements, it will return `NaN` (Not a number). In future releases,
 though this will throw a `ConversionError`.
 
 ```ts
