@@ -22,23 +22,35 @@ For the logical `NOT`:
 
 ## Examples
 
+### Logical AND
+
 ```ts
 // Logical AND - All must be true
 true && true; // -> true
 false && true; // -> false
 true && false; // -> false
 false && false; // -> false
+```
 
+### Logical OR
+
+```ts
 // Logical OR - One must be true
 true || true; // -> true
 false || true; // -> true
 true || false; // -> true
 false || false; // -> false
+```
 
+### Logical NOT
+
+```ts
 // Logical NOT - Negate
 !false; // -> true
 !true; // -> false
 ```
+
+### Chained Logical Expressions
 
 Logical Expressions may be also chained together as long as you want. For example:
 
@@ -52,6 +64,8 @@ true || true || true; // -> true
 true || false || true; // -> true
 false || false || false; // -> false
 ```
+
+### Logical Expressions & Relational Expressions
 
 You can also combine relational expressions with logical expressions, like this for example:
 
