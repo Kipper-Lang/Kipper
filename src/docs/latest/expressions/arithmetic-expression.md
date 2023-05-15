@@ -26,7 +26,6 @@ EXP ( + | - | * | / | ** | % ) EXP
 87 - 2.5; // -> 84.5
 ```
 
-// Plus
 ### Multiply Operator
 
 ```ts
