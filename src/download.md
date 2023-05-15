@@ -69,38 +69,25 @@ kipper/0.8.1 win32-x64 node-v16.13.0
 
 ## Including the Web Bundle
 
-If you want to use Kipper inside your browser, then you can include the browser-standalone version of Kipper into
+If you want to use Kipper inside your browser, then you can include the browser-standalone version of the compiler into
 your HTML file with the following script tag:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@kipper/web@latest/kipper-standalone.min.js"></script>
 ```
 
-This will globally register the identifier `Kipper`, which can then be used to access the Kipper package. For more
-info go on how to get started with Kipper in the web to the section
+This will globally register the identifier `Kipper`, which can then be used to access the Kipper package.
+
+For more info on how to get started with Kipper in the web go to the section
 [Running the Compiler in an HTML file](./docs/quickstart.html#running-the-compiler-in-an-html-file) in the
 Quickstart guide.
 
 <div class="red-highlight-text">
   <h3>Important Version Info</h3>
   <p>
-  Using Kipper v0.9.x, the standalone web version requires Babel as a dependency, as it does not itself yet implement
-  direct Kipper-to-JavaScript compilations, but only Kipper-to-TypeScript.
-  </p>
-  <p>
-  Additionally the package <code>@kipper/core</code> will be used instead of <code>@kipper/web</code>, as the web
-  package has only been introduced since v0.10.0. As such, use the following script import instead:
-  </p>
-  <pre><code class="language-html">&lt;!-- Babel dependency --&gt;
-&lt;script src="https://unpkg.com/@babel/standalone/babel.min.js"&gt;&lt;/script&gt;
-
-&lt;!-- Kipper --&gt;
-&lt;script src="https://cdn.jsdelivr.net/npm/@kipper/core@0.9.2/kipper-standalone.min.js"&gt;&lt;/script&gt;</code></pre>
-
-  <p>
-  This was changed with the release of
-  <a href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.10.0">v0.10.0</a>,
-  which releases the JavaScript target for the Kipper compiler.
+  Prior to v0.10.0 the web bundle was not available yet, so you will have to use an alternative method to include Kipper
+	in your web project. For more info on how to do that, go to the versions-specific
+	<a href="./docs/0.9.2/quickstart.html">Quickstart Guide for <code>v0.9.2</code></a>.
   </p>
 </div>
 
