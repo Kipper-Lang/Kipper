@@ -352,8 +352,8 @@ nav.phone-docs-nav {
 			h5,
 			h6 {
 				/* Adjust spacing for code in headers */
-				& > :first-child:is(code) {
-					margin: -0.2em;
+				&.starts-with-code-tag > :first-child:is(code) {
+					margin-left: -0.2em;
 				}
 			}
 
