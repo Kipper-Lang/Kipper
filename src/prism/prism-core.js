@@ -1781,3 +1781,11 @@ Prism.languages.wasm = {
 			);
 		}
 	});
+// Kipper extension
+"undefined" != typeof Prism &&
+  "undefined" != typeof document &&
+  (() => {
+    Prism.languages["kipper"] = {
+      ...Prism.languages["typescript"],
+    };
+  })();

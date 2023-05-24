@@ -256,3 +256,11 @@
 		}
 	}
 }
+
+/* The console is hidden on small screens */
+@media (max-width: $small-screen-size) {
+  #shell-sidebar {
+    display: none;
+    visibility: hidden;
+  }
+}

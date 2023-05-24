@@ -85,7 +85,7 @@ async function initCompiler(versionToUse: string): Promise<void> {
 }
 
 // Define the handler for worker messages
-onmessage = async function (event) {
+onmessage = async function(event) {
 	if (initFailed) {
 		// If the initialisation already was tried once and we failed, then we can't do anything
 		throw new Error("Web Worker thread for the Kipper Compiler encountered fatal error during initialisation");

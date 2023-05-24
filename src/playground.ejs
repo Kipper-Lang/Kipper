@@ -11,7 +11,7 @@
 <%- include('./partials/default-body-top', { rootDir: rootDir }) %>
 
 <!-- Playground Scripts -->
-<script defer type="module" src="<%= rootDir %>/js/playground.ts"></script>
+<script defer type="module" src="<%= rootDir %>/js/playground/index.ts"></script>
 
 <div id="main-frame">
     <div id="actual-content">
@@ -65,11 +65,8 @@
                             data-gramm="false"
                             wrap="off">
 							</textarea>
-                    <pre
-                            id="highlighting-field"
-                            class="line-numbers"
-                            aria-hidden="true"><code class="language-kipper"
-                                                     id="highlighting-field-content"></code></pre>
+                    <pre id="highlighting-field" class="line-numbers" aria-hidden="true"><code class="language-kipper"
+                                                 id="highlighting-field-content"></code></pre>
                 </div>
             </div>
             <div id="shell-sidebar" class="flex-column">
