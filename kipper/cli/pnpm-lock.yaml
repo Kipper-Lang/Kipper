@@ -10,7 +10,7 @@ specifiers:
   '@oclif/parser': 3.8.10
   '@oclif/plugin-help': 3.3.1
   '@oclif/plugin-warn-if-update-available': 2.0.4
-  '@oclif/test': 2.2.21
+  '@oclif/test': 2.3.21
   '@sinonjs/fake-timers': 10.0.2
   '@types/node': 18.15.11
   '@types/sinon': 10.0.13
@@ -37,7 +37,7 @@ dependencies:
   tslog: 3.3.4
 
 devDependencies:
-  '@oclif/test': 2.2.21
+  '@oclif/test': 2.3.21_o6avl3oodj6mwqsx3rm2wfkgv4
   '@sinonjs/fake-timers': 10.0.2
   '@types/node': 18.15.11
   '@types/sinon': 10.0.13
@@ -384,7 +384,7 @@ packages:
       cardinal: 2.1.1
       chalk: 4.1.2
       clean-stack: 3.0.1
-      cli-progress: 3.11.2
+      cli-progress: 3.12.0
       debug: 4.3.4_supports-color@8.1.1
       ejs: 3.1.8
       fs-extra: 9.1.0
@@ -405,6 +405,7 @@ packages:
       tslib: 2.5.0
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
+    dev: false
 
   /@oclif/core/2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4:
     resolution: {integrity: sha512-316DLfrHQDYmWDriI4Woxk9y1wVUrPN1sZdbQLHdOdlTA9v/twe7TdHpWOriEypfl6C85NWEJKc1870yuLtjrQ==}
@@ -487,6 +488,7 @@ packages:
 
   /@oclif/linewrap/1.0.0:
     resolution: {integrity: sha512-Ups2dShK52xXa8w6iBWLgcjPJWjais6KPJQq3gQ/88AY6BXoTX+MIGFPrWQO1KLMiQfoTpcLnUwloN4brrVUHw==}
+    dev: false
 
   /@oclif/parser/3.8.10:
     resolution: {integrity: sha512-J4l/NcnfbIU84+NNdy6bxq9yJt4joFWNvpk59hq+uaQPUNtjmNJDVGuRvf6GUOxHNgRsVK1JRmd/Ez+v7Z9GqQ==}
@@ -582,15 +584,20 @@ packages:
     resolution: {integrity: sha512-IMsTN1dXEXaOSre27j/ywGbBjrzx0FNd1XmuhCWCB9NTPrhWI1Ifbz+YLSEcstfQfocYsrbrIessxXb2oon4lA==}
     engines: {node: '>=12.0.0'}
     deprecated: Deprecated in favor of @oclif/core
+    dev: false
 
-  /@oclif/test/2.2.21:
-    resolution: {integrity: sha512-uIjn0PM6R9qlpYzoB9eYBwh3uMd5EdTux2dhBnYMA3DWcLOV4/+2TxKeVurfHFHfQfRp7imYSab7vEwTfiSo7g==}
+  /@oclif/test/2.3.21_o6avl3oodj6mwqsx3rm2wfkgv4:
+    resolution: {integrity: sha512-RaFNf3/PMwBLrL9yu8aFsONsUSpyI16AGC6HiAabDyu534Rh+jBtqy/dPZ53/SOCBOholhZmVs7jT0UE5Utwew==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/core': 1.26.1
-      fancy-test: 2.0.12
+      '@oclif/core': 2.8.5_o6avl3oodj6mwqsx3rm2wfkgv4
+      fancy-test: 2.0.23
     transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - '@types/node'
       - supports-color
+      - typescript
     dev: true
 
   /@octokit/auth-token/2.5.0:
@@ -1225,18 +1232,11 @@ packages:
       restore-cursor: 3.1.0
     dev: true
 
-  /cli-progress/3.11.2:
-    resolution: {integrity: sha512-lCPoS6ncgX4+rJu5bS3F/iCz17kZ9MPZ6dpuTtI0KXKABkhyXIdYB3Inby1OpaGti3YlI3EeEkM9AuWpelJrVA==}
-    engines: {node: '>=4'}
-    dependencies:
-      string-width: 4.2.3
-
   /cli-progress/3.12.0:
     resolution: {integrity: sha512-tRkV3HJ1ASwm19THiiLIXLO7Im7wlTuKnvkYaTkyoAPefqjNg7W7DHKUlGRxy9vxDvbyCYQkQozvptuMkGCg8A==}
     engines: {node: '>=4'}
     dependencies:
       string-width: 4.2.3
-    dev: true
 
   /cli-spinners/2.7.0:
     resolution: {integrity: sha512-qu3pN8Y3qHNgE2AFweciB1IfMnmZ/fsNTEE+NOFjmGB2F/7rLhnhzppvpCnN4FovtP26k8lHyy9ptEbNwWFLzw==}
@@ -1607,8 +1607,8 @@ packages:
       tmp: 0.0.33
     dev: true
 
-  /fancy-test/2.0.12:
-    resolution: {integrity: sha512-S7qVQNaViLTMzn71huZvrUCV59ldq+enQ1EQOkdNbl4q4Om97gwqbYKvZoglsnzCWRRFaFP+qHynpdqaLdiZqg==}
+  /fancy-test/2.0.23:
+    resolution: {integrity: sha512-RPX4iAzAioH9nxkqk2yrcunBLBmnMLxtIsw3Pjgj2PGPHTdT3wZ6asKv9U332+UQyZwZWWc4bP64JOa6DcVhnQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@types/chai': 4.3.3
@@ -1617,7 +1617,7 @@ packages:
       '@types/sinon': 10.0.13
       lodash: 4.17.21
       mock-stdin: 1.0.0
-      nock: 13.3.0
+      nock: 13.3.1
       stdout-stderr: 0.1.13
     transitivePeerDependencies:
       - supports-color
@@ -2687,8 +2687,8 @@ packages:
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
 
-  /nock/13.3.0:
-    resolution: {integrity: sha512-HHqYQ6mBeiMc+N038w8LkMpDCRquCHWeNmN3v6645P3NhN2+qXOBqvPqo7Rt1VyCMzKhJ733wZqw5B7cQVFNPg==}
+  /nock/13.3.1:
+    resolution: {integrity: sha512-vHnopocZuI93p2ccivFyGuUfzjq2fxNyNurp7816mlT5V5HF4SzXu8lvLrVzBbNqzs+ODooZ6OksuSUNM7Njkw==}
     engines: {node: '>= 10.13'}
     dependencies:
       debug: 4.3.4
