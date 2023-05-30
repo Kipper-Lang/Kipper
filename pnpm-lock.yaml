@@ -22,7 +22,7 @@ specifiers:
   eslint: 8.35.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
-  mkdirp: 2.1.3
+  mkdirp: 2.1.6
   mocha: 10.2.0
   nyc: 15.1.0
   prettier: 2.8.4
@@ -63,7 +63,7 @@ devDependencies:
   eslint: 8.35.0
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
-  mkdirp: 2.1.3
+  mkdirp: 2.1.6
   mocha: 10.2.0
   nyc: 15.1.0
   prettier: 2.8.4
@@ -2965,8 +2965,8 @@ packages:
       minimist: 1.2.8
     dev: true
 
-  /mkdirp/2.1.3:
-    resolution: {integrity: sha512-sjAkg21peAG9HS+Dkx7hlG9Ztx7HLeKnvB3NQRcu/mltCVmvkF0pisbiTSfDVYTT86XEfZrTUosLdZLStquZUw==}
+  /mkdirp/2.1.6:
+    resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
     hasBin: true
     dev: true
