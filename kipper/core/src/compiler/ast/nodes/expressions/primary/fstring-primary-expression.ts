@@ -5,10 +5,15 @@
 import type { FStringPrimaryExpressionSemantics } from "../../../semantic-data";
 import type { FStringPrimaryExpressionTypeSemantics } from "../../../type-data";
 import { Expression } from "../expression";
-import { FStringPrimaryExpressionContext, ParserASTMapping } from "../../../../parser";
+import {
+	ExpressionContext,
+	FStringDoubleQuoteAtomContext,
+	FStringPrimaryExpressionContext,
+	ParserASTMapping
+} from "../../../../parser";
 import { CompilableASTNode } from "../../../compilable-ast-node";
 import { CheckedType } from "../../../../analysis";
-import { KipperNotImplementedError } from "../../../../../errors";
+import { getParseRuleSource } from "../../../../../utils";
 
 /**
  * F-String class, which represents an f-string expression in the Kipper language. F-Strings are a way to automatically
@@ -49,11 +54,28 @@ export class FStringPrimaryExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const stringParts: Array<string | Expression> = [];
-		// TODO!
+		const atoms = <Array<FStringDoubleQuoteAtomContext>>this.getAntlrRuleChildren().filter(
+			(atom) => atom instanceof FStringDoubleQuoteAtomContext
+		);
 
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("F-String Expressions have not been implemented yet."));
+		let index = 0; // 'index' for going through 'this.children' (the expressions inside the f-string)
+		for (const atom of atoms) {
+			const isExpressionAtom = atom.children && atom.children.find(
+				(child) => child instanceof ExpressionContext
+			);
+			if (isExpressionAtom) {
+				stringParts.push(
+					this.children[index]
+				);
+				index++;
+			} else {
+				stringParts.push(<string>getParseRuleSource(atom));
+			}
+		}
+
+		this.semanticData = {
+			atoms: stringParts
+		};
 	}
 
 	/**
