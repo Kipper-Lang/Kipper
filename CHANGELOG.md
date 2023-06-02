@@ -29,6 +29,7 @@ To use development versions of Kipper download the
   also part of the `ParserConstantExpressionContext` type.
 - Renamed:
   - `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+  - `FStringPrimaryExpressionSemantics.items` to `atoms`.
 
 ### Fixed
 
