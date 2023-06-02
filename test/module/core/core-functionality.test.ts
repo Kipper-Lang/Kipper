@@ -839,6 +839,56 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("F-String", () => {
+		const types = [
+			{type: "str", value: " 1234 "},
+			{type: "num", value: 12345},
+			{type: "bool", value: true},
+			{type: "void", value: void 0},
+			{type: "null", value: null},
+			{type: "undefined", value: undefined},
+		];
+		types.forEach((arg) => {
+			describe(`Inserting [${arg.type}]`, () => {
+				it("Inserting single value", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				});
+
+				it("Inserting two values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				});
+
+				it("Inserting three values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}} - 3. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				});
+
+				it("Inserting more values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}} - 3. {${arg.value}} - 4. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx.stream.stringContent === fileContent, "Expected matching streams");
+				});
+			});
+		});
+	});
+
 	describe("Functions", () => {
 		it("Declaration", async () => {
 			const fileContent = "def test() -> void { }";
