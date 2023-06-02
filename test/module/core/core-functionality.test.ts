@@ -841,7 +841,7 @@ describe("Core functionality", () => {
 
 	describe("F-String", () => {
 		const types = [
-			{ type: "str", value: " '1234' " },
+			{ type: "str", value: "' 1234 '" },
 			{ type: "num", value: 12345 },
 			{ type: "bool", value: true },
 			{ type: "null", value: null },
@@ -932,7 +932,7 @@ describe("Core functionality", () => {
 		});
 
 		const types2 = [
-			{ type: "str", value1: " '12'", value2: "'34' " },
+			{ type: "str", value1: "' 12'", value2: "'34 '" },
 			{ type: "num", value1: 12, value2: 34 },
 		];
 		types2.forEach((arg) => {
