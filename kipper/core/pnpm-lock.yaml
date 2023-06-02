@@ -10,7 +10,7 @@ specifiers:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
   mkdirp: 2.1.6
-  prettier: 2.8.4
+  prettier: 2.8.8
   run-script-os: 1.1.6
   size-limit: 8.2.4
   ts-node: 10.9.1
@@ -33,7 +33,7 @@ devDependencies:
   json-parse-even-better-errors: 3.0.0
   minimist: 1.2.8
   mkdirp: 2.1.6
-  prettier: 2.8.4
+  prettier: 2.8.8
   run-script-os: 1.1.6
   size-limit: 8.2.4
   ts-node: 10.9.1_gbfmtwj2t57hq5iibp7xw5qwjq
@@ -1891,8 +1891,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /prettier/2.8.4:
-    resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
+  /prettier/2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
