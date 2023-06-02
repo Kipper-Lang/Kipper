@@ -4,7 +4,7 @@ specifiers:
   '@kipper/core': workspace:~
   '@kipper/target-js': workspace:~
   '@kipper/target-ts': workspace:~
-  '@oclif/command': 1.8.22
+  '@oclif/command': 1.8.26
   '@oclif/config': 1.18.8
   '@oclif/errors': 1.3.6
   '@oclif/parser': 3.8.10
@@ -28,7 +28,7 @@ dependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-  '@oclif/command': 1.8.22_@oclif+config@1.18.8
+  '@oclif/command': 1.8.26_@oclif+config@1.18.8
   '@oclif/config': 1.18.8
   '@oclif/errors': 1.3.6
   '@oclif/parser': 3.8.10
@@ -292,11 +292,11 @@ packages:
       chalk: 4.1.2
       strip-ansi: 6.0.1
       supports-color: 8.1.1
-      tslib: 2.5.0
+      tslib: 2.5.2
     dev: true
 
-  /@oclif/command/1.8.22_@oclif+config@1.18.2:
-    resolution: {integrity: sha512-lystv7IKsWRmCv6K68jSvHrO/DILUPBDb5GZ3absTA5XTnNXTaMrcwVzTcMPfTf+gCrgIaPPD1bmbRStwfQxFw==}
+  /@oclif/command/1.8.26_@oclif+config@1.18.2:
+    resolution: {integrity: sha512-IT9kOLFRMc3s6KJ1FymsNjbHShI211eVgAg+JMiDVl8LXwOJxYe8ybesgL1kpV9IUFByOBwZKNG2mmrVeNBHPg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@oclif/config': ^1
@@ -304,15 +304,15 @@ packages:
       '@oclif/config': 1.18.2
       '@oclif/errors': 1.3.6
       '@oclif/help': 1.0.5
-      '@oclif/parser': 3.8.10
+      '@oclif/parser': 3.8.11
       debug: 4.3.4
       semver: 7.5.1
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@oclif/command/1.8.22_@oclif+config@1.18.8:
-    resolution: {integrity: sha512-lystv7IKsWRmCv6K68jSvHrO/DILUPBDb5GZ3absTA5XTnNXTaMrcwVzTcMPfTf+gCrgIaPPD1bmbRStwfQxFw==}
+  /@oclif/command/1.8.26_@oclif+config@1.18.8:
+    resolution: {integrity: sha512-IT9kOLFRMc3s6KJ1FymsNjbHShI211eVgAg+JMiDVl8LXwOJxYe8ybesgL1kpV9IUFByOBwZKNG2mmrVeNBHPg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@oclif/config': ^1
@@ -320,7 +320,7 @@ packages:
       '@oclif/config': 1.18.8
       '@oclif/errors': 1.3.6
       '@oclif/help': 1.0.5
-      '@oclif/parser': 3.8.10
+      '@oclif/parser': 3.8.11
       debug: 4.3.4
       semver: 7.5.1
     transitivePeerDependencies:
@@ -336,7 +336,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.5.0
+      tslib: 2.5.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -461,11 +461,21 @@ packages:
       tslib: 2.5.0
     dev: false
 
+  /@oclif/parser/3.8.11:
+    resolution: {integrity: sha512-B3NweRn1yZw2g7xaF10Zh/zwlqTJJINfU+CRkqll+LaTisSNvZbW0RR9WGan26EqqLp4qzNjzX/e90Ew8l9NLw==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      '@oclif/errors': 1.3.6
+      '@oclif/linewrap': 1.0.0
+      chalk: 4.1.2
+      tslib: 2.5.2
+    dev: false
+
   /@oclif/plugin-help/3.3.1:
     resolution: {integrity: sha512-QuSiseNRJygaqAdABYFWn/H1CwIZCp9zp/PLid6yXvy6VcQV7OenEFF5XuYaCvSARe2Tg9r8Jqls5+fw1A9CbQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.22_@oclif+config@1.18.2
+      '@oclif/command': 1.8.26_@oclif+config@1.18.2
       '@oclif/config': 1.18.2
       '@oclif/errors': 1.3.5
       '@oclif/help': 1.0.5
@@ -3300,7 +3310,7 @@ packages:
   /rxjs/7.8.0:
     resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}
     dependencies:
-      tslib: 2.5.0
+      tslib: 2.5.2
     dev: true
 
   /safe-buffer/5.1.2:
@@ -3727,6 +3737,9 @@ packages:
 
   /tslib/2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
+
+  /tslib/2.5.2:
+    resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
 
   /tslog/3.3.4:
     resolution: {integrity: sha512-N0HHuHE0e/o75ALfkioFObknHR5dVchUad4F0XyFf3gXJYB++DewEzwGI/uIOM216E5a43ovnRNEeQIq9qgm4Q==}
