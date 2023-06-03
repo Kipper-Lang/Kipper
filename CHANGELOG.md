@@ -18,9 +18,22 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Added new valid conversions:
+  - `void` to `str`.
+	- `null` to `str`.
+  - `undefined` to `str`.
+- New parameters:
+	- `ignoreParams` in `genJSFunction`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createJSFunctionSignature`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genTSFunction`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createTSFunctionSignature`, which, if true makes the function signature define no parameters.
 - New field:
   - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
     context of the error.
+- New functions:
+  - `KipperTargetBuiltInGenerator.voidToStr`, for the built-in conversion from `void` to `str`.
+  - `KipperTargetBuiltInGenerator.nullToStr`, for the built-in conversion from `null` to `str`.
+  - `KipperTargetBuiltInGenerator.undefinedToStr`, for the built-in conversion from `undefined` to `str`.
 
 ### Changed
 
@@ -30,6 +43,7 @@ To use development versions of Kipper download the
 - Renamed:
   - `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
   - `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - `getTSFunction()` to `genTSFunction()`.
 
 ### Fixed
 
