@@ -12,11 +12,13 @@ import { TargetJS } from "./target";
  * Generates a JavaScript function from the given signature and body.
  * @param signature The signature of the function.
  * @param body The body of the function.
+ * @param ignoreParams Whether or not to ignore the parameters of the function.
  * @since 0.10.0
  */
 export function genJSFunction(
 	signature: { identifier: string; params: string[] },
 	body: string,
+	ignoreParams: boolean = false
 ): Array<TranslatedCodeLine> {
 	return [
 		[
@@ -24,7 +26,7 @@ export function genJSFunction(
 			" ",
 			"=",
 			" ",
-			createJSFunctionSignature(signature),
+			createJSFunctionSignature(signature, ignoreParams),
 			" ",
 			body,
 			";",
@@ -54,18 +56,33 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return (${convArgIdentifier}).toString(); }`);
 	}
 
-	async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
-		const signature = getJSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.params[0];
-
-		return genJSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
-	}
-
 	async boolToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
 
 		return genJSFunction(signature, `{ return \`\${${convArgIdentifier}}\`; }`);
+	}
+
+	async voidToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		return genJSFunction(signature, `{ return "void"; }`, true);
+	}
+
+	async nullToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		return genJSFunction(signature, `{ return "null"; }`, true);
+	}
+
+	async undefinedToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		return genJSFunction(signature, `{ return "undefined"; }`, true);
+	}
+
+	async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const convArgIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
 	}
 
 	async boolToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {

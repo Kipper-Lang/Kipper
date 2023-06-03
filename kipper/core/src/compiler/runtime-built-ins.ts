@@ -192,16 +192,6 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 		],
 		returnType: "str",
 	},
-	strToNum: {
-		identifier: "strToNum",
-		params: [
-			{
-				identifier: "value",
-				valueType: "str",
-			},
-		],
-		returnType: "num",
-	},
 	boolToStr: {
 		identifier: "boolToStr",
 		params: [
@@ -211,6 +201,46 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 			},
 		],
 		returnType: "str",
+	},
+	voidToStr: {
+		identifier: "voidToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "void",
+			}
+		],
+		returnType: "str",
+	},
+	nullToStr: {
+		identifier: "nullToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "null",
+			}
+		],
+		returnType: "str",
+	},
+	undefinedToStr: {
+		identifier: "undefinedToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "undefined",
+			}
+		],
+		returnType: "str",
+	},
+	strToNum: {
+		identifier: "strToNum",
+		params: [
+			{
+				identifier: "value",
+				valueType: "str",
+			},
+		],
+		returnType: "num",
 	},
 	boolToNum: {
 		identifier: "boolToNum",

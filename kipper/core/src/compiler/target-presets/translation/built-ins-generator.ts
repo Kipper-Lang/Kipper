@@ -28,15 +28,6 @@ export abstract class KipperTargetBuiltInGenerator {
 	abstract numToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
-	 * Conversion function which provides 'str' to 'num' type conversion functionality.
-	 * @param func The specification for the function. This contains the overall metadata for the function that
-	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
-	 * @param programCtx The program context of the environment that is being compiled.
-	 * @since 0.10.0
-	 */
-	abstract strToNum(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
-
-	/**
 	 * Conversion function which provides 'bool' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
@@ -44,6 +35,39 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @since 0.10.0
 	 */
 	abstract boolToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'str' to 'str' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 */
+	abstract voidToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'null' to 'str' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 */
+	abstract nullToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'undefined' to 'str' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 */
+	abstract undefinedToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Conversion function which provides 'str' to 'num' type conversion functionality.
+	 * @param func The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.10.0
+	 */
+	abstract strToNum(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Conversion function which provides 'bool' to 'num' type conversion functionality.
