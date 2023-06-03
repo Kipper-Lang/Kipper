@@ -9,6 +9,7 @@ import {
 	ExpressionContext,
 	FStringDoubleQuoteAtomContext,
 	FStringPrimaryExpressionContext,
+	FStringSingleQuoteAtomContext,
 	ParserASTMapping
 } from "../../../../parser";
 import { CompilableASTNode } from "../../../compilable-ast-node";
@@ -56,6 +57,7 @@ export class FStringPrimaryExpression extends Expression<
 		const stringParts: Array<string | Expression> = [];
 		const atoms = <Array<FStringDoubleQuoteAtomContext>>this.getAntlrRuleChildren().filter(
 			(atom) => atom instanceof FStringDoubleQuoteAtomContext
+				|| atom instanceof  FStringSingleQuoteAtomContext
 		);
 
 		let index = 0; // 'index' for going through 'this.children' (the expressions inside the f-string)
