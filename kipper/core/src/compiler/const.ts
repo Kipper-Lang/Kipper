@@ -226,9 +226,12 @@ export type KipperType = KipperCompilableType | KipperErrorType;
  */
 export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
 	["num", "str"],
-	["str", "num"],
 	["bool", "str"],
+	["void", "str"],
+	["null", "str"],
+	["undefined", "str"],
 	["bool", "num"],
+	["str", "num"],
 ];
 
 /**
