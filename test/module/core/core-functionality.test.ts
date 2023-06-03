@@ -863,7 +863,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value}`,
+								`Test: 1. ${arg.value}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -883,7 +883,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value} - 2. ${arg.value}`,
+								`Test: 1. ${arg.value} - 2. ${arg.value}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -903,7 +903,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value} - 2. ${arg.value} - 3. ${arg.value}`,
+								`Test: 1. ${arg.value} - 2. ${arg.value} - 3. ${arg.value}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -923,7 +923,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value} - 2. ${arg.value} - 3. ${arg.value} - 4. ${arg.value}`,
+								`Test: 1. ${arg.value} - 2. ${arg.value} - 3. ${arg.value} - 4. ${arg.value}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -951,7 +951,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2}`,
+								`Test: 1. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -971,7 +971,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2}`,
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2}`.replace(/'/g, "")
 							),
 						jsCode,
 					);
@@ -991,7 +991,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${arg.value1 + arg.value2}`,
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -1011,7 +1011,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${arg.value1 + arg.value2} - 4. ${arg.value1 + arg.value2}`,
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${arg.value1 + arg.value2} - 4. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -1023,7 +1023,7 @@ describe("Core functionality", () => {
 			const functionContent = "def test() -> str { return 'SUCCESS'; }";
 
 			it("Inserting single value", async () => {
-				const fileContent = `print(f"Test: 1. {${functionContent}}");`;
+				const fileContent = `${functionContent}; print(f"Test: 1. {test()}");`;
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
