@@ -951,7 +951,7 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2}`.replace(/'/g, "")
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
@@ -971,7 +971,10 @@ describe("Core functionality", () => {
 							assert.equal(
 								msg,
 								// @ts-ignore
-								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${
+									// @ts-ignore
+									arg.value1 + arg.value2
+								}`.replace(/'/g, ""),
 							),
 						jsCode,
 					);
