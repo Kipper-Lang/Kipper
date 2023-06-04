@@ -18,7 +18,7 @@ import { TargetJS } from "./target";
 export function genJSFunction(
 	signature: { identifier: string; params: string[] },
 	body: string,
-	ignoreParams: boolean = false
+	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
 	return [
 		[

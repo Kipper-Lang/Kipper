@@ -10,7 +10,7 @@ import {
 	FStringDoubleQuoteAtomContext,
 	FStringPrimaryExpressionContext,
 	FStringSingleQuoteAtomContext,
-	ParserASTMapping
+	ParserASTMapping,
 } from "../../../../parser";
 import { CompilableASTNode } from "../../../compilable-ast-node";
 import { CheckedType } from "../../../../analysis";
@@ -55,20 +55,17 @@ export class FStringPrimaryExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const stringParts: Array<string | Expression> = [];
-		const atoms = <Array<FStringDoubleQuoteAtomContext>>this.getAntlrRuleChildren().filter(
-			(atom) => atom instanceof FStringDoubleQuoteAtomContext
-				|| atom instanceof  FStringSingleQuoteAtomContext
+		const atoms = <Array<FStringDoubleQuoteAtomContext>>(
+			this.getAntlrRuleChildren().filter(
+				(atom) => atom instanceof FStringDoubleQuoteAtomContext || atom instanceof FStringSingleQuoteAtomContext,
+			)
 		);
 
 		let index = 0; // 'index' for going through 'this.children' (the expressions inside the f-string)
 		for (const atom of atoms) {
-			const isExpressionAtom = atom.children && atom.children.find(
-				(child) => child instanceof ExpressionContext
-			);
+			const isExpressionAtom = atom.children && atom.children.find((child) => child instanceof ExpressionContext);
 			if (isExpressionAtom) {
-				stringParts.push(
-					this.children[index]
-				);
+				stringParts.push(this.children[index]);
 				index++;
 			} else {
 				stringParts.push(<string>getParseRuleSource(atom));
@@ -76,7 +73,7 @@ export class FStringPrimaryExpression extends Expression<
 		}
 
 		this.semanticData = {
-			atoms: stringParts
+			atoms: stringParts,
 		};
 	}
 

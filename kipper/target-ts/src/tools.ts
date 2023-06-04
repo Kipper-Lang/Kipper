@@ -59,12 +59,12 @@ export function createTSFunctionSignature(
 		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
 		returnType: KipperCompilableType | Array<KipperCompilableType>;
 	},
-	ignoreParams: boolean = false
+	ignoreParams: boolean = false,
 ): string {
 	const { identifier, params } = signature;
-	const argsSignature = ignoreParams ?
-		"" :
-		`${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
+	const argsSignature = ignoreParams
+		? ""
+		: `${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
 
 	return `function ${identifier}(${argsSignature}): ${TargetTS.getTypeScriptType(signature.returnType)}`;
 }

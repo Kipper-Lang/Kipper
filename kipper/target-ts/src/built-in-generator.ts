@@ -23,7 +23,7 @@ export function genTSFunction(
 		returnType: KipperCompilableType | Array<KipperCompilableType>;
 	},
 	body: string,
-	ignoreParams: boolean = false
+	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
 	return [
 		[

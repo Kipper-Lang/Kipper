@@ -44,7 +44,7 @@ export function getJSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
  */
 export function createJSFunctionSignature(
 	signature: { identifier: string; params: Array<string> },
-	ignoreParams: boolean = false
+	ignoreParams: boolean = false,
 ): string {
 	const { identifier, params } = signature;
 	return `function ${identifier}(${ignoreParams ? "" : params.join(", ")})`;

@@ -208,7 +208,7 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 			{
 				identifier: "value",
 				valueType: "void",
-			}
+			},
 		],
 		returnType: "str",
 	},
@@ -218,7 +218,7 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 			{
 				identifier: "value",
 				valueType: "null",
-			}
+			},
 		],
 		returnType: "str",
 	},
@@ -228,7 +228,7 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 			{
 				identifier: "value",
 				valueType: "undefined",
-			}
+			},
 		],
 		returnType: "str",
 	},
