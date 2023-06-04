@@ -20,10 +20,10 @@ To use development versions of Kipper download the
 
 - Added new valid conversions:
   - `void` to `str`.
-	- `null` to `str`.
+  - `null` to `str`.
   - `undefined` to `str`.
 - New parameters:
-	- `ignoreParams` in `genJSFunction`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genJSFunction`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `genTSFunction`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createTSFunctionSignature`, which, if true makes the function signature define no parameters.
