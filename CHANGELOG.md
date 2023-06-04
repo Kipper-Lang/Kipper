@@ -47,9 +47,6 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
-  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
-
 ### Deprecated
 
 ### Removed
