@@ -18,7 +18,9 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Added new valid conversions:
+- Support for complex string formatting (or also called templating) in form of Python-like F-Strings. 
+  ([#287](https://github.com/Luna-Klatzer/Kipper/issues/287)).
+- New valid conversions:
   - `void` to `str`.
   - `null` to `str`.
   - `undefined` to `str`.
