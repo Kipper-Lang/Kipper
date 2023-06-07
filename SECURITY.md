@@ -12,6 +12,7 @@ The following versions are supported and will get bug-fixes and security updates
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.10.x  | :heavy_check_mark: |
 | 0.9.x   | :heavy_check_mark: |
 | <0.9.0  | :x:                |
 
