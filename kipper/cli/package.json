@@ -10,27 +10,27 @@
     "@kipper/core": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
-    "@oclif/command": "1.8.22",
+    "@oclif/command": "1.8.26",
     "@oclif/config": "1.18.8",
     "@oclif/plugin-help": "3.3.1",
     "@oclif/parser": "3.8.10",
     "@oclif/errors": "1.3.6",
-    "@oclif/plugin-warn-if-update-available": "2.0.4",
+    "@oclif/plugin-warn-if-update-available": "2.0.37",
     "tslog": "3.3.4"
   },
   "devDependencies": {
-    "@types/node": "18.15.11",
-    "@types/sinon": "10.0.13",
-    "@oclif/test": "2.2.21",
+    "@types/node": "18.16.16",
+    "@types/sinon": "10.0.15",
+    "@oclif/test": "2.3.21",
     "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "10.0.2",
-    "rimraf": "4.1.2",
+    "rimraf": "5.0.1",
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
-    "typescript": "4.9.5",
+    "typescript": "5.1.3",
     "oclif": "3.9.0",
     "json-parse-even-better-errors": "2.3.1",
-    "semver": "7.3.8"
+    "semver": "7.5.1"
   },
   "engines": {
     "node": ">=14.0.0"

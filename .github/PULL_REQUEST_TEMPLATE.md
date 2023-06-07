@@ -3,7 +3,7 @@
 <!-- Add an x in the checkbox to mark it -->
 
 - [ ] Info or documentation change (Non-breaking change that updates dependencies, info files or online documentation)
-- [ ] Website feature update or docs development changes (Change that changes the design or functionality of the websites or docs) 
+- [ ] Website feature update or docs development changes (Change that changes the design or functionality of the websites or docs)
 - [ ] Maintenance (Non-breaking change that updates dependencies)
 - [ ] Development or internal changes (These changes do not add new features or fix bugs, but update the code in other ways)
 - [ ] Bug fix (Non-breaking change which fixes an issue)

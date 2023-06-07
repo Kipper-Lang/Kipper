@@ -1,5 +1,5 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, defaultTarget, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, defaultTarget, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("InvalidAssignmentError", () => {
