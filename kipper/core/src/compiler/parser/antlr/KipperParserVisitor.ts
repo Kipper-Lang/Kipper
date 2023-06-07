@@ -66,6 +66,8 @@ import { IdentifierPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
+import { FStringSingleQuoteAtomContext } from "./KipperParser";
+import { FStringDoubleQuoteAtomContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
@@ -550,6 +552,20 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.fStringSingleQuoteAtom`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFStringSingleQuoteAtom?: (ctx: FStringSingleQuoteAtomContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.fStringDoubleQuoteAtom`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFStringDoubleQuoteAtom?: (ctx: FStringDoubleQuoteAtomContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.numberPrimaryExpression`.

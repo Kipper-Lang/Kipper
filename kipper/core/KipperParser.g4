@@ -182,7 +182,18 @@ stringPrimaryExpression
 	;
 
 fStringPrimaryExpression
-	:	SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral
+	:	FStringSingleQuoteStart fStringSingleQuoteAtom* FStringSingleQuoteEnd
+	|   FStringDoubleQuoteStart fStringDoubleQuoteAtom* FStringDoubleQuoteEnd
+	;
+
+fStringSingleQuoteAtom
+	: 	FStringSingleQuoteAtom
+	|	FStringExpStart expression? FStringExpEnd
+	;
+
+fStringDoubleQuoteAtom
+	: 	FStringDoubleQuoteAtom
+	|	FStringExpStart expression? FStringExpEnd
 	;
 
 numberPrimaryExpression
