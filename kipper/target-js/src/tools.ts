@@ -39,11 +39,15 @@ export function getJSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 /**
  * Generates the JavaScript function signature, based on the {@link signature signature metadata}.
  * @param signature The function signature metadata.
+ * @param ignoreParams Whether or not to ignore the parameters of the function.
  * @since 0.10.0
  */
-export function createJSFunctionSignature(signature: { identifier: string; params: Array<string> }): string {
+export function createJSFunctionSignature(
+	signature: { identifier: string; params: Array<string> },
+	ignoreParams: boolean = false,
+): string {
 	const { identifier, params } = signature;
-	return `function ${identifier}(${params.join(", ")})`;
+	return `function ${identifier}(${ignoreParams ? "" : params.join(", ")})`;
 }
 
 /**
