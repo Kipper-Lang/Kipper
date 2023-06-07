@@ -20,8 +20,8 @@ To use development versions of Kipper download the
 
 - New function:
   - `ensureScopeDeclarationAvailableIfNeeded`, which ensures that a scope declaration is available if needed. This
-    specifically is used during the semantic analysis/type checking of a declaration statement, which may need the 
-    scope declaration object during the processing.
+  	is used during the semantic analysis/type checking of a declaration statement, which may need the scope 
+		declaration object during the processing.
 
 ### Changed
 
