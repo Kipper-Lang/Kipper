@@ -16,7 +16,7 @@ import type { ASTDeclarationKind, ParserDeclarationContext } from "../../ast-typ
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
 import type { ScopeDeclaration } from "../../../analysis";
 import { CompilableASTNode, type CompilableNodeParent } from "../../compilable-ast-node";
-import { UndefinedDeclarationCtxError } from "../../../../errors";
+import {MissingRequiredSemanticDataError, UndefinedDeclarationCtxError} from "../../../../errors";
 
 /**
  * The base abstract AST node class for all declarations/declarations, which wrap their corresponding
@@ -95,6 +95,28 @@ export abstract class Declaration<
 			throw new UndefinedDeclarationCtxError();
 		}
 		return this.scopeDeclaration;
+	}
+
+	/**
+	 * Ensures that this node has a {@link Declaration.scopeDeclaration scope declaration} available. This will be
+	 * primarily used by declarations in their own analysis.
+	 *
+	 * This will throw an error if the scope declaration is not available.
+	 *
+	 * This is primarily used by the {@link Declaration.semanticTypeChecking} method, which often requires the scope
+	 * declaration to be available. As such this is a helper method which ensures the control flow is correct and no
+	 * invalid errors are thrown. (E.g. an internal error is thrown after a normal semantic analysis error).
+	 *
+	 * Intentionally this will also likely cause an {@link UndefinedSemanticsError} in case the {@link scopeDeclaration}
+	 * is missing and {@link AnalysableASTNode.hasFailed hasFailed} is returning false. Since that's an automatic
+	 * contradiction, it's better to ignore it here and let the {@link UndefinedSemanticsError} be thrown later.
+	 * @throws {MissingRequiredSemanticDataError} If the scope declaration is not available.
+	 * @since 0.11.0
+	 */
+	public ensureScopeDeclarationAvailableIfNeeded(): void {
+		if (this instanceof Declaration && this.hasFailed && this.scopeDeclaration === undefined) {
+			throw new MissingRequiredSemanticDataError();
+		}
 	}
 
 	/**
