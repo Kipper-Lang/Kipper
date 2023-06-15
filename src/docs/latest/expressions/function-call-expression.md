@@ -9,7 +9,7 @@ value.
 
 ## Syntax
 
-```ts
+```kipper
 call FUNC(ARGS...)
 ```
 
@@ -17,21 +17,21 @@ call FUNC(ARGS...)
 
 ### Calling a defined function
 
-```ts
+```kipper
 def func1() -> num { return 5; }
 func1(); // -> 5
 ```
 
 ### Calling a defined function and assigning it
 
-```ts
+```kipper
 def func2() -> num { return 10; }
 var example1: num = func2(); // -> 10
 ```
 
 ### Multiple chained function calls
 
-```ts
+```kipper
 // ✓ Multiple function calls with the end-result being assigned to a variable
 def func3() -> num { return 25; }
 var example2: num = func2() + func2(); // -> 50
@@ -39,14 +39,14 @@ var example2: num = func2() + func2(); // -> 50
 
 ### Using the return of a function with a return type of `void`
 
-```ts
+```kipper
 def func4() -> void {}
 var example3: void = func4(); // -> void
 ```
 
 ### <em class="red-checkmark">X</em> Can not use the return of a void function
 
-```ts
+```kipper
 def func4() -> void {}
 4 + func5(); // -> Error: Invalid arithmetic operation between types 'num' and 'void'.
 ```

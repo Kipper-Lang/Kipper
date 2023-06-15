@@ -6,7 +6,7 @@ a scope for variables. Compound statements are commonly used together with other
 
 ## Syntax
 
-```ts
+```kipper
 {
   STATEMENTS (OPTIONAL)...
 }

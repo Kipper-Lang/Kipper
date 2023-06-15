@@ -5,7 +5,7 @@ precedence, where each item is one by one evaluated.
 
 ## Syntax
 
-```ts
+```kipper
 NAME = EXP
 ```
 
@@ -15,7 +15,7 @@ Besides the regular assignment, there are also operators that modify the value o
 expression. These operators are `+=`, `-=`, `*=`, `/=`, `**=` and `%=`. These acts like arithmetic
 expressions and assignments combined.
 
-```ts
+```kipper
 NAME ( += | -= | *= | /= | **= | %= ) EXP
 ```
 
@@ -23,7 +23,7 @@ NAME ( += | -= | *= | /= | **= | %= ) EXP
 
 ### Assigning a value to a variable
 
-```ts
+```kipper
 var var1: num = 0;
 
 // Re-assigned the value of var1
@@ -32,7 +32,7 @@ var1 = 3;
 
 ### Chaining assignment expressions
 
-```ts
+```kipper
 var x: num = 5;
 var y: num = 5;
 var z: num = 5;
@@ -48,7 +48,7 @@ print(z as str);
 
 ### Operator Modified Assignment
 
-```ts
+```kipper
 var x: num = 5;
 
 // Operator modified assignment

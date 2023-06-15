@@ -16,7 +16,7 @@ without the involvement of any other statements.
 
 #### Syntax
 
-```ts
+```kipper
 EXPRESSION;
 ```
 
@@ -26,7 +26,7 @@ Common examples of expression statements are with increment or decrement express
 or subtract `1` to/from a value. These often do not require any other expressions, and can simply be used as a whole
 statement, like this:
 
-```ts
+```kipper
 // Defining a variable
 var increase_this: num = 4;
 increase_this++; // Expression statement -> 5
@@ -41,7 +41,7 @@ a scope for variables. Compound statements are commonly used together with other
 
 #### Syntax
 
-```ts
+```kipper
 {
   STATEMENTS (OPTIONAL)...
 }
@@ -59,7 +59,7 @@ different code, which may be specified inside an `else` code block.
 
 They must have a single starting `if`, may have multiple extending `else if` branches and can have a single ending `else` branch, which is evaluated if the previous condition were all `false`.
 
-```ts
+```kipper
 if (CONDITION) STATEMENT;
 // Required
 else if (CONDITION) STATEMENT;
@@ -69,7 +69,7 @@ else STATEMENT; // Optional
 
 #### Examples
 
-```ts
+```kipper
 // Simple comparison of a value
 var var1: num = 4;
 if (var1 == 4) {
@@ -106,7 +106,7 @@ be used to do repeating tasks at the end of a loop cycle, like calling a functio
 
 #### Syntax
 
-```ts
+```kipper
 for (INIT_EXPRESSION(OPTIONAL); CONDITION(OPTIONAL); LOOP_EXPRESSION(OPTIONAL)) STATEMENT;
 ```
 
@@ -131,7 +131,7 @@ use do-while than while-loops, so watch out for opportunities to replace while-l
 
 #### Syntax
 
-```ts
+```kipper
 while (CONDITION) STATEMENT;
 ```
 
@@ -154,7 +154,7 @@ statement is only run if the `CONDITION` is met.
 
 #### Syntax
 
-```ts
+```kipper
 do STATEMENT while (CONDITION);
 ```
 
@@ -182,7 +182,7 @@ These jump statements are:
 
 #### Syntax
 
-```ts
+```kipper
 // Only valid in functions
 return VALUE(OPTIONAL); // 'VALUE' is only required if the return type of the function is not 'void'
 

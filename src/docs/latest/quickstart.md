@@ -205,7 +205,7 @@ TypeScript.
 
 Using JavaScript:
 
-```ts
+```kipper
 const fs = require("fs").promises;
 const kipper = require("@kipper/core");
 const kipperJS = require("@kipper/core");
@@ -232,7 +232,7 @@ fs.readFile(path, "utf8").then(async (fileContent) => {
 
 Using TypeScript:
 
-```ts
+```kipper
 import { promises as fs } from "fs";
 import * as kipper from "@kipper/core";
 import * as kipperJS from "@kipper/target-js";

@@ -12,7 +12,7 @@ right side is evaluated and returned.
 
 ## Syntax
 
-```ts
+```kipper
 CONDITION ? EVALUATE_IF_TRUE : EVALUATE_IF_FALSE;
 ```
 
@@ -20,7 +20,7 @@ CONDITION ? EVALUATE_IF_TRUE : EVALUATE_IF_FALSE;
 
 ### Simple Conditional Expressions
 
-```ts
+```kipper
 // ✓ Simple evaluation of a number
 true ? 3 : 2; // -> 3
 false ? 3 : 2; // -> 2
@@ -28,7 +28,7 @@ false ? 3 : 2; // -> 2
 
 ### Using Conditional Expressions to assign a value
 
-```ts
+```kipper
 // ✓ Simple evaluation of a number that will be assigned
 var var1: num = 2;
 var var2: num = 9;
@@ -39,7 +39,7 @@ var smallestOrEqual: num = var1 < var2 ? var1 : var2; // -> 2
 
 As the ternary operator evaluates to more expressions, you can also chain it like this:
 
-```ts
+```kipper
 // ✓ Valid - Chained if ... else-if ... else-if ... else ternary operator
 var result: num = condition1 ? value1
      : condition2 ? value2
@@ -49,7 +49,7 @@ var result: num = condition1 ? value1
 
 Equivalent to:
 
-```ts
+```kipper
 if (condition1) { var result = value1; }
 else if (condition2) { var result = value2; }
 else if (condition3) { var result = value3; }

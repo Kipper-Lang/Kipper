@@ -17,7 +17,7 @@ storing them in variables.
 
 ### Storing a simple function
 
-```ts
+```kipper
 def func1() -> void {
     return;
 }
@@ -33,7 +33,7 @@ var storedRef = print;
 
 ### <em class="red-checkmark">X</em> Calling a function reference
 
-```ts
+```kipper
 def func2() -> void {
     return;
 }

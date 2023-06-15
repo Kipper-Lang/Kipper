@@ -60,7 +60,7 @@ standard mathematical [expressions](./expressions.html).
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Simple integer number
 var var1: num = 400;
 
@@ -102,7 +102,7 @@ var var2: num = 51 % 10; // -> 1
 
 Additionally, to the default Base-10 numbers, you may also use Hex, Octal and Binary numbers:
 
-```ts
+```kipper
 // ✓ Byte Number Support
 var bytes: num = 0b11111010; // -> 250
 
@@ -119,7 +119,7 @@ A string is a simple sequence of characters in UTF-16. A string may be any lengt
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Standard addition and concatenations are allowed
 var var4: str = "This is a";
 var var5: str = " string";
@@ -145,7 +145,7 @@ standard. To define a simple character, you use the `''` syntax, hinting a singl
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Simple UTF-16 Character
 var var6: char = "4";
 
@@ -182,7 +182,7 @@ The value can be also represented as 0 (`false`) and 1 (`true`).
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Simple bool value using 'True' and 'False'
 var var15: bool = False;
 var var16: bool = True;
@@ -206,7 +206,7 @@ should be not be used.
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Creating a void variable - This may only be 'void'
 var var21: void = void;
 
@@ -237,13 +237,13 @@ The `list<type>` data type is a unique data type, as it does not represent itsel
 multiple values. As a result of that a list has also a length and an index for each item, which you may use to access
 them using the following syntax:
 
-```ts
+```kipper
 VAR[INDEX];
 ```
 
 #### Examples
 
-```ts
+```kipper
 // ✓ Creating a simple list
 var var24: list<num> = [2, 3, 4];
 

@@ -19,6 +19,6 @@ Meaning that at the moment, its practical usage is fairly limited.
 
 ### Simple null variable definitions
 
-```ts
+```kipper
 var var1: null = null;
 ```

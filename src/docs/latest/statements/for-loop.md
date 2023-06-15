@@ -9,7 +9,7 @@ be used to do repeating tasks at the end of a loop cycle, like calling a functio
 
 ## Syntax
 
-```ts
+```kipper
 for (INIT_EXPRESSION (OPTIONAL); CONDITION (OPTIONAL); LOOP_EXPRESSIONS (OPTIONAL)...) STATEMENT;
 ```
 
@@ -22,7 +22,7 @@ for (INIT_EXPRESSION (OPTIONAL); CONDITION (OPTIONAL); LOOP_EXPRESSIONS (OPTIONA
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple for-loop with an execution counter
 for (var i: num = 1; i < 10; i++) {
   call print(f"Running for the {i}. time!");

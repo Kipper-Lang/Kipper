@@ -7,11 +7,11 @@ and informing the reader of important info.
 ## Syntax
 
 - Single Line Comment:
-```ts
+```kipper
 // CONTENT
 ```
 - Block Comment:
-```ts
+```kipper
 /* CONTENT */
 ```
 
@@ -22,7 +22,7 @@ They are used to describe the functionality of a function and its parameters, an
 used whenever a function is not self-explanatory.
 
 Function comments are written in the following format:
-```ts
+```kipper
 /**
  * DESCRIPTION
  * @param PARAMETER_NAME DESCRIPTION
@@ -41,14 +41,14 @@ and easy development.
 
 ### One-Line Comment
 
-```ts
+```kipper
 // Greet the user
 print("Hello user!");
 ```
 
 ### Multi-Line Comment
 
-```ts
+```kipper
 /*
  * We have a lot to say.
  * This is a very long comment.
@@ -61,7 +61,7 @@ print("It spans multiple lines.");
 
 ### Function Comment
 
-```ts
+```kipper
 /**
  * Calculates the sum of all numbers in the list 'val'.
  * @param val The list of numbers.

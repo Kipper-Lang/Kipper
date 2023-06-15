@@ -16,14 +16,14 @@ implement complex logic.
 
 ### Simple bool variable definitions
 
-```ts
+```kipper
 var var1: bool = false;
 var var2: bool = true;
 ```
 
 ### Comparison of two numbers
 
-```ts
+```kipper
 var var3: num = 3;
 var var4: num = 48;
 var equal: bool = var10 <= var11; // 3 smaller than 48 -> True
@@ -31,7 +31,7 @@ var equal: bool = var10 <= var11; // 3 smaller than 48 -> True
 
 ### Using a boolean as a number
 
-```ts
+```kipper
 var var5: bool = True;
 var var6: num = (var18 as num) + 2; // -> 3
 ```
@@ -40,7 +40,7 @@ var var6: num = (var18 as num) + 2; // -> 3
 
 - External boolean variable:
 
-	```ts
+	```kipper
 	var var7: bool = externalNumber % 10 == 0;
 	if (var7) {
 		// This code will be executed
@@ -51,7 +51,7 @@ var var6: num = (var18 as num) + 2; // -> 3
 
 - Direct boolean expression ([relational expressions](../expressions/relational-expression.html) or [logical expressions](../expressions/logical-expression.html)):
 
-	```ts
+	```kipper
 	if (externalNumber % 10 == 0) {
 		// This code will be executed
 	} else {
@@ -63,7 +63,7 @@ var var6: num = (var18 as num) + 2; // -> 3
 
 - External boolean variable:
 
-	```ts
+	```kipper
 	var var8: bool = validNumber(1);
 	while (var8) {
 		// This code will be executed
@@ -73,7 +73,7 @@ var var6: num = (var18 as num) + 2; // -> 3
 
 - Direct boolean expression ([relational expressions](../expressions/relational-expression.html) or [logical expressions](../expressions/logical-expression.html)):
 
-	```ts
+	```kipper
 	while (validNumber(1)) {
 		// This code will be executed
 	}

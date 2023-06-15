@@ -19,6 +19,6 @@ Meaning that at the moment, its practical usage is fairly limited.
 
 ### Simple undefined variable definitions
 
-```ts
+```kipper
 var var1: undefined = undefined;
 ```

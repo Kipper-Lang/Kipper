@@ -13,7 +13,7 @@ All data that is passed to a function is explicitly passed.
 
 ### Defining a function
 
-```ts
+```kipper
 def NAME(ARG_NAME: TYPE, ...) -> RETURN_TYPE {
   STATEMENTS... (OPTIONAL) // Function content
 
@@ -35,7 +35,7 @@ Rules for defining a Kipper function:
 
 _See also [Function call expression](./expressions/function-call-expression.html)._
 
-```ts
+```kipper
 call NAME(ARG1, ARG2, ARGn, ...);
 // OR - 'call' is optional
 NAME(ARGS, ARG2, ARGn, ...);
@@ -68,7 +68,7 @@ own scope.
 
 That means that the following code is valid and that the variable `x` is _not_ going to throw an `IdentifierError`:
 
-```ts
+```kipper
 def x() -> void {
   // 'x' will exist without issue with the type 'num'
   // in this scope/all children scopes.
@@ -83,7 +83,7 @@ def x() -> void {
 
 ### Simple function
 
-```ts
+```kipper
 def func1() -> void {
 	return;
 }
@@ -95,7 +95,7 @@ call func1();
 
 ### Function with parameters
 
-```ts
+```kipper
 def func2(param1: num, param2: str) -> void {
 	return;
 }
@@ -105,7 +105,7 @@ var result: void = func2(4, "string"); // -> void (no meaningful return value)
 
 ### Function with return value
 
-```ts
+```kipper
 def func3() -> num {
 	return 4;
 }
@@ -115,7 +115,7 @@ var result = func3(); // -> 4
 
 ### Function with parameters and return value
 
-```ts
+```kipper
 def func4(param1: num, param2: str) -> str {
 	return param1 as str + param2;
 }
@@ -125,7 +125,7 @@ var result: str = func4(4, "string"); // -> "4string"
 
 ### <em class="red-checkmark">X</em> May not call a function without parameters with parameters
 
-```ts
+```kipper
 def func5() -> void {
 	return;
 }
@@ -135,7 +135,7 @@ func5(4, "string");
 
 ### <em class="red-checkmark">X</em> May not call a function without the required parameters
 
-```ts
+```kipper
 def func6(param1: num, param2: str) -> void {
     return;
 }
@@ -145,7 +145,7 @@ func6(4);
 
 ### <em class="red-checkmark">X</em> May not call a function with invalid parameters/types
 
-```ts
+```kipper
 def func7(param1: num, param2: str) -> void {
 	return;
 }
@@ -155,7 +155,7 @@ func7("string", 4);
 
 ### <em class="red-checkmark">X</em> May not return a value of a different type than the return type
 
-```ts
+```kipper
 def func8() -> num {
     return "string";
 }
@@ -165,7 +165,7 @@ def func8() -> num {
 
 Remember! It is good to always document your functions.
 
-```ts
+```kipper
 /**
  * Adds the prefix to the main string.
  * @param pre The prefix that shall be added.

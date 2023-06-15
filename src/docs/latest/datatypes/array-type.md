@@ -14,7 +14,7 @@ them using the following syntax:
 
 ## Array Indexing Syntax
 
-```ts
+```kipper
 VAR[INDEX];
 ```
 
@@ -22,51 +22,51 @@ VAR[INDEX];
 
 ### Simple constant array definition
 
-```ts
+```kipper
 var var24: Array<num> = [2, 3, 4];
 ```
 
 ### Accessing elements of an array
 
-```ts
+```kipper
 var var25: Array<num> = [2, 3, 4];
 var item_of_list: num = var26[2]; // -> 4
 ```
 
 ### Calling [`len`](../built-in-functions.html#len) function on an array
 
-```ts
+```kipper
 var len_of_list: num = len(var26); // -> 3
 ```
 
 ### Calling `last` function on an array
 
-```ts
+```kipper
 var len_of_list: num = last(var26); // -> 4
 ```
 
 ### Calling `first` function on an array
 
-```ts
+```kipper
 // ✓ Accessing the first item of the list using 'first()'
 var len_of_list: num = first(var26); // -> 2
 ```
 
 ### <em class="red-checkmark">X</em> May not set a list to a single value
 
-```ts
+```kipper
 var var26: Array<num> = 2;
 ```
 
 ### <em class="red-checkmark">X</em> May not set item of list to an invalid type
 
-```ts
+```kipper
 var var27: Array<num> = ["string"];
 ```
 
 ### <em class="red-checkmark">X</em> May not convert list to another type as a whole
 
-```ts
+```kipper
 var var28: Array<str> = ["99", "1893", "4"];
 var var29: Array<num> = var27 as Array<num>; // -> Invalid conversion
 ```

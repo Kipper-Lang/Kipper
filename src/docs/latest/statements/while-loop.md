@@ -8,7 +8,7 @@ while-loops with do-while loops.
 
 ## Syntax
 
-```ts
+```kipper
 while (CONDITION) STATEMENT;
 ```
 
@@ -19,7 +19,7 @@ while (CONDITION) STATEMENT;
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple loop
 var var1: num = 0;
 while (var1 <= 5) {

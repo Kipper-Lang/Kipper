@@ -5,7 +5,7 @@ without the involvement of any other statements.
 
 ## Syntax
 
-```ts
+```kipper
 EXPRESSION;
 ```
 
@@ -15,7 +15,7 @@ Common examples of expression statements are with increment or decrement express
 or subtract `1` to/from a value. These often do not require any other expressions, and can simply be used as a whole
 statement, like this:
 
-```ts
+```kipper
 // Defining a variable
 var increase_this: num = 4;
 increase_this++; // Expression statement -> 5

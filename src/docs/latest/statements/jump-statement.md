@@ -16,7 +16,7 @@ These jump statements are:
 
 ## Syntax
 
-```ts
+```kipper
 // Only valid in functions
 return VALUE(OPTIONAL); // 'VALUE' is only required if the return type of the function is not 'void'
 

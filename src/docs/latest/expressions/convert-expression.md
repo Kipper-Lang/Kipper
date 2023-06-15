@@ -10,7 +10,7 @@ Therefore, to print out a number you first have to convert it to a string.
 
 ## Syntax
 
-```ts
+```kipper
 EXP as TYPE;
 ```
 
@@ -26,7 +26,7 @@ Converts a string to a number, if it meets the following requirements:
 Otherwise, if the string does not meet the above requirements, it will return `NaN` (Not a number). In future releases,
 though this will throw a `ConversionError`.
 
-```ts
+```kipper
 "203" as num; // -> 203
 ```
 
@@ -34,7 +34,7 @@ though this will throw a `ConversionError`.
 
 Converts a number to an identical string representation of the number.
 
-```ts
+```kipper
 203 as str; // -> "203"
 ```
 
@@ -42,7 +42,7 @@ Converts a number to an identical string representation of the number.
 
 Converts a number to a bool. This evaluates to `true` if it's a non-zero value.
 
-```ts
+```kipper
 20 as bool; // -> true
 0 as bool; // -> false
 ```
@@ -51,7 +51,7 @@ Converts a number to a bool. This evaluates to `true` if it's a non-zero value.
 
 Converts a bool to a number. This evaluates to `1` if it's `true`, otherwise it's `0`.
 
-```ts
+```kipper
 true as num; // -> 1
 false as num; // -> 0
 ```
@@ -60,7 +60,7 @@ false as num; // -> 0
 
 Converts a string to a number. This evaluates to `"true"` if it's `true`, otherwise it's `"false"`.
 
-```ts
+```kipper
 true as str; // -> "true"
 false as str; // -> "false"
 ```

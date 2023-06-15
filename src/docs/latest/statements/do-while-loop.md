@@ -6,7 +6,7 @@ statement is only run if the specified condition is met.
 
 ## Syntax
 
-```ts
+```kipper
 do STATEMENT while (CONDITION);
 ```
 
@@ -18,7 +18,7 @@ do STATEMENT while (CONDITION);
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple loop
 var var1: num = 0;
 do {

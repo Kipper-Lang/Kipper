@@ -8,7 +8,7 @@ A string is a simple sequence of characters in UTF-16. A string may be any lengt
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Standard addition and concatenations are allowed
 var var4: str = "This is a";
 var var5: str = " string";

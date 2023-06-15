@@ -10,13 +10,13 @@ single expression, and can be used to invert the result of a logical expression.
 
 For the logical `AND` and `OR`:
 
-```ts
+```kipper
 EXP ( && | || ) EXP
 ```
 
 For the logical `NOT`:
 
-```ts
+```kipper
 !VALUE;
 ```
 
@@ -24,7 +24,7 @@ For the logical `NOT`:
 
 ### Logical AND
 
-```ts
+```kipper
 // Logical AND - All must be true
 true && true; // -> true
 false && true; // -> false
@@ -34,7 +34,7 @@ false && false; // -> false
 
 ### Logical OR
 
-```ts
+```kipper
 // Logical OR - One must be true
 true || true; // -> true
 false || true; // -> true
@@ -44,7 +44,7 @@ false || false; // -> false
 
 ### Logical NOT
 
-```ts
+```kipper
 // Logical NOT - Negate
 !false; // -> true
 !true; // -> false
@@ -54,7 +54,7 @@ false || false; // -> false
 
 Logical Expressions may be also chained together as long as you want. For example:
 
-```ts
+```kipper
 // Chained Logical AND - All must be true
 true && true && true; // -> true
 true && false && true; // -> false
@@ -69,7 +69,7 @@ false || false || false; // -> false
 
 You can also combine relational expressions with logical expressions, like this for example:
 
-```ts
+```kipper
 // ✓ Combined relational and logical expressions
 (3 == 4 && 3 != 4) || (2 != 22 && 3 == 3);
 

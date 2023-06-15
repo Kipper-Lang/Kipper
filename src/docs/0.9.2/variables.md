@@ -17,7 +17,7 @@ so-called declarations and definitions.
 
 To declare a variable you simply specify its name and its type, but don't set a value yet:
 
-```ts
+```kipper
 var NAME: TYPE;
 ```
 
@@ -58,14 +58,14 @@ var var3: str;
 Defining a variable is fairly straightforward in Kipper, as like in declarations you specify the name, type and now as
 well the value. Here we use the assign character `=`, which sets the variable to the `VALUE`:
 
-```ts
+```kipper
 var NAME: TYPE = VALUE;
 ```
 
 Though, in case you want to make clear that you have already declared the variable and don't want to specify the type
 again, the following is also valid code:
 
-```ts
+```kipper
 NAME = VALUE;
 ```
 
@@ -104,7 +104,7 @@ var2 = 3; // typeof(3) -> num</code></pre>
 Before we can get to using our own variables, the concept of so-called scopes has to be understood. A scope of a
 variable defines simply where your code can access a variable, and not interfere with other variables.
 
-```ts
+```kipper
 // This is a simple scope or also called "block of code"
 {
 	// Variable that is bound to this scope
@@ -121,7 +121,7 @@ In this code-block, you may only reference/use variables that were defines in th
 The scope that you can always access is the highest scope and is called "global scope". It's where you define variables
 for your entire file/program. An example of a global would be simply this:
 
-```ts
+```kipper
 // Global variable
 var var3: num = 0;
 
@@ -139,7 +139,7 @@ Though, if you try to access a variable in another scope, you will get a compile
 from other scopes. They are invisible to you, so you will get an `Undefined Reference` error, saying the value is not
 defined in your or any other parent scope!
 
-```ts
+```kipper
 // Global variable
 var var3: num = 0;
 
@@ -169,14 +169,14 @@ To define a constant variable, you simply use the `const` keyword in place of th
 as a constant that is protected from changes (You may not declare a constant variable though, and you will always have
 to specify its value right when creating the variable!):
 
-```ts
+```kipper
 // Constant variable
 const var6: num = 1;
 ```
 
 You may read from the constant value like with a standard variable:
 
-```ts
+```kipper
 // Constant variable
 const var7: num = 1;
 const var8: num = 3;

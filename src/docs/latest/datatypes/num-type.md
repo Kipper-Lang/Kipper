@@ -15,7 +15,7 @@ operations have a higher priority than additions and subtractions.
 
 Simple example:
 
-```ts
+```kipper
 var result: num = 4 + 4 * 5; // 4 + (4 * 5) -> 24
 ```
 
@@ -39,7 +39,7 @@ always result in a Base-10 number.
 This also means that you may mix different number types together, as long as they are prefixed with the correct
 identifier:
 
-```ts
+```kipper
 var octal: num = 0o347 + 150 + 0xffa2; // -> 65823
 ```
 
@@ -51,7 +51,7 @@ be a 64-bit floating point number. This means that the maximum safe number range
 
 Over this limit, the numbers will start to lose precision, as shown in the following example:
 
-```ts
+```kipper
 var num1: num = 9007199254740991; // -> 9007199254740991
 var num2: num = 9007199254740992; // -> 9007199254740992
 var num3: num = 9007199254740993; // -> 9007199254740992
@@ -59,7 +59,7 @@ var num3: num = 9007199254740993; // -> 9007199254740992
 
 Performing equality checks now causes the following problem:
 
-```ts
+```kipper
 var isEqual = num3 === 9007199254740993; // -> true
 print(isEqual as str) // -> true
 
@@ -90,19 +90,19 @@ This also includes global functions to check whether a number is within the safe
 
 ### Simple integer variable definitions
 
-```ts
+```kipper
 var var1: num = 400;
 ```
 
 ### Simple floating point variable definitions
 
-```ts
+```kipper
 var var2: num = 0.43493;
 ```
 
 ### Calculations using floating point and integer numbers
 
-```ts
+```kipper
 var var3: num = var2 + var1; // -> 400.43493
 ```
 

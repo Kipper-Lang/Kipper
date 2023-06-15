@@ -17,7 +17,7 @@ Such expressions are essential for conditional expressions that are used in stat
 
 ## Syntax
 
-```ts
+```kipper
 EXP ( == | != | > | >= | < | <= ) EXP
 ```
 
@@ -25,28 +25,28 @@ EXP ( == | != | > | >= | < | <= ) EXP
 
 ### Equal-to Operator
 
-```ts
+```kipper
 20 == 20; // -> true
 92 == 20; // -> false
 ```
 
 ### Not Equal-to Operator
 
-```ts
+```kipper
 21 != 9; // -> true
 21 != 21; // -> false
 ```
 
 ### Greater-than Operator
 
-```ts
+```kipper
 20 > 5; // -> true
 20 > 20; // -> false
 ```
 
 ### Greater-than or Equal-to Operator
 
-```ts
+```kipper
 11 >= 5; // -> true
 20 >= 20; // -> true
 32 >= 99; // -> false
@@ -54,14 +54,14 @@ EXP ( == | != | > | >= | < | <= ) EXP
 
 ### Less-than Operator
 
-```ts
+```kipper
 10 < 78; // -> true
 43 < 14; // -> false
 ```
 
 ### Less-than or Equal-to Operator
 
-```ts
+```kipper
 12 <= 29; // -> true
 56 <= 56; // -> true
 21 <= 13; // -> false
