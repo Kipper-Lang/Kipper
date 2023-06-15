@@ -49,6 +49,9 @@ To use development versions of Kipper download the
 
 ### Fixed
 
+- Redeclaration bug causing an `InternalError` after calling the compiler 
+  ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
+
 ### Deprecated
 
 ### Removed

@@ -172,6 +172,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {
 			semanticData.value.ensureTypeSemanticallyValid(); // Ensure the assignment didn't fail
+			this.ensureScopeDeclarationAvailableIfNeeded(); // Ensure the scope declaration is available
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
