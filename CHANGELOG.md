@@ -51,6 +51,8 @@ To use development versions of Kipper download the
 
 - Redeclaration bug causing an `InternalError` after calling the compiler
   ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead 
+  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
 - Bug of invalid underline indent in error traceback.
 	([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
 
