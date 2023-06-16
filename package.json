@@ -1,7 +1,7 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language and compiler 🦊",
-  "version": "0.10.1",
+  "version": "0.11.0-alpha.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
