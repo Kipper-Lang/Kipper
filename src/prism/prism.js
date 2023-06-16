@@ -1193,6 +1193,9 @@ Prism.languages.wasm = {
 		/[+-]?\b(?:\d(?:_?\d)*(?:\.\d(?:_?\d)*)?(?:[eE][+-]?\d(?:_?\d)*)?|0x[\da-fA-F](?:_?[\da-fA-F])*(?:\.[\da-fA-F](?:_?[\da-fA-D])*)?(?:[pP][+-]?\d(?:_?\d)*)?)\b|\binf\b|\bnan(?::0x[\da-fA-F](?:_?[\da-fA-D])*)?\b/,
 	punctuation: /[()]/,
 };
+// Extend Kipper with TypoScript
+Prism.languages.kipper = Prism.languages.extend("typescript", {});
+Prism.languages.kip = Prism.languages.kipper;
 !(function () {
 	if ("undefined" != typeof Prism && "undefined" != typeof document) {
 		var e = "line-numbers",

@@ -15,7 +15,7 @@ repetition.
 
 ### Defining a function
 
-```ts
+```kipper
 def NAME(ARG_NAME: TYPE, ...) -> RETURN_TYPE {
   STATEMENTS... (OPTIONAL) // Function content
 
@@ -35,7 +35,7 @@ Rules for defining a Kipper function:
 
 _See also [Function call expression](./expressions.html)._
 
-```ts
+```kipper
 call NAME(ARG1, ARG2, ARGn, ...);
 // OR - 'call' is optional
 NAME(ARGS, ARG2, ARGn, ...);
@@ -64,7 +64,7 @@ avoid confusion in many cases. An exception though is the shadowing of the funct
 
 That means that the following code is valid and that the variable `x` is _not_ going to throw an `IdentifierError`:
 
-```ts
+```kipper
 def x() -> void {
   // 'x' will exist without issue with the type 'num'
   // in this scope/all children scopes.
@@ -77,7 +77,7 @@ def x() -> void {
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple void function with no arguments and return
 def print_banner() -> void {
   call print("Welcome to Kipper!");

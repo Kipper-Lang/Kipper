@@ -5,13 +5,13 @@ certain actions, like reading a value, calculating something, calling a function
 
 A simple example for expressions can be a simple calculation, like this:
 
-```ts
+```kipper
 val1 + val2 * val3; // Mathematical/Arithmetic expression
 ```
 
 Notice how in this case we are not assigning the result to anything? This is an important fact of expressions that they are usually independent and do a single task, meaning if we wanted to assign this result to a variable, we would have to use an assignment expression like this:
 
-```ts
+```kipper
 // Assign and arithmetic expression
 var result: num = val1 + val2 * val3;
 ```
@@ -182,13 +182,13 @@ The order of precedence is a very vital concept in programming languages, as the
 
 A simple example of this are arithmetic expressions `+ - * / %`, which have per mathematical conventions their own order of precedence. For example, multiplication and division signs **always** come first before plus and minus, unless you explicitly use brackets, like these `( )`. The same can be done here in Kipper as well, where you can forcefully increase the order of precedence using brackets:
 
-```ts
+```kipper
 15 + 4 * 6; // -> (15 + (4 * 6)) -> (15 + 24) -> 39
 ```
 
 Forced higher precedence using brackets:
 
-```ts
+```kipper
 (15 + 4) * 6; // -> ((15 + 4) * 6) -> (19 * 6) -> 114
 ```
 
@@ -197,26 +197,26 @@ Forced higher precedence using brackets:
 As you should have already seen in the table above, there is an extra column defining the so-called associativity. What
 does that mean? It's relatively simple and means whether the following (`( )` meaning the expression is read first):
 
-```ts
+```kipper
 a OPR b OPR c
 ```
 
 is evaluated as (left-associative - Reads from left to right):
 
-```ts
+```kipper
 (a OPR b) OPR c
 ```
 
 or as (right-associative - reads from right to left):
 
-```ts
+```kipper
 a OPR (b OPR c)
 ```
 
 This is especially important as it can change how certain things are evaluated, and also cause unwanted errors! For
 example the following would be interpreted as (left-associative):
 
-```ts
+```kipper
 32 / 4 / 4; // -> ((32 / 4) / 4) -> (8 / 4) -> 2
 ```
 
@@ -231,13 +231,13 @@ was evaluated. They may also be chained based on their order of precedence, wher
 
 ### Syntax
 
-```ts
+```kipper
 EXP ( + | - | * | / | ** | % ) EXP
 ```
 
 ### Examples
 
-```ts
+```kipper
 // Plus
 400.3 + 26.3; // -> 426.6
 
@@ -272,13 +272,13 @@ Such expressions are essential for conditional expressions that are used in stat
 
 ### Syntax
 
-```ts
+```kipper
 EXP ( == | != | > | >= | < | <= ) EXP
 ```
 
 ### Examples
 
-```ts
+```kipper
 // Equal to
 20 == 20; // -> true
 92 == 20; // -> false
@@ -318,19 +318,19 @@ single expression, and can be used to invert the result of a logical expression.
 
 For the logical `AND` and `OR`:
 
-```ts
+```kipper
 EXP ( && | || ) EXP
 ```
 
 For the logical `NOT`:
 
-```ts
+```kipper
 !VALUE;
 ```
 
 ### Examples
 
-```ts
+```kipper
 // Logical AND - All must be true
 true && true; // -> true
 false && true; // -> false
@@ -350,7 +350,7 @@ false || false; // -> false
 
 Logical Expressions may be also chained together as long as you want. For example:
 
-```ts
+```kipper
 // Chained Logical AND - All must be true
 true && true && true; // -> true
 true && false && true; // -> false
@@ -363,7 +363,7 @@ false || false || false; // -> false
 
 You can also combine relational expressions with logical expressions, like this for example:
 
-```ts
+```kipper
 // ✓ Combined relational and logical expressions
 (3 == 4 && 3 != 4) || (2 != 22 && 3 == 3);
 
@@ -383,13 +383,13 @@ right side is evaluated and returned.
 
 ### Syntax
 
-```ts
+```kipper
 CONDITION ? EVALUATE_IF_TRUE : EVALUATE_IF_FALSE;
 ```
 
 ### Examples
 
-```ts
+```kipper
 // ✓ Simple evaluation of a number
 true ? 3 : 2; // -> 3
 false ? 3 : 2; // -> 2
@@ -402,7 +402,7 @@ var smallestOrEqual: num = var1 < var2 ? var1 : var2; // -> 2
 
 As the ternary operator evaluates to more expressions, you can also chain it like this:
 
-```ts
+```kipper
 // ✓ Valid - Chained if ... else-if ... else-if ... else ternary operator
 val result: num = condition1 ? value1
      : condition2 ? value2
@@ -427,7 +427,7 @@ only allows a string as a parameter. Therefore, to print out a number you first 
 
 ### Syntax
 
-```ts
+```kipper
 EXP as TYPE;
 ```
 
@@ -443,7 +443,7 @@ Converts a string to a number, if it meets the following requirements:
 Otherwise if the string does not meet the above requirements, it will return `NaN` (Not a number). In future releases,
 though this will throw a `ConversionError`.
 
-```ts
+```kipper
 "203" as num; // -> 203
 ```
 
@@ -451,7 +451,7 @@ though this will throw a `ConversionError`.
 
 Converts a number to an identical string representation of the number.
 
-```ts
+```kipper
 203 as str; // -> "203"
 ```
 
@@ -459,7 +459,7 @@ Converts a number to an identical string representation of the number.
 
 Converts a single character to a string.
 
-```ts
+```kipper
 "c" as str; // -> "c"
 ```
 
@@ -467,7 +467,7 @@ Converts a single character to a string.
 
 Converts a number to a bool. This evaluates to `true` if it's a non-zero value.
 
-```ts
+```kipper
 20 as bool; // -> true
 0 as bool; // -> false
 ```
@@ -476,7 +476,7 @@ Converts a number to a bool. This evaluates to `true` if it's a non-zero value.
 
 Converts a bool to a number. This evaluates to `1` if it's `true`, otherwise it's `0`.
 
-```ts
+```kipper
 true as num; // -> 1
 false as num; // -> 0
 ```
@@ -485,7 +485,7 @@ false as num; // -> 0
 
 Converts a string to a number. This evaluates to `"true"` if it's `true`, otherwise it's `"false"`.
 
-```ts
+```kipper
 true as str; // -> "true"
 false as str; // -> "false"
 ```
@@ -501,13 +501,13 @@ value.
 
 ### Syntax
 
-```ts
+```kipper
 call FUNC(ARGS...)
 ```
 
 ### Examples
 
-```ts
+```kipper
 // ✓ Calling a defined function
 def func1() -> num { return 5; }
 call func1(); // -> 5

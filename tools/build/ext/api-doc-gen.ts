@@ -171,7 +171,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		const targetZipPath = path.resolve(destPath, `${version}.zip`);
 		const targetOutPath = path.resolve(destPath, version);
 
-		// Skip this step if the version is already down/home/luna/.docker/loaded
+		// Skip this step if the version is already downloaded
 		try {
 			await fs.access(targetOutPath);
 
@@ -182,7 +182,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 			return firstChild;
 		} catch (e) {
-			// Ignore
+			// Ignore - We need to install the version
 		}
 
 		// First download the temp zip file
@@ -210,6 +210,14 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 */
 	protected async installNodeModules(projectPath: AbsolutePath): Promise<void> {
 		log.debug(`Installing node modules for Kipper source code - '${projectPath}'`);
+
+    try {
+      const nodePath = `${projectPath}/node_modules`;
+      await fs.access(nodePath);
+      return;
+    } catch (e) {
+      // Ignore - We need to install the node modules
+    }
 
 		const process = spawn(
 			// Start the process with working directory equal to the project path

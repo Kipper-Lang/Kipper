@@ -6,13 +6,13 @@ the code reader of important info.
 
 ## Syntax
 
-```ts
+```kipper
 /* CONTENT */
 ```
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple comment
 /* Greet the user */
 call print("Hello user!");
