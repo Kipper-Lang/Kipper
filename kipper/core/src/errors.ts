@@ -96,7 +96,7 @@ export class KipperError extends Error {
 				let startOfError = this.tracebackData.location.col;
 
 				// In case the error is at the exact end of the line, mark the whole line as the error origin
-				if (startOfError === (srcLine.length - 1)) {
+				if (startOfError === srcLine.length - 1) {
 					let countOfLeadingSpaces = 0;
 					for (const char of srcLine) {
 						if (char === " ") {

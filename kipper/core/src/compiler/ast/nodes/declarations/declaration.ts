@@ -16,7 +16,7 @@ import type { ASTDeclarationKind, ParserDeclarationContext } from "../../ast-typ
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
 import type { ScopeDeclaration } from "../../../analysis";
 import { CompilableASTNode, type CompilableNodeParent } from "../../compilable-ast-node";
-import {MissingRequiredSemanticDataError, UndefinedDeclarationCtxError} from "../../../../errors";
+import { MissingRequiredSemanticDataError, UndefinedDeclarationCtxError } from "../../../../errors";
 
 /**
  * The base abstract AST node class for all declarations/declarations, which wrap their corresponding
