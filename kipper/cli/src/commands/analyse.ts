@@ -6,7 +6,6 @@ import { Command, flags } from "@oclif/command";
 import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
 import { KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { CLIEmitHandler, defaultCliLogger } from "../logger";
-import { IFlag } from "@oclif/command/lib/flags";
 import { getFile } from "../compile";
 
 export default class Analyse extends Command {
@@ -23,7 +22,7 @@ export default class Analyse extends Command {
 		},
 	];
 
-	static override flags: Record<string, IFlag<any>> = {
+	static override flags: flags.Input<any> = {
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
