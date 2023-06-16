@@ -51,6 +51,8 @@ To use development versions of Kipper download the
 
 - Redeclaration bug causing an `InternalError` after calling the compiler
   ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
+- Bug of invalid underline indent in error traceback.
+	([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
 
 ### Deprecated
 
