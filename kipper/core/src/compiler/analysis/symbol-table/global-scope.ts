@@ -27,7 +27,7 @@ export class GlobalScope extends Scope {
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
 
-		// Ensuring that the declaration does not overwrite other definitions
+		// Ensuring that the declaration does not overwrite other declarations
 		this.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this.programCtx.globalScope);
 
 		const scopeDeclaration = new ScopeFunctionDeclaration(declaration);
@@ -38,7 +38,7 @@ export class GlobalScope extends Scope {
 	public addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
 
-		// Ensuring that the declaration does not overwrite other definitions
+		// Ensuring that the declaration does not overwrite other declarations
 		this.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this.programCtx.globalScope);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);

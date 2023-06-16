@@ -8,8 +8,6 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
-	SemanticData,
-	TypeData,
 	UnaryExpressionSemantics,
 } from "../../ast";
 import {
@@ -484,7 +482,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// return type.
 		if (returnType !== "void") {
 			// Recursively check all code paths to ensure all return a value.
-			const checkChildrenCodePaths = (parent: Statement<SemanticData, TypeData>): boolean => {
+			const checkChildrenCodePaths = (parent: Statement): boolean => {
 				let returnPathsCovered = false;
 
 				// If the parent is an if statement, we have to check the if and else branches directly

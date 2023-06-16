@@ -13,7 +13,7 @@ describe("BuiltInOverwriteError", () => {
 			extendBuiltInFunctions: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
 		};
 
-		describe(`Global Scope - ${test.t} Overwrite`, () => {
+		describe(`Global Scope - Overwrite [${test.t}]`, () => {
 			it("Redeclaration by variable", async () => {
 				try {
 					await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);

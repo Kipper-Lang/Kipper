@@ -31,7 +31,7 @@ describe("Built-ins", () => {
 				target: target,
 			};
 
-			describe(`print (${target.fileExtension})`, () => {
+			describe(`print [${target.fileExtension}]`, () => {
 				it("Should error with no argument", async () => {
 					const fileContent = "print();";
 					try {
@@ -85,7 +85,7 @@ describe("Built-ins", () => {
 				});
 			});
 
-			describe(`len (${target.fileExtension})`, () => {
+			describe(`len [${target.fileExtension}]`, () => {
 				it("Should error with no argument", async () => {
 					const fileContent = "len();";
 					try {

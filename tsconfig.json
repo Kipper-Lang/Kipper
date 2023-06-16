@@ -14,7 +14,7 @@
 		"outDir": "./lib",
     "target": "es2016",
     "lib": [
-      "ES2016"
+      "ES7",
     ]
     // ES7 -> ES2016
   },
@@ -22,6 +22,7 @@
 		"compilerOptions": {
 			"rootDir": ".",
 			"sourceRoot": ".",
+			"sourceMap": true,
 		},
 		"files": true
 	},
@@ -40,6 +41,6 @@
 		"kipper/target-ts",
 	],
 	"files": [
-		"./kipper/index.ts"
+		"./kipper/index.ts",
 	]
 }

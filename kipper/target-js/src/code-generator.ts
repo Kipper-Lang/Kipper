@@ -2,11 +2,14 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
+	TranslatedCodeToken,
 	ComparativeExpressionSemantics,
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
+} from "@kipper/core";
+import {
 	AdditiveExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
@@ -41,8 +44,6 @@ import {
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-} from "@kipper/core";
-import {
 	CompoundStatement,
 	DoWhileLoopStatement,
 	ForLoopStatement,
@@ -467,7 +468,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link FStringPrimaryExpression} into the JavaScript language.
 	 */
 	fStringPrimaryExpression = async (node: FStringPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const atoms: Array<TranslatedCodeToken> = [];
+		for (const atom of node.getSemanticData().atoms) {
+			if (typeof atom === "string") {
+				atoms.push(atom);
+			} else {
+				atoms.push("${", ...(await atom.translateCtxAndChildren()), "}");
+			}
+		}
+
+		return ["`", ...atoms, "`"];
 	};
 
 	/**
