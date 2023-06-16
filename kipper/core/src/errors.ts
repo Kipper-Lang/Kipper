@@ -82,6 +82,9 @@ export class KipperError extends Error {
 	 * @since 0.3.0
 	 */
 	public getTraceback(): string {
+		// Sanitize the traceback message (No actual newlines)
+		this.message = this.message.replace(/\n/g, "\\n");
+
 		const tokenSrc = (() => {
 			if (
 				this.tracebackData.location?.line !== undefined &&
@@ -93,8 +96,16 @@ export class KipperError extends Error {
 				let startOfError = this.tracebackData.location.col;
 
 				// In case the error is at the exact end of the line, mark the whole line as the error origin
-				if (startOfError === this.tracebackData.tokenSrc.length) {
-					startOfError = 0;
+				if (startOfError === (srcLine.length - 1)) {
+					let countOfLeadingSpaces = 0;
+					for (const char of srcLine) {
+						if (char === " ") {
+							countOfLeadingSpaces++;
+						} else {
+							break;
+						}
+					}
+					startOfError = countOfLeadingSpaces; // Set the start of the error to the first non-space character
 				}
 
 				let endOfError = startOfError + this.tracebackData.tokenSrc.length;
