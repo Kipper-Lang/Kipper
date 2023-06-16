@@ -1,5 +1,5 @@
 import { KipperCompiler, KipperCompileResult, KipperError } from "@kipper/core";
-import { defaultConfig, ensureErrorWasReported, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("InvalidRelationalComparisonTypeError", () => {
