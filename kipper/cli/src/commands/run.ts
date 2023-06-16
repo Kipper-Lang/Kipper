@@ -52,7 +52,7 @@ export default class Run extends Command {
 		},
 	];
 
-	static override flags: Record<string, IFlag<any>> = {
+	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
 			default: "js",
@@ -154,7 +154,7 @@ export default class Run extends Command {
 
 			// Get the JS code that should be evaluated
 			let jsProgram: string;
-			if (target.targetName === "typescript") {
+			if (target.targetName !== "javascript") {
 				// Also do the compilation now with the JavaScript target
 				let jsProgramCtx = await compiler.compile(parseStream, { ...compilerOptions, target: getTarget("js") });
 				jsProgram = jsProgramCtx.write();

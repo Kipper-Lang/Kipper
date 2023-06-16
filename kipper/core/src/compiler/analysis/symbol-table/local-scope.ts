@@ -36,7 +36,7 @@ export class LocalScope extends Scope {
 	public addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
 
-		// Ensuring that the declaration does not overwrite other definitions
+		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);

@@ -33,7 +33,7 @@ export default class Compile extends Command {
 		},
 	];
 
-	static override flags: Record<string, IFlag<any>> = {
+	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
 			default: "js",

@@ -5,15 +5,25 @@
 lexer grammar KipperLexer;
 
 channels {
-	// Channel for all types of comments
-	COMMENT
+	COMMENT // Channel for all types of comments
 }
 
-// Comments are at the lowest priority of lexing
+tokens {
+	FStringExpStart
+}
+
+options {
+	superClass=KipperLexerBase;
+}
+
+@lexer::header {
+	import KipperLexerBase from "./base/KipperLexerBase";
+}
+
 BlockComment
-    :   '/*' .*? '*/'
+    :   '/*' .*?  '*/'
     	-> channel(COMMENT)
-    ;
+	;
 
 LineComment
 	:	'//' ~[\r\n\u2028\u2029]*
@@ -82,6 +92,12 @@ LeftParen : '(';
 RightParen : ')';
 LeftBracket : '[';
 RightBracket : ']';
+
+// FString Literal Braces - End Brace should trigger popMode as we go back to the FSTRING mode
+// This lexer rule should only be invoked when inside a FString literal
+FStringExpEnd : {this.insideFString()}? '}' -> popMode;
+
+// General braces
 LeftBrace : '{';
 RightBrace : '}';
 
@@ -130,14 +146,6 @@ IntegerConstant
     |	BinaryConstant
     ;
 
-SingleQuoteFStringLiteral
-    :   'f\'' SingleQuoteSCharSequence? '\''
-    ;
-
-DoubleQuoteFStringLiteral
-    :   'f"' DoubleQuoteSCharSequence? '"'
-    ;
-
 SingleQuoteStringLiteral
 	:	'\'' SingleQuoteSCharSequence? '\''
 	;
@@ -150,17 +158,47 @@ FloatingConstant
     :   DecimalFloatingConstant
     ;
 
-Whitespace
-    :   [\t\u000B\u000C\u0020\u00A0]+
-		-> channel(HIDDEN)
-    ;
+// Whitespaces and newlines are always hidden, so they are not included in the parsing process but still visible
+Whitespace : [\t\u000B\u000C\u0020\u00A0]+ -> channel(HIDDEN);
+Newline : [\r\n\u2028\u2029] -> channel(HIDDEN);
 
-Newline
-    :   [\r\n\u2028\u2029]
-        -> channel(HIDDEN)
-    ;
+// FString Start Quotes - Will change the mode to one of the FString modes
+FStringSingleQuoteStart : 'f\'' {this.incrementFStringDepth()} -> pushMode(SINGLE_QUOTE_FSTRING);
+FStringDoubleQuoteStart : 'f"' {this.incrementFStringDepth()} -> pushMode(DOUBLE_QUOTE_FSTRING);
 
-// Fragment rules for the lexer
+// ----------------------------------------------------
+// Special FString mode for single quotes
+// ----------------------------------------------------
+mode SINGLE_QUOTE_FSTRING;
+
+// Push to the default mode to allow for expression parsing
+FStringSingleQuoteExpStart : {this.insideFString()}? '{' -> type(FStringExpStart), pushMode(DEFAULT_MODE);
+
+// Pop the FString mode when the end of the FString literal is reached
+// -> we go back to the previous mode (usually DEFAULT_MODE)
+FStringSingleQuoteEnd : '\'' {this.decrementFStringDepth()} -> popMode;
+
+// FString Atom - Text between the braces
+FStringSingleQuoteAtom : SingleQuoteFStringSCharSequence;
+
+// ----------------------------------------------------
+// Special FString mode for double quotes
+// ----------------------------------------------------
+mode DOUBLE_QUOTE_FSTRING;
+
+// Push to the default mode to allow for expression parsing
+FStringDoubleQuoteExpStart : {this.insideFString()}? '{' -> type(FStringExpStart), pushMode(DEFAULT_MODE);
+
+// Pop the FString mode when the end of the FString literal is reached
+// -> we go back to the previous mode (usually DEFAULT_MODE)
+FStringDoubleQuoteEnd : '"' {this.decrementFStringDepth()} -> popMode;
+
+// FString Atom - Text between the braces
+FStringDoubleQuoteAtom : DoubleQuoteFStringSCharSequence;
+
+// ----------------------------------------------------
+// Fragment rules for the lexer - Not in any mode
+// ----------------------------------------------------
 fragment
 IdentifierNondigit
     :   Nondigit
@@ -263,7 +301,7 @@ EscapeSequence
 
 fragment
 SimpleEscapeSequence
-    :   '\\' ['"?abfnrtv\\]
+    :   '\\' ['"{}?abfnrtv\\]
     ;
 
 fragment
@@ -275,6 +313,31 @@ fragment
 HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit+
     ;
+
+// FString Literal content
+fragment
+SingleQuoteFStringSCharSequence
+	:	SingleQuoteFStringSChar+
+	;
+
+fragment
+SingleQuoteFStringSChar
+	:	~['\\\r\n{}]
+	|	EscapeSequence
+	;
+
+fragment
+DoubleQuoteFStringSCharSequence
+	:	DoubleQuoteFStringSChar+
+	;
+
+fragment
+DoubleQuoteFStringSChar
+	:	~["\\\r\n{}]
+	|	EscapeSequence
+	;
+
+// Standard String Literal content
 
 fragment
 SingleQuoteSCharSequence

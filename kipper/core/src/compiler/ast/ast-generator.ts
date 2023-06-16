@@ -2,6 +2,9 @@
  * Antlr4 listener for walking through a parser tree and processing its content.
  * @since 0.0.3
  */
+import type { ParserDeclarationContext } from "./ast-types";
+import type { ASTNodeParserContext, ParserExpressionContext, ParserStatementContext } from "./ast-types";
+import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
@@ -60,22 +63,14 @@ import type {
 	VariableDeclarationContext,
 } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
-import {
-	Declaration,
-	DeclarationASTNodeFactory,
-	Expression,
-	ExpressionASTNodeFactory,
-	Statement,
-	StatementASTNodeFactory,
-	RootASTNode,
-	CompilableASTNode,
-	ParserDeclarationContext,
-} from "./";
+import type { CompilableASTNode } from "./compilable-ast-node";
+import type { KipperParserRuleContext } from "../parser";
+import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import { Declaration } from "./nodes";
+import { Expression, Statement } from "./nodes";
+import { RootASTNode } from "./root-ast-node";
+import { DeclarationASTNodeFactory, ExpressionASTNodeFactory, StatementASTNodeFactory } from "./factories";
 import { KipperInternalError } from "../../errors";
-import { ASTNodeParserContext, ParserExpressionContext, ParserStatementContext } from "./ast-types";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { KipperParserRuleContext } from "../parser";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 
 /**
  * The AST generator, which acts as a listener for a {@link KipperProgramContext}, which walks through a parse tree
@@ -237,7 +232,7 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	private handleExitingTreeNode() {
 		if (this._currentExpression) {
-			// Ensure expressions stay separately handled from statements/definitions
+			// Ensure expressions stay separately handled from statements/declarations
 			const parent = this._currentExpression?.parent;
 			if (parent instanceof Expression) {
 				this._currentExpression = parent;

@@ -66,6 +66,8 @@ import { IdentifierPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
+import { FStringSingleQuoteAtomContext } from "./KipperParser";
+import { FStringDoubleQuoteAtomContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayLiteralPrimaryExpressionContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
@@ -812,6 +814,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitFStringPrimaryExpression?: (ctx: FStringPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.fStringSingleQuoteAtom`.
+	 * @param ctx the parse tree
+	 */
+	enterFStringSingleQuoteAtom?: (ctx: FStringSingleQuoteAtomContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.fStringSingleQuoteAtom`.
+	 * @param ctx the parse tree
+	 */
+	exitFStringSingleQuoteAtom?: (ctx: FStringSingleQuoteAtomContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.fStringDoubleQuoteAtom`.
+	 * @param ctx the parse tree
+	 */
+	enterFStringDoubleQuoteAtom?: (ctx: FStringDoubleQuoteAtomContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.fStringDoubleQuoteAtom`.
+	 * @param ctx the parse tree
+	 */
+	exitFStringDoubleQuoteAtom?: (ctx: FStringDoubleQuoteAtomContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.numberPrimaryExpression`.

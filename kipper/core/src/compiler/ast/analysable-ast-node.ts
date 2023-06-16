@@ -147,7 +147,7 @@ export abstract class AnalysableASTNode<
 
 	/**
 	 * Ensures that this node successfully passed the semantic analysis. This will be primarily used by statements and
-	 * definitions, which depend on other nodes to be semantically valid.
+	 * declarations, which depend on other nodes to be semantically valid.
 	 *
 	 * This is done by checking if the {@link AnalysableASTNode.hasFailed hasFailed} property is set to true and if the
 	 * {@link AnalysableASTNode.semanticData semanticData} property is undefined. If both of these conditions are met,
@@ -174,7 +174,7 @@ export abstract class AnalysableASTNode<
 
 	/**
 	 * Ensures that this node successfully passed the type checking step of semantic analysis. This will be primarily used
-	 * by statements and definitions, which depend on other nodes to be semantically valid.
+	 * by statements and declarations, which depend on other nodes to be semantically valid.
 	 *
 	 * This is done by checking if the {@link AnalysableASTNode.hasFailed hasFailed} property is set to true and if the
 	 * {@link AnalysableASTNode.typeSemantics typeSemantics} property is undefined. If both of these conditions are met,
@@ -268,9 +268,11 @@ export abstract class AnalysableASTNode<
 		// Start with the evaluation of the children
 		await this.semanticallyTypeCheckChildren();
 
-		// If the semantic analysis until now hasn't failed, do the semantic type checking of this node (if defined)
+		// If the semantic analysis until now has evaluated data, do the semantic type checking of this node (if defined)
 		// Per default, we will say the nodes themselves handle all errors, so we don't need to do anything here
 		// Note! Expressions do this differently and abort immediately all processing if one of the children failed.
+		// Additionally, this will also not check for 'this.hasFailed', as we still want to run type checking if possible
+		// even with a logic error in the code (so we only check for the semantic data)
 		if (this.semanticData && this.primarySemanticTypeChecking !== undefined) {
 			try {
 				await this.primarySemanticTypeChecking();
@@ -309,9 +311,11 @@ export abstract class AnalysableASTNode<
 		// Start with the evaluation of the children
 		await this.targetSemanticallyAnalyseChildren();
 
-		// If the semantic analysis until now hasn't failed, do the target semantic analysis of this node (if defined)
+		// If the semantic analysis until now has evaluated data, do the target semantic analysis of this node (if defined)
 		// Per default, we will say the nodes themselves handle all errors, so we don't need to do anything here
 		// Note! Expressions do this differently and abort immediately all processing if one of the children failed.
+		// Additionally, this will also not check for 'this.hasFailed', as we still want to run the target semantic
+		// analysis if possible even with a logic error in the code (so we only check for the semantic data)
 		if (this.semanticData && this.typeSemantics && this.targetSemanticAnalysis !== undefined) {
 			try {
 				await this.targetSemanticAnalysis(this);
@@ -335,7 +339,7 @@ export abstract class AnalysableASTNode<
 		}
 
 		// If the check for warnings function is defined, then call it
-		if (this.checkForWarnings && !this.hasFailed) {
+		if (!this.hasFailed && this.checkForWarnings) {
 			await this.checkForWarnings();
 		}
 	}

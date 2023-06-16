@@ -212,7 +212,7 @@ describe("KipperCompiler", () => {
 			const tests = [new KipperJavaScriptTarget(), new KipperTypeScriptTarget()];
 
 			tests.forEach((target) => {
-				it(`Sample program (${target.fileExtension})`, async () => {
+				it(`Sample program [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -222,7 +222,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 4, "Expected four global scope entries");
 				});
 
-				it(`Arithmetics (${target.fileExtension})`, async () => {
+				it(`Arithmetics [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(arithmeticsFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -233,7 +233,7 @@ describe("KipperCompiler", () => {
 					assert.include(result.write(), fileContent, "Expected compiled code to not change");
 				});
 
-				it(`Variable Declaration (${target.fileExtension})`, async () => {
+				it(`Variable Declaration [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(variableDeclarationFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -243,7 +243,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 1, "Expected one global scope entry");
 				});
 
-				it(`Nested scopes (${target.fileExtension})`, async () => {
+				it(`Nested scopes [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(nestedScopesFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -253,7 +253,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 4, "Expected four global scope entries");
 				});
 
-				it(`Single Function call (${target.fileExtension})`, async () => {
+				it(`Single Function call [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -279,7 +279,7 @@ describe("KipperCompiler", () => {
 					console.log = prevLog;
 				});
 
-				it(`Multi Function call (${target.fileExtension})`, async () => {
+				it(`Multi Function call [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(multiFunctionFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -295,7 +295,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`Single Function definition (${target.fileExtension})`, async () => {
+				it(`Single Function definition [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(singleFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -305,7 +305,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 1, "Expected one global scope entry");
 				});
 
-				it(`Multi Function definition (${target.fileExtension})`, async () => {
+				it(`Multi Function definition [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(multiFunctionDefinitionFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -315,7 +315,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 3, "Expected three global scope entries");
 				});
 
-				it(`Function call argument (${target.fileExtension})`, async () => {
+				it(`Function call argument [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(addedHelloWorldFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -332,7 +332,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`Variable assignment (${target.fileExtension})`, async () => {
+				it(`Variable assignment [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(assignmentArithmeticsFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -348,7 +348,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`Assign (${target.fileExtension})`, async () => {
+				it(`Assign [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(assignFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -358,7 +358,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 1, "Expected one global scope entry");
 				});
 
-				it(`Bool (${target.fileExtension})`, async () => {
+				it(`Bool [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(boolFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -368,7 +368,7 @@ describe("KipperCompiler", () => {
 					assert.equal(result.programCtx.globalScope.entries.size, 2, "Expected two global scope entries");
 				});
 
-				it(`Type conversion (${target.fileExtension})`, async () => {
+				it(`Type conversion [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(typeConversionFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -385,7 +385,7 @@ describe("KipperCompiler", () => {
 					assert(code.includes(TargetTS.getBuiltInIdentifier("boolToNum")));
 				});
 
-				it(`Expression statements (${target.fileExtension})`, async () => {
+				it(`Expression statements [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(expressionStatementsFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -400,7 +400,7 @@ describe("KipperCompiler", () => {
 					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
 				});
 
-				it(`Tangled expressions (${target.fileExtension})`, async () => {
+				it(`Tangled expressions [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(tangledExpressionsFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -416,7 +416,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`If statements (${target.fileExtension})`, async () => {
+				it(`If statements [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(ifStatementsFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -437,7 +437,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`While loop (${target.fileExtension})`, async () => {
+				it(`While loop [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(whileLoopFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
@@ -453,7 +453,7 @@ describe("KipperCompiler", () => {
 					}, jsCode);
 				});
 
-				it(`For loop (${target.fileExtension})`, async () => {
+				it(`For loop [${target.fileExtension}]`, async () => {
 					const fileContent = (await fs.readFile(forLoopFile, "utf8" as BufferEncoding)).toString();
 					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 

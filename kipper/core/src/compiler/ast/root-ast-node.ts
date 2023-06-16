@@ -13,7 +13,8 @@ import type {
 } from "../target-presets";
 import type { EvaluatedCompileConfig } from "../compile-config";
 import type { KipperProgramContext } from "../program-ctx";
-import type { Declaration, Statement } from "./nodes";
+import type { Declaration } from "./nodes/declarations/";
+import type { Statement } from "./nodes";
 import type { TranslatedCodeLine } from "../const";
 import { KipperError } from "../../errors";
 import { CompilationUnitContext, KipperParser } from "../parser";

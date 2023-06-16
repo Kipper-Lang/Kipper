@@ -1,5 +1,5 @@
 /**
- * Constant definitions and types for the compiler implementation.
+ * Constant declarations and types for the compiler implementation.
  * @since 0.3.0
  */
 import type {
@@ -226,9 +226,12 @@ export type KipperType = KipperCompilableType | KipperErrorType;
  */
 export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
 	["num", "str"],
-	["str", "num"],
 	["bool", "str"],
+	["void", "str"],
+	["null", "str"],
+	["undefined", "str"],
 	["bool", "num"],
+	["str", "num"],
 ];
 
 /**

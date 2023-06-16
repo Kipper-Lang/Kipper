@@ -254,7 +254,10 @@ export class KipperCompiler {
 				// RootASTNode class and CompilableASTNode classes.
 				programCtx.reportError(e);
 
-				if (compilerOptions.recover === false) {
+				if (compilerOptions.abortOnFirstError) {
+					// If 'abortOnFirstError' is set, then we abort the compilation and throw the error
+					throw e as KipperError;
+				} else if (!compilerOptions.recover) {
 					// If an error was thrown and the user does not want to recover from it, simply abort the compilation
 					// (The internal semantic analysis algorithm in RootASTNode and CompilableASTNode will have thrown this error,
 					// as they noticed 'compilerOptions.recover' is false)
