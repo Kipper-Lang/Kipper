@@ -41,7 +41,7 @@ import type {
 import {
 	MissingRequiredSemanticDataError,
 	UnableToDetermineSemanticDataError,
-	UndefinedDeclarationCtxError
+	UndefinedDeclarationCtxError,
 } from "../../../errors";
 import { getParseTreeSource } from "../../../utils";
 import { CompoundStatement, Statement } from "./statements";

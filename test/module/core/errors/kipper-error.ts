@@ -17,9 +17,9 @@ describe("KipperError", () => {
 				assert.equal(
 					(<KipperError>e).getTraceback(),
 					`Traceback:\nFile 'anonymous-script', line 2, col 0:\n` +
-					`  var i: str = "4";\n` +
-					`  ^^^^^^^^^^^^^^^^ \n` +
-					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
+						`  var i: str = "4";\n` +
+						`  ^^^^^^^^^^^^^^^^ \n` +
+						`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 				);
 				return;
 			}
@@ -39,9 +39,9 @@ describe("KipperError", () => {
 				assert.equal(
 					(<KipperError>e).getTraceback(),
 					`Traceback:\nFile 'anonymous-script', line 2, col 3:\n` +
-					`     var i: str = "4";\n` +
-					`     ^^^^^^^^^^^^^^^^ \n` +
-					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
+						`     var i: str = "4";\n` +
+						`     ^^^^^^^^^^^^^^^^ \n` +
+						`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 				);
 				return;
 			}
@@ -61,9 +61,9 @@ describe("KipperError", () => {
 				assert.equal(
 					(<KipperError>e).getTraceback(),
 					`Traceback:\nFile 'anonymous-script', line 2, col 3:\n` +
-					`     var i: str = "4";  \n` +
-					`     ^^^^^^^^^^^^^^^^   \n` +
-					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
+						`     var i: str = "4";  \n` +
+						`     ^^^^^^^^^^^^^^^^   \n` +
+						`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 				);
 				return;
 			}
@@ -72,20 +72,16 @@ describe("KipperError", () => {
 
 		it("Whole String Underline", async () => {
 			try {
-				await new KipperCompiler().compile('\\\\\\\\', defaultConfig);
+				await new KipperCompiler().compile("\\\\\\\\", defaultConfig);
 			} catch (e) {
-				assert.equal(
-					(<KipperError>e).constructor.name,
-					"LexerOrParserSyntaxError",
-					"Expected different error",
-				);
+				assert.equal((<KipperError>e).constructor.name, "LexerOrParserSyntaxError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				assert.equal(
 					(<KipperError>e).getTraceback(),
 					`Traceback:\nFile 'anonymous-script', line 1, col 0:\n` +
-					`  \\\\\\\\\n` +
-					`  ^^^^\n` +
-					`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
+						`  \\\\\\\\\n` +
+						`  ^^^^\n` +
+						`${(<KipperError>e).name}: ${(<KipperError>e).message}`,
 				);
 				return;
 			}
