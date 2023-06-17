@@ -38,6 +38,7 @@ parameters for a compilation.
 
 ### Kipper Compiler Parameters
 
+<div class="table-wrapper">
 <table>
   <thead>
     <tr>
@@ -133,6 +134,7 @@ parameters for a compilation.
     </tr>
   </tbody>
 </table>
+</div>
 
 ### Example Configuration
 
@@ -158,6 +160,7 @@ const result = compiler.compile(
 
 Parameters for the Kipper Compiler CLI in the console.
 
+<div class="table-wrapper">
 <table>
 <thead>
   <tr>
@@ -208,6 +211,7 @@ Parameters for the Kipper Compiler CLI in the console.
   </tr>
 </tbody>
 </table>
+</div>
 
 ### Example CLI Command
 
