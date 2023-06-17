@@ -21,12 +21,6 @@ nav:
 This is the in-depth documentation and API reference for the Kipper programming language and compiler, which aims to
 explain the implementation, functionality and details for Kipper.
 
-<div class="important">
-<p>Please note that due to active development, these docs are still not fully up-to-date and may show v0.9.2
-information.</p>
-<p>This should be changed during the time frame of April 2023.</p>
-</div>
-
 ## Introduction to Kipper
 
 - [Kipper Quickstart](./quickstart.html)
