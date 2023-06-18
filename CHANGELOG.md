@@ -29,9 +29,6 @@ To use development versions of Kipper download the
   - `ignoreParams` in `createJSFunctionSignature`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `genTSFunction`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createTSFunctionSignature`, which, if true makes the function signature define no parameters.
-- New field:
-  - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
-    context of the error.
 - New functions:
   - `KipperTargetBuiltInGenerator.voidToStr`, for the built-in conversion from `void` to `str`.
   - `KipperTargetBuiltInGenerator.nullToStr`, for the built-in conversion from `null` to `str`.
@@ -49,18 +46,32 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-- Redeclaration bug causing an `InternalError` after calling the compiler
-  ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
-- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
-  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
-- Bug of invalid underline indent in error traceback.
-  ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
-
 ### Deprecated
 
 ### Removed
 
 </details>
+
+## [0.10.2] - 2023-06-16
+
+### Added
+
+- New field:
+	- `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
+		context of the error.
+- New function:
+	- `ensureScopeDeclarationAvailableIfNeeded`, which ensures that a scope declaration is available if needed. This
+		is used during the semantic analysis/type checking of a declaration statement, which may need the scope
+		declaration object during the processing.
+
+### Fixed
+
+- Redeclaration bug causing an `InternalError` after calling the compiler
+	([#462](https://github.com/Luna-Klatzer/Kipper/issues/462)).
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
+	of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
+- Bug of invalid underline indent in error traceback.
+	([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
 
 ## [0.10.1] - 2023-02-21
 
@@ -1190,7 +1201,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...HEAD
+[0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2
