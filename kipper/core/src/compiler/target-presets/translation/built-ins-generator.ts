@@ -41,6 +41,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.11.0
 	 */
 	abstract voidToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
@@ -49,6 +50,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.11.0
 	 */
 	abstract nullToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
@@ -57,6 +59,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @param func The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.11.0
 	 */
 	abstract undefinedToStr(func: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
