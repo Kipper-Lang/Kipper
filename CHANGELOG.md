@@ -22,6 +22,9 @@ To use development versions of Kipper download the
 
 ### Fixed
 
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+	([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
+
 ### Deprecated
 
 ### Removed
