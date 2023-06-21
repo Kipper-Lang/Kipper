@@ -136,7 +136,7 @@ parameters for a compilation.
 
 ### Example Configuration
 
-```ts
+```kipper
 import { KipperCompiler } from "@kipper/core";
 import { JSTarget } from "@kipper/target-js";
 

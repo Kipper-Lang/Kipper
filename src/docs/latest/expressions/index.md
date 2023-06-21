@@ -19,13 +19,13 @@ certain actions, like reading a value, calculating something, calling a function
 
 A simple example for expressions can be a simple calculation, like this:
 
-```ts
+```kipper
 val1 + val2 * val3; // Mathematical/Arithmetic expression
 ```
 
 Notice how in this case we are not assigning the result to anything? This is an important fact of expressions that they are usually independent and do a single task, meaning if we wanted to assign this result to a variable, we would have to use an assignment expression like this:
 
-```ts
+```kipper
 // Assign and arithmetic expression
 var result: num = val1 + val2 * val3;
 ```
@@ -196,13 +196,13 @@ The order of precedence is a very vital concept in programming languages, as the
 
 A simple example of this are arithmetic expressions `+ - * / %`, which have per mathematical conventions their own order of precedence. For example, multiplication and division signs **always** come first before plus and minus, unless you explicitly use brackets, like these `( )`. The same can be done here in Kipper as well, where you can forcefully increase the order of precedence using brackets:
 
-```ts
+```kipper
 15 + 4 * 6; // -> (15 + (4 * 6)) -> (15 + 24) -> 39
 ```
 
 Forced higher precedence using brackets:
 
-```ts
+```kipper
 (15 + 4) * 6; // -> ((15 + 4) * 6) -> (19 * 6) -> 114
 ```
 
@@ -211,26 +211,26 @@ Forced higher precedence using brackets:
 As you should have already seen in the table above, there is an extra column defining the so-called associativity. What
 does that mean? It's relatively simple and means whether the following (`( )` meaning the expression is read first):
 
-```ts
+```kipper
 a OPR b OPR c
 ```
 
 is evaluated as (left-associative - Reads from left to right):
 
-```ts
+```kipper
 (a OPR b) OPR c
 ```
 
 or as (right-associative - reads from right to left):
 
-```ts
+```kipper
 a OPR (b OPR c)
 ```
 
 This is especially important as it can change how certain things are evaluated, and also cause unwanted errors! For
 example the following would be interpreted as (left-associative):
 
-```ts
+```kipper
 32 / 4 / 4; // -> ((32 / 4) / 4) -> (8 / 4) -> 2
 ```
 

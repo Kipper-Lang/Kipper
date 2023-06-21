@@ -8,7 +8,7 @@ results might differ depending on whether you are using Node.js or a browser env
 
 List of all built-in functions, which are usable in the current release of Kipper.
 
-### `print(msg: str) -> void`
+<h3 class="starts-with-code-tag"><code>print(msg: str) -> void</code></h3>
 
 Prints the specified string `msg` onto stdout/the console of the specific
 platform. This function under the hood `console.log()` in both Node.js and

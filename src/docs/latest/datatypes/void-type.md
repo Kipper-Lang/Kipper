@@ -15,7 +15,7 @@ not yet assigned).
 
 This also means comparing `void` to `undefined` will always be true:
 
-```ts
+```kipper
 var var1: void = void;
 var var2: undefined = undefined;
 
@@ -37,13 +37,13 @@ not valid in this language. Instead, simply use void.
 
 ### Creating a `void` variable
 
-```ts
+```kipper
 var var1: void = void;
 ```
 
 ### Using `void` to indicate a function has no return
 
-```ts
+```kipper
 def func1() -> void {
   return;
 }
@@ -51,7 +51,7 @@ def func1() -> void {
 
 ### Explicitly returning `void` for a function
 
-```ts
+```kipper
 def func2() -> void {
   return void;
 }
@@ -65,7 +65,7 @@ var var23: void = func2();
 
 ### <em class="red-checkmark">X</em> Can not assign to a `void` variable anything but `void`
 
-```ts
+```kipper
 // X May not set a 'void' variable to anything except 'void'
 var var2: void = 4;
 ```

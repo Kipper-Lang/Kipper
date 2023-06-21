@@ -10,7 +10,7 @@ use do-while than while-loops, so watch out for opportunities to replace while-l
 
 ## Syntax
 
-```ts
+```kipper
 while (CONDITION) STATEMENT;
 ```
 
@@ -21,7 +21,7 @@ while (CONDITION) STATEMENT;
 
 ## Examples
 
-```ts
+```kipper
 // ✓ Simple loop
 var var1: num = 0;
 while (var1 <= 5) {

@@ -110,7 +110,7 @@ Configuring `KipperCompile.compile()` can be done using the `CompileConfig` inte
 
 ### Example Configuration
 
-```ts
+```kipper
 import { KipperCompiler } from "@kipper/core";
 import { TypeScriptTarget } from "@kipper/core/lib/targets/typescript";
 

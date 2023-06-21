@@ -10,7 +10,7 @@ It is also possible to check multiple different conditions by using `else if` bl
 
 They must have a single starting `if`, may have multiple extending `else if` branches and can have a single ending `else` branch, which is evaluated if the previous condition were all `false`.
 
-```ts
+```kipper
 if (CONDITION) STATEMENT;
 // Required
 else if (CONDITION) STATEMENT;
@@ -20,7 +20,7 @@ else STATEMENT; // Optional
 
 ## Examples
 
-```ts
+```kipper
 // Simple comparison of a value
 var var1: num = 4;
 if (var1 == 4) {

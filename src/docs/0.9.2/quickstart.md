@@ -148,7 +148,7 @@ Kipper is shipped as a commonjs module and can therefore be imported using `requ
 
 Using JavaScript:
 
-```ts
+```kipper
 const ts = require("typescript");
 const fs = require("fs").promises;
 const kipper = require("@kipper/core");
@@ -177,7 +177,7 @@ fs.readFile(path, "utf8").then(async (fileContent) => {
 
 Using TypeScript:
 
-```ts
+```kipper
 import * as ts from "typescript";
 import { promises as fs } from "fs";
 import * as kipper from "@kipper/core";
