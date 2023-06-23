@@ -127,7 +127,7 @@
         border: none;
         outline: none;
         max-height: 60vh;
-        max-width: 70vw;
+        max-width: 65vw;
       }
 
       #code-editor-textarea,
@@ -188,6 +188,9 @@
 
   /* Sidebar styling */
   #shell-sidebar {
+    width: 35vw;
+    min-width: 35vw;
+    max-width: 35vw;
     margin: 0;
     display: flex;
 
