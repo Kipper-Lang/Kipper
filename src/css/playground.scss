@@ -1,266 +1,388 @@
 /*! Configuration for the Playground */
 @use "./foundation/var" as *;
 
-#interactive-console {
-	#left-console-interface {
-		margin: 0;
-		display: flex;
-		flex-grow: 2;
+#interactive-playground {
+  flex-direction: row;
 
-		#playground-option-menu {
-			display: flex;
-			flex-direction: row;
-			align-content: center;
-			justify-content: flex-start;
-			border-bottom: 2px solid $scheme-gray;
+  #interactive-code-editor {
+    margin: 0;
+    display: flex;
+    flex-grow: 2;
 
-			#clear-content-list-item {
-				margin-right: 1rem;
-			}
+    #playground-option-menu {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      justify-content: flex-start;
+      border-bottom: 2px solid $scheme-gray;
 
-			#version-selection {
-				margin-bottom: 0;
-				margin-left: 0;
-				position: relative;
-				z-index: 2;
+      #clear-content-list-item {
+        margin-right: 1rem;
+      }
 
-				& > #versions-dropdown {
-					/* Hide the dropdown at first */
-					display: none;
-					visibility: hidden;
-					position: absolute;
-					top: 100%;
-					width: calc(100% - 8px);
-					margin: 4px 0 0 4px;
-					z-index: 2;
-					overflow-y: auto;
-					max-height: 60vh;
-					border-radius: 5px;
-					box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+      #version-selection {
+        margin-bottom: 0;
+        margin-left: 0;
+        position: relative;
+        z-index: 2;
 
-					&:last-child.version-selector-button-wrapper {
-						/* Remove the border from the last element */
-						border-bottom: none;
-					}
+        & > #versions-dropdown {
+          /* Hide the dropdown at first */
+          display: none;
+          visibility: hidden;
+          position: absolute;
+          top: 100%;
+          width: calc(100% - 8px);
+          margin: 4px 0 0 4px;
+          z-index: 2;
+          overflow-y: auto;
+          max-height: 60vh;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
-					li.version-selector-button-wrapper {
-						display: flex;
-						align-content: center;
-						justify-content: center;
-						border-bottom: 2px solid $scheme-gray;
+          &:last-child.version-selector-button-wrapper {
+            /* Remove the border from the last element */
+            border-bottom: none;
+          }
 
-						button {
-							/* Similar styles like in the playground button */
-							padding: 0.8rem 0.8rem;
-							background-color: white;
-							border: none;
-							cursor: pointer;
+          li.version-selector-button-wrapper {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            border-bottom: 2px solid $scheme-gray;
 
-							/* Make the button grow to the size of the parent */
-							flex-grow: 1;
+            button {
+              /* Similar styles like in the playground button */
+              padding: 0.8rem 0.8rem;
+              background-color: white;
+              border: none;
+              cursor: pointer;
 
-							&:hover {
-								color: $scheme-primary;
-								background-color: $scheme-gray;
-							}
-						}
-					}
-				}
+              /* Make the button grow to the size of the parent */
+              flex-grow: 1;
 
-				#version-selector-root-button-wrapper {
-					/* A minimum width to prevent the button from being too small with short versions */
-					min-width: 5rem;
-					display: flex;
+              &:hover {
+                color: $scheme-primary;
+                background-color: $scheme-gray;
+              }
+            }
+          }
+        }
 
-					button {
-						flex-grow: 1;
-						display: flex;
-						flex-direction: row;
-						align-content: center;
-						justify-content: center;
-						column-gap: 0.4rem;
+        #version-selector-root-button-wrapper {
+          /* A minimum width to prevent the button from being too small with short versions */
+          min-width: 5rem;
+          display: flex;
 
-						.fa-caret-down::before {
-							display: block;
-							margin-top: 0.7em;
-						}
-					}
-				}
-			}
-		}
+          button {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            justify-content: center;
+            column-gap: 0.4rem;
 
-		/* The entire code entire window -> parent of the label and textarea */
-		#code-editor {
-			display: flex;
-			flex-grow: 1;
-			min-width: 0;
-			min-height: 0;
+            .fa-caret-down::before {
+              display: block;
+              margin-top: 0.7em;
+            }
+          }
+        }
+      }
+    }
 
-			.line-numbers .line-numbers-rows {
-				/* Disable the border for the line-numbers sidebar */
-				border-right: none;
+    /* The entire code entire window -> parent of the label and textarea */
+    #code-editor {
+      display: flex;
+      flex-grow: 1;
+      min-width: 0;
+      min-height: 0;
 
-				/* Remove the additional spacing which was used for the border */
-				left: -2.8em;
-				width: 2em;
-			}
+      .line-numbers .line-numbers-rows {
+        /* Disable the border for the line-numbers sidebar */
+        border-right: none;
 
-			/*
+        /* Remove the additional spacing which was used for the border */
+        left: -2.8em;
+        width: 2em;
+      }
+
+      /*
        * The user input fields - the two fields will be put over each other to make it look
        * like a single field
       */
-			#code-editor-textarea,
-			#highlighting-field {
-				/* Putting them on top of each other */
-				position: absolute;
-				flex-grow: 0;
+      #code-editor-textarea,
+      #code-editor-highlighting-field {
+        /* Putting them on top of each other */
+        position: absolute;
+        flex-grow: 0;
 
-				/* Allow scrolling */
-				overflow: auto;
+        /* Allow scrolling */
+        overflow: auto;
 
-				/* Identical styling */
-				margin: 0;
-				padding: 1rem 1rem 1rem 3rem;
-				resize: none;
-				border: none;
-				outline: none;
-				max-height: 60vh;
-				max-width: 70vw;
-			}
+        /* Identical styling */
+        margin: 0;
+        padding: 1rem 1rem 1rem 3rem;
+        resize: none;
+        border: none;
+        outline: none;
+        max-height: 60vh;
+        max-width: 70vw;
+      }
 
-			#code-editor-textarea,
-			#highlighting-field,
-			#highlighting-field * {
-				/* Also add text styles to highlighting tokens */
-				font-size: 14px;
-				font-family: consolas, monospace;
-				line-height: 18px;
-				background-color: white;
-				tab-size: 2;
-			}
+      #code-editor-textarea,
+      #code-editor-highlighting-field,
+      #code-editor-highlighting-field * {
+        /* Also add text styles to highlighting tokens */
+        font-size: 14px;
+        font-family: consolas, monospace;
+        line-height: 18px;
+        background-color: white;
+        tab-size: 2;
+      }
 
-			#code-editor-textarea {
-				/* Move the textarea in front of the result */
-				z-index: 1;
-				color: transparent;
-				background: transparent;
-				caret-color: $scheme-primary;
+      #code-editor-textarea {
+        /* Move the textarea in front of the result */
+        z-index: 1;
+        color: transparent;
+        background: transparent;
+        caret-color: $scheme-primary;
 
-				&::selection {
-					text-shadow: none;
-					background: rgba(70, 93, 160, 0.2);
-				}
-			}
+        &::selection {
+          text-shadow: none;
+          background: rgba(70, 93, 160, 0.2);
+        }
+      }
 
-			#highlighting-field {
-				z-index: 0;
+      #code-editor-highlighting-field {
+        z-index: 0;
 
-				#highlighting-field-content {
-					margin: 0 !important;
-					padding: 0 !important;
-					border-radius: 0 !important;
-				}
-			}
-		}
-	}
+        & > #code-editor-highlighting-field-content {
+          display: block; /* Due to issue where line numbers kept disappearing */
+          margin: 0;
+          padding: 0;
+          border-radius: 0;
+        }
+      }
+    }
+  }
 
-	.playground-button-wrapper {
-		display: flex;
-		align-content: center;
-		justify-content: center;
+  .playground-button-wrapper {
+    display: flex;
+    align-content: center;
+    justify-content: center;
 
-		button {
-			flex-grow: 1;
-			padding: 1rem 1rem;
-			background-color: white;
-			border: none;
-			cursor: pointer;
+    button {
+      flex-grow: 1;
+      padding: 1rem;
+      background-color: white;
+      border: none;
+      cursor: pointer;
 
-			&:hover {
-				color: $scheme-primary;
-				background-color: $scheme-gray;
-			}
-		}
-	}
+      &:hover {
+        color: $scheme-primary;
+        background-color: $scheme-gray;
+      }
+    }
+  }
 
-	/* Sidebar styling */
-	#shell-sidebar {
-		margin: 0;
-		display: flex;
+  /* Sidebar styling */
+  #shell-sidebar {
+    margin: 0;
+    display: flex;
 
-		#shell-sidebar-menu {
-			padding: 0;
-			width: inherit;
+    #shell-menu {
+      padding: 0;
+      width: inherit;
 
-			.playground-button-wrapper {
-				display: flex;
-				flex-grow: 1;
-			}
+      .playground-button-wrapper {
+        display: flex;
+        flex-grow: 1;
+      }
 
-			button {
-				border-bottom: 2px solid $scheme-gray;
-				flex-grow: 1;
-			}
-		}
+      button {
+        border-bottom: 2px solid $scheme-gray;
+        flex-grow: 1;
+      }
+    }
 
-		#shell-output {
-			& > .code-toolbar {
-				color: #9efeff; /* Shades of purple - Console theme color */
+    #shell-output {
+      & > .code-toolbar {
+        color: #9efeff; /* Shades of purple - Console theme color */
 
-				& pre,
-				& code {
-					border-radius: 0;
-				}
-			}
-		}
+        & pre,
+        & code {
+          border-radius: 0;
+        }
+      }
+    }
 
-		#shell-output {
-			&,
-			& > .code-toolbar,
-			& > .code-toolbar > pre {
-				display: flex;
-				flex-grow: 1;
-			}
+    #shell-output {
+      &,
+      & > .code-toolbar,
+      & > .code-toolbar > pre {
+        display: flex;
+        flex-grow: 1;
+      }
 
-			#shell-sidebar-highlight-field {
-				background-color: $scheme-console-blue;
-				display: flex;
-				flex-grow: 1;
-				margin: 0;
-				padding: 0;
-				width: inherit;
+      #shell-sidebar-highlight-field {
+        background-color: $scheme-console-blue;
+        display: flex;
+        flex-grow: 1;
+        margin: 0;
+        padding: 0;
+        width: inherit;
 
-				& > #shell-sidebar-highlight-field-content {
-					border-radius: 0;
-					align-self: flex-start;
-					overflow: auto;
-					overflow-wrap: break-word;
-					word-wrap: break-word; /* For IE */
+        /* Scroll on overflowing content */
+        overflow: scroll;
 
-					/* Apply proper formatting */
-					margin: 0;
-					padding: 1rem;
-					width: 30vw;
-					min-height: 0;
-					min-width: 0;
-					flex-grow: 1;
+        & > #shell-sidebar-highlight-field-content {
+          border-radius: 0;
+          align-self: flex-start;
+          overflow: unset;
 
-					/* Update font */
-					font-size: 14px;
-					line-height: 18px;
+          /* Apply proper formatting */
+          margin: 0;
+          padding: 1rem;
+          width: 30vw;
+          min-height: 0;
+          min-width: 0;
+          flex-grow: 1;
 
-					/* Tabs should be handled like spaces */
-					tab-size: 1;
-				}
-			}
-		}
-	}
+          /* Update font */
+          font-size: 14px;
+          line-height: 18px;
+
+          /* Tabs should be handled like spaces */
+          tab-size: 1;
+        }
+      }
+    }
+  }
 }
 
-/* The console is hidden on small screens */
-@media (max-width: $small-screen-size) {
-  #shell-sidebar {
+/* Phone overwrites */
+@media screen and (max-width: $medium-screen-size) {
+  #header-description-content {
     display: none;
     visibility: hidden;
+  }
+
+  #interactive-playground {
+    flex-direction: column;
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    min-height: 90vh;
+
+    #interactive-code-editor {
+      min-height: calc(50vh + 6px);
+
+      & > #code-editor {
+        /* Additional 2px due to border */
+        min-height: calc(50vh + 2px);
+      }
+
+      &,
+      & > #code-editor {
+        max-height: unset;
+        min-width: 100vw;
+        max-width: 100vw;
+      }
+    }
+
+    #interactive-code-editor {
+      & > #playground-option-menu {
+        flex-grow: 1;
+
+        & > #version-selection > #version-selector-root-button-wrapper,
+        & > .playground-button-wrapper {
+          & > button {
+            padding: 0.8rem;
+          }
+        }
+
+        & > #version-selection > #version-selector-root-button-wrapper > button {
+          /* Defining limits to avoid the text overflowing to a new line */
+          width: 7.5rem;
+          max-width: 7.5rem;
+          word-break: keep-all;
+
+          & > span {
+            display: inline-block;
+            position: relative;
+            direction: rtl;
+            left: 0;
+            top: 0;
+
+            /* Ensure the overflow gets turned into a scrollbar */
+            overflow-x: scroll;
+            overflow-y: hidden;
+            white-space: nowrap;
+
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            &::-webkit-scrollbar {
+              display: none;
+            }
+
+            /* Hide scrollbar for IE, Edge and Firefox */
+            & {
+              -ms-overflow-style: none; /* IE and Edge */
+              scrollbar-width: none; /* Firefox */
+            }
+          }
+        }
+      }
+
+      & > #code-editor {
+        flex-grow: 1;
+
+        #code-editor-textarea,
+        #code-editor-highlighting-field {
+          height: 40vh;
+          min-height: 40vh;
+          max-height: 40vh;
+          width: calc(100vw - 4rem);
+          min-width: calc(100vw - 4rem);
+          max-width: calc(100vw - 4rem);
+        }
+      }
+    }
+
+    #shell-sidebar {
+      height: calc(40vh + 2px);
+      min-height: calc(40vh + 2px);
+      max-height: calc(40vh + 2px);
+      width: 100vw;
+      min-width: 100vw;
+      max-width: 100vw;
+
+      & > #shell-menu {
+        height: 10vh;
+        max-height: 3.5rem; // 3.5rem (56px)
+
+        /* Small border at the top to more visually differentiate the areas */
+        border-top: 2px solid $scheme-gray;
+      }
+
+      & > #shell-output #shell-sidebar-highlight-field {
+        overflow: scroll;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+
+        & > #shell-sidebar-highlight-field-content {
+          height: calc(30vh - 2rem);
+          min-height: calc(30vh - 2rem);
+          max-height: calc(30vh - 2rem);
+          padding: 1rem;
+          margin: 0;
+          max-width: calc(100vw - 2rem);
+
+          /* Let the parent container handle the overflow */
+          overflow: unset;
+        }
+      }
+    }
   }
 }

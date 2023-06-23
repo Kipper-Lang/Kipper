@@ -10,8 +10,8 @@ const localStorageIdentifier = "kipper-code-editor-content";
 
 // Editor elements
 const codeTextArea: HTMLTextAreaElement = document.querySelector("#code-editor-textarea");
-const codeTextAreaResultWrapper: HTMLElement = document.querySelector("#highlighting-field");
-const codeTextAreaResult: HTMLElement = document.querySelector("#highlighting-field-content");
+const codeTextAreaResultWrapper: HTMLElement = document.querySelector("#code-editor-highlighting-field");
+const codeTextAreaResult: HTMLElement = document.querySelector("#code-editor-highlighting-field-content");
 const textSavingState: HTMLDivElement = document.querySelector("#text-saving-state");
 
 // Menu buttons
@@ -163,7 +163,7 @@ export function init(): void {
 			localStorage.setItem(localStorageIdentifier, givenTextArea.value);
 
 			spinning = false;
-			textSavingState.innerHTML = `<p class="gray-text">Code Saved!</p>`;
+			textSavingState.innerHTML = `<p class="gray-text">Saved!</p>`;
 		}, 1000);
 
 		if (!spinning) {
@@ -200,6 +200,6 @@ export function init(): void {
 
   // If the input is not empty, signalize that code was restored
   if (codeTextArea.value.trim() !== "") {
-    textSavingState.innerHTML = `<p class="gray-text">Code restored :)</p>`;
+    textSavingState.innerHTML = `<p class="gray-text">Loaded :)</p>`;
   }
 }
