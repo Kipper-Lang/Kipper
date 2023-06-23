@@ -304,8 +304,8 @@
 
         & > #version-selection > #version-selector-root-button-wrapper > button {
           /* Defining limits to avoid the text overflowing to a new line */
-          width: 7.5rem;
-          max-width: 7.5rem;
+          width: 25vw; /* Adjust to the screen width */
+          max-width: 10rem; /* Max space required is 10rem */
           word-break: keep-all;
 
           & > span {
