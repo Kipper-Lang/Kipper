@@ -93,8 +93,6 @@ export function writeConsoleResultAndHighlight(value: string): void {
 	// Write content to the console
 	shellOutputResult.innerHTML = escapeHTMLChars(value);
 
-	console.log(shellOutputResult);
-
 	// Highlight output field
 	prism.highlightElement(shellOutputResult);
 }
