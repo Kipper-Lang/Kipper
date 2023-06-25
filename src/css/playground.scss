@@ -281,11 +281,6 @@
     #interactive-code-editor {
       min-height: calc(50vh + 6px);
 
-      & > #code-editor {
-        /* Additional 2px due to border */
-        min-height: calc(50vh + 2px);
-      }
-
       &,
       & > #code-editor {
         max-height: unset;
@@ -296,7 +291,7 @@
 
     #interactive-code-editor {
       & > #playground-option-menu {
-        flex-grow: 1;
+        flex-grow: 0; /* Do not allow the menu to grow */
 
         & > #version-selection > #version-selector-root-button-wrapper,
         & > .playground-button-wrapper {
@@ -306,9 +301,8 @@
         }
 
         & > #version-selection > #version-selector-root-button-wrapper > button {
-          /* Defining limits to avoid the text overflowing to a new line */
-          width: 25vw; /* Adjust to the screen width */
-          max-width: 10rem; /* Max space required is 10rem */
+          /* Defining limits to avoid the text overflowing to a new line - Max space required is 10rem */
+          max-width: 10rem;
           word-break: keep-all;
 
           & > span {
@@ -342,12 +336,12 @@
 
         #code-editor-textarea,
         #code-editor-highlighting-field {
-          height: 40vh;
-          min-height: 40vh;
-          max-height: 40vh;
           width: calc(100vw - 4rem);
           min-width: calc(100vw - 4rem);
           max-width: calc(100vw - 4rem);
+
+          /* Init value, will be later modified by the playground resize handler */
+          height: 40vh;
         }
       }
     }
