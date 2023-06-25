@@ -29,6 +29,7 @@ $default-border-radius: 0.5em;
 $default-text-margin: 2em;
 
 /* Screen size presets */
+$x-large-screen-size: 1400px;
 $large-screen-size: 1200px;
 $medium-screen-size: 920px;
 $small-screen-size: 600px;
@@ -66,6 +67,7 @@ $button-dark-primary: #c71242;
 	--default-text-margin: 2em;
 
 	/* Screen size presets */
+  --x-large-screen-size: 1400px;
 	--large-screen-size: 1200px;
 	--medium-screen-size: 920px;
 	--small-screen-size: 600px;
