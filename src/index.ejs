@@ -16,11 +16,11 @@
         <%- include('./partials/header-nav-bar', { header: false }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
-        <div class="text-page-content-container">
-            <section id="homepage-content">
+        <div class="text-page-content-container flex-column">
+            <section id="homepage-welcome">
                 <ul class="no-style-list flex-row flex-parent-container flex-end">
                     <li>
-                        <section id="welcome-text" class="flex-parent-container flex-column flex-start">
+                        <div id="welcome-text" class="flex-parent-container flex-column flex-start">
                             <h2 id="welcome-header" class="super-large-header">Welcome to Kipper!</h2>
                             <p id="welcome-description">
                                 The new customisable and easy to use type-safe language for the web and Node.js!
@@ -29,7 +29,7 @@
                                 <a href="./playground.html" class="button"> Try our Playground </a>
                                 <a href="./docs/index.html" class="inverted-button"> View the Docs </a>
                             </p>
-                        </section>
+                        </div>
                     </li>
                     <li>
                         <a href="./playground.html">
@@ -37,6 +37,8 @@
                         </a>
                     </li>
                 </ul>
+            </section>
+            <section id="homepage-info">
             </section>
         </div>
         <!-- Footer bar - contains some links and general copyright notice -->
