@@ -1,5 +1,6 @@
 /* Super large headers for the homepage */
 @use "../mixins/header-presets" as *;
+@use "../foundation/var" as *;
 
 .super-large-header {
 	@include h-display;
@@ -11,15 +12,15 @@
 	line-height: 120%;
 	font-size: 2.2rem; /* Smallest font size */
 
-	@media screen and (min-width: 427px) {
+	@media screen and (min-width: $small-screen-size) {
 		font-size: 2.4rem;
 	}
 
-	@media screen and (min-width: 800px) {
+	@media screen and (min-width: $medium-screen-size) {
 		font-size: 3.2rem;
 	}
 
-	@media screen and (min-width: 1400px) {
+	@media screen and (min-width: $x-large-screen-size) {
 		font-size: 4.5rem;
 	}
 }
