@@ -1,6 +1,6 @@
 {
   "name": "kipperweb",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "The website and documentation for the Kipper programming language",
   "keywords": [
     "website",
@@ -80,6 +80,7 @@
     "@parcel/transformer-sass": "2.2.1",
     "@parcel/transformer-svg": "2.2.1",
     "@parcel/transformer-webmanifest": "2.2.1",
+    "@parcel/bundler-experimental": "2.2.1",
     "@parcel/types": "2.2.1",
     "@parcel/utils": "2.2.1",
     "@parcel/watcher": "2.0.7",

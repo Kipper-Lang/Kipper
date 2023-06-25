@@ -1784,3 +1784,11 @@ Prism.languages.kip = Prism.languages.kipper;
 			);
 		}
 	});
+// Kipper extension
+"undefined" != typeof Prism &&
+  "undefined" != typeof document &&
+  (() => {
+    Prism.languages["kipper"] = {
+      ...Prism.languages["typescript"],
+    };
+  })();
