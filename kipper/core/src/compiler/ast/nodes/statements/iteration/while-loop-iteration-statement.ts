@@ -5,7 +5,7 @@
 import type { CompilableNodeChild, CompilableNodeParent } from "../../../compilable-ast-node";
 import type { WhileLoopStatementSemantics } from "../../../semantic-data";
 import { IterationStatement } from "./iteration-statement";
-import { KipperParser, WhileLoopIterationStatementContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, WhileLoopIterationStatementContext } from "../../../../parser";
 import { Expression } from "../../expressions";
 import { Statement } from "../statement";
 
@@ -13,7 +13,7 @@ import { Statement } from "../statement";
  * While loop statement class, which represents a while loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSemantics> {
+export class WhileLoopIterationStatement extends IterationStatement<WhileLoopStatementSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -22,13 +22,40 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	protected override readonly _antlrRuleCtx: WhileLoopIterationStatementContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_whileLoopIterationStatement;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_whileLoopIterationStatement;
+	public override get kind() {
+		return WhileLoopIterationStatement.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return WhileLoopIterationStatement.ruleName;
+	}
 
 	protected readonly _children: Array<CompilableNodeChild>;
 
@@ -88,6 +115,6 @@ export class WhileLoopStatement extends IterationStatement<WhileLoopStatementSem
 	 */
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopStatement;
-	readonly targetCodeGenerator = this.codeGenerator.whileLoopStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopIterationStatement;
+	readonly targetCodeGenerator = this.codeGenerator.whileLoopIterationStatement;
 }

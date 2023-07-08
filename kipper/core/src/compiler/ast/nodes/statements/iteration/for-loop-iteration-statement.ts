@@ -9,7 +9,7 @@ import type { ScopeNode } from "../../../scope-node";
 import type { Statement } from "../statement";
 import type { VariableDeclaration } from "../../declarations";
 import { IterationStatement } from "./iteration-statement";
-import { ForLoopIterationStatementContext, KipperParser } from "../../../../parser";
+import { ForLoopIterationStatementContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../../expressions";
 import { LocalScope } from "../../../../analysis";
 
@@ -17,7 +17,7 @@ import { LocalScope } from "../../../../analysis";
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-export class ForLoopStatement
+export class ForLoopIterationStatement
 	extends IterationStatement<ForLoopStatementSemantics, NoTypeSemantics>
 	implements ScopeNode<LocalScope>
 {
@@ -36,13 +36,40 @@ export class ForLoopStatement
 	protected override readonly _antlrRuleCtx: ForLoopIterationStatementContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_forLoopIterationStatement;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_forLoopIterationStatement;
+	public override get kind() {
+		return ForLoopIterationStatement.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return ForLoopIterationStatement.ruleName;
+	}
 
 	protected readonly _children: Array<CompilableNodeChild>;
 
@@ -120,6 +147,6 @@ export class ForLoopStatement
 	 */
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.forLoopStatement;
-	readonly targetCodeGenerator = this.codeGenerator.forLoopStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.forLoopIterationStatement;
+	readonly targetCodeGenerator = this.codeGenerator.forLoopIterationStatement;
 }

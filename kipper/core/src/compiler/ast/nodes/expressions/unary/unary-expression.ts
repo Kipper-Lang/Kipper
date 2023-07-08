@@ -6,28 +6,33 @@
  */
 import type { UnaryExpressionSemantics } from "../../../semantic-data";
 import type { UnaryExpressionTypeSemantics } from "../../../type-data";
-import type {
-	IncrementOrDecrementUnaryExpressionContext,
-	OperatorModifiedUnaryExpressionContext,
-	ParserASTMapping,
-} from "../../../../parser";
+import type { ParseRuleKindMapping } from "../../../../parser";
+import { KindParseRuleMapping } from "../../../../parser";
 import { Expression } from "../expression";
-
-/**
- * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link UnaryExpression} AST node.
- * @since 0.10.0
- */
-export type ParserUnaryExpressionContext =
-	| IncrementOrDecrementUnaryExpressionContext
-	| OperatorModifiedUnaryExpressionContext;
+import { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link UnaryExpression} AST node.
  * @since 0.10.0
  */
 export type ASTUnaryExpressionKind =
-	| typeof ParserASTMapping.RULE_incrementOrDecrementUnaryExpression
-	| typeof ParserASTMapping.RULE_operatorModifiedUnaryExpression;
+	| typeof ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression
+	| typeof ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression;
+
+/**
+ * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link UnaryExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserUnaryExpressionContext = InstanceType<
+	typeof ASTNodeMapper.expressionKindToRuleContextMap[ASTUnaryExpressionKind]
+>;
+
+/**
+ * Union type of all possible {@link ParserASTNode.ruleName} values for a constructable {@link UnaryExpression}
+ * AST node.
+ * @since 0.11.0
+ */
+export type ParserUnaryExpressionRuleName = typeof KindParseRuleMapping[ASTUnaryExpressionKind];
 
 /**
  * Abstract unary expression class representing a unary expression, which can be used to modify an expression with
@@ -40,5 +45,6 @@ export abstract class UnaryExpression<
 	TypeSemantics extends UnaryExpressionTypeSemantics = UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContext;
-	public abstract readonly kind: ASTUnaryExpressionKind;
+	public abstract get kind(): ASTUnaryExpressionKind;
+	public abstract get ruleName(): ParserUnaryExpressionRuleName;
 }

@@ -7,7 +7,7 @@ import type {
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
-	UndefinedCustomType,
+	UndefinedCustomType
 } from "./analysis";
 import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
 import { InternalFunction } from "./runtime-built-ins";

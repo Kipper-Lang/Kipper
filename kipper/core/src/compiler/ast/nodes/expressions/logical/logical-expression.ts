@@ -4,25 +4,36 @@
  * abstract class only exists to provide the commonality between the different logical expressions.
  * @abstract
  */
-import type { EqualityExpressionContext, ParserASTMapping, RelationalExpressionContext } from "../../../../parser";
+import type { ParseRuleKindMapping } from "../../../../parser";
+import { KindParseRuleMapping } from "../../../../parser";
 import type { LogicalExpressionSemantics } from "../../../semantic-data";
 import type { LogicalExpressionTypeSemantics } from "../../../type-data";
 import { Expression } from "../expression";
-
-/**
- * Union type of all possible {@link ParserASTNode.kind} context classes for a constructable
- * {@link LogicalExpression} AST node.
- * @since 0.10.0
- */
-export type ParserLogicalExpressionContext = EqualityExpressionContext | RelationalExpressionContext;
+import { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link LogicalExpression} AST node.
  * @since 0.10.0
  */
 export type ASTLogicalExpressionKind =
-	| typeof ParserASTMapping.RULE_logicalAndExpression
-	| typeof ParserASTMapping.RULE_logicalOrExpression;
+	| typeof ParseRuleKindMapping.RULE_logicalAndExpression
+	| typeof ParseRuleKindMapping.RULE_logicalOrExpression;
+
+/**
+ * Union type of all possible {@link ParserASTNode.kind} context classes for a constructable
+ * {@link LogicalExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserLogicalExpressionContext = InstanceType<
+	typeof ASTNodeMapper.expressionKindToRuleContextMap[ASTLogicalExpressionKind]
+>;
+
+/**
+ * Union type of all possible {@link ParserASTNode.ruleName} values for a constructable {@link LogicalExpression}
+ * AST node.
+ * @since 0.11.0
+ */
+export type ParserLogicalExpressionRuleName = typeof KindParseRuleMapping[ASTLogicalExpressionKind];
 
 /**
  * Logical expression, representing an expression which can be used to combine two expressions/conditions using
@@ -35,5 +46,6 @@ export abstract class LogicalExpression<
 	TypeSemantics extends LogicalExpressionTypeSemantics = LogicalExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContext;
-	public abstract readonly kind: ASTLogicalExpressionKind;
+	public abstract get kind(): ASTLogicalExpressionKind;
+	public abstract get ruleName(): ParserLogicalExpressionRuleName;
 }

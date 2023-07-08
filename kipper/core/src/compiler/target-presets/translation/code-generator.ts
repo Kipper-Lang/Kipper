@@ -4,13 +4,17 @@
  */
 import type {
 	AdditiveExpression,
+	ArrayLiteralPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -21,26 +25,22 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	DoWhileLoopStatement,
-	ForLoopStatement,
-	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
-	CompilableASTNode,
-	MemberAccessExpression,
+	WhileLoopIterationStatement
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -57,7 +57,7 @@ import type { KipperProgramContext } from "../../program-ctx";
 export type TargetASTNodeCodeGenerator<
 	T extends CompilableASTNode,
 	R extends TranslatedExpression | TranslatedCodeLine | Array<TranslatedCodeLine>,
-> = (node: T) => Promise<R>;
+> = Function & ((node: T) => Promise<R>);
 
 /**
  * Represents a function that generates setup code for a Kipper file.
@@ -121,22 +121,31 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract expressionStatement: TargetASTNodeCodeGenerator<ExpressionStatement, Array<TranslatedCodeLine>>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract doWhileLoopStatement: TargetASTNodeCodeGenerator<DoWhileLoopStatement, Array<TranslatedCodeLine>>;
+	public abstract doWhileLoopIterationStatement: TargetASTNodeCodeGenerator<
+		DoWhileLoopIterationStatement,
+		Array<TranslatedCodeLine>
+	>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0s
 	 */
-	public abstract whileLoopStatement: TargetASTNodeCodeGenerator<WhileLoopStatement, Array<TranslatedCodeLine>>;
+	public abstract whileLoopIterationStatement: TargetASTNodeCodeGenerator<
+		WhileLoopIterationStatement,
+		Array<TranslatedCodeLine>
+	>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract forLoopStatement: TargetASTNodeCodeGenerator<ForLoopStatement, Array<TranslatedCodeLine>>;
+	public abstract forLoopIterationStatement: TargetASTNodeCodeGenerator<
+		ForLoopIterationStatement,
+		Array<TranslatedCodeLine>
+	>;
 
 	/**
 	 * Translates a {@link JumpStatement} into a specific language.

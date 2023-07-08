@@ -13,7 +13,7 @@ import type { MultiplicativeExpressionSemantics } from "../../../semantic-data";
 import type { MultiplicativeTypeSemantics } from "../../../type-data";
 import type { Expression } from "../expression";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
-import { MultiplicativeExpressionContext, ParserASTMapping } from "../../../../parser";
+import { KindParseRuleMapping, MultiplicativeExpressionContext, ParseRuleKindMapping } from "../../../../parser";
 import { KipperMultiplicativeOperator, kipperMultiplicativeOperators } from "../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
@@ -43,13 +43,40 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_multiplicativeExpression;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_multiplicativeExpression;
+	public override get kind() {
+		return MultiplicativeExpression.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return MultiplicativeExpression.ruleName;
+	}
 
 	constructor(antlrRuleCtx: MultiplicativeExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);

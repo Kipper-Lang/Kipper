@@ -6,14 +6,6 @@
 import type { KipperReferenceable } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { CompilableNodeChild, CompilableNodeParent, ScopeNode } from "../../ast";
-import { KipperSemanticsAsserter } from "./err-handler";
-import {
-	LocalScope,
-	Scope,
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
-	ScopeVariableDeclaration,
-} from "../symbol-table";
 import {
 	CompoundStatement,
 	Expression,
@@ -22,22 +14,30 @@ import {
 	IterationStatement,
 	JumpStatement,
 	ReturnStatement,
-	VariableDeclaration,
+	VariableDeclaration
 } from "../../ast";
+import { KipperSemanticsAsserter } from "./err-handler";
 import {
+	LocalScope,
+	Scope,
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeVariableDeclaration
+} from "../symbol-table";
+import {
+	BuiltInOrInternalGeneratorFunctionNotFoundError,
 	BuiltInOverwriteError,
 	IdentifierAlreadyUsedByFunctionError,
 	IdentifierAlreadyUsedByParameterError,
 	IdentifierAlreadyUsedByVariableError,
 	InvalidAssignmentError,
 	InvalidGlobalError,
-	MissingFunctionBodyError,
+	InvalidJumpStatementError,
 	InvalidReturnStatementError,
+	MissingFunctionBodyError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
-	UnknownReferenceError,
-	InvalidJumpStatementError,
-	BuiltInOrInternalGeneratorFunctionNotFoundError,
+	UnknownReferenceError
 } from "../../../errors";
 
 /**

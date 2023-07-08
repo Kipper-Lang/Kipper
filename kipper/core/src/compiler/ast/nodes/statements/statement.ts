@@ -3,10 +3,9 @@
  * @since 0.1.0
  */
 import type { CompilableNodeParent, SemanticData, TypeData } from "../../index";
-import type { ASTStatementKind, ParserStatementContext } from "../../ast-types";
+import type { ASTStatementKind, ASTStatementRuleName, ParserStatementContext } from "../../common";
 import type { TranslatedCodeLine } from "../../../const";
 import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
-import { KipperParser } from "../../../parser";
 import { CompilableASTNode } from "../../compilable-ast-node";
 
 /**
@@ -31,10 +30,21 @@ export abstract class Statement<
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
 	 * @since 0.10.0
 	 */
-	public abstract readonly kind: ASTStatementKind;
+	public abstract get kind(): ASTStatementKind;
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
+	 * @since 0.11.0
+	 */
+	public abstract get ruleName(): ASTStatementRuleName;
 
 	protected constructor(antlrRuleCtx: ParserStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);

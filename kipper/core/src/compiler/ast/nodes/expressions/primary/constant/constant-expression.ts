@@ -5,37 +5,36 @@
  */
 import type { ConstantExpressionSemantics } from "../../../../semantic-data";
 import type { ExpressionTypeSemantics } from "../../../../type-data";
-import type {
-	ArrayLiteralPrimaryExpressionContext,
-	BoolPrimaryExpressionContext,
-	NumberPrimaryExpressionContext,
-	ParserASTMapping,
-	StringPrimaryExpressionContext,
-	VoidOrNullOrUndefinedPrimaryExpressionContext,
-} from "../../../../../parser";
+import type { ParseRuleKindMapping } from "../../../../../parser";
+import { KindParseRuleMapping } from "../../../../../parser";
 import { Expression } from "../../expression";
-
-/**
- * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ConstantExpression} AST node.
- * @since 0.10.0
- */
-export type ParserConstantExpressionContext =
-	| NumberPrimaryExpressionContext
-	| StringPrimaryExpressionContext
-	| BoolPrimaryExpressionContext
-	| VoidOrNullOrUndefinedPrimaryExpressionContext
-	| ArrayLiteralPrimaryExpressionContext;
+import { ASTNodeMapper } from "../../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link ConstantExpression} AST node.
  * @since 0.10.0
  */
 export type ASTConstantExpressionKind =
-	| typeof ParserASTMapping.RULE_numberPrimaryExpression
-	| typeof ParserASTMapping.RULE_stringPrimaryExpression
-	| typeof ParserASTMapping.RULE_boolPrimaryExpression
-	| typeof ParserASTMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
-	| typeof ParserASTMapping.RULE_arrayLiteralPrimaryExpression;
+	| typeof ParseRuleKindMapping.RULE_numberPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_stringPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_boolPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression;
+
+/**
+ * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ConstantExpression} AST node.
+ * @since 0.10.0
+ */
+export type ParserConstantExpressionContext = InstanceType<
+	typeof ASTNodeMapper.expressionKindToRuleContextMap[ASTConstantExpressionKind]
+>;
+
+/**
+ * Union type of all possible {@link ParserASTNode.ruleName} values for a constructable {@link ConstantExpression}
+ * AST node.
+ * @since 0.11.0
+ */
+export type ParserConstantExpressionRuleName = typeof KindParseRuleMapping[ASTConstantExpressionKind];
 
 /**
  * Abstract constant expression class representing a constant expression, which was defined in the source code. This
@@ -47,5 +46,6 @@ export abstract class ConstantExpression<
 	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserConstantExpressionContext;
-	public abstract readonly kind: ASTConstantExpressionKind;
+	public abstract get kind(): ASTConstantExpressionKind;
+	public abstract get ruleName(): ParserConstantExpressionRuleName;
 }

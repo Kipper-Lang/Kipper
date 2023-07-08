@@ -4,14 +4,15 @@
  * @since 0.10.0
  */
 import type { SliceNotationContext, SliceNotationMemberAccessExpressionContext } from "../../../parser";
-import type { MemberAccessExpressionSemantics } from "../../semantic-data";
-import type { MemberAccessExpressionTypeSemantics } from "../../type-data";
-import type { CompilableASTNode } from "../../compilable-ast-node";
 import {
 	BracketNotationMemberAccessExpressionContext,
 	DotNotationMemberAccessExpressionContext,
-	ParserASTMapping,
+	KindParseRuleMapping,
+	ParseRuleKindMapping
 } from "../../../parser";
+import type { MemberAccessExpressionSemantics } from "../../semantic-data";
+import type { MemberAccessExpressionTypeSemantics } from "../../type-data";
+import type { CompilableASTNode } from "../../compilable-ast-node";
 import { Expression } from "./expression";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../errors";
 import { kipperInternalBuiltInFunctions } from "../../../runtime-built-ins";
@@ -42,11 +43,40 @@ export class MemberAccessExpression extends Expression<
 	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_memberAccessExpression;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_memberAccessExpression;
+	public override get kind() {
+		return MemberAccessExpression.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return MemberAccessExpression.ruleName;
+	}
 
 	constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);

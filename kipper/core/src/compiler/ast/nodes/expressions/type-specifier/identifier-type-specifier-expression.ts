@@ -11,7 +11,11 @@ import type { IdentifierTypeSpecifierExpressionSemantics } from "../../../semant
 import type { IdentifierTypeSpecifierExpressionTypeSemantics } from "../../../type-data";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "./type-specifier-expression";
-import { IdentifierTypeSpecifierContext, ParserASTMapping } from "../../../../parser";
+import {
+	IdentifierTypeSpecifierExpressionContext,
+	KindParseRuleMapping,
+	ParseRuleKindMapping
+} from "../../../../parser";
 import { CheckedType, UncheckedType } from "../../../../analysis";
 
 /**
@@ -32,18 +36,45 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierContext;
+	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierExpressionContext;
+
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_identifierTypeSpecifier;
+	public override get kind() {
+		return IdentifierTypeSpecifierExpression.kind;
+	}
 
-	constructor(antlrRuleCtx: IdentifierTypeSpecifierContext, parent: CompilableASTNode) {
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return IdentifierTypeSpecifierExpression.ruleName;
+	}
+
+	constructor(antlrRuleCtx: IdentifierTypeSpecifierExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -89,7 +120,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): IdentifierTypeSpecifierContext {
+	public override get antlrRuleCtx(): IdentifierTypeSpecifierExpressionContext {
 		return this._antlrRuleCtx;
 	}
 

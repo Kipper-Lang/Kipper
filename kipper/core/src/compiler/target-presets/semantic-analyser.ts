@@ -5,13 +5,17 @@
 
 import type {
 	AdditiveExpression,
+	AnalysableASTNode,
+	ArrayLiteralPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CompoundStatement,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -22,28 +26,24 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ArrayLiteralPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
+	SemanticData,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TypeData,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	TypeData,
-	SemanticData,
-	DoWhileLoopStatement,
-	ForLoopStatement,
-	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
-	AnalysableASTNode,
-	MemberAccessExpression,
+	WhileLoopIterationStatement
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 
@@ -84,22 +84,22 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract expressionStatement?: TargetASTNodeSemanticAnalyser<ExpressionStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract doWhileLoopStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
+	public abstract doWhileLoopIterationStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopIterationStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract whileLoopStatement?: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
+	public abstract whileLoopIterationStatement?: TargetASTNodeSemanticAnalyser<WhileLoopIterationStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract forLoopStatement?: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
+	public abstract forLoopIterationStatement?: TargetASTNodeSemanticAnalyser<ForLoopIterationStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.

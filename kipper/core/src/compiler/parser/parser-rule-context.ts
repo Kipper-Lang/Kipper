@@ -1,5 +1,5 @@
 import { ParserRuleContext } from "antlr4ts";
-import { ASTKind } from "./parser-ast-mapping";
+import { ASTKind } from "./parse-rule-kind-mapping";
 
 /**
  * A custom implementation of the Antlr4 {@link ParserRuleContext} class, representing a node in the parse tree.
@@ -31,7 +31,7 @@ export abstract class KipperParserRuleContext extends ParserRuleContext {
 	/**
 	 * Returns the specific unique kind number of this rule ctx. This is used to map the rule ctx to the correct AST node.
 	 *
-	 * For more info on this, see {@link ParserASTMapping} and the documentation provided.
+	 * For more info on this, see {@link ParseRuleKindMapping} and the documentation provided.
 	 * @since 0.10.0
 	 */
 	public get astSyntaxKind(): ASTKind {

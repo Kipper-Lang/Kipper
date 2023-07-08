@@ -4,9 +4,9 @@
  */
 import type { SemanticData } from "../ast-node";
 import type { Expression, IfStatement, Statement } from "../nodes";
-import type { JmpStatementType } from "../../const";
-import type { FunctionDeclaration, VariableDeclaration } from "../nodes/declarations";
 import { IterationStatement } from "../nodes";
+import type { JmpStatementType } from "../../const";
+import type { FunctionDeclaration, VariableDeclaration } from "../nodes";
 
 /**
  * Semantics for AST Node {@link IfStatement}.

@@ -19,13 +19,12 @@ import type {
 	KipperUnaryModifierOperator,
 	KipperUnaryOperator,
 	KipperUndefinedType,
-	KipperVoidType,
+	KipperVoidType
 } from "../../const";
 import type { SemanticData } from "../ast-node";
 import type { Expression, IdentifierPrimaryExpression } from "../nodes";
-import type { Reference } from "../../analysis";
-import type { UncheckedType } from "../../analysis";
 import { IdentifierTypeSpecifierExpression } from "../nodes";
+import type { Reference, UncheckedType } from "../../analysis";
 
 /**
  * Static semantics for an expression class that must be evaluated during the Semantic Analysis.

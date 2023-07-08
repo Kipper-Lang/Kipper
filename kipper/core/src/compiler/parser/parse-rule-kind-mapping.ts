@@ -3,6 +3,9 @@
  * @since 0.10.0
  */
 
+import { InverseMap } from "../../tools/types/inverse-map";
+import { inverseMap } from "../../tools";
+
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the
  * {@link ASTNodeFactory} factories to an AST node class implementation.
@@ -15,7 +18,7 @@
  * internal purposes inside the parser. For completion’s sake, all numbers are listed here regardless.
  * @since 0.10.0
  */
-export const ParserASTMapping = {
+export const ParseRuleKindMapping = {
 	// Standard rules copied from KipperParser
 	RULE_compilationUnit: 0,
 	RULE_translationUnit: 1,
@@ -80,10 +83,10 @@ export const ParserASTMapping = {
 	RULE_assignmentExpression: 60,
 	RULE_assignmentOperator: 61,
 	RULE_expression: 62,
-	RULE_typeSpecifier: 63,
-	RULE_identifierTypeSpecifier: 64,
-	RULE_genericTypeSpecifier: 65,
-	RULE_typeofTypeSpecifier: 66,
+	RULE_typeSpecifierExpression: 63,
+	RULE_identifierTypeSpecifierExpression: 64,
+	RULE_genericTypeSpecifierExpression: 65,
+	RULE_typeofTypeSpecifierExpression: 66,
 	RULE_typeSpecifierIdentifier: 67,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 68, // -> See 'computedPrimaryExpression'
@@ -91,10 +94,16 @@ export const ParserASTMapping = {
 } as const;
 
 /**
- * Union type of every possible {@link ParserASTMapping AST kind number} mapped to a KipperParser rule.
+ * Inverse mapping of {@link ParseRuleKindMapping} which maps the AST syntax kind number to the KipperParser rule.
+ * @since 0.11.0
+ */
+export const KindParseRuleMapping = <InverseMap<typeof ParseRuleKindMapping>>inverseMap(ParseRuleKindMapping);
+
+/**
+ * Union type of every possible {@link ParseRuleKindMapping AST kind number} mapped to a KipperParser rule.
  *
  * Not every number contained here is mapped to a constructable AST node. Some may be only used for
  * internal purposes inside the parser. For completion’s sake, all numbers are listed here regardless.
  * @since 0.10.0
  */
-export type ASTKind = (typeof ParserASTMapping)[keyof typeof ParserASTMapping];
+export type ASTKind = typeof ParseRuleKindMapping[keyof typeof ParseRuleKindMapping];

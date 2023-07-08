@@ -12,7 +12,7 @@
 import type { DeclarationSemantics } from "../../semantic-data";
 import type { DeclarationTypeData } from "../../type-data";
 import type { TranslatedCodeLine } from "../../../const";
-import type { ASTDeclarationKind, ParserDeclarationContext } from "../../ast-types";
+import type { ASTDeclarationKind, ASTDeclarationRuleName, ParserDeclarationContext } from "../../common";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
 import type { ScopeDeclaration } from "../../../analysis";
 import { CompilableASTNode, type CompilableNodeParent } from "../../compilable-ast-node";
@@ -51,10 +51,20 @@ export abstract class Declaration<
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public abstract readonly kind: ASTDeclarationKind;
+	public abstract get kind(): ASTDeclarationKind;
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
+	 * @since 0.11.0
+	 */
+	public abstract get ruleName(): ASTDeclarationRuleName;
 
 	protected constructor(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);

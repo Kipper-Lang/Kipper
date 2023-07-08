@@ -9,8 +9,8 @@ import type { FunctionScope, ScopeParameterDeclaration } from "../../../analysis
 import type { FunctionDeclaration } from "./function-declaration";
 import type { IdentifierTypeSpecifierExpression } from "../expressions";
 import { Declaration } from "./declaration";
-import { KipperParser, ParameterDeclarationContext } from "../../../parser";
-import { getParseTreeSource } from "../../../../utils";
+import { KindParseRuleMapping, ParameterDeclarationContext, ParseRuleKindMapping } from "../../../parser";
+import { getParseTreeSource } from "../../../../tools";
 
 /**
  * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
@@ -35,13 +35,40 @@ export class ParameterDeclaration extends Declaration<
 	protected override _scopeDeclaration: ScopeParameterDeclaration | undefined;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_parameterDeclaration;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_parameterDeclaration;
+	public override get kind() {
+		return ParameterDeclaration.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return ParameterDeclaration.ruleName;
+	}
 
 	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);

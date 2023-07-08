@@ -11,9 +11,9 @@ import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runti
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import type { KipperWarning } from "../warnings";
-import type { CompilableASTNode, RootASTNode, Expression } from "./ast";
-import type { EvaluatedCompileConfig } from "./compile-config";
+import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
+import type { EvaluatedCompileConfig } from "./compile-config";
 import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";

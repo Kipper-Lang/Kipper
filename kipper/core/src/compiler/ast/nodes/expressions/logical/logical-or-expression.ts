@@ -12,7 +12,7 @@ import type { LogicalOrExpressionSemantics } from "../../../semantic-data";
 import type { LogicalOrExpressionTypeSemantics } from "../../../type-data";
 import type { Expression } from "../expression";
 import { LogicalExpression } from "./logical-expression";
-import { LogicalOrExpressionContext, ParserASTMapping } from "../../../../parser";
+import { KindParseRuleMapping, LogicalOrExpressionContext, ParseRuleKindMapping } from "../../../../parser";
 import { CompilableASTNode } from "../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { kipperLogicalOrOperator } from "../../../../const";
@@ -40,13 +40,40 @@ export class LogicalOrExpression extends LogicalExpression<
 	protected override readonly _antlrRuleCtx: LogicalOrExpressionContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_logicalOrExpression;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_logicalOrExpression;
+	public override get kind() {
+		return LogicalOrExpression.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return LogicalOrExpression.ruleName;
+	}
 
 	constructor(antlrRuleCtx: LogicalOrExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);

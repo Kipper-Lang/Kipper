@@ -6,7 +6,7 @@ import type { TypeofTypeSpecifierExpressionSemantics } from "../../../semantic-d
 import type { TypeofTypeSpecifierExpressionTypeSemantics } from "../../../type-data";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "./type-specifier-expression";
-import { ParserASTMapping, TypeofTypeSpecifierContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, TypeofTypeSpecifierExpressionContext } from "../../../../parser";
 import { KipperNotImplementedError } from "../../../../../errors";
 
 /**
@@ -22,18 +22,45 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierContext;
+	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierExpressionContext;
+
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_typeofTypeSpecifier;
+	public override get kind() {
+		return TypeofTypeSpecifierExpression.kind;
+	}
 
-	constructor(antlrRuleCtx: TypeofTypeSpecifierContext, parent: CompilableASTNode) {
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return TypeofTypeSpecifierExpression.ruleName;
+	}
+
+	constructor(antlrRuleCtx: TypeofTypeSpecifierExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -73,7 +100,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): TypeofTypeSpecifierContext {
+	public override get antlrRuleCtx(): TypeofTypeSpecifierExpressionContext {
 		return this._antlrRuleCtx;
 	}
 

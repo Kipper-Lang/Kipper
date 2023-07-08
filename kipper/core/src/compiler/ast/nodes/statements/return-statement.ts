@@ -7,7 +7,7 @@ import type { ReturnStatementSemantics } from "../../semantic-data";
 import type { ReturnStatementTypeSemantics } from "../../type-data";
 import { Statement } from "./statement";
 import { CheckedType } from "../../../analysis";
-import { KipperParser, ReturnStatementContext } from "../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, ReturnStatementContext } from "../../../parser";
 import { Expression } from "../expressions";
 
 /**
@@ -23,13 +23,40 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	protected override readonly _antlrRuleCtx: ReturnStatementContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_returnStatement;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_returnStatement;
+	public override get kind() {
+		return ReturnStatement.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_statement}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return ReturnStatement.ruleName;
+	}
 
 	protected readonly _children: Array<Expression>;
 

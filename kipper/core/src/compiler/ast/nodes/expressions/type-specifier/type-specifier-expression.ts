@@ -4,32 +4,36 @@
  * @since 0.9.0
  */
 import type { TypeSpecifierExpressionSemantics } from "../../../semantic-data";
-import type {
-	GenericTypeSpecifierContext,
-	IdentifierTypeSpecifierContext,
-	ParserASTMapping,
-	TypeofTypeSpecifierContext,
-} from "../../../../parser";
+import type { ParseRuleKindMapping } from "../../../../parser";
+import { KindParseRuleMapping } from "../../../../parser";
 import type { TypeSpecifierExpressionTypeSemantics } from "../../../type-data";
 import { Expression } from "../expression";
-
-/**
- * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link MemberAccessExpression} AST node.
- * @since 0.10.0
- */
-export type ParserTypeSpecifierExpressionContext =
-	| IdentifierTypeSpecifierContext
-	| GenericTypeSpecifierContext
-	| TypeofTypeSpecifierContext;
+import { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link TypeSpecifierExpression} AST node.
  * @since 0.10.0
  */
 export type ASTTypeSpecifierExpressionKind =
-	| typeof ParserASTMapping.RULE_identifierTypeSpecifier
-	| typeof ParserASTMapping.RULE_genericTypeSpecifier
-	| typeof ParserASTMapping.RULE_typeofTypeSpecifier;
+	| typeof ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression
+	| typeof ParseRuleKindMapping.RULE_genericTypeSpecifierExpression
+	| typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression;
+
+/**
+ * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link TypeSpecifierExpression}
+ * AST node.
+ * @since 0.10.0
+ */
+export type ParserTypeSpecifierExpressionContext = InstanceType<
+	typeof ASTNodeMapper.expressionKindToRuleContextMap[ASTTypeSpecifierExpressionKind]
+>;
+
+/**
+ * Union type of all possible {@link ParserASTNode.ruleName} values for a constructable {@link TypeSpecifierExpression}
+ * AST node.
+ * @since 0.11.0
+ */
+export type ParserTypeSpecifierExpressionRuleName = typeof KindParseRuleMapping[ASTTypeSpecifierExpressionKind];
 
 /**
  * Abstract type class representing a type specifier. This abstract class only exists to provide the commonality between the
@@ -41,5 +45,6 @@ export abstract class TypeSpecifierExpression<
 	TypeSemantics extends TypeSpecifierExpressionTypeSemantics = TypeSpecifierExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContext;
-	public abstract readonly kind: ASTTypeSpecifierExpressionKind;
+	public abstract get kind(): ASTTypeSpecifierExpressionKind;
+	public abstract get ruleName(): ParserTypeSpecifierExpressionRuleName;
 }

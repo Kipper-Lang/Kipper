@@ -2,23 +2,23 @@
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
-import type { NoSemantics, NoTypeSemantics } from "./ast-node";
-import { ParserASTNode } from "./ast-node";
+import type { NoSemantics, NoTypeSemantics } from "../ast-node";
+import { ParserASTNode } from "../ast-node";
 import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
 	TargetSetUpCodeGenerator,
-	TargetWrapUpCodeGenerator,
-} from "../target-presets";
-import type { EvaluatedCompileConfig } from "../compile-config";
-import type { KipperProgramContext } from "../program-ctx";
-import type { Declaration } from "./nodes/declarations/";
-import type { Statement } from "./nodes";
-import type { TranslatedCodeLine } from "../const";
-import { KipperError } from "../../errors";
-import { CompilationUnitContext, KipperParser } from "../parser";
-import { handleSemanticError } from "../analysis";
+	TargetWrapUpCodeGenerator
+} from "../../target-presets";
+import type { EvaluatedCompileConfig } from "../../compile-config";
+import type { KipperProgramContext } from "../../program-ctx";
+import type { Declaration } from "./declarations";
+import type { Statement } from "./index";
+import type { TranslatedCodeLine } from "../../const";
+import { KipperError } from "../../../errors";
+import { CompilationUnitContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../parser";
+import { handleSemanticError } from "../../analysis";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
@@ -31,13 +31,40 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 	protected readonly _children: Array<Declaration | Statement>;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_compilationUnit;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_compilationUnit;
+	public override get kind() {
+		return RootASTNode.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return RootASTNode.ruleName;
+	}
 
 	constructor(programCtx: KipperProgramContext, antlrCtx: CompilationUnitContext) {
 		super(antlrCtx, undefined);

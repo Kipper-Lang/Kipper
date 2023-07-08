@@ -10,7 +10,13 @@ import type { CompilableNodeParent } from "../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../statements";
 import type { IdentifierTypeSpecifierExpression } from "../expressions";
 import { FunctionScope, ScopeFunctionDeclaration, UncheckedType } from "../../../analysis";
-import { CompoundStatementContext, DeclaratorContext, FunctionDeclarationContext, KipperParser } from "../../../parser";
+import {
+	CompoundStatementContext,
+	DeclaratorContext,
+	FunctionDeclarationContext,
+	KindParseRuleMapping,
+	ParseRuleKindMapping
+} from "../../../parser";
 import { Declaration } from "./declaration";
 import { ParameterDeclaration } from "./parameter-declaration";
 import { UnableToDetermineSemanticDataError } from "../../../../errors";
@@ -46,13 +52,41 @@ export class FunctionDeclaration
 	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
 
 	/**
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_functionDeclaration;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_functionDeclaration;
+	public override get kind() {
+		return FunctionDeclaration.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return FunctionDeclaration.ruleName;
+	}
 
 	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);

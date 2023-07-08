@@ -7,7 +7,7 @@ import type { BoolPrimaryExpressionTypeSemantics } from "../../../../type-data";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { KipperBoolTypeLiterals } from "../../../../../const";
 import { ConstantExpression } from "./constant-expression";
-import { BoolPrimaryExpressionContext, ParserASTMapping } from "../../../../../parser";
+import { BoolPrimaryExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { CheckedType } from "../../../../../analysis";
 
 /**
@@ -26,13 +26,40 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_boolPrimaryExpression;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_boolPrimaryExpression;
+	public override get kind() {
+		return BoolPrimaryExpression.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return BoolPrimaryExpression.ruleName;
+	}
 
 	constructor(antlrRuleCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);

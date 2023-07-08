@@ -6,7 +6,7 @@ import type { StringPrimaryExpressionSemantics } from "../../../../semantic-data
 import type { StringPrimaryExpressionTypeSemantics } from "../../../../type-data";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { ConstantExpression } from "./constant-expression";
-import { ParserASTMapping, StringPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, StringPrimaryExpressionContext } from "../../../../../parser";
 import { CheckedType } from "../../../../../analysis";
 
 /**
@@ -25,13 +25,40 @@ export class StringPrimaryExpression extends ConstantExpression<
 	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_stringPrimaryExpression;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = ParserASTMapping.RULE_stringPrimaryExpression;
+	public override get kind() {
+		return StringPrimaryExpression.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return StringPrimaryExpression.ruleName;
+	}
 
 	constructor(antlrRuleCtx: StringPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);

@@ -9,7 +9,7 @@ import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import type { KipperParseStream } from "./compiler";
 import { CompilableASTNode, KipperProgramContext } from "./compiler";
-import { getParseRuleSource } from "./utils";
+import { getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.

@@ -16,9 +16,10 @@ import { Declaration } from "./declaration";
 import {
 	DeclaratorContext,
 	InitDeclaratorContext,
-	KipperParser,
-	StorageTypeSpecifierContext,
-	VariableDeclarationContext,
+	KindParseRuleMapping,
+	ParseRuleKindMapping,
+	storageTypeSpecifierContext,
+	VariableDeclarationContext
 } from "../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../errors";
 
@@ -52,13 +53,40 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_variableDeclaration;
+
+	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
 	 * @since 0.10.0
 	 */
-	public override readonly kind = KipperParser.RULE_variableDeclaration;
+	public override get kind() {
+		return VariableDeclaration.kind;
+	}
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_declaration}.
+	 * @since 0.11.0
+	 */
+	public override get ruleName() {
+		return VariableDeclaration.ruleName;
+	}
 
 	constructor(antlrRuleCtx: VariableDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -105,8 +133,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const children: Array<ParseTree> = this.getAntlrRuleChildren();
 
 		// Determine the ctx instances
-		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
-			children.find((val) => val instanceof StorageTypeSpecifierContext)
+		const storageTypeCtx = <storageTypeSpecifierContext | undefined>(
+			children.find((val) => val instanceof storageTypeSpecifierContext)
 		);
 		const initDeclaratorCtx = <InitDeclaratorContext | undefined>(
 			children.find((val) => val instanceof InitDeclaratorContext)
