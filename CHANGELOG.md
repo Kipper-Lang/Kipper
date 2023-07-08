@@ -24,18 +24,34 @@ To use development versions of Kipper download the
   - `void` to `str`.
   - `null` to `str`.
   - `undefined` to `str`.
+- New modules:
+  - `kipper/core/tools`, which contains all tools and utilities used by the compiler.
+  - `kipper/core/tools/decorators`, which contains all decorators used by the compiler.
+  - `kipper/core/tools/functions`, which contains all functions used by the compiler.
+  - `kipper/core/tools/types`, which contains all types used by the compiler.
+  - `kipper/core/compiler/ast/common`, which contains commonly used types and functions.
+  - `kipper/core/compiler/ast/factories`, which replaces the old file `factories.ts` and contains all AST factory
+    classes and types.
+  - `kipper/core/compiler/ast/mapping`, which contains all AST mapping objects and the `ASTNodeMapper` class.
+- New class:
+  - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
 - New parameters:
-  - `ignoreParams` in `genJSFunction`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `createJSFunctionSignature`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `genTSFunction`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `createTSFunctionSignature`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genTSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createTSFunctionSignature()`, which, if true makes the function signature define no parameters.
 - New field:
   - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
     context of the error.
+  - `ParserASTNode.ruleName`, which contains the rule name of the node.
+- New types:
+  - `InverseMap`, which inverts a map by swapping the keys and values.
 - New functions:
-  - `KipperTargetBuiltInGenerator.voidToStr`, for the built-in conversion from `void` to `str`.
-  - `KipperTargetBuiltInGenerator.nullToStr`, for the built-in conversion from `null` to `str`.
-  - `KipperTargetBuiltInGenerator.undefinedToStr`, for the built-in conversion from `undefined` to `str`.
+  - `KipperTargetBuiltInGenerator.voidToStr()`, for the built-in conversion from `void` to `str`.
+  - `KipperTargetBuiltInGenerator.nullToStr()`, for the built-in conversion from `null` to `str`.
+  - `KipperTargetBuiltInGenerator.undefinedToStr()`, for the built-in conversion from `undefined` to `str`.
+  - `replaceObjKeys()`, which replaces the keys of an object with the values returned by a function.
+  - `inverseMap()`, which inverts a map by swapping the keys and values.
 
 ### Changed
 
@@ -43,9 +59,35 @@ To use development versions of Kipper download the
   This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
   also part of the `ParserConstantExpressionContext` type.
 - Renamed:
-  - `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
-  - `FStringPrimaryExpressionSemantics.items` to `atoms`.
-  - `getTSFunction()` to `genTSFunction()`.
+  - Class `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - Function `getTSFunction()` to `genTSFunction()`.
+  - Grammar Rule `typeSpecifier` to `typeSpecifierExpression` and its AST class `TypeSpecifier` to
+    `TypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `identifierTypeSpecifier` to `identifierTypeSpecifierExpression` and its AST class
+    `IdentifierTypeSpecifier` to `IdentifierTypeSpecifierExpression`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `genericTypeSpecifier` to `genericTypeSpecifierExpression` and its AST class `GenericTypeSpecifier` to
+    `GenericTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `typeofTypeSpecifier` to `typeofTypeSpecifierExpression` and its AST class `TypeofTypeSpecifier` to
+    `TypeofTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `forLoopStatement` to `forLoopIterationStatement` and its AST class `ForLoopStatement` to
+    `ForLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `whileLoopStatement` to `whileLoopIterationStatement` and its AST class `WhileLoopStatement` to
+    `WhileLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `doWhileLoopStatement` to `doWhileLoopIterationStatement` and its AST class
+    `DoWhileLoopStatement` to `DoWhileLoopIterationStatement`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+- Moved:
+	- `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
+  - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module. 
+  - `kipper/core/compiler/ast/ast-types.ts` to the new `kipper/core/compiler/ast/common` module.
 
 ### Fixed
 
@@ -261,7 +303,7 @@ To use development versions of Kipper download the
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
   - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context
-    to an AST node. This is the type representing all values from `ParserASTMapping`.
+    to an AST node. This is the type representing all values from `ParseRuleKindMapping`.
   - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
     corresponding AST node class.
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
@@ -307,7 +349,7 @@ To use development versions of Kipper download the
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.
-  - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
+  - `ParseRuleKindMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
   - `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
 
