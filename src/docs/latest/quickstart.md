@@ -198,7 +198,7 @@ Example package.json:
 Afterwards, you can include the `@kipper/core` package in your JavaScript or TypeScript file. This package contains the
 full Kipper Compiler and API, which can be customised according to your needs.
 
-Kipper is shipped as a commonjs module and can therefore be imported using `require()` in Javascript or`import` in
+Kipper is shipped as a CommonJS module and can therefore be imported using `require()` in Javascript or `import` in
 TypeScript.
 
 ### Example
