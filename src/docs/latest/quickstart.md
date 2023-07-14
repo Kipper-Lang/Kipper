@@ -248,7 +248,7 @@ fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => 
     // Compile the code string or stream
     let result = await compiler.compile(fileContent, {
         /* Config - Target must always be specified */
-        target: new kipperJS.TargetJS,
+        target: new kipperJS.TargetJS(),
     });
     let jsCode = result.write();
 

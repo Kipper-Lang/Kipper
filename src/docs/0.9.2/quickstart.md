@@ -149,27 +149,29 @@ Kipper is shipped as a commonjs module and can therefore be imported using `requ
 Using JavaScript:
 
 ```kipper
+const ts = require("typescript");
 const fs = require("fs").promises;
 const kipper = require("@kipper/core");
-const kipperJS = require("@kipper/target-js");
 
 const path = "INSERT_PATH";
 fs.readFile(path, "utf8").then(async (fileContent) => {
-    // Define your own logger and compiler, which will handle the compilation
-    const logger = new kipper.KipperLogger((level, msg) => {
-        console.log(`[${level}] ${msg}`);
-    });
-    const compiler = new kipper.KipperCompiler(logger);
+	// Define your own logger and compiler, which will handle the compilation
+	const logger = new kipper.KipperLogger((level, msg) => {
+		console.log(`[${level}] ${msg}`);
+	});
+	const compiler = new kipper.KipperCompiler(logger);
 
-    // Compile the code string or stream
-    let result = await compiler.compile(fileContent, {
-        /* Config - Target must always be specified */
-        target: new kipperJS.TargetJS,
-    });
-    let jsCode = result.write();
+	// Compile the code string or stream
+	let result = await compiler.compile(fileContent, {
+		/* Config */
+	});
+	let tsCode = result.write();
 
-    // Running the Kipper program
-    eval(jsCode);
+	// Compiling down to JS using the typescript node module
+	let jsCode = ts.transpile(tsCode);
+
+	// Running the Kipper program
+	eval(jsCode);
 });
 ```
 
