@@ -28,7 +28,7 @@ dependencies:
   '@kipper/core': link:../core
   '@kipper/target-js': link:../target-js
   '@kipper/target-ts': link:../target-ts
-  '@oclif/command': 1.8.31_@oclif+config@1.18.8
+  '@oclif/command': 1.8.31
   '@oclif/config': 1.18.8
   '@oclif/errors': 1.3.6
   '@oclif/parser': 3.8.10
@@ -168,7 +168,6 @@ packages:
       treeverse: 1.0.4
       walk-up-path: 1.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -198,8 +197,6 @@ packages:
       promise-retry: 2.0.1
       semver: 7.5.1
       which: 2.0.2
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /@npmcli/installed-package-contents/1.0.7:
@@ -230,7 +227,6 @@ packages:
       pacote: 12.0.3
       semver: 7.5.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -280,7 +276,6 @@ packages:
       node-gyp: 8.4.1
       read-package-json-fast: 2.0.3
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -295,27 +290,9 @@ packages:
       tslib: 2.5.2
     dev: true
 
-  /@oclif/command/1.8.31_@oclif+config@1.18.2:
+  /@oclif/command/1.8.31:
     resolution: {integrity: sha512-5GLT2l8ccxTqog4UBIX6DqdvDXkpDWBIU7tz8Bx+N1CACpY9cXqG6luUqQzLshKaHXx9b/Y4/KF6SvRTg9FN5A==}
     engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@oclif/config': ^1
-    dependencies:
-      '@oclif/config': 1.18.2
-      '@oclif/errors': 1.3.6
-      '@oclif/help': 1.0.5
-      '@oclif/parser': 3.8.13
-      debug: 4.3.4
-      semver: 7.5.4
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /@oclif/command/1.8.31_@oclif+config@1.18.8:
-    resolution: {integrity: sha512-5GLT2l8ccxTqog4UBIX6DqdvDXkpDWBIU7tz8Bx+N1CACpY9cXqG6luUqQzLshKaHXx9b/Y4/KF6SvRTg9FN5A==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@oclif/config': ^1
     dependencies:
       '@oclif/config': 1.18.8
       '@oclif/errors': 1.3.6
@@ -508,7 +485,7 @@ packages:
     resolution: {integrity: sha512-QuSiseNRJygaqAdABYFWn/H1CwIZCp9zp/PLid6yXvy6VcQV7OenEFF5XuYaCvSARe2Tg9r8Jqls5+fw1A9CbQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.31_@oclif+config@1.18.2
+      '@oclif/command': 1.8.31
       '@oclif/config': 1.18.2
       '@oclif/errors': 1.3.5
       '@oclif/help': 1.0.5
@@ -1090,8 +1067,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.13
       unique-filename: 1.1.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cacache/16.1.3:
@@ -1116,8 +1091,6 @@ packages:
       ssri: 9.0.1
       tar: 6.1.13
       unique-filename: 2.0.1
-    transitivePeerDependencies:
-      - bluebird
     dev: true
 
   /cacheable-lookup/5.0.4:
@@ -2399,7 +2372,6 @@ packages:
       socks-proxy-agent: 7.0.0
       ssri: 9.0.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -2424,7 +2396,6 @@ packages:
       socks-proxy-agent: 6.2.1
       ssri: 8.0.1
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -2703,7 +2674,6 @@ packages:
       tar: 6.1.13
       which: 2.0.2
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -2806,7 +2776,6 @@ packages:
       minizlib: 2.1.2
       npm-package-arg: 8.1.5
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -2877,7 +2846,6 @@ packages:
       - '@swc/core'
       - '@swc/wasm'
       - '@types/node'
-      - bluebird
       - encoding
       - mem-fs
       - supports-color
@@ -3017,7 +2985,6 @@ packages:
       ssri: 8.0.1
       tar: 6.1.13
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
@@ -3146,11 +3113,6 @@ packages:
 
   /promise-inflight/1.0.1:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
     dev: true
 
   /promise-retry/2.0.1:
@@ -3826,6 +3788,7 @@ packages:
     resolution: {integrity: sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==}
     engines: {node: '>=14.17'}
     hasBin: true
+    dev: true
 
   /unique-filename/1.1.1:
     resolution: {integrity: sha512-Vmp0jIp2ln35UTXuryvjzkjGdRyf9b2lTXuSYUiPmzRcl3FDtYqAwOnTJkAngD9SWhnoJzDbTKwaOrZ+STtxNQ==}
@@ -4131,7 +4094,6 @@ packages:
       textextensions: 5.15.0
       untildify: 4.0.0
     transitivePeerDependencies:
-      - bluebird
       - supports-color
     dev: true
 
