@@ -48,7 +48,7 @@ using the `--target=js` flag, for example:
 kipper compile example-script.kip --target=js
 ```
 
-Otherwise, simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for 
+Otherwise, simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for
 example:
 
 - JavaScript (CommonJS):

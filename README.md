@@ -14,7 +14,7 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
-_For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper)._
+_For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper-)._
 
 ## General Information
 
@@ -35,7 +35,7 @@ npm i kipper
 
 If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 
-## Project Packages 
+## Project Packages
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
 - [`@kipper/core`](https://www.npmjs.com/package/@kipper/core): The core implementation of the Kipper compiler.
@@ -46,7 +46,7 @@ If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
 - [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
   compiler.
 
-## Goals & Planned Features 
+## Goals & Planned Features
 
 _View the current implementation state in the [Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)._
 

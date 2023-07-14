@@ -13,7 +13,7 @@
 The standalone web-module for the Kipper Compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
 
