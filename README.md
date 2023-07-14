@@ -222,7 +222,7 @@ issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Ki
 
 If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
 
-We appreciate any feedback or help! 🦊❤️
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 
