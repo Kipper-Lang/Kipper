@@ -1,6 +1,6 @@
 ![](./img/Kipper-Logo-with-head.png)
 
-# The Kipper programming language - `kipper`
+# The Kipper programming language - `kipper` 🦊✨
 
 [![Version](https://img.shields.io/npm/v/kipper?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
