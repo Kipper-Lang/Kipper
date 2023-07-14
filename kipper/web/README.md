@@ -1,6 +1,6 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper Web Module - `@kipper/web`
+# Kipper Web Module - `@kipper/web` 🦊🌐
 
 [![Version](https://img.shields.io/npm/v/@kipper/web?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
@@ -10,12 +10,12 @@
 [![Install size](https://packagephobia.com/badge?p=@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
 
-The standalone web-module for the Kipper Compiler.
+The standalone web-module for the Kipper Compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 🦊
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -53,7 +53,7 @@ Simple example of compiling and running Kipper code in a browser:
 	// Compile the code to JavaScript
 	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
 	const result = await compiler.compile(`call print("Hello world!");`, {
-		target: new KipperJS.KipperJavaScriptTarget(),
+		target: new KipperJS.TargetJS(),
 	});
 	const jsCode = result.write();
 
@@ -64,7 +64,16 @@ Simple example of compiling and running Kipper code in a browser:
 
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
+Proper documentation for the Kipper language is available at https://docs.kipper-lang.org!
+
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 

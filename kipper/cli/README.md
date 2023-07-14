@@ -1,13 +1,13 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper CLI - `@kipper/cli`
+# Kipper CLI - `@kipper/cli` 🦊🖥️
 
-The Kipper command line interface (CLI) to interact with the Kipper compiler.
+The Kipper command line interface (CLI) to interact with the Kipper compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -188,6 +188,15 @@ USAGE
 
 _See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.2/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
+
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 

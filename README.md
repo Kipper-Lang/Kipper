@@ -101,7 +101,7 @@ Simple example of compiling and running Kipper code in a browser:
 	// Compile the code to JavaScript
 	// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
 	const result = await compiler.compile(`call print("Hello world!");`, {
-		target: new KipperJS.KipperJavaScriptTarget(),
+		target: new KipperJS.TargetJS(),
 	});
 	const jsCode = result.write();
 
@@ -110,7 +110,7 @@ Simple example of compiling and running Kipper code in a browser:
 </script>
 ```
 
-### Locally using Node.js and the CLI 🦊🖥️
+### Locally using Node.js with `@kipper/cli` 🦊🖥️
 
 This is to recommend way to use Kipper if you want to dive deeper into Kipper, as it allows you to locally use and run
 kipper, without depending on a browser.
@@ -132,7 +132,7 @@ console and file-interactions, which are not supported inside a browser.
 
 For more info go to the [`@kipper/cli` README](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
 
-### Locally in your own code as a package 🦊⌨️
+### Locally in your own code with `@kipper/core` 🦊⌨️
 
 This is the recommended way if you intend to use kipper in a workflow or write code yourself to manage
 the compiler. This also allows for special handling of logging and customising the compilation process.
