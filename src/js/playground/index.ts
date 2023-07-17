@@ -31,31 +31,31 @@ function setEditorAndConsoleSizes(): void {
     // Set editor size
     // - Subtract 2rem for the height due to an inner padding of 1rem
     // - Unset the width as it will automatically fill up the available space
-    codeEditor.style.height = `${interactiveCodeEditor.clientHeight - playgroundOptionMenu.clientHeight}px`;
+    codeEditor.style.height = `${interactiveCodeEditor.offsetHeight - playgroundOptionMenu.offsetHeight}px`;
 
-    codeTextAreaHighlightField.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
+    codeTextAreaHighlightField.style.height = `${codeEditor.offsetHeight - 2 * rem}px`;
     codeTextAreaHighlightField.style.width = undefined;
-    codeTextArea.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
+    codeTextArea.style.height = `${codeEditor.offsetHeight - 2 * rem}px`;
     codeTextArea.style.width = undefined;
 
     // Set console size
     // - Subtract 2rem for the height due to an inner padding of 1rem
-    shellOutputResult.style.height = `${shellOutput.clientHeight - 2 * rem}px}`;
+    shellOutputResult.style.height = `${shellOutput.offsetHeight - 2 * rem}px}`;
     shellOutputResult.style.width = undefined;
   } else {
     // -- Large screen configuration --
     // Set editor size
     // - Subtract 2rem for the height due to an inner padding of 1rem
     // - Subtract 4rem for the width due to an inner padding of 3rem + 1rem
-    codeTextAreaHighlightField.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
-    codeTextAreaHighlightField.style.width = `${codeEditor.clientWidth - 4 * rem}px`;
-    codeTextArea.style.height = `${codeEditor.clientHeight - 2 * rem}px`;
-    codeTextArea.style.width = `${codeEditor.clientWidth - 4 * rem}px`;
+    codeTextAreaHighlightField.style.height = `${codeEditor.offsetHeight - 2 * rem}px`;
+    codeTextAreaHighlightField.style.width = `${codeEditor.offsetWidth - 4 * rem}px`;
+    codeTextArea.style.height = `${codeEditor.offsetHeight - 2 * rem}px`;
+    codeTextArea.style.width = `${codeEditor.offsetWidth - 4 * rem}px`;
 
     // Set console size
     // - Subtracts 2rem due to an inner padding of 1rem
-    shellOutputResult.style.height = `${shellOutput.clientHeight - 2 * rem}px`;
-    shellOutputResult.style.width = `${shellOutput.clientWidth - 2 * rem}px`;
+    shellOutputResult.style.height = `${shellOutput.offsetHeight - 2 * rem}px`;
+    shellOutputResult.style.width = `${shellOutput.offsetWidth - 2 * rem}px`;
   }
 
   console.log(`REM: ${rem}`);
