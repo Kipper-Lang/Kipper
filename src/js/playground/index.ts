@@ -68,9 +68,9 @@ function setEditorAndConsoleSizes(): void {
     // - Subtract 2rem for the height due to an inner padding of 1rem
     // - Subtract 4rem for the width due to an inner padding of 3rem + 1rem
     codeTextAreaHighlightField.style.height = `${codeEditor.offsetHeight - 2 * rem + scrollBarWidth}px`;
-    codeTextAreaHighlightField.style.width = `${codeEditor.offsetWidth - 4 * rem}px`;
+    codeTextAreaHighlightField.style.width = `${codeEditor.offsetWidth - 4 * rem - scrollBarWidth}px`;
     codeTextArea.style.height = `${codeEditor.offsetHeight - 2 * rem + scrollBarWidth}px`;
-    codeTextArea.style.width = `${codeEditor.offsetWidth - 4 * rem}px`;
+    codeTextArea.style.width = `${codeEditor.offsetWidth - 4 * rem - scrollBarWidth}px`;
 
     // Set console size
     // - Subtracts 2rem due to an inner padding of 1rem
@@ -84,6 +84,10 @@ function setEditorAndConsoleSizes(): void {
   console.log(`Code Editor Highlight Field: ${codeTextAreaHighlightField.offsetWidth}x${codeTextAreaHighlightField.offsetHeight}`);
   console.log(`Shell Output: ${shellOutput.offsetWidth}x${shellOutput.offsetHeight}`);
   console.log(`Shell Output Result: ${shellOutputResult.offsetWidth}x${shellOutputResult.offsetHeight}`);
+
+  // After the initial setup, call the function again to let the DOM update (allows for all final sizes to be taken
+  // into account - Not the cleanest solution, but it works)
+  setTimeout(setEditorAndConsoleSizes, 10);
 }
 
 // Properly configure the sizes of the items in the browser window. This should set every item relative to the maximum
