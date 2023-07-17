@@ -84,15 +84,19 @@ function setEditorAndConsoleSizes(): void {
   console.log(`Code Editor Highlight Field: ${codeTextAreaHighlightField.offsetWidth}x${codeTextAreaHighlightField.offsetHeight}`);
   console.log(`Shell Output: ${shellOutput.offsetWidth}x${shellOutput.offsetHeight}`);
   console.log(`Shell Output Result: ${shellOutputResult.offsetWidth}x${shellOutputResult.offsetHeight}`);
-
-  // After the initial setup, call the function again to let the DOM in the meantime update (allows for all final sizes
-  // to be taken into account - Not the cleanest solution, but it works)
-  setTimeout(setEditorAndConsoleSizes, 10);
 }
 
 // Properly configure the sizes of the items in the browser window. This should set every item relative to the maximum
 // possible space available.
-window.addEventListener("DOMContentLoaded", setEditorAndConsoleSizes);
+window.addEventListener(
+  "DOMContentLoaded", async () => {
+    await setEditorAndConsoleSizes();
+
+    // After the initial setup, call the function again to let the DOM in the meantime update (allows for all final
+    // sizes to be taken into account - Not the cleanest solution, but it works)
+    setTimeout(setEditorAndConsoleSizes, 10);
+  }
+);
 window.addEventListener("resize", setEditorAndConsoleSizes);
 
 // Initialize the editor, console and runner
