@@ -94,7 +94,7 @@
     /* The entire code entire window -> parent of the label and textarea */
     #code-editor {
       display: flex;
-      flex-grow: 1;
+      flex-grow: 0;
       min-width: 0;
       min-height: 0;
 
