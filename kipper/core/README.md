@@ -1,6 +1,6 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper Core Package - `@kipper/core`
+# Kipper Core Package - `@kipper/core` 🦊✨
 
 [![Version](https://img.shields.io/npm/v/@kipper/core?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
@@ -10,12 +10,12 @@
 [![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 
-The core module for Kipper, which contains the primary language and compiler.
+The core module for Kipper, which contains the primary language and compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -50,7 +50,7 @@ To use Kipper you have three options:
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
 - Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.
 
-### In a browser
+### In a browser 🦊🌐
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.js` file, which
 provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
@@ -76,7 +76,7 @@ Simple example of compiling and running Kipper code in a browser:
 </script>
 ```
 
-### Locally using Node.js with `@kipper/cli`
+### Locally using Node.js with `@kipper/cli` 🦊🖥️
 
 This is to recommend way to use Kipper if you want to dive deeper into Kipper, as it allows you to locally use and run
 kipper, without depending on a browser.
@@ -98,7 +98,7 @@ console and file-interactions, which are not supported inside a browser.
 
 For more info go to the [`@kipper/cli` README](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
 
-### Locally in your own code as a package
+### Locally in your own code with `@kipper/core` 🦊⌨️
 
 This is the recommended way if you intend to use kipper in a workflow or write code yourself to manage
 the compiler. This also allows for special handling of logging and customising the compilation process.
@@ -144,6 +144,15 @@ Simple example of using the Kipper Compiler in Node.js:
   	eval(jsCode);
   });
   ```
+
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 

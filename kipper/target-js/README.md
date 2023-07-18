@@ -1,6 +1,6 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper JavaScript Target - `@kipper/target-js`
+# Kipper JavaScript Target - `@kipper/target-js` 🦊⌨️
 
 [![Version](https://img.shields.io/npm/v/@kipper/target-js?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
 [![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
@@ -10,7 +10,7 @@
 [![Install size](https://packagephobia.com/badge?p=@kipper/target-js)](https://packagephobia.com/result?p=@kipper/target-js)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/target-js)](https://packagephobia.com/result?p=@kipper/target-js)
 
-The JavaScript target for the Kipper Compiler.
+The JavaScript target for the Kipper Compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
@@ -41,7 +41,15 @@ If you are using `pnpm` or `yarn`, use `pnpm i @kipper/target-js` or `yarn add @
 
 ## Usage
 
-Simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for example:
+If you are using `@kipper/cli` then this package is automatically installed and compiling to JavaScript can be done
+using the `--target=js` flag, for example:
+
+```bash
+kipper compile example-script.kip --target=js
+```
+
+Otherwise, simply import the target and specify it in the `compilerOptions` field of `KipperCompiler.compile()`, for
+example:
 
 - JavaScript (CommonJS):
 
@@ -83,16 +91,18 @@ Simply import the target and specify it in the `compilerOptions` field of `Kippe
   });
   ```
 
-If you are using `@kipper/cli` then this package is automatically installed and compiling to JavaScript can be done
-using the `--target=js` flag, for example:
-
-```bash
-kipper compile example-script.kip --target=js
-```
-
 ## Kipper Docs
 
-Proper documentation for the Kipper language is available [here](https://kipper-lang.org/docs)!
+Proper documentation for the Kipper language is available at https://docs.kipper-lang.org!
+
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 

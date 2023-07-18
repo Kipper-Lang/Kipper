@@ -173,7 +173,7 @@ export class KipperError extends Error {
 
 	/**
 	 * Returns the program ctx containing the metadata of the program compilation in which the error occurred.
-	 * @since 0.11.0
+	 * @since 0.10.2
 	 */
 	public get programCtx(): KipperProgramContext | undefined {
 		return this.tracebackData.errorNode?.programCtx;
