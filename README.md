@@ -77,7 +77,7 @@ To use Kipper you have three options:
 - Run it using the NodeJS CLI [`@kipper/cli`](https://www.npmjs.com/package/@kipper/cli).
 - Import the package [`@kipper/core`](https://www.npmjs.com/package/@kipper/core) in NodeJS or Deno.
 
-### In a browser with `@kipper/web`🦊🌐
+### In a browser with `@kipper/web` 🦊🌐
 
 For running Kipper in the browser, you will have to include the `kipper-standalone.js` file, which
 provides the Kipper Compiler for the browser and enables the compilation of Kipper code to JavaScript.
