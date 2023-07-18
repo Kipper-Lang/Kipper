@@ -235,8 +235,8 @@
         padding: 0;
         width: inherit;
 
-        /* Scroll on overflowing content */
-        overflow: scroll;
+        /* Scroll on overflowing content - Hide if not necessary */
+        overflow: auto;
 
         & > #shell-sidebar-highlight-field-content {
           border-radius: 0;
