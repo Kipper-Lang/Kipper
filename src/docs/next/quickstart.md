@@ -19,14 +19,14 @@ The Kipper Compiler supports multiple environments of which the most common ones
 <div class="red-highlight-text">
   <h3>Opt-in for development versions</h3>
   <p>
-  	If you wish to use the newest features of Kipper, you can instead of installing the <code>latest</code> tag install
-		<code>next</code>, which includes new features not yet available on the stable branch. Note though that they are
-		usually experimental or not fully tested, so edge cases may not work or the <code>next<code> tag docs may be incomplete.
-	</p>
-	<p>
-		If you are using <code>next</code> releases or also the docs, we greatly appreciate any feedback or help! Kipper is 
-		open-source and free for anyone, help us make it even better! 🦊❤️
-	</p>
+    If you wish to use the newest features of Kipper, you can instead of installing the <code>latest</code> tag install
+    <code>next</code>, which includes features not yet available in the stable release. Note though that they are usually
+    experimental and not fully tested, so edge cases may not work or documentation may be incomplete.
+  </p>
+  <p>
+    If you are using <code>next</code> releases or also the <code>next</code> docs, we greatly appreciate any feedback or help!
+    Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
+  </p>
 </div>
 
 ## Setting up Kipper for the Browser
