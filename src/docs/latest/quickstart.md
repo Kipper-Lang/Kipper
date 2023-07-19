@@ -16,10 +16,23 @@ The Kipper Compiler supports multiple environments of which the most common ones
 2. Running the Kipper Compiler using the `@kipper/cli` package in a terminal. [-> `Setting up Kipper for the Terminal`](#setting-up-kipper-for-the-terminal)
 3. Including the `@kipper/core` package into a Node.js program. [-> `Importing Kipper as a module`](#importing-kipper-as-a-module)
 
+<div class="red-highlight-text">
+  <h3>Opt-in for development versions</h3>
+  <p>
+  	If you wish to use the newest features of Kipper, you can instead of installing the <code>latest</code> tag install
+		<code>next</code>, which includes new features not yet available on the stable branch. Note though that they are
+		usually experimental or not fully tested, so edge cases may not work or the <code>next<code> tag docs may be incomplete.
+	</p>
+	<p>
+		If you are using <code>next</code> releases or also the docs, we greatly appreciate any feedback or help! Kipper is 
+		open-source and free for anyone, help us make it even better! 🦊❤️
+	</p>
+</div>
+
 ## Setting up Kipper for the Browser
 
 For running Kipper in the browser, you will have to include the primary `kipper-standalone.min.js` file, which
-provides the kipper source code compatible for _modern_ browsers.
+provides the Kipper source code compatible for _relatively modern_ browsers.
 
 View the [support list](./supported-platforms.html) to make sure your browser is supported.
 
@@ -114,7 +127,7 @@ allow you to run the Kipper Compiler from the terminal.
 
 For setting up a project with a specific Kipper version you will have to add the `@kipper/cli` package to your
 `package.json` file. If then installed by your local package manager, the executable `kipper` will be available in your
-project's work-directory, but not anywhere else.
+project's work directory, but not anywhere else.
 
 Running the following command will install the latest version of Kipper for your project:
 
@@ -137,7 +150,7 @@ Example `package.json`:
 	"keywords": ["kipper", "example"],
 	"license": "GPL-3.0",
 	"dependencies": {
-		"@kipper/cli": "latest" // <-- Add this line to your dependencies (latest version or specific version)
+		"@kipper/cli": "latest" // <-- Add this line to your dependencies (choose latest, next or a specific version)
 	}
 }
 ```
@@ -175,6 +188,27 @@ using `npm`, you can run the following code:
 npx kipper
 ```
 
+<div class="red-highlight-text">
+	<h3>Important</h3>
+	<p>
+		Note that some shells may not recognise the `kipper` command even after reloading your shell and/or path variable. In that
+		case please stick to your package manager and invoke `kipper` that way, so for example always use <code>npx kipper</code>
+		instead of just <code>kipper</code>
+	</p>
+</div>
+
+Also, make sure to try and run a Kipper file after the installation to ensure the Kipper compiler and Node runtime are fully working:
+
+- Use `run` and directly execute:
+```bash
+kipper run main.kip
+```
+- Or use `compile` and invoke `node` (or `ts-node` if the target is `ts`)
+```bash
+kipper compile main.kip --target=js
+node ./build/main.js
+```
+
 ## Importing Kipper as a module
 
 To set up Kipper for your personal code, simply add <code>@kipper/core</code> or <code>kipper</code> (also includes the
@@ -210,7 +244,7 @@ const fs = require("fs").promises;
 const kipper = require("@kipper/core");
 const kipperJS = require("@kipper/target-js");
 
-const path = "INSERT_PATH";
+const path = "YOUR_FILE.kip";
 fs.readFile(path, "utf8").then(async (fileContent) => {
     // Define your own logger and compiler, which will handle the compilation
     const logger = new kipper.KipperLogger((level, msg) => {
@@ -237,7 +271,7 @@ import { promises as fs } from "fs";
 import * as kipper from "@kipper/core";
 import * as kipperJS from "@kipper/target-js";
 
-const path = "INSERT_PATH";
+const path = "YOUR_FILE.kip";
 fs.readFile(path, "utf8" as BufferEncoding).then(async (fileContent: string) => {
     // Define your own logger and compiler, which will handle the compilation
     const logger = new kipper.KipperLogger((level, msg) => {
