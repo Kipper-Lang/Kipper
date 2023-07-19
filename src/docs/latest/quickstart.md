@@ -224,7 +224,7 @@ Example package.json:
 	"keywords": ["kipper", "example"],
 	"license": "GPL-3.0",
 	"dependencies": {
-		"@kipper/core": "latest"
+		"@kipper/core": "latest" // <-- Add this line to your dependencies (choose latest, next or a specific version)
 	}
 }
 ```
