@@ -32,7 +32,7 @@ var example1: num = func2(); // -> 10
 ### Multiple chained function calls
 
 ```kipper
-// ✓ Multiple function calls with the end-result being assigned to a variable
+// ✓ Multiple function calls with the end result being assigned to a variable
 def func3() -> num { return 25; }
 var example2: num = func2() + func2(); // -> 50
 ```
