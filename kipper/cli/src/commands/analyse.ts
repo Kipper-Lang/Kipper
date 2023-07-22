@@ -71,7 +71,11 @@ export default class Analyse extends Command {
 		const startTime: number = new Date().getTime();
 
 		// Actual processing by the compiler
-		await compiler.syntaxAnalyse(config.stream);
+		try {
+			await compiler.syntaxAnalyse(config.stream);
+		} catch (e) {
+			return; // Ignore the error thrown by the compiler (the logger already logged it)
+		}
 
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;
