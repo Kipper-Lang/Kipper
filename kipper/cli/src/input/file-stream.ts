@@ -3,11 +3,11 @@
  * stream functionality from the core kipper module.
  * @since 0.0.3
  */
-
-import { KipperParseStream } from "@kipper/core";
 import { constants, promises as fs } from "fs";
 import * as path from "path";
-import { KipperFileAccessError, KipperUnsupportedEncodingError } from "./errors";
+import { KipperParseStream } from "@kipper/core";
+import { KipperFileAccessError, KipperInvalidInputError, KipperUnsupportedEncodingError } from "../errors";
+import { OutputArgs, OutputFlags } from "@oclif/parser/lib/parse";
 
 /**
  * Valid encodings that Kipper supports.
@@ -33,6 +33,25 @@ export function verifyEncoding(encoding: string): KipperEncoding {
 		return kipperEncoding;
 	} else {
 		throw new KipperUnsupportedEncodingError(encoding);
+	}
+}
+
+/**
+ * Evaluates the file or stream provided by the command arguments or flags.
+ * @param args The arguments that were passed to the command.
+ * @param flags The flags that were passed to the command.
+ * @since 0.10.0
+ */
+export async function getFile(
+	args: OutputArgs,
+	flags: OutputFlags<any>,
+): Promise<KipperParseFile | KipperParseStream> {
+	if (args.stream) {
+		return await KipperParseFile.fromFile(args.stream, flags["encoding"] as KipperEncoding);
+	} else if (flags["string-code"]) {
+		return new KipperParseStream({ stringContent: flags["string-code"] });
+	} else {
+		throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated");
 	}
 }
 

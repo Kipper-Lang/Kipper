@@ -2,20 +2,27 @@
  * 'analyse' command for analysing the syntax of a file.
  * @since 0.0.5
  */
+import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperError, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
-import { KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
-import { CLIEmitHandler, defaultCliLogger } from "../logger";
-import { IFlag } from "@oclif/command/lib/flags";
-import { getFile } from "../compile";
+import {
+	CompileConfig,
+	KipperCompiler,
+	KipperCompileTarget,
+	KipperLogger,
+	KipperParseStream,
+	LogLevel
+} from "@kipper/core";
+import { CLIEmitHandler } from "../logger";
+import { KipperEncodings, KipperParseFile, getFile, verifyEncoding, getTarget, KipperEncoding } from "../input/";
+import { prettifiedErrors } from "../decorators";
 
 export default class Analyse extends Command {
-	static override description = "Analyse a Kipper file and validate its syntax and semantic integrity.";
+	static override description: string = "Analyse a Kipper file and validate its syntax and semantic integrity.";
 
 	// TODO! Add examples when the command moves out of development
-	static override examples = [];
+	static override examples: Array<string> = [];
 
-	static override args = [
+	static override args: args.Input = [
 		{
 			name: "file",
 			required: false,
@@ -23,7 +30,7 @@ export default class Analyse extends Command {
 		},
 	];
 
-	static override flags: Record<string, IFlag<any>> = {
+	static override flags: flags.Input<any> = {
 		encoding: flags.string({
 			char: "e",
 			default: "utf8",
@@ -42,37 +49,41 @@ export default class Analyse extends Command {
 		}),
 	};
 
-	public async run() {
+	/**
+	 * Gets the configuration for the invocation of this command.
+	 * @private
+	 */
+	private async getRunConfig() {
 		const { args, flags } = this.parse(Analyse);
-		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
+
+		// Compilation-required
+		const stream: KipperParseStream = await getFile(args, flags);
+		const target: KipperCompileTarget = await getTarget(flags["target"]);
+
+		return {
+			args,
+			flags,
+			config: {
+				stream,
+				target,
+			}
+		};
+	}
+
+	@prettifiedErrors<Analyse>()
+	public async run() {
+		const { flags, config } = await this.getRunConfig();
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
-
-		// Fetch the file
-		let file: KipperParseFile | KipperParseStream = await getFile(args, flags);
-
-		// Compilation configuration
-		const parseStream = new KipperParseStream({
-			name: file.name,
-			filePath: file instanceof KipperParseFile ? file.absolutePath : file.filePath,
-			charStream: file.charStream,
-		});
 
 		// Start timer for processing
 		const startTime: number = new Date().getTime();
 
-		// Analyse the file
-		try {
-			await compiler.syntaxAnalyse(parseStream);
+		// Actual processing by the compiler
+		await compiler.syntaxAnalyse(config.stream);
 
-			// Finished!
-			const duration: number = (new Date().getTime() - startTime) / 1000;
-			await logger.info(`Finished code analysis in ${duration}s.`);
-		} catch (e) {
-			// In case the error is of type KipperError, exit the program, as the logger should have already handled the
-			// output of the error and traceback.
-			if (!(e instanceof KipperError)) {
-				defaultCliLogger.fatal(`Encountered unexpected internal error: \n${(<Error>e).stack}`);
-			}
-		}
+		// Finished!
+		const duration: number = (new Date().getTime() - startTime) / 1000;
+		await logger.info(`Done in ${duration}s.`);
 	}
 }

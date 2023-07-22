@@ -2,7 +2,7 @@
  * CLI Logger implementing the core logger from '@kipper/core'
  * @since 0.0.6
  */
-
+import { flags } from "@oclif/command";
 import { LogLevel } from "@kipper/core";
 import { ILogObject, ISettingsParam, Logger } from "tslog";
 

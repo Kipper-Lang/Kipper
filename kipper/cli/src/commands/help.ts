@@ -4,8 +4,13 @@
  */
 import HelpCommand from "@oclif/plugin-help/lib/commands/help";
 
+/**
+ * This class is only there so oclif auto-generates docs for the help command, which should be visible in the README.md.
+ *
+ * Note that there is another Help class in the root module of '@kipper/cli'.
+ */
 export default class Help extends HelpCommand {
-	static override description = "Display help for the Kipper CLI.";
+	static override description: string = "Display help for the Kipper CLI.";
 	static override args = HelpCommand.args;
 	static override flags = HelpCommand.flags;
 
