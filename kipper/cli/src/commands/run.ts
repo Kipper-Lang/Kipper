@@ -5,6 +5,7 @@
 import { Command, flags } from "@oclif/command";
 import {
 	defaultOptimisationOptions,
+	EvaluatedCompileConfig,
 	KipperCompiler,
 	KipperCompileResult,
 	KipperCompileTarget,
@@ -77,17 +78,18 @@ export default class Run extends Command {
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
-			default: <boolean>defaultOptimisationOptions.optimiseInternals,
+			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
-			default: <boolean>defaultOptimisationOptions.optimiseInternals,
+			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		warnings: flags.boolean({
+			// This is different to the compile config field 'warnings', since this is purely about the CLI output
 			char: "w",
 			default: false, // Log warnings ONLY if the user intends to do so
 			description: "Show warnings that were emitted during the compilation.",
@@ -99,12 +101,12 @@ export default class Run extends Command {
 			allowNo: true,
 		}),
 		recover: flags.boolean({
-			default: true,
+			default: EvaluatedCompileConfig.defaults.recover,
 			description: "Recover from compiler errors and display all detected compiler errors.",
 			allowNo: true,
 		}),
 		"abort-on-first-error": flags.boolean({
-			default: false,
+			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
 			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
 			allowNo: true,
 		}),

@@ -18,6 +18,7 @@ import { Logger } from "tslog";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../file-stream";
 import { getFile, getTarget, writeCompilationResult } from "../compile";
+import { EvaluatedCompileConfig } from "@kipper/core";
 
 export default class Compile extends Command {
 	static override description = "Compile a Kipper program into the specified target language.";
@@ -69,24 +70,24 @@ export default class Compile extends Command {
 			allowNo: true,
 		}),
 		warnings: flags.boolean({
+			// This is different to the compile config field 'warnings', since this is purely about the CLI output
 			char: "w",
 			default: true,
 			description: "Show warnings that were emitted during the compilation.",
 			allowNo: true,
 		}),
 		"log-timestamp": flags.boolean({
-			char: "t",
 			default: false,
 			description: "Show the timestamp of each log message.",
 			allowNo: true,
 		}),
 		recover: flags.boolean({
-			default: true,
+			default: EvaluatedCompileConfig.defaults.recover,
 			description: "Recover from compiler errors and log all detected semantic issues.",
 			allowNo: true,
 		}),
 		"abort-on-first-error": flags.boolean({
-			default: false,
+			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
 			description: "Abort on the first error the compiler encounters.",
 			allowNo: true,
 		}),
