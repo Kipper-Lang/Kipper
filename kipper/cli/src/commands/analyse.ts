@@ -4,16 +4,9 @@
  */
 import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
-import {
-	CompileConfig,
-	KipperCompiler,
-	KipperCompileTarget,
-	KipperLogger,
-	KipperParseStream,
-	LogLevel,
-} from "@kipper/core";
+import { KipperCompiler, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
 import { CLIEmitHandler } from "../logger";
-import { KipperEncodings, KipperParseFile, getFile, verifyEncoding, getTarget, KipperEncoding } from "../input/";
+import { getParseStream, KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";
 
 export default class Analyse extends Command {
@@ -58,14 +51,12 @@ export default class Analyse extends Command {
 
 		// Compilation-required
 		const stream: KipperParseStream = await getFile(args, flags);
-		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
 		return {
 			args,
 			flags,
 			config: {
 				stream,
-				target,
 			},
 		};
 	}
