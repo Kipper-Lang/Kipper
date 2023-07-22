@@ -42,7 +42,7 @@ export function verifyEncoding(encoding: string): KipperEncoding {
  * @param flags The flags that were passed to the command.
  * @since 0.10.0
  */
-export async function getFile(
+export async function getParseStream(
 	args: OutputArgs,
 	flags: OutputFlags<any>,
 ): Promise<KipperParseFile | KipperParseStream> {

@@ -15,11 +15,11 @@ import {
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel,
+	LogLevel
 } from "@kipper/core";
 import { spawn } from "child_process";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { KipperEncoding, KipperEncodings, getFile, getTarget, verifyEncoding } from "../input/";
+import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
 
@@ -122,7 +122,7 @@ export default class Run extends Command {
 		const { args, flags } = this.parse(Run);
 
 		// Compilation-required
-		const stream: KipperParseStream = await getFile(args, flags);
+		const stream: KipperParseStream = await getParseStream(args, flags);
 		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
 		// Output

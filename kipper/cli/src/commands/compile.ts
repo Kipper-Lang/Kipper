@@ -14,10 +14,10 @@ import {
 	KipperCompileTarget,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel,
+	LogLevel
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { KipperEncoding, KipperEncodings, getFile, getTarget, verifyEncoding } from "../input/";
+import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
 
@@ -102,7 +102,7 @@ export default class Compile extends Command {
 		const { args, flags } = this.parse(Compile);
 
 		// Compilation-required
-		const stream: KipperParseStream = await getFile(args, flags);
+		const stream: KipperParseStream = await getParseStream(args, flags);
 		const target: KipperCompileTarget = await getTarget(flags["target"]);
 
 		return {

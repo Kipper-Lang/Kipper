@@ -50,7 +50,7 @@ export default class Analyse extends Command {
 		const { args, flags } = this.parse(Analyse);
 
 		// Compilation-required
-		const stream: KipperParseStream = await getFile(args, flags);
+		const stream: KipperParseStream = await getParseStream(args, flags);
 
 		return {
 			args,
