@@ -5,7 +5,7 @@
 import { Command } from "@oclif/command";
 
 export default class Version extends Command {
-	static override description = "Display the currently installed Kipper version.";
+	static override description: string = "Display the currently installed Kipper version.";
 
 	public async run(): Promise<void> {
 		process.stdout.write(this.config.userAgent + "\n");
