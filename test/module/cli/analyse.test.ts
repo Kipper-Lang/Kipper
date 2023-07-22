@@ -15,7 +15,7 @@ describe("Kipper CLI 'analyse'", () => {
 				expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
 				expect(ctx.stdout).to.contain("Parsing");
 				expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-				expect(ctx.stdout).to.contain("Finished code analysis in");
+				expect(ctx.stdout).to.contain("Done in");
 			});
 
 		test
@@ -42,7 +42,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 
 			test
@@ -53,7 +53,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'main.kip'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 
 			test
@@ -64,7 +64,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'hello-world-utf16.kip'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 		});
 
@@ -78,7 +78,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 
 			test
@@ -89,7 +89,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 
 			test
@@ -100,7 +100,7 @@ describe("Kipper CLI 'analyse'", () => {
 					expect(ctx.stdout).to.contain("Starting syntax check for 'anonymous-script'.");
 					expect(ctx.stdout).to.contain("Parsing");
 					expect(ctx.stdout).to.contain("Finished syntax check successfully.");
-					expect(ctx.stdout).to.contain("Finished code analysis in");
+					expect(ctx.stdout).to.contain("Done in");
 				});
 		});
 	});
