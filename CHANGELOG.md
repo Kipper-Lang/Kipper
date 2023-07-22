@@ -18,29 +18,37 @@ To use development versions of Kipper download the
 
 ### Added
 
-- New modules in `@kipper/cli`:
-  - `input`, which contains all input-related handling functions and classes.
-  - `output`, which contains the output-related handling functions and classes.
-- New decorator `prettifiedErrors` in `@kipper/cli`, which applies standardised error formatting to any thrown error.
-
 ### Changed
 
-- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
-- Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
-  as a suffix anymore.
-- Changed success message of the `kipper analyse` command `Finished code analysis in ...` to `Done in ...`.
-- Renamed `getFile` to `getParseStream`.
-
 ### Fixed
-
-- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
-  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
 
 ### Deprecated
 
 ### Removed
 
 </details>
+
+## [0.10.3] - 2023-07-22
+
+### Added
+
+- New modules in `@kipper/cli`:
+	- `input`, which contains all input-related handling functions and classes.
+	- `output`, which contains the output-related handling functions and classes.
+- New decorator `prettifiedErrors` in `@kipper/cli`, which applies standardised error formatting to any thrown error.
+
+### Changed
+
+- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+- Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
+	as a suffix anymore.
+- Changed success message of the `kipper analyse` command `Finished code analysis in ...` to `Done in ...`.
+- Renamed `getFile` to `getParseStream`.
+
+### Fixed
+
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+	([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
 
 ## [0.10.2] - 2023-06-16
 
@@ -1191,7 +1199,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...HEAD
+[0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...v0.10.3
 [0.10.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
