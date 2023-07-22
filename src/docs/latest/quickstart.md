@@ -165,7 +165,7 @@ npm install -g @kipper/cli
 ```
 
 <article class="important">
-  <h3>Important</h2>
+  <h3>Important</h3>
   <p>
   If possible avoid installing Kipper globally if you intend to use it inside your own projects, as it can cause
   issues with locally installed versions (node project dependencies). For a localised and project-dependent kipper
