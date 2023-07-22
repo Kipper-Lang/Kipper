@@ -64,7 +64,7 @@ export default class Analyse extends Command {
 	@prettifiedErrors<Analyse>()
 	public async run() {
 		const { flags, config } = await this.getRunConfig();
-		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// Start timer for processing
