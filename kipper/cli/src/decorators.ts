@@ -33,11 +33,11 @@ export function prettifiedErrors<TProto extends Command>() {
 				const errConfig: { exit: number } & PrettyPrintableError = {
 					exit: 1,
 					suggestions:
-						internalError || !cliError ?
-							[
-								"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
-								"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
-							]
+						internalError || !cliError
+							? [
+									"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
+										"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
+								]
 							: undefined,
 				};
 

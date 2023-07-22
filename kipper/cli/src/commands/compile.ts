@@ -14,7 +14,7 @@ import {
 	KipperCompileTarget,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
 import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";

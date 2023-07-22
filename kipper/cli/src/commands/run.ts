@@ -15,7 +15,7 @@ import {
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { spawn } from "child_process";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
