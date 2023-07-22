@@ -15,7 +15,7 @@ import {
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { spawn } from "child_process";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
@@ -45,7 +45,7 @@ export default class Run extends Command {
 	static override description: string = "Compile and execute a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
-	static override examples: Array<string>= [];
+	static override examples: Array<string> = [];
 
 	static override args: args.Input = [
 		{
@@ -76,7 +76,7 @@ export default class Run extends Command {
 		}),
 		"string-code": flags.string({
 			char: "s",
-			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter."
+			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
@@ -146,7 +146,7 @@ export default class Run extends Command {
 					recover: flags["recover"],
 					abortOnFirstError: flags["abort-on-first-error"],
 				} as CompileConfig,
-			}
+			},
 		};
 	}
 
@@ -183,13 +183,10 @@ export default class Run extends Command {
 		let jsProgram: string;
 		if (config.target.targetName === "typescript") {
 			// Also do the compilation now with the JavaScript target
-			let jsProgramCtx = await compiler.compile(
-				config.stream,
-				{
-					...config.compilerOptions,
-					target: getTarget("js"),
-				}
-			);
+			let jsProgramCtx = await compiler.compile(config.stream, {
+				...config.compilerOptions,
+				target: getTarget("js"),
+			});
 			jsProgram = jsProgramCtx.write();
 		} else {
 			jsProgram = result.write();

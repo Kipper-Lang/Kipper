@@ -17,7 +17,7 @@ export function prettifiedErrors<TProto extends Command>() {
 	return function (target: TProto, propertyKey: keyof TProto, descriptor: PropertyDescriptor) {
 		const originalFunc: Function = descriptor.value;
 
-		const func = async function(this: Command): Promise<void> {
+		const func = async function (this: Command): Promise<void> {
 			try {
 				await originalFunc.call(this);
 			} catch (error) {
@@ -25,24 +25,26 @@ export function prettifiedErrors<TProto extends Command>() {
 				const internalError = error instanceof KipperInternalError;
 
 				// Error configuration
-				const name: string = cliError ?
-					"Error"
-					: internalError ? "Unexpected Internal Error" : "Unexpected CLI Error";
+				const name: string = cliError ? "Error" : internalError ? "Unexpected Internal Error" : "Unexpected CLI Error";
 				const msg: string =
-					error && typeof error === "object" && "message" in error && typeof error.message === "string" ?
-						error.message
+					error && typeof error === "object" && "message" in error && typeof error.message === "string"
+						? error.message
 						: String(error);
-				const errConfig: {exit: number} & PrettyPrintableError = {
+				const errConfig: { exit: number } & PrettyPrintableError = {
 					exit: 1,
-					suggestions: internalError || !cliError ?
-						["Ensure no invalid types or data were passed to module functions or classes. Otherwise report the" +
-						" issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️"]
-						: undefined
+					suggestions:
+						internalError || !cliError
+							? [
+									"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the" +
+										" issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
+								]
+							: undefined,
 				};
 
 				try {
 					this.error(msg, errConfig);
-				} catch (e) { // Will always error
+				} catch (e) {
+					// Will always error
 					(<OclifCLIError>e).name = name;
 					throw e; // Rethrowing it -> Oclif will pretty print it
 				}

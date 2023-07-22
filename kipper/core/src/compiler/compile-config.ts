@@ -217,7 +217,7 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 * @since 0.10.0
 	 * @private
 	 */
-	private getConfigOption<T>(option: keyof (typeof EvaluatedCompileConfig)["defaults"], rawConfig: CompileConfig): T {
+	private getConfigOption<T>(option: keyof typeof EvaluatedCompileConfig["defaults"], rawConfig: CompileConfig): T {
 		if (rawConfig[option] !== undefined) {
 			return rawConfig[option] as T;
 		}

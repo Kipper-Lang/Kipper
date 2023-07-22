@@ -19,7 +19,7 @@ To use development versions of Kipper download the
 ### Added
 
 - New modules in `@kipper/cli`:
-	- `input`, which contains all input-related handling functions and classes.
+  - `input`, which contains all input-related handling functions and classes.
   - `output`, which contains the output-related handling functions and classes.
 - New decorator `prettifiedErrors` in `@kipper/cli`, which applies standardised error formatting to any thrown error.
 
@@ -27,12 +27,12 @@ To use development versions of Kipper download the
 
 - Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
 - Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
-	as a suffix anymore. 
+  as a suffix anymore.
 
 ### Fixed
 
 - CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
-	([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
+  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
 
 ### Deprecated
 

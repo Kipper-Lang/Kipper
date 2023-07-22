@@ -46,8 +46,8 @@ export async function getFile(
 	args: OutputArgs,
 	flags: OutputFlags<any>,
 ): Promise<KipperParseFile | KipperParseStream> {
-	if (args.stream) {
-		return await KipperParseFile.fromFile(args.stream, flags["encoding"] as KipperEncoding);
+	if (args.file) {
+		return await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
 	} else if (flags["string-code"]) {
 		return new KipperParseStream({ stringContent: flags["string-code"] });
 	} else {

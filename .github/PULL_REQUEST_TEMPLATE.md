@@ -1,4 +1,4 @@
-<!-- 
+<!--
 PLEASE READ THROUGH THE DESCRIPTIONS AND UNCOMMENT ALL ITEMS THAT APPLY!
 
 COMMENTS ARE MARKED BY A STARTING ARROW AND ENDING ARROW, LIKE IN LINES 1 AND 5.
@@ -25,7 +25,7 @@ COMMENTS ARE MARKED BY A STARTING ARROW AND ENDING ARROW, LIKE IN LINES 1 AND 5.
 <!-- REPLACE ME -->
 
 <!-- Uncomment if this closes an issue:
-Closes #INSERT_NR 
+Closes #INSERT_NR
 -->
 
 ## List of Changes
@@ -73,8 +73,8 @@ None.
 <!-- Include other issues and PRs related to this if any exist.  Use this format: - [ ] #ISSUE_OR_PR -->
 
 <!-- Uncomment if this PR has any related issues, discussions or PRs (Replace space with 'x' if the related item has been closed!):
-- [ ] #INSERT_NR 
-- [ ] #INSERT_NR 
+- [ ] #INSERT_NR
+- [ ] #INSERT_NR
 - [ ] ...
 -->
 

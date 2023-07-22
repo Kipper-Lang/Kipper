@@ -14,7 +14,7 @@ import {
 	KipperCompileTarget,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
 import { KipperEncoding, KipperEncodings, getFile, getTarget, verifyEncoding } from "../input/";
@@ -120,7 +120,7 @@ export default class Compile extends Command {
 					recover: flags["recover"],
 					abortOnFirstError: flags["abort-on-first-error"],
 				} as CompileConfig,
-			}
+			},
 		};
 	}
 

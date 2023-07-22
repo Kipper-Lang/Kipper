@@ -10,7 +10,7 @@ import {
 	KipperCompileTarget,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler } from "../logger";
 import { KipperEncodings, KipperParseFile, getFile, verifyEncoding, getTarget, KipperEncoding } from "../input/";
@@ -66,7 +66,7 @@ export default class Analyse extends Command {
 			config: {
 				stream,
 				target,
-			}
+			},
 		};
 	}
 
