@@ -196,7 +196,7 @@ export class KipperConfigError extends KipperError {
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`${msg} - Report this bug to the developer using the traceback!`);
+		super(msg);
 		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
 	}
 }
