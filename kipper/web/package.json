@@ -1,7 +1,7 @@
 {
   "name": "@kipper/web",
   "description": "The standalone web-module for the Kipper compiler 🦊",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "devDependencies": {
     "@kipper/target-js": "workspace:~",

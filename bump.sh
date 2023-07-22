@@ -44,8 +44,6 @@ else
   git commit -a -m "Release $1"
   git tag -a "v$1" -m "Release $1"
 
-  git commit -a -m "Release 0.10.2";git tag -a "v0.10.2" -m "Release 0.10.2"
-
   # Update lock files
   echo "-- Updating lock files"
   pnpm install
