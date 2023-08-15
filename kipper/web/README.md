@@ -9,6 +9,7 @@
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
+[![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 The standalone web-module for the Kipper Compiler. 🦊✨
 
