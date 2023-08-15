@@ -20,9 +20,19 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Moved function `executeKipperProgram` to `Run` as private function.
+- Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
+- Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
+  a `KipperCompileResult` is also returned for syntax errors (where it has no value).
+
 ### Fixed
 
+- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
+  multiple bugs where errors where reported as "Unexpected CLI Error".
+
 ### Deprecated
+
+- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
 
 ### Removed
 
