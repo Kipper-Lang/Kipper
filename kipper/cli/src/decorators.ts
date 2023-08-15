@@ -41,6 +41,8 @@ export function prettifiedErrors<TProto extends Command>() {
 							: undefined,
 				};
 
+				// 'Command.error' (i.e. 'this.error') will throw the CLI error we want, which means we need to catch it and
+				// modify it, so we have the correct result we want
 				try {
 					this.error(msg, errConfig);
 				} catch (e) {

@@ -12,6 +12,7 @@ import {
 	KipperCompiler,
 	KipperCompileResult,
 	KipperCompileTarget,
+	KipperError,
 	KipperLogger,
 	KipperParseStream,
 	LogLevel,
@@ -87,6 +88,10 @@ export default class Compile extends Command {
 			description: "Recover from compiler errors and log all detected semantic issues.",
 			allowNo: true,
 		}),
+		/**
+		 * TODO! Remove this flag
+		 * @deprecated
+		 */
 		"abort-on-first-error": flags.boolean({
 			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
 			description: "Abort on the first error the compiler encounters.",
@@ -139,7 +144,17 @@ export default class Compile extends Command {
 		const startTime: number = new Date().getTime();
 
 		// Compile the file
-		let result: KipperCompileResult = await compiler.compile(config.stream, config.compilerOptions);
+		let result: KipperCompileResult;
+		try {
+			result = await compiler.compile(config.stream, config.compilerOptions);
+		} catch (e) {
+			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
+				// Ignore the error thrown by the compiler (the logger already logged it)
+				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
+				return;
+			}
+			throw e;
+		}
 
 		// If the compilation failed, abort
 		if (!result.success) {

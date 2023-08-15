@@ -43,7 +43,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.10.3 linux-x64 node-v20.3.1
+@kipper/cli/0.10.4 linux-x64 node-v20.3.1
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -80,7 +80,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.3/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.4/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -119,7 +119,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.3/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.4/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -136,7 +136,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.3/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.4/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run [FILE]`
 
@@ -175,7 +175,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.3/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.4/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -186,7 +186,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.3/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.10.4/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper
