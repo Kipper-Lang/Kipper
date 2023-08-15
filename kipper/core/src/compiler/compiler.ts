@@ -2,85 +2,15 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
-import type { TranslatedCodeLine } from "./const";
 import { InternalFunction, kipperInternalBuiltInFunctions } from "./runtime-built-ins";
 import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
-import { KipperError } from "../errors";
+import { KipperError, KipperSyntaxError } from "../errors";
 import { CompileConfig, EvaluatedCompileConfig } from "./compile-config";
-
-/**
- * The result of a {@link KipperCompiler} compilation.
- * @since 0.0.3
- */
-export class KipperCompileResult {
-	public readonly _programCtx: KipperProgramContext;
-	public readonly _result: Array<TranslatedCodeLine> | undefined;
-
-	constructor(fileCtx: KipperProgramContext, result: Array<TranslatedCodeLine> | undefined) {
-		this._programCtx = fileCtx;
-		this._result = result;
-	}
-
-	/**
-	 * The program context for the compilation run, which stores the content of the program and meta-data.
-	 */
-	public get programCtx(): KipperProgramContext {
-		return this._programCtx;
-	}
-
-	/**
-	 * The result of the compilation in TypeScript form (every line is represented as an entry in the array).
-	 */
-	public get result(): Array<TranslatedCodeLine> | undefined {
-		return this._result;
-	}
-
-	/**
-	 * Returns true, if the compilation was successful without errors.
-	 * @since 0.10.0
-	 */
-	public get success(): boolean {
-		return Boolean(this.result);
-	}
-
-	/**
-	 * The list of warnings that were raised during the compilation process.
-	 *
-	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to
-	 * be problematic, but which do not prevent the program from being compiled.
-	 * @since 0.9.0
-	 */
-	public get warnings(): Array<KipperError> {
-		return this.programCtx.warnings;
-	}
-
-	/**
-	 * The list of errors that were raised during the compilation process.
-	 *
-	 * Errors are fatal errors, which are raised when the compiler encounters a situation that it considers to be
-	 * problematic, which prevents it from compiling the program.
-	 * @since 0.10.0
-	 */
-	public get errors(): Array<KipperError> {
-		return this.programCtx.errors;
-	}
-
-	/**
-	 * Creates a string from the compiled code that can be written to a file in a human-readable way.
-	 * @param lineEnding The line ending for each line of the file. Default line ending is LF ('\n').
-	 */
-	public write(lineEnding: string = "\n"): string {
-		if (this.result === undefined) {
-			throw Error("Can not generate code for a failed compilation");
-		}
-
-		return this.result.map((line: TranslatedCodeLine) => line.join("") + lineEnding).join("");
-	}
-}
+import { KipperCompileResult } from "./compile-result";
 
 /**
  * The main Compiler class that contains the functions for parsing and compiling a file.
@@ -122,7 +52,7 @@ export class KipperCompiler {
 	 * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
 	 * @param name The encoding to read the file with.
 	 */
-	private static async _handleStreamInput(
+	private async handleStreamInput(
 		stream: string | KipperParseStream,
 		name: string = "anonymous-script",
 	): Promise<KipperParseStream> {
@@ -215,25 +145,19 @@ export class KipperCompiler {
 		compilerOptions: CompileConfig,
 	): Promise<KipperCompileResult> {
 		// Handle the input and format it
-		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream, compilerOptions.fileName);
+		let inStream: KipperParseStream = await this.handleStreamInput(stream, compilerOptions.fileName);
 
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		let parseData: ParseData;
+		let parseData: ParseData | undefined = undefined;
+		let programCtx: KipperProgramContext | undefined = undefined;
 		try {
 			parseData = await this.parse(inStream);
-		} catch (e) {
-			// Report the failure of the compilation
-			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
-			throw e;
-		}
+			programCtx = await this.getProgramCtx(parseData, compilerOptions);
 
-		// Get the program context, which will store the meta-data of the program
-		const programCtx = await this.getProgramCtx(parseData, compilerOptions);
-
-		try {
 			// Start compilation of the Kipper program
+			this.logger.debug("Creating ctx object for compilation metadata and semantic data");
 			const code = await programCtx.compileProgram();
 
 			// After the compilation is done, return the compilation result as an instance
@@ -250,19 +174,30 @@ export class KipperCompiler {
 			this.logger.fatal(`Failed to compile '${inStream.name}'.`);
 
 			if (e instanceof KipperError) {
-				// Add the error to the programCtx, as that should not have been done yet by the semantic analysis in the
-				// RootASTNode class and CompilableASTNode classes.
-				programCtx.reportError(e);
+				this.logger.debug(`Detected thrown KipperError ${e.name}. Attempting error handling.`);
+				if (programCtx !== undefined) {
+					// Add the error to the programCtx, as that should not have been done yet by the semantic analysis in the
+					// RootASTNode class and CompilableASTNode classes.
+					programCtx.reportError(e);
+				}
 
 				if (compilerOptions.abortOnFirstError) {
 					// If 'abortOnFirstError' is set, then we abort the compilation and throw the error
+					// This ignores whatever error it is (syntax error, semantic error etc.) and simply throws it
 					throw e as KipperError;
+				} else if (programCtx === undefined) {
+					// If there is no programCtx, then there was a syntaxError, which automatically crashes the compilation
+					// That means we will simply return the result with the given syntax errors
+					return new KipperCompileResult(programCtx, undefined, [<KipperSyntaxError>e]);
 				} else if (!compilerOptions.recover) {
 					// If an error was thrown and the user does not want to recover from it, simply abort the compilation
 					// (The internal semantic analysis algorithm in RootASTNode and CompilableASTNode will have thrown this error,
 					// as they noticed 'compilerOptions.recover' is false)
-					return new KipperCompileResult(programCtx, undefined);
+					return new KipperCompileResult(programCtx);
 				}
+
+				// If none of the cases were hit that means there was very likely a bug -> report it as a warning
+				this.logger.warn(`Failed to process thrown KipperError ${e.name}. Report this bug to the developers!`);
 			}
 
 			// Re-throw the error in every other case
@@ -283,7 +218,8 @@ export class KipperCompiler {
 	 */
 	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
 		// TODO! Remove this function and replace it with a new compilation option 'noCodeGeneration'
-		let inStream: KipperParseStream = await KipperCompiler._handleStreamInput(stream);
+		// Maybe? -> Open for debate
+		let inStream: KipperParseStream = await this.handleStreamInput(stream);
 
 		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
 

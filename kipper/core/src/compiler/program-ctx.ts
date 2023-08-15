@@ -419,11 +419,11 @@ export class KipperProgramContext {
 	 * @since 0.8.0
 	 * @see {@link compileProgram}
 	 */
-	private async generateAbstractSyntaxTree(
-		listener: KipperFileASTGenerator = new KipperFileASTGenerator(this, this.antlrParseTree),
-	): Promise<RootASTNode> {
-		if (listener.rootNode.programCtx !== this) {
-			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");
+	private async generateAbstractSyntaxTree(listener?: KipperFileASTGenerator): Promise<RootASTNode> {
+		if (listener === undefined) {
+			listener = new KipperFileASTGenerator(this, this.antlrParseTree);
+		} else if (listener.rootNode.programCtx !== this) {
+			throw new Error("Field 'listener.rootNode.programCtx' must match this instance");
 		}
 
 		try {

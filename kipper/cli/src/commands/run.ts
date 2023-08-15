@@ -23,24 +23,6 @@ import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncod
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
 
-/**
- * Run the Kipper program.
- * @param jsCode
- */
-export async function executeKipperProgram(jsCode: string) {
-	const kipperProgram = spawn(process.execPath, ["-e", jsCode]);
-
-	// Per default the encoding should be 'utf-8'
-	kipperProgram.stdin.setDefaultEncoding("utf-8");
-
-	// Set how to handle streams
-	kipperProgram.stdout.pipe(process.stdout);
-	kipperProgram.stderr.pipe(process.stderr);
-
-	// Close immediately after the Kipper program
-	kipperProgram.on("close", (code: number) => process.exit(code));
-}
-
 export default class Run extends Command {
 	static override description: string = "Compile and execute a Kipper program.";
 
@@ -107,6 +89,10 @@ export default class Run extends Command {
 			description: "Recover from compiler errors and display all detected compiler errors.",
 			allowNo: true,
 		}),
+		/**
+		 * TODO! Remove this flag
+		 * @deprecated
+		 */
 		"abort-on-first-error": flags.boolean({
 			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
 			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
@@ -150,6 +136,24 @@ export default class Run extends Command {
 		};
 	}
 
+	/**
+	 * Run the Kipper program in a new spawned process.
+	 * @param jsCode The JavaScript code to execute using the same JavaScript runtime as this CLI is being executed from.
+	 */
+	private async executeKipperProgram(jsCode: string): Promise<void> {
+		const kipperProgram = spawn(process.execPath, ["-e", jsCode]);
+
+		// Per default the encoding should be 'utf-8'
+		kipperProgram.stdin.setDefaultEncoding("utf-8");
+
+		// Set how to handle streams
+		kipperProgram.stdout.pipe(process.stdout);
+		kipperProgram.stderr.pipe(process.stderr);
+
+		// Close immediately after the Kipper program
+		kipperProgram.on("close", (code: number) => process.exit(code));
+	}
+
 	@prettifiedErrors<Run>()
 	public async run() {
 		const { flags, config } = await this.getRunConfig();
@@ -166,7 +170,9 @@ export default class Run extends Command {
 			result = await compiler.compile(config.stream, config.compilerOptions);
 		} catch (e) {
 			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
-				return; // Ignore the error thrown by the compiler (the logger already logged it)
+				// Ignore the error thrown by the compiler (the logger already logged it)
+				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
+				return;
 			}
 			throw e;
 		}
@@ -193,6 +199,6 @@ export default class Run extends Command {
 		}
 
 		// Execute the program
-		await executeKipperProgram(jsProgram);
+		await this.executeKipperProgram(jsProgram);
 	}
 }
