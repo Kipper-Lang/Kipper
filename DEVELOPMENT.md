@@ -157,8 +157,18 @@ which can be included and used inside a browser without any dependencies.
     export const version = "MAJOR.MINOR.PATCH";
     ```
 
-    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
-    changes must be committed yourself with a commit message preferably similar to this:
+    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. 
+    
+	Additionally, you will have to update `CITATION.cff`, which contains the explanation for how to cite this project.
+	For that you will need to update every reference to the old version and replace it with the new one. The fields
+   	that must be changed are as follows:
+
+	- `identifiers.value`
+    - `identifiers.description`
+	- `license-url`
+	- `version`
+
+    These changes must be committed yourself with a commit message preferably similar to this:
 
     ```
     Bumped static index.ts versions to MAJOR.MINOR.PATCH
