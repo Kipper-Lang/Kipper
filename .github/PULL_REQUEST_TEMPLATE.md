@@ -32,7 +32,7 @@ Closes #INSERT_NR
 
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
 
-<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!)
+<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!) -->
 
 - Change Nr. 1
 - Change Nr. 2
