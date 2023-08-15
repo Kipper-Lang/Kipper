@@ -1,11 +1,12 @@
 import { assert } from "chai";
 import {
 	KipperCompiler,
-	KipperCompileResult, KipperError,
+	KipperCompileResult,
+	KipperError,
 	KipperLogger,
 	KipperParseStream,
 	KipperSyntaxError,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
@@ -210,10 +211,7 @@ describe("KipperCompiler", () => {
 
 		describe("returns", () => {
 			it("Successful Compilation", async () => {
-				const result = await compiler.compile(
-					"var x: num = 1;",
-					{ target: defaultTarget }
-				);
+				const result = await compiler.compile("var x: num = 1;", { target: defaultTarget });
 				assert.isDefined(result, "Expected defined compilation result");
 				assert.isDefined(result!!.programCtx, "Expected defined programCtx");
 				assert.equal(result!!.warnings.length, 0, "Expected no warnings");
@@ -223,9 +221,7 @@ describe("KipperCompiler", () => {
 			describe("Failed Compilation (Syntax Error)", () => {
 				it("should throw error with 'abortOnFirstError'", async () => {
 					try {
-						await compiler.compile(
-							"var x: num =", { target: defaultTarget, abortOnFirstError: true }
-						);
+						await compiler.compile("var x: num =", { target: defaultTarget, abortOnFirstError: true });
 					} catch (e) {
 						assert.instanceOf(e, KipperSyntaxError);
 						return;
@@ -235,19 +231,12 @@ describe("KipperCompiler", () => {
 
 				describe("should return compilation result with no 'abortOnFirstError'", () => {
 					it("One error", async () => {
-						const result = await compiler.compile(
-							"var x: num =",
-							{ target: defaultTarget }
-						);
+						const result = await compiler.compile("var x: num =", { target: defaultTarget });
 						assert.isDefined(result, "Expected defined compilation result");
 						assert.isUndefined(result!!.programCtx, "Expected undefined programCtx (syntax error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 1, "Expected an error to be reported");
-						assert.equal(
-							result.errors[0].constructor.name,
-							"LexerOrParserSyntaxError",
-							"Expected different error",
-						);
+						assert.equal(result.errors[0].constructor.name, "LexerOrParserSyntaxError", "Expected different error");
 					});
 				});
 			});
@@ -255,9 +244,7 @@ describe("KipperCompiler", () => {
 			describe("Failed Compilation (Semantic Error)", () => {
 				it("should throw error with 'abortOnFirstError'", async () => {
 					try {
-						await compiler.compile(
-							"const x: num;", { target: defaultTarget, abortOnFirstError: true }
-						);
+						await compiler.compile("const x: num;", { target: defaultTarget, abortOnFirstError: true });
 					} catch (e) {
 						assert.instanceOf(e, KipperError);
 						return;
@@ -267,36 +254,24 @@ describe("KipperCompiler", () => {
 
 				describe("should return compilation result with no 'abortOnFirstError'", () => {
 					it("One error", async () => {
-						const result = await compiler.compile(
-							"const x: num;",
-							{ target: defaultTarget }
-						);
+						const result = await compiler.compile("const x: num;", { target: defaultTarget });
 						assert.isDefined(result, "Expected defined compilation result");
 						assert.isDefined(result!!.programCtx, "Expected undefined programCtx (semantic error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 1, "Expected an error to be reported");
-						assert.equal(
-							result.errors[0].constructor.name,
-							"UndefinedConstantError",
-							"Expected different error",
-						);
+						assert.equal(result.errors[0].constructor.name, "UndefinedConstantError", "Expected different error");
 					});
 
 					it("Multiple error", async () => {
-						const result = await compiler.compile(
-							"const x: num; const y: num; const z: num;",
-							{ target: defaultTarget }
-						);
+						const result = await compiler.compile("const x: num; const y: num; const z: num;", {
+							target: defaultTarget,
+						});
 						assert.isDefined(result, "Expected defined compilation result");
 						assert.isDefined(result!!.programCtx, "Expected undefined programCtx (semantic error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 3, "Expected three errors to be reported");
 						for (const error of result!!.errors) {
-							assert.equal(
-								error.constructor.name,
-								"UndefinedConstantError",
-								"Expected different error",
-							);
+							assert.equal(error.constructor.name, "UndefinedConstantError", "Expected different error");
 						}
 					});
 				});

@@ -1,5 +1,5 @@
 <!--
-Please read through the given 
+Please read through the given
 
 Comments are marked by arrows, like in lines 1 and 5. They will not be visible in the final pull request!
 -->
@@ -32,7 +32,7 @@ Closes #INSERT_NR
 
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
 
-<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!)
+<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!) -->
 
 - Change Nr. 1
 - Change Nr. 2
@@ -55,9 +55,13 @@ None.
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added and remove any header with no item.). -->
 
 ### Added
+
 ### Changed
+
 ### Fixed
+
 ### Deprecated
+
 ### Removed
 
 <!-- Just write none if they are no changelog entries (although you should definitely do some if they change source code), like this:

@@ -30,20 +30,14 @@ describe("Error recovery", () => {
 
 		describe("Syntax error", () => {
 			it("One error", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.syntaxError[0],
-					disabledErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.syntaxError[0], disabledErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperSyntaxError);
 				assert(result.errors.length === 1, "Expected only one error");
 			});
 
 			it("Multiple errors", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.syntaxError[1],
-					disabledErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.syntaxError[1], disabledErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperSyntaxError);
 				assert(result.errors.length === 1, "Expected only one error");
@@ -74,20 +68,14 @@ describe("Error recovery", () => {
 
 		describe("Type error", () => {
 			it("One error", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.typeError[0],
-					disabledErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.typeError[0], disabledErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperError);
 				assert(result.errors.length === 1, "Expected only one error");
 			});
 
 			it("Multiple errors", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.typeError[1],
-					disabledErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.typeError[1], disabledErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperError);
 				assert(result.errors.length === 1, "Expected only one error");
@@ -104,20 +92,14 @@ describe("Error recovery", () => {
 
 		describe("Semantic error", () => {
 			it("One error", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.semanticError[0],
-					activeErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.semanticError[0], activeErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperError);
 				assert(result.errors.length === 1, "Expected only one error");
 			});
 
 			it("Multiple errors", async () => {
-				const result = await new KipperCompiler().compile(
-					errorRecoveryTestCases.semanticError[1],
-					activeErrorRecovery,
-				);
+				const result = await new KipperCompiler().compile(errorRecoveryTestCases.semanticError[1], activeErrorRecovery);
 
 				assert.instanceOf(result.errors[0], KipperError);
 				assert.instanceOf(result.errors[1], KipperError);

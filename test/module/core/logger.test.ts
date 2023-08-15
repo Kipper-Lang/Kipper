@@ -74,18 +74,13 @@ describe("KipperLogger", () => {
 				assert(msg, "Expected non-empty message.");
 			}, LogLevel.ERROR);
 
-			const result = await new KipperCompiler(logger).compile(
-				"var x: num = 4; \nvar x: num = 5",
-				{ target: defaultTarget }
-			);
+			const result = await new KipperCompiler(logger).compile("var x: num = 4; \nvar x: num = 5", {
+				target: defaultTarget,
+			});
 			assert.isDefined(result, "Expected defined compilation result");
 			assert.isUndefined(result!!.programCtx, "Expected programCtx to be undefined (syntax error)");
 			assert.equal(result!!.errors.length, 1, "Expected one stored error");
-			assert.equal(
-				result.errors[0].constructor.name,
-				"LexerOrParserSyntaxError",
-				"Expected different error",
-			);
+			assert.equal(result.errors[0].constructor.name, "LexerOrParserSyntaxError", "Expected different error");
 
 			// Check logging errors
 			assert(errors > 0, "Expected at least 0 errors");

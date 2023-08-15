@@ -28,7 +28,7 @@ To use development versions of Kipper download the
 ### Fixed
 
 - CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
-	multiple bugs where errors were reported as "Unexpected CLI Error".
+  multiple bugs where errors were reported as "Unexpected CLI Error".
 
 ### Deprecated
 
