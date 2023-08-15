@@ -22,7 +22,7 @@
     "uglify-js": "3.17.4"
   },
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.0.0",
     "pnpm": ">=8"
   },
   "homepage": "https://kipper-lang.org",
