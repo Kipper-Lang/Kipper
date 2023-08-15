@@ -54,13 +54,10 @@ export class KipperCompileResult {
 	 *
 	 * Warnings are non-fatal errors, which are raised when the compiler encounters a situation that it considers to
 	 * be problematic, but which do not prevent the program from being compiled.
-	 *
-	 * If {@link this.programCtx} is undefined, then the compiler wasn't able to get to warning checks yet and as such
-	 * this will be undefined.
 	 * @since 0.9.0
 	 */
-	public get warnings(): Array<KipperError> | undefined {
-		return this.programCtx?.warnings;
+	public get warnings(): Array<KipperError> {
+		return this.programCtx?.warnings ?? [];
 	}
 
 	/**
