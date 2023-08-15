@@ -20,23 +20,31 @@ To use development versions of Kipper download the
 
 ### Changed
 
-- Moved function `executeKipperProgram` to `Run` as a private function.
-- Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
-- Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
-  a `KipperCompileResult` is also returned for syntax errors (where it has no value).
-
 ### Fixed
 
-- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
-  multiple bugs where errors were reported as "Unexpected CLI Error".
-
 ### Deprecated
-
-- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
 
 ### Removed
 
 </details>
+
+## [0.10.4] - 2023-08-15
+
+### Changed
+
+- Moved function `executeKipperProgram` to `Run` as a private function.
+- Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
+- Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
+	a `KipperCompileResult` is also returned for syntax errors (where it has no value).
+
+### Fixed
+
+- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
+	multiple bugs where errors were reported as "Unexpected CLI Error".
+
+### Deprecated
+
+- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
 
 ## [0.10.3] - 2023-07-22
 
@@ -1209,7 +1217,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.4...HEAD
+[0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...v0.10.4
 [0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...v0.10.3
 [0.10.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
