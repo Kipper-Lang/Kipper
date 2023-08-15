@@ -29,7 +29,9 @@ keywords:
   - transpiler
   - code-generation
   - oop-programming
+  - type-safety
+  -
 license: GPL-3.0-or-later
-commit: REPLACE_ME
+license-url: 'https://github.com/Kipper-Lang/Kipper/blob/v0.10.4/LICENSE'
 version: 0.10.4
 date-released: '2023-08-15'
