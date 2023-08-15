@@ -44,7 +44,7 @@
     "watchify": "4.0.0"
   },
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=16.0.0",
     "pnpm": ">=8"
   },
   "homepage": "https://kipper-lang.org",
