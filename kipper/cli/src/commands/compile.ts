@@ -15,7 +15,7 @@ import {
 	KipperError,
 	KipperLogger,
 	KipperParseStream,
-	LogLevel
+	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
 import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
@@ -91,7 +91,7 @@ export default class Compile extends Command {
 		/**
 		 * TODO! Remove this flag
 		 * @deprecated
- 		 */
+		 */
 		"abort-on-first-error": flags.boolean({
 			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
 			description: "Abort on the first error the compiler encounters.",

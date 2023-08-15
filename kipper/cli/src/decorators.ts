@@ -2,7 +2,7 @@
  * Utility decorators for the Kipper CLI.
  */
 import { Command } from "@oclif/command";
-import { KipperError, KipperInternalError } from "@kipper/core";
+import { KipperInternalError } from "@kipper/core";
 import { KipperCLIError } from "./errors";
 import { CLIError as OclifCLIError, PrettyPrintableError } from "@oclif/errors";
 

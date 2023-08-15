@@ -18,7 +18,7 @@ export class KipperCompileResult {
 	constructor(
 		fileCtx?: KipperProgramContext,
 		result?: Array<TranslatedCodeLine>,
-		syntaxErrors?: Array<KipperSyntaxError>
+		syntaxErrors?: Array<KipperSyntaxError>,
 	) {
 		this._programCtx = fileCtx;
 		this._result = result;
