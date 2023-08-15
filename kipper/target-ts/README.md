@@ -9,6 +9,7 @@
 [![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
+[![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 The TypeScript target for the Kipper Compiler. 🦊✨
 
