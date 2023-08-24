@@ -127,6 +127,9 @@
         border: none;
         outline: none;
         max-width: 65vw;
+
+        /* Remove code area border radius */
+        border-radius: 0;
       }
 
       #code-editor-textarea,
