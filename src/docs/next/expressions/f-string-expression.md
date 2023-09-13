@@ -27,7 +27,7 @@ of the string will be left as is. Expressions may appear anywhere in the string,
 
 ### String Formatting
 
-```ts
+```kipper
 var name: str = "Luna";
 var age: num = 20;
 print(f"Hello {name}! You are {age} years old.");
@@ -35,7 +35,7 @@ print(f"Hello {name}! You are {age} years old.");
 
 ### Simplified String Concatenation
 
-```ts
+```kipper
 var welcome: str = "Hello ";
 var name: str = "World";
 print(f"{welcome}{name}");
@@ -43,7 +43,7 @@ print(f"{welcome}{name}");
 
 ### Using Expressions in F-Strings
 
-```ts
+```kipper
 var name: str = "user";
 var age: num = 20;
 print(f"Hello {name}! You are {age} years old. Next year you will be {age + 1} years old.");
@@ -51,7 +51,7 @@ print(f"Hello {name}! You are {age} years old. Next year you will be {age + 1} y
 
 ### Using F-Strings in F-Strings (Nested Expressions)
 
-```ts
+```kipper
 def printWelcome(name: str, age: num) -> void {
     var olderKeyword: str = "adult";
     var youngerKeyword: str = "child";
