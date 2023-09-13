@@ -6,7 +6,7 @@ expressions delimited by curly braces `{}`.
 This is the Kipper variant of templating/string formatting. It works by evaluating the expression inside the curly
 braces and replacing the curly braces and the expression with the result of the evaluation.
 
-```kipperper
+```kipper
 f"Hello {name}!"
 ```
 
