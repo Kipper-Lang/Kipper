@@ -12,7 +12,7 @@ options {
 @parser::header {
 	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 	// kind values.
-	import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
+	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
 }
 
 // Entry Point for an entire file
@@ -44,7 +44,7 @@ declaration
     ;
 
 functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier compoundStatement?
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
 	;
 
 variableDeclaration
@@ -65,7 +65,7 @@ directDeclarator
     ;
 
 initDeclarator
-    :   declarator ':' typeSpecifier ('=' initializer)?
+    :   declarator ':' typeSpecifierExpression ('=' initializer)?
     ;
 
 parameterList
@@ -74,7 +74,7 @@ parameterList
     ;
 
 parameterDeclaration
-    :   declarator ':' typeSpecifier
+    :   declarator ':' typeSpecifierExpression
     ;
 
 initializer
@@ -217,15 +217,15 @@ voidOrNullOrUndefinedPrimaryExpression
 // comes in the form of a special '_labelASTKind' property on the rule context, which defines which AST class should
 // implement the rule context.
 //
-// Note: All AST identifier numbers are stored in the 'ParserASTMapping' object.
+// Note: All AST identifier numbers are stored in the 'ParseRuleKindMapping' object.
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
-	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
-	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
-	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
+	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
+	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
 	;
 
 argumentExpressionList
@@ -278,7 +278,7 @@ unaryOperator
 
 castOrConvertExpression
     :   unaryExpression # passOnCastOrConvertExpression
-    |   unaryExpression 'as' typeSpecifier #actualCastOrConvertExpression
+    |   unaryExpression 'as' typeSpecifierExpression #actualCastOrConvertExpression
     ;
 
 multiplicativeExpression
@@ -329,20 +329,19 @@ expression
     :   assignmentExpression (',' assignmentExpression)* // Comma-separated expressions
     ;
 
-// TODO! Implement the following type specifiers as expressions
-typeSpecifier
-    :   identifierTypeSpecifier | genericTypeSpecifier | typeofTypeSpecifier
+typeSpecifierExpression
+    :   identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression
     ;
 
-identifierTypeSpecifier
+identifierTypeSpecifierExpression
 	:	typeSpecifierIdentifier
 	;
 
-genericTypeSpecifier
+genericTypeSpecifierExpression
 	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
 	;
 
-typeofTypeSpecifier
+typeofTypeSpecifierExpression
 	:	'typeof' '(' typeSpecifierIdentifier ')'
 	;
 

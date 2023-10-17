@@ -13,7 +13,7 @@ import { InternalFunction } from "../runtime-built-ins";
  * identifier's metadata and reference expression.
  * @since 0.8.0
  */
-export interface Reference<T extends KipperReferenceable> {
+export interface Reference<T extends KipperReferenceable = KipperReferenceable> {
 	/**
 	 * The target that this reference points to.
 	 * @since 0.8.0

@@ -25,6 +25,7 @@ describe("AST Nodes", () => {
 		// Example class for testing purposes
 		class ExampleNode extends CompilableASTNode {
 			readonly kind: number = Number.MAX_SAFE_INTEGER;
+			readonly ruleName: string = "RULE_exampleNode";
 
 			constructor(antlrCtx: KipperParserRuleContext, parent: CompilableNodeParent) {
 				super(antlrCtx, parent);

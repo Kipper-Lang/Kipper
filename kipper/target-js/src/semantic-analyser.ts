@@ -58,22 +58,22 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	expressionStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	doWhileLoopStatement = undefined;
+	doWhileLoopIterationStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link WhileLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link WhileLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	whileLoopStatement = undefined;
+	whileLoopIterationStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ForLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link ForLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	forLoopStatement = undefined;
+	forLoopIterationStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
@@ -114,7 +114,7 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	numberPrimaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
 	listPrimaryExpression = undefined;
 

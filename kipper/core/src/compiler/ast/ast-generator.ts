@@ -2,8 +2,12 @@
  * Antlr4 listener for walking through a parser tree and processing its content.
  * @since 0.0.3
  */
-import type { ParserDeclarationContext } from "./ast-types";
-import type { ASTNodeParserContext, ParserExpressionContext, ParserStatementContext } from "./ast-types";
+import type {
+	ASTNodeParserContext,
+	ParserDeclarationContext,
+	ParserExpressionContext,
+	ParserStatementContext,
+} from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import type {
 	ActualAdditiveExpressionContext,
@@ -15,60 +19,59 @@ import type {
 	ActualLogicalOrExpressionContext,
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
+	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
+	BracketNotationMemberAccessExpressionContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
+	DeclaratorContext,
+	DirectDeclaratorContext,
+	DotNotationMemberAccessExpressionContext,
+	DoWhileLoopIterationStatementContext,
+	ExplicitCallFunctionCallExpressionContext,
+	ExpressionContext,
 	ExpressionStatementContext,
+	ExternalItemContext,
+	ForLoopIterationStatementContext,
 	FStringPrimaryExpressionContext,
 	FunctionCallExpressionContext,
-	GenericTypeSpecifierContext,
+	FunctionDeclarationContext,
+	GenericTypeSpecifierExpressionContext,
 	IdentifierPrimaryExpressionContext,
-	IdentifierTypeSpecifierContext,
+	IdentifierTypeSpecifierExpressionContext,
+	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InitDeclaratorContext,
+	InitializerContext,
 	JumpStatementContext,
 	KipperParserListener,
-	ArrayLiteralPrimaryExpressionContext,
+	KipperParserRuleContext,
+	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
+	ParameterListContext,
+	PassOnLogicalAndExpressionContext,
+	ReturnStatementContext,
+	SliceNotationMemberAccessExpressionContext,
+	storageTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	SwitchLabeledStatementContext,
-	TangledPrimaryExpressionContext,
-	TypeofTypeSpecifierContext,
-	DoWhileLoopIterationStatementContext,
-	ExternalItemContext,
-	ForLoopIterationStatementContext,
-	IfStatementContext,
-	InitializerContext,
-	ReturnStatementContext,
 	SwitchStatementContext,
+	TangledPrimaryExpressionContext,
+	TypeofTypeSpecifierExpressionContext,
+	TypeSpecifierExpressionContext,
+	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	FunctionDeclarationContext,
-	DeclaratorContext,
-	DirectDeclaratorContext,
-	ExpressionContext,
-	InitDeclaratorContext,
-	ParameterListContext,
-	StorageTypeSpecifierContext,
-	TypeSpecifierContext,
-	BracketNotationMemberAccessExpressionContext,
-	DotNotationMemberAccessExpressionContext,
-	ExplicitCallFunctionCallExpressionContext,
-	LogicalAndExpressionContext,
-	PassOnLogicalAndExpressionContext,
-	SliceNotationMemberAccessExpressionContext,
-	VariableDeclarationContext,
 } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
-import type { KipperParserRuleContext } from "../parser";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { Declaration } from "./nodes";
-import { Expression, Statement } from "./nodes";
-import { RootASTNode } from "./root-ast-node";
+import { Declaration, Expression, Statement } from "./nodes";
+import { RootASTNode } from "./nodes/root-ast-node";
 import { DeclarationASTNodeFactory, ExpressionASTNodeFactory, StatementASTNodeFactory } from "./factories";
 import { KipperInternalError } from "../../errors";
 
@@ -353,15 +356,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterArrayLiteralPrimaryExpression: (ctx: ArrayLiteralPrimaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
+	public enterArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitArrayLiteralPrimaryExpression: (ctx: ArrayLiteralPrimaryExpressionContext) => void =
-		this.handleExitingTreeNode;
+	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.
@@ -991,13 +992,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterStorageTypeSpecifier?(ctx: StorageTypeSpecifierContext): void;
+	public enterStorageTypeSpecifier?(ctx: storageTypeSpecifierContext): void;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitStorageTypeSpecifier?(ctx: StorageTypeSpecifierContext): void;
+	public exitStorageTypeSpecifier?(ctx: storageTypeSpecifierContext): void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initDeclarator`.
@@ -1015,49 +1016,55 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by `KipperParser.identifierTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public enterIdentifierTypeSpecifier: (ctx: IdentifierTypeSpecifierContext) => void = this.handleEnteringTreeNode;
+	public enterIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.identifierTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public exitIdentifierTypeSpecifier: (ctx: IdentifierTypeSpecifierContext) => void = this.handleExitingTreeNode;
+	public exitIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.genericTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public enterGenericTypeSpecifier: (ctx: GenericTypeSpecifierContext) => void = this.handleEnteringTreeNode;
+	public enterGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.genericTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public exitGenericTypeSpecifier: (ctx: GenericTypeSpecifierContext) => void = this.handleExitingTreeNode;
+	public exitGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.typeofTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public enterTypeofTypeSpecifier: (ctx: TypeofTypeSpecifierContext) => void = this.handleEnteringTreeNode;
+	public enterTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.typeofTypeSpecifier`.
 	 * @param ctx the parse tree
 	 */
-	public exitTypeofTypeSpecifier: (ctx: TypeofTypeSpecifierContext) => void = this.handleExitingTreeNode;
+	public exitTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterTypeSpecifier?(ctx: TypeSpecifierContext): void;
+	public enterTypeSpecifierExpression?(ctx: TypeSpecifierExpressionContext): void;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.typeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitTypeSpecifier?(ctx: TypeSpecifierContext): void;
+	public exitTypeSpecifierExpression?(ctx: TypeSpecifierExpressionContext): void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarator`.

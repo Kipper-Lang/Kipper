@@ -13,7 +13,6 @@ import {
 	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
-import { IFlag } from "@oclif/command/lib/flags";
 import { spawn } from "child_process";
 import { Logger } from "tslog";
 import { CLIEmitHandler, defaultCliLogger, defaultKipperLoggerConfig } from "../logger";

@@ -8,6 +8,8 @@
 		"noImplicitOverride": false,
 		"noImplicitThis": true,
 		"noImplicitReturns": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"strict": true,
     "moduleResolution": "node",
     "module": "commonjs",

@@ -3,7 +3,7 @@
  * @since 0.0.2
  */
 export * from "./parser-rule-context";
-export * from "./parser-ast-mapping";
+export * from "./parse-rule-kind-mapping";
 export * from "./antlr/";
 export * from "./parse-stream";
 export * from "./parse-data";

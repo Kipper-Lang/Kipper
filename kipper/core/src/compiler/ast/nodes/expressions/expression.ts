@@ -6,12 +6,12 @@
  * @since 0.1.0
  */
 import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
-import type { ExpressionSemantics } from "../../semantic-data";
-import type { ExpressionTypeSemantics } from "../../type-data";
+import type { ExpressionSemantics } from "./expression-semantics";
+import type { ExpressionTypeSemantics } from "./expression-type-semantics";
 import { TranslatedExpression } from "../../../const";
 import { MissingRequiredSemanticDataError } from "../../../../errors";
 import { CompilableASTNode } from "../../compilable-ast-node";
-import { ASTExpressionKind, ParserExpressionContext } from "../../ast-types";
+import { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext } from "../../common";
 
 /**
  * The base abstract AST node class for all expressions, which wrap their corresponding
@@ -37,10 +37,21 @@ export abstract class Expression<
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
 	 * node wraps.
 	 *
-	 * This may be compared using the {@link KipperParser} rule fields, for example {@link ParserASTMapping.RULE_expression}.
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public abstract readonly kind: ASTExpressionKind;
+	public abstract get kind(): ASTExpressionKind;
+
+	/**
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.11.0
+	 */
+	public abstract get ruleName(): ASTExpressionRuleName;
 
 	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
