@@ -9,7 +9,7 @@ import type {
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
 	TargetSetUpCodeGenerator,
-	TargetWrapUpCodeGenerator
+	TargetWrapUpCodeGenerator,
 } from "../../target-presets";
 import type { EvaluatedCompileConfig } from "../../compile-config";
 import type { KipperProgramContext } from "../../program-ctx";

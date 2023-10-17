@@ -35,6 +35,27 @@ To use development versions of Kipper download the
   - `kipper/core/compiler/ast/mapping`, which contains all AST mapping objects and the `ASTNodeMapper` class.
 - New class:
   - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
+  - `PrimaryExpression`, which is an abstract base class for all primary expressions.
+  - `PostfixExpression`, which is an abstract base class for all postfix expressions.
+- New interfaces:
+  - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
+  - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
+  - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
+  - `PostfixExpressionTypeSemantics`, which represents the type semantics of a postfix expression.
+  - `IterationStatementTypeSemantics`, which represents the type semantics of an iteration statement.
+  - `ExpressionStatementSemantics`, which represents the semantics of an expression statement.
+  - `ExpressionStatementTypeSemantics`, which represents the type semantics of an expression statement.
+  - `StatementSemantics`, which represents the semantics of a statement.
+  - `StatementTypeSemantics`, which represents the type semantics of a statement.
+  - `IfStatementTypeSemantics`, which represents the type semantics of an if statement.
+  - `CompoundStatementSemantics`, which represents the semantics of a compound statement.
+  - `CompoundStatementTypeSemantics`, which represents the type semantics of a compound statement.
+  - `ForLoopStatementTypeSemantics`, which represents the type semantics of a for loop statement.
+  - `DoWhileLoopIterationStatementTypeSemantics`, which represents the type semantics of a do-while loop statement.
+  - `WhileLoopStatementTypeSemantics`, which represents the type semantics of a while loop statement.
+  - `JumpStatementTypeSemantics`, which represents the type semantics of a jump statement.
+  - `SwitchStatementSemantics`, which represents the semantics of a switch statement.
+  - `SwitchStatementTypeSemantics`, which represents the type semantics of a switch statement.
 - New parameters:
   - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
@@ -84,9 +105,14 @@ To use development versions of Kipper download the
     `DoWhileLoopStatement` to `DoWhileLoopIterationStatement`. This also includes changing the name in the
     `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
   - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+  - Class `ArrayLiteralPrimaryExpression` to `ArrayPrimaryExpression`.
+  - Interface `ArrayLiteralPrimaryExpressionSemantics` to `ArrayPrimaryExpressionSemantics`.
+  - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
+  - Interface `TangledPrimaryTypeSemantics` to `TangledPrimaryExpressionTypeSemantics`.
+  - Interface `DoWhileLoopStatementSemantics` to `DoWhileLoopIterationStatementSemantics`.
 - Moved:
-	- `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
-  - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module. 
+  - `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
+  - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module.
   - `kipper/core/compiler/ast/ast-types.ts` to the new `kipper/core/compiler/ast/common` module.
 
 ### Fixed

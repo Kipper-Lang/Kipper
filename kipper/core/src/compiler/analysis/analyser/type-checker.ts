@@ -8,7 +8,7 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
-	UnaryExpressionSemantics
+	UnaryExpressionSemantics,
 } from "../../ast";
 import {
 	AssignmentExpression,
@@ -24,7 +24,7 @@ import {
 	ReturnStatement,
 	Statement,
 	TangledPrimaryExpression,
-	UnaryExpression
+	UnaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
@@ -37,7 +37,7 @@ import {
 	KipperReferenceable,
 	KipperReferenceableFunction,
 	kipperStrType,
-	kipperSupportedConversions
+	kipperSupportedConversions,
 } from "../../const";
 import {
 	ArgumentTypeError,
@@ -55,7 +55,7 @@ import {
 	KipperNotImplementedError,
 	ReadOnlyWriteTypeError,
 	UnknownTypeError,
-	ValueNotIndexableTypeError
+	ValueNotIndexableTypeError,
 } from "../../../errors";
 import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
 

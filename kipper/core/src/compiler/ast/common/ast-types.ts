@@ -4,7 +4,7 @@
  */
 import type {
 	AdditiveExpressionContext,
-	ArrayLiteralPrimaryExpressionContext,
+	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
@@ -41,7 +41,7 @@ import type {
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
-	WhileLoopIterationStatementContext
+	WhileLoopIterationStatementContext,
 } from "../../parser";
 import { KindParseRuleMapping } from "../../parser";
 
@@ -51,7 +51,7 @@ import { KindParseRuleMapping } from "../../parser";
  */
 export type ParserExpressionContext =
 	| NumberPrimaryExpressionContext
-	| ArrayLiteralPrimaryExpressionContext
+	| ArrayPrimaryExpressionContext
 	| IdentifierPrimaryExpressionContext
 	| VoidOrNullOrUndefinedPrimaryExpressionContext
 	| BoolPrimaryExpressionContext
@@ -185,9 +185,9 @@ export type ConstructableASTKind = ASTDeclarationKind | ASTStatementKind | ASTEx
  * @since 0.11.0
  */
 export type ASTDeclarationRuleName =
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_functionDeclaration]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_variableDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_functionDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST
@@ -195,15 +195,15 @@ export type ASTDeclarationRuleName =
  * @since 0.11.0
  */
 export type ASTStatementRuleName =
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_compoundStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_ifStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_switchStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_expressionStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_doWhileLoopIterationStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_jumpStatement]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_returnStatement];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_compoundStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_ifStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_switchStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_expressionStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_doWhileLoopIterationStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_jumpStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Expression} AST
@@ -211,31 +211,31 @@ export type ASTStatementRuleName =
  * @since 0.11.0
  */
 export type ASTExpressionRuleName =
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_numberPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_boolPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_stringPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_fStringPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_tangledPrimaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_incrementOrDecrementPostfixExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_functionCallExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_castOrConvertExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_multiplicativeExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_additiveExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_relationalExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_equalityExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_logicalAndExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_logicalOrExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_conditionalExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_assignmentExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]
-	| typeof KindParseRuleMapping[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_numberPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_boolPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_stringPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_fStringPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tangledPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_incrementOrDecrementPostfixExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_functionCallExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_castOrConvertExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_multiplicativeExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_additiveExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_relationalExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_equalityExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_logicalAndExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_logicalOrExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_conditionalExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_assignmentExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link CompilableASTNode}.

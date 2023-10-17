@@ -55,7 +55,7 @@ export class StatementASTNodeFactory extends ASTNodeFactory<Statement, ParserExp
  * A union of all construable Statement AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTStatementClass = typeof StatementASTNodeFactory.ruleMapping[ASTStatementKind];
+export type ConstructableASTStatementClass = (typeof StatementASTNodeFactory.ruleMapping)[ASTStatementKind];
 
 /**
  * A union of all construable Statement AST nodes. Uses {@link ConstructableASTStatementClass} to infer the type.

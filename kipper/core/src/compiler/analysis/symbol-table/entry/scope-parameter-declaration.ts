@@ -7,7 +7,7 @@ import type {
 	FunctionDeclaration,
 	ParameterDeclaration,
 	ParameterDeclarationSemantics,
-	ParameterDeclarationTypeSemantics
+	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { LocalScope } from "../index";
 import type { CheckedType } from "../../type";

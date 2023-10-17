@@ -6,7 +6,7 @@
 import type {
 	AdditiveExpression,
 	AnalysableASTNode,
-	ArrayLiteralPrimaryExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -43,7 +43,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement
+	WhileLoopIterationStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 
@@ -134,9 +134,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract numberPrimaryExpression?: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayLiteralPrimaryExpression>;
+	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayPrimaryExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.

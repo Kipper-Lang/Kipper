@@ -29,7 +29,7 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ArrayLiteralPrimaryExpression,
+	ArrayPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
 	LogicalOrExpression,
@@ -374,9 +374,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArrayLiteralPrimaryExpression} into the JavaScript language.
+	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayLiteralPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayLiteralExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 

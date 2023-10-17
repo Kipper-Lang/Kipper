@@ -6,7 +6,7 @@ import {
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,
-	ParameterDeclaration
+	ParameterDeclaration,
 } from "../../../ast";
 import { ScopeDeclaration } from "./scope-declaration";
 import { CheckedType } from "../../type";

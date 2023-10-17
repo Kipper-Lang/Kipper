@@ -57,7 +57,7 @@ export class ExpressionASTNodeFactory extends ASTNodeFactory<Expression, ParserE
  * A union of all construable Expression AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTExpressionClass = typeof ExpressionASTNodeFactory.ruleMapping[ASTExpressionKind];
+export type ConstructableASTExpressionClass = (typeof ExpressionASTNodeFactory.ruleMapping)[ASTExpressionKind];
 
 /**
  * A union of all construable Expression AST nodes. Uses {@link ConstructableASTExpressionClass} to infer the type.

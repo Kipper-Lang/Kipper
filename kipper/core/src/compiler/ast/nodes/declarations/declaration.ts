@@ -9,8 +9,8 @@
  * function and its local scope.
  * @since 0.1.0
  */
-import type { DeclarationSemantics } from "../../semantic-data";
-import type { DeclarationTypeData } from "../../type-data";
+import type { DeclarationSemantics } from "./declaration-semantics";
+import type { DeclarationTypeSemantics } from "./declaration-type-semantics";
 import type { TranslatedCodeLine } from "../../../const";
 import type { ASTDeclarationKind, ASTDeclarationRuleName, ParserDeclarationContext } from "../../common";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
@@ -31,7 +31,7 @@ import { MissingRequiredSemanticDataError, UndefinedDeclarationCtxError } from "
  */
 export abstract class Declaration<
 	Semantics extends DeclarationSemantics = DeclarationSemantics,
-	TypeData extends DeclarationTypeData = DeclarationTypeData,
+	TypeData extends DeclarationTypeSemantics = DeclarationTypeSemantics,
 > extends CompilableASTNode<Semantics, TypeData> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

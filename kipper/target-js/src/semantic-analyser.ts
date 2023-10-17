@@ -114,7 +114,7 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	numberPrimaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
 	listPrimaryExpression = undefined;
 

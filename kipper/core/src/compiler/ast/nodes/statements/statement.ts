@@ -2,10 +2,12 @@
  * AST Node Statement classes of the Kipper language.
  * @since 0.1.0
  */
-import type { CompilableNodeParent, SemanticData, TypeData } from "../../index";
+import type { CompilableNodeParent } from "../../index";
 import type { ASTStatementKind, ASTStatementRuleName, ParserStatementContext } from "../../common";
 import type { TranslatedCodeLine } from "../../../const";
 import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
+import type { StatementSemantics } from "./statement-semantics";
+import type { StatementTypeSemantics } from "./statement-type-semantics";
 import { CompilableASTNode } from "../../compilable-ast-node";
 
 /**
@@ -16,8 +18,8 @@ import { CompilableASTNode } from "../../compilable-ast-node";
  * @since 0.1.0
  */
 export abstract class Statement<
-	Semantics extends SemanticData = SemanticData,
-	TypeSemantics extends TypeData = TypeData,
+	Semantics extends StatementSemantics = StatementSemantics,
+	TypeSemantics extends StatementTypeSemantics = StatementTypeSemantics,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

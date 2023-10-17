@@ -12,6 +12,4 @@ export * from "./compilable-ast-node";
 export * from "./scope-node";
 export * from "./mapping/";
 export * from "./factories/";
-export * from "./semantic-data/";
-export * from "./type-data/";
 export * from "./nodes/";

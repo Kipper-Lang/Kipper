@@ -17,7 +17,7 @@ import {
 	ActualRelationalExpressionContext,
 	AdditiveExpressionContext,
 	ArgumentExpressionListContext,
-	ArrayLiteralPrimaryExpressionContext,
+	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	AssignmentOperatorContext,
 	BlockItemContext,
@@ -98,7 +98,7 @@ import {
 	UnaryOperatorContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
-	WhileLoopIterationStatementContext
+	WhileLoopIterationStatementContext,
 } from "./KipperParser";
 
 /**
@@ -853,12 +853,12 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * Enter a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
+	enterArrayPrimaryExpression?: (ctx: ArrayPrimaryExpressionContext) => void;
 	/**
 	 * Exit a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitArrayLiteralPrimaryExpression?: (ctx: ArrayLiteralPrimaryExpressionContext) => void;
+	exitArrayPrimaryExpression?: (ctx: ArrayPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.

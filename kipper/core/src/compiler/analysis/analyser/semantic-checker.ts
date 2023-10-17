@@ -14,7 +14,7 @@ import {
 	IterationStatement,
 	JumpStatement,
 	ReturnStatement,
-	VariableDeclaration
+	VariableDeclaration,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import {
@@ -22,7 +22,7 @@ import {
 	Scope,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	ScopeVariableDeclaration
+	ScopeVariableDeclaration,
 } from "../symbol-table";
 import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
@@ -37,7 +37,7 @@ import {
 	MissingFunctionBodyError,
 	UndefinedConstantError,
 	UndefinedReferenceError,
-	UnknownReferenceError
+	UnknownReferenceError,
 } from "../../../errors";
 
 /**

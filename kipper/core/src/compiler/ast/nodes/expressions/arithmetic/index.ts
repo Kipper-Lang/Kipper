@@ -3,5 +3,8 @@
  * calculations based on two expressions.
  * @since 0.11.0
  */
-export * from "./additive-expression";
-export * from "./multiplicative-expression";
+export * from "./arithmetic-expression";
+export * from "./arithmetic-expression-semantics";
+export * from "./arithmetic-expression-type-semantics";
+export * from "./additive-expression/";
+export * from "./multiplicative-expression/";

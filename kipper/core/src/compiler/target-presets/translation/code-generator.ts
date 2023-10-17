@@ -4,7 +4,7 @@
  */
 import type {
 	AdditiveExpression,
-	ArrayLiteralPrimaryExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -40,7 +40,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement
+	WhileLoopIterationStatement,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -180,13 +180,10 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract numberPrimaryExpression: TargetASTNodeCodeGenerator<NumberPrimaryExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link ArrayLiteralPrimaryExpression} into a specific language.
+	 * Translates a {@link ArrayPrimaryExpression} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<
-		ArrayLiteralPrimaryExpression,
-		TranslatedExpression
-	>;
+	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<ArrayPrimaryExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.

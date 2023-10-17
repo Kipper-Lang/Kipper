@@ -7,7 +7,7 @@ import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
-	TargetASTNodeCodeGenerator
+	TargetASTNodeCodeGenerator,
 } from "../target-presets";
 import type { KipperParser, KipperParserRuleContext } from "../parser";
 import type { TypeData } from "./ast-node";

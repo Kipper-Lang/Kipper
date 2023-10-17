@@ -57,7 +57,7 @@ export class DeclarationASTNodeFactory extends ASTNodeFactory<Declaration, Parse
  * A union of all construable Declaration AST node classes.
  * @since 0.10.0
  */
-export type ConstructableASTDeclarationClass = typeof DeclarationASTNodeFactory.ruleMapping[ASTDeclarationKind];
+export type ConstructableASTDeclarationClass = (typeof DeclarationASTNodeFactory.ruleMapping)[ASTDeclarationKind];
 
 /**
  * A union of all construable Declaration AST nodes. Uses {@link ConstructableASTDeclarationClass} to infer the type.

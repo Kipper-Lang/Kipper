@@ -6,7 +6,7 @@ import type {
 	ASTNodeParserContext,
 	ParserDeclarationContext,
 	ParserExpressionContext,
-	ParserStatementContext
+	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import type {
@@ -19,7 +19,7 @@ import type {
 	ActualLogicalOrExpressionContext,
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
-	ArrayLiteralPrimaryExpressionContext,
+	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CompilationUnitContext,
@@ -65,7 +65,7 @@ import type {
 	TypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
-	WhileLoopIterationStatementContext
+	WhileLoopIterationStatementContext,
 } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
@@ -356,15 +356,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterArrayLiteralPrimaryExpression: (ctx: ArrayLiteralPrimaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
+	public enterArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitArrayLiteralPrimaryExpression: (ctx: ArrayLiteralPrimaryExpressionContext) => void =
-		this.handleExitingTreeNode;
+	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.

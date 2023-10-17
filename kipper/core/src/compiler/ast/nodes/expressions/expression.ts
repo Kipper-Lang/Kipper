@@ -6,8 +6,8 @@
  * @since 0.1.0
  */
 import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
-import type { ExpressionSemantics } from "../../semantic-data";
-import type { ExpressionTypeSemantics } from "../../type-data";
+import type { ExpressionSemantics } from "./expression-semantics";
+import type { ExpressionTypeSemantics } from "./expression-type-semantics";
 import { TranslatedExpression } from "../../../const";
 import { MissingRequiredSemanticDataError } from "../../../../errors";
 import { CompilableASTNode } from "../../compilable-ast-node";

@@ -2320,11 +2320,8 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public arrayLiteralPrimaryExpression(): ArrayLiteralPrimaryExpressionContext {
-		let _localctx: ArrayLiteralPrimaryExpressionContext = new ArrayLiteralPrimaryExpressionContext(
-			this._ctx,
-			this.state,
-		);
+	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext {
+		let _localctx: ArrayPrimaryExpressionContext = new ArrayPrimaryExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 76, KipperParser.RULE_arrayLiteralPrimaryExpression);
 		let _la: number;
 		try {
@@ -5609,8 +5606,8 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	public numberPrimaryExpression(): NumberPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, NumberPrimaryExpressionContext);
 	}
-	public arrayLiteralPrimaryExpression(): ArrayLiteralPrimaryExpressionContext | undefined {
-		return this.tryGetRuleContext(0, ArrayLiteralPrimaryExpressionContext);
+	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext | undefined {
+		return this.tryGetRuleContext(0, ArrayPrimaryExpressionContext);
 	}
 	public voidOrNullOrUndefinedPrimaryExpression(): VoidOrNullOrUndefinedPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, VoidOrNullOrUndefinedPrimaryExpressionContext);
@@ -6001,7 +5998,7 @@ export class NumberPrimaryExpressionContext extends KipperParserRuleContext {
 	}
 }
 
-export class ArrayLiteralPrimaryExpressionContext extends KipperParserRuleContext {
+export class ArrayPrimaryExpressionContext extends KipperParserRuleContext {
 	public LeftBracket(): TerminalNode {
 		return this.getToken(KipperParser.LeftBracket, 0);
 	}
@@ -6035,20 +6032,20 @@ export class ArrayLiteralPrimaryExpressionContext extends KipperParserRuleContex
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterArrayLiteralPrimaryExpression) {
-			listener.enterArrayLiteralPrimaryExpression(this);
+		if (listener.enterArrayPrimaryExpression) {
+			listener.enterArrayPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitArrayLiteralPrimaryExpression) {
-			listener.exitArrayLiteralPrimaryExpression(this);
+		if (listener.exitArrayPrimaryExpression) {
+			listener.exitArrayPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitArrayLiteralPrimaryExpression) {
-			return visitor.visitArrayLiteralPrimaryExpression(this);
+		if (visitor.visitArrayPrimaryExpression) {
+			return visitor.visitArrayPrimaryExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

@@ -6,7 +6,7 @@
  */
 import {
 	AdditiveExpressionContext,
-	ArrayLiteralPrimaryExpressionContext,
+	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
@@ -44,7 +44,7 @@ import {
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
-	WhileLoopIterationStatementContext
+	WhileLoopIterationStatementContext,
 } from "../../parser";
 import type {
 	ASTDeclarationKind,
@@ -52,11 +52,11 @@ import type {
 	ASTExpressionKind,
 	ASTExpressionRuleName,
 	ASTStatementKind,
-	ASTStatementRuleName
+	ASTStatementRuleName,
 } from "../common";
 import {
 	AdditiveExpression,
-	ArrayLiteralPrimaryExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
@@ -94,7 +94,7 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement
+	WhileLoopIterationStatement,
 } from "../nodes";
 
 /**
@@ -122,7 +122,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionKindToClassMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
-		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayLiteralPrimaryExpression,
+		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayPrimaryExpression,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpression,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpression,
@@ -183,7 +183,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionKindToRuleContextMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpressionContext,
-		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayLiteralPrimaryExpressionContext,
+		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpressionContext,
@@ -249,7 +249,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionRuleNameToClassMap = {
 		RULE_numberPrimaryExpression: NumberPrimaryExpression,
-		RULE_arrayLiteralPrimaryExpression: ArrayLiteralPrimaryExpression,
+		RULE_arrayLiteralPrimaryExpression: ArrayPrimaryExpression,
 		RULE_identifierPrimaryExpression: IdentifierPrimaryExpression,
 		RULE_voidOrNullOrUndefinedPrimaryExpression: VoidOrNullOrUndefinedPrimaryExpression,
 		RULE_boolPrimaryExpression: BoolPrimaryExpression,
@@ -301,7 +301,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapDeclarationKindToClass<T extends ASTDeclarationKind>(
 		kind: T,
-	): typeof ASTNodeMapper.declarationKindToClassMap[T] {
+	): (typeof ASTNodeMapper.declarationKindToClassMap)[T] {
 		return this.declarationKindToClassMap[kind];
 	}
 
@@ -314,7 +314,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapExpressionKindToClass<T extends ASTExpressionKind>(
 		kind: T,
-	): typeof ASTNodeMapper.expressionKindToClassMap[T] {
+	): (typeof ASTNodeMapper.expressionKindToClassMap)[T] {
 		return this.expressionKindToClassMap[kind];
 	}
 
@@ -328,7 +328,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapStatementKindToClass<T extends ASTStatementKind>(
 		kind: T,
-	): typeof ASTNodeMapper.statementKindToClassMap[T] {
+	): (typeof ASTNodeMapper.statementKindToClassMap)[T] {
 		return this.statementKindToClassMap[kind];
 	}
 
@@ -341,7 +341,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapDeclarationKindToRuleContext<T extends ASTDeclarationKind>(
 		kind: T,
-	): typeof ASTNodeMapper.declarationKindToRuleContextMap[T] {
+	): (typeof ASTNodeMapper.declarationKindToRuleContextMap)[T] {
 		return this.declarationKindToRuleContextMap[kind];
 	}
 
@@ -354,7 +354,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapExpressionKindToRuleContext<T extends ASTExpressionKind>(
 		kind: T,
-	): typeof ASTNodeMapper.expressionKindToRuleContextMap[T] {
+	): (typeof ASTNodeMapper.expressionKindToRuleContextMap)[T] {
 		return this.expressionKindToRuleContextMap[kind];
 	}
 
@@ -367,7 +367,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapStatementKindToRuleContext<T extends ASTStatementKind>(
 		kind: T,
-	): typeof ASTNodeMapper.statementKindToRuleContextMap[T] {
+	): (typeof ASTNodeMapper.statementKindToRuleContextMap)[T] {
 		return this.statementKindToRuleContextMap[kind];
 	}
 
@@ -380,7 +380,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapDeclarationRuleNameToClass<T extends ASTDeclarationRuleName>(
 		name: T,
-	): typeof ASTNodeMapper.declarationRuleNameToClassMap[T] {
+	): (typeof ASTNodeMapper.declarationRuleNameToClassMap)[T] {
 		return this.declarationRuleNameToClassMap[name];
 	}
 
@@ -393,7 +393,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapExpressionRuleNameToClass<T extends ASTExpressionRuleName>(
 		name: T,
-	): typeof ASTNodeMapper.expressionRuleNameToClassMap[T] {
+	): (typeof ASTNodeMapper.expressionRuleNameToClassMap)[T] {
 		return this.expressionRuleNameToClassMap[name];
 	}
 
@@ -406,7 +406,7 @@ export class ASTNodeMapper {
 	 */
 	public static mapStatementRuleNameToClass<T extends ASTStatementRuleName>(
 		name: T,
-	): typeof ASTNodeMapper.statementRuleNameToClassMap[T] {
+	): (typeof ASTNodeMapper.statementRuleNameToClassMap)[T] {
 		return this.statementRuleNameToClassMap[name];
 	}
 }

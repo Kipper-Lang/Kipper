@@ -4,10 +4,10 @@
  * @since 0.11.0
  */
 export * from "./statement";
-export * from "./iteration/";
-export * from "./compound-statement";
-export * from "./expression-statement";
-export * from "./if-statement";
-export * from "./jump-statement";
-export * from "./return-statement";
-export * from "./switch-statement";
+export * from "./iteration-statement/";
+export * from "./compound-statement/";
+export * from "./expression-statement/";
+export * from "./if-statement/";
+export * from "./jump-statement/";
+export * from "./return-statement/";
+export * from "./switch-statement/";

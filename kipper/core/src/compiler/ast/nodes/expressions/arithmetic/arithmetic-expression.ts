@@ -4,8 +4,8 @@
  * comparative expressions.
  * @since 0.9.0
  */
-import type { ArithmeticExpressionSemantics } from "../../../semantic-data";
-import type { ArithmeticExpressionTypeSemantics } from "../../../type-data";
+import type { ArithmeticExpressionSemantics } from "./arithmetic-expression-semantics";
+import type { ArithmeticExpressionTypeSemantics } from "./arithmetic-expression-type-semantics";
 import type { ParseRuleKindMapping } from "../../../../parser";
 import { KindParseRuleMapping } from "../../../../parser";
 import { Expression } from "../expression";
@@ -24,7 +24,7 @@ export type ASTArithmeticExpressionKind =
  * @since 0.10.0
  */
 export type ParserArithmeticExpressionContext = InstanceType<
-	typeof ASTNodeMapper.expressionKindToRuleContextMap[ASTArithmeticExpressionKind]
+	(typeof ASTNodeMapper.expressionKindToRuleContextMap)[ASTArithmeticExpressionKind]
 >;
 
 /**
@@ -32,7 +32,7 @@ export type ParserArithmeticExpressionContext = InstanceType<
  * AST node.
  * @since 0.11.0
  */
-export type ParserArithmeticExpressionRuleName = typeof KindParseRuleMapping[ASTArithmeticExpressionKind];
+export type ParserArithmeticExpressionRuleName = (typeof KindParseRuleMapping)[ASTArithmeticExpressionKind];
 
 /**
  * Abstract arithmetic expression class representing an arithmetic expression, which can be used to perform calculations
