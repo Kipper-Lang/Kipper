@@ -70,25 +70,28 @@ describe("UselessExpressionStatementWarning", () => {
 		it("Assignment expression", async () => {
 			let result = await new KipperCompiler().compile("var x: num = 5; x = 5;", defaultConfig);
 
-			assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
-			assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
-			assert.isEmpty(result?.programCtx.warnings, "Expected no warnings");
+			assert.isDefined(result, "Expected defined compilation result");
+			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isEmpty(result!!.programCtx!!.warnings, "Expected no warnings");
 		});
 
 		it("Function call", async () => {
 			let result = await new KipperCompiler().compile("def f() -> void { }; f();", defaultConfig);
 
-			assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
-			assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
-			assert.isEmpty(result?.programCtx.warnings, "Expected no warnings");
+			assert.isDefined(result, "Expected defined compilation result");
+			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isEmpty(result!!.programCtx!!.warnings, "Expected no warnings");
 		});
 
 		it("Child has side effects", async () => {
 			let result = await new KipperCompiler().compile("var x: num = 5; 5 + (x += 5);", defaultConfig);
 
-			assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
-			assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
-			assert.isEmpty(result?.programCtx.warnings, "Expected no warnings");
+			assert.isDefined(result, "Expected defined compilation result");
+			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isEmpty(result!!.programCtx!!.warnings, "Expected no warnings");
 		});
 	});
 });

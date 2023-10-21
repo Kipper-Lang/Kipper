@@ -130,6 +130,67 @@ To use development versions of Kipper download the
 
 </details>
 
+## [0.10.4] - 2023-08-15
+
+### Changed
+
+- Moved function `executeKipperProgram` to `Run` as a private function.
+- Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
+- Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
+  a `KipperCompileResult` is also returned for syntax errors (where it has no value).
+
+### Fixed
+
+- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
+  multiple bugs where errors were reported as "Unexpected CLI Error".
+
+### Deprecated
+
+- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
+
+## [0.10.3] - 2023-07-22
+
+### Added
+
+- New modules in `@kipper/cli`:
+  - `input`, which contains all input-related handling functions and classes.
+  - `output`, which contains the output-related handling functions and classes.
+- New decorator `prettifiedErrors` in `@kipper/cli`, which applies standardised error formatting to any thrown error.
+
+### Changed
+
+- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+- Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
+  as a suffix anymore.
+- Changed success message of the `kipper analyse` command `Finished code analysis in ...` to `Done in ...`.
+- Renamed `getFile` to `getParseStream`.
+
+### Fixed
+
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
+
+## [0.10.2] - 2023-06-16
+
+### Added
+
+- New field:
+  - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
+    context of the error.
+- New function:
+  - `ensureScopeDeclarationAvailableIfNeeded`, which ensures that a scope declaration is available if needed. This
+    is used during the semantic analysis/type checking of a declaration statement, which may need the scope
+    declaration object during the processing.
+
+### Fixed
+
+- Redeclaration bug causing an `InternalError` after calling the compiler
+  ([#462](https://github.com/Luna-Klatzer/Kipper/issues/462)).
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
+  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
+- Bug of invalid underline indent in error traceback.
+  ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
+
 ## [0.10.1] - 2023-02-21
 
 ### Fixed
@@ -329,7 +390,7 @@ To use development versions of Kipper download the
   - `ConstructableASTDeclaration`, which is a union type of all possible `Declaration` AST node instances.
   - `ConstructableASTNode`, which is a union type of all possible `ASTNode` AST node instances.
   - `ASTKind`, which represents a union of all AST node kind values that can be used to map a KipperParser rule context
-    to an AST node. This is the type representing all values from `ParseRuleKindMapping`.
+    to an AST node. This is the type representing all values from `ParserASTMapping`.
   - `ConstructableASTKind`, which is the same as `ASTKind`, but removes any kind value that does not have a
     corresponding AST node class.
   - `KipperReferenceableFunction`, which represents a function that can be referenced by a `FunctionCallExpression`.
@@ -375,7 +436,7 @@ To use development versions of Kipper download the
 - New constants:
   - `kipperNullType`, which represents the Kipper null type.
   - `kipperUndefinedType`, which represents the Kipper undefined type.
-  - `ParseRuleKindMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
+  - `ParserASTMapping`, which is a special mapping object used to get the AST kind number for a `KipperParser` rule ctx
     instance.
   - `kipperRuntimeBuiltInVariables`, which contains the built-in variables of the Kipper runtime.
 
@@ -1258,7 +1319,10 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.4...HEAD
+[0.10.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...v0.10.4
+[0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...v0.10.3
+[0.10.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2

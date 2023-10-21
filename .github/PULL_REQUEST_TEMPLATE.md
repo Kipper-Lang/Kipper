@@ -1,40 +1,54 @@
+<!--
+Please read through the given
+
+Comments are marked by arrows, like in lines 1 and 5. They will not be visible in the final pull request!
+-->
+
 ## What type of change does this PR perform?
 
-<!-- Add an x in the checkbox to mark it -->
+<!-- Please put an X in the box of the line that applies -->
+<!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
 
-- [ ] Info or documentation change (Non-breaking change that updates dependencies, info files or online documentation)
-- [ ] Website feature update or docs development changes (Change that changes the design or functionality of the websites or docs)
 - [ ] Maintenance (Non-breaking change that updates dependencies)
+- [ ] Info or documentation change (Non-breaking change that updates repo info files (e.g. README.md, CONTRIBUTING.md, etc.) or online documentation)
+- [ ] Website feature update or docs development changes (Change that changes the design or functionality of the websites or docs)
 - [ ] Development or internal changes (These changes do not add new features or fix bugs, but update the code in other ways)
 - [ ] Bug fix (Non-breaking change which fixes an issue)
 - [ ] New feature (Non-breaking change which adds functionality)
-- [ ] Breaking change (Major bug fix or feature that would cause existing functionality to not work as expected.)
+- [ ] Breaking change (Major bug fix or feature that would cause existing functionality not to work as expected.)
 - [ ] Requires a documentation update, as it changes language or compiler behaviour
-
-<!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
 
 ## Summary
 
-<!-- Explain the reason for this pr, changes and solution briefly. -->
+<!-- Explain the reason for this pr, changes, and solution briefly. -->
 
-<!-- Write here -->
+<!-- REPLACE ME -->
 
-Closes # <!-- Remove this if this is not related to an issue -->
+<!-- Uncomment if this closes an issue:
+Closes #INSERT_NR
+-->
 
-## Summary of Changes
+## List of Changes
 
 <!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
 
-<!-- Write here -->
+<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!) -->
+
+- Change Nr. 1
+- Change Nr. 2
+- ...
 
 ## Does this PR create new warnings?
 
 <!-- Add any new warnings or possible issues that could occur with this PR. -->
 
-- Eslint reported ...
-- CodeQL returned ...
+- Warning Nr. 1
+- Warning Nr. 2
+- ...
 
-<!-- Remove example text! -->
+<!-- Just write none if they are no warnings, like this:
+None.
+-->
 
 ## Detailed Changelog
 
@@ -42,18 +56,28 @@ _Not present for website/docs changes_
 
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added and remove any header with no item.). -->
 
-<!-- ### Added -->
-<!-- ### Changed -->
-<!-- ### Removed -->
+### Added
 
-<!-- Default: -->
+### Changed
 
+### Fixed
+
+### Deprecated
+
+### Removed
+
+<!-- Just write none if they are no changelog entries (although you should definitely do some if they change source code), like this:
 None.
+-->
 
 ## Linked issues or PRs
 
 <!-- Include other issues and PRs related to this if any exist.  Use this format: - [ ] #ISSUE_OR_PR -->
 
-<!-- Default: -->
+- [ ] #ISSUE_PR_OR_DISCUSSION_TAG
+- [ ] #ISSUE_PR_OR_DISCUSSION_TAG
+- [ ] ...
 
+<!-- Just write the following if there are no linked issues:
 No linked issues.
+-->

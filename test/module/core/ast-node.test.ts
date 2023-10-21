@@ -78,7 +78,9 @@ describe("AST Nodes", () => {
 		describe("hasFailed", () => {
 			it("With no errors", async () => {
 				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
@@ -87,7 +89,9 @@ describe("AST Nodes", () => {
 
 			it("With errors", async () => {
 				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
@@ -100,7 +104,9 @@ describe("AST Nodes", () => {
 		describe("sourceCode", () => {
 			it("With empty file", async () => {
 				const result = await new KipperCompiler().compile("", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.sourceCode, "", "Expected source code to be empty");
@@ -109,7 +115,9 @@ describe("AST Nodes", () => {
 			it("With file content", async () => {
 				const sourceCode = "var valid: str = '1';";
 				const result = await new KipperCompiler().compile(sourceCode, { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.sourceCode, sourceCode, "Expected source code to match");
@@ -119,7 +127,9 @@ describe("AST Nodes", () => {
 		describe("hasFailed", () => {
 			it("With no errors", async () => {
 				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.hasFailed, false, "Expected 'hasFailed' to be false");
@@ -127,7 +137,9 @@ describe("AST Nodes", () => {
 
 			it("With errors", async () => {
 				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.isTrue(ast.hasFailed, "Expected 'hasFailed' to be false");
@@ -137,7 +149,9 @@ describe("AST Nodes", () => {
 		describe("children", () => {
 			it("With empty file", async () => {
 				const result = await new KipperCompiler().compile("", { target: defaultTarget });
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 0, "Expected 0 children");
@@ -149,7 +163,8 @@ describe("AST Nodes", () => {
 					"var invalid: str = 1;",
 					{ target: defaultTarget },
 				);
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child");
@@ -161,7 +176,8 @@ describe("AST Nodes", () => {
 					"var x1: str = 1; var x2: str = '1'; const x3: str;",
 					{ target: defaultTarget },
 				);
-				const ast = <RootASTNode>result.programCtx.abstractSyntaxTree;
+				assert.isDefined(result.programCtx);
+				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 3, "Expected 2 children");

@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { KipperCompiler, KipperLogger, LexerOrParserSyntaxError, LogLevel } from "@kipper/core";
+import { KipperCompiler, KipperLogger, LogLevel } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 describe("KipperLogger", () => {
@@ -65,7 +65,7 @@ describe("KipperLogger", () => {
 			assert(levelReceived === LogLevel.FATAL, "Expected FATAL");
 		});
 
-		it("Test automatic logging on compilation exceptions", async () => {
+		it("should automatically report error", async () => {
 			let fatalErrors = 0;
 			let errors = 0;
 			const logger = new KipperLogger((level, msg) => {
@@ -74,21 +74,17 @@ describe("KipperLogger", () => {
 				assert(msg, "Expected non-empty message.");
 			}, LogLevel.ERROR);
 
-			try {
-				await new KipperCompiler(logger).compile("var x: num = 4; \nvar x: num = 5", { target: defaultTarget });
-			} catch (e) {
-				assert(
-					(<LexerOrParserSyntaxError<any>>e).constructor.name === "LexerOrParserSyntaxError",
-					"Expected different error",
-				);
+			const result = await new KipperCompiler(logger).compile("var x: num = 4; \nvar x: num = 5", {
+				target: defaultTarget,
+			});
+			assert.isDefined(result, "Expected defined compilation result");
+			assert.isUndefined(result!!.programCtx, "Expected programCtx to be undefined (syntax error)");
+			assert.equal(result!!.errors.length, 1, "Expected one stored error");
+			assert.equal(result.errors[0].constructor.name, "LexerOrParserSyntaxError", "Expected different error");
 
-				// Check logging errors
-				assert(errors > 0, "Expected at least 0 errors");
-				assert(fatalErrors > 0, "Expected at least 0 fatal errors");
-
-				return;
-			}
-			assert(false, "Expected 'KipperSyntaxError'");
+			// Check logging errors
+			assert(errors > 0, "Expected at least 0 errors");
+			assert(fatalErrors > 0, "Expected at least 0 fatal errors");
 		});
 	});
 });
