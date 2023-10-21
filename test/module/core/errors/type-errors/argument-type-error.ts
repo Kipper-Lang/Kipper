@@ -54,7 +54,8 @@ describe("ArgumentTypeError", () => {
 		} catch (e) {
 			assert.fail("Expected no error");
 		}
-		assert.notEqual(result, undefined, "Expected compilation result from Kipper Compiler call");
-		assert.isFalse(result?.programCtx.hasFailed ?? true, "Expected no errors");
+		assert.isDefined(result, "Expected defined compilation result");
+		assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+		assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
 	});
 });
