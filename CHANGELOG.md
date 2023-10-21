@@ -76,6 +76,9 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+	(This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
+	i.e. `0.11.0-alpha.0` does *not* have this change).
 - Made `VoidOrNullOrUndefinedPrimaryExpression` a constant expression and inherit from the `ConstantExpression` class.
   This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
   also part of the `ParserConstantExpressionContext` type.
@@ -123,6 +126,9 @@ To use development versions of Kipper download the
   of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
 - Bug of invalid underline indent in error traceback.
   ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+	([#451](https://github.com/Luna-Klatzer/Kipper/issues/451)) (This is the same fix as in `0.10.3`, but was only
+	added to the dev branch with the release of `0.11.0-alpha.1` i.e. `0.11.0-alpha.0` still has this bug).
 - CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
 	multiple bugs where errors were reported as "Unexpected CLI Error". (This is the same fix as in `0.10.4`, but was
   only added to the dev branch with the release of `0.11.0-alpha.1` i.e. `0.11.0-alpha.0` still has this bug).
