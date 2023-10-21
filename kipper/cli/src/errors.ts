@@ -2,7 +2,6 @@
  * CLI related errors that core on {@link KipperError}
  * @since 0.1.0
  */
-
 import { KipperError } from "@kipper/core";
 
 /**
