@@ -21,11 +21,13 @@ export function prettifiedErrors<TProto extends Command>() {
 			try {
 				await originalFunc.call(this);
 			} catch (error) {
-				const cliError = error instanceof KipperCLIError;
+				const cliError =
+					error instanceof KipperCLIError ||
+					error instanceof OclifCLIError;
 				const internalError = error instanceof KipperInternalError;
 
 				// Error configuration
-				const name: string = cliError ? "Error" : internalError ? "Unexpected Internal Error" : "Unexpected CLI Error";
+				const name: string = cliError ? "Error" : internalError ? "Unexpected Internal Error" : "CLI Error";
 				const msg: string =
 					error && typeof error === "object" && "message" in error && typeof error.message === "string"
 						? error.message
