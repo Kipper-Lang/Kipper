@@ -1,7 +1,7 @@
 name: "Size Limit"
 on: pull_request
 jobs:
-  size:
+  size-limit:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,16 +15,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: pnpm/action-setup@v2.2.4
+      - name: Install PNPM & dev dependencies
+        uses: pnpm/action-setup@v2.2.4
         with:
           version: 8.x.x
           run_install: |
             - recursive: true
-      - name: Build project
+      - name: Build project to allow for browserify to run
         run: pnpm build
-      - name: Setup size-limit
-        run: pnpm i
-      - uses: andresz1/size-limit-action@v1.7.0
+      - name: Run size-limit
+        uses: andresz1/size-limit-action@v1.7.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           script: pnpm exec size-limit --json
