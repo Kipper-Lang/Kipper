@@ -25,9 +25,10 @@
 		"size-limit": "8.2.4",
 		"@size-limit/preset-big-lib": "8.2.4"
 	},
-	"engines": {
-		"node": ">=14.0.0"
-	},
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8"
+  },
 	"homepage": "https://kipper-lang.org",
 	"bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
 	"repository": {

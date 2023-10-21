@@ -5,10 +5,10 @@
  */
 export { run } from "@oclif/command";
 
-export * from "./file-stream";
+export * from "./input/file-stream";
 export * from "./logger";
 export * from "./errors";
-export * from "./compile";
+export * from "./output/compile";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/cli";
