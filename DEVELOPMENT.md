@@ -171,13 +171,13 @@ which can be included and used inside a browser without any dependencies.
     These changes must be committed yourself with a commit message preferably similar to this:
 
     ```
-    Bumped static index.ts versions to MAJOR.MINOR.PATCH
+    release: Bumped static index.ts versions to MAJOR.MINOR.PATCH
     ```
 
     For example:
 
     ```
-    Bumped static index.ts versions to 0.5.0-rc.0
+    release: Bumped static index.ts versions to 0.5.0-rc.0
     ```
 
 4.  Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
