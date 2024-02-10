@@ -98,7 +98,7 @@
     "browserify": "pnpm --filter \"@kipper/web\" run browserify",
     "start": "node ./kipper/cli/bin/run",
     "bump": "run-script-os",
-    "bump:linux:macos:default": "./bump.sh",
+    "bump:linux:macos:default": "bash ./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
     "size-limit": "size-limit",
     "cleanup": "run-script-os",
