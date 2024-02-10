@@ -21,9 +21,7 @@ export function prettifiedErrors<TProto extends Command>() {
 			try {
 				await originalFunc.call(this);
 			} catch (error) {
-				const cliError =
-					error instanceof KipperCLIError ||
-					error instanceof OclifCLIError;
+				const cliError = error instanceof KipperCLIError || error instanceof OclifCLIError;
 				const internalError = error instanceof KipperInternalError;
 
 				// Error configuration

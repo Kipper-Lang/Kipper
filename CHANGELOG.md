@@ -120,7 +120,6 @@ To use development versions of Kipper download the
 
 ### Fixed
 
-
 - Redeclaration bug causing an `InternalError` after calling the compiler
   ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
 - Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
@@ -132,7 +131,7 @@ To use development versions of Kipper download the
   added to the dev branch with the release of `0.11.0-alpha.1` i.e. `0.11.0-alpha.0` still has this bug).
 - CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
   multiple bugs where errors were reported as "Unexpected CLI Error". (This is the same fix as in `0.10.4`, but with one
-  additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e. 
+  additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e.
   `0.11.0-alpha.0` still has this bug).
 
 ### Deprecated
