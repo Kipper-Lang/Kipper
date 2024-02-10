@@ -103,6 +103,9 @@
     "size-limit": "size-limit",
     "cleanup": "run-script-os",
     "cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
-    "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib"
+    "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib",
+		"add-next-tag": "run-script-os",
+		"add-next-tag:linux:macos:default": "bash ./add-next-tag.sh",
+		"add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1"
   }
 }

@@ -223,8 +223,8 @@ which can be included and used inside a browser without any dependencies.
     pnpm publish --tag alpha; pnpm -r publish --tag alpha
     ```
 
-    Afterwards ensure the `next` tag is updated for every package using:
+    Afterwards ensure the `next` tag is updated for every package using (Requires `npm` to be installed):
 
     ```bash
-    npm dist-tag add <PACKAGE>@<VERSION> next
-    ```
+    pnpm run add-next-tag MAJOR.MINOR.PATCH
+	```
