@@ -120,6 +120,7 @@ To use development versions of Kipper download the
 
 ### Fixed
 
+
 - Redeclaration bug causing an `InternalError` after calling the compiler
   ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
 - Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
