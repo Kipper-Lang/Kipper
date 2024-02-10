@@ -5,6 +5,7 @@
 		"rootDir": "./src",
 		"target": "es2016",
 		"noImplicitOverride": false,
+		"experimentalDecorators": true,
 		"skipLibCheck": true,
 		"lib": [
 			"ES7" // ES7 -> ES2016

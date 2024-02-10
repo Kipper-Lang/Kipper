@@ -6,7 +6,7 @@
  */
 
 import type { ParseTree } from "antlr4ts/tree";
-import { getParseRuleSource } from "../../utils";
+import { getParseRuleSource } from "../../tools";
 import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../../errors";
 import { KipperParserRuleContext } from "../parser";
 
@@ -55,7 +55,14 @@ export abstract class ParserASTNode<Semantics extends SemanticData, TypeSemantic
 	 * This may be compared using the {@link KipperParser} rule fields, for example {@link KipperParser.RULE_expression}.
 	 * @since 0.10.0
 	 */
-	public abstract readonly kind: number;
+	public abstract get kind(): number;
+
+	/**
+	 * Returns the identifier of this AST node. This is a unique identifier that can be used to differentiate this AST
+	 * node from other AST nodes.
+	 * @since 0.11.0
+	 */
+	public abstract get ruleName(): string;
 
 	protected constructor(antlrCtx: KipperParserRuleContext, parent: ParserASTNode<any, any> | undefined) {
 		this._antlrRuleCtx = antlrCtx;

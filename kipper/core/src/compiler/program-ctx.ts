@@ -11,9 +11,9 @@ import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runti
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import type { KipperWarning } from "../warnings";
-import type { CompilableASTNode, RootASTNode, Expression } from "./ast";
-import type { EvaluatedCompileConfig } from "./compile-config";
+import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
+import type { EvaluatedCompileConfig } from "./compile-config";
 import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import { KipperOptimiser, OptimisationOptions } from "./optimiser";
@@ -419,11 +419,11 @@ export class KipperProgramContext {
 	 * @since 0.8.0
 	 * @see {@link compileProgram}
 	 */
-	private async generateAbstractSyntaxTree(
-		listener: KipperFileASTGenerator = new KipperFileASTGenerator(this, this.antlrParseTree),
-	): Promise<RootASTNode> {
-		if (listener.rootNode.programCtx !== this) {
-			throw new Error("RootNode field 'programCtx' of 'listener' must match this instance");
+	private async generateAbstractSyntaxTree(listener?: KipperFileASTGenerator): Promise<RootASTNode> {
+		if (listener === undefined) {
+			listener = new KipperFileASTGenerator(this, this.antlrParseTree);
+		} else if (listener.rootNode.programCtx !== this) {
+			throw new Error("Field 'listener.rootNode.programCtx' must match this instance");
 		}
 
 		try {

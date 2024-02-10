@@ -1,6 +1,6 @@
 import { KipperProgramContext } from "../../program-ctx";
 import { KipperSemanticErrorHandler } from "./err-handler";
-import { getParseRuleSource } from "../../../utils";
+import { getParseRuleSource } from "../../../tools";
 import { CompilableASTNode, Expression, ExpressionStatement } from "../../ast";
 import { KipperWarning, UselessExpressionStatementWarning } from "../../../warnings";
 

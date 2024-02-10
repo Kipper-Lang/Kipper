@@ -12,19 +12,19 @@ import type {
 } from "../../ast";
 import {
 	AssignmentExpression,
-	Expression,
-	RelationalExpression,
-	UnaryExpression,
 	CompoundStatement,
+	Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
+	MemberAccessExpression,
 	ParameterDeclaration,
+	RelationalExpression,
 	ReturnStatement,
 	Statement,
 	TangledPrimaryExpression,
-	MemberAccessExpression,
+	UnaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";

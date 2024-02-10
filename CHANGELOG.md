@@ -24,30 +24,102 @@ To use development versions of Kipper download the
   - `void` to `str`.
   - `null` to `str`.
   - `undefined` to `str`.
+- New modules:
+  - `kipper/core/tools`, which contains all tools and utilities used by the compiler.
+  - `kipper/core/tools/decorators`, which contains all decorators used by the compiler.
+  - `kipper/core/tools/functions`, which contains all functions used by the compiler.
+  - `kipper/core/tools/types`, which contains all types used by the compiler.
+  - `kipper/core/compiler/ast/common`, which contains commonly used types and functions.
+  - `kipper/core/compiler/ast/factories`, which replaces the old file `factories.ts` and contains all AST factory
+    classes and types.
+  - `kipper/core/compiler/ast/mapping`, which contains all AST mapping objects and the `ASTNodeMapper` class.
+- New class:
+  - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
+  - `PrimaryExpression`, which is an abstract base class for all primary expressions.
+  - `PostfixExpression`, which is an abstract base class for all postfix expressions.
+- New interfaces:
+  - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
+  - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
+  - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
+  - `PostfixExpressionTypeSemantics`, which represents the type semantics of a postfix expression.
+  - `IterationStatementTypeSemantics`, which represents the type semantics of an iteration statement.
+  - `ExpressionStatementSemantics`, which represents the semantics of an expression statement.
+  - `ExpressionStatementTypeSemantics`, which represents the type semantics of an expression statement.
+  - `StatementSemantics`, which represents the semantics of a statement.
+  - `StatementTypeSemantics`, which represents the type semantics of a statement.
+  - `IfStatementTypeSemantics`, which represents the type semantics of an if statement.
+  - `CompoundStatementSemantics`, which represents the semantics of a compound statement.
+  - `CompoundStatementTypeSemantics`, which represents the type semantics of a compound statement.
+  - `ForLoopStatementTypeSemantics`, which represents the type semantics of a for loop statement.
+  - `DoWhileLoopIterationStatementTypeSemantics`, which represents the type semantics of a do-while loop statement.
+  - `WhileLoopStatementTypeSemantics`, which represents the type semantics of a while loop statement.
+  - `JumpStatementTypeSemantics`, which represents the type semantics of a jump statement.
+  - `SwitchStatementSemantics`, which represents the semantics of a switch statement.
+  - `SwitchStatementTypeSemantics`, which represents the type semantics of a switch statement.
 - New parameters:
-  - `ignoreParams` in `genJSFunction`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `createJSFunctionSignature`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `genTSFunction`, which, if true makes the function signature define no parameters.
-  - `ignoreParams` in `createTSFunctionSignature`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genTSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createTSFunctionSignature()`, which, if true makes the function signature define no parameters.
 - New field:
   - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
     context of the error.
+  - `ParserASTNode.ruleName`, which contains the rule name of the node.
+- New types:
+  - `InverseMap`, which inverts a map by swapping the keys and values.
 - New functions:
-  - `KipperTargetBuiltInGenerator.voidToStr`, for the built-in conversion from `void` to `str`.
-  - `KipperTargetBuiltInGenerator.nullToStr`, for the built-in conversion from `null` to `str`.
-  - `KipperTargetBuiltInGenerator.undefinedToStr`, for the built-in conversion from `undefined` to `str`.
+  - `KipperTargetBuiltInGenerator.voidToStr()`, for the built-in conversion from `void` to `str`.
+  - `KipperTargetBuiltInGenerator.nullToStr()`, for the built-in conversion from `null` to `str`.
+  - `KipperTargetBuiltInGenerator.undefinedToStr()`, for the built-in conversion from `undefined` to `str`.
+  - `replaceObjKeys()`, which replaces the keys of an object with the values returned by a function.
+  - `inverseMap()`, which inverts a map by swapping the keys and values.
 
 ### Changed
 
+- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+  (This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
+  i.e. `0.11.0-alpha.0` does _not_ have this change).
 - Made `VoidOrNullOrUndefinedPrimaryExpression` a constant expression and inherit from the `ConstantExpression` class.
   This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
   also part of the `ParserConstantExpressionContext` type.
 - Renamed:
-  - `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
-  - `FStringPrimaryExpressionSemantics.items` to `atoms`.
-  - `getTSFunction()` to `genTSFunction()`.
+  - Class `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - Function `getTSFunction()` to `genTSFunction()`.
+  - Grammar Rule `typeSpecifier` to `typeSpecifierExpression` and its AST class `TypeSpecifier` to
+    `TypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `identifierTypeSpecifier` to `identifierTypeSpecifierExpression` and its AST class
+    `IdentifierTypeSpecifier` to `IdentifierTypeSpecifierExpression`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `genericTypeSpecifier` to `genericTypeSpecifierExpression` and its AST class `GenericTypeSpecifier` to
+    `GenericTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `typeofTypeSpecifier` to `typeofTypeSpecifierExpression` and its AST class `TypeofTypeSpecifier` to
+    `TypeofTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `forLoopStatement` to `forLoopIterationStatement` and its AST class `ForLoopStatement` to
+    `ForLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `whileLoopStatement` to `whileLoopIterationStatement` and its AST class `WhileLoopStatement` to
+    `WhileLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `doWhileLoopStatement` to `doWhileLoopIterationStatement` and its AST class
+    `DoWhileLoopStatement` to `DoWhileLoopIterationStatement`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+  - Class `ArrayLiteralPrimaryExpression` to `ArrayPrimaryExpression`.
+  - Interface `ArrayLiteralPrimaryExpressionSemantics` to `ArrayPrimaryExpressionSemantics`.
+  - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
+  - Interface `TangledPrimaryTypeSemantics` to `TangledPrimaryExpressionTypeSemantics`.
+  - Interface `DoWhileLoopStatementSemantics` to `DoWhileLoopIterationStatementSemantics`.
+- Moved:
+  - `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
+  - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module.
+  - `kipper/core/compiler/ast/ast-types.ts` to the new `kipper/core/compiler/ast/common` module.
 
 ### Fixed
+
 
 - Redeclaration bug causing an `InternalError` after calling the compiler
   ([#462](https://github.om/Luna-Klatzer/Kipper/issues/462)).
@@ -55,12 +127,80 @@ To use development versions of Kipper download the
   of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
 - Bug of invalid underline indent in error traceback.
   ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451)) (This is the same fix as in `0.10.3`, but was only
+  added to the dev branch with the release of `0.11.0-alpha.1` i.e. `0.11.0-alpha.0` still has this bug).
+- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
+  multiple bugs where errors were reported as "Unexpected CLI Error". (This is the same fix as in `0.10.4`, but with one
+  additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e. 
+  `0.11.0-alpha.0` still has this bug).
 
 ### Deprecated
 
 ### Removed
 
 </details>
+
+## [0.10.4] - 2023-08-15
+
+### Changed
+
+- Moved function `executeKipperProgram` to `Run` as a private function.
+- Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
+- Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
+  a `KipperCompileResult` is also returned for syntax errors (where it has no value).
+
+### Fixed
+
+- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
+  multiple bugs where errors were reported as "Unexpected CLI Error".
+
+### Deprecated
+
+- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
+
+## [0.10.3] - 2023-07-22
+
+### Added
+
+- New modules in `@kipper/cli`:
+  - `input`, which contains all input-related handling functions and classes.
+  - `output`, which contains the output-related handling functions and classes.
+- New decorator `prettifiedErrors` in `@kipper/cli`, which applies standardised error formatting to any thrown error.
+
+### Changed
+
+- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+- Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
+  as a suffix anymore.
+- Changed success message of the `kipper analyse` command `Finished code analysis in ...` to `Done in ...`.
+- Renamed `getFile` to `getParseStream`.
+
+### Fixed
+
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
+
+## [0.10.2] - 2023-06-16
+
+### Added
+
+- New field:
+  - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
+    context of the error.
+- New function:
+  - `ensureScopeDeclarationAvailableIfNeeded`, which ensures that a scope declaration is available if needed. This
+    is used during the semantic analysis/type checking of a declaration statement, which may need the scope
+    declaration object during the processing.
+
+### Fixed
+
+- Redeclaration bug causing an `InternalError` after calling the compiler
+  ([#462](https://github.com/Luna-Klatzer/Kipper/issues/462)).
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
+  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
+- Bug of invalid underline indent in error traceback.
+  ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
 
 ## [0.10.1] - 2023-02-21
 
@@ -1190,7 +1330,10 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...HEAD
+[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.4...HEAD
+[0.10.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...v0.10.4
+[0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...v0.10.3
+[0.10.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
 [0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
 [0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2

@@ -20,9 +20,10 @@
 		"ts-node": "10.9.1",
 		"@types/node": "18.16.16"
 	},
-	"engines": {
-		"node": ">=14.0.0"
-	},
+  "engines": {
+    "node": ">=16.0.0",
+    "pnpm": ">=8"
+  },
 	"homepage": "https://kipper-lang.org",
 	"bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
 	"repository": {

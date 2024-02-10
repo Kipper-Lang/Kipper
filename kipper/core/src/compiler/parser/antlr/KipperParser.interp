@@ -220,10 +220,10 @@ conditionalExpression
 assignmentExpression
 assignmentOperator
 expression
-typeSpecifier
-identifierTypeSpecifier
-genericTypeSpecifier
-typeofTypeSpecifier
+typeSpecifierExpression
+identifierTypeSpecifierExpression
+genericTypeSpecifierExpression
+typeofTypeSpecifierExpression
 typeSpecifierIdentifier
 
 

@@ -29,7 +29,7 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ArrayLiteralPrimaryExpression,
+	ArrayPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
 	LogicalOrExpression,
@@ -45,8 +45,8 @@ import {
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	CompoundStatement,
-	DoWhileLoopStatement,
-	ForLoopStatement,
+	DoWhileLoopIterationStatement,
+	ForLoopIterationStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
@@ -54,7 +54,7 @@ import {
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
+	WhileLoopIterationStatement,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -230,18 +230,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
+	 * Translates a {@link DoWhileLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+	doWhileLoopIterationStatement = async (node: DoWhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
 	/**
-	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 * Translates a {@link WhileLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+	whileLoopIterationStatement = async (node: WhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const condition = await semanticData.loopCondition.translateCtxAndChildren();
 		const statement = await semanticData.loopBody.translateCtxAndChildren();
@@ -257,10 +257,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 * Translates a {@link ForLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+	forLoopIterationStatement = async (node: ForLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 
 		// Translate the parts of the for loop statement - Everything except the loop body is optional
@@ -374,9 +374,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArrayLiteralPrimaryExpression} into the JavaScript language.
+	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayLiteralPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayLiteralExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
 		return [];
 	};
 

@@ -3,7 +3,12 @@
  * @since 0.8.0
  */
 import type { TranslatedCodeLine } from "../const";
-import type { KipperCompileTarget, KipperTargetCodeGenerator, KipperTargetSemanticAnalyser } from "../target-presets";
+import type {
+	KipperCompileTarget,
+	KipperTargetCodeGenerator,
+	KipperTargetSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
+} from "../target-presets";
 import type { KipperParser, KipperParserRuleContext } from "../parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
@@ -12,7 +17,6 @@ import type { RootASTNode, SemanticData } from "./index";
 import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
-import type { TargetASTNodeCodeGenerator } from "../target-presets";
 import { AnalysableASTNode } from "./analysable-ast-node";
 
 /**
