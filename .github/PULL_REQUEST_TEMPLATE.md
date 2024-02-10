@@ -1,7 +1,7 @@
 <!--
-Please read through the given
+Please read through the given types of changes and select the correct one using an 'x' instead of the ' ' (space) in the brackets.
 
-Comments are marked by arrows, like in lines 1 and 5. They will not be visible in the final pull request!
+Note: Comments are marked by arrows, like here. They will not be visible in the final pull request!
 -->
 
 ## What type of change does this PR perform?
