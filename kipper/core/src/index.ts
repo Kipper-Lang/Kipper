@@ -7,17 +7,17 @@ export * from "./errors";
 export * from "./warnings";
 export * from "./compiler";
 export * from "./logger";
-export * from "./utils";
+export * from "./tools";
 export * from "./antlr-error-listener";
 export * as compiler from "./compiler";
 export * as logger from "./logger";
 export * as errors from "./errors";
-export * as utils from "./utils";
+export * as utils from "./tools";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/core";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.11.0-alpha.0";
+export const version = "0.11.0-alpha.1";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

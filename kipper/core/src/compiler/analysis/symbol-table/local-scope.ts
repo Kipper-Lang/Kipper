@@ -3,7 +3,7 @@
  * namespace.
  * @since 0.8.0
  */
-import type { ScopeNode, FunctionDeclaration, VariableDeclaration } from "../../ast/";
+import type { FunctionDeclaration, ScopeNode, VariableDeclaration } from "../../ast/";
 import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";

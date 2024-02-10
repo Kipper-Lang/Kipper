@@ -52,7 +52,7 @@
 			// Compile the code to JavaScript
 			// Top-level await ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await#top_level_await
 			const result = await compiler.compile(`call print("Hello world!");`, {
-				target: new KipperJS.KipperJavaScriptTarget(),
+				target: new KipperJS.TargetJS(),
 			});
 			const jsCode = result.write();
 

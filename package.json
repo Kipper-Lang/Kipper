@@ -1,7 +1,7 @@
 {
   "name": "kipper",
   "description": "The Kipper programming language and compiler 🦊",
-  "version": "0.11.0-alpha.0",
+  "version": "0.11.0-alpha.1",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "dependencies": {
     "@kipper/cli": "workspace:~",
@@ -44,8 +44,8 @@
     "watchify": "4.0.0"
   },
   "engines": {
-    "node": ">=14.0.0",
-    "pnpm": ">=7"
+    "node": ">=16.0.0",
+    "pnpm": ">=8"
   },
   "homepage": "https://kipper-lang.org",
   "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
@@ -98,11 +98,14 @@
     "browserify": "pnpm --filter \"@kipper/web\" run browserify",
     "start": "node ./kipper/cli/bin/run",
     "bump": "run-script-os",
-    "bump:linux:macos:default": "./bump.sh",
+    "bump:linux:macos:default": "bash ./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
     "size-limit": "size-limit",
     "cleanup": "run-script-os",
     "cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
-    "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib"
+    "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib",
+		"add-next-tag": "run-script-os",
+		"add-next-tag:linux:macos:default": "bash ./add-next-tag.sh",
+		"add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1"
   }
 }

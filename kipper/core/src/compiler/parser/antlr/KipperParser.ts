@@ -2,19 +2,15 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
+import { ASTKind, KipperParserRuleContext, ParseRuleKindMapping } from "..";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -169,10 +165,10 @@ export class KipperParser extends Parser {
 	public static readonly RULE_assignmentExpression = 60;
 	public static readonly RULE_assignmentOperator = 61;
 	public static readonly RULE_expression = 62;
-	public static readonly RULE_typeSpecifier = 63;
-	public static readonly RULE_identifierTypeSpecifier = 64;
-	public static readonly RULE_genericTypeSpecifier = 65;
-	public static readonly RULE_typeofTypeSpecifier = 66;
+	public static readonly RULE_typeSpecifierExpression = 63;
+	public static readonly RULE_identifierTypeSpecifierExpression = 64;
+	public static readonly RULE_genericTypeSpecifierExpression = 65;
+	public static readonly RULE_typeofTypeSpecifierExpression = 66;
 	public static readonly RULE_typeSpecifierIdentifier = 67;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
@@ -239,10 +235,10 @@ export class KipperParser extends Parser {
 		"assignmentExpression",
 		"assignmentOperator",
 		"expression",
-		"typeSpecifier",
-		"identifierTypeSpecifier",
-		"genericTypeSpecifier",
-		"typeofTypeSpecifier",
+		"typeSpecifierExpression",
+		"identifierTypeSpecifierExpression",
+		"genericTypeSpecifierExpression",
+		"typeofTypeSpecifierExpression",
 		"typeSpecifierIdentifier",
 	];
 
@@ -804,7 +800,7 @@ export class KipperParser extends Parser {
 				this.state = 174;
 				this.match(KipperParser.RetIndicator);
 				this.state = 175;
-				this.typeSpecifier();
+				this.typeSpecifierExpression();
 				this.state = 177;
 				this._errHandler.sync(this);
 				switch (this.interpreter.adaptivePredict(this._input, 7, this._ctx)) {
@@ -855,8 +851,8 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public storageTypeSpecifier(): StorageTypeSpecifierContext {
-		let _localctx: StorageTypeSpecifierContext = new StorageTypeSpecifierContext(this._ctx, this.state);
+	public storageTypeSpecifier(): storageTypeSpecifierContext {
+		let _localctx: storageTypeSpecifierContext = new storageTypeSpecifierContext(this._ctx, this.state);
 		this.enterRule(_localctx, 16, KipperParser.RULE_storageTypeSpecifier);
 		let _la: number;
 		try {
@@ -947,7 +943,7 @@ export class KipperParser extends Parser {
 				this.state = 189;
 				this.match(KipperParser.Colon);
 				this.state = 190;
-				this.typeSpecifier();
+				this.typeSpecifierExpression();
 				this.state = 193;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
@@ -1025,7 +1021,7 @@ export class KipperParser extends Parser {
 				this.state = 204;
 				this.match(KipperParser.Colon);
 				this.state = 205;
-				this.typeSpecifier();
+				this.typeSpecifierExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -2324,11 +2320,8 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public arrayLiteralPrimaryExpression(): ArrayLiteralPrimaryExpressionContext {
-		let _localctx: ArrayLiteralPrimaryExpressionContext = new ArrayLiteralPrimaryExpressionContext(
-			this._ctx,
-			this.state,
-		);
+	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext {
+		let _localctx: ArrayPrimaryExpressionContext = new ArrayPrimaryExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 76, KipperParser.RULE_arrayLiteralPrimaryExpression);
 		let _la: number;
 		try {
@@ -2543,7 +2536,7 @@ export class KipperParser extends Parser {
 
 							this.state = 396;
 							this.match(KipperParser.RightParen);
-							_localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression;
+							_localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression;
 						}
 						break;
 					default:
@@ -2614,7 +2607,7 @@ export class KipperParser extends Parser {
 
 										this.state = 406;
 										this.match(KipperParser.RightParen);
-										_localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression;
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression;
 									}
 									break;
 
@@ -2630,7 +2623,7 @@ export class KipperParser extends Parser {
 										}
 										this.state = 409;
 										this.dotNotation();
-										_localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression;
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
 									}
 									break;
 
@@ -2646,7 +2639,7 @@ export class KipperParser extends Parser {
 										}
 										this.state = 413;
 										this.bracketNotation();
-										_localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression;
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
 									}
 									break;
 
@@ -2662,7 +2655,7 @@ export class KipperParser extends Parser {
 										}
 										this.state = 417;
 										this.sliceNotation();
-										_localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression;
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
 									}
 									break;
 							}
@@ -3166,7 +3159,7 @@ export class KipperParser extends Parser {
 						this.state = 478;
 						this.match(KipperParser.As);
 						this.state = 479;
-						this.typeSpecifier();
+						this.typeSpecifierExpression();
 					}
 					break;
 			}
@@ -3858,9 +3851,9 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public typeSpecifier(): TypeSpecifierContext {
-		let _localctx: TypeSpecifierContext = new TypeSpecifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 126, KipperParser.RULE_typeSpecifier);
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		let _localctx: TypeSpecifierExpressionContext = new TypeSpecifierExpressionContext(this._ctx, this.state);
+		this.enterRule(_localctx, 126, KipperParser.RULE_typeSpecifierExpression);
 		try {
 			this.state = 578;
 			this._errHandler.sync(this);
@@ -3869,7 +3862,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 575;
-						this.identifierTypeSpecifier();
+						this.identifierTypeSpecifierExpression();
 					}
 					break;
 
@@ -3877,7 +3870,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 576;
-						this.genericTypeSpecifier();
+						this.genericTypeSpecifierExpression();
 					}
 					break;
 
@@ -3885,7 +3878,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 3);
 					{
 						this.state = 577;
-						this.typeofTypeSpecifier();
+						this.typeofTypeSpecifierExpression();
 					}
 					break;
 			}
@@ -3903,9 +3896,12 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public identifierTypeSpecifier(): IdentifierTypeSpecifierContext {
-		let _localctx: IdentifierTypeSpecifierContext = new IdentifierTypeSpecifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 128, KipperParser.RULE_identifierTypeSpecifier);
+	public identifierTypeSpecifierExpression(): IdentifierTypeSpecifierExpressionContext {
+		let _localctx: IdentifierTypeSpecifierExpressionContext = new IdentifierTypeSpecifierExpressionContext(
+			this._ctx,
+			this.state,
+		);
+		this.enterRule(_localctx, 128, KipperParser.RULE_identifierTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
@@ -3926,9 +3922,12 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public genericTypeSpecifier(): GenericTypeSpecifierContext {
-		let _localctx: GenericTypeSpecifierContext = new GenericTypeSpecifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 130, KipperParser.RULE_genericTypeSpecifier);
+	public genericTypeSpecifierExpression(): GenericTypeSpecifierExpressionContext {
+		let _localctx: GenericTypeSpecifierExpressionContext = new GenericTypeSpecifierExpressionContext(
+			this._ctx,
+			this.state,
+		);
+		this.enterRule(_localctx, 130, KipperParser.RULE_genericTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
@@ -3955,9 +3954,12 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public typeofTypeSpecifier(): TypeofTypeSpecifierContext {
-		let _localctx: TypeofTypeSpecifierContext = new TypeofTypeSpecifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 132, KipperParser.RULE_typeofTypeSpecifier);
+	public typeofTypeSpecifierExpression(): TypeofTypeSpecifierExpressionContext {
+		let _localctx: TypeofTypeSpecifierExpressionContext = new TypeofTypeSpecifierExpressionContext(
+			this._ctx,
+			this.state,
+		);
+		this.enterRule(_localctx, 132, KipperParser.RULE_typeofTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
@@ -4650,8 +4652,8 @@ export class FunctionDeclarationContext extends KipperParserRuleContext {
 	public RetIndicator(): TerminalNode {
 		return this.getToken(KipperParser.RetIndicator, 0);
 	}
-	public typeSpecifier(): TypeSpecifierContext {
-		return this.getRuleContext(0, TypeSpecifierContext);
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
 	}
 	public parameterList(): ParameterListContext | undefined {
 		return this.tryGetRuleContext(0, ParameterListContext);
@@ -4689,8 +4691,8 @@ export class FunctionDeclarationContext extends KipperParserRuleContext {
 }
 
 export class VariableDeclarationContext extends KipperParserRuleContext {
-	public storageTypeSpecifier(): StorageTypeSpecifierContext {
-		return this.getRuleContext(0, StorageTypeSpecifierContext);
+	public storageTypeSpecifier(): storageTypeSpecifierContext {
+		return this.getRuleContext(0, storageTypeSpecifierContext);
 	}
 	public initDeclarator(): InitDeclaratorContext {
 		return this.getRuleContext(0, InitDeclaratorContext);
@@ -4724,7 +4726,7 @@ export class VariableDeclarationContext extends KipperParserRuleContext {
 	}
 }
 
-export class StorageTypeSpecifierContext extends KipperParserRuleContext {
+export class storageTypeSpecifierContext extends KipperParserRuleContext {
 	public Var(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Var, 0);
 	}
@@ -4833,8 +4835,8 @@ export class InitDeclaratorContext extends KipperParserRuleContext {
 	public Colon(): TerminalNode {
 		return this.getToken(KipperParser.Colon, 0);
 	}
-	public typeSpecifier(): TypeSpecifierContext {
-		return this.getRuleContext(0, TypeSpecifierContext);
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
 	}
 	public Assign(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Assign, 0);
@@ -4926,8 +4928,8 @@ export class ParameterDeclarationContext extends KipperParserRuleContext {
 	public Colon(): TerminalNode {
 		return this.getToken(KipperParser.Colon, 0);
 	}
-	public typeSpecifier(): TypeSpecifierContext {
-		return this.getRuleContext(0, TypeSpecifierContext);
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -5604,8 +5606,8 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	public numberPrimaryExpression(): NumberPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, NumberPrimaryExpressionContext);
 	}
-	public arrayLiteralPrimaryExpression(): ArrayLiteralPrimaryExpressionContext | undefined {
-		return this.tryGetRuleContext(0, ArrayLiteralPrimaryExpressionContext);
+	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext | undefined {
+		return this.tryGetRuleContext(0, ArrayPrimaryExpressionContext);
 	}
 	public voidOrNullOrUndefinedPrimaryExpression(): VoidOrNullOrUndefinedPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, VoidOrNullOrUndefinedPrimaryExpressionContext);
@@ -5996,7 +5998,7 @@ export class NumberPrimaryExpressionContext extends KipperParserRuleContext {
 	}
 }
 
-export class ArrayLiteralPrimaryExpressionContext extends KipperParserRuleContext {
+export class ArrayPrimaryExpressionContext extends KipperParserRuleContext {
 	public LeftBracket(): TerminalNode {
 		return this.getToken(KipperParser.LeftBracket, 0);
 	}
@@ -6030,20 +6032,20 @@ export class ArrayLiteralPrimaryExpressionContext extends KipperParserRuleContex
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterArrayLiteralPrimaryExpression) {
-			listener.enterArrayLiteralPrimaryExpression(this);
+		if (listener.enterArrayPrimaryExpression) {
+			listener.enterArrayPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitArrayLiteralPrimaryExpression) {
-			listener.exitArrayLiteralPrimaryExpression(this);
+		if (listener.exitArrayPrimaryExpression) {
+			listener.exitArrayPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitArrayLiteralPrimaryExpression) {
-			return visitor.visitArrayLiteralPrimaryExpression(this);
+		if (visitor.visitArrayPrimaryExpression) {
+			return visitor.visitArrayPrimaryExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -6787,8 +6789,8 @@ export class ActualCastOrConvertExpressionContext extends CastOrConvertExpressio
 	public As(): TerminalNode {
 		return this.getToken(KipperParser.As, 0);
 	}
-	public typeSpecifier(): TypeSpecifierContext {
-		return this.getRuleContext(0, TypeSpecifierContext);
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
 	}
 	constructor(ctx: CastOrConvertExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -7561,46 +7563,46 @@ export class ExpressionContext extends KipperParserRuleContext {
 	}
 }
 
-export class TypeSpecifierContext extends KipperParserRuleContext {
-	public identifierTypeSpecifier(): IdentifierTypeSpecifierContext | undefined {
-		return this.tryGetRuleContext(0, IdentifierTypeSpecifierContext);
+export class TypeSpecifierExpressionContext extends KipperParserRuleContext {
+	public identifierTypeSpecifierExpression(): IdentifierTypeSpecifierExpressionContext | undefined {
+		return this.tryGetRuleContext(0, IdentifierTypeSpecifierExpressionContext);
 	}
-	public genericTypeSpecifier(): GenericTypeSpecifierContext | undefined {
-		return this.tryGetRuleContext(0, GenericTypeSpecifierContext);
+	public genericTypeSpecifierExpression(): GenericTypeSpecifierExpressionContext | undefined {
+		return this.tryGetRuleContext(0, GenericTypeSpecifierExpressionContext);
 	}
-	public typeofTypeSpecifier(): TypeofTypeSpecifierContext | undefined {
-		return this.tryGetRuleContext(0, TypeofTypeSpecifierContext);
+	public typeofTypeSpecifierExpression(): TypeofTypeSpecifierExpressionContext | undefined {
+		return this.tryGetRuleContext(0, TypeofTypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_typeSpecifier;
+		return KipperParser.RULE_typeSpecifierExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterTypeSpecifier) {
-			listener.enterTypeSpecifier(this);
+		if (listener.enterTypeSpecifierExpression) {
+			listener.enterTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitTypeSpecifier) {
-			listener.exitTypeSpecifier(this);
+		if (listener.exitTypeSpecifierExpression) {
+			listener.exitTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitTypeSpecifier) {
-			return visitor.visitTypeSpecifier(this);
+		if (visitor.visitTypeSpecifierExpression) {
+			return visitor.visitTypeSpecifierExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 
-export class IdentifierTypeSpecifierContext extends KipperParserRuleContext {
+export class IdentifierTypeSpecifierExpressionContext extends KipperParserRuleContext {
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
 		return this.getRuleContext(0, TypeSpecifierIdentifierContext);
 	}
@@ -7609,31 +7611,31 @@ export class IdentifierTypeSpecifierContext extends KipperParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_identifierTypeSpecifier;
+		return KipperParser.RULE_identifierTypeSpecifierExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterIdentifierTypeSpecifier) {
-			listener.enterIdentifierTypeSpecifier(this);
+		if (listener.enterIdentifierTypeSpecifierExpression) {
+			listener.enterIdentifierTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitIdentifierTypeSpecifier) {
-			listener.exitIdentifierTypeSpecifier(this);
+		if (listener.exitIdentifierTypeSpecifierExpression) {
+			listener.exitIdentifierTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitIdentifierTypeSpecifier) {
-			return visitor.visitIdentifierTypeSpecifier(this);
+		if (visitor.visitIdentifierTypeSpecifierExpression) {
+			return visitor.visitIdentifierTypeSpecifierExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 
-export class GenericTypeSpecifierContext extends KipperParserRuleContext {
+export class GenericTypeSpecifierExpressionContext extends KipperParserRuleContext {
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext[];
 	public typeSpecifierIdentifier(i: number): TypeSpecifierIdentifierContext;
 	public typeSpecifierIdentifier(i?: number): TypeSpecifierIdentifierContext | TypeSpecifierIdentifierContext[] {
@@ -7654,31 +7656,31 @@ export class GenericTypeSpecifierContext extends KipperParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_genericTypeSpecifier;
+		return KipperParser.RULE_genericTypeSpecifierExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterGenericTypeSpecifier) {
-			listener.enterGenericTypeSpecifier(this);
+		if (listener.enterGenericTypeSpecifierExpression) {
+			listener.enterGenericTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitGenericTypeSpecifier) {
-			listener.exitGenericTypeSpecifier(this);
+		if (listener.exitGenericTypeSpecifierExpression) {
+			listener.exitGenericTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitGenericTypeSpecifier) {
-			return visitor.visitGenericTypeSpecifier(this);
+		if (visitor.visitGenericTypeSpecifierExpression) {
+			return visitor.visitGenericTypeSpecifierExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
 	}
 }
 
-export class TypeofTypeSpecifierContext extends KipperParserRuleContext {
+export class TypeofTypeSpecifierExpressionContext extends KipperParserRuleContext {
 	public Typeof(): TerminalNode {
 		return this.getToken(KipperParser.Typeof, 0);
 	}
@@ -7696,24 +7698,24 @@ export class TypeofTypeSpecifierContext extends KipperParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_typeofTypeSpecifier;
+		return KipperParser.RULE_typeofTypeSpecifierExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterTypeofTypeSpecifier) {
-			listener.enterTypeofTypeSpecifier(this);
+		if (listener.enterTypeofTypeSpecifierExpression) {
+			listener.enterTypeofTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitTypeofTypeSpecifier) {
-			listener.exitTypeofTypeSpecifier(this);
+		if (listener.exitTypeofTypeSpecifierExpression) {
+			listener.exitTypeofTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitTypeofTypeSpecifier) {
-			return visitor.visitTypeofTypeSpecifier(this);
+		if (visitor.visitTypeofTypeSpecifierExpression) {
+			return visitor.visitTypeofTypeSpecifierExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

@@ -15,3 +15,4 @@ kipper-standalone.min.js
 kipper/web/src/
 *.yaml
 *.json
+CITATION.cff

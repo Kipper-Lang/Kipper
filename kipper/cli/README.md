@@ -1,13 +1,13 @@
 ![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper CLI - `@kipper/cli`
+# Kipper CLI - `@kipper/cli` 🦊🖥️
 
-The Kipper command line interface (CLI) to interact with the Kipper compiler.
+The Kipper command line interface (CLI) to interact with the Kipper compiler. 🦊✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -19,9 +19,10 @@ and the [Kipper website](https://kipper-lang.org)._
 [![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
 [![Install size](https://packagephobia.com/badge?p=@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/cli)](https://packagephobia.com/result?p=@kipper/cli)
+[![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
-* [Kipper CLI - `@kipper/cli`](#kipper-cli---kippercli)
+* [Kipper CLI - `@kipper/cli` 🦊🖥️](#kipper-cli---kippercli-️)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -43,7 +44,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.0 linux-x64 node-v18.15.0
+@kipper/cli/0.11.0-alpha.1 linux-x64 node-v20.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -80,7 +81,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -108,18 +109,18 @@ OPTIONS
   -s, --string-code=string-code  The content of a Kipper file that can be passed as a replacement for the 'file'
                                  parameter.
 
-  -t, --[no-]log-timestamp       Show the timestamp of each log message.
-
   -t, --target=js|ts             [default: js] The target language where the compiled program should be emitted to.
 
   -w, --[no-]warnings            Show warnings that were emitted during the compilation.
 
   --[no-]abort-on-first-error    Abort on the first error the compiler encounters.
 
+  --[no-]log-timestamp           Show the timestamp of each log message.
+
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -136,7 +137,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run [FILE]`
 
@@ -175,7 +176,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -186,8 +187,17 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
+
+## Contributing to Kipper
+
+If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
+issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+
+We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 

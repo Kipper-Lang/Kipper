@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: Kipper
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Luna
+    family-names: Klatzer
+    email: luna.klatzer@gmail.com
+    affiliation: HTL Leonding
+    orcid: 'https://orcid.org/0009-0001-5332-8988'
+identifiers:
+  - type: url
+    value: >-
+      https://github.com/Kipper-Lang/Kipper/releases/tag/v0.11.0-alpha.1
+    description: The GitHub release URL of tag 0.11.0-alpha.1
+repository-code: 'https://github.com/Kipper-Lang/Kipper/'
+url: 'https://kipper-lang.org'
+abstract: >-
+  Kipper is a JavaScript-like strongly and strictly typed
+  language with Python flavour. It aims to provide
+  straightforward, simple, secure and type-safe coding with
+  better efficiency and developer satisfaction. It compiles
+  to both JavaScript and TypeScript, and can be set up in
+  your terminal, Node.js or ES6+ browser.
+keywords:
+  - compiler
+  - transpiler
+  - code-generation
+  - oop-programming
+  - type-safety
+license: GPL-3.0-or-later
+license-url: 'https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/LICENSE'
+version: 0.11.0-alpha.1
+date-released: '2023-08-15'

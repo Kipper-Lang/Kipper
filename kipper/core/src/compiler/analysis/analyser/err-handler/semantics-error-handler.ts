@@ -5,7 +5,7 @@
 import type { CompilableASTNode } from "../../../ast";
 import type { KipperParseStream } from "../../../parser";
 import { KipperError } from "../../../../errors";
-import { getParseRuleSource } from "../../../../utils";
+import { getParseRuleSource } from "../../../../tools";
 
 /**
  * Error handler which handles semantic errors for {@link CompilableASTNode compilable AST nodes}.

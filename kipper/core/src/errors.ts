@@ -9,7 +9,7 @@ import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import type { KipperParseStream } from "./compiler";
 import { CompilableASTNode, KipperProgramContext } from "./compiler";
-import { getParseRuleSource } from "./utils";
+import { getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -173,7 +173,7 @@ export class KipperError extends Error {
 
 	/**
 	 * Returns the program ctx containing the metadata of the program compilation in which the error occurred.
-	 * @since 0.11.0
+	 * @since 0.10.2
 	 */
 	public get programCtx(): KipperProgramContext | undefined {
 		return this.tracebackData.errorNode?.programCtx;
@@ -196,7 +196,7 @@ export class KipperConfigError extends KipperError {
  */
 export class KipperInternalError extends Error {
 	constructor(msg: string) {
-		super(`${msg} - Report this bug to the developer using the traceback!`);
+		super(msg);
 		this.name = this.constructor.name === "KipperInternalError" ? "InternalError" : this.constructor.name;
 	}
 }

@@ -4,6 +4,8 @@
  * @since 0.11.0
  */
 export * from "./declaration";
-export * from "./parameter-declaration";
-export * from "./function-declaration";
-export * from "./variable-declaration";
+export * from "./declaration-semantics";
+export * from "./declaration-type-semantics";
+export * from "./parameter-declaration/";
+export * from "./function-declaration/";
+export * from "./variable-declaration/";

@@ -14,7 +14,7 @@ import { testPrintOutput } from "./core-functionality.test";
  */
 function getJSEvalCode(result: KipperCompileResult): string {
 	let code = result.write();
-	if (result.programCtx.target instanceof KipperTypeScriptTarget) {
+	if (result.programCtx!!.target instanceof KipperTypeScriptTarget) {
 		code = ts.transpile(code);
 	}
 	return code;
@@ -147,7 +147,7 @@ describe("Built-ins", () => {
 			const result = await compiler.compile(stream, { target: new TargetTS() });
 
 			assert.include(result.write(), "print(__name__);");
-			assert.equal(result.programCtx.builtInVariableReferences.length, 1);
+			assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
 
 			let code: string = getJSEvalCode(result);
 			testPrintOutput((out) => assert.equal(out, "test.kip"), code);

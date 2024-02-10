@@ -157,17 +157,27 @@ which can be included and used inside a browser without any dependencies.
     export const version = "MAJOR.MINOR.PATCH";
     ```
 
-    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version. These
-    changes must be committed yourself with a commit message preferably similar to this:
+    The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
+
+    Additionally, you will have to update `CITATION.cff`, which contains the explanation for how to cite this project.
+    For that you will need to update every reference to the old version and replace it with the new one. The fields
+    that must be changed are as follows:
+
+    - `identifiers.value`
+    - `identifiers.description`
+    - `license-url`
+    - `version`
+
+    These changes must be committed yourself with a commit message preferably similar to this:
 
     ```
-    Bumped static index.ts versions to MAJOR.MINOR.PATCH
+    release: Bumped static index.ts versions to MAJOR.MINOR.PATCH
     ```
 
     For example:
 
     ```
-    Bumped static index.ts versions to 0.5.0-rc.0
+    release: Bumped static index.ts versions to 0.5.0-rc.0
     ```
 
 4.  Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
@@ -213,8 +223,8 @@ which can be included and used inside a browser without any dependencies.
     pnpm publish --tag alpha; pnpm -r publish --tag alpha
     ```
 
-    Afterwards ensure the `next` tag is updated for every package using:
+    Afterwards ensure the `next` tag is updated for every package using (Requires `npm` to be installed):
 
     ```bash
-    npm dist-tag add <PACKAGE>@<VERSION> next
-    ```
+    pnpm run add-next-tag MAJOR.MINOR.PATCH
+	```
