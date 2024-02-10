@@ -22,9 +22,8 @@ export class MarkdownDocsBuilder {
 	public readonly converter: showdown.Converter;
 	public readonly baseTemplate: string;
 
-	public constructor(docsEJSTemplate: string) {
-		// Create new converted - Note: Extension 'line-numbers' is disabled for now
-		this.converter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
+	public constructor(docsEJSTemplate: string, converter: showdown.Converter) {
+		this.converter = converter;
 
 		// Get base Docs template
 		this.baseTemplate = path.resolve(docsEJSTemplate);

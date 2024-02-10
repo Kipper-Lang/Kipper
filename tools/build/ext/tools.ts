@@ -1,3 +1,4 @@
+import type * as showdownModule from "showdown";
 import {
 	AbsolutePath,
 	DirTreeItem,
@@ -18,8 +19,9 @@ import * as cheerio from "cheerio";
 import * as path from "path";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
-import * as showdown from "showdown";
 import fetch from "node-fetch";
+import { KIPPER_NPMJS_URL } from "../const";
+import { downloadLatestChangelog } from "./changelog";
 
 /**
  * Returns whether 'copyToRoot' is true for the specified version.
@@ -141,7 +143,7 @@ export async function getBuildData(dataFile: Path): Promise<Record<string, any>>
 	log.debug("Requesting package metadata from registry.npmjs.org");
 	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
-	const resp = await fetch("https://registry.npmjs.org/kipper");
+	const resp = await fetch(KIPPER_NPMJS_URL);
 	const json = await resp.json();
 
 	return {
@@ -209,8 +211,14 @@ export async function copyNonEJSFiles(src: AbsolutePath, dest: AbsolutePath): Pr
  * @param src The source directory of the ejs files.
  * @param dest The destination directory of the ejs files.
  * @param data The data to pass to the ejs renderer.
+ * @param showdownConverter The showdown converter to convert markdown to HTML.
  */
-export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data: Record<string, any>): Promise<void> {
+export async function buildEjsFiles(
+  src: AbsolutePath,
+  dest: AbsolutePath,
+  data: Record<string, any>,
+  showdownConverter: showdownModule.Converter,
+): Promise<void> {
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
 
@@ -225,8 +233,10 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 		}
 	}
 
-	// The converter for the markdown files
-	const markdownConverter = new showdown.Converter({ metadata: true /* extensions: ['line-numbers'] } */ });
+  // Download the changelog and store it in a variable (will be used later for changelog.ejs)
+  // (This is important to always get the latest changelog)
+  const changelogMd: string = await downloadLatestChangelog();
+  mdFiles.push("changelog.md");
 
 	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
 	for (let file of result) {
@@ -250,8 +260,13 @@ export async function buildEjsFiles(src: AbsolutePath, dest: AbsolutePath, data:
 			// and insert it into the ejs file
 			let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
 			if (mdFile !== undefined) {
-				const md = (await fs.readFile(path.resolve(src, mdFile))).toString();
-				itemData.markdownContent = markdownConverter.makeHtml(md);
+        let md: string;
+				if (mdFile === "changelog.md") {
+          md = changelogMd;
+        } else {
+          md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+        }
+				itemData.markdownContent = showdownConverter.makeHtml(md);
 			}
 
 			// Build ejs file
