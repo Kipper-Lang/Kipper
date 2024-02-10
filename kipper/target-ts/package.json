@@ -1,7 +1,7 @@
 {
 	"name": "@kipper/target-ts",
 	"description": "The TypeScript target for the Kipper compiler 🦊",
-	"version": "0.11.0-alpha.0",
+	"version": "0.11.0-alpha.1",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"@kipper/target-js": "workspace:~",
@@ -20,10 +20,10 @@
 		"ts-node": "10.9.1",
 		"@types/node": "18.16.16"
 	},
-  "engines": {
-    "node": ">=16.0.0",
-    "pnpm": ">=8"
-  },
+	"engines": {
+		"node": ">=16.0.0",
+		"pnpm": ">=8"
+	},
 	"homepage": "https://kipper-lang.org",
 	"bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
 	"repository": {

@@ -22,10 +22,9 @@ and the [Kipper website](https://kipper-lang.org)._
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
-
-- [Kipper CLI - `@kipper/cli` 🦊🖥️](#kipper-cli---kippercli-️)
-- [Usage](#usage)
-- [Commands](#commands)
+* [Kipper CLI - `@kipper/cli` 🦊🖥️](#kipper-cli---kippercli-️)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 ## General Information
@@ -40,30 +39,27 @@ and the [Kipper website](https://kipper-lang.org)._
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.0 linux-x64 node-v18.15.0
+@kipper/cli/0.11.0-alpha.1 linux-x64 node-v20.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kipper analyse [FILE]`](#kipper-analyse-file)
-- [`kipper compile [FILE]`](#kipper-compile-file)
-- [`kipper help [COMMAND]`](#kipper-help-command)
-- [`kipper run [FILE]`](#kipper-run-file)
-- [`kipper version`](#kipper-version)
+* [`kipper analyse [FILE]`](#kipper-analyse-file)
+* [`kipper compile [FILE]`](#kipper-compile-file)
+* [`kipper help [COMMAND]`](#kipper-help-command)
+* [`kipper run [FILE]`](#kipper-run-file)
+* [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
 
@@ -85,7 +81,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -124,7 +120,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -141,7 +137,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/help.ts)_
 
 ## `kipper run [FILE]`
 
@@ -180,7 +176,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -191,8 +187,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.0/kipper/cli/src/commands/version.ts)_
-
+_See code: [src/commands/version.ts](https://github.com/Luna-Klatzer/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper
