@@ -43,12 +43,14 @@ import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
 import { log } from "./ext/logger";
 import { parcelBuild } from "./ext/parcel-build";
+import { registerChangelogFixExtension } from "./ext/changelog";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
 ejs.cache = new lru({
 	max: 500,
 });
+
 
 // Add new extension to showdown
 showdown.extension("line-numbers", () => {
@@ -62,6 +64,9 @@ showdown.extension("line-numbers", () => {
 		},
 	];
 });
+
+// Add changelog fix extension to showdown
+registerChangelogFixExtension(showdown);
 
 // Configure showdown
 showdown.setFlavor("github");
@@ -81,12 +86,21 @@ showdown.setOption("disableForced4SpacesIndentedSublists", true);
 showdown.setOption("customizedHeaderId", true);
 showdown.setOption("emoji", true);
 
+// Global showdown converter
+const showdownConverter = new showdown.Converter({
+  metadata: true,
+  extensions: [
+    /* line-numbers, */
+    "fix-details-summary"
+  ]
+});
+
 /**
  * The docs builder class managing the build process for the Markdown documentation files.
  */
 export class DocsBuilder extends MarkdownDocsBuilder {
-	public constructor(docsEJSTemplate: string) {
-		super(docsEJSTemplate);
+	public constructor(docsEJSTemplate: string, converter: showdown.Converter) {
+		super(docsEJSTemplate, converter);
 	}
 
 	/**
@@ -333,16 +347,16 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
   );
   await ensureCleanDirectory(distRootDir); // Clean the dist folder
 
-	// Get data for the ejs build
 	const data = await getBuildData(configPath);
 
 	// Build all ejs files (Convert from EJS to HTML)
+  // This also includes all root Markdown files (e.g. download.md) which is then loaded into those ejs files as well
 	log.info("Building static EJS files");
-	await buildEjsFiles(srcRootDir, destRootDir, data);
+	await buildEjsFiles(srcRootDir, destRootDir, data, showdownConverter);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const ejsDocsTemplate = path.resolve(`${srcRootDir}/partials/docs/page-template.ejs`);
-	const docsBuilder = new DocsBuilder(ejsDocsTemplate);
+	const docsBuilder = new DocsBuilder(ejsDocsTemplate, showdownConverter);
 	const versionSidebars = await docsBuilder.build(
     srcRootDocs, destRootDocs, data
   );
@@ -368,7 +382,7 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 
 		// Build the API docs - Injecting the API docs into the already compiled build folder
 		log.info("Preparing to inject API docs for versions: " + versions.join(", "));
-		const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir);
+		const apiDocsBuilder = new APIDocsBuilder(ejsDocsTemplate, srcRootDir, destRootDir, showdownConverter);
 		await apiDocsBuilder.buildAPIDocs(versions, packagesToDocument, versionSidebars, {
 			apiPath,
 			docsPath: "/docs/",

@@ -16,30 +16,13 @@
         <!-- The top element: menu and search bar -->
         <%- include('./partials/header-nav-bar', { header: true, title: title, description: description }) %>
 
-
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="text-page-content-container">
             <div id="changelog-content" class="text-content shadowed-box">
                 <section id="changelog">
                     <script src="./showdown/showdown.min.js"></script>
-                    <script>
-                      console.log("Loading Changelog...");
-                      const url = "https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/CHANGELOG.md";
-                      fetch(url)
-                        .then((response) => response.text())
-                        .then((response) => {
-                          // Set markdown flavor to 'github'
-                          showdown.setFlavor("github");
-                          showdown.setOption('simpleLineBreaks', false);
-
-                          const converter = new showdown.Converter();
-
-                          const md = response.toString();
-                          document.getElementById("markdown-content").innerHTML = converter.makeHtml(md);
-                        });
-                    </script>
                     <!-- Markdown will be added here -->
-                    <article class="markdown-content"></article>
+                    <article class="markdown-content"><%- markdownContent %></article>
                 </section>
             </div>
         </div>

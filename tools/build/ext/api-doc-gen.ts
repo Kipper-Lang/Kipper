@@ -1,4 +1,5 @@
 import type { AbsolutePath, DocumentMetaData, FileOrDirName, WebURLPath } from "./base-types";
+import type * as showdown from "showdown";
 import { finished } from "stream/promises";
 import { Readable } from "stream";
 import { spawn } from "child_process";
@@ -20,7 +21,6 @@ import * as path from "path";
 import * as fsSync from "fs";
 import * as fs from "fs/promises";
 import * as extractZip from "extract-zip";
-import { constants } from "fs";
 
 export const PROJECT_ZIP_PATH: string = "https://github.com/Luna-Klatzer/Kipper/zipball/$VERSION/";
 export const REPLACE_TEMPLATE: string = "<!-- Replace this with API docs generation -->";
@@ -107,8 +107,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	public srcRootDir: string;
 	public destRootDir: string;
 
-	public constructor(docsEJSTemplate: string, srcRootDir: string, destRootDir: string) {
-		super(docsEJSTemplate);
+	public constructor(docsEJSTemplate: string, srcRootDir: string, destRootDir: string, convert: showdown.Converter) {
+		super(docsEJSTemplate, convert);
 		this.srcRootDir = srcRootDir;
 		this.destRootDir = destRootDir;
 	}
