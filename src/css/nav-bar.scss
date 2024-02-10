@@ -7,11 +7,11 @@ nav#phone-header-nav-bar {
 	visibility: hidden;
 }
 
-#page-header {
+#page-header-wrapper {
 	clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
 }
 
-#header-description-content #page-header h1 {
+#header-description-content #page-header-wrapper h1 {
 	margin-top: 1rem;
 }
 
