@@ -126,7 +126,7 @@ which can be included and used inside a browser without any dependencies.
 ## Making a new release
 
 1.  Get new version for the next release
-    (Visit GitHub for the [recommended version](https://github.com/Luna-Klatzer/Kipper/releases)):
+    (Visit GitHub for the [recommended version](https://github.com/Kipper-Lang/Kipper/releases)):
 
     ```bash
     MAJOR.MINOR.PATCH

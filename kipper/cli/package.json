@@ -45,10 +45,10 @@
     "LICENSE"
   ],
   "homepage": "https://kipper-lang.org",
-  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "bugs": "https://github.com/Kipper-Lang/Kipper/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper"
+    "url": "https://github.com/Kipper-Lang/Kipper"
   },
   "keywords": [
     "kipper",
@@ -68,7 +68,7 @@
       "@oclif/plugin-warn-if-update-available"
     ],
     "helpClass": "./lib/help",
-    "repositoryPrefix": "https://github.com/Luna-Klatzer/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>",
+    "repositoryPrefix": "https://github.com/Kipper-Lang/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>",
     "warn-if-update-available": {
       "timeoutInDays": 7,
       "message": "<%= config.name %> npm package update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>."

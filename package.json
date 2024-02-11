@@ -48,10 +48,10 @@
     "pnpm": ">=8"
   },
   "homepage": "https://kipper-lang.org",
-  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "bugs": "https://github.com/Kipper-Lang/Kipper/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper"
+    "url": "https://github.com/Kipper-Lang/Kipper"
   },
   "keywords": [
     "kipper",

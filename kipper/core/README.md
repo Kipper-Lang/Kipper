@@ -1,12 +1,12 @@
-![](https://github.com/Luna-Klatzer/Kipper/raw/main/img/Kipper-Logo-with-head.png)
+![](https://github.com/Kipper-Lang/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
 # Kipper Core Package - `@kipper/core` 🦊✨
 
 [![Version](https://img.shields.io/npm/v/@kipper/core?label=npm%20stable&color=%23cd2620&logo=npm)](https://npmjs.org/package/kipper)
-[![Dev Version](https://img.shields.io/github/v/tag/Luna-Klatzer/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Luna-Klatzer/Kipper/tags)
-[![codecov](https://codecov.io/gh/Luna-Klatzer/Kipper/branch/main/graph/badge.svg?token=S4RQT7X3YP)](https://codecov.io/gh/Luna-Klatzer/Kipper)
-[![Issues](https://img.shields.io/github/issues/Luna-Klatzer/Kipper)](https://github.com/Luna-Klatzer/Kipper/issues)
-[![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)](https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE)
+[![Dev Version](https://img.shields.io/github/v/tag/Kipper-Lang/Kipper?include_prereleases&label=dev&logo=github&sort=semver)](https://github.com/Kipper-Lang/Kipper/tags)
+[![codecov](https://codecov.io/gh/Kipper-Lang/Kipper/branch/main/graph/badge.svg?token=S4RQT7X3YP)](https://codecov.io/gh/Kipper-Lang/Kipper)
+[![Issues](https://img.shields.io/github/issues/Kipper-Lang/Kipper)](https://github.com/Kipper-Lang/Kipper/issues)
+[![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)](https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE)
 [![Install size](https://packagephobia.com/badge?p=@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
@@ -18,7 +18,7 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
-_For more details, you can read more about this project on the [project repository](https://github.com/Luna-Klatzer/Kipper)
+_For more details, you can read more about this project on the [project repository](https://github.com/Kipper-Lang/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
 
 ## Installation
@@ -37,8 +37,8 @@ If you are using `pnpm` or `yarn`, use `pnpm i @kipper/core` or `yarn add @kippe
 - Docs: https://docs.kipper-lang.org
 - Playground: https://play.kipper-lang.org
 - Issue Tracker: https://issues.kipper-lang.org
-- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Luna-Klatzer/Kipper/discussions/139)
-- Changelog: [View CHANGELOG.md](https://github.com/Luna-Klatzer/Kipper/blob/main/CHANGELOG.md)
+- Roadmap: [View Kipper Roadmap 🦊🚧](https://github.com/Kipper-Lang/Kipper/discussions/139)
+- Changelog: [View CHANGELOG.md](https://github.com/Kipper-Lang/Kipper/blob/main/CHANGELOG.md)
 
 ## How to use Kipper?
 
@@ -97,7 +97,7 @@ This also enables the usage of Kipper files with the `.kip` extension, which can
 without having to configure anything yourself. This also allows the input of data over the
 console and file-interactions, which are not supported inside a browser.
 
-For more info go to the [`@kipper/cli` README](https://github.com/Luna-Klatzer/Kipper/blob/main/kipper/cli/README.md).
+For more info go to the [`@kipper/cli` README](https://github.com/Kipper-Lang/Kipper/blob/main/kipper/cli/README.md).
 
 ### Locally in your own code with `@kipper/core` 🦊⌨️
 
@@ -149,15 +149,15 @@ Simple example of using the Kipper Compiler in Node.js:
 ## Contributing to Kipper
 
 If you want to contribute to Kipper, we have a full guide explaining the structure of Kipper and how to use GitHub
-issues and pull requests. Check it out [here](https://github.com/Luna-Klatzer/Kipper/blob/main/CONTRIBUTING.md)!
+issues and pull requests. Check it out [here](https://github.com/Kipper-Lang/Kipper/blob/main/CONTRIBUTING.md)!
 
-If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Luna-Klatzer/Kipper/discussions)!
+If you have any questions or concerns, you can open up a discussion page [here](https://github.com/Kipper-Lang/Kipper/discussions)!
 
 We appreciate any feedback or help! Kipper is open-source and free for anyone, help us make it even better! 🦊❤️
 
 ## Copyright and License
 
-![License](https://img.shields.io/github/license/Luna-Klatzer/Kipper?color=cyan)
+![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
 Copyright (C) 2021-2023 Luna Klatzer
@@ -174,7 +174,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 
-See the [LICENSE](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/LICENSE)
+See the [LICENSE](https://raw.githubusercontent.com/Kipper-Lang/Kipper/main/LICENSE)
 for information on terms & conditions for usage.
 
 ### FOSSA License Report
