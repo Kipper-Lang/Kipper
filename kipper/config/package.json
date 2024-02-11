@@ -4,6 +4,7 @@
 	"version": "0.11.0-alpha.0",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"devDependencies": {
+		"@kipper/cli": "workspace:~",
 		"typescript": "5.1.3"
 	},
   "engines": {
@@ -24,19 +25,7 @@
 	"files": [
 		"lib",
 		"src",
-		"LICENSE",
-		"KipperLexer.g4",
-		"KipperParser.g4"
-	],
-	"size-limit": [
-		{
-			"path": "./kipper-standalone.min.js",
-			"limit": "200 kB"
-		},
-		{
-			"path": "./kipper-standalone.js",
-			"limit": "400 kB"
-		}
+		"LICENSE"
 	],
 	"license": "GPL-3.0-or-later",
 	"main": "lib/index.js",
@@ -45,14 +34,9 @@
 		"prepack": "pnpm run build",
 		"build": "tsc",
 		"version": "pnpm version",
-		"antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./KipperLexer.g4 ./KipperParser.g4",
-		"postantlr4ts": "run-script-os",
-		"postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./",
-		"postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\ && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\",
 		"lint": "pnpm run tslint",
 		"lint:fix": "pnpm run tslint:fix",
 		"tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
-		"tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
-		"size-limit": "size-limit"
+		"tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix"
 	}
 }
