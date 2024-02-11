@@ -53,17 +53,53 @@ export function writeConsoleOutputDefaultMessage(): void {
 	// Clear output
 	clearConsoleOutput();
 
-	const welcomeMessage: Array<string> = [
-		"--- Welcome to the Kipper Playground! ---\n",
-		"Try out your first program by writing:\n",
-		'  call print("Hello world");\n',
-		"Create your first variable by writing:\n",
-		'  var myString: str = "Hello world!";',
-		"  call print(myString);\n",
-		"Perform your first calculations by writing:\n",
-		"  var result: num = 3.14 * 9;",
-		"  call print(result as str);\n",
-	];
+	const welcomeMessage: Array<string> = `--- Welcome to the Kipper Playground! ---
+
+Try out your first program by writing:
+
+  print("Hello world");
+
+Create your first variable by writing:
+
+  var myString: str = "Hello world!";
+  print(myString);
+
+Perform your first calculations by writing:
+
+  var result: num = 3.14 * 9;
+  print(result as str);
+
+Like other languages, Kipper provides loops like while-loops:
+
+  var i: num = 0;
+  while (i < 5) {
+    print(i as str);
+    i = i + 1;
+  }
+
+And you can also use for-loops:
+
+  for (var i: num = 0; i < 5; i = i + 1) {
+    print(i as str);
+  }
+
+You can also use conditionals:
+
+  var x: num = 10;
+  if (x > 5) {
+    print("x is greater than 5");
+  } else {
+    print("x is less than or equal to 5");
+  }
+
+You can also define functions:
+
+  func add(a: num, b: num): num {
+    return a + b;
+  }
+  print(add(3, 4) as str);
+`
+    .split("\n");
 
 	// Write to the console
 	for (const msg of welcomeMessage) {
