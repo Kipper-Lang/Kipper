@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 devDependencies:
+  '@kipper/cli':
+    specifier: workspace:~
+    version: link:../cli
   typescript:
     specifier: 5.1.3
     version: 5.1.3
