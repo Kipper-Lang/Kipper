@@ -1,7 +1,8 @@
-import * as fs from 'fs/promises';
 import type { KipperEncoding } from "@kipper/cli";
 import { ConfigFile } from "./abstract/config-file";
 import * as path from "node:path";
+import * as fs from 'node:fs/promises';
+import { ensureExistsHasPermAndIsOfType } from "./tools";
 
 /**
  * A class that represents a Kipper config file.
@@ -30,6 +31,8 @@ export class KipperConfigFile extends ConfigFile {
 	 * @since 0.11.0
 	 */
 	static async fromFile(file: string, encoding: KipperEncoding): Promise<KipperConfigFile> {
+		await ensureExistsHasPermAndIsOfType(file, "r", "file");
+
 		const fileContent = await fs.readFile(file, { encoding });
 		const fileName = path.basename(file);
 		return new KipperConfigFile(fileContent, fileName, encoding);
