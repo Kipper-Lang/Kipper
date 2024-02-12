@@ -1,0 +1,12 @@
+{
+	"compiler": {
+		"version": "*",
+		"target": "ts"
+	},
+	"files": [
+		"src/index.kip"
+	],
+	"resources": [
+		"my-image.png"
+	]
+}
