@@ -12,12 +12,13 @@
 		"tslib": "~2.6.2"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "1.0.2",
+		"@types/chai": "4.3.0",
+		"@types/mocha": "10.0.1",
+		"@types/node": "18.16.16",
+		"@types/semver": "7.5.7",
     "@oclif/test": "2.3.21",
     "@size-limit/preset-big-lib": "8.2.4",
-    "@types/chai": "4.3.0",
-    "@types/mocha": "10.0.1",
-    "@types/node": "18.16.16",
+		"@istanbuljs/nyc-config-typescript": "1.0.2",
     "@typescript-eslint/eslint-plugin": "6.21.0",
 		"eslint": "8.56.0",
     "json-parse-even-better-errors": "3.0.0",
@@ -40,7 +41,8 @@
     "uglify-js": "3.17.4",
     "uuid": "9.0.0",
     "watchify": "4.0.0",
-		"antlr4ts": "^0.5.0-alpha.4"
+		"antlr4ts": "^0.5.0-alpha.4",
+		"semver": "7.6.0"
 	},
   "engines": {
     "node": ">=16.0.0",
