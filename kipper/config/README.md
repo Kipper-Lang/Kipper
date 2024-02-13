@@ -19,7 +19,6 @@ straightforward, simple, secure and type-safe coding with better efficiency and 
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
-
 _For more details, you can read more about this project on the [project repository](https://github.com/Kipper-Lang/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
 

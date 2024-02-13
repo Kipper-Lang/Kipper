@@ -6,33 +6,34 @@ import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "../eval
  * A type that represents a configuration scheme definition.
  * @since 0.11.0
  */
-export type ConfigInterpreterSchemeDefinition = {
-		type: "string" | "number" | "boolean";
-		required: boolean;
-		// eslint-disable-next-line no-mixed-spaces-and-tabs
-	}
+export type ConfigInterpreterSchemeDefinition =
 	| {
-		type: "array";
-		required: boolean;
-		itemType: "string" | "number" | "boolean";
-		// eslint-disable-next-line no-mixed-spaces-and-tabs
-	}
+			type: "string" | "number" | "boolean";
+			required: boolean;
+			// eslint-disable-next-line no-mixed-spaces-and-tabs
+	  }
 	| {
-		type: "object";
-		required: boolean;
-		properties: ConfigInterpreterScheme;
-		// eslint-disable-next-line no-mixed-spaces-and-tabs
-	}
+			type: "array";
+			required: boolean;
+			itemType: "string" | "number" | "boolean";
+			// eslint-disable-next-line no-mixed-spaces-and-tabs
+	  }
 	| {
-		type: "union";
-		required: boolean;
-		possibilities: (
-			{ type: "string" | "number" | "boolean" } |
-			{ type: "array"; itemType: "string" | "number" | "boolean" } |
-			{ type: "object"; properties: ConfigInterpreterScheme }
-		)[]
-		// eslint-disable-next-line no-mixed-spaces-and-tabs
-	};
+			type: "object";
+			required: boolean;
+			properties: ConfigInterpreterScheme;
+			// eslint-disable-next-line no-mixed-spaces-and-tabs
+	  }
+	| {
+			type: "union";
+			required: boolean;
+			possibilities: (
+				| { type: "string" | "number" | "boolean" }
+				| { type: "array"; itemType: "string" | "number" | "boolean" }
+				| { type: "object"; properties: ConfigInterpreterScheme }
+			)[];
+			// eslint-disable-next-line no-mixed-spaces-and-tabs
+	  };
 
 /**
  * A type that represents a configuration scheme.
@@ -150,7 +151,7 @@ export abstract class ConfigInterpreter<SchemeT extends ConfigInterpreterScheme,
 			let valid = false;
 			for (const possibility of possibilities) {
 				try {
-					this.checkType({...possibility, required: schemeValue.required}, configValue, key, meta);
+					this.checkType({ ...possibility, required: schemeValue.required }, configValue, key, meta);
 					valid = true;
 					break;
 				} catch (e) {

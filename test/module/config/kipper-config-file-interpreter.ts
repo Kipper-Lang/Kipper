@@ -1,10 +1,6 @@
 import { getFileName } from "./utils/utils";
 import { assert } from "chai";
-import {
-	KipperConfigFile,
-	KipperConfigInterpreter,
-	version as kipConfigVersion
-} from "@kipper/config";
+import { KipperConfigFile, KipperConfigInterpreter, version as kipConfigVersion } from "@kipper/config";
 import * as semver from "semver";
 import * as path from "node:path";
 
@@ -14,7 +10,7 @@ const extendsKipConfig = getFileName("kip-config.extended.json");
 describe("KipperConfigInterpreter", () => {
 	describe("loadConfig", () => {
 		const interpreter = new KipperConfigInterpreter();
-		const errorTestCases =[
+		const errorTestCases = [
 			{ file: getFileName("errors/does-not-exist.json"), error: "FileNotFoundError" },
 			{ file: getFileName("errors/invalid-json.json"), error: "JSONSyntaxError" },
 			{ file: getFileName("errors/invalid-version-syntax.json"), error: "InvalidVersionSyntaxError" },
@@ -38,15 +34,13 @@ describe("KipperConfigInterpreter", () => {
 					outDir: `${pwd}/dist`,
 					compiler: {
 						version: semver.parse(semver.clean(kipConfigVersion))!,
-						target: "ts"
+						target: "ts",
 					},
-					files: [
-						{ src: `${pwd}/test/kipper-files/main.kip`, outDir: `${pwd}/dist` }
-					],
+					files: [{ src: `${pwd}/test/kipper-files/main.kip`, outDir: `${pwd}/dist` }],
 					resources: [
 						{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
 						{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
-					]
+					],
 				});
 			});
 
@@ -75,7 +69,7 @@ describe("KipperConfigInterpreter", () => {
 					outDir: `${pwd}/dist`,
 					compiler: {
 						version: semver.parse(semver.clean(kipConfigVersion))!,
-						target: "ts"
+						target: "ts",
 					},
 					files: [
 						{ src: `${pwd}/test/kipper-files/multi-function-definition.kip`, outDir: `${pwd}/dist` },

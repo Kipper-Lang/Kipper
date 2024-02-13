@@ -5,7 +5,8 @@ import {
 	ConfigErrorMetaData,
 	IncompatibleVersionError,
 	InvalidMappingSyntaxError,
-	InvalidVersionSyntaxError, RefInvalidPathError
+	InvalidVersionSyntaxError,
+	RefInvalidPathError,
 } from "./errors";
 import { ensureExistsHasPermAndIsOfType } from "./tools";
 import { version as kipperConfigVersion } from "./index";
@@ -26,10 +27,7 @@ export const KipperConfigScheme = {
 	extends: {
 		type: "union",
 		required: false,
-		possibilities: [
-			{ type: "string" },
-			{ type: "array", itemType: "string" }
-		],
+		possibilities: [{ type: "string" }, { type: "array", itemType: "string" }],
 	},
 	/**
 	 * The base path of the project. This is the path that all other paths are relative to.
@@ -206,16 +204,19 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		if (Array.isArray(rawConfig.extends)) {
 			const extensionParentFiles = [...refChain, configFile.fileName];
 			const extendedConfigs = await Promise.all(
-				rawConfig.extends.map(async (extendFile) => (await this.loadConfig(
-						await KipperConfigFile.fromFile(
-							extendFile,
-							configFile.encoding,
-							{ fileName: path.basename(extendFile), refChain: extensionParentFiles },
-						),
-						envInfo,
-						extensionParentFiles,
-					)).raw
-				)
+				rawConfig.extends.map(
+					async (extendFile) =>
+						(
+							await this.loadConfig(
+								await KipperConfigFile.fromFile(extendFile, configFile.encoding, {
+									fileName: path.basename(extendFile),
+									refChain: extensionParentFiles,
+								}),
+								envInfo,
+								extensionParentFiles,
+							)
+						).raw,
+				),
 			);
 			extendedConfig = <RawEvaluatedKipperConfigFile>deepmerge.all(extendedConfigs);
 		}
@@ -261,7 +262,7 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		// Process the config file here (e.g., resolve paths, apply extensions, etc.)
 		return new EvaluatedKipperConfigFile(
 			deepmerge(
-				(extendedConfig ?? {}),
+				extendedConfig ?? {},
 				{
 					basePath: validatedConfigFile.basePath,
 					outDir: validatedConfigFile.outDir,
@@ -277,9 +278,9 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 				{
 					isMergeableObject: function (value: object) {
 						return isPlainObject(value) || Array.isArray(value);
-					}
-				}
-			)
+					},
+				},
+			),
 		);
 	}
 
@@ -345,10 +346,7 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 					meta,
 				);
 			}
-			const resolvedOutPath = path.resolve(
-				outDir,
-				src ? path.relative(src, path.dirname(resolvedSrcPath)) : filePath
-			);
+			const resolvedOutPath = path.resolve(outDir, src ? path.relative(src, path.dirname(resolvedSrcPath)) : filePath);
 
 			processedFiles.push({
 				src: resolvedSrcPath,
@@ -358,7 +356,10 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		return processedFiles;
 	}
 
-	private async validateCompilerVersion(providedVersion: string | undefined, meta: ConfigErrorMetaData): Promise<semver.SemVer> {
+	private async validateCompilerVersion(
+		providedVersion: string | undefined,
+		meta: ConfigErrorMetaData,
+	): Promise<semver.SemVer> {
 		// First get the current version of the compiler - As every kipper package has to have the same version when used
 		// together, we can simply import 'version' from index.ts
 		const currentKipperVersion = kipperConfigVersion;

@@ -14,7 +14,7 @@ export class KipperConfigFile extends ConfigFile {
 		content: string,
 		fileName: string = "<string>",
 		encoding: KipperEncoding = "utf8",
-		meta?: ConfigErrorMetaData
+		meta?: ConfigErrorMetaData,
 	) {
 		super(content, fileName, encoding, meta);
 	}
