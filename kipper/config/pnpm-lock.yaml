@@ -22,12 +22,6 @@ devDependencies:
   '@kipper/cli':
     specifier: workspace:~
     version: link:../cli
-  '@types/deepmerge':
-    specifier: 2.2.0
-    version: 2.2.0
-  '@types/is-plain-object':
-    specifier: 2.0.4
-    version: 2.0.4
   '@types/semver':
     specifier: 7.5.7
     version: 7.5.7
@@ -37,20 +31,6 @@ devDependencies:
 
 packages:
 
-  /@types/deepmerge@2.2.0:
-    resolution: {integrity: sha512-FEQYDHh6+Q+QXKSrIY46m+/lAmAj/bk4KpLaam+hArmzaVpMBHLcfwOH2Q2UOkWM7XsdY9PmZpGyPAjh/JRGhQ==}
-    deprecated: This is a stub types definition. deepmerge provides its own type definitions, so you do not need this installed.
-    dependencies:
-      deepmerge: 4.3.1
-    dev: true
-
-  /@types/is-plain-object@2.0.4:
-    resolution: {integrity: sha512-najbe//S/ThT7nEh+iLmXNUFMWQHf7x2QUrsMgtF/apA8dJl8rCsfWr9f8XG9nBo+NyT5TbT92IFIJji9ZmsRQ==}
-    deprecated: This is a stub types definition for is-plain-object (https://github.com/jonschlinkert/is-plain-object). is-plain-object provides its own type definitions, so you don't need @types/is-plain-object installed!
-    dependencies:
-      is-plain-object: 5.0.0
-    dev: true
-
   /@types/semver@7.5.7:
     resolution: {integrity: sha512-/wdoPq1QqkSj9/QOeKkFquEuPzQbHTWAMPH/PaUMB+JuR31lXhlWXRZ52IpfDYVlDOUBvX09uBrPwxGT1hjNBg==}
     dev: true
@@ -58,10 +38,12 @@ packages:
   /deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
+    dev: false
 
   /is-plain-object@5.0.0:
     resolution: {integrity: sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==}
     engines: {node: '>=0.10.0'}
+    dev: false
 
   /lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
