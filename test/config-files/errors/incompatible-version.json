@@ -2,7 +2,7 @@
 	"outDir": "dist",
 	"srcDir": "test/kipper-files",
 	"compiler": {
-		"version": "*",
+		"version": ">=99.99.99",
 		"target": "ts"
 	},
 	"files": [
@@ -10,6 +10,6 @@
 	],
 	"resources": [
 		"img/icon.png",
-		"img/Kipper-Logo-without-head.png:new-img-folder/icon.png"
+		"img/Kipper-Logo-without-head.png:icon.png"
 	]
 }

@@ -10,6 +10,7 @@
 	],
 	"resources": [
 		"img/icon.png",
-		"img/Kipper-Logo-without-head.png:new-img-folder/icon.png"
-	]
+		"img/Kipper-Logo-without-head.png:icon.png"
+	],
+	"i-am-new": true
 }

@@ -1,4 +1,5 @@
 {
+	"extends": "./test/config-files/kip-config.extension.json",
 	"outDir": "dist",
 	"srcDir": "test/kipper-files",
 	"compiler": {
