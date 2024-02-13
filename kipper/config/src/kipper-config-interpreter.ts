@@ -11,6 +11,8 @@ import { ensureExistsHasPermAndIsOfType } from "./tools";
 import { version as kipperConfigVersion } from "./index";
 import * as semver from "semver";
 import * as path from "node:path";
+import * as deepmerge from "deepmerge";
+import { isPlainObject } from "is-plain-object";
 
 /**
  * A type that represents a Kipper config file.
@@ -22,8 +24,12 @@ export const KipperConfigScheme = {
 	 * @since 0.11.0
 	 */
 	extends: {
-		type: "string",
+		type: "union",
 		required: false,
+		possibilities: [
+			{ type: "string" },
+			{ type: "array", itemType: "string" }
+		],
 	},
 	/**
 	 * The base path of the project. This is the path that all other paths are relative to.
@@ -108,18 +114,18 @@ export const KipperConfigScheme = {
 	 */
 	compiler: {
 		type: "object",
-		required: true,
+		required: false,
 		properties: {
 			/**
-			 * The target of the compiler.
+			 * The target of the compiler. Defaults to "js".
 			 * @since 0.11.0
 			 */
 			target: {
 				type: "string",
-				required: true,
+				required: false,
 			},
 			/**
-			 * The version of the compiler.
+			 * The version of the compiler. Defaults to "*" i.e. any version.
 			 *
 			 * Standard NPM-like versioning is used, i.e. the following rules apply:
 			 * - "1.2.3" will match only "1.2.3".
@@ -131,7 +137,7 @@ export const KipperConfigScheme = {
 			 */
 			version: {
 				type: "string",
-				required: true,
+				required: false,
 			},
 		},
 	},
@@ -176,33 +182,48 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 	 * @param envInfo The environment information that is used to interpret the config file. This is needed as the
 	 * interpreter needs to know the working directory of the invoked Kipper CLI command to resolve relative paths and
 	 * other information.
-	 * @param parentFiles The parent files of the provided config files. This will be used to indicate where the config
+	 * @param refChain The parent files of the provided config files. This will be used to indicate where the config
 	 * file was referenced from and will be used to provide more descriptive error messages (e.g. "fileA -> fileB ->
 	 * fileC -> ..."). This will usually not be needed by the user and is primarily used for internal purposes.
 	 */
 	async loadConfig(
 		configFile: KipperConfigFile,
 		envInfo: KipperConfigEnvInfo = { workDir: process.cwd() },
-		parentFiles: string[] = [],
+		refChain: string[] = [],
 	): Promise<EvaluatedKipperConfigFile> {
 		// Create the meta object which is used to provide more descriptive error messages (will be reused throughout the
 		// whole analysis and processing of the config file)
-		const meta: ConfigErrorMetaData = { fileName: configFile.fileName, parentFiles };
+		const meta: ConfigErrorMetaData = { fileName: configFile.fileName, refChain: refChain };
 
 		const rawConfig = configFile.parsedJSON;
 
 		// Evaluate any "extends" fields in the config file
-		let extendedConfig: EvaluatedKipperConfigFile | undefined;
+		let extendedConfig: RawEvaluatedKipperConfigFile | undefined;
+
 		if (rawConfig.extends && typeof rawConfig.extends === "string") {
-			extendedConfig = await this.loadConfig(
-				await KipperConfigFile.fromFile(rawConfig.extends, configFile.encoding),
-				envInfo,
-				[...parentFiles, configFile.fileName],
+			rawConfig.extends = [rawConfig.extends];
+		}
+		if (Array.isArray(rawConfig.extends)) {
+			const extensionParentFiles = [...refChain, configFile.fileName];
+			const extendedConfigs = await Promise.all(
+				rawConfig.extends.map(async (extendFile) => (await this.loadConfig(
+						await KipperConfigFile.fromFile(
+							extendFile,
+							configFile.encoding,
+							{ fileName: path.basename(extendFile), refChain: extensionParentFiles },
+						),
+						envInfo,
+						extensionParentFiles,
+					)).raw
+				)
 			);
+			extendedConfig = <RawEvaluatedKipperConfigFile>deepmerge.all(extendedConfigs);
 		}
 
 		// Ensure that the config file is "on a basic level" valid (all required fields are present, etc.)
-		this.validateConfigBasedOffScheme(rawConfig, meta, extendedConfig?.raw);
+		// (We skip this if this file is included in another file, as we only want to make sure that the final file is
+		// valid)
+		this.validateConfigBasedOffScheme(rawConfig, meta, extendedConfig);
 		const validatedConfigFile = rawConfig as KipperConfig;
 
 		// Make "outDir" and "basePath" absolute and ensure that "basePath" exist, are directories and readable/writable
@@ -235,21 +256,31 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		);
 
 		// Validate the compiler version
-		const processedVersion = await this.validateCompilerVersion(validatedConfigFile.compiler.version, meta);
+		const processedVersion = await this.validateCompilerVersion(validatedConfigFile.compiler?.version, meta);
 
 		// Process the config file here (e.g., resolve paths, apply extensions, etc.)
-		return new EvaluatedKipperConfigFile({
-			...(extendedConfig?.raw || {}),
-			basePath: validatedConfigFile.basePath,
-			outDir: validatedConfigFile.outDir,
-			srcDir: validatedConfigFile.srcDir,
-			resources: processedResources,
-			files: processedFiles,
-			compiler: {
-				target: validatedConfigFile.compiler.target,
-				version: processedVersion,
-			},
-		});
+		return new EvaluatedKipperConfigFile(
+			deepmerge(
+				(extendedConfig ?? {}),
+				{
+					basePath: validatedConfigFile.basePath,
+					outDir: validatedConfigFile.outDir,
+					srcDir: validatedConfigFile.srcDir,
+					resources: processedResources,
+					files: processedFiles,
+					compiler: {
+						target: validatedConfigFile.compiler?.target ?? "js",
+						version: processedVersion,
+					},
+				},
+				// Ensure the version is not broken after the deepmerge
+				{
+					isMergeableObject: function (value: object) {
+						return isPlainObject(value) || Array.isArray(value);
+					}
+				}
+			)
+		);
 	}
 
 	private async processResources(
@@ -279,7 +310,9 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 				resolvedOutPath = path.resolve(outDir, resourceItem);
 			}
 
+			// Ensure that path is a file and readable
 			await ensureExistsHasPermAndIsOfType(resolvedSrcPath, "r", "file", meta);
+
 			processedResources.push({
 				src: resolvedSrcPath,
 				out: resolvedOutPath,
@@ -325,19 +358,19 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		return processedFiles;
 	}
 
-	private async validateCompilerVersion(providedVersion: string, meta: ConfigErrorMetaData): Promise<semver.SemVer> {
+	private async validateCompilerVersion(providedVersion: string | undefined, meta: ConfigErrorMetaData): Promise<semver.SemVer> {
 		// First get the current version of the compiler - As every kipper package has to have the same version when used
 		// together, we can simply import 'version' from index.ts
 		const currentKipperVersion = kipperConfigVersion;
 
 		// If '*' is provided, we'll simply resolve it to the currently installed version
-		if (providedVersion.trim() === "*") {
+		if (providedVersion === undefined || providedVersion.trim() === "*") {
 			return semver.parse(semver.clean(currentKipperVersion))!;
 		}
 
 		// Validate the provided version
-		const cleanVersion = semver.clean(providedVersion);
-		if (!cleanVersion || !semver.valid(cleanVersion)) {
+		const cleanVersion = semver.validRange(providedVersion);
+		if (!cleanVersion) {
 			throw new InvalidVersionSyntaxError(providedVersion, meta);
 		}
 

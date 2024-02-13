@@ -43,12 +43,12 @@ export class EvaluatedKipperConfigFile implements RawEvaluatedKipperConfigFile {
 	compiler: RawEvaluatedKipperConfigFile["compiler"];
 
 	public constructor(config: RawEvaluatedKipperConfigFile) {
+		this.raw = config;
 		this.basePath = config.basePath;
 		this.outDir = config.outDir;
 		this.srcDir = config.srcDir;
 		this.files = config.files;
 		this.resources = config.resources;
 		this.compiler = config.compiler;
-		this.raw = config;
 	}
 }

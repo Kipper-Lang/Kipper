@@ -3,28 +3,43 @@ import { ConfigErrorMetaData, ConfigValidationError, UnknownFieldError } from ".
 import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "../evaluated-kipper-config-file";
 
 /**
+ * A type that represents a configuration scheme definition.
+ * @since 0.11.0
+ */
+export type ConfigInterpreterSchemeDefinition = {
+		type: "string" | "number" | "boolean";
+		required: boolean;
+		// eslint-disable-next-line no-mixed-spaces-and-tabs
+	}
+	| {
+		type: "array";
+		required: boolean;
+		itemType: "string" | "number" | "boolean";
+		// eslint-disable-next-line no-mixed-spaces-and-tabs
+	}
+	| {
+		type: "object";
+		required: boolean;
+		properties: ConfigInterpreterScheme;
+		// eslint-disable-next-line no-mixed-spaces-and-tabs
+	}
+	| {
+		type: "union";
+		required: boolean;
+		possibilities: (
+			{ type: "string" | "number" | "boolean" } |
+			{ type: "array"; itemType: "string" | "number" | "boolean" } |
+			{ type: "object"; properties: ConfigInterpreterScheme }
+		)[]
+		// eslint-disable-next-line no-mixed-spaces-and-tabs
+	};
+
+/**
  * A type that represents a configuration scheme.
  * @since 0.11.0
  */
 export type ConfigInterpreterScheme = {
-	[key: string]:
-		| {
-				type: "string" | "number" | "boolean";
-				required: boolean;
-				// eslint-disable-next-line no-mixed-spaces-and-tabs
-		  }
-		| {
-				type: "array";
-				required: boolean;
-				itemType: "string" | "number" | "boolean";
-				// eslint-disable-next-line no-mixed-spaces-and-tabs
-		  }
-		| {
-				type: "object";
-				required: boolean;
-				properties: ConfigInterpreterScheme;
-				// eslint-disable-next-line no-mixed-spaces-and-tabs
-		  };
+	[key: string]: ConfigInterpreterSchemeDefinition;
 };
 
 /**
@@ -111,26 +126,7 @@ export abstract class ConfigInterpreter<SchemeT extends ConfigInterpreterScheme,
 			if (schemeValue.required && configValue === undefined && !(parentConfig && key in parentConfig)) {
 				throw new ConfigValidationError(`Missing required field "${key}"`, meta);
 			} else if (configValue) {
-				if (schemeValue.type === "object") {
-					this.validateConfigBasedOffSchemeRecursive(configValue, schemeValue.properties, meta);
-				} else if (schemeValue.type === "array") {
-					if (!Array.isArray(configValue)) {
-						throw new ConfigValidationError(`Field "${key}" is not an array, but it should be`, meta);
-					}
-
-					for (const value of configValue) {
-						if (typeof value !== schemeValue.itemType) {
-							throw new ConfigValidationError(
-								`Field "${key}" contains an item that is not of type "${schemeValue.itemType}"`,
-								meta,
-							);
-						}
-					}
-				} else {
-					if (typeof configValue !== schemeValue.type) {
-						throw new ConfigValidationError(`Field "${key}" is not of type "${schemeValue.type}"`, meta);
-					}
-				}
+				this.checkType(schemeValue, configValue, key, meta);
 			}
 		}
 
@@ -139,6 +135,58 @@ export abstract class ConfigInterpreter<SchemeT extends ConfigInterpreterScheme,
 				throw new UnknownFieldError(`Unknown field "${key}"`, meta);
 			}
 		});
+	}
+
+	private checkType(
+		schemeValue: ConfigInterpreterSchemeDefinition,
+		configValue: any,
+		key: string,
+		meta: ConfigErrorMetaData,
+	) {
+		if (schemeValue.type === "union") {
+			const possibilities = schemeValue.possibilities;
+
+			// Ensure that at least one type is valid
+			let valid = false;
+			for (const possibility of possibilities) {
+				try {
+					this.checkType({...possibility, required: schemeValue.required}, configValue, key, meta);
+					valid = true;
+					break;
+				} catch (e) {
+					if (!(e instanceof ConfigValidationError)) {
+						throw e;
+					}
+				}
+			}
+
+			if (!valid) {
+				throw new ConfigValidationError(
+					`Field "${key}" is not of any of the types '${possibilities.map((p) => p.type).join(", ")}'`,
+					meta,
+				);
+			}
+		} else {
+			if (
+				(schemeValue.type === "array" && !Array.isArray(configValue)) ||
+				(schemeValue.type !== "array" && schemeValue.type !== typeof configValue)
+			) {
+				throw new ConfigValidationError(`Field "${key}" is not of type "${schemeValue.type}"`, meta);
+			}
+
+			if (schemeValue.type === "object") {
+				this.validateConfigBasedOffSchemeRecursive(configValue, schemeValue.properties, meta);
+			} else if (schemeValue.type === "array") {
+				for (const value of configValue) {
+					if (typeof value !== schemeValue.itemType) {
+						throw new ConfigValidationError(
+							`Field "${key}" contains an item that is not of type "${schemeValue.itemType}"`,
+							meta,
+						);
+					}
+				}
+			}
+		}
 	}
 
 	abstract loadConfig(config: ConfigFile): Promise<OutputT>;

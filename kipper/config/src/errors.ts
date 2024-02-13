@@ -4,7 +4,7 @@ import { clean } from "semver";
  * The metadata for a config error, which is used to provide verbose error messages.
  * @since 0.11.0
  */
-export type ConfigErrorMetaData = { fileName: string; parentFiles: string[] };
+export type ConfigErrorMetaData = { fileName: string; refChain: string[] };
 
 /**
  * Generic error for the '@kipper/config' package.
@@ -12,7 +12,7 @@ export type ConfigErrorMetaData = { fileName: string; parentFiles: string[] };
  */
 export class ConfigError {
 	public constructor(public message: string, public meta?: ConfigErrorMetaData) {
-		this.message = `${message}${meta ? ` (${[meta.fileName, ...meta.parentFiles].join(" -> ")})` : ""}`;
+		this.message = `${message}${meta ? ` (${[...meta.refChain, meta.fileName].join(" -> ")})` : ""}`;
 	}
 }
 
@@ -43,6 +43,16 @@ export class InvalidPathError extends ConfigError {
 export class ConfigInterpreterError extends ConfigError {
 	public constructor(message: string, meta?: ConfigErrorMetaData) {
 		super(message, meta);
+	}
+}
+
+/**
+ * Error that is thrown whenever a file is not found.
+ * @since 0.11.0
+ */
+export class JSONSyntaxError extends ConfigInterpreterError {
+	public constructor(details: string, meta: ConfigErrorMetaData) {
+		super(`Invalid JSON syntax ~ ${details}`, meta);
 	}
 }
 
