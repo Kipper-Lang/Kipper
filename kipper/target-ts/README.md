@@ -11,7 +11,7 @@
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/target-ts)](https://packagephobia.com/result?p=@kipper/target-ts)
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
-The TypeScript target for the Kipper Compiler. 🦊✨
+The TypeScript target for the Kipper Compiler. ⌨️✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
