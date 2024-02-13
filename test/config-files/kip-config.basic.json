@@ -1,12 +1,14 @@
 {
+	"outDir": "dist",
+	"srcDir": "test/kipper-files",
 	"compiler": {
 		"version": "*",
 		"target": "ts"
 	},
 	"files": [
-		"src/index.kip"
+		"test/kipper-files/main.kip"
 	],
 	"resources": [
-		"my-image.png"
+		"img/icon.png"
 	]
 }
