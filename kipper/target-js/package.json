@@ -4,7 +4,8 @@
 	"version": "0.11.0-alpha.1",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
-		"@kipper/core": "workspace:~"
+		"@kipper/core": "workspace:~",
+		"tslib": "~2.6.2"
 	},
 	"devDependencies": {
 		"typescript": "5.1.3",

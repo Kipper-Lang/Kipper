@@ -5,7 +5,8 @@
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"@kipper/target-js": "workspace:~",
-		"@kipper/core": "workspace:~"
+		"@kipper/core": "workspace:~",
+		"tslib": "~2.6.2"
 	},
 	"devDependencies": {
 		"typescript": "5.1.3",

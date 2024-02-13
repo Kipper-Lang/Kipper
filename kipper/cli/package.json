@@ -16,6 +16,7 @@
     "@oclif/parser": "3.8.10",
     "@oclif/errors": "1.3.6",
     "@oclif/plugin-warn-if-update-available": "2.0.37",
+		"tslib": "~2.6.2",
     "tslog": "3.3.4"
   },
   "devDependencies": {
