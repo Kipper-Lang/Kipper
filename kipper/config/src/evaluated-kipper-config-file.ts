@@ -15,8 +15,10 @@ export interface RawEvaluatedKipperConfigFile extends EvaluatedConfigFile {
 	basePath: string;
 	outDir: string;
 	srcDir?: string;
-	files: Array<{ src: PathLike, out: PathLike }>;
-	resources: Array<{ src: PathLike, out: PathLike }>;
+	// Since multiple files may be generated from a single source file,
+	// the outDir is used to specify the output directory and not a single file path
+	files: Array<{ src: PathLike; outDir: PathLike }>;
+	resources: Array<{ src: PathLike; out: PathLike }>;
 	compiler: {
 		target: string;
 		version: semver.SemVer;

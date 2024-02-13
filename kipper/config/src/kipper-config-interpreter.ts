@@ -1,7 +1,12 @@
 import { Config, ConfigInterpreter, ConfigInterpreterScheme } from "./abstract/config-interpreter";
 import { KipperConfigFile } from "./kipper-config-file";
 import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
-import { ConfigErrorMetaData, InvalidMappingSyntaxError, InvalidVersionSyntaxError } from "./errors";
+import {
+	ConfigErrorMetaData,
+	IncompatibleVersionError,
+	InvalidMappingSyntaxError,
+	InvalidVersionSyntaxError, RefInvalidPathError
+} from "./errors";
 import { ensureExistsHasPermAndIsOfType } from "./tools";
 import { version as kipperConfigVersion } from "./index";
 import * as semver from "semver";
@@ -152,7 +157,6 @@ export interface KipperConfigEnvInfo {
 	/**
 	 *
 	 */
-
 }
 
 export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConfigScheme, EvaluatedKipperConfigFile> {
@@ -179,7 +183,7 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 	async loadConfig(
 		configFile: KipperConfigFile,
 		envInfo: KipperConfigEnvInfo = { workDir: process.cwd() },
-		parentFiles: string[] = []
+		parentFiles: string[] = [],
 	): Promise<EvaluatedKipperConfigFile> {
 		// Create the meta object which is used to provide more descriptive error messages (will be reused throughout the
 		// whole analysis and processing of the config file)
@@ -201,19 +205,34 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		this.validateConfigBasedOffScheme(rawConfig, meta, extendedConfig?.raw);
 		const validatedConfigFile = rawConfig as KipperConfig;
 
-		// Make "outDir" and "basePath" absolute and ensure they exist, are directories and readable/writable
+		// Make "outDir" and "basePath" absolute and ensure that "basePath" exist, are directories and readable/writable
+		// If "outDir" doesn't exist we'll simply create it later (Handled by the CLI though)
 		validatedConfigFile.outDir = path.resolve(envInfo.workDir, validatedConfigFile.outDir);
 		validatedConfigFile.basePath = validatedConfigFile.basePath
 			? path.resolve(envInfo.workDir, validatedConfigFile.basePath)
 			: envInfo.workDir;
-		await ensureExistsHasPermAndIsOfType(validatedConfigFile.outDir, "rw", "dir", meta);
 		await ensureExistsHasPermAndIsOfType(validatedConfigFile.basePath, "rw", "dir", meta);
 
+		// If "srcDir" is provided, we'll ensure it exists and is a directory
+		if (validatedConfigFile.srcDir) {
+			validatedConfigFile.srcDir = path.resolve(validatedConfigFile.basePath, validatedConfigFile.srcDir);
+			await ensureExistsHasPermAndIsOfType(validatedConfigFile.srcDir, "rw", "dir", meta);
+		}
+
 		// Process each resource and file in the config file
-		const processedResources =
-			await this.processResources(validatedConfigFile.resources, validatedConfigFile.basePath, validatedConfigFile.outDir, meta);
-		const processedFiles =
-			await this.processFiles(validatedConfigFile.files, validatedConfigFile.basePath, validatedConfigFile.srcDir, validatedConfigFile.outDir, meta);
+		const processedResources = await this.processResources(
+			validatedConfigFile.resources,
+			validatedConfigFile.basePath,
+			validatedConfigFile.outDir,
+			meta,
+		);
+		const processedFiles = await this.processFiles(
+			validatedConfigFile.files,
+			validatedConfigFile.basePath,
+			validatedConfigFile.srcDir,
+			validatedConfigFile.outDir,
+			meta,
+		);
 
 		// Validate the compiler version
 		const processedVersion = await this.validateCompilerVersion(validatedConfigFile.compiler.version, meta);
@@ -278,17 +297,29 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 	): Promise<RawEvaluatedKipperConfigFile["files"]> {
 		const processedFiles: RawEvaluatedKipperConfigFile["files"] = [];
 		for (const filePath of files) {
-			const resolvedSrcPath = path.resolve(src ?? basePath, filePath);
+			// We always use the "basePath" as the source directory is only used for modifying the output directory structure
+			const resolvedSrcPath = path.resolve(basePath, filePath);
 			await ensureExistsHasPermAndIsOfType(resolvedSrcPath, "r", "file", meta);
 
 			// If a srcDir is provided, the files will be emitted with preserved directory structure relative to the srcDir
 			// If not, we assume that the given filePath is relative to the basePath i.e. will be relative to the outDir
 			// in the output
-			const resolvedOutPath = path.resolve(outDir, src ? path.relative(src, resolvedSrcPath) : filePath);
+			// (Note: This also means we have to throw an error if srcDir is provided, but files are outside of it)
+			if (src && !resolvedSrcPath.startsWith(path.resolve(src))) {
+				throw new RefInvalidPathError(
+					resolvedSrcPath,
+					`The file is outside of the provided srcDir "${src}" and will not be emitted with preserved directory structure`,
+					meta,
+				);
+			}
+			const resolvedOutPath = path.resolve(
+				outDir,
+				src ? path.relative(src, path.dirname(resolvedSrcPath)) : filePath
+			);
 
 			processedFiles.push({
 				src: resolvedSrcPath,
-				out: resolvedOutPath,
+				outDir: resolvedOutPath,
 			});
 		}
 		return processedFiles;
@@ -297,7 +328,12 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 	private async validateCompilerVersion(providedVersion: string, meta: ConfigErrorMetaData): Promise<semver.SemVer> {
 		// First get the current version of the compiler - As every kipper package has to have the same version when used
 		// together, we can simply import 'version' from index.ts
-		const latestKipperVersion = kipperConfigVersion;
+		const currentKipperVersion = kipperConfigVersion;
+
+		// If '*' is provided, we'll simply resolve it to the currently installed version
+		if (providedVersion.trim() === "*") {
+			return semver.parse(semver.clean(currentKipperVersion))!;
+		}
 
 		// Validate the provided version
 		const cleanVersion = semver.clean(providedVersion);
@@ -307,9 +343,9 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 
 		// Ensure the provided version is compatible with the current version
 		// (Kipper will always follow the semver versioning scheme, as such we can ignore the potential 'null' return value)
-		const coercedCurrentVersion = semver.coerce(latestKipperVersion)!;
+		const coercedCurrentVersion = semver.coerce(currentKipperVersion)!;
 		if (!semver.satisfies(coercedCurrentVersion, providedVersion)) {
-			throw new InvalidVersionSyntaxError(providedVersion, meta);
+			throw new IncompatibleVersionError(providedVersion, cleanVersion, currentKipperVersion, meta);
 		}
 
 		return semver.parse(cleanVersion)!;

@@ -3,6 +3,11 @@
  * @author Luna Klatzer
  * @copyright 2021-2024 Luna Klatzer
  */
+export * from "./errors";
+export * from "./abstract/";
+export * from "./kipper-config-file";
+export * from "./kipper-config-interpreter";
+export * from "./evaluated-kipper-config-file";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/config";

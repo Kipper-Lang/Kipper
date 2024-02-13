@@ -1,7 +1,7 @@
 import type { KipperEncoding } from "@kipper/cli";
 import { ConfigFile } from "./abstract/config-file";
 import * as path from "node:path";
-import * as fs from 'node:fs/promises';
+import * as fs from "node:fs/promises";
 import { ensureExistsHasPermAndIsOfType } from "./tools";
 
 /**
