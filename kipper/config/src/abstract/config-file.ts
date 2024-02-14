@@ -1,4 +1,3 @@
-import type { KipperEncoding } from "@kipper/cli";
 import { ConfigErrorMetaData, JSONSyntaxError } from "../errors";
 
 /**
@@ -9,9 +8,9 @@ export abstract class ConfigFile {
 	public readonly content: string;
 	public readonly parsedJSON: { [key: string]: any };
 	public readonly fileName: string;
-	public readonly encoding: KipperEncoding;
+	public readonly encoding: BufferEncoding;
 
-	protected constructor(content: string, fileName: string, encoding: KipperEncoding, meta?: ConfigErrorMetaData) {
+	protected constructor(content: string, fileName: string, encoding: BufferEncoding, meta?: ConfigErrorMetaData) {
 		this.content = content;
 		this.fileName = fileName;
 		this.encoding = encoding;

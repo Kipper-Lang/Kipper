@@ -1,5 +1,4 @@
-import type { KipperEncoding } from "@kipper/cli";
-import { ConfigFile } from "./abstract/config-file";
+import { ConfigFile } from "./abstract";
 import * as path from "node:path";
 import * as fs from "node:fs/promises";
 import { ensureExistsHasPermAndIsOfType } from "./tools";
@@ -13,7 +12,7 @@ export class KipperConfigFile extends ConfigFile {
 	protected constructor(
 		content: string,
 		fileName: string = "<string>",
-		encoding: KipperEncoding = "utf8",
+		encoding: BufferEncoding = "utf8",
 		meta?: ConfigErrorMetaData,
 	) {
 		super(content, fileName, encoding, meta);
@@ -26,7 +25,7 @@ export class KipperConfigFile extends ConfigFile {
 	 * {@link encoding} is always assumed to be the internal encoding of the JavaScript environment i.e. UTF-16 (utf16le).
 	 * @since 0.11.0
 	 */
-	static fromString(content: string, encoding: KipperEncoding = "utf16le"): KipperConfigFile {
+	static fromString(content: string, encoding: BufferEncoding = "utf16le"): KipperConfigFile {
 		return new KipperConfigFile(content, "<string>", encoding);
 	}
 
@@ -38,10 +37,10 @@ export class KipperConfigFile extends ConfigFile {
 	 * need to be provided when manually creating a KipperConfigFile.
 	 * @since 0.11.0
 	 */
-	static async fromFile(file: string, encoding: KipperEncoding, meta?: ConfigErrorMetaData): Promise<KipperConfigFile> {
+	static async fromFile(file: string, encoding: BufferEncoding, meta?: ConfigErrorMetaData): Promise<KipperConfigFile> {
 		await ensureExistsHasPermAndIsOfType(file, "r", "file", meta);
 
-		const fileContent = await fs.readFile(file, { encoding });
+		const fileContent = await fs.readFile(file, encoding);
 		const fileName = path.basename(file);
 		return new KipperConfigFile(fileContent, fileName, encoding, meta);
 	}

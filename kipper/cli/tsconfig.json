@@ -3,12 +3,15 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
-		"target": "es2016",
+		"target": "es2020",
+		"module": "CommonJS",
+		"moduleResolution": "node16",
 		"noImplicitOverride": false,
 		"experimentalDecorators": true,
+		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"lib": [
-			"ES7" // ES7 -> ES2016
+			"ES2020"
 		]
 	},
 	"include": [

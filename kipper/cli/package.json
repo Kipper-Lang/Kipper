@@ -7,6 +7,7 @@
     "kipper": "./bin/run"
   },
   "dependencies": {
+		"@kipper/config": "workspace:~",
     "@kipper/core": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
@@ -17,11 +18,14 @@
     "@oclif/errors": "1.3.6",
     "@oclif/plugin-warn-if-update-available": "2.0.37",
 		"tslib": "~2.6.2",
-    "tslog": "3.3.4"
+    "tslog": "3.3.4",
+		"chalk": "4.1.2",
+		"inquirer": "7.3.3"
   },
   "devDependencies": {
     "@types/node": "18.16.16",
     "@types/sinon": "10.0.15",
+		"@types/inquirer": "7.3.3",
 		"typescript": "5.1.3",
 		"prettier": "2.8.8"
   },
@@ -74,8 +78,15 @@
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "build": "tsc",
+		"postbuild": "cp -r ./src/templates ./lib/templates",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
-    "start": "node ./bin/run"
+    "start": "node ./bin/run",
+		"start:analyse": "node ./bin/run analyse",
+		"start:compile": "node ./bin/run compile",
+		"start:help": "node ./bin/run help",
+		"start:new": "node ./bin/run new",
+		"start:run": "node ./bin/run run",
+		"start:version": "node ./bin/run version"
   }
 }
