@@ -1,5 +1,3 @@
-import { clean } from "semver";
-
 /**
  * The metadata for a config error, which is used to provide verbose error messages.
  * @since 0.11.0
@@ -128,5 +126,15 @@ export class IncompatibleVersionError extends ConfigInterpreterError {
 			}, but received '${actual}'`,
 			meta,
 		);
+	}
+}
+
+/**
+ * Error that is thrown whenever an unknown target is encountered.
+ * @since 0.11.0
+ */
+export class UnknownTargetError extends ConfigInterpreterError {
+	public constructor(provided: string, meta: ConfigErrorMetaData) {
+		super(`Unknown target ~ '${provided}'`, meta);
 	}
 }

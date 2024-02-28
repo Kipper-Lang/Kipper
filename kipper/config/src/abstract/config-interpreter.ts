@@ -1,6 +1,6 @@
 import { ConfigFile } from "./config-file";
 import { ConfigErrorMetaData, ConfigValidationError, UnknownFieldError } from "../errors";
-import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "../evaluated-kipper-config-file";
+import { RawEvaluatedKipperConfigFile } from "../evaluated-kipper-config-file";
 
 /**
  * A type that represents a configuration scheme definition.

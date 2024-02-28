@@ -17,9 +17,9 @@ export function prettifiedErrors<TProto extends Command>() {
 	return function (target: TProto, propertyKey: keyof TProto, descriptor: PropertyDescriptor) {
 		const originalFunc: Function = descriptor.value;
 
-		const func = async function (this: Command): Promise<void> {
+		const func = async function (this: Command, ...argArray: Array<any>): Promise<void> {
 			try {
-				await originalFunc.call(this);
+				await originalFunc.call(this, ...argArray);
 			} catch (error) {
 				const cliError = error instanceof KipperCLIError || error instanceof OclifCLIError;
 				const internalError = error instanceof KipperInternalError;
@@ -56,6 +56,6 @@ export function prettifiedErrors<TProto extends Command>() {
 
 		// Modify the prototype and return the property descriptor
 		target[propertyKey] = func as TProto[keyof TProto];
-		return func as TypedPropertyDescriptor<() => Promise<void>>;
+		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<void>>;
 	};
 }

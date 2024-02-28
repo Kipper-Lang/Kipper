@@ -58,63 +58,40 @@ export default class New extends Command {
 		return !!(await fs.stat(filePath).catch(() => false));
 	}
 
-	private async genKipConfig(rootDir: string, config: {target: string}): Promise<void> {
+	private async genKipConfig(rootDir: string, config: { target: string }): Promise<void> {
 		const kipConfig = await fs.readFile(templates.kipConfig, { encoding: "utf8" });
-		const kipConfigPath = path.join(
-			rootDir,
-			path
-				.basename(templates.kipConfig)
-				.replace(".template", "")
-		);
+		const kipConfigPath = path.join(rootDir, path.basename(templates.kipConfig).replace(".template", ""));
 		await fs.writeFile(
 			kipConfigPath,
-			kipConfig
-				.replace("<PROJECT_TARGET>", config.target)
-				.replace("<KIPPER_VERSION>", `^${version}`)
+			kipConfig.replace("<PROJECT_TARGET>", config.target).replace("<KIPPER_VERSION>", `^${version}`),
 		);
 	}
 
 	private async genMainFile(rootDir: string): Promise<void> {
 		const mainFile = await fs.readFile(templates.mainFile, { encoding: "utf8" });
-		const mainFilePath = path.join(
-			rootDir,
-			"src",
-			path
-				.basename(templates.mainFile)
-				.replace(".template", "")
-		);
+		const mainFilePath = path.join(rootDir, "src", path.basename(templates.mainFile).replace(".template", ""));
 		await fs.writeFile(mainFilePath, mainFile);
 	}
 
 	private async genGitignore(rootDir: string): Promise<void> {
 		const gitignore = await fs.readFile(templates.gitignore, { encoding: "utf8" });
-		const gitignorePath = path.join(
-			rootDir,
-			path
-				.basename(templates.gitignore)
-				.replace(".template", "")
-		);
+		const gitignorePath = path.join(rootDir, path.basename(templates.gitignore).replace(".template", ""));
 		await fs.writeFile(gitignorePath, gitignore);
 	}
 
 	private async genPackageJson(
 		rootDir: string,
 		config: {
-			name: string,
-			description: string,
-			version: string,
-			license: string,
-			author: string,
-			repo: string | undefined,
-		}
+			name: string;
+			description: string;
+			version: string;
+			license: string;
+			author: string;
+			repo: string | undefined;
+		},
 	): Promise<void> {
 		const packageJson = await fs.readFile(templates.packageJson, { encoding: "utf8" });
-		const packageJsonPath = path.join(
-			rootDir,
-			path
-				.basename(templates.packageJson)
-				.replace(".template", "")
-		);
+		const packageJsonPath = path.join(rootDir, path.basename(templates.packageJson).replace(".template", ""));
 		await fs.writeFile(
 			packageJsonPath,
 			packageJson
@@ -125,9 +102,10 @@ export default class New extends Command {
 				.replace("<PACKAGE_LICENSE>", config.license)
 				.replace(
 					"<PROJECT_REPO>",
-					config.repo ? `  "repository": {\n    "type": "git",\n    "url": "${config.repo}"\n  },` : ""
+					config.repo ? `  "repository": {\n    "type": "git",\n    "url": "${config.repo}"\n  },` : "",
 				)
 				.replace("<KIPPER_VERSION>", `^${version}`)
+				.replace(',\n  "homepage": "<PACKAGE_GIT_REPOSITORY>"', config.repo ? `,\n  "homepage": "${config.repo}"` : ""),
 		);
 	}
 	@prettifiedErrors<New>()
@@ -165,7 +143,7 @@ export default class New extends Command {
 			projectVersion = await promptModule.prompt("Enter project version (default: 1.0.0):", projectVersion);
 			projectLicense = await promptModule.prompt("Choose project license (default: MIT):", projectLicense);
 			projectAuthor = await promptModule.prompt("Enter your name or organization:");
-			projectRepo = await promptModule.confirm("Would you like to link a project repository?")
+			projectRepo = (await promptModule.confirm("Would you like to link a project repository?"))
 				? await promptModule.prompt("Enter the repository URL:")
 				: undefined;
 			projectTarget = await promptModule.choice("Choose compilation target (default: js):", ["js", "ts"], "js");
@@ -181,7 +159,7 @@ export default class New extends Command {
 		}
 
 		// Create the project files
-		await this.genKipConfig(rootDir, {target: projectTarget});
+		await this.genKipConfig(rootDir, { target: projectTarget });
 		await this.genMainFile(rootDir);
 		await this.genGitignore(rootDir);
 		await this.genPackageJson(rootDir, {

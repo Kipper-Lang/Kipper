@@ -8,8 +8,7 @@
   },
   "dependencies": {
 		"@kipper/cli": "<KIPPER_VERSION>"
-	},
-  <PROJECT_REPO>
+	},<PROJECT_REPO>
   "keywords": [
   	"kipper"
   ],

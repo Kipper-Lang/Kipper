@@ -7,6 +7,7 @@ import {
 	InvalidMappingSyntaxError,
 	InvalidVersionSyntaxError,
 	RefInvalidPathError,
+	UnknownTargetError,
 } from "./errors";
 import { ensureExistsHasPermAndIsOfType } from "./tools";
 import { version as kipperConfigVersion } from "./index";
@@ -14,6 +15,9 @@ import * as semver from "semver";
 import * as path from "node:path";
 import * as deepmerge from "deepmerge";
 import { isPlainObject } from "is-plain-object";
+import { KipperJavaScriptTarget } from "@kipper/target-js";
+import { KipperTypeScriptTarget } from "@kipper/target-ts";
+import { KipperCompileTarget } from "@kipper/core";
 
 /**
  * A type that represents a Kipper config file.
@@ -158,9 +162,6 @@ export interface KipperConfigEnvInfo {
 	 * @since 0.11.0
 	 */
 	workDir: string;
-	/**
-	 *
-	 */
 }
 
 export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConfigScheme, EvaluatedKipperConfigFile> {
@@ -259,6 +260,11 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		// Validate the compiler version
 		const processedVersion = await this.validateCompilerVersion(validatedConfigFile.compiler?.version, meta);
 
+		// Validate the compiler target
+		const processedTarget = validatedConfigFile.compiler?.target
+			? await this.validateCompilerTarget(validatedConfigFile.compiler?.target, meta)
+			: new KipperJavaScriptTarget();
+
 		// Process the config file here (e.g., resolve paths, apply extensions, etc.)
 		return new EvaluatedKipperConfigFile(
 			deepmerge(
@@ -270,7 +276,7 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 					resources: processedResources,
 					files: processedFiles,
 					compiler: {
-						target: validatedConfigFile.compiler?.target ?? "js",
+						target: processedTarget,
 						version: processedVersion,
 					},
 				},
@@ -383,5 +389,18 @@ export class KipperConfigInterpreter extends ConfigInterpreter<typeof KipperConf
 		}
 
 		return semver.parse(cleanVersion)!;
+	}
+
+	private async validateCompilerTarget(target: string, meta: ConfigErrorMetaData): Promise<KipperCompileTarget> {
+		switch (target) {
+			case "js":
+			case "javascript":
+				return new KipperJavaScriptTarget();
+			case "ts":
+			case "typescript":
+				return new KipperTypeScriptTarget();
+			default:
+				throw new UnknownTargetError(target, meta);
+		}
 	}
 }

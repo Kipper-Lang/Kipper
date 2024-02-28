@@ -1,5 +1,6 @@
-import type { EvaluatedConfigFile, EvaluatedConfigValue } from "./abstract/evaluated-config-file";
+import type { EvaluatedConfigFile, EvaluatedConfigValue } from "./abstract";
 import type * as semver from "semver";
+import type { CompileConfig, KipperCompileTarget } from "@kipper/core";
 
 /**
  * A type that represents a path-like object.
@@ -20,7 +21,7 @@ export interface RawEvaluatedKipperConfigFile extends EvaluatedConfigFile {
 	files: Array<{ src: PathLike; outDir: PathLike }>;
 	resources: Array<{ src: PathLike; out: PathLike }>;
 	compiler: {
-		target: string;
+		target: KipperCompileTarget;
 		version: semver.SemVer;
 	};
 }
@@ -50,5 +51,15 @@ export class EvaluatedKipperConfigFile implements RawEvaluatedKipperConfigFile {
 		this.files = config.files;
 		this.resources = config.resources;
 		this.compiler = config.compiler;
+	}
+
+	/**
+	 * Generates a compile configuration from the evaluated config file.
+	 * @since 0.11.0
+	 */
+	public genCompilerConfig(): CompileConfig {
+		return {
+			target: this.compiler.target,
+		} satisfies CompileConfig;
 	}
 }

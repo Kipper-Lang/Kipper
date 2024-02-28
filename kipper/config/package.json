@@ -1,6 +1,6 @@
 {
 	"name": "@kipper/config",
-	"description": "The config file support package adding support for kip-config.json 🦊",
+	"description": "The config file support package adding support for kip-config.json/kipper-config.json 🦊",
 	"version": "0.11.0-alpha.1",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
