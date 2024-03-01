@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+		<!-- isDocsFile: true -->
+		<!-- docsVersion: latest -->
+		<!-- latestVersion: 0.10.4 -->
+
+		<meta charset="utf-8">
+
+		<title>compiler - Kipper Docs v0.10.4</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="manifest" href="https://kipper-lang.org/up_/site.webmanifest">
+		<link rel="apple-touch-icon" href="https://kipper-lang.org/kipper-icon.4fb9d618.png">
+		<link rel="shortcut icon" type="image/ico" href="https://kipper-lang.org/favicon.dcdc2d88.ico">
+
+		<!-- Loading the prism highlighting style-sheet -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.f4d6a214.css">
+
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Loading the main stylesheets -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.0b0dca04.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.244b5875.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.e24a109c.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.64273195.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.ee0d14b6.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.a30088c4.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.acde3bdd.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.4a54af2e.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.45a9510a.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.06a4d211.css">
+
+		<!-- Phone header nav bar functionality script -->
+		<script defer="" src="https://kipper-lang.org/index.b4512e7b.js"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+		<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+		<meta name="theme-color" content="#e01a4f">
+
+		<!-- Meta fields -->
+		<meta property="og:site_name" content="Kipper">
+		<meta property="og:title" content="compiler - Kipper Docs v0.10.4">
+		<meta property="og:description" content="">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+		<meta property="og:image" content="https://kipper-lang.org/img/icons/kipper-head-icon.png">
+		<meta property="og:locale" content="en_GB">
+
+		<link rel="stylesheet" href="https://kipper-lang.org/docs/index.9b1a8e07.css">
+	
+	
+		<script defer="" src="https://kipper-lang.org/index.ab8b3880.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.c645b044.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.27bd5b50.js"></script>
+
+		<!-- Show Error if JS is disabled or blocked -->
+		<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our site!</noscript>
+
+		<!-- Docs specific scripts -->
+		<script defer="" src="https://kipper-lang.org/docs/index.8234afb6.js"></script>
+
+		<div id="main-frame">
+			<div id="actual-content">
+				<!-- The top element: menu and search bar -->
+
+				<header id="primary-page-header" class="page-header">
+					<nav id="header-nav-bar">
+						<ul id="std-header-primary-content">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<h2>Kipper</h2>
+								</a>
+								<a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.10.4">
+									<small>v0.10.4</small>
+								</a>
+							</li>
+
+							<!-- Main navigation links -->
+
+							<li>
+								<a href="https://kipper-lang.org/download.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Downloads</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Docs</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Playground</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Changelog</h4>
+								</a>
+							</li>
+						</ul>
+						<div class="search-bar-wrapper">
+							<ul class="no-style-list">
+								<li class="search-icon-wrapper">
+									<i class="search-icon fa-solid fa-magnifying-glass"></i>
+								</li>
+								<li id="std-search-bar" class="search-bar">
+									<label for="std-search-bar-input"></label>
+									<input id="std-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+					<nav id="phone-header-nav-bar">
+						<ul id="phone-header-primary-content" class="no-style-list">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<h2>Kipper</h2>
+								</a>
+								<a class="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v0.10.4">
+									<small>v0.10.4</small>
+								</a>
+							</li>
+
+							<!--
+        Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
+        Additionally, the search bar is shown in the dropdown menu.
+        -->
+							<li class="phone-header-nav-bar-menu-toggle">
+								<i class="fa-solid fa-bars"></i>
+							</li>
+						</ul>
+
+						<!-- Dropdown menu -->
+						<ul id="phone-header-nav-bar-menu" class="no-style-list">
+							<li>
+								<ul id="phone-header-dropdown-urls" class="no-style-list">
+									<!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
+
+									<li>
+										<a href="https://kipper-lang.org/download.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Downloads</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Docs</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Playground</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Changelog</h4>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<!-- Search bar -->
+								<div class="search-bar-wrapper">
+									<ul class="no-style-list">
+										<li class="search-icon-wrapper">
+											<i class="search-icon fa-solid fa-magnifying-glass"></i>
+										</li>
+										<li id="phone-search-bar" class="search-bar">
+											<label for="phone-search-bar-input"></label>
+											<input id="phone-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
+
+					<div id="header-description-content" class="text-page-content-container"></div>
+				</header>
+
+				<!-- Main Content, where the text is located and the items unique to this site are defined -->
+				<div class="flex-parent-container flex-fill-to-parent">
+					<ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+						<li id="docs-sidebar-nav-wrapper">
+							<nav id="docs-sidebar-nav">
+								<!-- Only visible on small screens to enhance navigability -->
+								<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+								<nav class="phone-docs-nav">
+									<!-- Class as it appears twice. Here and in the nav sidebar -->
+									<ul class="no-style-list">
+										<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+										<li>
+											<ul class="phone-docs-nav-path">
+												<li>
+													<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+														latest
+													</a>
+													<span> /</span>
+												</li>
+
+												<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+														Kipper API
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+														Module
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+														@kipper/core
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+														compiler
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+
+								<div id="docs-sidebar-std-nav">
+									<!-- Standard sidebar nav visible on all screen sizes -->
+									<div id="docs-sidebar-nav-head">
+										<h6><a class="docs-page-header-path-item" href="https://kipper-lang.org/index.html">Kipper Docs</a></h6>
+										<div id="docs-version-selection">
+											<div id="docs-version-selector-root-button-wrapper">
+												<button>
+													<span class="h6">
+														<span>latest</span>
+														<i class="fa-solid fa-xs fa-caret-down"></i>
+													</span>
+												</button>
+											</div>
+											<ul id="docs-versions-dropdown" class="no-style-list flex-column">
+												<li id="docs-version-selector-0.9.2" class="docs-version-selector-button-wrapper" data-version="0.9.2">
+													<a href="https://kipper-lang.org/docs/0.9.2/index.html">0.9.2</a>
+												</li>
+
+												<li id="docs-version-selector-latest" class="docs-version-selector-button-wrapper" data-version="latest">
+													<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">latest</a>
+												</li>
+
+												<li id="docs-version-selector-next" class="docs-version-selector-button-wrapper" data-version="next">
+													<a href="https://kipper-lang.org/docs/next/api/module/core/compiler.html">next</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<ul class="docs-sidebar-nav-list no-style-list flex-column">
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/index.html">Overview</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/quickstart.html">Quickstart</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/goals-and-roadmap.html">Goals for Kipper</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/supported-platforms.html">Supported platforms</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/usage-examples.html">Usage Examples</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Kipper API</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/compiler-setup.html">Compiler Setup</a>
+													</p>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Module</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+														<!-- core, module, api -->
+														<!-- module, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/module/index.html">Overview</a>
+															</p>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/core</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/index.html">index</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">compiler</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/errors.html">errors</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/logger.html">logger</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/utils.html">utils</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-js</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-js, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-js/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-ts</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-ts, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-ts/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>CLI</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column">
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/index.html">Overview</a>
+															</p>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/variables.html">Variables</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Datatypes</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/str-type.html">String Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/num-type.html">Number Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/bool-type.html">Boolean Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/void-type.html">Void Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/null-type.html">Null Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/undefined-type.html">Undefined Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/array-type.html">Array Type</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Expressions</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/arithmetic-expression.html">Arithmetic Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/assignment-expression.html">Assignment Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/conditional-expression.html">Conditional Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/logical-expression.html">Logical Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/relational-expression.html">Relational Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/convert-expression.html">Convert Or Cast Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/function-call-expression.html">Function Call Expression</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Statements</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/expression-statement.html">Expression Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/if-statement.html">If Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/while-loop.html">While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/do-while-loop.html">Do-While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/for-loop.html">For Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/compound-statement.html">Compound Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/jump-statement.html">Jump Statement</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/functions.html">Functions</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/comments.html">Comments</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/built-in-functions.html">Built-in Functions</a>
+											</p>
+										</li>
+									</ul>
+								</div>
+							</nav>
+						</li>
+						<li id="docs-page-content-wrapper">
+							<!-- Phone-specific navigation bar, for the top of the page -->
+							<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+							<nav class="phone-docs-nav">
+								<!-- Class as it appears twice. Here and in the nav sidebar -->
+								<ul class="no-style-list">
+									<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+									<li>
+										<ul class="phone-docs-nav-path">
+											<li>
+												<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+													latest
+												</a>
+												<span> /</span>
+											</li>
+
+											<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+													Kipper API
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+													Module
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+													@kipper/core
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+													compiler
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+							<section id="docs-content" class="shadowed-box">
+								<nav id="docs-page-header">
+									<ul id="docs-nav-current-page-path" class="flex-row no-style-list">
+										<li>
+											<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+												latest
+											</a>
+											<span> /</span>
+										</li>
+
+										<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+												Kipper API
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+												Module
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+												@kipper/core
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+												compiler
+											</a>
+										</li>
+									</ul>
+									<a id="edit-page-on-github" href="https://github.com/Luna-Klatzer/Kipper/edit/docs/src/docs/latest/api/module/core/compiler.md" title="Edit this page on GitHub">
+										<i class="fa-brands fa-github"></i>
+										<p>Edit page</p>
+									</a>
+								</nav>
+								<article class="markdown-content">
+									<h1 id="class-kipperlexer">Class: KipperLexer</h1>
+<p><a href="../compiler.html">compiler</a>.KipperLexer</p>
+<h2 id="hierarchy">Hierarchy</h2>
+<ul>
+<li><p><code>unknown</code></p>
+<p>↳ <strong><code>KipperLexer</code></strong></p></li>
+</ul>
+<h2 id="table-of-contents">Table of contents</h2>
+<h3 id="constructors">Constructors</h3>
+<ul>
+<li><a href="compiler.KipperLexer.html#constructor">constructor</a></li>
+</ul>
+<h3 id="properties">Properties</h3>
+<ul>
+<li><a href="compiler.KipperLexer.html#andand">AndAnd</a></li>
+<li><a href="compiler.KipperLexer.html#as">As</a></li>
+<li><a href="compiler.KipperLexer.html#assign">Assign</a></li>
+<li><a href="compiler.KipperLexer.html#blockcomment">BlockComment</a></li>
+<li><a href="compiler.KipperLexer.html#break">Break</a></li>
+<li><a href="compiler.KipperLexer.html#comment">COMMENT</a></li>
+<li><a href="compiler.KipperLexer.html#callfunc">CallFunc</a></li>
+<li><a href="compiler.KipperLexer.html#case">Case</a></li>
+<li><a href="compiler.KipperLexer.html#colon">Colon</a></li>
+<li><a href="compiler.KipperLexer.html#comma">Comma</a></li>
+<li><a href="compiler.KipperLexer.html#const">Const</a></li>
+<li><a href="compiler.KipperLexer.html#continue">Continue</a></li>
+<li><a href="compiler.KipperLexer.html#deffunc">DefFunc</a></li>
+<li><a href="compiler.KipperLexer.html#default">Default</a></li>
+<li><a href="compiler.KipperLexer.html#div">Div</a></li>
+<li><a href="compiler.KipperLexer.html#divassign">DivAssign</a></li>
+<li><a href="compiler.KipperLexer.html#do">Do</a></li>
+<li><a href="compiler.KipperLexer.html#dot">Dot</a></li>
+<li><a href="compiler.KipperLexer.html#doublequotefstringliteral">DoubleQuoteFStringLiteral</a></li>
+<li><a href="compiler.KipperLexer.html#doublequotestringliteral">DoubleQuoteStringLiteral</a></li>
+<li><a href="compiler.KipperLexer.html#else">Else</a></li>
+<li><a href="compiler.KipperLexer.html#enum">Enum</a></li>
+<li><a href="compiler.KipperLexer.html#equal">Equal</a></li>
+<li><a href="compiler.KipperLexer.html#false">False</a></li>
+<li><a href="compiler.KipperLexer.html#floatingconstant">FloatingConstant</a></li>
+<li><a href="compiler.KipperLexer.html#for">For</a></li>
+<li><a href="compiler.KipperLexer.html#greater">Greater</a></li>
+<li><a href="compiler.KipperLexer.html#greaterequal">GreaterEqual</a></li>
+<li><a href="compiler.KipperLexer.html#identifier">Identifier</a></li>
+<li><a href="compiler.KipperLexer.html#if">If</a></li>
+<li><a href="compiler.KipperLexer.html#integerconstant">IntegerConstant</a></li>
+<li><a href="compiler.KipperLexer.html#leftbrace">LeftBrace</a></li>
+<li><a href="compiler.KipperLexer.html#leftbracket">LeftBracket</a></li>
+<li><a href="compiler.KipperLexer.html#leftparen">LeftParen</a></li>
+<li><a href="compiler.KipperLexer.html#less">Less</a></li>
+<li><a href="compiler.KipperLexer.html#lessequal">LessEqual</a></li>
+<li><a href="compiler.KipperLexer.html#linecomment">LineComment</a></li>
+<li><a href="compiler.KipperLexer.html#minus">Minus</a></li>
+<li><a href="compiler.KipperLexer.html#minusassign">MinusAssign</a></li>
+<li><a href="compiler.KipperLexer.html#minusminus">MinusMinus</a></li>
+<li><a href="compiler.KipperLexer.html#mod">Mod</a></li>
+<li><a href="compiler.KipperLexer.html#modassign">ModAssign</a></li>
+<li><a href="compiler.KipperLexer.html#newline">Newline</a></li>
+<li><a href="compiler.KipperLexer.html#not">Not</a></li>
+<li><a href="compiler.KipperLexer.html#notequal">NotEqual</a></li>
+<li><a href="compiler.KipperLexer.html#null">Null</a></li>
+<li><a href="compiler.KipperLexer.html#oror">OrOr</a></li>
+<li><a href="compiler.KipperLexer.html#plus">Plus</a></li>
+<li><a href="compiler.KipperLexer.html#plusassign">PlusAssign</a></li>
+<li><a href="compiler.KipperLexer.html#plusplus">PlusPlus</a></li>
+<li><a href="compiler.KipperLexer.html#powerto">PowerTo</a></li>
+<li><a href="compiler.KipperLexer.html#questionmark">QuestionMark</a></li>
+<li><a href="compiler.KipperLexer.html#retindicator">RetIndicator</a></li>
+<li><a href="compiler.KipperLexer.html#return">Return</a></li>
+<li><a href="compiler.KipperLexer.html#rightbrace">RightBrace</a></li>
+<li><a href="compiler.KipperLexer.html#rightbracket">RightBracket</a></li>
+<li><a href="compiler.KipperLexer.html#rightparen">RightParen</a></li>
+<li><a href="compiler.KipperLexer.html#semicolon">SemiColon</a></li>
+<li><a href="compiler.KipperLexer.html#singlequotefstringliteral">SingleQuoteFStringLiteral</a></li>
+<li><a href="compiler.KipperLexer.html#singlequotestringliteral">SingleQuoteStringLiteral</a></li>
+<li><a href="compiler.KipperLexer.html#spread">Spread</a></li>
+<li><a href="compiler.KipperLexer.html#star">Star</a></li>
+<li><a href="compiler.KipperLexer.html#starassign">StarAssign</a></li>
+<li><a href="compiler.KipperLexer.html#switch">Switch</a></li>
+<li><a href="compiler.KipperLexer.html#true">True</a></li>
+<li><a href="compiler.KipperLexer.html#typeof">Typeof</a></li>
+<li><a href="compiler.KipperLexer.html#undefined">Undefined</a></li>
+<li><a href="compiler.KipperLexer.html#vocabulary">VOCABULARY</a></li>
+<li><a href="compiler.KipperLexer.html#var">Var</a></li>
+<li><a href="compiler.KipperLexer.html#void">Void</a></li>
+<li><a href="compiler.KipperLexer.html#while">While</a></li>
+<li><a href="compiler.KipperLexer.html#whitespace">Whitespace</a></li>
+<li><a href="compiler.KipperLexer.html#_literal_names">_LITERAL_NAMES</a></li>
+<li><a href="compiler.KipperLexer.html#_symbolic_names">_SYMBOLIC_NAMES</a></li>
+<li><a href="compiler.KipperLexer.html#__atn">__ATN</a></li>
+<li><a href="compiler.KipperLexer.html#_serializedatn">_serializedATN</a></li>
+<li><a href="compiler.KipperLexer.html#_serializedatnsegment0">_serializedATNSegment0</a></li>
+<li><a href="compiler.KipperLexer.html#_serializedatnsegment1">_serializedATNSegment1</a></li>
+<li><a href="compiler.KipperLexer.html#_serializedatnsegments">_serializedATNSegments</a></li>
+<li><a href="compiler.KipperLexer.html#channelnames">channelNames</a></li>
+<li><a href="compiler.KipperLexer.html#modenames">modeNames</a></li>
+<li><a href="compiler.KipperLexer.html#rulenames">ruleNames</a></li>
+</ul>
+<h3 id="accessors">Accessors</h3>
+<ul>
+<li><a href="compiler.KipperLexer.html#channelnames-1">channelNames</a></li>
+<li><a href="compiler.KipperLexer.html#grammarfilename">grammarFileName</a></li>
+<li><a href="compiler.KipperLexer.html#modenames-1">modeNames</a></li>
+<li><a href="compiler.KipperLexer.html#rulenames-1">ruleNames</a></li>
+<li><a href="compiler.KipperLexer.html#serializedatn">serializedATN</a></li>
+<li><a href="compiler.KipperLexer.html#vocabulary-1">vocabulary</a></li>
+<li><a href="compiler.KipperLexer.html#_atn">_ATN</a></li>
+</ul>
+<h2 id="constructors-1">Constructors</h2>
+<h3 id="constructor">constructor</h3>
+<p>• <strong>new KipperLexer</strong>(<code>input</code>)</p>
+<h4 id="parameters">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>input</code></td>
+<td style="text-align:left;"><code>CharStream</code></td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="overrides">Overrides</h4>
+<p>Lexer.constructor</p>
+<h4 id="defined-in">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:344</p>
+<h2 id="properties-1">Properties</h2>
+<h3 id="andand">AndAnd</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>AndAnd</strong>: <code>46</code></p>
+<h4 id="defined-in-1">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:62</p>
+<hr>
+<h3 id="as">As</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>As</strong>: <code>5</code></p>
+<h4 id="defined-in-2">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:21</p>
+<hr>
+<h3 id="assign">Assign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Assign</strong>: <code>49</code></p>
+<h4 id="defined-in-3">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:65</p>
+<hr>
+<h3 id="blockcomment">BlockComment</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>BlockComment</strong>: <code>1</code></p>
+<h4 id="defined-in-4">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:17</p>
+<hr>
+<h3 id="break">Break</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Break</strong>: <code>10</code></p>
+<h4 id="defined-in-5">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:26</p>
+<hr>
+<h3 id="comment">COMMENT</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>COMMENT</strong>: <code>2</code></p>
+<h4 id="defined-in-6">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:87</p>
+<hr>
+<h3 id="callfunc">CallFunc</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>CallFunc</strong>: <code>20</code></p>
+<h4 id="defined-in-7">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:36</p>
+<hr>
+<h3 id="case">Case</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Case</strong>: <code>8</code></p>
+<h4 id="defined-in-8">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:24</p>
+<hr>
+<h3 id="colon">Colon</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Colon</strong>: <code>31</code></p>
+<h4 id="defined-in-9">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:47</p>
+<hr>
+<h3 id="comma">Comma</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Comma</strong>: <code>28</code></p>
+<h4 id="defined-in-10">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:44</p>
+<hr>
+<h3 id="const">Const</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Const</strong>: <code>3</code></p>
+<h4 id="defined-in-11">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:19</p>
+<hr>
+<h3 id="continue">Continue</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Continue</strong>: <code>11</code></p>
+<h4 id="defined-in-12">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:27</p>
+<hr>
+<h3 id="deffunc">DefFunc</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>DefFunc</strong>: <code>18</code></p>
+<h4 id="defined-in-13">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:34</p>
+<hr>
+<h3 id="default">Default</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Default</strong>: <code>9</code></p>
+<h4 id="defined-in-14">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:25</p>
+<hr>
+<h3 id="div">Div</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Div</strong>: <code>43</code></p>
+<h4 id="defined-in-15">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:59</p>
+<hr>
+<h3 id="divassign">DivAssign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>DivAssign</strong>: <code>53</code></p>
+<h4 id="defined-in-16">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:69</p>
+<hr>
+<h3 id="do">Do</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Do</strong>: <code>12</code></p>
+<h4 id="defined-in-17">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:28</p>
+<hr>
+<h3 id="dot">Dot</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Dot</strong>: <code>61</code></p>
+<h4 id="defined-in-18">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:77</p>
+<hr>
+<h3 id="doublequotefstringliteral">DoubleQuoteFStringLiteral</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>DoubleQuoteFStringLiteral</strong>: <code>65</code></p>
+<h4 id="defined-in-19">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:81</p>
+<hr>
+<h3 id="doublequotestringliteral">DoubleQuoteStringLiteral</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>DoubleQuoteStringLiteral</strong>: <code>67</code></p>
+<h4 id="defined-in-20">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:83</p>
+<hr>
+<h3 id="else">Else</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Else</strong>: <code>15</code></p>
+<h4 id="defined-in-21">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:31</p>
+<hr>
+<h3 id="enum">Enum</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Enum</strong>: <code>17</code></p>
+<h4 id="defined-in-22">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:33</p>
+<hr>
+<h3 id="equal">Equal</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Equal</strong>: <code>55</code></p>
+<h4 id="defined-in-23">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:71</p>
+<hr>
+<h3 id="false">False</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>False</strong>: <code>23</code></p>
+<h4 id="defined-in-24">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:39</p>
+<hr>
+<h3 id="floatingconstant">FloatingConstant</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>FloatingConstant</strong>: <code>68</code></p>
+<h4 id="defined-in-25">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:84</p>
+<hr>
+<h3 id="for">For</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>For</strong>: <code>16</code></p>
+<h4 id="defined-in-26">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:32</p>
+<hr>
+<h3 id="greater">Greater</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Greater</strong>: <code>59</code></p>
+<h4 id="defined-in-27">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:75</p>
+<hr>
+<h3 id="greaterequal">GreaterEqual</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>GreaterEqual</strong>: <code>60</code></p>
+<h4 id="defined-in-28">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:76</p>
+<hr>
+<h3 id="identifier">Identifier</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Identifier</strong>: <code>62</code></p>
+<h4 id="defined-in-29">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:78</p>
+<hr>
+<h3 id="if">If</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>If</strong>: <code>14</code></p>
+<h4 id="defined-in-30">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:30</p>
+<hr>
+<h3 id="integerconstant">IntegerConstant</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>IntegerConstant</strong>: <code>63</code></p>
+<h4 id="defined-in-31">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:79</p>
+<hr>
+<h3 id="leftbrace">LeftBrace</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>LeftBrace</strong>: <code>36</code></p>
+<h4 id="defined-in-32">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:52</p>
+<hr>
+<h3 id="leftbracket">LeftBracket</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>LeftBracket</strong>: <code>34</code></p>
+<h4 id="defined-in-33">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:50</p>
+<hr>
+<h3 id="leftparen">LeftParen</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>LeftParen</strong>: <code>32</code></p>
+<h4 id="defined-in-34">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:48</p>
+<hr>
+<h3 id="less">Less</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Less</strong>: <code>57</code></p>
+<h4 id="defined-in-35">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:73</p>
+<hr>
+<h3 id="lessequal">LessEqual</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>LessEqual</strong>: <code>58</code></p>
+<h4 id="defined-in-36">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:74</p>
+<hr>
+<h3 id="linecomment">LineComment</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>LineComment</strong>: <code>2</code></p>
+<h4 id="defined-in-37">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:18</p>
+<hr>
+<h3 id="minus">Minus</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Minus</strong>: <code>40</code></p>
+<h4 id="defined-in-38">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:56</p>
+<hr>
+<h3 id="minusassign">MinusAssign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>MinusAssign</strong>: <code>51</code></p>
+<h4 id="defined-in-39">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:67</p>
+<hr>
+<h3 id="minusminus">MinusMinus</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>MinusMinus</strong>: <code>41</code></p>
+<h4 id="defined-in-40">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:57</p>
+<hr>
+<h3 id="mod">Mod</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Mod</strong>: <code>44</code></p>
+<h4 id="defined-in-41">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:60</p>
+<hr>
+<h3 id="modassign">ModAssign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>ModAssign</strong>: <code>54</code></p>
+<h4 id="defined-in-42">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:70</p>
+<hr>
+<h3 id="newline">Newline</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Newline</strong>: <code>70</code></p>
+<h4 id="defined-in-43">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:86</p>
+<hr>
+<h3 id="not">Not</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Not</strong>: <code>48</code></p>
+<h4 id="defined-in-44">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:64</p>
+<hr>
+<h3 id="notequal">NotEqual</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>NotEqual</strong>: <code>56</code></p>
+<h4 id="defined-in-45">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:72</p>
+<hr>
+<h3 id="null">Null</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Null</strong>: <code>26</code></p>
+<h4 id="defined-in-46">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:42</p>
+<hr>
+<h3 id="oror">OrOr</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>OrOr</strong>: <code>47</code></p>
+<h4 id="defined-in-47">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:63</p>
+<hr>
+<h3 id="plus">Plus</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Plus</strong>: <code>38</code></p>
+<h4 id="defined-in-48">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:54</p>
+<hr>
+<h3 id="plusassign">PlusAssign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>PlusAssign</strong>: <code>50</code></p>
+<h4 id="defined-in-49">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:66</p>
+<hr>
+<h3 id="plusplus">PlusPlus</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>PlusPlus</strong>: <code>39</code></p>
+<h4 id="defined-in-50">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:55</p>
+<hr>
+<h3 id="powerto">PowerTo</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>PowerTo</strong>: <code>45</code></p>
+<h4 id="defined-in-51">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:61</p>
+<hr>
+<h3 id="questionmark">QuestionMark</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>QuestionMark</strong>: <code>30</code></p>
+<h4 id="defined-in-52">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:46</p>
+<hr>
+<h3 id="retindicator">RetIndicator</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>RetIndicator</strong>: <code>21</code></p>
+<h4 id="defined-in-53">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:37</p>
+<hr>
+<h3 id="return">Return</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Return</strong>: <code>19</code></p>
+<h4 id="defined-in-54">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:35</p>
+<hr>
+<h3 id="rightbrace">RightBrace</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>RightBrace</strong>: <code>37</code></p>
+<h4 id="defined-in-55">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:53</p>
+<hr>
+<h3 id="rightbracket">RightBracket</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>RightBracket</strong>: <code>35</code></p>
+<h4 id="defined-in-56">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:51</p>
+<hr>
+<h3 id="rightparen">RightParen</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>RightParen</strong>: <code>33</code></p>
+<h4 id="defined-in-57">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:49</p>
+<hr>
+<h3 id="semicolon">SemiColon</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>SemiColon</strong>: <code>29</code></p>
+<h4 id="defined-in-58">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:45</p>
+<hr>
+<h3 id="singlequotefstringliteral">SingleQuoteFStringLiteral</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>SingleQuoteFStringLiteral</strong>: <code>64</code></p>
+<h4 id="defined-in-59">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:80</p>
+<hr>
+<h3 id="singlequotestringliteral">SingleQuoteStringLiteral</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>SingleQuoteStringLiteral</strong>: <code>66</code></p>
+<h4 id="defined-in-60">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:82</p>
+<hr>
+<h3 id="spread">Spread</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Spread</strong>: <code>6</code></p>
+<h4 id="defined-in-61">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:22</p>
+<hr>
+<h3 id="star">Star</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Star</strong>: <code>42</code></p>
+<h4 id="defined-in-62">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:58</p>
+<hr>
+<h3 id="starassign">StarAssign</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>StarAssign</strong>: <code>52</code></p>
+<h4 id="defined-in-63">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:68</p>
+<hr>
+<h3 id="switch">Switch</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Switch</strong>: <code>7</code></p>
+<h4 id="defined-in-64">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:23</p>
+<hr>
+<h3 id="true">True</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>True</strong>: <code>22</code></p>
+<h4 id="defined-in-65">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:38</p>
+<hr>
+<h3 id="typeof">Typeof</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Typeof</strong>: <code>24</code></p>
+<h4 id="defined-in-66">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:40</p>
+<hr>
+<h3 id="undefined">Undefined</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Undefined</strong>: <code>27</code></p>
+<h4 id="defined-in-67">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:43</p>
+<hr>
+<h3 id="vocabulary">VOCABULARY</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>VOCABULARY</strong>: <code>Vocabulary</code></p>
+<h4 id="defined-in-68">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:331</p>
+<hr>
+<h3 id="var">Var</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Var</strong>: <code>4</code></p>
+<h4 id="defined-in-69">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:20</p>
+<hr>
+<h3 id="void">Void</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Void</strong>: <code>25</code></p>
+<h4 id="defined-in-70">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:41</p>
+<hr>
+<h3 id="while">While</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>While</strong>: <code>13</code></p>
+<h4 id="defined-in-71">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:29</p>
+<hr>
+<h3 id="whitespace">Whitespace</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>Whitespace</strong>: <code>69</code></p>
+<h4 id="defined-in-72">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:85</p>
+<hr>
+<h3 id="_literal_names">_LITERAL_NAMES</h3>
+<p>▪ <code>Static</code> <code>Private</code> <code>Readonly</code> <strong>_LITERAL_NAMES</strong>: (<code>undefined</code> | <code>string</code>)[]</p>
+<h4 id="defined-in-73">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:194</p>
+<hr>
+<h3 id="_symbolic_names">_SYMBOLIC_NAMES</h3>
+<p>▪ <code>Static</code> <code>Private</code> <code>Readonly</code> <strong>_SYMBOLIC_NAMES</strong>: (<code>undefined</code> | <code>string</code>)[]</p>
+<h4 id="defined-in-74">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:258</p>
+<hr>
+<h3 id="__atn">__ATN</h3>
+<p>▪ <code>Static</code> <strong>__ATN</strong>: <code>ATN</code></p>
+<h4 id="defined-in-75">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:668</p>
+<hr>
+<h3 id="_serializedatn">_serializedATN</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>_serializedATN</strong>: <code>string</code></p>
+<h4 id="defined-in-76">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:664</p>
+<hr>
+<h3 id="_serializedatnsegment0">_serializedATNSegment0</h3>
+<p>▪ <code>Static</code> <code>Private</code> <code>Readonly</code> <strong>_serializedATNSegment0</strong>: <code>string</code></p>
+<h4 id="defined-in-77">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:375</p>
+<hr>
+<h3 id="_serializedatnsegment1">_serializedATNSegment1</h3>
+<p>▪ <code>Static</code> <code>Private</code> <code>Readonly</code> <strong>_serializedATNSegment1</strong>: <code>string</code></p>
+<h4 id="defined-in-78">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:634</p>
+<hr>
+<h3 id="_serializedatnsegments">_serializedATNSegments</h3>
+<p>▪ <code>Static</code> <code>Private</code> <code>Readonly</code> <strong>_serializedATNSegments</strong>: <code>number</code> = <code>2</code></p>
+<h4 id="defined-in-79">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:374</p>
+<hr>
+<h3 id="channelnames">channelNames</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>channelNames</strong>: <code>string</code>[]</p>
+<h4 id="defined-in-80">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:90</p>
+<hr>
+<h3 id="modenames">modeNames</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>modeNames</strong>: <code>string</code>[]</p>
+<h4 id="defined-in-81">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:93</p>
+<hr>
+<h3 id="rulenames">ruleNames</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>ruleNames</strong>: <code>string</code>[]</p>
+<h4 id="defined-in-82">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:95</p>
+<h2 id="accessors-1">Accessors</h2>
+<h3 id="channelnames-1">channelNames</h3>
+<p>• <code>get</code> <strong>channelNames</strong>(): <code>string</code>[]</p>
+<h4 id="returns">Returns</h4>
+<p><code>string</code>[]</p>
+<h4 id="defined-in-83">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:365</p>
+<hr>
+<h3 id="grammarfilename">grammarFileName</h3>
+<p>• <code>get</code> <strong>grammarFileName</strong>(): <code>string</code></p>
+<h4 id="returns-1">Returns</h4>
+<p><code>string</code></p>
+<h4 id="defined-in-84">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:350</p>
+<hr>
+<h3 id="modenames-1">modeNames</h3>
+<p>• <code>get</code> <strong>modeNames</strong>(): <code>string</code>[]</p>
+<h4 id="returns-2">Returns</h4>
+<p><code>string</code>[]</p>
+<h4 id="defined-in-85">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:370</p>
+<hr>
+<h3 id="rulenames-1">ruleNames</h3>
+<p>• <code>get</code> <strong>ruleNames</strong>(): <code>string</code>[]</p>
+<h4 id="returns-3">Returns</h4>
+<p><code>string</code>[]</p>
+<h4 id="defined-in-86">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:355</p>
+<hr>
+<h3 id="serializedatn">serializedATN</h3>
+<p>• <code>get</code> <strong>serializedATN</strong>(): <code>string</code></p>
+<h4 id="returns-4">Returns</h4>
+<p><code>string</code></p>
+<h4 id="defined-in-87">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:360</p>
+<hr>
+<h3 id="vocabulary-1">vocabulary</h3>
+<p>• <code>get</code> <strong>vocabulary</strong>(): <code>Vocabulary</code></p>
+<h4 id="returns-5">Returns</h4>
+<p><code>Vocabulary</code></p>
+<h4 id="defined-in-88">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:339</p>
+<hr>
+<h3 id="_atn">_ATN</h3>
+<p>• <code>Static</code> <code>get</code> <strong>_ATN</strong>(): <code>ATN</code></p>
+<h4 id="returns-6">Returns</h4>
+<p><code>ATN</code></p>
+<h4 id="defined-in-89">Defined in</h4>
+<p>kipper/core/src/compiler/parser/antlr/KipperLexer.ts:669</p>
+								</article>
+							</section>
+						</li>
+					</ul>
+				</div>
+				<!-- Footer bar - contains some links and general copyright notice -->
+				<footer id="footer-bar" class="flex-parent-container flex-column">
+					<ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+						<li>
+							<img id="htl-leonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="" height="48px">
+						</li>
+						<li>
+							<ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/releases">Releases</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper">GitHub</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/security/policy">Security</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/issues">Issue Tracker</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE">License</a>
+									</small>
+								</li>
+							</ul>
+						</li>
+						<li id="copyright">
+							<small class="centered-text white-text">
+								Copyright © 2021-2024 Luna Klatzer. Kipper is licensed under the GPL-3.0 license.
+							</small>
+						</li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script src="https://kipper-lang.org/index.3b69bdcb.js" defer=""></script>
+	
+
