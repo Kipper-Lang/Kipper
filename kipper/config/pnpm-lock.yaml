@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@kipper/target-js':
+    specifier: workspace:~
+    version: link:../target-js
+  '@kipper/target-ts':
+    specifier: workspace:~
+    version: link:../target-ts
   deepmerge:
     specifier: 4.3.1
     version: 4.3.1
@@ -19,6 +25,9 @@ dependencies:
     version: 2.6.2
 
 devDependencies:
+  '@kipper/core':
+    specifier: workspace:~
+    version: link:../core
   '@types/semver':
     specifier: 7.5.7
     version: 7.5.7
