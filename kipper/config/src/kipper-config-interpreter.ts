@@ -1,4 +1,4 @@
-import { Config, ConfigInterpreter, ConfigInterpreterScheme } from "./abstract/config-interpreter";
+import { Config, ConfigInterpreter, type ConfigInterpreterScheme } from "./abstract/config-interpreter";
 import { KipperConfigFile } from "./kipper-config-file";
 import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
 import {
@@ -17,7 +17,7 @@ import * as deepmerge from "deepmerge";
 import { isPlainObject } from "is-plain-object";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import { KipperCompileTarget } from "@kipper/core";
+import type { KipperCompileTarget } from "@kipper/core";
 
 /**
  * A type that represents a Kipper config file.
