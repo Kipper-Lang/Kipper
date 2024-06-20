@@ -19,10 +19,10 @@ To use development versions of Kipper download the
 ### Added
 
 - Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
-	and parsing. This package is used by the Kipper CLI to automatically load and parse config files.
+  and parsing. This package is used by the Kipper CLI to automatically load and parse config files.
   ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
 - Added setup wizard to the `@kipper/cli` to automatically create a Kipper project with a config file.
-	([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
+  ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
 - Support for complex string formatting (or also called templating) in the form of Python-like F-Strings.
   ([#287](https://github.com/Kipper-Lang/Kipper/issues/287)).
 - New valid conversions:

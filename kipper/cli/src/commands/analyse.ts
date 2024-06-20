@@ -4,7 +4,7 @@
  */
 import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
+import { KipperCompiler, KipperLogger, LogLevel } from "@kipper/core";
 import { CLIEmitHandler } from "../logger";
 import { getParseStream, KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";

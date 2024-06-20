@@ -2,11 +2,10 @@
  * CLI implementation and wrapper functions for Kipper compilations.
  * @since 0.1.0
  */
-import { KipperCompileResult, KipperCompileTarget, KipperParseStream } from "@kipper/core";
+import { KipperCompileResult } from "@kipper/core";
 import { constants, promises as fs } from "fs";
-import * as path from "path";
 import { KipperFileWriteError } from "../errors";
-import { KipperEncoding, KipperParseFile } from "../input";
+import { KipperEncoding } from "../input";
 
 /**
  * Writes the file that exist inside the {@link KipperCompileResult compilation result}.
