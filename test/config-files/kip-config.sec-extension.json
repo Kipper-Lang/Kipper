@@ -2,7 +2,7 @@
 	"outDir": "dist",
 	"srcDir": "test/kipper-files",
 	"compiler": {
-		"target": "ext"
+		"target": "js"
 	},
 	"files": [
 		"test/kipper-files/multi-function-definition.kip"
