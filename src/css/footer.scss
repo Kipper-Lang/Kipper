@@ -10,12 +10,18 @@
 		padding: 0.5rem 1.5rem 1.5rem;
 		flex-shrink: 1;
 
+    li#development-and-support-notice {
+      color: white;
+      font-size: 0.8rem;
+      margin: 0.5rem 0 0 0;
+    }
+
     li#footer-logos {
       display: flex;
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      margin: 0.25rem 0 1rem;
+      margin: 0 0 1rem;
 
       #htlleonding-logo {
         margin: 1rem;
@@ -38,6 +44,10 @@
 			border-top: 1px solid #f4f4f4;
 			margin-top: 1em;
 			padding-top: 1rem;
+
+      small {
+        display: flex;
+      }
 		}
 	}
 }
