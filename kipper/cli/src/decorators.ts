@@ -5,6 +5,7 @@ import { Command } from "@oclif/command";
 import { KipperInternalError } from "@kipper/core";
 import { KipperCLIError } from "./errors";
 import { CLIError as OclifCLIError, PrettyPrintableError } from "@oclif/errors";
+import { ConfigError } from "@kipper/config";
 
 /**
  * Wraps the given function with an async error handler that will pretty print errors using the {@link Command.error}
@@ -22,10 +23,11 @@ export function prettifiedErrors<TProto extends Command>() {
 				await originalFunc.call(this, ...argArray);
 			} catch (error) {
 				const cliError = error instanceof KipperCLIError || error instanceof OclifCLIError;
+				const configError = error instanceof ConfigError;
 				const internalError = error instanceof KipperInternalError;
 
 				// Error configuration
-				const name: string = cliError ? "Error" : internalError ? "Unexpected Internal Error" : "CLI Error";
+				const name: string = getErrorName(cliError, configError, internalError);
 				const msg: string =
 					error && typeof error === "object" && "message" in error && typeof error.message === "string"
 						? error.message
@@ -34,7 +36,7 @@ export function prettifiedErrors<TProto extends Command>() {
 				const errConfig: { exit: number } & PrettyPrintableError = {
 					exit: 1,
 					suggestions:
-						internalError || !cliError
+						internalError || (!cliError && !configError)
 							? [
 									"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
 										"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
@@ -58,4 +60,16 @@ export function prettifiedErrors<TProto extends Command>() {
 		target[propertyKey] = func as TProto[keyof TProto];
 		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<void>>;
 	};
+}
+
+function getErrorName(cliError: boolean, configError: boolean, internalError: boolean): string {
+	if (cliError) {
+		return "Error";
+	} else if (configError) {
+		return "Config Error";
+	} else if (internalError) {
+		return "Internal Error";
+	} else {
+		return "CLI Error";
+	}
 }

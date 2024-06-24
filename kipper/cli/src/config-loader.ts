@@ -3,6 +3,7 @@
  * @since 0.11.0
  */
 import { EvaluatedKipperConfigFile, KipperConfigFile, KipperConfigInterpreter } from "@kipper/config";
+import * as fs from "fs";
 
 export let defaultConfigInterpreter = new KipperConfigInterpreter();
 
@@ -54,13 +55,12 @@ export async function loadConfig(
  */
 export async function loadAutoConfig(): Promise<EvaluatedKipperConfigFile | undefined> {
 	const workdir = process.cwd();
-	try {
-		return await loadConfig({ path: `${workdir}/kip-config.json`, encoding: "utf8" });
-	} catch (e) {
-		try {
-			return await loadConfig({ path: `${workdir}/kipper-config.json`, encoding: "utf8" });
-		} catch (e) {
-			return undefined;
+
+	const potentialPaths = [`${workdir}/kip-config.json`, `${workdir}/kipper-config.json`];
+	for (const path of potentialPaths) {
+		if (fs.existsSync(path)) {
+			return loadConfig({ path, encoding: "utf8" });
 		}
 	}
+	return undefined;
 }
