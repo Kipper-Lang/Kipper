@@ -42,13 +42,11 @@ export default class Compile extends Command {
 	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
-			default: "js",
 			description: "The target language where the compiled program should be emitted to.",
 			options: ["js", "ts"],
 		}),
 		encoding: flags.string({
 			char: "e",
-			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
@@ -115,13 +113,14 @@ export default class Compile extends Command {
 
 		// Compilation-required
 		const { stream, outDir } = await getParseStream(args, flags, preExistingConfig);
-		const target: KipperCompileTarget = preExistingCompileConfig?.target ?? getTarget(flags["target"]);
+		const target: KipperCompileTarget = flags["target"] ?
+			getTarget(flags["target"]) :
+			preExistingCompileConfig?.target ?? getTarget("js");
 
 		// Output
-		const encoding = flags["encoding"] as KipperEncoding;
-		const outPath = `${path.resolve(outDir)}/${stream instanceof KipperParseFile ? stream.path.name : stream.name}.${
-			target.fileExtension
-		}`;
+		const encoding = flags["encoding"] || "utf-8";
+		const fileName = stream instanceof KipperParseFile ? stream.path.name : stream.name;
+		const outPath = `${path.resolve(outDir)}/${fileName}.${target.fileExtension}`;
 
 		return {
 			args,
@@ -138,12 +137,20 @@ export default class Compile extends Command {
 					target: target,
 					optimisationOptions: {
 						optimiseInternals:
-							preExistingCompileConfig?.optimisationOptions?.optimiseInternals ?? flags["optimise-internals"],
+							flags["optimise-internals"] ??
+								preExistingCompileConfig?.optimisationOptions?.optimiseInternals ??
+								defaultOptimisationOptions.optimiseInternals,
 						optimiseBuiltIns:
-							preExistingCompileConfig?.optimisationOptions?.optimiseBuiltIns ?? flags["optimise-builtins"],
+							flags["optimise-builtins"] ??
+								preExistingCompileConfig?.optimisationOptions?.optimiseBuiltIns ??
+								defaultOptimisationOptions.optimiseBuiltIns,
 					},
-					recover: preExistingCompileConfig?.recover ?? flags["recover"],
-					abortOnFirstError: preExistingCompileConfig?.abortOnFirstError ?? flags["abort-on-first-error"],
+					recover: flags["recover"] ??
+						preExistingCompileConfig?.recover ??
+						EvaluatedCompileConfig.defaults.recover,
+					abortOnFirstError: flags["abort-on-first-error"] ??
+						preExistingCompileConfig?.abortOnFirstError ??
+						EvaluatedCompileConfig.defaults.abortOnFirstError,
 				} as CompileConfig,
 			},
 		};

@@ -28,19 +28,16 @@ export default class Run extends Compile {
 	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
-			default: "js",
 			description: "The target language where the compiled program should be emitted to.",
 			options: ["js", "ts"],
 		}),
 		encoding: flags.string({
 			char: "e",
-			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
 		"output-dir": flags.string({
 			char: "o",
-			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
@@ -50,13 +47,11 @@ export default class Run extends Compile {
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
