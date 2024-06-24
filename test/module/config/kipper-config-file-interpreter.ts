@@ -35,10 +35,12 @@ describe("KipperConfigInterpreter", () => {
 				assert.equal(config.outDir, `${pwd}/dist`);
 				assert.deepEqual(config.compiler.version, semver.parse(semver.clean(kipConfigVersion)));
 				assert.instanceOf(config.compiler.target, KipperTypeScriptTarget);
-				assert.deepEqual(config.files, [{
-					src: `${pwd}/test/kipper-files/main.kip`,
-					outDir: `${pwd}/dist`
-				}]);
+				assert.deepEqual(config.files, [
+					{
+						src: `${pwd}/test/kipper-files/main.kip`,
+						outDir: `${pwd}/dist`,
+					},
+				]);
 				assert.deepEqual(config.resources, [
 					{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
 					{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
