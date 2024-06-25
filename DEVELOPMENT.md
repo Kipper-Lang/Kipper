@@ -141,7 +141,7 @@ which can be included and used inside a browser without any dependencies.
     (Visit GitHub for the [recommended version](https://github.com/Kipper-Lang/Kipper/releases)):
 
     ```bash
-    MAJOR.MINOR.PATCH
+    MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
 
     Add `-alpha.N`, `-beta.N` or `-rc.N` in case it's a development version.
@@ -166,7 +166,7 @@ which can be included and used inside a browser without any dependencies.
 3.  Updated the static `version` identifiers in the `index.ts` files of each package:
 
     ```ts
-    export const version = "MAJOR.MINOR.PATCH";
+    export const version = "MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]";
     ```
 
     The easiest way to do this is to run `replace` in an IDE and replace the old versions with the new version.
@@ -183,22 +183,22 @@ which can be included and used inside a browser without any dependencies.
     These changes must be committed yourself with a commit message preferably similar to this:
 
     ```
-    release: Bumped Kipper project version to MAJOR.MINOR.PATCH
+    release: Bumped Kipper project version to MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
 
-	(Previously, before `0.11.0-alpha.2` it was `release: Bumped static index.ts versions to MAJOR.MINOR.PATCH`)
+	(Previously, before `0.11.0-alpha.2` it was `release: Bumped static index.ts versions to MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]`)
 
     For example:
 
     ```
-    release: Bumped static index.ts versions to 0.5.0-rc.0
+    release: Bumped Kipper project version to 0.5.0-rc.0
     ```
 
 4.  Bump version with a pre-written script (This will create a tag with the prefix `v`, make a commit and push to
     the remote host):
 
     ```bash
-    pnpm run bump MAJOR.MINOR.PATCH
+    pnpm run bump MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
 
     It is important that this script is run _AFTER_ the previous step, so that the commits associated with the tags
@@ -240,5 +240,5 @@ which can be included and used inside a browser without any dependencies.
     Afterwards ensure the `next` tag is updated for every package using (Requires `npm` to be installed):
 
     ```bash
-    pnpm run add-next-tag MAJOR.MINOR.PATCH
+    pnpm run add-next-tag MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
