@@ -4,7 +4,7 @@
  */
 import type { args } from "@oclif/parser";
 import { flags } from "@oclif/command";
-import { defaultOptimisationOptions, EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
+import { EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
 import { spawn } from "child_process";
 import { CLIEmitHandler } from "../logger";
 import { KipperEncodings, verifyEncoding } from "../input/";

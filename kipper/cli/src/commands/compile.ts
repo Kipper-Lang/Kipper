@@ -17,7 +17,7 @@ import {
 	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { getParseStream, getTarget, KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../input/";
+import { getParseStream, getTarget, KipperEncodings, KipperParseFile, verifyEncoding } from "../input/";
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
 import { loadAutoConfig } from "../config-loader";
