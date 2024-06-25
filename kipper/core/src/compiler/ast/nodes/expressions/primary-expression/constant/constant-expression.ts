@@ -19,7 +19,7 @@ export type ASTConstantExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_stringPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_boolPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
-	| typeof ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression;
+	| typeof ParseRuleKindMapping.RULE_arrayPrimaryExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ConstantExpression} AST node.

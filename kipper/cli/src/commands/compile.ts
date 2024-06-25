@@ -113,9 +113,9 @@ export default class Compile extends Command {
 
 		// Compilation-required
 		const { stream, outDir } = await getParseStream(args, flags, preExistingConfig);
-		const target: KipperCompileTarget = flags["target"] ?
-			getTarget(flags["target"]) :
-			preExistingCompileConfig?.target ?? getTarget("js");
+		const target: KipperCompileTarget = flags["target"]
+			? getTarget(flags["target"])
+			: preExistingCompileConfig?.target ?? getTarget("js");
 
 		// Output
 		const encoding = flags["encoding"] || "utf-8";
@@ -138,17 +138,16 @@ export default class Compile extends Command {
 					optimisationOptions: {
 						optimiseInternals:
 							flags["optimise-internals"] ??
-								preExistingCompileConfig?.optimisationOptions?.optimiseInternals ??
-								defaultOptimisationOptions.optimiseInternals,
+							preExistingCompileConfig?.optimisationOptions?.optimiseInternals ??
+							defaultOptimisationOptions.optimiseInternals,
 						optimiseBuiltIns:
 							flags["optimise-builtins"] ??
-								preExistingCompileConfig?.optimisationOptions?.optimiseBuiltIns ??
-								defaultOptimisationOptions.optimiseBuiltIns,
+							preExistingCompileConfig?.optimisationOptions?.optimiseBuiltIns ??
+							defaultOptimisationOptions.optimiseBuiltIns,
 					},
-					recover: flags["recover"] ??
-						preExistingCompileConfig?.recover ??
-						EvaluatedCompileConfig.defaults.recover,
-					abortOnFirstError: flags["abort-on-first-error"] ??
+					recover: flags["recover"] ?? preExistingCompileConfig?.recover ?? EvaluatedCompileConfig.defaults.recover,
+					abortOnFirstError:
+						flags["abort-on-first-error"] ??
 						preExistingCompileConfig?.abortOnFirstError ??
 						EvaluatedCompileConfig.defaults.abortOnFirstError,
 				} as CompileConfig,

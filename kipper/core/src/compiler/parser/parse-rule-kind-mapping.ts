@@ -57,7 +57,7 @@ export const ParseRuleKindMapping = {
 	RULE_fStringSingleQuoteAtom: 35,
 	RULE_fStringDoubleQuoteAtom: 36,
 	RULE_numberPrimaryExpression: 37,
-	RULE_arrayLiteralPrimaryExpression: 38,
+	RULE_arrayPrimaryExpression: 38,
 	RULE_voidOrNullOrUndefinedPrimaryExpression: 39,
 	RULE_computedPrimaryExpression: 40,
 	RULE_argumentExpressionList: 41,

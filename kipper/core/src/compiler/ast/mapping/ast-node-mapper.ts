@@ -122,7 +122,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionKindToClassMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
-		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayPrimaryExpression,
+		[ParseRuleKindMapping.RULE_arrayPrimaryExpression]: ArrayPrimaryExpression,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpression,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpression,
@@ -183,7 +183,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionKindToRuleContextMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpressionContext,
-		[ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression]: ArrayPrimaryExpressionContext,
+		[ParseRuleKindMapping.RULE_arrayPrimaryExpression]: ArrayPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpressionContext,
@@ -249,7 +249,7 @@ export class ASTNodeMapper {
 	 */
 	public static readonly expressionRuleNameToClassMap = {
 		RULE_numberPrimaryExpression: NumberPrimaryExpression,
-		RULE_arrayLiteralPrimaryExpression: ArrayPrimaryExpression,
+		RULE_arrayPrimaryExpression: ArrayPrimaryExpression,
 		RULE_identifierPrimaryExpression: IdentifierPrimaryExpression,
 		RULE_voidOrNullOrUndefinedPrimaryExpression: VoidOrNullOrUndefinedPrimaryExpression,
 		RULE_boolPrimaryExpression: BoolPrimaryExpression,
