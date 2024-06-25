@@ -15,7 +15,7 @@
 	},
 	"engines": {
 		"node": ">=16.0.0",
-		"pnpm": ">=8"
+		"pnpm": "8"
 	},
 	"homepage": "https://kipper-lang.org",
 	"bugs": "https://github.com/Kipper-Lang/Kipper/issues",
