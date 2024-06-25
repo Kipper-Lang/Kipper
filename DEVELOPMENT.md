@@ -1,11 +1,11 @@
 # Developer's Guide
 
-Welcome to the Developer's Guide for Kipper! Here you can get a general overview of how to get started with 
+Welcome to the Developer's Guide for Kipper! Here you can get a general overview of how to get started with
 working on the Kipper programming language.
 
 Please note that there may be changes in the workflow or work process and as such sometimes also inconsistencies in this
-file. We will try to keep it as well maintained as possible, but if anything seems off don't hesitate to open up a 
-[discussion](https://github.com/Kipper-Lang/Kipper/discussions) or an 
+file. We will try to keep it as well maintained as possible, but if anything seems off don't hesitate to open up a
+[discussion](https://github.com/Kipper-Lang/Kipper/discussions) or an
 [issue](https://github.com/Kipper-Lang/Kipper/issues/new/choose) if it is something that's clearly wrong.
 
 ## General Setup
@@ -27,7 +27,7 @@ Please be aware that Kipper only supports the following versions:
 ### Install PNPM for the monorepo management
 
 Before working on Kipper, it's important to install pnpm which provides the toolset required to manage a monorepo such
-as the one set up here! 
+as the one set up here!
 
 For how to install pnpm please refer to the pnpm website, or if you have npm just run:
 
@@ -36,7 +36,7 @@ npm i -g pnpm
 ```
 
 Please also be aware that we strictly require PNPM version `8` and anything besides that is currently not supported and
-may break! PNPM sometimes introduces breaking changes with their major releases, so using a different version may brick 
+may break! PNPM sometimes introduces breaking changes with their major releases, so using a different version may brick
 the setup so please watch out for that too!
 
 ## Install dependencies
@@ -186,7 +186,7 @@ which can be included and used inside a browser without any dependencies.
     release: Bumped Kipper project version to MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
 
-	(Previously, before `0.11.0-alpha.2` it was `release: Bumped static index.ts versions to MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]`)
+    (Previously, before `0.11.0-alpha.2` it was `release: Bumped static index.ts versions to MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]`)
 
     For example:
 
