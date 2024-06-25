@@ -22,6 +22,7 @@ and the [Kipper website](https://kipper-lang.org)._
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
+
 - [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
 - [Usage](#usage)
 - [Commands](#commands)
