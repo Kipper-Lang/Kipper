@@ -1,33 +1,23 @@
 {
 	"name": "@kipper/core",
 	"description": "The core implementation of the Kipper compiler 🦊",
-	"version": "0.11.0-alpha.1",
+	"version": "0.11.0-alpha.2",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"antlr4ts": "^0.5.0-alpha.4",
-		"tslib": "~2.5.0"
+		"tslib": "~2.6.2"
 	},
 	"devDependencies": {
-		"typescript": "5.1.3",
-		"uuid": "9.0.0",
-		"mkdirp": "3.0.1",
-		"ansi-regex": "6.0.1",
-		"minimist": "1.2.8",
-		"prettier": "2.8.8",
-		"tsify": "5.0.4",
-		"browserify": "17.0.0",
-		"watchify": "4.0.0",
-		"antlr4ts-cli": "0.5.0-alpha.4",
-		"json-parse-even-better-errors": "3.0.0",
-		"run-script-os": "1.1.6",
-		"ts-node": "10.9.1",
 		"@types/node": "18.16.16",
+		"typescript": "5.1.3",
+		"prettier": "2.8.8",
 		"size-limit": "8.2.4",
-		"@size-limit/preset-big-lib": "8.2.4"
+		"@size-limit/preset-big-lib": "8.2.4",
+		"antlr4ts-cli": "^0.5.0-alpha.4"
 	},
 	"engines": {
-		"node": ">=16.0.0",
-		"pnpm": ">=8"
+		"node": "16.x || 18.x || 20.x || 22.x",
+		"pnpm": "8"
 	},
 	"homepage": "https://kipper-lang.org",
 	"bugs": "https://github.com/Kipper-Lang/Kipper/issues",

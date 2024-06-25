@@ -157,7 +157,7 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     |   stringPrimaryExpression
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
-    |   arrayLiteralPrimaryExpression
+    |   arrayPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
     ;
 
@@ -200,7 +200,7 @@ numberPrimaryExpression
 	:	IntegerConstant | FloatingConstant
 	;
 
-arrayLiteralPrimaryExpression
+arrayPrimaryExpression
 	:	'[' (expression (',' expression)*)? ']'
 	;
 

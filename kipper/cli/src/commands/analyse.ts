@@ -4,10 +4,11 @@
  */
 import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
-import { KipperCompiler, KipperLogger, KipperParseStream, LogLevel } from "@kipper/core";
+import { KipperCompiler, KipperLogger, LogLevel } from "@kipper/core";
 import { CLIEmitHandler } from "../logger";
 import { getParseStream, KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";
+import { loadAutoConfig } from "../config-loader";
 
 export default class Analyse extends Command {
 	static override description: string = "Analyse a Kipper file and validate its syntax and semantic integrity.";
@@ -49,8 +50,11 @@ export default class Analyse extends Command {
 	private async getRunConfig() {
 		const { args, flags } = this.parse(Analyse);
 
+		// Load the pre-existing configuration
+		const preExistingConfig = await loadAutoConfig();
+
 		// Compilation-required
-		const stream: KipperParseStream = await getParseStream(args, flags);
+		const { stream } = await getParseStream(args, flags, preExistingConfig);
 
 		return {
 			args,

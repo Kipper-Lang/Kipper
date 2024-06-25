@@ -1,0 +1,12 @@
+{
+	"outDir": "build",
+	"srcDir": "src",
+	"compiler": {
+		"version": "<KIPPER_VERSION>",
+		"target": "<PROJECT_TARGET>"
+	},
+	"files": [
+		"./src/main.kip"
+	],
+	"resources": []
+}

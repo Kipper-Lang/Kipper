@@ -195,7 +195,7 @@ fStringPrimaryExpression
 fStringSingleQuoteAtom
 fStringDoubleQuoteAtom
 numberPrimaryExpression
-arrayLiteralPrimaryExpression
+arrayPrimaryExpression
 voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 argumentExpressionList

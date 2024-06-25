@@ -1,13 +1,13 @@
 ![](https://github.com/Kipper-Lang/Kipper/raw/main/img/Kipper-Logo-with-head.png)
 
-# Kipper CLI - `@kipper/cli` 🦊🖥️
+# Kipper CLI - `@kipper/cli` 🦊✨
 
-The Kipper command line interface (CLI) to interact with the Kipper compiler. 🦊✨
+The Kipper command line interface (CLI) to interact with the Kipper compiler. ⌨️✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Kipper-Lang/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -22,7 +22,7 @@ and the [Kipper website](https://kipper-lang.org)._
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
-* [Kipper CLI - `@kipper/cli` 🦊🖥️](#kipper-cli---kippercli-️)
+* [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
@@ -44,7 +44,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.1 linux-x64 node-v20.10.0
+@kipper/cli/0.11.0-alpha.2 linux-x64 node-v20.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -58,6 +58,7 @@ USAGE
 * [`kipper analyse [FILE]`](#kipper-analyse-file)
 * [`kipper compile [FILE]`](#kipper-compile-file)
 * [`kipper help [COMMAND]`](#kipper-help-command)
+* [`kipper new [LOCATION]`](#kipper-new-location)
 * [`kipper run [FILE]`](#kipper-run-file)
 * [`kipper version`](#kipper-version)
 
@@ -81,7 +82,7 @@ OPTIONS
   -w, --[no-]warnings            Show warnings that were emitted during the analysis.
 ```
 
-_See code: [src/commands/analyse.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/analyse.ts)_
+_See code: [src/commands/analyse.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -92,24 +93,25 @@ USAGE
   $ kipper compile [FILE]
 
 ARGUMENTS
-  FILE  The file that should be compiled.
+  FILE  The file that should be compiled. Takes precedence over the 'string-code' flag and the config file.
 
 OPTIONS
   -b, --[no-]optimise-builtins   Optimise the generated built-in functions using tree-shaking to reduce the size of the
                                  output.
 
-  -e, --encoding=encoding        [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
+  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf8,utf16le).
 
   -i, --[no-]optimise-internals  Optimise the generated internal functions using tree-shaking to reduce the size of the
                                  output.
 
-  -o, --output-dir=output-dir    [default: build] The build directory where the compiled files should be placed. If the
-                                 path does not exist, it will be created.
+  -o, --output-dir=output-dir    The build directory where the compiled files should be placed. If the path does not
+                                 exist, it will be created. Takes precedence over the config file, defaults to 'build'
+                                 if both are not provided
 
   -s, --string-code=string-code  The content of a Kipper file that can be passed as a replacement for the 'file'
-                                 parameter.
+                                 parameter. Takes precedence over the config file.
 
-  -t, --target=js|ts             [default: js] The target language where the compiled program should be emitted to.
+  -t, --target=js|ts             The target language where the compiled program should be emitted to.
 
   -w, --[no-]warnings            Show warnings that were emitted during the compilation.
 
@@ -120,7 +122,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -137,7 +139,25 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/help.ts)_
+
+## `kipper new [LOCATION]`
+
+Generate a new Kipper using a setup wizard. (Node-only for now)
+
+```
+USAGE
+  $ kipper new [LOCATION]
+
+ARGUMENTS
+  LOCATION  [default: /home/luna/data/Documents/Kipper/Kipper/kipper/cli] The directory where the new project should be
+            created. Defaults to the current directory.
+
+OPTIONS
+  -d, --default  Use the default settings for the new project. Skips the setup wizard.
+```
+
+_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/new.ts)_
 
 ## `kipper run [FILE]`
 
@@ -154,18 +174,18 @@ OPTIONS
   -b, --[no-]optimise-builtins   Optimise the generated built-in functions using tree-shaking to reduce the size of the
                                  output.
 
-  -e, --encoding=encoding        [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
+  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf8,utf16le).
 
   -i, --[no-]optimise-internals  Optimise the generated internal functions using tree-shaking to reduce the size of the
                                  output.
 
-  -o, --output-dir=output-dir    [default: build] The build directory where the compiled files should be placed. If the
-                                 path does not exist, it will be created.
+  -o, --output-dir=output-dir    The build directory where the compiled files should be placed. If the path does not
+                                 exist, it will be created.
 
   -s, --string-code=string-code  The content of a Kipper file that can be passed as a replacement for the 'file'
                                  parameter.
 
-  -t, --target=js|ts             [default: js] The target language where the compiled program should be emitted to.
+  -t, --target=js|ts             The target language where the compiled program should be emitted to.
 
   -w, --[no-]warnings            Show warnings that were emitted during the compilation.
 
@@ -176,7 +196,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -187,7 +207,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.1/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper
@@ -204,7 +224,7 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2023 Luna Klatzer
+Copyright (C) 2021-2024 Luna Klatzer
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

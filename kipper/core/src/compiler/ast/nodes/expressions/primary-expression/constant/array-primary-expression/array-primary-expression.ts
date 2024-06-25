@@ -28,7 +28,7 @@ export class ArrayPrimaryExpression extends ConstantExpression<
 	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_arrayLiteralPrimaryExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_arrayPrimaryExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST

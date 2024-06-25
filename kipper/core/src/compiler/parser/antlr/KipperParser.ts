@@ -2,15 +2,19 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { ASTKind, KipperParserRuleContext, ParseRuleKindMapping } from "..";
+import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
+import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
+import { Override } from "antlr4ts/Decorators";
 import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
+import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
+import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -140,7 +144,7 @@ export class KipperParser extends Parser {
 	public static readonly RULE_fStringSingleQuoteAtom = 35;
 	public static readonly RULE_fStringDoubleQuoteAtom = 36;
 	public static readonly RULE_numberPrimaryExpression = 37;
-	public static readonly RULE_arrayLiteralPrimaryExpression = 38;
+	public static readonly RULE_arrayPrimaryExpression = 38;
 	public static readonly RULE_voidOrNullOrUndefinedPrimaryExpression = 39;
 	public static readonly RULE_computedPrimaryExpression = 40;
 	public static readonly RULE_argumentExpressionList = 41;
@@ -210,7 +214,7 @@ export class KipperParser extends Parser {
 		"fStringSingleQuoteAtom",
 		"fStringDoubleQuoteAtom",
 		"numberPrimaryExpression",
-		"arrayLiteralPrimaryExpression",
+		"arrayPrimaryExpression",
 		"voidOrNullOrUndefinedPrimaryExpression",
 		"computedPrimaryExpression",
 		"argumentExpressionList",
@@ -851,8 +855,8 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public storageTypeSpecifier(): storageTypeSpecifierContext {
-		let _localctx: storageTypeSpecifierContext = new storageTypeSpecifierContext(this._ctx, this.state);
+	public storageTypeSpecifier(): StorageTypeSpecifierContext {
+		let _localctx: StorageTypeSpecifierContext = new StorageTypeSpecifierContext(this._ctx, this.state);
 		this.enterRule(_localctx, 16, KipperParser.RULE_storageTypeSpecifier);
 		let _la: number;
 		try {
@@ -1889,7 +1893,7 @@ export class KipperParser extends Parser {
 					this.enterOuterAlt(_localctx, 7);
 					{
 						this.state = 321;
-						this.arrayLiteralPrimaryExpression();
+						this.arrayPrimaryExpression();
 					}
 					break;
 				case KipperParser.Void:
@@ -2320,9 +2324,9 @@ export class KipperParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext {
+	public arrayPrimaryExpression(): ArrayPrimaryExpressionContext {
 		let _localctx: ArrayPrimaryExpressionContext = new ArrayPrimaryExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 76, KipperParser.RULE_arrayLiteralPrimaryExpression);
+		this.enterRule(_localctx, 76, KipperParser.RULE_arrayPrimaryExpression);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
@@ -4691,8 +4695,8 @@ export class FunctionDeclarationContext extends KipperParserRuleContext {
 }
 
 export class VariableDeclarationContext extends KipperParserRuleContext {
-	public storageTypeSpecifier(): storageTypeSpecifierContext {
-		return this.getRuleContext(0, storageTypeSpecifierContext);
+	public storageTypeSpecifier(): StorageTypeSpecifierContext {
+		return this.getRuleContext(0, StorageTypeSpecifierContext);
 	}
 	public initDeclarator(): InitDeclaratorContext {
 		return this.getRuleContext(0, InitDeclaratorContext);
@@ -4726,7 +4730,7 @@ export class VariableDeclarationContext extends KipperParserRuleContext {
 	}
 }
 
-export class storageTypeSpecifierContext extends KipperParserRuleContext {
+export class StorageTypeSpecifierContext extends KipperParserRuleContext {
 	public Var(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Var, 0);
 	}
@@ -5606,7 +5610,7 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	public numberPrimaryExpression(): NumberPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, NumberPrimaryExpressionContext);
 	}
-	public arrayLiteralPrimaryExpression(): ArrayPrimaryExpressionContext | undefined {
+	public arrayPrimaryExpression(): ArrayPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ArrayPrimaryExpressionContext);
 	}
 	public voidOrNullOrUndefinedPrimaryExpression(): VoidOrNullOrUndefinedPrimaryExpressionContext | undefined {
@@ -6028,7 +6032,7 @@ export class ArrayPrimaryExpressionContext extends KipperParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_arrayLiteralPrimaryExpression;
+		return KipperParser.RULE_arrayPrimaryExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {

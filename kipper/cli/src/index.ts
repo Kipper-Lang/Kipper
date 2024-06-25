@@ -5,7 +5,7 @@
  */
 export { run } from "@oclif/command";
 
-export * from "./input/file-stream";
+export * from "./input";
 export * from "./logger";
 export * from "./errors";
 export * from "./output/compile";
@@ -13,7 +13,7 @@ export * from "./output/compile";
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/cli";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.11.0-alpha.1";
+export const version = "0.11.0-alpha.2";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

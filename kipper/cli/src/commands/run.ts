@@ -3,27 +3,15 @@
  * @since 0.0.3
  */
 import type { args } from "@oclif/parser";
-import { Command, flags } from "@oclif/command";
-import { Logger } from "tslog";
-import {
-	CompileConfig,
-	defaultOptimisationOptions,
-	EvaluatedCompileConfig,
-	KipperCompiler,
-	KipperCompileResult,
-	KipperCompileTarget,
-	KipperError,
-	KipperLogger,
-	KipperParseStream,
-	LogLevel,
-} from "@kipper/core";
+import { flags } from "@oclif/command";
+import { EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
 import { spawn } from "child_process";
-import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
-import { writeCompilationResult } from "../output";
+import { CLIEmitHandler } from "../logger";
+import { KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";
+import Compile from "./compile";
 
-export default class Run extends Command {
+export default class Run extends Compile {
 	static override description: string = "Compile and execute a Kipper program.";
 
 	// TODO! Add examples when the command moves out of development
@@ -40,19 +28,16 @@ export default class Run extends Command {
 	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
-			default: "js",
 			description: "The target language where the compiled program should be emitted to.",
 			options: ["js", "ts"],
 		}),
 		encoding: flags.string({
 			char: "e",
-			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
 		"output-dir": flags.string({
 			char: "o",
-			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
@@ -62,13 +47,11 @@ export default class Run extends Command {
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
@@ -101,47 +84,11 @@ export default class Run extends Command {
 	};
 
 	/**
-	 * Gets the configuration for the invocation of this command.
-	 * @private
-	 */
-	private async getRunConfig() {
-		const { args, flags } = this.parse(Run);
-
-		// Compilation-required
-		const stream: KipperParseStream = await getParseStream(args, flags);
-		const target: KipperCompileTarget = await getTarget(flags["target"]);
-
-		// Output
-		const outputDir: string = flags["output-dir"];
-		const encoding = flags["encoding"] as KipperEncoding;
-
-		return {
-			args,
-			flags,
-			config: {
-				stream,
-				target,
-				outputDir,
-				encoding,
-				compilerOptions: {
-					target: target,
-					optimisationOptions: {
-						optimiseInternals: flags["optimise-internals"],
-						optimiseBuiltIns: flags["optimise-builtins"],
-					},
-					recover: flags["recover"],
-					abortOnFirstError: flags["abort-on-first-error"],
-				} as CompileConfig,
-			},
-		};
-	}
-
-	/**
 	 * Run the Kipper program in a new spawned process.
-	 * @param jsCode The JavaScript code to execute using the same JavaScript runtime as this CLI is being executed from.
+	 * @param entryFile The file that should be executed.
 	 */
-	private async executeKipperProgram(jsCode: string): Promise<void> {
-		const kipperProgram = spawn(process.execPath, ["-e", jsCode]);
+	private async executeKipperProgram(entryFile: string): Promise<void> {
+		const kipperProgram = spawn("ts-node", [entryFile]);
 
 		// Per default the encoding should be 'utf-8'
 		kipperProgram.stdin.setDefaultEncoding("utf-8");
@@ -157,48 +104,9 @@ export default class Run extends Command {
 	@prettifiedErrors<Run>()
 	public async run() {
 		const { flags, config } = await this.getRunConfig();
-		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
-		const compiler = new KipperCompiler(logger);
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.WARN, flags["warnings"]);
 
-		// If 'log-timestamp' is set, set the logger to use the timestamp
-		if (flags["log-timestamp"]) {
-			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
-		}
-
-		let result: KipperCompileResult;
-		try {
-			result = await compiler.compile(config.stream, config.compilerOptions);
-		} catch (e) {
-			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
-				// Ignore the error thrown by the compiler (the logger already logged it)
-				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
-				return;
-			}
-			throw e;
-		}
-
-		// If the compilation failed, abort
-		if (!result.success) {
-			return;
-		}
-
-		// Write the file output for this compilation
-		await writeCompilationResult(result, config.stream, config.outputDir, config.target, config.encoding);
-
-		// Get the JS code that should be evaluated
-		let jsProgram: string;
-		if (config.target.targetName === "typescript") {
-			// Also do the compilation now with the JavaScript target
-			let jsProgramCtx = await compiler.compile(config.stream, {
-				...config.compilerOptions,
-				target: getTarget("js"),
-			});
-			jsProgram = jsProgramCtx.write();
-		} else {
-			jsProgram = result.write();
-		}
-
-		// Execute the program
-		await this.executeKipperProgram(jsProgram);
+		await super.run(logger);
+		await this.executeKipperProgram(config.outPath);
 	}
 }

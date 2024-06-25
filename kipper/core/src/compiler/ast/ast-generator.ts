@@ -56,7 +56,7 @@ import type {
 	PassOnLogicalAndExpressionContext,
 	ReturnStatementContext,
 	SliceNotationMemberAccessExpressionContext,
-	storageTypeSpecifierContext,
+	StorageTypeSpecifierContext,
 	StringPrimaryExpressionContext,
 	SwitchLabeledStatementContext,
 	SwitchStatementContext,
@@ -353,13 +353,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	public exitNumberPrimaryExpression: (ctx: NumberPrimaryExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
+	 * Enter a parse tree produced by `KipperParser.arrayPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public enterArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
 
 	/**
-	 * Exit a parse tree produced by `KipperParser.arrayLiteralPrimaryExpression`.
+	 * Exit a parse tree produced by `KipperParser.arrayPrimaryExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
@@ -992,13 +992,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterStorageTypeSpecifier?(ctx: storageTypeSpecifierContext): void;
+	public enterStorageTypeSpecifier?(ctx: StorageTypeSpecifierContext): void;
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.storageTypeSpecifier`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitStorageTypeSpecifier?(ctx: storageTypeSpecifierContext): void;
+	public exitStorageTypeSpecifier?(ctx: StorageTypeSpecifierContext): void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.initDeclarator`.

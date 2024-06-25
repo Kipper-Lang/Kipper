@@ -18,7 +18,7 @@ import {
 	InitDeclaratorContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
-	storageTypeSpecifierContext,
+	StorageTypeSpecifierContext,
 	VariableDeclarationContext,
 } from "../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
@@ -133,8 +133,8 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const children: Array<ParseTree> = this.getAntlrRuleChildren();
 
 		// Determine the ctx instances
-		const storageTypeCtx = <storageTypeSpecifierContext | undefined>(
-			children.find((val) => val instanceof storageTypeSpecifierContext)
+		const storageTypeCtx = <StorageTypeSpecifierContext | undefined>(
+			children.find((val) => val instanceof StorageTypeSpecifierContext)
 		);
 		const initDeclaratorCtx = <InitDeclaratorContext | undefined>(
 			children.find((val) => val instanceof InitDeclaratorContext)

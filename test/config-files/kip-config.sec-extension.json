@@ -1,0 +1,13 @@
+{
+	"outDir": "dist",
+	"srcDir": "test/kipper-files",
+	"compiler": {
+		"target": "js"
+	},
+	"files": [
+		"test/kipper-files/multi-function-definition.kip"
+	],
+	"resources": [
+		"img/Kipper-Logo-with-head.png"
+	]
+}
