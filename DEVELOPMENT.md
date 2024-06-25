@@ -1,18 +1,33 @@
 # Developer's Guide
 
-We recommend Visual Studio Code or Web-Storm for developing on Kipper.
+Welcome to the Developer's Guide for Kipper! Here you can get a general overview of how to get started with 
+working on the Kipper programming language.
+
+Please note that there may be changes in the workflow or work process and as such sometimes also inconsistencies in this
+file. We will try to keep it as well maintained as possible, but if anything seems off don't hesitate to open up a 
+[discussion](https://github.com/Kipper-Lang/Kipper/discussions) or an 
+[issue](https://github.com/Kipper-Lang/Kipper/issues/new/choose) if it is something that's clearly wrong.
 
 ## General Setup
 
-### Install the TypeScript Compiler and Node.js
+We recommend Web-Storm for developing on Kipper, as that has based on our experience provided the best development
+experience, but other options such as VSCode are also viable. Generally speaking it's
 
-- [Download page of TypeScript](https://www.typescriptlang.org/download)
-- [Download page of Node.js](https://nodejs.org/en/download/)
+### Install Node.js
+
+[Download page of Node.js](https://nodejs.org/en/download/)
+
+Please be aware that Kipper only supports the following versions:
+
+- `16.x`
+- `18.x`
+- `20.x`
+- `22.x`
 
 ### Install PNPM for the monorepo management
 
-Before working on Kipper, it's important to install pnpm, since Kipper is a monorepo with many child packages in a
-single branch and repo, and therefore depends on the monorepo tools of pnpm.
+Before working on Kipper, it's important to install pnpm which provides the toolset required to manage a monorepo such
+as the one set up here! 
 
 For how to install pnpm please refer to the pnpm website, or if you have npm just run:
 
@@ -20,25 +35,22 @@ For how to install pnpm please refer to the pnpm website, or if you have npm jus
 npm i -g pnpm
 ```
 
-### VSCode setup
-
-Install the following extensions:
-
-- [eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- [prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+Please also be aware that we strictly require PNPM version `8` and anything besides that is currently not supported and
+may break! PNPM sometimes introduces breaking changes with their major releases, so using a different version may brick 
+the setup so please watch out for that too!
 
 ## Install dependencies
 
 Whenever dependencies in `package.json` are changed, run the following command:
 
 ```sh
-pnpm install
+pnpm i
 ```
 
 To only install resolved dependencies in `pnpm-lock.yaml`:
 
 ```sh
-pnpm install --frozen-lockfile
+pnpm i --frozen-lockfile
 ```
 
 ## Force LF line-endings
@@ -171,8 +183,10 @@ which can be included and used inside a browser without any dependencies.
     These changes must be committed yourself with a commit message preferably similar to this:
 
     ```
-    release: Bumped static index.ts versions to MAJOR.MINOR.PATCH
+    release: Bumped Kipper project version to MAJOR.MINOR.PATCH
     ```
+
+	(Previously, before `0.11.0-alpha.2` it was `release: Bumped static index.ts versions to MAJOR.MINOR.PATCH`)
 
     For example:
 
