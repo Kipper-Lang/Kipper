@@ -14,13 +14,15 @@ import {
 	KipperCompileTarget,
 	KipperError,
 	KipperLogger,
-	KipperParseStream,
 	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
+import { getParseStream, getTarget, KipperEncoding, KipperEncodings, KipperParseFile, verifyEncoding } from "../input/";
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
+import { loadAutoConfig } from "../config-loader";
+import { copyConfigResources } from "../copy-resources";
+import path from "node:path";
 
 export default class Compile extends Command {
 	static override description: string = "Compile a Kipper program into the specified target language.";
@@ -32,32 +34,31 @@ export default class Compile extends Command {
 		{
 			name: "file",
 			required: false,
-			description: "The file that should be compiled.",
+			description:
+				"The file that should be compiled. Takes precedence over the 'string-code' flag and the config file.",
 		},
 	];
 
 	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
-			default: "js",
 			description: "The target language where the compiled program should be emitted to.",
 			options: ["js", "ts"],
 		}),
 		encoding: flags.string({
 			char: "e",
-			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
 		"output-dir": flags.string({
 			char: "o",
-			default: "build",
 			description:
-				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
+				"The build directory where the compiled files should be placed. If the path does not exist, it will be created. Takes precedence over the config file, defaults to 'build' if both are not provided",
 		}),
 		"string-code": flags.string({
 			char: "s",
-			description: "The content of a Kipper file that can be passed as a replacement for the 'file' parameter.",
+			description:
+				"The content of a Kipper file that can be passed as a replacement for the 'file' parameter. Takes precedence over the config file.",
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
@@ -103,12 +104,23 @@ export default class Compile extends Command {
 	 * Gets the configuration for the invocation of this command.
 	 * @private
 	 */
-	private async getRunConfig() {
+	protected async getRunConfig() {
 		const { args, flags } = this.parse(Compile);
 
+		// Load the pre-existing configuration
+		const preExistingConfig = await loadAutoConfig();
+		const preExistingCompileConfig = preExistingConfig?.genCompilerConfig();
+
 		// Compilation-required
-		const stream: KipperParseStream = await getParseStream(args, flags);
-		const target: KipperCompileTarget = await getTarget(flags["target"]);
+		const { stream, outDir } = await getParseStream(args, flags, preExistingConfig);
+		const target: KipperCompileTarget = flags["target"] ?
+			getTarget(flags["target"]) :
+			preExistingCompileConfig?.target ?? getTarget("js");
+
+		// Output
+		const encoding = flags["encoding"] || "utf-8";
+		const fileName = stream instanceof KipperParseFile ? stream.path.name : stream.name;
+		const outPath = `${path.resolve(outDir)}/${fileName}.${target.fileExtension}`;
 
 		return {
 			args,
@@ -116,23 +128,39 @@ export default class Compile extends Command {
 			config: {
 				stream,
 				target,
+				outDir,
+				outPath,
+				encoding,
+				resources: preExistingConfig?.resources ?? [],
 				compilerOptions: {
+					...preExistingCompileConfig,
 					target: target,
 					optimisationOptions: {
-						optimiseInternals: flags["optimise-internals"],
-						optimiseBuiltIns: flags["optimise-builtins"],
+						optimiseInternals:
+							flags["optimise-internals"] ??
+								preExistingCompileConfig?.optimisationOptions?.optimiseInternals ??
+								defaultOptimisationOptions.optimiseInternals,
+						optimiseBuiltIns:
+							flags["optimise-builtins"] ??
+								preExistingCompileConfig?.optimisationOptions?.optimiseBuiltIns ??
+								defaultOptimisationOptions.optimiseBuiltIns,
 					},
-					recover: flags["recover"],
-					abortOnFirstError: flags["abort-on-first-error"],
+					recover: flags["recover"] ??
+						preExistingCompileConfig?.recover ??
+						EvaluatedCompileConfig.defaults.recover,
+					abortOnFirstError: flags["abort-on-first-error"] ??
+						preExistingCompileConfig?.abortOnFirstError ??
+						EvaluatedCompileConfig.defaults.abortOnFirstError,
 				} as CompileConfig,
 			},
 		};
 	}
 
 	@prettifiedErrors<Compile>()
-	public async run() {
+	public async run(logger?: KipperLogger) {
 		const { flags, config } = await this.getRunConfig();
-		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
+
+		logger = logger ?? new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
 		const compiler = new KipperCompiler(logger);
 
 		// If 'log-timestamp' is set, set the logger to use the timestamp
@@ -162,14 +190,14 @@ export default class Compile extends Command {
 		}
 
 		// Write the file output for this compilation
-		const out = await writeCompilationResult(
-			result,
-			config.stream,
-			flags["output-dir"],
-			config.target,
-			flags["encoding"] as KipperEncoding,
-		);
+		const out = await writeCompilationResult(result, config.outDir, config.outPath, config.encoding);
 		logger.debug(`Generated file '${out}'.`);
+
+		// Copy resources if they exist
+		if (config.resources) {
+			await copyConfigResources(config.resources);
+			logger.debug(`Finished copying resources specified in config.`);
+		}
 
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;

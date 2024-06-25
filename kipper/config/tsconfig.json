@@ -1,0 +1,24 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"target": "es2016",
+		"noImplicitOverride": false,
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"lib": [
+			"ES7" // ES7 -> ES2016
+		]
+	},
+	"include": [
+		"./src/**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"lib",
+		"dist",
+		"**/*.spec.ts"
+	],
+	"files": []
+}

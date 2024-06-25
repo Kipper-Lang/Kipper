@@ -18,6 +18,11 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
+  and parsing. This package is used by the Kipper CLI to automatically load and parse config files.
+  ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
+- Added setup wizard to the `@kipper/cli` to automatically create a Kipper project with a config file.
+  ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
 - Support for complex string formatting (or also called templating) in the form of Python-like F-Strings.
   ([#287](https://github.com/Kipper-Lang/Kipper/issues/287)).
 - New valid conversions:
@@ -37,6 +42,7 @@ To use development versions of Kipper download the
   - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
   - `PrimaryExpression`, which is an abstract base class for all primary expressions.
   - `PostfixExpression`, which is an abstract base class for all postfix expressions.
+  - `PromptModule` in `@kipper/cli`, which contains all prompt-related functions and classes.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
@@ -73,6 +79,9 @@ To use development versions of Kipper download the
   - `KipperTargetBuiltInGenerator.undefinedToStr()`, for the built-in conversion from `undefined` to `str`.
   - `replaceObjKeys()`, which replaces the keys of an object with the values returned by a function.
   - `inverseMap()`, which inverts a map by swapping the keys and values.
+  - `loadConfig()` in `@kipper/cli`, which loads a config file from the specified path.
+  - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
+  - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
 
 ### Changed
 

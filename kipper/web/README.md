@@ -11,12 +11,12 @@
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/web)](https://packagephobia.com/result?p=@kipper/web)
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
-The standalone web-module for the Kipper Compiler. 🦊✨
+The standalone web-module for the Kipper Compiler. ⌨️✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊🖥️
+It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
 _For more details, you can read more about this project on the [project repository](https://github.com/Kipper-Lang/Kipper)
 and the [Kipper website](https://kipper-lang.org)._
@@ -81,7 +81,7 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2023 Luna Klatzer
+Copyright (C) 2021-2024 Luna Klatzer
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

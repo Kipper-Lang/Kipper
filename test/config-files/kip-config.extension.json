@@ -1,0 +1,14 @@
+{
+	"extends": "./test/config-files/kip-config.sec-extension.json",
+	"outDir": "dist",
+	"srcDir": "test/kipper-files",
+	"compiler": {
+		"target": "js"
+	},
+	"files": [
+		"test/kipper-files/multi-function-call.kip"
+	],
+	"resources": [
+		"img/Kipper-Icon.png"
+	]
+}

@@ -11,7 +11,7 @@
 [![Publish size](https://badgen.net/packagephobia/publish/@kipper/core)](https://packagephobia.com/result?p=@kipper/core)
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
-The core module for Kipper, which contains the primary language and compiler. 🦊✨
+The core module for Kipper, which contains the primary language and compiler. ⌨️✨
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
 straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
@@ -23,7 +23,7 @@ and the [Kipper website](https://kipper-lang.org)._
 
 ## Installation
 
-To install the whole Kipper package with its CLI, run the following command:
+To install the package, run the following command:
 
 ```bash
 npm i @kipper/core
@@ -160,7 +160,7 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2023 Luna Klatzer
+Copyright (C) 2021-2024 Luna Klatzer
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

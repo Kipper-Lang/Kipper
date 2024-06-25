@@ -5,7 +5,7 @@
  */
 export { run } from "@oclif/command";
 
-export * from "./input/file-stream";
+export * from "./input";
 export * from "./logger";
 export * from "./errors";
 export * from "./output/compile";

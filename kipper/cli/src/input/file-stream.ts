@@ -8,6 +8,7 @@ import * as path from "path";
 import { KipperParseStream } from "@kipper/core";
 import { KipperFileAccessError, KipperInvalidInputError, KipperUnsupportedEncodingError } from "../errors";
 import { OutputArgs, OutputFlags } from "@oclif/parser/lib/parse";
+import { EvaluatedKipperConfigFile } from "@kipper/config";
 
 /**
  * Valid encodings that Kipper supports.
@@ -36,23 +37,42 @@ export function verifyEncoding(encoding: string): KipperEncoding {
 	}
 }
 
+function ensureCompatibleFiles(files: Array<{ src: string; outDir: string }> | undefined): void {
+	if ((files?.length ?? 0) >= 2) {
+		throw new KipperInvalidInputError(
+			"Multiple files are not supported in the CLI. This will be updated in a future release.",
+		);
+	}
+}
+
 /**
  * Evaluates the file or stream provided by the command arguments or flags.
  * @param args The arguments that were passed to the command.
  * @param flags The flags that were passed to the command.
+ * @param config The configuration file that was loaded.
  * @since 0.10.0
  */
 export async function getParseStream(
 	args: OutputArgs,
 	flags: OutputFlags<any>,
-): Promise<KipperParseFile | KipperParseStream> {
+	config: EvaluatedKipperConfigFile | undefined,
+): Promise<{ stream: KipperParseFile | KipperParseStream; outDir: string }> {
+	let stream: KipperParseFile | KipperParseStream;
 	if (args.file) {
-		return await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
+		stream = await KipperParseFile.fromFile(args.file, flags["encoding"] as KipperEncoding);
 	} else if (flags["string-code"]) {
-		return new KipperParseStream({ stringContent: flags["string-code"] });
+		stream = new KipperParseStream({ stringContent: flags["string-code"] });
+	} else if (config?.files) {
+		ensureCompatibleFiles(config.files);
+		stream = await KipperParseFile.fromFile(config.files[0].src, flags["encoding"]);
 	} else {
 		throw new KipperInvalidInputError("Argument 'file' or flag '-s/--string-code' must be populated");
 	}
+
+	return {
+		stream: stream,
+		outDir: args["output-dir"] ?? config?.outDir ?? "build",
+	};
 }
 
 /**

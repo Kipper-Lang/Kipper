@@ -1,0 +1,10 @@
+{
+	"outDir": true,
+	"srcDir": true,
+	"compiler": {
+		"version": true,
+		"target": true
+	},
+	"files": true,
+	"resources": true
+}

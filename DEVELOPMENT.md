@@ -227,4 +227,4 @@ which can be included and used inside a browser without any dependencies.
 
     ```bash
     pnpm run add-next-tag MAJOR.MINOR.PATCH
-	```
+    ```
