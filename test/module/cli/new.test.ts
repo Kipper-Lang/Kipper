@@ -1,21 +1,32 @@
 import { assert } from "chai";
 import * as path from "path";
+import * as fsSync from "fs";
 import * as fs from "fs/promises";
 import { test } from "@oclif/test";
 import { version } from "@kipper/core";
 
-const originalCwd = process.cwd();
 const tempFolder = path.join(__dirname, "..", "..", "temp");
 
+function createTemp(): void {
+	if (!fsSync.existsSync(tempFolder)) {
+		fsSync.mkdirSync(tempFolder, { recursive: true });
+	}
+}
+
+function removeTemp(): void {
+	if (fsSync.existsSync(tempFolder)) {
+		fsSync.rmSync(tempFolder, { recursive: true });
+	}
+}
+
 describe("Kipper CLI 'new'", () => {
-	beforeEach(async () => {
-		await fs.mkdir(tempFolder, { recursive: true });
-		process.chdir(tempFolder);
+	beforeEach(() => {
+		createTemp();
 	});
 
 	test
 		.stdout()
-		.command(["new", "-d"])
+		.command(["new", tempFolder, "-d"])
 		.it("using '-d' (Default Config)", async (ctx) => {
 			assert.isNotEmpty(ctx.stdout);
 			assert.include(ctx.stdout, "Using default settings. Skipping setup wizard.");
@@ -47,8 +58,7 @@ describe("Kipper CLI 'new'", () => {
 			assert.include(kipConfig, '"resources": []');
 		});
 
-	afterEach(async () => {
-		await fs.rm(tempFolder, { recursive: true });
-		process.chdir(originalCwd);
+	afterEach(() => {
+		removeTemp();
 	});
 });
