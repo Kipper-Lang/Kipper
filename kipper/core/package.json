@@ -16,7 +16,7 @@
 		"antlr4ts-cli": "^0.5.0-alpha.4"
 	},
 	"engines": {
-		"node": ">=16.0.0",
+		"node": "16.x || 18.x || 20.x || 22.x",
 		"pnpm": "8"
 	},
 	"homepage": "https://kipper-lang.org",
