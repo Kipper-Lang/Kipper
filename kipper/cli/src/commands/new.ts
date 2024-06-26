@@ -19,7 +19,7 @@ const templates = {
 };
 
 export default class New extends Command {
-	static override description: string = "Generate a new Kipper using a setup wizard. (Node-only for now)";
+	static override description: string = "Generate a new Kipper using a setup wizard.";
 
 	// TODO! Add examples when the command moves out of development
 	static override examples: Array<string> = [];
@@ -28,8 +28,8 @@ export default class New extends Command {
 		{
 			name: "location",
 			required: false,
-			default: process.cwd(),
-			description: "The directory where the new project should be created. Defaults to the current directory.",
+			default: ".",
+			description: "The directory where the new project should be created.",
 		},
 	];
 
@@ -111,7 +111,7 @@ export default class New extends Command {
 	@prettifiedErrors<New>()
 	public async run() {
 		const { args, flags } = await this.getRunConfig();
-		const rootDir = args.location;
+		const rootDir = path.resolve(args.location);
 		const promptModule = await PromptModule.create();
 
 		// For the setup wizard we will ask the following questions

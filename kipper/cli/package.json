@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.11.0-alpha.2",
+  "version": "0.11.0-alpha.3",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
@@ -29,7 +29,9 @@
     "@types/inquirer": "7.3.3",
     "typescript": "5.1.3",
     "prettier": "2.8.8",
-    "oclif": "2.7.0"
+    "oclif": "2.7.0",
+    "rimraf": "5.0.7",
+    "copyfiles": "2.4.1"
   },
   "engines": {
     "node": "16.x || 18.x || 20.x || 22.x",
@@ -80,7 +82,7 @@
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "build": "tsc",
-    "postbuild": "cp -r ./src/templates ./lib/templates",
+    "postbuild": "copyfiles ./src/templates/**/* ./lib/templates/ --flat --all",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
     "start": "node ./bin/run",

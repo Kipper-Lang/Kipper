@@ -1,7 +1,7 @@
 {
 	"name": "@kipper/target-js",
 	"description": "The JavaScript target for the Kipper compiler 🦊",
-	"version": "0.11.0-alpha.2",
+	"version": "0.11.0-alpha.3",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"@kipper/core": "workspace:~",

@@ -84,7 +84,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
-				'var __kipperGlobalScope = typeof __kipperGlobalScope !== "undefined" ? __kipperGlobalScope : typeof' +
+				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
 					' globalThis !== "undefined" ?' +
 					" globalThis : typeof" +
 					' window !== "undefined" ?' +
@@ -93,15 +93,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			],
 			// Create global kipper object - Always prefer the global '__kipper' instance
 			["// @ts-ignore"],
-			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+			["var __kipper = __globalScope.__kipper = __globalScope.__kipper || __kipper || {}", ";"],
 			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError ||  (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
 				";",
 			],
+			["// @ts-ignore"],
 			[
-				'__kipper.IndexError = __kipper.IndexError ||  (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
 				";",
 			],
 		];
