@@ -25,6 +25,8 @@ To use development versions of Kipper download the
   ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
 - Support for complex string formatting (or also called templating) in the form of Python-like F-Strings.
   ([#287](https://github.com/Kipper-Lang/Kipper/issues/287)).
+- Support for string multiplication using the `*` operator.
+	([#478](https://github.com/Kipper-Lang/Kipper/issues/478)).
 - New valid conversions:
   - `void` to `str`.
   - `null` to `str`.
