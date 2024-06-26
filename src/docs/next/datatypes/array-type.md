@@ -5,7 +5,7 @@ title: Array Type
 # Array Type - `Array<T>`
 
 <p class="important">
-Scheduled for release in Kipper v0.12.0
+Scheduled for release in Kipper v0.11.0
 </p>
 
 The `Array<T>` data type is a unique data type, as it does not represent itself a value, but rather a sequence of

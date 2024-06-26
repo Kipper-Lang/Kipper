@@ -5,6 +5,8 @@ precedence, where each item is one by one evaluated.
 
 ## Syntax
 
+### Simple Assignment
+
 ```kipper
 NAME = EXP
 ```
