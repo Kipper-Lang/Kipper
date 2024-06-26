@@ -4,7 +4,7 @@
 /* Default sizing for buttons */
 .button,
 .button-dark {
-	padding: 1em 1.6em;
+	padding: 0.8em 1.4em;
 	margin: 1.2rem 1.2rem 1.2rem 0;
 }
 
@@ -67,7 +67,7 @@
 	border: 2px solid $scheme-primary;
 	color: $scheme-primary;
 	background-color: transparent;
-	padding: calc(1em - 2px) calc(1.6em - 2px);
+	padding: calc(0.8em - 2px) calc(1.4em - 2px);
 	margin: 1.2rem 1.2rem 1.2rem 0;
 
 	&:active,
