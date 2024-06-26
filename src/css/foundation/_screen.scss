@@ -1,5 +1,5 @@
 /* Defines Screen-Specific size variables and overwrites */
-@use "./var" as *;
+@use "../mixins/rigged-background" as *;
 
 #main-frame {
 	display: flex;
@@ -10,9 +10,12 @@
 		flex-grow: 1;
 		flex-direction: column;
 
+    .page-header {
+      @include rigged-background();
+    }
+
 		.page-header,
 		#page-header-wrapper {
-			background-color: $scheme-primary;
 			display: flex;
 			flex-direction: column;
 		}
