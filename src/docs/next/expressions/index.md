@@ -10,6 +10,7 @@ nav:
   - ./relational-expression.md
   - ./convert-expression.md
   - ./f-string-expression.md
+  - ./member-access-expression.md
   - ./function-call-expression.md
 ---
 
