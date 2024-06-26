@@ -33,6 +33,7 @@ import {
 	KipperCompilableType,
 	kipperCompilableTypes,
 	kipperIncrementOrDecrementOperators,
+	kipperMultiplicativeOperators,
 	kipperPlusOperator,
 	KipperReferenceable,
 	KipperReferenceableFunction,
@@ -392,6 +393,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		if (leftOpType !== "num" || rightOpType !== "num") {
 			// Strings can use '+' to concat strings
 			if (op === kipperPlusOperator && leftOpType == kipperStrType && rightOpType == kipperStrType) {
+				return;
+			}
+
+			// Strings can use * to repeat a string n times
+			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrType && rightOpType == "num") {
 				return;
 			}
 

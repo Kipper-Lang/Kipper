@@ -28,18 +28,6 @@ describe("ArithmeticOperationTypeError", () => {
 			assert.fail("Expected 'ArithmeticOperationTypeError'");
 		});
 
-		it("str*num", async () => {
-			try {
-				await new KipperCompiler().compile('"3" * 4;', defaultConfig);
-			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
-				ensureTracebackDataExists(<KipperError>e);
-				return;
-			}
-			assert.fail("Expected 'ArithmeticOperationTypeError'");
-		});
-
 		it("str**num", async () => {
 			try {
 				await new KipperCompiler().compile('"3" ** 4;', defaultConfig);
@@ -342,6 +330,37 @@ describe("ArithmeticOperationTypeError", () => {
 	});
 
 	describe("NoError", () => {
+		describe("num*num", () => {
+			it("num*num", async () => {
+				let result: KipperCompileResult | undefined = undefined;
+				try {
+					result = await new KipperCompiler().compile("3 * 3;", defaultConfig);
+				} catch (e) {
+					assert.fail("Expected no 'ArithmeticOperationTypeError'");
+				}
+				assert.isDefined(result, "Expected defined compilation result");
+				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			});
+		});
+
+		describe("*", () => {
+			it("str*num", async () => {
+				let result: KipperCompileResult | undefined = undefined;
+				try {
+					result = await new KipperCompiler().compile('"3" * 3;', {
+						abortOnFirstError: true,
+						target: defaultTarget,
+					});
+				} catch (e) {
+					assert.fail("Expected no 'ArithmeticOperationTypeError'");
+				}
+				assert.isDefined(result, "Expected defined compilation result");
+				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			});
+		});
+
 		describe("+", () => {
 			it("str", async () => {
 				let result: KipperCompileResult | undefined = undefined;
