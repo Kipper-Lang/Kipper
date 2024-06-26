@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.11.0-alpha.3",
+  "version": "0.11.0-alpha.4",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
@@ -77,7 +77,7 @@
   },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "prepack": "rimraf lib && tsc -b && oclif manifest && oclif readme",
+    "prepack": "rimraf lib && pnpm run build && oclif manifest && oclif readme",
     "version": "oclif readme && git add README.md && pnpm version",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",

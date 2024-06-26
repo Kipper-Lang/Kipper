@@ -597,9 +597,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	multiplicativeExpression = async (node: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
+		const stringRepeatFunction = TargetJS.getBuiltInIdentifier("repeatString");
 
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
+
+		// In this case it should be a string multiplication
+		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
+			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
+		}
+
 		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 

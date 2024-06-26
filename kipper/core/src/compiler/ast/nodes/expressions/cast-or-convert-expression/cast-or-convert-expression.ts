@@ -134,14 +134,17 @@ export class CastOrConvertExpression extends Expression<
 			semanticData.castType.identifier,
 		);
 		if (internalIdentifier in kipperInternalBuiltInFunctions) {
-			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions[internalIdentifier]);
+			this.programCtx.addInternalReference(
+				this,
+				kipperInternalBuiltInFunctions[internalIdentifier as keyof typeof kipperInternalBuiltInFunctions],
+			);
 		}
 	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * This will log all warnings using {@link this.programCtx.logger} and store them in {@link this.KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!

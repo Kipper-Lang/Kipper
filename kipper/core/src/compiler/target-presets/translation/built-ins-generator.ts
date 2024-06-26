@@ -105,6 +105,18 @@ export abstract class KipperTargetBuiltInGenerator {
 	abstract index(funcSpec: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
+	 * Repeat string function which provides the ability to repeat a string a given number of times.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.10.0
+	 */
+	abstract repeatString(
+		funcSpec: InternalFunction,
+		programCtx: KipperProgramContext,
+	): Promise<Array<TranslatedCodeLine>>;
+
+	/**
 	 * Print function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
