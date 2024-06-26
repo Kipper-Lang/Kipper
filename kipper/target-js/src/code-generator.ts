@@ -600,6 +600,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 
+		// In this case it should be a string multiplication
 		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
 			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
 		}

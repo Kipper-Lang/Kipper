@@ -330,6 +330,20 @@ describe("ArithmeticOperationTypeError", () => {
 	});
 
 	describe("NoError", () => {
+		describe("num*num", () => {
+			it("num*num", async () => {
+				let result: KipperCompileResult | undefined = undefined;
+				try {
+					result = await new KipperCompiler().compile("3 * 3;", defaultConfig);
+				} catch (e) {
+					assert.fail("Expected no 'ArithmeticOperationTypeError'");
+				}
+				assert.isDefined(result, "Expected defined compilation result");
+				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			});
+		});
+
 		describe("*", () => {
 			it("str*num", async () => {
 				let result: KipperCompileResult | undefined = undefined;
