@@ -82,7 +82,7 @@
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "build": "tsc",
-		"postbuild": "copyfiles ./src/templates/* ./lib/templates/ --flat",
+		"postbuild": "copyfiles ./src/templates/**/* ./lib/templates/ --flat --all",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
     "start": "node ./bin/run",
