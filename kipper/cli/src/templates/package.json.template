@@ -6,7 +6,7 @@
   	"run": "kipper run ./src/main.kip",
   	"build": "kipper compile"
   },
-  "dependencies": {
+  "devDependencies": {
 		"@kipper/cli": "<KIPPER_VERSION>"
 	},<PROJECT_REPO>
   "keywords": [

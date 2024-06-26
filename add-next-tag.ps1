@@ -9,6 +9,7 @@ $(npm dist-tag add @kipper/cli@$version next)
 $(npm dist-tag add @kipper/core@$version next)
 $(npm dist-tag add @kipper/target-js@$version next)
 $(npm dist-tag add @kipper/target-ts@$version next)
+$(npm dist-tag add @kipper/config@$version next)
 $(npm dist-tag add @kipper/web@$version next)
 ExitOnFailure
 
