@@ -22,10 +22,9 @@ and the [Kipper website](https://kipper-lang.org)._
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
-
-- [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
-- [Usage](#usage)
-- [Commands](#commands)
+* [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 ## General Information
@@ -40,31 +39,28 @@ and the [Kipper website](https://kipper-lang.org)._
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.2 linux-x64 node-v20.10.0
+@kipper/cli/0.11.0-alpha.2 linux-x64 node-v18.18.2
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kipper analyse [FILE]`](#kipper-analyse-file)
-- [`kipper compile [FILE]`](#kipper-compile-file)
-- [`kipper help [COMMAND]`](#kipper-help-command)
-- [`kipper new [LOCATION]`](#kipper-new-location)
-- [`kipper run [FILE]`](#kipper-run-file)
-- [`kipper version`](#kipper-version)
+* [`kipper analyse [FILE]`](#kipper-analyse-file)
+* [`kipper compile [FILE]`](#kipper-compile-file)
+* [`kipper help [COMMAND]`](#kipper-help-command)
+* [`kipper new [LOCATION]`](#kipper-new-location)
+* [`kipper run [FILE]`](#kipper-run-file)
+* [`kipper version`](#kipper-version)
 
 ## `kipper analyse [FILE]`
 
@@ -147,15 +143,14 @@ _See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.
 
 ## `kipper new [LOCATION]`
 
-Generate a new Kipper using a setup wizard. (Node-only for now)
+Generate a new Kipper using a setup wizard.
 
 ```
 USAGE
   $ kipper new [LOCATION]
 
 ARGUMENTS
-  LOCATION  [default: /home/luna/data/Documents/Kipper/Kipper/kipper/cli] The directory where the new project should be
-            created. Defaults to the current directory.
+  LOCATION  [default: .] The directory where the new project should be created.
 
 OPTIONS
   -d, --default  Use the default settings for the new project. Skips the setup wizard.
@@ -212,7 +207,6 @@ USAGE
 ```
 
 _See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.2/kipper/cli/src/commands/version.ts)_
-
 <!-- commandsstop -->
 
 ## Contributing to Kipper
