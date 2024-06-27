@@ -3,6 +3,7 @@
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
 import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+import KipperParserBase from "./base/KipperParserBase";
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
@@ -64,12 +65,15 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierContext } from "./KipperParser";
+import { IdentifierOrStringPrimaryExpressionContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { FStringSingleQuoteAtomContext } from "./KipperParser";
 import { FStringDoubleQuoteAtomContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayPrimaryExpressionContext } from "./KipperParser";
+import { ObjectPrimaryExpressionContext } from "./KipperParser";
+import { ObjectPropertyContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
 import { ComputedPrimaryExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -540,6 +544,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitIdentifier?: (ctx: IdentifierContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `KipperParser.identifierOrStringPrimaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitIdentifierOrStringPrimaryExpression?: (ctx: IdentifierOrStringPrimaryExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `KipperParser.stringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -580,6 +591,20 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitArrayPrimaryExpression?: (ctx: ArrayPrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectPrimaryExpression?: (ctx: ObjectPrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitObjectProperty?: (ctx: ObjectPropertyContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
