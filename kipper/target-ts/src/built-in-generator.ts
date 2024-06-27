@@ -134,6 +134,14 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		);
 	}
 
+	override async repeatString(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const repeatArgIdentifier = signature.params[0].identifier;
+		const timesArgIdentifier = signature.params[1].identifier;
+
+		return genTSFunction(signature, `{ return ${repeatArgIdentifier}.repeat(${timesArgIdentifier}); }`);
+	}
+
 	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0].identifier;

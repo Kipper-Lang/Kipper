@@ -17,8 +17,8 @@ import { KindParseRuleMapping, MultiplicativeExpressionContext, ParseRuleKindMap
 import { KipperMultiplicativeOperator, kipperMultiplicativeOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
 import { ArithmeticExpression } from "../arithmetic-expression";
+import { kipperInternalBuiltInFunctions } from "../../../../../runtime-built-ins";
 
 /**
  * Multiplicative expression, which can be used to perform multiplicative operations on two expressions.
@@ -37,7 +37,7 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * which is returned inside the {@link antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: MultiplicativeExpressionContext;
@@ -87,7 +87,7 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * This will not run in case that {@link hasFailed} is true, as that indicates that the semantic analysis of
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -121,7 +121,7 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
 	 * and throw errors if encountered.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * This will not run in case that {@link hasFailed} is true, as that indicates that the type checking of
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
@@ -133,10 +133,17 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 			.typeCheck(this)
 			.validArithmeticExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
-		// A multiplicative expression will always be of type 'num'
+		// A multiplicative will always have the type of the first operant. This is also the case for string multiplication
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("num"),
+			evaluatedType: semanticData.leftOp.getTypeSemanticData().evaluatedType,
 		};
+
+		if (
+			semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str" &&
+			semanticData.rightOp.getTypeSemanticData().evaluatedType.getCompilableType() === "num"
+		) {
+			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["repeatString"]);
+		}
 	}
 
 	/**

@@ -134,7 +134,10 @@ export class CastOrConvertExpression extends Expression<
 			semanticData.castType.identifier,
 		);
 		if (internalIdentifier in kipperInternalBuiltInFunctions) {
-			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions[internalIdentifier]);
+			this.programCtx.addInternalReference(
+				this,
+				kipperInternalBuiltInFunctions[internalIdentifier as keyof typeof kipperInternalBuiltInFunctions],
+			);
 		}
 	}
 

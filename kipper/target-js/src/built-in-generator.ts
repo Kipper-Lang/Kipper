@@ -117,6 +117,14 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		);
 	}
 
+	async repeatString(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const toRepeatIdentifier = signature.params[0];
+		const timesIdentifier = signature.params[1];
+
+		return genJSFunction(signature, `{ return ${toRepeatIdentifier}.repeat(${timesIdentifier}); }`);
+	}
+
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0];
