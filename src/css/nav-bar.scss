@@ -3,351 +3,355 @@
 
 /* Per default hide the phone header nav bar */
 nav#phone-header-nav-bar {
-	display: none;
-	visibility: hidden;
+  display: none;
+  visibility: hidden;
 }
 
 #page-header-wrapper {
-	clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
 }
 
 #header-description-content #page-header-wrapper h1 {
-	margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 #header-nav-bar {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
-	& > ul > :first-child {
-		padding-right: 1rem;
-	}
+  & > ul > :first-child {
+    padding-right: 1rem;
+  }
 
-	.selected-nav-page {
-		align-items: center;
-		justify-content: center;
-		padding: 0;
+  .selected-nav-page {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
 
-		h4 {
-			padding-top: 0.25em;
-			padding-bottom: 0.25rem;
-			border-bottom: 2px solid white;
-		}
-	}
+    h4 {
+      padding-top: 0.25em;
+      padding-bottom: 0.25rem;
+      border-bottom: 2px solid white;
+    }
+  }
 
-	ul {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: row;
-		overflow: hidden;
-	}
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
 }
 
 .underline-button.selected-nav-page::before {
-	/* Overwriting the background color of the underline-button */
-	background-color: transparent !important;
+  /* Overwriting the background color of the underline-button */
+  background-color: transparent !important;
 }
 
 /* Search Bar - Default presets */
 .search-bar-wrapper {
-	display: flex;
-	flex-grow: 1;
-	flex-direction: row;
-	justify-content: right;
-	align-items: center;
-	align-content: end;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  align-content: end;
 
-	ul {
-		height: 2rem;
-		background-color: white;
-		border-radius: $default-border-radius;
-		box-shadow: rgba(9, 30, 66, 0.25) 0 4px 8px -2px, rgba(9, 30, 66, 0.08) 0 0 0 1px;
-		flex-direction: row;
+  ul {
+    height: 2rem;
+    background-color: white;
+    border-radius: $default-border-radius;
+    box-shadow: rgba(9, 30, 66, 0.25) 0 4px 8px -2px, rgba(9, 30, 66, 0.08) 0 0 0 1px;
+    flex-direction: row;
 
-		.search-bar {
-			display: flex;
-			flex-direction: row;
-			justify-content: right;
-			align-items: end;
-			align-content: end;
+    .search-bar {
+      display: flex;
+      flex-direction: row;
+      justify-content: right;
+      align-items: end;
+      align-content: end;
 
-			.search-bar-input {
-				background-color: white;
-				color: $scheme-primary;
-				border: none;
-				outline: none;
-				height: 2rem;
-				padding-left: 0.8rem;
-				overflow-wrap: break-word;
-				word-wrap: break-word; /* For IE */
-			}
-		}
-	}
+      .search-bar-input {
+        background-color: white;
+        color: $scheme-primary;
+        border: none;
+        outline: none;
+        height: 2rem;
+        padding-left: 0.8rem;
+        overflow-wrap: break-word;
+        word-wrap: break-word; /* For IE */
+      }
+    }
+  }
 }
 
 /* Sits on top of the page content */
 #search-result-overlay {
-	position: fixed;
-	visibility: hidden;
-	cursor: pointer;
-	display: block;
-	z-index: 2;
-	border: 1px solid rgba(25, 25, 28, 0.2);
-	border-radius: 10px;
-	margin-top: 0.5rem;
-	background-color: white;
+  position: fixed;
+  visibility: hidden;
+  cursor: pointer;
+  display: block;
+  z-index: 2;
+  border: 1px solid rgba(25, 25, 28, 0.2);
+  border-radius: 10px;
+  margin-top: 0.5rem;
+  background-color: white;
 
-	#search-result {
-		div {
-			padding: 0.8rem;
+  #search-result {
+    div {
+      padding: 0.8rem;
 
-			&:not(:last-child) {
-				border-bottom: 1px solid rgba(25, 25, 28, 0.2);
-			}
-		}
-	}
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(25, 25, 28, 0.2);
+      }
+    }
+  }
 }
 
 /* Styling for both desktop and phone nav bar */
 nav#header-nav-bar,
 nav#phone-header-nav-bar {
-	ul#std-header-primary-content,
-	ul#phone-header-primary-content {
-		& > li {
-			float: left;
-			display: inherit;
-			justify-content: center;
-			align-items: center;
-			flex-shrink: inherit;
+  ul#std-header-primary-content,
+  ul#phone-header-primary-content {
+    & > li {
+      float: left;
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: inherit;
 
-			a,
-			h1 {
-				color: white;
-				text-align: center;
-				text-decoration: none;
-			}
-		}
-	}
+      a,
+      h1 {
+        color: white;
+        text-align: center;
+        text-decoration: none;
+      }
+    }
+  }
 
-	.version-identifier {
-		display: flex;
-		align-items: flex-start;
-		justify-content: flex-start;
+  .version-identifier {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
 
-		& > small {
-			font-size: 14px;
-			line-height: 18px;
-			padding-left: 0.4rem;
-			margin-top: -12px;
-			text-decoration: none;
-			letter-spacing: -0.01em;
-			color: rgba(255, 255, 255, 0.8);
-			transition: ease-in-out 300ms;
+    & > small {
+      font-size: 14px;
+      line-height: 18px;
+      padding-left: 0.4rem;
+      margin-top: -12px;
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.8);
+      transition: ease-in-out 300ms;
 
-			&:hover {
-				color: white;
-			}
-		}
-	}
+      &:hover {
+        color: white;
+      }
+    }
+  }
 
-	/* The search bar styling for all screens */
-	div.search-bar-wrapper > ul {
-		padding-right: 0.5rem;
+  /* The search bar styling for all screens */
+  div.search-bar-wrapper > ul {
+    padding-right: 0.5rem;
 
-		.search-icon-wrapper {
-			float: left;
-			display: inherit;
-			justify-content: center;
-			align-items: center;
-		}
+    .search-icon-wrapper {
+      float: left;
+      display: inherit;
+      justify-content: center;
+      align-items: center;
+    }
 
-		.search-icon {
-			margin-left: 0.5rem;
-		}
+    .search-icon {
+      margin-left: 0.5rem;
+    }
 
-		.search-bar {
-			&,
-			.search-bar-input {
-				flex-grow: 1;
-			}
-		}
-	}
+    .search-bar {
+      &,
+      .search-bar-input {
+        flex-grow: 1;
+      }
+    }
+  }
 }
 
 /* Only tablets and desktops are targeted with this */
 @media screen and (min-width: $large-screen-size) {
-	$search-bar-size: 14vw;
-	$search-bar-size-expanded: 22vw;
+  $search-bar-size: 14vw;
+  $search-bar-size-expanded: 22vw;
 
-	.search-bar-wrapper > ul > li.search-bar > .search-bar-input {
-		width: $search-bar-size;
-		max-width: $search-bar-size;
-		transition: width 0.5s ease-in-out;
+  .search-bar-wrapper > ul > li.search-bar > .search-bar-input {
+    width: $search-bar-size;
+    max-width: $search-bar-size;
+    transition: width 0.5s ease-in-out;
 
-		&:focus {
-			width: $search-bar-size-expanded;
-			max-width: $search-bar-size-expanded;
-		}
-	}
+    &:focus {
+      width: $search-bar-size-expanded;
+      max-width: $search-bar-size-expanded;
+    }
+  }
 
-	#header-nav-bar {
-		padding-right: 2rem;
-		padding-left: 2rem;
-	}
+  #header-nav-bar {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 }
 
 /* For small and middle-sized screens */
 @media screen and (max-width: $large-screen-size) {
-	$search-bar-size: 10vw;
-	$search-bar-size-expanded: 16vw;
+  $search-bar-size: 10vw;
+  $search-bar-size-expanded: 16vw;
 
-	#header-nav-bar {
-		padding-right: 1rem;
-		padding-left: 1rem;
-	}
+  #header-nav-bar {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
 
-	/* Disable animation for screens that are too small */
-	.search-bar-wrapper > ul > .search-bar > .search-bar-input {
-		width: $search-bar-size-expanded;
-	}
+  /* Disable animation for screens that are too small */
+  .search-bar-wrapper > ul > .search-bar > .search-bar-input {
+    width: $search-bar-size-expanded;
+  }
 }
 
 @media screen and (min-width: $medium-screen-size) {
-	#header-nav-bar {
-		padding-right: 2rem;
-		padding-left: 2rem;
-	}
+  #header-nav-bar {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
 }
 
 @media screen and (max-width: $medium-screen-size) {
-	#header-nav-bar {
-		display: none;
-		visibility: hidden;
-	}
+  #main-frame > #actual-content {
+    & > header#primary-page-header {
+      &.homepage {
+        // To add contrast between the main content and the header, we want to remove the background image from the header
+        // on the homepage!
+        background-image: none;
+      }
 
-	nav#phone-header-nav-bar {
-		display: flex;
-		visibility: visible;
-		flex-direction: column;
-		justify-content: space-between;
+      & > #header-nav-bar {
+        display: none;
+        visibility: hidden;
+      }
+    }
 
-		ul#phone-header-primary-content {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
-			align-content: center;
-			z-index: 1;
+    nav#phone-header-nav-bar {
+      display: flex;
+      visibility: visible;
+      flex-direction: column;
+      justify-content: space-between;
 
-			li.kipper-version-and-logo {
-				display: flex;
-				flex-direction: row;
-			}
+      ul#phone-header-primary-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+        z-index: 1;
 
-			li.phone-header-nav-bar-menu-toggle {
-				&:hover {
-					cursor: pointer;
+        li.kipper-version-and-logo {
+          display: flex;
+          flex-direction: row;
+        }
 
-					& > .fa-bars {
-						color: rgba(255, 255, 255, 0.8);
-						transition: color 0.24s ease;
-					}
-				}
+        li.phone-header-nav-bar-menu-toggle {
+          &:hover {
+            cursor: pointer;
 
-				& > .fa-bars {
-					font-size: 1.5rem;
-					color: white;
-				}
-			}
-		}
+            & > .fa-bars {
+              color: rgba(255, 255, 255, 0.8);
+              transition: color 0.24s ease;
+            }
+          }
 
-		ul#phone-header-nav-bar-menu {
-			padding: 0.5rem 0 1rem 0;
+          & > .fa-bars {
+            font-size: 1.5rem;
+            color: white;
+          }
+        }
+      }
 
-			/* Hide per default */
-			display: none;
-			visibility: hidden;
+      ul#phone-header-nav-bar-menu {
+        padding: 0.5rem 0 1rem 0;
 
-			#phone-header-dropdown-urls {
-				:first-child:is(li) {
-					border-top: 1px solid rgba(255, 255, 255, 0.8);
-				}
+        /* Hide per default */
+        display: none;
+        visibility: hidden;
 
-				li {
-					border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+        #phone-header-dropdown-urls {
+          :first-child:is(li) {
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+          }
 
-					&:hover {
-						background-color: rgba(var(--scheme-primary-rgb), 0.8);
-					}
-				}
-			}
+          li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
 
-			.top-nav-button.underline-button {
-				&:hover {
-					/* !important as the buttons have a higher specificity - needs to be overwritten */
-					color: rgba(255, 255, 255, 0.8) !important;
-				}
+            &:hover {
+              background-color: rgba(var(--scheme-primary-rgb), 0.8);
+            }
+          }
+        }
 
-				&::before {
-					content: none;
-					display: none;
-					visibility: hidden;
-					color: transparent;
-					transform: none;
-				}
-			}
+        .top-nav-button.underline-button {
+          &:hover {
+            /* !important as the buttons have a higher level of precedence - needs to be overwritten */
+            color: rgba(255, 255, 255, 0.8) !important;
+          }
 
-			&.visible {
-				visibility: visible;
-				display: block;
-				z-index: 0;
+          &::before {
+            content: none;
+            display: none;
+            visibility: hidden;
+            color: transparent;
+            transform: none;
+          }
+        }
 
-				/* Slide-in animation */
-				position: relative;
-				animation: animate_top 0.4s;
-				@keyframes animate_top {
-					from {
-						top: -20rem;
-						opacity: 0;
-					}
-					to {
-						top: 0;
-						opacity: 1;
-					}
-				}
-			}
+        &.visible {
+          visibility: visible;
+          display: block;
+          z-index: 0;
 
-			&.invisible {
-				visibility: hidden;
-				display: none;
-			}
-		}
+          /* Slide-in animation */
+          position: relative;
+          animation: animate_top 0.4s;
+          @keyframes animate_top {
+            from {
+              top: -20rem;
+              opacity: 0;
+            }
+            to {
+              top: 0;
+              opacity: 1;
+            }
+          }
+        }
 
-		.search-bar-wrapper {
-			margin-top: 1rem;
-			display: flex;
-			justify-content: center;
+        &.invisible {
+          visibility: hidden;
+          display: none;
+        }
+      }
 
-			ul {
-				display: flex;
-				width: 60%;
-				min-width: 20rem;
-			}
-		}
-	}
+      .search-bar-wrapper {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
 
-	#primary-page-header {
-		/* Remove the background color - this is to make the animation of the children look better */
-		background-color: transparent;
-	}
+        ul {
+          display: flex;
+          width: 60%;
+          min-width: 20rem;
+        }
+      }
+    }
 
-	/* Setting the background color and padding independently for the animation */
-	#phone-header-primary-content,
-	#phone-header-nav-bar-menu {
-		background-color: $scheme-primary;
-		padding-right: 1rem !important;
-		padding-left: 1rem !important;
-	}
+    /* Setting the background color and padding independently for the animation */
+    #phone-header-primary-content,
+    #phone-header-nav-bar-menu {
+      padding-right: 1rem !important;
+      padding-left: 1rem !important;
+    }
+  }
 }
