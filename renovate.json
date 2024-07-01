@@ -11,6 +11,10 @@
   "lockFileMaintenance": {
     "enabled": true
   },
+	"baseBranches": [
+		"dev-main",
+		"dev-next"
+	],
   "packageRules": [
 		{
       "matchDepTypes": ["devDependencies"],
