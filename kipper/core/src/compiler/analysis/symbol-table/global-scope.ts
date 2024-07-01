@@ -4,8 +4,9 @@
  * @since 0.8.0
  */
 import type { KipperProgramContext } from "../../program-ctx";
-import { FunctionDeclaration, VariableDeclaration } from "../../ast";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { FunctionDeclaration, VariableDeclaration } from "../../ast";
+import type { ScopeDeclaration } from "./entry";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
 
 /**

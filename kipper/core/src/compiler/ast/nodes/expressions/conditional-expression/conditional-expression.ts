@@ -10,7 +10,8 @@ import type { ConditionalExpressionSemantics } from "./conditional-expression-se
 import type { ConditionalExpressionTypeSemantics } from "./conditional-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import { ConditionalExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { ConditionalExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { KipperNotImplementedError } from "../../../../../errors";
 
 /**

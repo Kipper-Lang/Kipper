@@ -8,15 +8,20 @@ import type { PrimaryExpressionSemantics } from "./primary-expression-semantics"
 import type { PrimaryExpressionTypeSemantics } from "./primary-expression-type-semantics";
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../expression";
-import { ASTNodeMapper } from "../../../mapping";
-import { ASTConstantExpressionKind } from "./constant";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link PrimaryExpression} AST node.
  * @since 0.10.0
  */
 export type ASTPrimaryExpressionKind =
-	| ASTConstantExpressionKind
+	| typeof ParseRuleKindMapping.RULE_objectProperty
+	| typeof ParseRuleKindMapping.RULE_numberPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_stringPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_boolPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_arrayPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_objectPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_fStringPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_tangledPrimaryExpression;

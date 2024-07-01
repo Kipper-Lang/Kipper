@@ -2,10 +2,10 @@
  * CLI implementation and wrapper functions for Kipper compilations.
  * @since 0.1.0
  */
-import { KipperCompileResult } from "@kipper/core";
+import type { KipperCompileResult } from "@kipper/core";
 import { constants, promises as fs } from "fs";
 import { KipperFileWriteError } from "../errors";
-import { KipperEncoding } from "../input";
+import type { KipperEncoding } from "../input";
 
 /**
  * Writes the file that exist inside the {@link KipperCompileResult compilation result}.

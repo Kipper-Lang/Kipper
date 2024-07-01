@@ -1,10 +1,11 @@
 /**
  * Utility decorators for the Kipper CLI.
  */
-import { Command } from "@oclif/command";
+import type { Command } from "@oclif/command";
 import { KipperInternalError } from "@kipper/core";
 import { KipperCLIError } from "./errors";
-import { CLIError as OclifCLIError, PrettyPrintableError } from "@oclif/errors";
+import type { PrettyPrintableError } from "@oclif/errors";
+import { CLIError as OclifCLIError } from "@oclif/errors";
 import { ConfigError } from "@kipper/config";
 
 /**
@@ -18,7 +19,7 @@ export function prettifiedErrors<TProto extends Command>() {
 	return function (target: TProto, propertyKey: keyof TProto, descriptor: PropertyDescriptor) {
 		const originalFunc: Function = descriptor.value;
 
-		const func = async function (this: Command, ...argArray: Array<any>): Promise<void> {
+		const func = async function (this: Command, ...argArray: Array<any>): Promise<any> {
 			try {
 				await originalFunc.call(this, ...argArray);
 			} catch (error) {
@@ -58,7 +59,7 @@ export function prettifiedErrors<TProto extends Command>() {
 
 		// Modify the prototype and return the property descriptor
 		target[propertyKey] = func as TProto[keyof TProto];
-		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<void>>;
+		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<any>>;
 	};
 }
 

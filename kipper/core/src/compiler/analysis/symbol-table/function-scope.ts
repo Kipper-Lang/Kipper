@@ -4,7 +4,8 @@
  * @since 0.8.0
  */
 import type { FunctionDeclaration, ParameterDeclaration } from "../../ast";
-import { ScopeDeclaration, ScopeParameterDeclaration } from "./entry";
+import type { ScopeDeclaration } from "./entry";
+import { ScopeParameterDeclaration } from "./entry";
 import { LocalScope } from "./local-scope";
 
 /**

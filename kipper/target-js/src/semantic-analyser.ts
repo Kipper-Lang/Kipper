@@ -2,13 +2,8 @@
  * The TypeScript target-specific semantic analyser.
  * @since 0.10.0
  */
-import {
-	FunctionDeclaration,
-	ParameterDeclaration,
-	VariableDeclaration,
-	KipperTargetSemanticAnalyser,
-	ReservedIdentifierOverwriteError,
-} from "@kipper/core";
+import type { FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "@kipper/core";
+import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
 
 /**
@@ -116,7 +111,19 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	/**
 	 * Performs typescript-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
-	listPrimaryExpression = undefined;
+	arrayPrimaryExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ObjectPrimaryExpression} instances.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ObjectPropertyPrimaryExpression} instances.
+	 * @since 0.11.0
+	 */
+	objectProperty = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.

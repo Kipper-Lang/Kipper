@@ -11,8 +11,10 @@ import type { AdditiveExpressionSemantics } from "./additive-expression-semantic
 import type { AdditiveExpressionTypeSemantics } from "./additive-expression-type-semantics";
 import type { Expression } from "../../expression";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { AdditiveExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { KipperAdditiveOperator, kipperAdditiveOperators } from "../../../../../const";
+import type { AdditiveExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { KipperAdditiveOperator } from "../../../../../const";
+import { kipperAdditiveOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ArithmeticExpression } from "../arithmetic-expression";

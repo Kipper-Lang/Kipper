@@ -1,6 +1,6 @@
-import { KipperParseStream } from "./parse-stream";
-import { CompilationUnitContext, KipperParser } from "./antlr/KipperParser";
-import { KipperLexer } from "./antlr/KipperLexer";
+import type { KipperParseStream } from "./parse-stream";
+import type { CompilationUnitContext, KipperParser } from "./antlr/KipperParser";
+import type { KipperLexer } from "./antlr/KipperLexer";
 
 /**
  * Parse data for a {@link KipperProgramContext}.

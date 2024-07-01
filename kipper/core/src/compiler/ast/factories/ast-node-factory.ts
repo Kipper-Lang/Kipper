@@ -4,8 +4,8 @@
  */
 import type { ConstructableASTKind } from "../common";
 import type { ConstructableASTNodeClass } from "./index";
-import { CompilableASTNode } from "../compilable-ast-node";
-import { KipperParserRuleContext } from "../../parser";
+import type { CompilableASTNode } from "../compilable-ast-node";
+import type { KipperParserRuleContext } from "../../parser";
 
 /**
  * A simple blueprint for a factory for creating AST nodes from a parser context.

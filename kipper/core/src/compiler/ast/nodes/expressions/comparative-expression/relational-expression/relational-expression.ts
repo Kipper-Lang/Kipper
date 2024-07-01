@@ -17,9 +17,11 @@ import type { RelationalExpressionSemantics } from "./relational-expression-sema
 import type { RelationalExpressionTypeSemantics } from "./relational-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { ComparativeExpression } from "../comparative-expression";
-import { KindParseRuleMapping, ParseRuleKindMapping, RelationalExpressionContext } from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
-import { KipperRelationalOperator, kipperRelationalOperators } from "../../../../../const";
+import type { RelationalExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { KipperRelationalOperator } from "../../../../../const";
+import { kipperRelationalOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";

@@ -2,8 +2,8 @@
  * A node that can be semantically analysed for a specific {@link KipperCompileTarget target language}.
  * @since 0.10.0
  */
-import { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../target-presets";
-import { TranslatedCodeLine } from "../const";
+import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../target-presets";
+import type { TranslatedCodeLine } from "../const";
 
 /**
  * A node that can be semantically analysed for a specific {@link KipperCompileTarget target language}.

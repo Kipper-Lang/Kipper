@@ -9,11 +9,12 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import { FunctionScope, ScopeFunctionDeclaration, UncheckedType } from "../../../../analysis";
+import type { ScopeFunctionDeclaration, UncheckedType } from "../../../../analysis";
+import { FunctionScope } from "../../../../analysis";
+import type { FunctionDeclarationContext } from "../../../../parser";
 import {
 	CompoundStatementContext,
 	DeclaratorContext,
-	FunctionDeclarationContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
 } from "../../../../parser";

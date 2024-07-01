@@ -1,4 +1,5 @@
-import type { EvaluatedConfigFile, EvaluatedConfigValue } from "./abstract";
+import { EvaluatedConfigValue } from "./abstract";
+import type { EvaluatedConfigFile } from "./abstract";
 import type * as semver from "semver";
 import type { CompileConfig, KipperCompileTarget } from "@kipper/core";
 

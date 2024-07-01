@@ -10,7 +10,7 @@ import type {
 	InternalFunction,
 	InternalFunctionArgument,
 } from "@kipper/core";
-import { TranslatedCodeLine } from "@kipper/core";
+import type { TranslatedCodeLine } from "@kipper/core";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an JavaScript env.

@@ -1,5 +1,6 @@
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import { KipperCompiler, KipperError } from "@kipper/core";
+import type { KipperError } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 
 describe("NotImplemented", () => {

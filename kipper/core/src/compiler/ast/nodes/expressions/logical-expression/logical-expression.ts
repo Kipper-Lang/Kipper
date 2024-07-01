@@ -8,7 +8,7 @@ import type { LogicalExpressionSemantics } from "./logical-expression-semantics"
 import type { LogicalExpressionTypeSemantics } from "./logical-expression-type-semantics";
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../expression";
-import { ASTNodeMapper } from "../../../mapping";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link LogicalExpression} AST node.

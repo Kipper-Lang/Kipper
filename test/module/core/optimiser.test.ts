@@ -1,4 +1,5 @@
-import { CompileConfig, KipperCompiler, KipperCompileResult } from "@kipper/core";
+import type { CompileConfig, KipperCompileResult } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
