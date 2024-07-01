@@ -158,7 +158,7 @@ To use development versions of Kipper download the
 ### Removed
 
 - Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
-  `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of 
+  `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of
   complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
   `PrimaryExpression` instead.
 
