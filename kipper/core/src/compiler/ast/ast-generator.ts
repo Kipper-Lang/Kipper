@@ -51,6 +51,7 @@ import type {
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
+	ObjectPropertyContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
 	ParameterListContext,
@@ -376,6 +377,20 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public enterObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.

@@ -68,9 +68,7 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Properties have not been implemented yet."));
+		return; // For now, we don't have any semantic analysis for object properties.
 	}
 
 	/**
@@ -82,9 +80,7 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Properties have not been implemented yet."));
+		return; // For now, we don't have any type checking for object properties.
 	}
 
 	/**
