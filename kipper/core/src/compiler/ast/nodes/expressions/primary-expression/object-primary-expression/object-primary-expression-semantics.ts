@@ -1,4 +1,3 @@
-import type { Expression } from "../../expression";
 import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
 import type { ObjectProperty } from "./object-property";
 
