@@ -38,6 +38,7 @@ template: |
 
   ## Full Details
 
+  **View on NPM**: [`$RESOLVED_VERSION`](https://www.npmjs.com/package/kipper/v/$RESOLVED_VERSION)
   **Detailed Changelog**: [`CHANGELOG.md`](https://github.com/$OWNER/$REPOSITORY/blob/v$RESOLVED_VERSION/CHANGELOG.md)
   **Compare Changes**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
 
