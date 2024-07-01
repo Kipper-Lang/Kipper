@@ -4,7 +4,6 @@ import type { ObjectPropertyContext } from "../../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
 import { PrimaryExpression } from "../../primary-expression";
 import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import { KipperNotImplementedError } from "../../../../../../../errors";
 
 /**
  * Object property, which represents a property inside an {@link ObjectPrimaryExpression object}. This is a key-value
