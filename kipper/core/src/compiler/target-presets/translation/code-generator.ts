@@ -44,6 +44,13 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import {
+	BitwiseAndExpression
+} from "../../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
+import {
+	BitwiseOrExpression
+} from "../../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
+import { BitwiseXorExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -324,4 +331,10 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into a specific language.
 	 */
 	public abstract assignmentExpression: TargetASTNodeCodeGenerator<AssignmentExpression, TranslatedExpression>;
+
+	public abstract bitwiseAndExpression: TargetASTNodeCodeGenerator<BitwiseAndExpression, TranslatedExpression>;
+
+	public abstract bitwiseOrExpression: TargetASTNodeCodeGenerator<BitwiseOrExpression, TranslatedExpression>;
+
+	public abstract bitwiseXorExpression: TargetASTNodeCodeGenerator<BitwiseXorExpression, TranslatedExpression>;
 }

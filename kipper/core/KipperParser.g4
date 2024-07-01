@@ -291,9 +291,18 @@ additiveExpression
     |   additiveExpression ('+'|'-') multiplicativeExpression # actualAdditiveExpression
     ;
 
+bitwiseShiftExpression
+    :   additiveExpression # passOnBitwiseShiftExpression
+    |   bitwiseShiftExpression bitwiseShiftOperators bitwiseAndExpression # actualBitwiseShiftExpression
+    ;
+
+bitwiseShiftOperators
+	:   '<<' | '>>' | '>>>'
+	;
+
 relationalExpression
-    :   additiveExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') additiveExpression # actualRelationalExpression
+    :   bitwiseShiftExpression # passOnRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') bitwiseShiftExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -301,9 +310,24 @@ equalityExpression
     |   equalityExpression ('=='| '!=') relationalExpression # actualEqualityExpression
     ;
 
+bitwiseAndExpression
+    :   equalityExpression # passOnBitwiseAndExpression
+    |   bitwiseAndExpression '&' equalityExpression # actualBitwiseAndExpression
+    ;
+
+bitwiseXorExpression
+    :   bitwiseAndExpression # passOnBitwiseXorExpression
+    |   bitwiseXorExpression '^' bitwiseAndExpression # actualBitwiseXorExpression
+    ;
+
+bitwiseOrExpression
+    :   bitwiseXorExpression # passOnBitwiseOrExpression
+    |   bitwiseOrExpression '|' bitwiseXorExpression # actualBitwiseOrExpression
+    ;
+
 logicalAndExpression
-    :   equalityExpression # passOnLogicalAndExpression
-    |   logicalAndExpression '&&' equalityExpression # actualLogicalAndExpression
+    :   bitwiseOrExpression # passOnLogicalAndExpression
+    |   logicalAndExpression '&&' bitwiseOrExpression # actualLogicalAndExpression
     ;
 
 logicalOrExpression

@@ -7,7 +7,7 @@
 import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
-	AssignmentExpressionContext,
+	AssignmentExpressionContext, BitwiseAndExpressionContext, BitwiseOrExpressionContext, BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
@@ -206,6 +206,9 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]: IdentifierTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,

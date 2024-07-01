@@ -292,6 +292,108 @@ export type KipperLogicalOperator = KipperLogicalAndOperator | KipperLogicalOrOp
 export const kipperLogicalOperator: Array<KipperLogicalOperator> = ["&&", "||"];
 
 /**
+ * The bitwise-and operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP & EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseAndOperator = "&";
+
+/**
+ * The bitwise-and operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP & EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseAndOperator: KipperBitwiseAndOperator = "&";
+
+/**
+ * The bitwise-or operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP | EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseOrOperator = "|";
+
+/**
+ * The bitwise-or operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP | EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseOrOperator: KipperBitwiseOrOperator = "|";
+
+/**
+ * The bitwise left-shift operator, which can be used to shift a number to the left by a certain amount of bits.
+ * @example
+ * EXP << EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseZeroFillLeftShiftOperator = "<<";
+
+/**
+ * The bitwise left-shift operator, which can be used to shift a number to the left by a certain amount of bits.
+ * @example
+ * EXP << EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseLeftZeroFillShiftOperator: KipperBitwiseZeroFillLeftShiftOperator = "<<";
+
+/**
+ * The bitwise right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
+ * @example
+ * EXP >> EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseSignedRightShiftOperator = ">>";
+
+/**
+ * The bitwise right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
+ * @example
+ * EXP >> EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseRightShiftOperator: KipperBitwiseSignedRightShiftOperator = ">>";
+
+/**
+ * The bitwise zero-fill right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
+ * @example
+ * EXP >>> EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseZeroFillRightShiftOperator = ">>>";
+
+/**
+ * The bitwise zero-fill right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
+ * @example
+ * EXP >>> EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseZeroFillRightShiftOperator: KipperBitwiseZeroFillRightShiftOperator = ">>>";
+
+/**
+ * The bitwise-xor operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP ^ EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseXorOperator = "^";
+
+/**
+ * The bitwise-xor operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP ^ EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseXorOperator: KipperBitwiseXorOperator = "^";
+
+/**
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
+ * @since 0.9.0
+ */
+export type KipperBitwiseOperator = KipperBitwiseAndOperator | KipperBitwiseOrOperator | KipperBitwiseXorOperator;
+
+/**
  * All available equality operators inside Kipper, which can be used to compare two expressions against each other.
  * @since 0.9.0
  */

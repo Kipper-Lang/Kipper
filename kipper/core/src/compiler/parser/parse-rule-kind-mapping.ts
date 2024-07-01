@@ -74,22 +74,27 @@ export const ParseRuleKindMapping = {
 	RULE_castOrConvertExpression: 52,
 	RULE_multiplicativeExpression: 53,
 	RULE_additiveExpression: 54,
-	RULE_relationalExpression: 55,
-	RULE_equalityExpression: 56,
-	RULE_logicalAndExpression: 57,
-	RULE_logicalOrExpression: 58,
-	RULE_conditionalExpression: 59,
-	RULE_assignmentExpression: 60,
-	RULE_assignmentOperator: 61,
-	RULE_expression: 62,
-	RULE_typeSpecifierExpression: 63,
-	RULE_identifierTypeSpecifierExpression: 64,
-	RULE_genericTypeSpecifierExpression: 65,
-	RULE_typeofTypeSpecifierExpression: 66,
-	RULE_typeSpecifierIdentifier: 67,
+	RULE_bitwiseShiftExpression: 55,
+	RULE_bitwiseShiftOperators: 56,
+	RULE_relationalExpression: 57,
+	RULE_equalityExpression: 58,
+	RULE_bitwiseAndExpression: 59,
+	RULE_bitwiseOrExpression: 60,
+	RULE_bitwiseXorExpression: 61,
+	RULE_logicalAndExpression: 62,
+	RULE_logicalOrExpression: 63,
+	RULE_conditionalExpression: 64,
+	RULE_assignmentExpression: 65,
+	RULE_assignmentOperator: 66,
+	RULE_expression: 67,
+	RULE_typeSpecifierExpression: 68,
+	RULE_identifierTypeSpecifierExpression: 69,
+	RULE_genericTypeSpecifierExpression: 70,
+	RULE_typeofTypeSpecifierExpression: 71,
+	RULE_typeSpecifierIdentifier: 72,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
-	RULE_memberAccessExpression: 68, // -> See 'computedPrimaryExpression'
-	RULE_functionCallExpression: 69, // -> See 'computedPrimaryExpression'
+	RULE_memberAccessExpression: 73, // -> See 'computedPrimaryExpression'
+	RULE_functionCallExpression: 74, // -> See 'computedPrimaryExpression'
 } as const;
 
 /**

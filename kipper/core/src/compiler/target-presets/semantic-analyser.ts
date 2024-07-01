@@ -46,6 +46,13 @@ import type {
 	WhileLoopIterationStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
+import {
+	BitwiseAndExpression
+} from "../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
+import {
+	BitwiseOrExpression
+} from "../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
+import { BitwiseXorExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -253,4 +260,10 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+
+	public abstract bitwiseAndExpression?: TargetASTNodeSemanticAnalyser<BitwiseAndExpression>;
+
+	public abstract bitwiseOrExpression?: TargetASTNodeSemanticAnalyser<BitwiseOrExpression>;
+
+	public abstract bitwiseXorExpression?: TargetASTNodeSemanticAnalyser<BitwiseXorExpression>;
 }
