@@ -1,0 +1,3 @@
+var a: num = 10;
+var b: num = 5;
+print(f"Result: {a << b}");

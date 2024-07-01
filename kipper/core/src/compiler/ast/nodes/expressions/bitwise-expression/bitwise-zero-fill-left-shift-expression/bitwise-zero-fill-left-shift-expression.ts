@@ -10,11 +10,9 @@ import { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 import { BitwiseZeroFillLeftShiftExpressionSemantics } from "./bitwise-zero-fill-left-shift-expression-semantics";
-import {
-	BitwiseZeroFillLeftShiftExpressionTypeSemantics
-} from "./bitwise-zero-fill-left-shift-expression-type-semantics";
+import { BitwiseZeroFillLeftShiftExpressionTypeSemantics } from "./bitwise-zero-fill-left-shift-expression-type-semantics";
 
-export class BitwiseZeroFillLeftShiftExpressionExpression extends BitwiseExpression<
+export class BitwiseZeroFillLeftShiftExpression extends BitwiseExpression<
 	BitwiseZeroFillLeftShiftExpressionSemantics,
 	BitwiseZeroFillLeftShiftExpressionTypeSemantics
 > {
@@ -23,13 +21,13 @@ export class BitwiseZeroFillLeftShiftExpressionExpression extends BitwiseExpress
 	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseXorExpression;
 
 	public override get kind() {
-		return BitwiseZeroFillLeftShiftExpressionExpression.kind;
+		return BitwiseZeroFillLeftShiftExpression.kind;
 	}
 
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
 	public override get ruleName() {
-		return BitwiseZeroFillLeftShiftExpressionExpression.ruleName;
+		return BitwiseZeroFillLeftShiftExpression.ruleName;
 	}
 
 	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
@@ -41,7 +39,7 @@ export class BitwiseZeroFillLeftShiftExpressionExpression extends BitwiseExpress
 		const leftOp: Expression = this.children[0];
 		const rightOp: Expression = this.children[1];
 
-		if(!leftOp || !rightOp) {
+		if (!leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
@@ -64,7 +62,7 @@ export class BitwiseZeroFillLeftShiftExpressionExpression extends BitwiseExpress
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseXorExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseZeroFillLeftShiftOperations;
 
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseXorExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseZeroFillLeftShiftExpression;
 }

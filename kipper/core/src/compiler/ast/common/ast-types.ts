@@ -168,7 +168,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression
 	| typeof ParseRuleKindMapping.RULE_genericTypeSpecifierExpression
 	| typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression
-  | typeof ParseRuleKindMapping.RULE_bitwiseOrExpression
+	| typeof ParseRuleKindMapping.RULE_bitwiseOrExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;

@@ -2,12 +2,14 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	TranslatedCodeToken,
 	ComparativeExpressionSemantics,
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
+	BitwiseExpressionSemantics,
+	BitwiseExpression,
 } from "@kipper/core";
 import {
 	AdditiveExpression,
@@ -55,6 +57,8 @@ import {
 	ScopeFunctionDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	BitwiseOrExpression,
+	BitwiseAndExpression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -629,10 +633,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @private
 	 */
 	protected translateOperatorExpressionWithOperands = async (
-		node: ComparativeExpression | LogicalExpression,
+		node: ComparativeExpression | LogicalExpression | BitwiseExpression,
 	): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
+		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics | BitwiseExpressionSemantics =
+			node.getSemanticData();
 
 		// Generate the code for the operands
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
@@ -700,5 +705,33 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
+	};
+
+	bitwiseOrExpression = async (node: BitwiseOrExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseAndExpression = async (node: BitwiseAndExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseXorExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseZeroFillLeftShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseZeroFillRightShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	bitwiseSignedRightShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
 	};
 }

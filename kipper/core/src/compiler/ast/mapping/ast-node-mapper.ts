@@ -7,7 +7,10 @@
 import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
-	AssignmentExpressionContext, BitwiseAndExpressionContext, BitwiseOrExpressionContext, BitwiseXorExpressionContext,
+	AssignmentExpressionContext,
+	BitwiseAndExpressionContext,
+	BitwiseOrExpressionContext,
+	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
@@ -96,6 +99,9 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
+import { BitwiseXorExpression } from "../nodes/expressions/bitwise-expression/bitwise-xor-expression";
+import { BitwiseAndExpression, BitwiseOrExpression } from "../nodes/expressions/bitwise-expression";
+import { BitwiseSignedRightShiftExpression } from "../nodes/expressions/bitwise-expression/bitwise-signed-right-shift-expression/bitwise-signed-right-shift-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -146,6 +152,9 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: MemberAccessExpression,
+		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpression,
+		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
+		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
@@ -276,6 +285,9 @@ export class ASTNodeMapper {
 		RULE_genericTypeSpecifierExpression: GenericTypeSpecifierExpression,
 		RULE_typeofTypeSpecifierExpression: TypeofTypeSpecifierExpression,
 		RULE_memberAccessExpression: MemberAccessExpression,
+		RULE_bitwiseOrExpression: BitwiseOrExpression,
+		RULE_bitwiseAndExpression: BitwiseAndExpression,
+		RULE_bitwiseXorExpression: BitwiseXorExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
 
 	/**

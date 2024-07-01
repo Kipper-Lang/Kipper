@@ -46,13 +46,12 @@ import type {
 	WhileLoopIterationStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import {
-	BitwiseAndExpression
-} from "../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
-import {
-	BitwiseOrExpression
-} from "../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
+import { BitwiseAndExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
+import { BitwiseOrExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
 import { BitwiseXorExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
+import { BitwiseSignedRightShiftExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-signed-right-shift-expression/bitwise-signed-right-shift-expression";
+import { BitwiseZeroFillLeftShiftExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-left-shift-expression";
+import { BitwiseZeroFillRightShiftExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-right-shift-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -266,4 +265,10 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract bitwiseOrExpression?: TargetASTNodeSemanticAnalyser<BitwiseOrExpression>;
 
 	public abstract bitwiseXorExpression?: TargetASTNodeSemanticAnalyser<BitwiseXorExpression>;
+
+	public abstract bitwiseSignedRightShiftExpression?: TargetASTNodeSemanticAnalyser<BitwiseSignedRightShiftExpression>;
+
+	public abstract bitwiseZeroFillLeftShiftOperations?: TargetASTNodeSemanticAnalyser<BitwiseZeroFillLeftShiftExpression>;
+
+	public abstract bitwiseZeroFillRightShiftOperations?: TargetASTNodeSemanticAnalyser<BitwiseZeroFillRightShiftExpression>;
 }

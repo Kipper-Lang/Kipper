@@ -34,7 +34,7 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		const leftOp: Expression = this.children[0];
 		const rightOp: Expression = this.children[1];
 
-		if(!leftOp || !rightOp) {
+		if (!leftOp || !rightOp) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 

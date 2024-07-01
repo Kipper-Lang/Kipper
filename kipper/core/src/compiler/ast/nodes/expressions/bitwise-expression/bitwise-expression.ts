@@ -8,7 +8,6 @@ import { Expression } from "../expression";
 import { BitwiseExpressionTypeSemantics } from "./bitwise-expression-type-semantics";
 import { BitwiseExpressionSemantics } from "./bitwise-expression-semantics";
 
-
 export type ASTBitwiseExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseOrExpression

@@ -9,25 +9,25 @@ import { CompilableASTNode } from "../../../../compilable-ast-node";
 import { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
-import { BitwiseZeroFillRightShiftExpressionSemantics } from "./bitwise-zero-fill-right-shift-expression-semantics";
-import { BitwiseZeroFillRightShiftExpressionTypeSemantics } from "./bitwise-zero-fill-right-shift-expression-type-semantics";
+import { BitwiseSignedRightShiftExpressionSemantics } from "./bitwise-signed-right-shift-expression-semantics";
+import { BitwiseSignedRightShiftExpressionTypeSemantics } from "./bitwise-signed-right-shift-expression-type-semantics";
 
-export class BitwiseZeroFillRightShiftExpression extends BitwiseExpression<
-	BitwiseZeroFillRightShiftExpressionSemantics,
-	BitwiseZeroFillRightShiftExpressionTypeSemantics
+export class BitwiseSignedRightShiftExpression extends BitwiseExpression<
+	BitwiseSignedRightShiftExpressionSemantics,
+	BitwiseSignedRightShiftExpressionTypeSemantics
 > {
 	protected override readonly _antlrRuleCtx: BitwiseAndExpressionContext;
 
 	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseXorExpression;
 
 	public override get kind() {
-		return BitwiseZeroFillRightShiftExpression.kind;
+		return BitwiseSignedRightShiftExpression.kind;
 	}
 
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
 	public override get ruleName() {
-		return BitwiseZeroFillRightShiftExpression.ruleName;
+		return BitwiseSignedRightShiftExpression.ruleName;
 	}
 
 	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
@@ -46,7 +46,7 @@ export class BitwiseZeroFillRightShiftExpression extends BitwiseExpression<
 		this.semanticData = {
 			leftOp: leftOp,
 			rightOp: rightOp,
-			operator: ">>>",
+			operator: ">>",
 		};
 	}
 
@@ -62,7 +62,7 @@ export class BitwiseZeroFillRightShiftExpression extends BitwiseExpression<
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseZeroFillRightShiftOperations;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseSignedRightShiftExpression;
 
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseZeroFillRightShiftExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseSignedRightShiftExpression;
 }

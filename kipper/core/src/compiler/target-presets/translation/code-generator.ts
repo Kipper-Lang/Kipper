@@ -44,13 +44,12 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import {
-	BitwiseAndExpression
-} from "../../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
-import {
-	BitwiseOrExpression
-} from "../../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
+import { BitwiseAndExpression } from "../../ast/nodes/expressions/bitwise-expression";
+import { BitwiseOrExpression } from "../../ast/nodes/expressions/bitwise-expression";
 import { BitwiseXorExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
+import { BitwiseZeroFillLeftShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-left-shift-expression";
+import { BitwiseZeroFillRightShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-right-shift-expression";
+import { BitwiseSignedRightShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-signed-right-shift-expression/bitwise-signed-right-shift-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -337,4 +336,19 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract bitwiseOrExpression: TargetASTNodeCodeGenerator<BitwiseOrExpression, TranslatedExpression>;
 
 	public abstract bitwiseXorExpression: TargetASTNodeCodeGenerator<BitwiseXorExpression, TranslatedExpression>;
+
+	public abstract bitwiseSignedRightShiftExpression: TargetASTNodeCodeGenerator<
+		BitwiseSignedRightShiftExpression,
+		TranslatedExpression
+	>;
+
+	public abstract bitwiseZeroFillLeftShiftExpression: TargetASTNodeCodeGenerator<
+		BitwiseZeroFillLeftShiftExpression,
+		TranslatedExpression
+	>;
+
+	public abstract bitwiseZeroFillRightShiftExpression: TargetASTNodeCodeGenerator<
+		BitwiseZeroFillRightShiftExpression,
+		TranslatedExpression
+	>;
 }
