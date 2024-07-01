@@ -70,6 +70,12 @@ export default class Compile extends Command {
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
+		"dry-run": flags.boolean({
+			char: "d",
+			default: false,
+			description: "Run the compiler without writing any output. Useful for checking for errors.",
+			allowNo: true,
+		}),
 		warnings: flags.boolean({
 			// This is different to the compile config field 'warnings', since this is purely about the CLI output
 			char: "w",
@@ -184,21 +190,20 @@ export default class Compile extends Command {
 		// If the compilation failed, abort
 		if (!result.success) {
 			return false;
-		}
+		} else if (!flags["dry-run"]) {
+			const out = await writeCompilationResult(result, config.outDir, config.outPath, config.encoding);
+			logger.debug(`Generated file '${out}'.`);
 
-		// Write the file output for this compilation
-		const out = await writeCompilationResult(result, config.outDir, config.outPath, config.encoding);
-		logger.debug(`Generated file '${out}'.`);
-
-		// Copy resources if they exist
-		if (config.resources) {
-			await copyConfigResources(config.resources);
-			logger.debug(`Finished copying resources specified in config.`);
+			// Copy resources if they exist
+			if (config.resources) {
+				await copyConfigResources(config.resources);
+				logger.debug(`Finished copying resources specified in config.`);
+			}
 		}
 
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;
-		logger.info(`Done in ${duration}s.`);
+		logger.info(`Done in ${duration}s.` + (flags["dry-run"] ? " (Dry run)" : ""));
 		return true;
 	}
 }
