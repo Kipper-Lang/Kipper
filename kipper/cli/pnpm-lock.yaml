@@ -47,8 +47,8 @@ devDependencies:
     specifier: 18.16.16
     version: 18.16.16
   '@types/sinon':
-    specifier: 10.0.15
-    version: 10.0.15
+    specifier: 10.0.20
+    version: 10.0.20
   json-parse-even-better-errors:
     specifier: 2.3.1
     version: 2.3.1
@@ -829,8 +829,8 @@ packages:
       '@types/node': 18.16.16
     dev: true
 
-  /@types/sinon@10.0.15:
-    resolution: {integrity: sha512-3lrFNQG0Kr2LDzvjyjB6AMJk4ge+8iYhQfdnSwIwlG88FUOV43kPcQqDZkDa/h3WSZy6i8Fr0BSjfQtB1B3xuQ==}
+  /@types/sinon@10.0.20:
+    resolution: {integrity: sha512-2APKKruFNCAZgx3daAyACGzWuJ028VVCUDk6o2rw/Z4PXT0ogwdV4KUegW0MwVs0Zu59auPXbbuBJHF12Sx1Eg==}
     dependencies:
       '@types/sinonjs__fake-timers': 8.1.2
     dev: true
@@ -1604,7 +1604,7 @@ packages:
       '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
       '@types/node': 18.16.16
-      '@types/sinon': 10.0.15
+      '@types/sinon': 10.0.20
       lodash: 4.17.21
       mock-stdin: 1.0.0
       nock: 13.3.1
@@ -2029,6 +2029,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
     dev: true
