@@ -1,10 +1,11 @@
 /**
  * Utility decorators for the Kipper CLI.
  */
-import { Command } from "@oclif/command";
+import type { Command } from "@oclif/command";
 import { KipperInternalError } from "@kipper/core";
 import { KipperCLIError } from "./errors";
-import { CLIError as OclifCLIError, PrettyPrintableError } from "@oclif/errors";
+import type { PrettyPrintableError } from "@oclif/errors";
+import { CLIError as OclifCLIError } from "@oclif/errors";
 import { ConfigError } from "@kipper/config";
 
 /**

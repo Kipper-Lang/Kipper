@@ -1,8 +1,9 @@
-import { KipperProgramContext } from "../../program-ctx";
+import type { KipperProgramContext } from "../../program-ctx";
 import { KipperSemanticErrorHandler } from "./err-handler";
 import { getParseRuleSource } from "../../../tools";
-import { CompilableASTNode, Expression, ExpressionStatement } from "../../ast";
-import { KipperWarning, UselessExpressionStatementWarning } from "../../../warnings";
+import type { CompilableASTNode, Expression, ExpressionStatement } from "../../ast";
+import type { KipperWarning } from "../../../warnings";
+import { UselessExpressionStatementWarning } from "../../../warnings";
 
 /**
  * A warning issuer, which is used to check for certain conditions and report warnings to the program context if needed.

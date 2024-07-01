@@ -3,6 +3,7 @@
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
 import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+import KipperParserBase from "./base/KipperParserBase";
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
@@ -64,12 +65,15 @@ import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierContext } from "./KipperParser";
+import { IdentifierOrStringPrimaryExpressionContext } from "./KipperParser";
 import { StringPrimaryExpressionContext } from "./KipperParser";
 import { FStringPrimaryExpressionContext } from "./KipperParser";
 import { FStringSingleQuoteAtomContext } from "./KipperParser";
 import { FStringDoubleQuoteAtomContext } from "./KipperParser";
 import { NumberPrimaryExpressionContext } from "./KipperParser";
 import { ArrayPrimaryExpressionContext } from "./KipperParser";
+import { ObjectPrimaryExpressionContext } from "./KipperParser";
+import { ObjectPropertyContext } from "./KipperParser";
 import { VoidOrNullOrUndefinedPrimaryExpressionContext } from "./KipperParser";
 import { ComputedPrimaryExpressionContext } from "./KipperParser";
 import { ArgumentExpressionListContext } from "./KipperParser";
@@ -794,6 +798,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitIdentifier?: (ctx: IdentifierContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.identifierOrStringPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterIdentifierOrStringPrimaryExpression?: (ctx: IdentifierOrStringPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.identifierOrStringPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitIdentifierOrStringPrimaryExpression?: (ctx: IdentifierOrStringPrimaryExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.stringPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -858,6 +873,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitArrayPrimaryExpression?: (ctx: ArrayPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterObjectPrimaryExpression?: (ctx: ObjectPrimaryExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitObjectPrimaryExpression?: (ctx: ObjectPrimaryExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx the parse tree
+	 */
+	enterObjectProperty?: (ctx: ObjectPropertyContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx the parse tree
+	 */
+	exitObjectProperty?: (ctx: ObjectPropertyContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.

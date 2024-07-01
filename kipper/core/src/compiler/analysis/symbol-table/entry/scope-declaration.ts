@@ -2,9 +2,9 @@
  * An symbol table entry of a variable, parameter or function declaration inside a {@link Scope}.
  * @since 0.10.0
  */
-import { Declaration } from "../../../ast";
-import { KipperProgramContext } from "../../../program-ctx";
-import { CheckedType } from "../../type";
+import type { Declaration } from "../../../ast";
+import type { KipperProgramContext } from "../../../program-ctx";
+import type { CheckedType } from "../../type";
 
 /**
  * An symbol table entry of a variable, parameter or function declaration inside a Kipper scope.

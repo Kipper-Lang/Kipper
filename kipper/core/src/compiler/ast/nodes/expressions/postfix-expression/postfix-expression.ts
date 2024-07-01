@@ -8,7 +8,7 @@ import type { PostfixExpressionSemantics } from "./postfix-expression-semantics"
 import type { PostfixExpressionTypeSemantics } from "./postfix-expression-type-semantics";
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../expression";
-import { ASTNodeMapper } from "../../../mapping";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link PostfixExpression} AST node.

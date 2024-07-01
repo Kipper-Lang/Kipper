@@ -9,7 +9,8 @@ import type { FunctionScope, ScopeParameterDeclaration } from "../../../../analy
 import type { FunctionDeclaration } from "../function-declaration";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
 import { Declaration } from "../declaration";
-import { KindParseRuleMapping, ParameterDeclarationContext, ParseRuleKindMapping } from "../../../../parser";
+import type { ParameterDeclarationContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { getParseTreeSource } from "../../../../../tools";
 
 /**

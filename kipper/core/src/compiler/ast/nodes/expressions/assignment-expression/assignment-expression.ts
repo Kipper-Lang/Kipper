@@ -15,16 +15,13 @@
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { AssignmentExpressionSemantics } from "./assignment-expression-semantics";
 import type { AssignmentExpressionTypeSemantics } from "./assignment-expression-type-semantics";
-import {
-	AssignmentExpressionContext,
-	KindParseRuleMapping,
-	KipperParserRuleContext,
-	ParseRuleKindMapping,
-} from "../../../../parser";
+import type { AssignmentExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../expression";
-import { IdentifierPrimaryExpression } from "../primary-expression";
+import type { IdentifierPrimaryExpression } from "../primary-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { kipperArithmeticAssignOperators, KipperAssignOperator } from "../../../../const";
+import type { KipperAssignOperator } from "../../../../const";
+import { kipperArithmeticAssignOperators } from "../../../../const";
 import { getParseRuleSource } from "../../../../../tools";
 import { ScopeVariableDeclaration } from "../../../../analysis";
 

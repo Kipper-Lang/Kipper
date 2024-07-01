@@ -7,7 +7,8 @@ import type { IfStatementSemantics } from "./if-statement-semantics";
 import type { IfStatementTypeSemantics } from "./if-statement-type-semantics";
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
-import { IfStatementContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { IfStatementContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**

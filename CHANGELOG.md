@@ -40,11 +40,13 @@ To use development versions of Kipper download the
   - `kipper/core/compiler/ast/factories`, which replaces the old file `factories.ts` and contains all AST factory
     classes and types.
   - `kipper/core/compiler/ast/mapping`, which contains all AST mapping objects and the `ASTNodeMapper` class.
-- New class:
+- New classes:
   - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
   - `PrimaryExpression`, which is an abstract base class for all primary expressions.
   - `PostfixExpression`, which is an abstract base class for all postfix expressions.
   - `PromptModule` in `@kipper/cli`, which contains all prompt-related functions and classes.
+  - `ObjectPrimaryExpression`, which represents an AST object primary expression.
+  - `ObjectProperty`, which represents an AST object property.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
@@ -64,6 +66,10 @@ To use development versions of Kipper download the
   - `JumpStatementTypeSemantics`, which represents the type semantics of a jump statement.
   - `SwitchStatementSemantics`, which represents the semantics of a switch statement.
   - `SwitchStatementTypeSemantics`, which represents the type semantics of a switch statement.
+  - `ObjectPrimaryExpressionSemantics`, which represents the semantics of an object primary expression.
+  - `ObjectPrimaryExpressionTypeSemantics`, which represents the type semantics of an object primary expression.
+  - `ObjectPropertySemantics`, which represents the semantics of an object property.
+  - `ObjectPropertyTypeSemantics`, which represents the type semantics of an object property.
 - New parameters:
   - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
@@ -124,6 +130,8 @@ To use development versions of Kipper download the
   - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
   - Interface `TangledPrimaryTypeSemantics` to `TangledPrimaryExpressionTypeSemantics`.
   - Interface `DoWhileLoopStatementSemantics` to `DoWhileLoopIterationStatementSemantics`.
+  - Method `TargetASTNodeCodeGenerator.arrayLiteralExpression` to `arrayPrimaryExpression`.
+  - Method `TargetASTNodeSemanticAnalyser.listPrimaryExpression` to `arrayPrimaryExpression`.
 - Moved:
   - `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
   - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module.
@@ -148,6 +156,11 @@ To use development versions of Kipper download the
 ### Deprecated
 
 ### Removed
+
+- Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
+  `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of 
+  complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
+  `PrimaryExpression` instead.
 
 </details>
 

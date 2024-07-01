@@ -5,13 +5,11 @@
 import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
 import { Logger } from "tslog";
+import type { CompileConfig, KipperCompileResult, KipperCompileTarget } from "@kipper/core";
 import {
-	CompileConfig,
 	defaultOptimisationOptions,
 	EvaluatedCompileConfig,
 	KipperCompiler,
-	KipperCompileResult,
-	KipperCompileTarget,
 	KipperError,
 	KipperLogger,
 	LogLevel,

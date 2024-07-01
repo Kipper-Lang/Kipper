@@ -5,15 +5,15 @@
 import type { FStringPrimaryExpressionSemantics } from "./fstring-primary-expression-semantics";
 import type { FStringPrimaryExpressionTypeSemantics } from "./fstring-primary-expression-type-semantics";
 import { Expression } from "../../expression";
+import type { FStringPrimaryExpressionContext } from "../../../../../parser";
 import {
 	ExpressionContext,
 	FStringDoubleQuoteAtomContext,
-	FStringPrimaryExpressionContext,
 	FStringSingleQuoteAtomContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
 } from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { CheckedType } from "../../../../../analysis";
 import { getParseRuleSource } from "../../../../../../tools";
 

@@ -13,8 +13,10 @@ import type { MultiplicativeExpressionSemantics } from "./multiplicative-express
 import type { MultiplicativeTypeSemantics } from "./multiplicative-expression-type-semantics";
 import type { Expression } from "../../expression";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { KindParseRuleMapping, MultiplicativeExpressionContext, ParseRuleKindMapping } from "../../../../../parser";
-import { KipperMultiplicativeOperator, kipperMultiplicativeOperators } from "../../../../../const";
+import type { MultiplicativeExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { KipperMultiplicativeOperator } from "../../../../../const";
+import { kipperMultiplicativeOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ArithmeticExpression } from "../arithmetic-expression";

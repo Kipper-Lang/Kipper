@@ -1,19 +1,16 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import * as path from "path";
-import { KipperParserRuleContext } from "@kipper/core";
-import {
-	CompilableASTNode,
-	KipperCompiler,
-	KipperParseStream,
+import type { KipperParserRuleContext } from "@kipper/core";
+import type {
 	KipperProgramContext,
-	RootASTNode,
 	ParseData,
 	TargetASTNodeSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
 	CompilableNodeParent,
 } from "@kipper/core";
+import { CompilableASTNode, KipperCompiler, KipperParseStream, RootASTNode } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);

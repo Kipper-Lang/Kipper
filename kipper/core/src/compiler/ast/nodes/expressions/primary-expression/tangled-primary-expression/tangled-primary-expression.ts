@@ -9,7 +9,8 @@ import type { TangledPrimaryExpressionSemantics } from "./tangled-primary-expres
 import type { TangledPrimaryExpressionTypeSemantics } from "./tangled-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
-import { KindParseRuleMapping, ParseRuleKindMapping, TangledPrimaryExpressionContext } from "../../../../../parser";
+import type { TangledPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { PrimaryExpression } from "../primary-expression";
 

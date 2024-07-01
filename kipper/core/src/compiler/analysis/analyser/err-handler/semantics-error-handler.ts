@@ -4,7 +4,7 @@
  */
 import type { CompilableASTNode } from "../../../ast";
 import type { KipperParseStream } from "../../../parser";
-import { KipperError } from "../../../../errors";
+import type { KipperError } from "../../../../errors";
 import { getParseRuleSource } from "../../../../tools";
 
 /**

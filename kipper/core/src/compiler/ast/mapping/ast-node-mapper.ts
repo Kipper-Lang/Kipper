@@ -5,6 +5,7 @@
  * @since 0.11.0
  */
 import {
+	ParseRuleKindMapping,
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -32,9 +33,9 @@ import {
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	NumberPrimaryExpressionContext,
+	ObjectPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
-	ParseRuleKindMapping,
 	RelationalExpressionContext,
 	ReturnStatementContext,
 	SliceNotationMemberAccessExpressionContext,
@@ -45,6 +46,7 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
+	ObjectPropertyContext,
 } from "../../parser";
 import type {
 	ASTDeclarationKind,
@@ -54,6 +56,8 @@ import type {
 	ASTStatementKind,
 	ASTStatementRuleName,
 } from "../common";
+import type { Declaration, Expression, Statement } from "../nodes";
+import { ObjectProperty } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -62,10 +66,8 @@ import {
 	CastOrConvertExpression,
 	CompoundStatement,
 	ConditionalExpression,
-	Declaration,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
-	Expression,
 	ExpressionStatement,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
@@ -83,11 +85,11 @@ import {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
 	ReturnStatement,
-	Statement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -123,6 +125,8 @@ export class ASTNodeMapper {
 	public static readonly expressionKindToClassMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpression,
 		[ParseRuleKindMapping.RULE_arrayPrimaryExpression]: ArrayPrimaryExpression,
+		[ParseRuleKindMapping.RULE_objectPrimaryExpression]: ObjectPrimaryExpression,
+		[ParseRuleKindMapping.RULE_objectProperty]: ObjectProperty,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpression,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpression,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpression,
@@ -184,6 +188,8 @@ export class ASTNodeMapper {
 	public static readonly expressionKindToRuleContextMap = {
 		[ParseRuleKindMapping.RULE_numberPrimaryExpression]: NumberPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_arrayPrimaryExpression]: ArrayPrimaryExpressionContext,
+		[ParseRuleKindMapping.RULE_objectProperty]: ObjectPropertyContext,
+		[ParseRuleKindMapping.RULE_objectPrimaryExpression]: ObjectPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_identifierPrimaryExpression]: IdentifierPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]: VoidOrNullOrUndefinedPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_boolPrimaryExpression]: BoolPrimaryExpressionContext,
@@ -250,6 +256,8 @@ export class ASTNodeMapper {
 	public static readonly expressionRuleNameToClassMap = {
 		RULE_numberPrimaryExpression: NumberPrimaryExpression,
 		RULE_arrayPrimaryExpression: ArrayPrimaryExpression,
+		RULE_objectProperty: ObjectProperty,
+		RULE_objectPrimaryExpression: ObjectPrimaryExpression,
 		RULE_identifierPrimaryExpression: IdentifierPrimaryExpression,
 		RULE_voidOrNullOrUndefinedPrimaryExpression: VoidOrNullOrUndefinedPrimaryExpression,
 		RULE_boolPrimaryExpression: BoolPrimaryExpression,

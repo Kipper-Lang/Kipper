@@ -2,7 +2,8 @@
  * Antlr4 Error listener handling Antlr4 errors and reporting them.
  * @since 0.0.2
  */
-import { KipperLogger, LogLevel } from "./logger";
+import type { KipperLogger } from "./logger";
+import { LogLevel } from "./logger";
 import { LexerOrParserSyntaxError } from "./errors";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";

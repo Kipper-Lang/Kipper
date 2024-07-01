@@ -4,7 +4,7 @@
  */
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
-import { BuiltInFunction, BuiltInVariable, InternalFunction } from "../runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "../runtime-built-ins";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.

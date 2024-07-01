@@ -3,8 +3,14 @@
  * functions.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, InternalFunction, TranslatedCodeLine } from "@kipper/core";
-import { KipperProgramContext, KipperTargetBuiltInGenerator } from "@kipper/core";
+import type {
+	BuiltInFunction,
+	BuiltInVariable,
+	InternalFunction,
+	TranslatedCodeLine,
+	KipperProgramContext,
+} from "@kipper/core";
+import { KipperTargetBuiltInGenerator } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature } from "./tools";
 import { TargetJS } from "./target";
 
@@ -117,6 +123,14 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		);
 	}
 
+	async repeatString(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const toRepeatIdentifier = signature.params[0];
+		const timesIdentifier = signature.params[1];
+
+		return genJSFunction(signature, `{ return ${toRepeatIdentifier}.repeat(${timesIdentifier}); }`);
+	}
+
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0];
@@ -134,13 +148,5 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
 		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
-	}
-
-	async repeatString(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
-		const signature = getJSFunctionSignature(funcSpec);
-		const toRepeatIdentifier = signature.params[0];
-		const timesIdentifier = signature.params[1];
-
-		return genJSFunction(signature, `{ return ${toRepeatIdentifier}.repeat(${timesIdentifier}); }`);
 	}
 }

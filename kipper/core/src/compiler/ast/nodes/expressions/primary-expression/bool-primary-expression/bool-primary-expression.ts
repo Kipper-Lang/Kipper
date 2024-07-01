@@ -4,17 +4,18 @@
  */
 import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-semantics";
 import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import type { KipperBoolTypeLiterals } from "../../../../../../const";
-import { ConstantExpression } from "../constant-expression";
-import { BoolPrimaryExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
-import { CheckedType } from "../../../../../../analysis";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { KipperBoolTypeLiterals } from "../../../../../const";
+import type { BoolPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
  * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
  * @since 0.8.0
  */
-export class BoolPrimaryExpression extends ConstantExpression<
+export class BoolPrimaryExpression extends PrimaryExpression<
 	BoolPrimaryExpressionSemantics,
 	BoolPrimaryExpressionTypeSemantics
 > {

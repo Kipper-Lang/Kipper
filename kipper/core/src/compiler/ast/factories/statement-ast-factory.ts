@@ -4,7 +4,7 @@
  */
 import type { ASTStatementKind, ParserExpressionContext, ParserStatementContext } from "../common";
 import type { CompilableNodeParent } from "../compilable-ast-node";
-import { Statement } from "../nodes";
+import type { Statement } from "../nodes";
 import { ASTNodeFactory } from "./ast-node-factory";
 import { ASTNodeMapper } from "../mapping";
 

@@ -7,7 +7,7 @@ import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../par
 import type { ComparativeExpressionSemantics } from "./comparative-expression-semantics";
 import type { ComparativeExpressionTypeSemantics } from "./comparative-expression-type-semantics";
 import { Expression } from "../expression";
-import { ASTNodeMapper } from "../../../mapping";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link ComparativeExpression} AST node.

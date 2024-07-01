@@ -5,8 +5,9 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { ExpressionStatementSemantics } from "./expression-statement-semantics";
 import type { ExpressionStatementTypeSemantics } from "./expression-statement-type-semantics";
 import { Statement } from "../statement";
-import { ExpressionStatementContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Expression } from "../../expressions";
+import type { ExpressionStatementContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { Expression } from "../../expressions";
 
 /**
  * Expression statement class, which represents a statement made up of an expression in the Kipper language.

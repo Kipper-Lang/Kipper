@@ -1,4 +1,5 @@
-import { KipperCompiler, KipperCompileResult, KipperError, KipperSyntaxError } from "@kipper/core";
+import type { KipperCompileResult, KipperError, KipperSyntaxError } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
