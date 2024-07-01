@@ -40,6 +40,7 @@ const tangledExpressionsFile = getFileName("tangled-expressions.kip");
 const ifStatementsFile = getFileName("if-statements.kip");
 const forLoopFile = getFileName("for-loop.kip");
 const whileLoopFile = getFileName("while-loop.kip");
+const doWhileLoopFile = getFileName("do-while-loop.kip");
 
 describe("KipperCompiler", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
@@ -537,6 +538,21 @@ describe("KipperCompiler", () => {
 					const jsCode = ts.transpile(result.write());
 					testPrintOutput((message: any) => {
 						assert(String(i++) === message, `Expected '${String(i - 1)}' from for-loop`);
+					}, jsCode);
+				});
+
+				it(`Do-While loop [${target.fileExtension}]`, async () => {
+					const fileContent : string = (await fs.readFile(doWhileLoopFile, "utf8" as BufferEncoding)).toString();
+					const result : KipperCompileResult = await compiler.compile(fileContent, { target: target });
+
+					const code : string = result.write();
+					assert(code);
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
+
+					const jsCode = ts.transpile(result.write());
+					testPrintOutput((message: any) => {
+						assert("10" === message, "Expected '10'");
 					}, jsCode);
 				});
 			});

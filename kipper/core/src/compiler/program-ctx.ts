@@ -201,6 +201,7 @@ export class KipperProgramContext {
 		);
 	}
 
+	// @ts-ignore
 	/**
 	 * Asserts a certain truth.
 	 * @param ctx The AST node context item.
