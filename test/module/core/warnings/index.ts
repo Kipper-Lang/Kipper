@@ -1,5 +1,5 @@
 import { defaultConfig, ensureTracebackDataExists } from "../errors";
-import { KipperProgramContext } from "@kipper/core";
+import type { KipperProgramContext } from "@kipper/core";
 import { assert } from "chai";
 
 export function ensureWarningWasReported(programCtx?: KipperProgramContext): void {

@@ -6,7 +6,7 @@
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import type { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
 import { TargetTS } from "./target";
 
 /**

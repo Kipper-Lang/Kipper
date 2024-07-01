@@ -12,8 +12,9 @@ import type { CastOrConvertExpressionTypeSemantics } from "./cast-or-convert-exp
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { Expression } from "../expression";
-import { CastOrConvertExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { UncheckedType } from "../../../../analysis";
+import type { CastOrConvertExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { UncheckedType } from "../../../../analysis";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
 import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";

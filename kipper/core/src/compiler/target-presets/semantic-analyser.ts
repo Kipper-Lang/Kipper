@@ -31,6 +31,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -46,6 +47,7 @@ import type {
 	WhileLoopIterationStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
+import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -136,7 +138,17 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	/**
 	 * Performs translation-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayPrimaryExpression>;
+	public abstract arrayPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ObjectPrimaryExpression} instances.
+	 */
+	public abstract objectPrimaryExpression?: TargetASTNodeSemanticAnalyser<ObjectPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ObjectProperty} instances.
+	 */
+	public abstract objectProperty?: TargetASTNodeSemanticAnalyser<ObjectProperty>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.

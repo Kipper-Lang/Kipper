@@ -1,5 +1,5 @@
 import { Parser } from "antlr4ts/Parser";
-import { TokenStream } from "antlr4ts/TokenStream";
+import type { TokenStream } from "antlr4ts/TokenStream";
 
 export default abstract class KipperParserBase extends Parser {
 	private insideExpression: boolean;

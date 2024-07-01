@@ -2,7 +2,7 @@
  * A symbol table entry for a function declaration.
  * @since 0.10.0
  */
-import {
+import type {
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,

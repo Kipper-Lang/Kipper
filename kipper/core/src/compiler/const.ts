@@ -10,7 +10,7 @@ import type {
 	UndefinedCustomType,
 } from "./analysis";
 import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
-import { InternalFunction } from "./runtime-built-ins";
+import type { InternalFunction } from "./runtime-built-ins";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should

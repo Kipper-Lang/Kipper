@@ -1,34 +1,35 @@
 /**
- * Integer constant expression, which represents a number constant that was defined in the source code.
+ * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
-import type { NumberPrimaryExpressionSemantics } from "./number-primary-expression-semantics";
-import type { NumberPrimaryExpressionTypeSemantics } from "./number-primary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import { ConstantExpression } from "../constant-expression";
-import { KindParseRuleMapping, NumberPrimaryExpressionContext, ParseRuleKindMapping } from "../../../../../../parser";
-import { CheckedType } from "../../../../../../analysis";
+import type { ArrayPrimaryExpressionSemantics } from "./array-primary-expression-semantics";
+import type { ArrayPrimaryExpressionTypeSemantics } from "./array-primary-expression-type-semantics";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { ArrayPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
- * Number constant expression, which represents a number constant that was defined in the source code.
+ * List constant expression, which represents a list constant that was defined in the source code.
  * @since 0.1.0
  */
-export class NumberPrimaryExpression extends ConstantExpression<
-	NumberPrimaryExpressionSemantics,
-	NumberPrimaryExpressionTypeSemantics
+export class ArrayPrimaryExpression extends PrimaryExpression<
+	ArrayPrimaryExpressionSemantics,
+	ArrayPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: NumberPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: ArrayPrimaryExpressionContext;
 
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_numberPrimaryExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_arrayPrimaryExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -39,7 +40,7 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * @since 0.10.0
 	 */
 	public override get kind() {
-		return NumberPrimaryExpression.kind;
+		return ArrayPrimaryExpression.kind;
 	}
 
 	/**
@@ -57,10 +58,10 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return NumberPrimaryExpression.ruleName;
+		return ArrayPrimaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: NumberPrimaryExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: ArrayPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -73,10 +74,8 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		// The value should stay the same as written, and the code generator implementation should handle outputting the
-		// value in the target language
 		this.semanticData = {
-			value: this.sourceCode,
+			value: [], // TODO! Implement list data fetching.
 		};
 	}
 
@@ -89,9 +88,9 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// This will always be of type 'number'
+		// This will always be of type 'list'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("num"),
+			evaluatedType: CheckedType.fromCompilableType("list"),
 		};
 	}
 
@@ -106,10 +105,10 @@ export class NumberPrimaryExpression extends ConstantExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): NumberPrimaryExpressionContext {
+	public override get antlrRuleCtx(): ArrayPrimaryExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.numberPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.numberPrimaryExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.arrayPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.arrayPrimaryExpression;
 }

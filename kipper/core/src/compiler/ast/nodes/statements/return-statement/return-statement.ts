@@ -8,7 +8,8 @@ import type { ReturnStatementTypeSemantics } from "./return-statement-type-seman
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
 import { CheckedType } from "../../../../analysis";
-import { KindParseRuleMapping, ParseRuleKindMapping, ReturnStatementContext } from "../../../../parser";
+import type { ReturnStatementContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 
 /**
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using

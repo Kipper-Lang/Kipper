@@ -4,7 +4,7 @@
  */
 import type { InverseMap } from "../../tools/types";
 import { inverseMap } from "../../tools";
-import {KipperParser} from "./antlr";
+import { KipperParser } from "./antlr";
 
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the

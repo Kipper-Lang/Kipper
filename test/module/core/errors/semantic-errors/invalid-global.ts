@@ -1,4 +1,5 @@
-import { KipperCompiler, KipperError, KipperParseStream, KipperProgramContext, ParseData } from "@kipper/core";
+import type { KipperError, KipperProgramContext, ParseData } from "@kipper/core";
+import { KipperCompiler, KipperParseStream } from "@kipper/core";
 import { defaultConfig } from "../index";
 import { assert } from "chai";
 

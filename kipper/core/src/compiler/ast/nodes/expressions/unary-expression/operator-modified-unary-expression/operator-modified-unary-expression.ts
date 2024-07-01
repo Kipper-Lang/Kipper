@@ -13,12 +13,8 @@ import type { Expression } from "../../expression";
 import type { KipperNegateOperator, KipperSignOperator } from "../../../../../const";
 import { kipperUnaryModifierOperators } from "../../../../../const";
 import { UnaryExpression } from "../unary-expression";
-import {
-	KindParseRuleMapping,
-	OperatorModifiedUnaryExpressionContext,
-	ParseRuleKindMapping,
-	UnaryOperatorContext,
-} from "../../../../../parser";
+import type { OperatorModifiedUnaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 

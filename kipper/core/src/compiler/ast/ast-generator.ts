@@ -9,7 +9,7 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import {
+import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualCastOrConvertExpressionContext,

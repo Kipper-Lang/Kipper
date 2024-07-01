@@ -1,4 +1,5 @@
-import { KipperCompiler, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "@kipper/core";
+import type { ScopeFunctionDeclaration } from "@kipper/core";
+import { KipperCompiler, ScopeVariableDeclaration } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { assert } from "chai";
 

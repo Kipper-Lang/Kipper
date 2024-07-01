@@ -3,7 +3,8 @@
  * @since 0.0.6
  */
 import { LogLevel } from "@kipper/core";
-import { ILogObject, ISettingsParam, Logger } from "tslog";
+import type { ILogObject, ISettingsParam } from "tslog";
+import { Logger } from "tslog";
 
 /**
  * Default {@link ISettingsParam} Configuration for the CLI Logger.

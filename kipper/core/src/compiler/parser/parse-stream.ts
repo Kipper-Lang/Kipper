@@ -2,7 +2,8 @@
  * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
  * @since 0.0.3
  */
-import { CharStreams, CodePointCharStream } from "antlr4ts";
+import type { CodePointCharStream } from "antlr4ts";
+import { CharStreams } from "antlr4ts";
 import { KipperConfigError } from "../../errors";
 
 /**

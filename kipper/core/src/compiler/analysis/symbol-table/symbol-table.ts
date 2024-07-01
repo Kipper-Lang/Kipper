@@ -1,4 +1,4 @@
-import { ScopeDeclaration } from "./entry";
+import type { ScopeDeclaration } from "./entry";
 
 /**
  * A simple interface defining the basic functionality of a symbol table.

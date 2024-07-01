@@ -2,13 +2,13 @@
  * Semantics for AST Node {@link NumberPrimaryExpression}.
  * @since 0.5.0
  */
-import type { ConstantExpressionSemantics } from "../constant-expression-semantics";
+import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
 
 /**
  * Semantics for AST Node {@link NumberPrimaryExpression}.
  * @since 0.5.0
  */
-export interface NumberPrimaryExpressionSemantics extends ConstantExpressionSemantics {
+export interface NumberPrimaryExpressionSemantics extends PrimaryExpressionSemantics {
 	/**
 	 * The value of the constant number expression.
 	 *

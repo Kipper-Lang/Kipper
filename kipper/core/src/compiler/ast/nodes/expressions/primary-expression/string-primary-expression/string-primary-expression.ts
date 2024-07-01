@@ -1,35 +1,35 @@
 /**
- * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
- * @since 0.8.0
+ * String constant expression, which represents a string constant that was defined in the source code.
+ * @since 0.1.0
  */
-import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-semantics";
-import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import type { KipperBoolTypeLiterals } from "../../../../../../const";
-import { ConstantExpression } from "../constant-expression";
-import { BoolPrimaryExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
-import { CheckedType } from "../../../../../../analysis";
+import type { StringPrimaryExpressionSemantics } from "./string-primary-expression-semantics";
+import type { StringPrimaryExpressionTypeSemantics } from "./string-primary-expression-type-semantics";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { StringPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
- * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
- * @since 0.8.0
+ * String constant expression, which represents a string constant that was defined in the source code.
+ * @since 0.1.0
  */
-export class BoolPrimaryExpression extends ConstantExpression<
-	BoolPrimaryExpressionSemantics,
-	BoolPrimaryExpressionTypeSemantics
+export class StringPrimaryExpression extends PrimaryExpression<
+	StringPrimaryExpressionSemantics,
+	StringPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: StringPrimaryExpressionContext;
 
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_boolPrimaryExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_stringPrimaryExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -40,7 +40,7 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	 * @since 0.10.0
 	 */
 	public override get kind() {
-		return BoolPrimaryExpression.kind;
+		return StringPrimaryExpression.kind;
 	}
 
 	/**
@@ -58,10 +58,10 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return BoolPrimaryExpression.ruleName;
+		return StringPrimaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: StringPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -75,7 +75,8 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			value: <KipperBoolTypeLiterals>this.sourceCode,
+			value: this.sourceCode.slice(1, this.sourceCode.length - 1), // Remove string quotation marks
+			quotationMarks: <`"` | `'`>this.sourceCode[0],
 		};
 	}
 
@@ -88,9 +89,9 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// This will always be of type 'bool'
+		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: CheckedType.fromCompilableType("str"),
 		};
 	}
 
@@ -105,10 +106,10 @@ export class BoolPrimaryExpression extends ConstantExpression<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): BoolPrimaryExpressionContext {
+	public override get antlrRuleCtx(): StringPrimaryExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.boolPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.boolPrimaryExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.stringPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.stringPrimaryExpression;
 }

@@ -8,8 +8,6 @@ import type {
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
-} from "@kipper/core";
-import {
 	AdditiveExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
@@ -43,18 +41,22 @@ import {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-	CompoundStatement,
 	DoWhileLoopIterationStatement,
 	ForLoopIterationStatement,
+	MemberAccessExpression,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopIterationStatement,
+	ObjectPrimaryExpression,
+	ObjectProperty,
+} from "@kipper/core";
+import {
+	VariableDeclaration,
+	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -378,7 +380,23 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectProperty} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
 		return [];
 	};
 

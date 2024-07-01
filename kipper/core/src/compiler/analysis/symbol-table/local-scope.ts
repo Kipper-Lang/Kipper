@@ -6,7 +6,8 @@
 import type { FunctionDeclaration, ScopeNode, VariableDeclaration } from "../../ast/";
 import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { ScopeDeclaration, ScopeFunctionDeclaration } from "./entry";
+import { ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
 
 /**

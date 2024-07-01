@@ -2,23 +2,20 @@
  * Constant expression, representing the void, null or undefined keyword.
  * @since 0.10.0
  */
-import type { KipperNullType, KipperUndefinedType, KipperVoidType } from "../../../../../../const";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
+import type { KipperNullType, KipperUndefinedType, KipperVoidType } from "../../../../../const";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-null-or-undefined-primary-expression-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
-import {
-	KindParseRuleMapping,
-	ParseRuleKindMapping,
-	VoidOrNullOrUndefinedPrimaryExpressionContext,
-} from "../../../../../../parser";
-import { CheckedType } from "../../../../../../analysis";
-import { ConstantExpression } from "../constant-expression";
+import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
  * Constant expression, representing the void, null or undefined keyword.
  * @since 0.10.0
  */
-export class VoidOrNullOrUndefinedPrimaryExpression extends ConstantExpression<
+export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 	VoidOrNullOrUndefinedPrimaryExpressionSemantics,
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
 > {

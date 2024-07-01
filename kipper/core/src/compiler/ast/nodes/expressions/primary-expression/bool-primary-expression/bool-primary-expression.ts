@@ -1,34 +1,36 @@
 /**
- * Object literal constant, which represents an object that was defined in the source code.
- * @since 0.11.0
+ * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
+ * @since 0.8.0
  */
-import type { ObjectPrimaryExpressionSemantics } from "./object-primary-expression-semantics";
-import type { ObjectPrimaryExpressionTypeSemantics } from "./object-primary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import { ConstantExpression } from "../constant-expression";
-import { ObjectPrimaryExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
-import { KipperNotImplementedError } from "../../../../../../../errors";
+import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-semantics";
+import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { KipperBoolTypeLiterals } from "../../../../../const";
+import type { BoolPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
- * Object literal constant, which represents an object that was defined in the source code.
- * @since 0.11.0
+ * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
+ * @since 0.8.0
  */
-export class ObjectPrimaryExpression extends ConstantExpression<
-	ObjectPrimaryExpressionSemantics,
-	ObjectPrimaryExpressionTypeSemantics
+export class BoolPrimaryExpression extends PrimaryExpression<
+	BoolPrimaryExpressionSemantics,
+	BoolPrimaryExpressionTypeSemantics
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: ObjectPrimaryExpressionContext;
+	protected override readonly _antlrRuleCtx: BoolPrimaryExpressionContext;
 
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_objectPrimaryExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_boolPrimaryExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -36,10 +38,10 @@ export class ObjectPrimaryExpression extends ConstantExpression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.11.0
+	 * @since 0.10.0
 	 */
 	public override get kind() {
-		return ObjectPrimaryExpression.kind;
+		return BoolPrimaryExpression.kind;
 	}
 
 	/**
@@ -57,10 +59,10 @@ export class ObjectPrimaryExpression extends ConstantExpression<
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return ObjectPrimaryExpression.ruleName;
+		return BoolPrimaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: ObjectPrimaryExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: BoolPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -73,9 +75,9 @@ export class ObjectPrimaryExpression extends ConstantExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Literals have not been implemented yet."));
+		this.semanticData = {
+			value: <KipperBoolTypeLiterals>this.sourceCode,
+		};
 	}
 
 	/**
@@ -84,29 +86,30 @@ export class ObjectPrimaryExpression extends ConstantExpression<
 	 *
 	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
 	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.11.0
+	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Literals have not been implemented yet."));
+		// This will always be of type 'bool'
+		this.typeSemantics = {
+			evaluatedType: CheckedType.fromCompilableType("bool"),
+		};
 	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
+	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ObjectPrimaryExpressionContext {
+	public override get antlrRuleCtx(): BoolPrimaryExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.listPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.arrayLiteralExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.boolPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.boolPrimaryExpression;
 }
