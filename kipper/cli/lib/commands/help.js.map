@@ -1,0 +1,1 @@
+{"version":3,"file":"help.js","sourceRoot":"","sources":["../../src/commands/help.ts"],"names":[],"mappings":";;;AAIA,wFAA+D;AAQ/D,MAAqB,IAAK,SAAQ,cAAW;IAK5C,MAAM,CAAU,KAAK,CAAC,GAAG;QACxB,OAAO,MAAM,KAAK,CAAC,GAAG,EAAE,CAAC;IAC1B,CAAC;;AANe,gBAAW,GAAW,kCAAkC,CAAC;AACzD,SAAI,GAAG,cAAW,CAAC,IAAI,CAAC;AACxB,UAAK,GAAqB,cAAW,CAAC,KAAK,CAAC;kBAHxC,IAAI"}

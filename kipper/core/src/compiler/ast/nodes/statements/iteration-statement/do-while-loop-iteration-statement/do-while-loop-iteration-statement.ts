@@ -12,6 +12,8 @@ import {
 	ParseRuleKindMapping,
 } from "../../../../../parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
+import type { Expression } from "../../../expressions";
+import { Statement } from "../../statement";
 
 /**
  * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable
@@ -94,9 +96,13 @@ export class DoWhileLoopIterationStatement extends IterationStatement<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Do-While loop statements have not been implemented yet."));
+		const loopBody = <Statement>this.children[0];
+		const loopCondition = <Expression>this.children[1];
+
+		this.semanticData = {
+			loopCondition: loopCondition,
+			loopBody: loopBody,
+		};
 	}
 
 	/**
@@ -107,11 +113,7 @@ export class DoWhileLoopIterationStatement extends IterationStatement<
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.7.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Do-While loop statements have not been implemented yet."));
-	}
+	public primarySemanticTypeChecking: undefined = undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

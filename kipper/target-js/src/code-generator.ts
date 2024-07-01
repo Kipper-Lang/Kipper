@@ -234,12 +234,23 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	doWhileLoopIterationStatement = async (node: DoWhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["do", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "} " : "", "while", " ", "(", ...condition, ")"],
+		];
 	};
 
 	/**
 	 * Translates a {@link WhileLoopIterationStatement} into the JavaScript language.
-	 * @since 0.10.0
+	 * @since 0.// Check whether the loop body is a compound statement10.0
 	 */
 	whileLoopIterationStatement = async (node: WhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();

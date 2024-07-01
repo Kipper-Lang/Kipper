@@ -1,0 +1,10 @@
+export { run } from "@oclif/command";
+export * from "./input";
+export * from "./logger";
+export * from "./errors";
+export * from "./output/compile";
+export declare const name = "@kipper/cli";
+export declare const version = "0.11.0-alpha.1";
+export declare const author = "Luna Klatzer";
+export declare const license = "GPL-3.0-or-later";
+export declare const github = "https://github.com/Kipper-Lang/Kipper";
