@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/node": "18.16.16",
-    "@types/sinon": "10.0.15",
+    "@types/sinon": "10.0.20",
     "@oclif/test": "2.3.21",
     "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "10.0.2",
