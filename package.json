@@ -9,7 +9,7 @@
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
     "antlr4ts": "^0.5.0-alpha.4",
-    "tslib": "~2.5.0"
+    "tslib": "~2.6.0"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
