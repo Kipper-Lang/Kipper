@@ -62,8 +62,8 @@ devDependencies:
     specifier: 4.3.6
     version: 4.3.6
   coverage-badge-creator:
-    specifier: 1.0.17
-    version: 1.0.17
+    specifier: 1.0.19
+    version: 1.0.19
   eslint:
     specifier: 8.42.0
     version: 8.42.0
@@ -1660,8 +1660,8 @@ packages:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: true
 
-  /coverage-badge-creator@1.0.17:
-    resolution: {integrity: sha512-9agGAXGNafW9avCVg5eJF7rzpTRjTbSf3acNxEUQqxUn7WDrnEAlomHyPIosucZuChPxVPgW6Kg3W4nStj/jCg==}
+  /coverage-badge-creator@1.0.19:
+    resolution: {integrity: sha512-D49WcKmhusMp0KtdINdiDW4VzTAKWv3IHFr/jLwsKtvnFgXj+uuu6Td+XcrsXVUfThkueU1cZxWluJexcOaiXA==}
     hasBin: true
     dev: true
 
@@ -2842,7 +2842,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jsonparse@1.3.1:
@@ -3306,7 +3306,7 @@ packages:
     resolution: {integrity: sha512-whdkPIooSu/bASggZ96BWVvZTRMOFxnyUG5PnTSGKoJE2gd5mbVNmR2Nj20QFzxYYgAXpoqC+AiXzl+UMRh7zQ==}
     engines: {node: '>=8'}
     dependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
       hasha: 5.2.2
       lodash.flattendeep: 4.4.0
       release-zalgo: 1.0.0
