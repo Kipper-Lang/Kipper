@@ -8,9 +8,8 @@ import type { CompilableNodeChild, CompilableNodeParent } from "../../../../comp
 import { IterationStatement } from "../iteration-statement";
 import type { DoWhileLoopIterationStatementContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
 import type { Expression } from "../../../expressions";
-import { Statement } from "../../statement";
+import type { Statement } from "../../statement";
 
 /**
  * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable

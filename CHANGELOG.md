@@ -17,8 +17,9 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
+
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
-	([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
+  ([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
 - Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
   and parsing. This package is used by the Kipper CLI to automatically load and parse config files.
   ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).

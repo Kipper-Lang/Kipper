@@ -3,8 +3,8 @@
  * @since 0.10.0
  */
 import type { IterationStatementSemantics } from "../iteration-statement-semantics";
-import { Expression } from "../../../expressions";
-import { Statement } from "../../statement";
+import type { Expression } from "../../../expressions";
+import type { Statement } from "../../statement";
 
 /**
  * Semantics for AST Node {@link DoWhileLoopIterationStatement}.

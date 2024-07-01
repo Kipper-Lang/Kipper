@@ -542,10 +542,10 @@ describe("KipperCompiler", () => {
 				});
 
 				it(`Do-While loop [${target.fileExtension}]`, async () => {
-					const fileContent : string = (await fs.readFile(doWhileLoopFile, "utf8" as BufferEncoding)).toString();
-					const result : KipperCompileResult = await compiler.compile(fileContent, { target: target });
+					const fileContent: string = (await fs.readFile(doWhileLoopFile, "utf8" as BufferEncoding)).toString();
+					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
 
-					const code : string = result.write();
+					const code: string = result.write();
 					assert(code);
 					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
 					assert(code.includes(TargetTS.getBuiltInIdentifier("numToStr")));
