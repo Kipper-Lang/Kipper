@@ -15,8 +15,8 @@ dependencies:
     specifier: workspace:~
     version: link:../target-ts
   '@oclif/command':
-    specifier: 1.8.31
-    version: 1.8.31(@oclif/config@1.18.17)
+    specifier: 1.8.36
+    version: 1.8.36(@oclif/config@1.18.17)
   '@oclif/config':
     specifier: 1.18.17
     version: 1.18.17
@@ -316,35 +316,37 @@ packages:
       chalk: 4.1.2
       strip-ansi: 6.0.1
       supports-color: 8.1.1
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: true
 
-  /@oclif/command@1.8.31(@oclif/config@1.18.17):
-    resolution: {integrity: sha512-5GLT2l8ccxTqog4UBIX6DqdvDXkpDWBIU7tz8Bx+N1CACpY9cXqG6luUqQzLshKaHXx9b/Y4/KF6SvRTg9FN5A==}
+  /@oclif/command@1.8.36(@oclif/config@1.18.17):
+    resolution: {integrity: sha512-/zACSgaYGtAQRzc7HjzrlIs14FuEYAZrMOEwicRoUnZVyRunG4+t5iSEeQu0Xy2bgbCD0U1SP/EdeNZSTXRwjQ==}
     engines: {node: '>=12.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       '@oclif/config': ^1
     dependencies:
       '@oclif/config': 1.18.17
       '@oclif/errors': 1.3.6
       '@oclif/help': 1.0.5
-      '@oclif/parser': 3.8.13
+      '@oclif/parser': 3.8.17
       debug: 4.3.4(supports-color@8.1.1)
       semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@oclif/command@1.8.31(@oclif/config@1.18.2):
-    resolution: {integrity: sha512-5GLT2l8ccxTqog4UBIX6DqdvDXkpDWBIU7tz8Bx+N1CACpY9cXqG6luUqQzLshKaHXx9b/Y4/KF6SvRTg9FN5A==}
+  /@oclif/command@1.8.36(@oclif/config@1.18.2):
+    resolution: {integrity: sha512-/zACSgaYGtAQRzc7HjzrlIs14FuEYAZrMOEwicRoUnZVyRunG4+t5iSEeQu0Xy2bgbCD0U1SP/EdeNZSTXRwjQ==}
     engines: {node: '>=12.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       '@oclif/config': ^1
     dependencies:
       '@oclif/config': 1.18.2
       '@oclif/errors': 1.3.6
       '@oclif/help': 1.0.5
-      '@oclif/parser': 3.8.13
+      '@oclif/parser': 3.8.17
       debug: 4.3.4(supports-color@8.1.1)
       semver: 7.5.4
     transitivePeerDependencies:
@@ -376,7 +378,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -391,7 +393,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -425,7 +427,7 @@ packages:
       strip-ansi: 6.0.1
       supports-color: 8.1.1
       supports-hyperlinks: 2.2.0
-      tslib: 2.6.0
+      tslib: 2.6.3
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
     dev: true
@@ -494,6 +496,7 @@ packages:
   /@oclif/help@1.0.5:
     resolution: {integrity: sha512-77ZXqVXcd+bQ6EafN56KbL4PbNtZM/Lq4GQElekNav+CPIgPNKT3AtMTQrc0fWke6bb/BTLB+1Fu1gWgx643jQ==}
     engines: {node: '>=8.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     dependencies:
       '@oclif/config': 1.18.6
       '@oclif/errors': 1.3.6
@@ -521,16 +524,6 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@oclif/parser@3.8.13:
-    resolution: {integrity: sha512-M4RAB4VB5DuPF3ZoVJlXyemyxhflYBKrvP0cBI/ZJVelrfR7Z1fB/iUSrw7SyFvywI13mHmtEQ8Xz0bSUs7g8A==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      '@oclif/errors': 1.3.6
-      '@oclif/linewrap': 1.0.0
-      chalk: 4.1.2
-      tslib: 2.6.0
-    dev: false
-
   /@oclif/parser@3.8.17:
     resolution: {integrity: sha512-l04iSd0xoh/16TGVpXb81Gg3z7tlQGrEup16BrVLsZBK6SEYpYHRJZnM32BwZrHI97ZSFfuSwVlzoo6HdsaK8A==}
     engines: {node: '>=8.0.0'}
@@ -546,7 +539,7 @@ packages:
     resolution: {integrity: sha512-QuSiseNRJygaqAdABYFWn/H1CwIZCp9zp/PLid6yXvy6VcQV7OenEFF5XuYaCvSARe2Tg9r8Jqls5+fw1A9CbQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.31(@oclif/config@1.18.2)
+      '@oclif/command': 1.8.36(@oclif/config@1.18.2)
       '@oclif/config': 1.18.2
       '@oclif/errors': 1.3.5
       '@oclif/help': 1.0.5
@@ -3356,7 +3349,7 @@ packages:
   /rxjs@7.8.0:
     resolution: {integrity: sha512-F2+gxDshqmIub1KdvZkaEfGDwLNpPvk9Fs6LD/MyQxNgMds/WH9OdDDXOmxUZpME+iSK3rQCctkL0DYyytUqMg==}
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
     dev: true
 
   /safe-buffer@5.1.2:
@@ -3796,12 +3789,8 @@ packages:
     resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
     dev: true
 
-  /tslib@2.6.0:
-    resolution: {integrity: sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==}
-
   /tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
-    dev: false
 
   /tslog@3.3.4:
     resolution: {integrity: sha512-N0HHuHE0e/o75ALfkioFObknHR5dVchUad4F0XyFf3gXJYB++DewEzwGI/uIOM216E5a43ovnRNEeQIq9qgm4Q==}
