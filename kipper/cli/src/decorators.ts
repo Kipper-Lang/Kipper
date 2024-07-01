@@ -19,7 +19,7 @@ export function prettifiedErrors<TProto extends Command>() {
 	return function (target: TProto, propertyKey: keyof TProto, descriptor: PropertyDescriptor) {
 		const originalFunc: Function = descriptor.value;
 
-		const func = async function (this: Command, ...argArray: Array<any>): Promise<void> {
+		const func = async function (this: Command, ...argArray: Array<any>): Promise<any> {
 			try {
 				await originalFunc.call(this, ...argArray);
 			} catch (error) {
@@ -59,7 +59,7 @@ export function prettifiedErrors<TProto extends Command>() {
 
 		// Modify the prototype and return the property descriptor
 		target[propertyKey] = func as TProto[keyof TProto];
-		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<void>>;
+		return func as TypedPropertyDescriptor<(...argArray: Array<any>) => Promise<any>>;
 	};
 }
 

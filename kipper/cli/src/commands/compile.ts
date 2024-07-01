@@ -154,7 +154,7 @@ export default class Compile extends Command {
 	}
 
 	@prettifiedErrors<Compile>()
-	public async run(logger?: KipperLogger) {
+	public async run(logger?: KipperLogger): Promise<boolean> {
 		const { flags, config } = await this.getRunConfig();
 
 		logger = logger ?? new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
@@ -176,14 +176,14 @@ export default class Compile extends Command {
 			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
 				// Ignore the error thrown by the compiler (the logger already logged it)
 				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
-				return;
+				return false;
 			}
 			throw e;
 		}
 
 		// If the compilation failed, abort
 		if (!result.success) {
-			return;
+			return false;
 		}
 
 		// Write the file output for this compilation
@@ -199,5 +199,6 @@ export default class Compile extends Command {
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;
 		logger.info(`Done in ${duration}s.`);
+		return true;
 	}
 }
