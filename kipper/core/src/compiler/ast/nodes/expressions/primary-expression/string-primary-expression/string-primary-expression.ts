@@ -4,16 +4,17 @@
  */
 import type { StringPrimaryExpressionSemantics } from "./string-primary-expression-semantics";
 import type { StringPrimaryExpressionTypeSemantics } from "./string-primary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
-import { ConstantExpression } from "../constant-expression";
-import { KindParseRuleMapping, ParseRuleKindMapping, StringPrimaryExpressionContext } from "../../../../../../parser";
-import { CheckedType } from "../../../../../../analysis";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { StringPrimaryExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { CheckedType } from "../../../../../analysis";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
  * String constant expression, which represents a string constant that was defined in the source code.
  * @since 0.1.0
  */
-export class StringPrimaryExpression extends ConstantExpression<
+export class StringPrimaryExpression extends PrimaryExpression<
 	StringPrimaryExpressionSemantics,
 	StringPrimaryExpressionTypeSemantics
 > {

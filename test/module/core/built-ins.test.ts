@@ -1,6 +1,7 @@
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
-import { CompileConfig, KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
+import type { CompileConfig, KipperCompileResult, KipperError } from "@kipper/core";
+import { KipperCompiler, KipperParseStream } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { testPrintOutput } from "./core-functionality.test";

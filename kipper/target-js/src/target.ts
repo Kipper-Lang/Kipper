@@ -4,7 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import { BuiltInFunction, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable } from "@kipper/core";
+import { KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";

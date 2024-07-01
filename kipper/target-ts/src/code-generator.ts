@@ -3,7 +3,7 @@
  * @since 0.8.0
  */
 import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";
-import { FunctionDeclaration } from "@kipper/core";
+import type { FunctionDeclaration } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";

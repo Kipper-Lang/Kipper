@@ -6,8 +6,9 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { JumpStatementSemantics } from "./jump-statement-semantics";
 import type { JumpStatementTypeSemantics } from "./jump-statement-type-semantics";
 import { Statement } from "../statement";
-import { JumpStatementContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Expression } from "../../expressions";
+import type { JumpStatementContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { Expression } from "../../expressions";
 
 /**
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using

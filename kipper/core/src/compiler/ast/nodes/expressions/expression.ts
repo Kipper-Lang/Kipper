@@ -8,10 +8,10 @@
 import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
 import type { ExpressionSemantics } from "./expression-semantics";
 import type { ExpressionTypeSemantics } from "./expression-type-semantics";
-import { TranslatedExpression } from "../../../const";
+import type { TranslatedExpression } from "../../../const";
 import { MissingRequiredSemanticDataError } from "../../../../errors";
 import { CompilableASTNode } from "../../compilable-ast-node";
-import { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext } from "../../common";
+import type { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext } from "../../common";
 
 /**
  * The base abstract AST node class for all expressions, which wrap their corresponding

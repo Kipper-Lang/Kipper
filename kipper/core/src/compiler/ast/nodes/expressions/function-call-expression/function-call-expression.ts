@@ -12,7 +12,8 @@ import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { KipperReferenceableFunction } from "../../../../const";
 import type { IdentifierPrimaryExpressionSemantics } from "../primary-expression";
 import { Expression } from "../expression";
-import { FunctionCallExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { FunctionCallExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { CheckedType } from "../../../../analysis";
 

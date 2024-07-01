@@ -6,7 +6,7 @@
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import type { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
 import { TargetTS } from "./target";
 
 /**
@@ -132,6 +132,14 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 				`throw new __kipper.IndexError(\`Index '\${${indexIdentifier}}' out of bonds of array-like.\`); ` +
 				`return ${arrayLikeIdentifier}[${indexIdentifier}]; }`,
 		);
+	}
+
+	override async repeatString(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const repeatArgIdentifier = signature.params[0].identifier;
+		const timesArgIdentifier = signature.params[1].identifier;
+
+		return genTSFunction(signature, `{ return ${repeatArgIdentifier}.repeat(${timesArgIdentifier}); }`);
 	}
 
 	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {

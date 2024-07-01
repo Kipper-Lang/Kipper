@@ -8,8 +8,6 @@ import type {
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
-} from "@kipper/core";
-import {
 	AdditiveExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
@@ -43,18 +41,22 @@ import {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-	CompoundStatement,
 	DoWhileLoopIterationStatement,
 	ForLoopIterationStatement,
+	MemberAccessExpression,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopIterationStatement,
+	ObjectPrimaryExpression,
+	ObjectProperty,
+} from "@kipper/core";
+import {
+	VariableDeclaration,
+	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -84,7 +86,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
-				'var __kipperGlobalScope = typeof __kipperGlobalScope !== "undefined" ? __kipperGlobalScope : typeof' +
+				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
 					' globalThis !== "undefined" ?' +
 					" globalThis : typeof" +
 					' window !== "undefined" ?' +
@@ -93,15 +95,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			],
 			// Create global kipper object - Always prefer the global '__kipper' instance
 			["// @ts-ignore"],
-			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+			["var __kipper = __globalScope.__kipper = __globalScope.__kipper || __kipper || {}", ";"],
 			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError ||  (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
 				";",
 			],
+			["// @ts-ignore"],
 			[
-				'__kipper.IndexError = __kipper.IndexError ||  (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
 				";",
 			],
 		];
@@ -387,7 +391,23 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectProperty} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
 		return [];
 	};
 
@@ -606,9 +626,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	multiplicativeExpression = async (node: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
+		const stringRepeatFunction = TargetJS.getBuiltInIdentifier("repeatString");
 
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
+
+		// In this case it should be a string multiplication
+		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
+			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
+		}
+
 		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 

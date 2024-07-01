@@ -1,7 +1,7 @@
 {
 	"name": "@kipper/core",
 	"description": "The core implementation of the Kipper compiler 🦊",
-	"version": "0.11.0-alpha.1",
+	"version": "0.11.0-alpha.5",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"antlr4ts": "^0.5.0-alpha.4",
@@ -16,7 +16,7 @@
 		"antlr4ts-cli": "^0.5.0-alpha.4"
 	},
 	"engines": {
-		"node": ">=16.0.0",
+		"node": "16.x || 18.x || 20.x || 22.x",
 		"pnpm": "8"
 	},
 	"homepage": "https://kipper-lang.org",
@@ -54,10 +54,12 @@
 		"prepack": "pnpm run build",
 		"build": "tsc",
 		"version": "pnpm version",
-		"antlr4ts": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./KipperLexer.g4 ./KipperParser.g4",
-		"postantlr4ts": "run-script-os",
-		"postantlr4ts:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./",
-		"postantlr4ts:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\ && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\",
+		"antlr4": "pnpm run antlr4-no-rebuild",
+		"antlr4-no-rebuild": "antlr4ts -visitor -o ./src/compiler/parser/antlr ./KipperLexer.g4 ./KipperParser.g4",
+		"postantlr4-no-rebuild": "run-script-os",
+		"postantlr4-no-rebuild:linux:macos:default": "cp ./src/compiler/parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./lib/compiler/parser/antlr/ && cp ./src/compiler/parser/antlr/*.tokens ./",
+		"postantlr4-no-rebuild:windows": "copy .\\src\\compiler\\parser\\antlr\\*.interp .\\lib\\compiler\\parser\\antlr\\ /Y && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\lib\\compiler\\parser\\antlr\\ && copy .\\src\\compiler\\parser\\antlr\\*.tokens .\\",
+		"postantlr4": "pnpm run build",
 		"lint": "pnpm run tslint",
 		"lint:fix": "pnpm run tslint:fix",
 		"tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",

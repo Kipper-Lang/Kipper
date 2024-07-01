@@ -1,10 +1,5 @@
-import {
-	RefNotFoundError,
-	RefInvalidPathError,
-	ConfigErrorMetaData,
-	FileNotFoundError,
-	InvalidPathError,
-} from "./errors";
+import type { ConfigErrorMetaData } from "./errors";
+import { RefNotFoundError, RefInvalidPathError, FileNotFoundError, InvalidPathError } from "./errors";
 import * as fs from "node:fs/promises";
 
 /**

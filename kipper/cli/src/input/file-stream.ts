@@ -7,8 +7,8 @@ import { constants, promises as fs } from "fs";
 import * as path from "path";
 import { KipperParseStream } from "@kipper/core";
 import { KipperFileAccessError, KipperInvalidInputError, KipperUnsupportedEncodingError } from "../errors";
-import { OutputArgs, OutputFlags } from "@oclif/parser/lib/parse";
-import { EvaluatedKipperConfigFile } from "@kipper/config";
+import type { OutputArgs, OutputFlags } from "@oclif/parser/lib/parse";
+import type { EvaluatedKipperConfigFile } from "@kipper/config";
 
 /**
  * Valid encodings that Kipper supports.

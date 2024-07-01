@@ -7,11 +7,13 @@
 import type { KipperParserRuleContext } from "../parser";
 import type { TargetASTNodeSemanticAnalyser } from "../target-presets";
 import type { TargetAnalysableNode } from "./target-node";
-import { ParserASTNode, SemanticData, TypeData } from "./ast-node";
-import { KipperError, MissingRequiredSemanticDataError } from "../../errors";
-import { KipperProgramContext } from "../program-ctx";
-import { RootASTNode } from "./nodes/root-ast-node";
-import { EvaluatedCompileConfig } from "../compile-config";
+import type { SemanticData, TypeData } from "./ast-node";
+import { ParserASTNode } from "./ast-node";
+import type { KipperError } from "../../errors";
+import { MissingRequiredSemanticDataError } from "../../errors";
+import type { KipperProgramContext } from "../program-ctx";
+import type { RootASTNode } from "./nodes/root-ast-node";
+import type { EvaluatedCompileConfig } from "../compile-config";
 import { handleSemanticError } from "../analysis";
 
 /**

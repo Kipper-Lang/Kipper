@@ -1,7 +1,7 @@
 {
 	"name": "@kipper/target-js",
 	"description": "The JavaScript target for the Kipper compiler 🦊",
-	"version": "0.11.0-alpha.1",
+	"version": "0.11.0-alpha.5",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"@kipper/core": "workspace:~",
@@ -13,7 +13,7 @@
 		"prettier": "2.8.8"
 	},
 	"engines": {
-		"node": ">=16.0.0",
+		"node": "16.x || 18.x || 20.x || 22.x",
 		"pnpm": "8"
 	},
 	"homepage": "https://kipper-lang.org",

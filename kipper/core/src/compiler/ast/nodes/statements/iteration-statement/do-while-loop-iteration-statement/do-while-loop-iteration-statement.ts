@@ -6,11 +6,8 @@ import type { DoWhileLoopIterationStatementSemantics } from "./do-while-loop-ite
 import type { DoWhileLoopIterationStatementTypeSemantics } from "./do-while-loop-iteration-statement-type-semantics";
 import type { CompilableNodeChild, CompilableNodeParent } from "../../../../compilable-ast-node";
 import { IterationStatement } from "../iteration-statement";
-import {
-	DoWhileLoopIterationStatementContext,
-	KindParseRuleMapping,
-	ParseRuleKindMapping,
-} from "../../../../../parser";
+import type { DoWhileLoopIterationStatementContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 import type { Expression } from "../../../expressions";
 import { Statement } from "../../statement";

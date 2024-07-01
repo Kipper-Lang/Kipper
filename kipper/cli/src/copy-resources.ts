@@ -1,7 +1,7 @@
-import { EvaluatedKipperConfigFile } from "@kipper/config";
+import type { EvaluatedKipperConfigFile } from "@kipper/config";
 import * as fs from "node:fs/promises";
 import * as fsSync from "node:fs";
-import { KipperLogger } from "@kipper/core";
+import type { KipperLogger } from "@kipper/core";
 
 import path from "node:path";
 

@@ -3,8 +3,8 @@
  * @since 0.9.0
  */
 import type { ASTExpressionKind, ParserExpressionContext } from "../common";
-import { Expression } from "../nodes";
-import { CompilableASTNode } from "../compilable-ast-node";
+import type { Expression } from "../nodes";
+import type { CompilableASTNode } from "../compilable-ast-node";
 import { ASTNodeFactory } from "./ast-node-factory";
 import { ASTNodeMapper } from "../mapping";
 

@@ -1,4 +1,4 @@
-import { StatementTypeSemantics } from "../statement-type-semantics";
+import type { StatementTypeSemantics } from "../statement-type-semantics";
 
 /**
  * Type semantics for AST Node {@link JumpStatement}.

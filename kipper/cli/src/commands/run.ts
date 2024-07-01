@@ -4,8 +4,8 @@
  */
 import type { args } from "@oclif/parser";
 import { flags } from "@oclif/command";
-import { defaultOptimisationOptions, EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
-import { spawn } from "child_process";
+import { EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
+import { fork } from "child_process";
 import { CLIEmitHandler } from "../logger";
 import { KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";
@@ -84,18 +84,22 @@ export default class Run extends Compile {
 	};
 
 	/**
+	 * Detects the location for ts-node and returns the path to the executable.
+	 * @private
+	 */
+	private detectTSNode(): string {
+		return require.resolve("ts-node/dist/bin.js");
+	}
+
+	/**
 	 * Run the Kipper program in a new spawned process.
 	 * @param entryFile The file that should be executed.
 	 */
 	private async executeKipperProgram(entryFile: string): Promise<void> {
-		const kipperProgram = spawn("ts-node", [entryFile]);
+		const kipperProgram = fork(this.detectTSNode(), [entryFile]);
 
 		// Per default the encoding should be 'utf-8'
-		kipperProgram.stdin.setDefaultEncoding("utf-8");
-
-		// Set how to handle streams
-		kipperProgram.stdout.pipe(process.stdout);
-		kipperProgram.stderr.pipe(process.stderr);
+		kipperProgram.stdin?.setDefaultEncoding("utf-8");
 
 		// Close immediately after the Kipper program
 		kipperProgram.on("close", (code: number) => process.exit(code));

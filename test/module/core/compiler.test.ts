@@ -1,7 +1,7 @@
 import { assert } from "chai";
+import type { KipperCompileResult } from "@kipper/core";
 import {
 	KipperCompiler,
-	KipperCompileResult,
 	KipperError,
 	KipperLogger,
 	KipperParseStream,

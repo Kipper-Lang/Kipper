@@ -13,13 +13,13 @@ import type { Expression, IdentifierTypeSpecifierExpression } from "../../expres
 import type { ParseTree } from "antlr4ts/tree";
 import type { KipperStorageType } from "../../../../const";
 import { Declaration } from "../declaration";
+import type { VariableDeclarationContext } from "../../../../parser";
 import {
 	DeclaratorContext,
 	InitDeclaratorContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
 	StorageTypeSpecifierContext,
-	VariableDeclarationContext,
 } from "../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 

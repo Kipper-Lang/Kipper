@@ -5,25 +5,19 @@
  */
 import type { KipperReferenceable } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { CompilableNodeChild, CompilableNodeParent, ScopeNode } from "../../ast";
-import {
-	CompoundStatement,
+import type {
+	CompilableNodeChild,
+	CompilableNodeParent,
+	ScopeNode,
 	Expression,
-	FunctionDeclaration,
-	IdentifierPrimaryExpression,
-	IterationStatement,
 	JumpStatement,
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
+import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import {
-	LocalScope,
-	Scope,
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
-	ScopeVariableDeclaration,
-} from "../symbol-table";
+import type { LocalScope, Scope } from "../symbol-table";
+import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
 	BuiltInOverwriteError,

@@ -9,33 +9,36 @@ import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
 	UnaryExpressionSemantics,
-} from "../../ast";
-import {
 	AssignmentExpression,
-	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
-	IdentifierPrimaryExpression,
-	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	MemberAccessExpression,
-	ParameterDeclaration,
 	RelationalExpression,
-	ReturnStatement,
 	Statement,
-	TangledPrimaryExpression,
 	UnaryExpression,
+} from "../../ast";
+import {
+	CompoundStatement,
+	IdentifierPrimaryExpression,
+	IfStatement,
+	ParameterDeclaration,
+	ReturnStatement,
+	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
-import {
+import type {
 	KipperArithmeticOperator,
 	KipperCompilableType,
-	kipperCompilableTypes,
-	kipperIncrementOrDecrementOperators,
-	kipperPlusOperator,
 	KipperReferenceable,
 	KipperReferenceableFunction,
+} from "../../const";
+import {
+	kipperCompilableTypes,
+	kipperIncrementOrDecrementOperators,
+	kipperMultiplicativeOperators,
+	kipperPlusOperator,
 	kipperStrType,
 	kipperSupportedConversions,
 } from "../../const";
@@ -57,7 +60,8 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
+import type { UncheckedType } from "../type";
+import { CheckedType, UndefinedCustomType } from "../type";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -392,6 +396,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		if (leftOpType !== "num" || rightOpType !== "num") {
 			// Strings can use '+' to concat strings
 			if (op === kipperPlusOperator && leftOpType == kipperStrType && rightOpType == kipperStrType) {
+				return;
+			}
+
+			// Strings can use * to repeat a string n times
+			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrType && rightOpType == "num") {
 				return;
 			}
 
