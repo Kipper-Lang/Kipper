@@ -24,7 +24,7 @@
     "@oclif/test": "2.3.21",
     "ts-node": "10.9.1",
     "@sinonjs/fake-timers": "10.0.2",
-    "rimraf": "5.0.1",
+    "rimraf": "5.0.7",
     "os-tmpdir": "1.0.2",
     "pseudomap": "1.0.2",
     "typescript": "5.1.3",
