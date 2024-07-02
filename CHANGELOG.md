@@ -17,7 +17,8 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-- Implemented Conditional Expression (`?:`) as a ternary operator.
+
+- Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
 	([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
   ([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
