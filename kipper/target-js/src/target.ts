@@ -4,11 +4,12 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable } from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, TranslatedCodeLine } from "@kipper/core";
 import { KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
+import type { TargetOptions } from "./target-options";
 
 /**
  * The JavaScript translation target for the Kipper language.
@@ -88,12 +89,44 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 		"of",
 	];
 
+	/**
+	 * The ECMAScript version to target.
+	 * @private
+	 * @since 0.11.0
+	 */
+	private readonly _ecmaVersion: TargetOptions["ecmaVersion"] | undefined;
+
 	constructor(
+		options: TargetOptions = {},
 		semanticAnalyser: JavaScriptTargetSemanticAnalyser = new JavaScriptTargetSemanticAnalyser(),
 		codeGenerator: JavaScriptTargetCodeGenerator = new JavaScriptTargetCodeGenerator(),
 		builtInGenerator: JavaScriptTargetBuiltInGenerator = new JavaScriptTargetBuiltInGenerator(),
 	) {
 		super("javascript", semanticAnalyser, codeGenerator, builtInGenerator, "js");
+		this._ecmaVersion = options.ecmaVersion;
+	}
+
+	/**
+	 * The ECMAScript version which was specified for this target.
+	 * @since 0.11.0
+	 */
+	public get ecmaVersion(): TargetOptions["ecmaVersion"] {
+		return this._ecmaVersion;
+	}
+
+	/**
+	 * Post-processing which modifies the code if necessary. This is called after the code generation.
+	 *
+	 * This more specifically will transform the JavaScript code into a different ECMA version if specified.
+	 * @param genCode The generated code to post-process.
+	 * @returns The post-processed code.
+	 * @since 0.11.0
+	 */
+	public async postProcess(genCode: Array<TranslatedCodeLine>): Promise<Array<TranslatedCodeLine>> {
+		if (!this.ecmaVersion) {
+			// TODO! Add SWC post-processing
+		}
+		return genCode;
 	}
 
 	/**

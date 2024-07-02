@@ -5,6 +5,7 @@
 
 import type { KipperTargetBuiltInGenerator, KipperTargetCodeGenerator } from "./translation";
 import type { KipperTargetSemanticAnalyser } from "./semantic-analyser";
+import type { TranslatedCodeLine } from "../const";
 
 /**
  * Represents a Kipper compilation translation defining how a Kipper parse tree shall
@@ -30,5 +31,15 @@ export abstract class KipperCompileTarget {
 		this.codeGenerator = codeGenerator;
 		this.builtInGenerator = builtInGenerator;
 		this.fileExtension = fileExtension;
+	}
+
+	/**
+	 * Post-processing which can be used to modify the generated code after the translation of the AST is done.
+	 * @param genCode The generated code from the parse tree.
+	 * @returns The translated code in the target language, which has been modified to the desired form.
+	 * @since 0.11.0
+	 */
+	public async postProcess(genCode: Array<TranslatedCodeLine>): Promise<Array<TranslatedCodeLine>> {
+		return genCode;
 	}
 }

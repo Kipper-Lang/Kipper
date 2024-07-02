@@ -535,7 +535,8 @@ export class KipperProgramContext {
 		}
 
 		try {
-			return await this.abstractSyntaxTree.translate();
+			const translatedAST = await this.abstractSyntaxTree.translate();
+			return await this.target.postProcess(translatedAST);
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
