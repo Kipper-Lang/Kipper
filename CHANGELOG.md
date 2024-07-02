@@ -31,6 +31,8 @@ To use development versions of Kipper download the
   ([#287](https://github.com/Kipper-Lang/Kipper/issues/287)).
 - Support for string multiplication using the `*` operator.
   ([#478](https://github.com/Kipper-Lang/Kipper/issues/478)).
+- New CLI flag `--dry-run` in `compile`, which only compiles the program and does not write any outputs.
+  ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
 - New valid conversions:
   - `void` to `str`.
   - `null` to `str`.
@@ -162,6 +164,8 @@ To use development versions of Kipper download the
 
 ### Removed
 
+- Removed CLI command `analyse` in favor of the flag `--dry-run` in the CLI command `compile`.
+  ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
 - Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
   `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of
   complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
