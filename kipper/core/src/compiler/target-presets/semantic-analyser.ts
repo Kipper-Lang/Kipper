@@ -3,13 +3,13 @@
  * @since 0.10.0
  */
 
-import type {
+import {
 	AdditiveExpression,
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression,
+	CastOrConvertExpression, ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -24,7 +24,7 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
-	IncrementOrDecrementUnaryExpression,
+	IncrementOrDecrementUnaryExpression, InterfaceDeclaration,
 	JumpStatement,
 	LogicalAndExpression,
 	LogicalOrExpression,
@@ -129,6 +129,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	public abstract variableDeclaration?: TargetASTNodeSemanticAnalyser<VariableDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
+	 */
+	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.
+	 */
+	public abstract interfaceDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.

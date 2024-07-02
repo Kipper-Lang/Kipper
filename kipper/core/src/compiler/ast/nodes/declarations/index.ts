@@ -9,3 +9,5 @@ export * from "./declaration-type-semantics";
 export * from "./parameter-declaration/";
 export * from "./function-declaration/";
 export * from "./variable-declaration/";
+export * from "./class-declaration/";
+export * from "./interface-declaration/";

@@ -2,13 +2,13 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
-	CastOrConvertExpressionContext,
+	CastOrConvertExpressionContext, ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -24,7 +24,7 @@ import type {
 	IdentifierTypeSpecifierExpressionContext,
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
-	IncrementOrDecrementUnaryExpressionContext,
+	IncrementOrDecrementUnaryExpressionContext, InterfaceDeclarationContext,
 	JumpStatementContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
@@ -99,7 +99,9 @@ export type ParserStatementContext =
 export type ParserDeclarationContext =
 	| FunctionDeclarationContext
 	| ParameterDeclarationContext
-	| VariableDeclarationContext;
+	| VariableDeclarationContext
+	| InterfaceDeclarationContext
+	| ClassDeclarationContext;
 
 /**
  * Union type of all rule context classes implemented by the {@link ParseRuleKindMapping} that have a corresponding AST node class.
@@ -118,7 +120,9 @@ export type ASTNodeParserContext = ParserExpressionContext | ParserStatementCont
 export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_functionDeclaration
 	| typeof ParseRuleKindMapping.RULE_parameterDeclaration
-	| typeof ParseRuleKindMapping.RULE_variableDeclaration;
+	| typeof ParseRuleKindMapping.RULE_variableDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
+	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
@@ -189,7 +193,9 @@ export type ConstructableASTKind = ASTDeclarationKind | ASTStatementKind | ASTEx
 export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_functionDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST

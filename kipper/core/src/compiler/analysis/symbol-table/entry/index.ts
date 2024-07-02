@@ -6,3 +6,4 @@ export * from "./scope-declaration";
 export * from "./scope-variable-declaration";
 export * from "./scope-parameter-declaration";
 export * from "./scope-function-declaration";
+export * from "./scope-type-declaration";

@@ -5,13 +5,13 @@
  * @since 0.11.0
  */
 import {
-	ParseRuleKindMapping,
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -28,14 +28,17 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InterfaceDeclarationContext,
 	JumpStatementContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
+	ObjectPropertyContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
+	ParseRuleKindMapping,
 	RelationalExpressionContext,
 	ReturnStatementContext,
 	SliceNotationMemberAccessExpressionContext,
@@ -46,7 +49,6 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	ObjectPropertyContext,
 } from "../../parser";
 import type {
 	ASTDeclarationKind,
@@ -56,18 +58,19 @@ import type {
 	ASTStatementKind,
 	ASTStatementRuleName,
 } from "../common";
-import type { Declaration, Expression, Statement } from "../nodes";
-import { ObjectProperty } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
+	Declaration,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
+	Expression,
 	ExpressionStatement,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
@@ -79,6 +82,7 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
 	LogicalAndExpression,
 	LogicalOrExpression,
@@ -86,17 +90,19 @@ import {
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
 	ReturnStatement,
+	Statement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement,
+	WhileLoopIterationStatement
 } from "../nodes";
 
 /**
@@ -115,6 +121,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclaration,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclaration,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclaration,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclaration,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -178,6 +186,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclarationContext,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclarationContext,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclarationContext,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -246,6 +256,8 @@ export class ASTNodeMapper {
 		RULE_functionDeclaration: FunctionDeclaration,
 		RULE_variableDeclaration: VariableDeclaration,
 		RULE_parameterDeclaration: ParameterDeclaration,
+		RULE_interfaceDeclaration: InterfaceDeclaration,
+		RULE_classDeclaration: ClassDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**
