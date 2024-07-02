@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
+  ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
   ([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
@@ -54,6 +56,8 @@ To use development versions of Kipper download the
   - `ObjectPrimaryExpression`, which represents an AST object primary expression.
   - `ObjectProperty`, which represents an AST object property.
 - New interfaces:
+  - `BitwiseExpressionSemantics`, which represents the semantics of a bitwise expression.
+  - `BitwiseExpressionTypeSemantics`, which represents the type semantics of a bitwise expression.
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
   - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
