@@ -5,17 +5,19 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, BuiltInVariable, TranslatedCodeLine } from "@kipper/core";
-import { KipperCompileTarget } from "@kipper/core";
+import { codeLinesToString, KipperCompileTarget, stringToCodeLines } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
 import type { TargetOptions } from "./target-options";
+import type { Module, Options, Output } from "@swc/wasm-web";
+import { KipperSWCError } from "./errors";
 
 /**
  * The JavaScript translation target for the Kipper language.
  * @since 0.10.0
  */
-export class KipperJavaScriptTarget extends KipperCompileTarget {
+export class transformToTargetVersion extends KipperCompileTarget {
 	/**
 	 * The internal identifier for the global Kipper object storing runtime definitions.
 	 * @since 0.10.0
@@ -125,8 +127,24 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	public async postProcess(genCode: Array<TranslatedCodeLine>): Promise<Array<TranslatedCodeLine>> {
 		if (!this.ecmaVersion) {
 			// TODO! Add SWC post-processing
+			genCode = await this.transformToTargetVersion(codeLinesToString(genCode, "\n"));
 		}
 		return genCode;
+	}
+
+	private async transformToTargetVersion(genCode: string): Promise<Array<TranslatedCodeLine>> {
+		const swc = await import("@swc/wasm-web");
+		try {
+			await swc.default();
+			const ast: Module = await swc.parse(genCode, { syntax: "ecmascript" });
+			const output: Output = await swc.transform(ast, {
+				target: this.ecmaVersion,
+			} as Options);
+
+			return stringToCodeLines(output.code, "\n");
+		} catch (e) {
+			throw new KipperSWCError("Failed to transform code to target version due to SWC error: " + e);
+		}
 	}
 
 	/**

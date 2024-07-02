@@ -3,9 +3,12 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
+		"noImplicitAny": true,
+		"strict": true,
 		"target": "es2016",
 		"lib": [
-			"ES7" // ES7 -> ES2016
+			"ES7", // ES7 -> ES2016
+			"dom"
 		]
 	},
 	"include": [

@@ -8,14 +8,17 @@ dependencies:
   '@kipper/core':
     specifier: workspace:~
     version: link:../core
+  '@swc/wasm-web':
+    specifier: 1.6.6
+    version: 1.6.6
   tslib:
     specifier: ~2.6.2
     version: 2.6.2
 
 devDependencies:
   '@types/node':
-    specifier: 18.16.16
-    version: 18.16.16
+    specifier: 20.14.9
+    version: 20.14.9
   prettier:
     specifier: 2.8.8
     version: 2.8.8
@@ -25,8 +28,14 @@ devDependencies:
 
 packages:
 
-  /@types/node@18.16.16:
-    resolution: {integrity: sha512-NpaM49IGQQAUlBhHMF82QH80J08os4ZmyF9MkpCzWAGuOHqE4gTEbhzd7L3l5LmWuZ6E0OiC1FweQ4tsiW35+g==}
+  /@swc/wasm-web@1.6.6:
+    resolution: {integrity: sha512-Gw9YqqAQtt6vm1Enpf4YtmxG1xke11fzFIhoLLYmyxTRZoMuFE3SVdCs1s4lK3RooTHsj8///xGgBthGHTHvbg==}
+    dev: false
+
+  /@types/node@20.14.9:
+    resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
+    dependencies:
+      undici-types: 5.26.5
     dev: true
 
   /prettier@2.8.8:
@@ -41,4 +50,8 @@ packages:
   /typescript@5.1.3:
     resolution: {integrity: sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==}
     engines: {node: '>=14.17'}
+    dev: true
+
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
     dev: true

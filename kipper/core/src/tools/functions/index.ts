@@ -7,3 +7,4 @@ export * from "./inverse-map";
 export * from "./replace-obj-keys";
 export * from "./other";
 export * from "./code-lines-to-string";
+export * from "./string-to-code-lines";

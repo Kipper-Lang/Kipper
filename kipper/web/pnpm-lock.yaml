@@ -14,6 +14,9 @@ devDependencies:
   '@kipper/target-ts':
     specifier: workspace:~
     version: link:../target-ts
+  '@swc/wasm-web':
+    specifier: 1.6.6
+    version: 1.6.6
   '@types/node':
     specifier: 18.16.16
     version: 18.16.16
@@ -31,6 +34,10 @@ devDependencies:
     version: 3.17.4
 
 packages:
+
+  /@swc/wasm-web@1.6.6:
+    resolution: {integrity: sha512-Gw9YqqAQtt6vm1Enpf4YtmxG1xke11fzFIhoLLYmyxTRZoMuFE3SVdCs1s4lK3RooTHsj8///xGgBthGHTHvbg==}
+    dev: true
 
   /@types/node@18.16.16:
     resolution: {integrity: sha512-NpaM49IGQQAUlBhHMF82QH80J08os4ZmyF9MkpCzWAGuOHqE4gTEbhzd7L3l5LmWuZ6E0OiC1FweQ4tsiW35+g==}
