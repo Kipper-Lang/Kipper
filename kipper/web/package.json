@@ -19,7 +19,7 @@
     "ts-node": "10.9.2",
     "@types/node": "18.19.39",
     "browserify": "17.0.0",
-    "uglify-js": "3.17.4"
+    "uglify-js": "3.18.0"
   },
   "engines": {
     "node": ">=16.0.0",
