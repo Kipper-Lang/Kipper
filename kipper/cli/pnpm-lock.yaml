@@ -65,8 +65,8 @@ devDependencies:
     specifier: 5.0.7
     version: 5.0.7
   semver:
-    specifier: 7.5.1
-    version: 7.5.1
+    specifier: 7.6.2
+    version: 7.6.2
   ts-node:
     specifier: 10.9.2
     version: 10.9.2(@types/node@18.19.39)(typescript@5.1.3)
@@ -187,7 +187,7 @@ packages:
       read-package-json-fast: 2.0.3
       readdir-scoped-modules: 1.1.0
       rimraf: 3.0.2
-      semver: 7.5.1
+      semver: 7.6.2
       ssri: 8.0.1
       treeverse: 1.0.4
       walk-up-path: 1.0.0
@@ -200,7 +200,7 @@ packages:
     resolution: {integrity: sha512-8KG5RD0GVP4ydEzRn/I4BNDuxDtqVbOdm8675T49OIG/NGhaK0pjPX7ZcDlvKYbA+ulvVK3ztfcF4uBdOxuJbQ==}
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.5.1
+      semver: 7.6.2
     dev: true
 
   /@npmcli/fs@2.1.2:
@@ -208,7 +208,7 @@ packages:
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.5.1
+      semver: 7.6.2
     dev: true
 
   /@npmcli/git@2.1.0:
@@ -220,7 +220,7 @@ packages:
       npm-pick-manifest: 6.1.1
       promise-inflight: 1.0.1
       promise-retry: 2.0.1
-      semver: 7.5.1
+      semver: 7.6.2
       which: 2.0.2
     transitivePeerDependencies:
       - bluebird
@@ -252,7 +252,7 @@ packages:
       cacache: 15.3.0
       json-parse-even-better-errors: 2.3.1
       pacote: 12.0.3
-      semver: 7.5.1
+      semver: 7.6.2
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -320,7 +320,7 @@ packages:
       '@oclif/help': 1.0.5
       '@oclif/parser': 3.8.17
       debug: 4.3.4(supports-color@8.1.1)
-      semver: 7.5.4
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -337,7 +337,7 @@ packages:
       '@oclif/help': 1.0.5
       '@oclif/parser': 3.8.17
       debug: 4.3.4(supports-color@8.1.1)
-      semver: 7.5.4
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -534,7 +534,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       http-call: 5.3.0
       lodash.template: 4.5.0
-      semver: 7.5.4
+      semver: 7.6.2
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'
@@ -2283,6 +2283,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+    dev: true
 
   /lru-cache@7.14.1:
     resolution: {integrity: sha512-ysxwsnTKdAx96aTRdhDOCQfDgbHnt8SK0KY8SEjO0wHinhWOFTESbjVCMPbU1uGXg/ch4lifqx0wfjOawU2+WA==}
@@ -2591,7 +2592,7 @@ packages:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.5.1
+      semver: 7.6.2
       tar: 6.1.13
       which: 2.0.2
     transitivePeerDependencies:
@@ -2622,7 +2623,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.11.0
-      semver: 7.5.1
+      semver: 7.6.2
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -2646,7 +2647,7 @@ packages:
     resolution: {integrity: sha512-09OmyDkNLYwqKPOnbI8exiOZU2GVVmQp7tgez2BPi5OZC8M82elDAps7sxC4l//uSUtotWqoEIDwjRvWH4qz8w==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.5.1
+      semver: 7.6.2
     dev: true
 
   /npm-normalize-package-bin@1.0.1:
@@ -2663,7 +2664,7 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       hosted-git-info: 4.1.0
-      semver: 7.5.1
+      semver: 7.6.2
       validate-npm-package-name: 3.0.0
     dev: true
 
@@ -2684,7 +2685,7 @@ packages:
       npm-install-checks: 4.0.0
       npm-normalize-package-bin: 1.0.1
       npm-package-arg: 8.1.5
-      semver: 7.5.1
+      semver: 7.6.2
     dev: true
 
   /npm-registry-fetch@12.0.2:
@@ -2758,7 +2759,7 @@ packages:
       got: 11.8.6
       lodash: 4.17.21
       normalize-package-data: 3.0.3
-      semver: 7.5.1
+      semver: 7.6.2
       shelljs: 0.8.5
       tslib: 2.6.3
       yeoman-environment: 3.15.1(mem-fs-editor@9.6.0)(mem-fs@2.2.1)
@@ -3272,20 +3273,10 @@ packages:
     resolution: {integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==}
     hasBin: true
 
-  /semver@7.5.1:
-    resolution: {integrity: sha512-Wvss5ivl8TMRZXXESstBA4uR5iXgEN/VC5/sOcuXdVLzcdkz4HWetIoRfG5gb5X+ij/G9rw9YoGn3QoQ8OCSpw==}
+  /semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
     engines: {node: '>=10'}
     hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
-    dev: true
-
-  /semver@7.5.4:
-    resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
-    engines: {node: '>=10'}
-    hasBin: true
-    dependencies:
-      lru-cache: 6.0.0
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -3916,6 +3907,7 @@ packages:
 
   /yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+    dev: true
 
   /yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
@@ -3973,7 +3965,7 @@ packages:
       pacote: 12.0.3
       preferred-pm: 3.0.3
       pretty-bytes: 5.6.0
-      semver: 7.5.1
+      semver: 7.6.2
       slash: 3.0.0
       strip-ansi: 6.0.1
       text-table: 0.2.0
@@ -4003,7 +3995,7 @@ packages:
       minimist: 1.2.7
       read-pkg-up: 7.0.1
       run-async: 2.4.1
-      semver: 7.5.1
+      semver: 7.6.2
       shelljs: 0.8.5
       sort-keys: 4.2.0
       text-table: 0.2.0
