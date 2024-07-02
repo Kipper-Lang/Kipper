@@ -19,7 +19,7 @@ To use development versions of Kipper download the
 ### Added
 
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
-	([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
+  ([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
   ([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
 - Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
