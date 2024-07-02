@@ -22,7 +22,7 @@
 		"run-script-os": "1.1.6",
 		"ts-node": "10.9.1",
 		"@types/node": "18.16.16",
-		"size-limit": "8.2.4",
+		"size-limit": "8.2.6",
 		"@size-limit/preset-big-lib": "8.2.6"
 	},
   "engines": {
