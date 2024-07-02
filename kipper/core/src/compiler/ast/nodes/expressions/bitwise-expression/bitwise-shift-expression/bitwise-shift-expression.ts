@@ -67,12 +67,17 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	}
 
 	/**
-	 * The name of the rule for this AST node.
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
 	/**
-	 * The name of the rule for this AST node.
+	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
+	 * AST node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {

@@ -56,7 +56,8 @@ export class BitwiseAndExpression extends BitwiseExpression<
 	}
 
 	/**
-	 * The name of the rule for this AST node.
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
