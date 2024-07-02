@@ -44,10 +44,10 @@ import {
 	BitwiseAndExpression,
 	BitwiseOrExpression,
 	BitwiseXorExpression,
+	BitwiseShiftExpression
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import { BitwiseShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-shift-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

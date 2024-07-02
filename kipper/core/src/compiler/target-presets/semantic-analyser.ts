@@ -46,10 +46,7 @@ import type {
 	WhileLoopIterationStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import { BitwiseAndExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-and-expression/bitwise-and-expression";
-import { BitwiseOrExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-or-expression/bitwise-or-expression";
-import { BitwiseXorExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
-import { BitwiseShiftExpression } from "../ast/nodes/expressions/bitwise-expression/bitwise-shift-expression";
+import { BitwiseAndExpression, BitwiseOrExpression, BitwiseXorExpression, BitwiseShiftExpression } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.

@@ -24,10 +24,6 @@ import {
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
 	ArrayPrimaryExpressionContext,
-	BitwiseAndExpressionContext,
-	BitwiseOrExpressionContext,
-	BitwiseShiftExpressionContext,
-	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CompilationUnitContext,
@@ -78,8 +74,7 @@ import {
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { Declaration, Expression, Statement } from "./nodes";
-import { RootASTNode } from "./nodes/root-ast-node";
+import { Declaration, Expression, Statement, RootASTNode } from "./nodes";
 import { DeclarationASTNodeFactory, ExpressionASTNodeFactory, StatementASTNodeFactory } from "./factories";
 import { KipperInternalError } from "../../errors";
 

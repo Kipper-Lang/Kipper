@@ -99,10 +99,11 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	BitwiseOrExpression,
+	BitwiseXorExpression,
+	BitwiseShiftExpression,
+	BitwiseAndExpression
 } from "../nodes";
-import { BitwiseXorExpression } from "../nodes/expressions/bitwise-expression/bitwise-xor-expression";
-import { BitwiseAndExpression, BitwiseOrExpression } from "../nodes/expressions/bitwise-expression";
-import { BitwiseShiftExpression } from "../nodes/expressions/bitwise-expression/bitwise-shift-expression/bitwise-shift-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.

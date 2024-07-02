@@ -15,10 +15,7 @@ import { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-
 import {
 	KipperBitwiseShiftOperator,
 	kipperBitwiseShiftOperators,
-	KipperMultiplicativeOperator,
-	kipperMultiplicativeOperators,
 } from "../../../../../const";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 
 export class BitwiseShiftExpression extends BitwiseExpression<
 	BitwiseShiftExpressionSemantics,
