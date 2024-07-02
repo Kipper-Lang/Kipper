@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
+  ([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
   ([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
 - Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
@@ -94,6 +96,7 @@ To use development versions of Kipper download the
   - `loadConfig()` in `@kipper/cli`, which loads a config file from the specified path.
   - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
   - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
+  - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
 
 ### Changed
 

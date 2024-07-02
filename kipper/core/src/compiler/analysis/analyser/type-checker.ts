@@ -679,4 +679,29 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			}
 		}
 	}
+
+	/**
+	 * Checks whether the conditional expression is valid.
+	 * @param trueBranch The expression which is called when the condition evaluates to true.
+	 * @param falseBranch The expression which is called when the condition evaluates to false.
+	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
+	 * @since 0.11.0
+	 */
+	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+		const trueBranchType = KipperTypeChecker.getTypeForAnalysis(trueBranch.getTypeSemanticData().evaluatedType);
+		const falseBranchType = KipperTypeChecker.getTypeForAnalysis(falseBranch.getTypeSemanticData().evaluatedType);
+
+		// If the branch types are undefined, skip type checking (the types are invalid anyway)
+		if (trueBranchType === undefined || falseBranchType === undefined) {
+			return;
+		}
+
+		if (trueBranchType !== falseBranchType) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError(
+					"Conditional expressions with mismatching branch return types are not implemented yet",
+				),
+			);
+		}
+	}
 }
