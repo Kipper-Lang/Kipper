@@ -568,7 +568,6 @@ describe("Core functionality", () => {
 		});
 	});
 
-	//past here
 	describe("Conditional Expression", () => {
 		it("Simple conditional expression", async () => {
 			const fileContent = "const x: num = true ? 5 : 10;";
