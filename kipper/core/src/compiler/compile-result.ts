@@ -5,6 +5,7 @@
 import type { KipperProgramContext } from "./program-ctx";
 import type { TranslatedCodeLine } from "./const";
 import type { KipperError, KipperSyntaxError } from "../errors";
+import { codeLinesToString } from "../tools/functions/code-lines-to-string";
 
 /**
  * The result of a {@link KipperCompiler} compilation.
@@ -82,6 +83,6 @@ export class KipperCompileResult {
 			throw Error("Can not generate code for a failed compilation");
 		}
 
-		return this.result.map((line: TranslatedCodeLine) => line.join("") + lineEnding).join("");
+		return codeLinesToString(this.result, lineEnding);
 	}
 }
