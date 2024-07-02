@@ -98,6 +98,7 @@ To use development versions of Kipper download the
   - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
   - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
   - `KipperCompileTarget.postProcess()`, which is always called after the target code generation.
+  - `codeLinesToString()`, which converts an array of generated code lines to a writable string output.
 
 ### Changed
 
