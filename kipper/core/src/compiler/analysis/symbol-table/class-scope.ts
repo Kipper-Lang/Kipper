@@ -3,7 +3,7 @@
  * the global namespace.
  * @since 0.11.0
  */
-import {InterfaceDeclaration, FunctionDeclaration, ClassDeclaration} from "../../ast";
+import type { ClassDeclaration } from "../../ast";
 import { LocalScope } from "./local-scope";
 
 /**

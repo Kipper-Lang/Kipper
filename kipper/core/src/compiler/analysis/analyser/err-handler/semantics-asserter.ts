@@ -4,8 +4,7 @@
  * @since 0.7.0
  */
 import type { KipperProgramContext } from "../../../program-ctx";
-import type { KipperError } from "../../../../errors";
-import type { KipperNotImplementedError } from "../../../../errors";
+import type { KipperError, KipperNotImplementedError } from "../../../../errors";
 import type { CompilableASTNode } from "../../../ast";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
 import { getParseRuleSource } from "../../../../tools";

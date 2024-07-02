@@ -58,6 +58,7 @@ import type {
 	ASTStatementKind,
 	ASTStatementRuleName,
 } from "../common";
+import type { Declaration, Expression, Statement } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -67,10 +68,8 @@ import {
 	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
-	Declaration,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
-	Expression,
 	ExpressionStatement,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
@@ -95,14 +94,13 @@ import {
 	ParameterDeclaration,
 	RelationalExpression,
 	ReturnStatement,
-	Statement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement
+	WhileLoopIterationStatement,
 } from "../nodes";
 
 /**

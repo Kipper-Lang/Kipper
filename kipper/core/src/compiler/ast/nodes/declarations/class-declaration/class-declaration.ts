@@ -2,15 +2,16 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.11.0
  */
-import type {ScopeNode} from "../../../scope-node";
-import type {ClassDeclarationSemantics} from "./class-declaration-semantics";
-import type {ClassDeclarationTypeSemantics} from "./class-declaration-type-semantics";
-import type {CompilableNodeParent} from "../../../compilable-ast-node";
-import {ScopeTypeDeclaration} from "../../../../analysis";
-import {ClassDeclarationContext, KindParseRuleMapping, ParseRuleKindMapping} from "../../../../parser";
-import {Declaration} from "../declaration";
-import {KipperNotImplementedError} from "../../../../../errors";
-import {ClassScope} from "../../../../analysis/symbol-table/class-scope";
+import type { ScopeNode } from "../../../scope-node";
+import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
+import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
+import type { CompilableNodeParent } from "../../../compilable-ast-node";
+import type { ScopeTypeDeclaration } from "../../../../analysis";
+import type { ClassDeclarationContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import { Declaration } from "../declaration";
+import { KipperNotImplementedError } from "../../../../../errors";
+import { ClassScope } from "../../../../analysis/symbol-table/class-scope";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
@@ -125,8 +126,7 @@ export class ClassDeclaration
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this
-			.programCtx
+		this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
 	}
@@ -140,8 +140,7 @@ export class ClassDeclaration
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this
-			.programCtx
+		this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
 	}
@@ -157,4 +156,3 @@ export class ClassDeclaration
 	readonly targetSemanticAnalysis = this.semanticAnalyser.classDeclaration;
 	readonly targetCodeGenerator = this.codeGenerator.classDeclaration;
 }
- 

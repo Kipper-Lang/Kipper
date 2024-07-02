@@ -8,10 +8,10 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	CompilableNodeChild,
 	CompilableNodeParent,
-	ScopeNode,
 	Expression,
 	JumpStatement,
 	ReturnStatement,
+	ScopeNode,
 	VariableDeclaration,
 } from "../../ast";
 import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";

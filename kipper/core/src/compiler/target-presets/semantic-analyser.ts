@@ -3,13 +3,14 @@
  * @since 0.10.0
  */
 
-import {
+import type {
 	AdditiveExpression,
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression, ClassDeclaration,
+	CastOrConvertExpression,
+	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -24,7 +25,8 @@ import {
 	IdentifierTypeSpecifierExpression,
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
-	IncrementOrDecrementUnaryExpression, InterfaceDeclaration,
+	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
 	LogicalAndExpression,
 	LogicalOrExpression,

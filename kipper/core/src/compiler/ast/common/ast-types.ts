@@ -2,13 +2,14 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
-	CastOrConvertExpressionContext, ClassDeclarationContext,
+	CastOrConvertExpressionContext,
+	ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -24,7 +25,8 @@ import {
 	IdentifierTypeSpecifierExpressionContext,
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
-	IncrementOrDecrementUnaryExpressionContext, InterfaceDeclarationContext,
+	IncrementOrDecrementUnaryExpressionContext,
+	InterfaceDeclarationContext,
 	JumpStatementContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,

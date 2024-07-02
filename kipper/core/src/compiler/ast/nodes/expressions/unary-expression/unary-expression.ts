@@ -6,8 +6,7 @@
  */
 import type { UnaryExpressionSemantics } from "./unary-expression-semantics";
 import type { UnaryExpressionTypeSemantics } from "./unary-expression-type-semantics";
-import type { ParseRuleKindMapping } from "../../../../parser";
-import type { KindParseRuleMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 

@@ -2,14 +2,14 @@
  * A symbol table entry for a type declaration such as a class or interface.
  * @since 0.11.0
  */
-import {ScopeDeclaration} from "./scope-declaration";
-import {
+import { ScopeDeclaration } from "./scope-declaration";
+import type {
 	ClassDeclaration,
 	FunctionDeclarationSemantics,
 	InterfaceDeclaration,
 	InterfaceDeclarationSemantics,
 } from "../../../ast";
-import {CheckedType} from "../../type";
+import { CheckedType } from "../../type";
 
 /**
  * Represents the definition of a type such as a class or interface in a scope.

@@ -2,23 +2,23 @@
  * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
  * @since 0.11.0
  */
-import type {InterfaceDeclarationSemantics} from "./interface-declaration-semantics";
-import type {InterfaceDeclarationTypeSemantics} from "./interface-declaration-type-semantics";
-import type {CompilableNodeParent} from "../../../compilable-ast-node";
-import {ScopeTypeDeclaration} from "../../../../analysis";
-import {
-	InterfaceDeclarationContext,
-	KindParseRuleMapping,
-	ParseRuleKindMapping
-} from "../../../../parser";
-import {Declaration} from "../declaration";
-import {KipperNotImplementedError} from "../../../../../errors";
+import type { InterfaceDeclarationSemantics } from "./interface-declaration-semantics";
+import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
+import type { CompilableNodeParent } from "../../../compilable-ast-node";
+import type { ScopeTypeDeclaration } from "../../../../analysis";
+import type { InterfaceDeclarationContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import { Declaration } from "../declaration";
+import { KipperNotImplementedError } from "../../../../../errors";
 
 /**
  * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
  * @since 0.11.0
  */
-export class InterfaceDeclaration extends Declaration<InterfaceDeclarationSemantics, InterfaceDeclarationTypeSemantics> {
+export class InterfaceDeclaration extends Declaration<
+	InterfaceDeclarationSemantics,
+	InterfaceDeclarationTypeSemantics
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -108,8 +108,7 @@ export class InterfaceDeclaration extends Declaration<InterfaceDeclarationSemant
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this
-			.programCtx
+		this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
 	}
@@ -123,8 +122,7 @@ export class InterfaceDeclaration extends Declaration<InterfaceDeclarationSemant
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this
-			.programCtx
+		this.programCtx
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
 	}

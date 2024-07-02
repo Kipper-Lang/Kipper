@@ -7,8 +7,7 @@ import type { InputMismatchException, LexerNoViableAltException, NoViableAltExce
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperParseStream } from "./compiler";
-import type { CompilableASTNode, KipperProgramContext } from "./compiler";
+import type { CompilableASTNode, KipperParseStream, KipperProgramContext } from "./compiler";
 import { getParseRuleSource } from "./tools";
 
 /**
