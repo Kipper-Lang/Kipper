@@ -709,7 +709,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ConditionalExpression} into the JavaScript language.
 	 */
 	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.condition.translateCtxAndChildren();
+		const trueBranch = await semanticData.trueBranch.translateCtxAndChildren();
+		const falseBranch = await semanticData.falseBranch.translateCtxAndChildren();
+
+		return [...condition, " ? ", ...trueBranch, " : ", ...falseBranch];
 	};
 
 	/**
