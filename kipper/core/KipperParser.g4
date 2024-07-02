@@ -273,7 +273,7 @@ incrementOrDecrementOperator
     ;
 
 unaryOperator
-    :   '+' | '-' | '!'
+    :   '+' | '-' | '!' | '~'
     ;
 
 castOrConvertExpression

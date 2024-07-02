@@ -102,7 +102,7 @@ import {
 	BitwiseOrExpression,
 	BitwiseXorExpression,
 	BitwiseShiftExpression,
-	BitwiseAndExpression
+	BitwiseAndExpression,
 } from "../nodes";
 
 /**

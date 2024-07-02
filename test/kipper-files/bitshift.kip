@@ -1,4 +1,3 @@
 var a: num = 10;
-var b: num = 5;
-var c: num = a >>> b;
+var c: num = a ^ 3;
 print(f"Result: {c}");

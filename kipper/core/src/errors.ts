@@ -573,6 +573,22 @@ export class ArithmeticOperationTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever an invalid bitwise operation is used, where the types are conflicting or can not
+ * interact with one another.
+ * @since 0.6.0
+ */
+export class BitwiseOperationTypeError extends TypeError {
+	constructor(firstType?: string, secondType?: string) {
+		if (firstType && secondType) {
+			// If the types caused the error, specify them in the error message
+			super(`Invalid bitwise operation between operands of type '${firstType}' and '${secondType}'.`);
+		} else {
+			super(`Invalid bitwise operation.`);
+		}
+	}
+}
+
+/**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
 export class ArgumentTypeError extends TypeError {

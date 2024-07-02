@@ -30,6 +30,7 @@ import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import {
 	KipperArithmeticOperator,
+	KipperBitwiseOperator,
 	KipperCompilableType,
 	kipperCompilableTypes,
 	kipperIncrementOrDecrementOperators,
@@ -44,6 +45,7 @@ import {
 	ArgumentTypeError,
 	ArithmeticOperationTypeError,
 	AssignmentTypeError,
+	BitwiseOperationTypeError,
 	ExpressionNotCallableError,
 	IncompleteReturnsInCodePathsError,
 	InvalidAmountOfArgumentsError,
@@ -403,6 +405,29 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
 			throw this.assertError(new ArithmeticOperationTypeError(leftOpType, rightOpType));
+		}
+	}
+
+	/**
+	 * Asserts that the passed type allows the bitwise operation.
+	 * @param leftOp The left operand expression.
+	 * @param rightOp The right operand expression.
+	 * @param op The bitwise operation that is performed.
+	 * @throws {BitwiseOperationTypeError} If the type of the left or right operand is not a number.
+	 * @since 0.11.0
+	 */
+	public validBitwiseExpression(leftOp: Expression, rightOp: Expression, op: KipperBitwiseOperator): void {
+		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
+		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
+
+		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
+		if (leftOpType === undefined || rightOpType === undefined) {
+			return;
+		}
+
+		// Ensure that both expressions are of type 'num'
+		if (leftOpType !== "num" || rightOpType !== "num") {
+			throw this.assertError(new BitwiseOperationTypeError(leftOpType, rightOpType));
 		}
 	}
 

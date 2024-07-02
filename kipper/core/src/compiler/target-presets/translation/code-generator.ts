@@ -44,7 +44,7 @@ import {
 	BitwiseAndExpression,
 	BitwiseOrExpression,
 	BitwiseXorExpression,
-	BitwiseShiftExpression
+	BitwiseShiftExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";

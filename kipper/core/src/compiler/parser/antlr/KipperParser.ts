@@ -502,15 +502,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 33)) |
 								(1 << (KipperParser.Not - 33)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -589,15 +590,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 33)) |
 								(1 << (KipperParser.Not - 33)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				);
 			}
@@ -712,6 +714,7 @@ export class KipperParser extends Parser {
 					case KipperParser.Minus:
 					case KipperParser.MinusMinus:
 					case KipperParser.Not:
+					case KipperParser.BitwiseNot:
 					case KipperParser.Identifier:
 					case KipperParser.IntegerConstant:
 					case KipperParser.SingleQuoteStringLiteral:
@@ -1122,6 +1125,7 @@ export class KipperParser extends Parser {
 				case KipperParser.Minus:
 				case KipperParser.MinusMinus:
 				case KipperParser.Not:
+				case KipperParser.BitwiseNot:
 				case KipperParser.Identifier:
 				case KipperParser.IntegerConstant:
 				case KipperParser.SingleQuoteStringLiteral:
@@ -1229,15 +1233,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 33)) |
 								(1 << (KipperParser.Not - 33)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -1546,15 +1551,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 33)) |
 								(1 << (KipperParser.Not - 33)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -1581,6 +1587,7 @@ export class KipperParser extends Parser {
 							case KipperParser.Minus:
 							case KipperParser.MinusMinus:
 							case KipperParser.Not:
+							case KipperParser.BitwiseNot:
 							case KipperParser.Identifier:
 							case KipperParser.IntegerConstant:
 							case KipperParser.SingleQuoteStringLiteral:
@@ -1622,15 +1629,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -1662,15 +1670,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -1833,15 +1842,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -2205,15 +2215,16 @@ export class KipperParser extends Parser {
 										(1 << (KipperParser.MinusMinus - 21)) |
 										(1 << (KipperParser.Not - 21)))) !==
 									0) ||
-							(((_la - 71) & ~0x1f) === 0 &&
-								((1 << (_la - 71)) &
-									((1 << (KipperParser.Identifier - 71)) |
-										(1 << (KipperParser.IntegerConstant - 71)) |
-										(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-										(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-										(1 << (KipperParser.FloatingConstant - 71)) |
-										(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-										(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+							(((_la - 66) & ~0x1f) === 0 &&
+								((1 << (_la - 66)) &
+									((1 << (KipperParser.BitwiseNot - 66)) |
+										(1 << (KipperParser.Identifier - 66)) |
+										(1 << (KipperParser.IntegerConstant - 66)) |
+										(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+										(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+										(1 << (KipperParser.FloatingConstant - 66)) |
+										(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+										(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 									0)
 						) {
 							{
@@ -2283,15 +2294,16 @@ export class KipperParser extends Parser {
 										(1 << (KipperParser.MinusMinus - 21)) |
 										(1 << (KipperParser.Not - 21)))) !==
 									0) ||
-							(((_la - 71) & ~0x1f) === 0 &&
-								((1 << (_la - 71)) &
-									((1 << (KipperParser.Identifier - 71)) |
-										(1 << (KipperParser.IntegerConstant - 71)) |
-										(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-										(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-										(1 << (KipperParser.FloatingConstant - 71)) |
-										(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-										(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+							(((_la - 66) & ~0x1f) === 0 &&
+								((1 << (_la - 66)) &
+									((1 << (KipperParser.BitwiseNot - 66)) |
+										(1 << (KipperParser.Identifier - 66)) |
+										(1 << (KipperParser.IntegerConstant - 66)) |
+										(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+										(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+										(1 << (KipperParser.FloatingConstant - 66)) |
+										(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+										(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 									0)
 						) {
 							{
@@ -2384,15 +2396,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -2552,15 +2565,16 @@ export class KipperParser extends Parser {
 											(1 << (KipperParser.MinusMinus - 21)) |
 											(1 << (KipperParser.Not - 21)))) !==
 										0) ||
-								(((_la - 71) & ~0x1f) === 0 &&
-									((1 << (_la - 71)) &
-										((1 << (KipperParser.Identifier - 71)) |
-											(1 << (KipperParser.IntegerConstant - 71)) |
-											(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-											(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-											(1 << (KipperParser.FloatingConstant - 71)) |
-											(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-											(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+								(((_la - 66) & ~0x1f) === 0 &&
+									((1 << (_la - 66)) &
+										((1 << (KipperParser.BitwiseNot - 66)) |
+											(1 << (KipperParser.Identifier - 66)) |
+											(1 << (KipperParser.IntegerConstant - 66)) |
+											(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+											(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+											(1 << (KipperParser.FloatingConstant - 66)) |
+											(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+											(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 										0)
 							) {
 								{
@@ -2623,15 +2637,16 @@ export class KipperParser extends Parser {
 														(1 << (KipperParser.MinusMinus - 21)) |
 														(1 << (KipperParser.Not - 21)))) !==
 													0) ||
-											(((_la - 71) & ~0x1f) === 0 &&
-												((1 << (_la - 71)) &
-													((1 << (KipperParser.Identifier - 71)) |
-														(1 << (KipperParser.IntegerConstant - 71)) |
-														(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-														(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-														(1 << (KipperParser.FloatingConstant - 71)) |
-														(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-														(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+											(((_la - 66) & ~0x1f) === 0 &&
+												((1 << (_la - 66)) &
+													((1 << (KipperParser.BitwiseNot - 66)) |
+														(1 << (KipperParser.Identifier - 66)) |
+														(1 << (KipperParser.IntegerConstant - 66)) |
+														(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+														(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+														(1 << (KipperParser.FloatingConstant - 66)) |
+														(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+														(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 													0)
 										) {
 											{
@@ -2836,15 +2851,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -2876,15 +2892,16 @@ export class KipperParser extends Parser {
 								(1 << (KipperParser.MinusMinus - 21)) |
 								(1 << (KipperParser.Not - 21)))) !==
 							0) ||
-					(((_la - 71) & ~0x1f) === 0 &&
-						((1 << (_la - 71)) &
-							((1 << (KipperParser.Identifier - 71)) |
-								(1 << (KipperParser.IntegerConstant - 71)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 71)) |
-								(1 << (KipperParser.FloatingConstant - 71)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 71)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 71)))) !==
+					(((_la - 66) & ~0x1f) === 0 &&
+						((1 << (_la - 66)) &
+							((1 << (KipperParser.BitwiseNot - 66)) |
+								(1 << (KipperParser.Identifier - 66)) |
+								(1 << (KipperParser.IntegerConstant - 66)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 66)) |
+								(1 << (KipperParser.FloatingConstant - 66)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 66)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 66)))) !==
 							0)
 				) {
 					{
@@ -3015,6 +3032,7 @@ export class KipperParser extends Parser {
 				case KipperParser.Plus:
 				case KipperParser.Minus:
 				case KipperParser.Not:
+				case KipperParser.BitwiseNot:
 					this.enterOuterAlt(_localctx, 3);
 					{
 						this.state = 473;
@@ -3141,7 +3159,10 @@ export class KipperParser extends Parser {
 					!(
 						((_la - 40) & ~0x1f) === 0 &&
 						((1 << (_la - 40)) &
-							((1 << (KipperParser.Plus - 40)) | (1 << (KipperParser.Minus - 40)) | (1 << (KipperParser.Not - 40)))) !==
+							((1 << (KipperParser.Plus - 40)) |
+								(1 << (KipperParser.Minus - 40)) |
+								(1 << (KipperParser.Not - 40)) |
+								(1 << (KipperParser.BitwiseNot - 40)))) !==
 							0
 					)
 				) {
@@ -4585,8 +4606,8 @@ export class KipperParser extends Parser {
 		"r\x02t\x02v\x02x\x02z\x02|\x02~\x02\x80\x02\x82\x02\x84\x02\x86\x02\x88" +
 		"\x02\x8A\x02\x8C\x02\x8E\x02\x90\x02\x92\x02\x02\x11\x03\x02\x06\x07\x03" +
 		"\x02\r\x0E\x03\x02\x19\x1A\x03\x02KL\x04\x02JJMM\x03\x02\x1C\x1E\x04\x02" +
-		"++--\x05\x02**,,44\x03\x02.1\x04\x02**,,\x03\x02EG\x03\x02=@\x03\x02;" +
-		"<\x03\x025:\x04\x02\x1C\x1EII\x02\u028D\x02\x95\x03\x02\x02\x02\x04\x9A" +
+		"++--\x06\x02**,,44DD\x03\x02.1\x04\x02**,,\x03\x02EG\x03\x02=@\x03\x02" +
+		";<\x03\x025:\x04\x02\x1C\x1EII\x02\u028D\x02\x95\x03\x02\x02\x02\x04\x9A" +
 		"\x03\x02\x02\x02\x06\x9E\x03\x02\x02\x02\b\xA1\x03\x02\x02\x02\n\xA8\x03" +
 		"\x02\x02\x02\f\xB1\x03\x02\x02\x02\x0E\xB3\x03\x02\x02\x02\x10\xBF\x03" +
 		"\x02\x02\x02\x12\xC2\x03\x02\x02\x02\x14\xC4\x03\x02\x02\x02\x16\xC6\x03" +
@@ -4782,45 +4803,46 @@ export class KipperParser extends Parser {
 		"\x02\x02\u0233\u0231\x03\x02\x02\x02\u0234\u0235\b>\x01\x02\u0235\u0236" +
 		"\x05x=\x02\u0236\u023C\x03\x02\x02\x02\u0237\u0238\f\x03\x02\x02\u0238" +
 		"\u0239\x07C\x02\x02\u0239\u023B\x05x=\x02\u023A\u0237\x03\x02\x02\x02" +
-		"\u023B\u023E\x03\x02\x02\x02\u023C\u023A\x03\x02\x02";
+		"\u023B\u023E\x03\x02\x02\x02\u023C\u023A\x03";
 	private static readonly _serializedATNSegment1: string =
-		"\x02\u023C\u023D\x03\x02\x02\x02\u023D{\x03\x02\x02\x02\u023E\u023C\x03" +
-		"\x02\x02\x02\u023F\u0240\b?\x01\x02\u0240\u0241\x05z>\x02\u0241\u0247" +
-		"\x03\x02\x02\x02\u0242\u0243\f\x03\x02\x02\u0243\u0244\x07B\x02\x02\u0244" +
-		"\u0246\x05z>\x02\u0245\u0242\x03\x02\x02\x02\u0246\u0249\x03\x02\x02\x02" +
-		"\u0247\u0245\x03\x02\x02\x02\u0247\u0248\x03\x02\x02\x02\u0248}\x03\x02" +
-		"\x02\x02\u0249\u0247\x03\x02\x02\x02\u024A\u024B\b@\x01\x02\u024B\u024C" +
-		"\x05|?\x02\u024C\u0252\x03\x02\x02\x02\u024D\u024E\f\x03\x02\x02\u024E" +
-		"\u024F\x072\x02\x02\u024F\u0251\x05|?\x02\u0250\u024D\x03\x02\x02\x02" +
-		"\u0251\u0254\x03\x02\x02\x02\u0252\u0250\x03\x02\x02\x02\u0252\u0253\x03" +
-		"\x02\x02\x02\u0253\x7F\x03\x02\x02\x02\u0254\u0252\x03\x02\x02\x02\u0255" +
-		"\u0256\bA\x01\x02\u0256\u0257\x05~@\x02\u0257\u025D\x03\x02\x02\x02\u0258" +
-		"\u0259\f\x03\x02\x02\u0259\u025A\x073\x02\x02\u025A\u025C\x05~@\x02\u025B" +
-		"\u0258\x03\x02\x02\x02\u025C\u025F\x03\x02\x02\x02\u025D\u025B\x03\x02" +
-		"\x02\x02\u025D\u025E\x03\x02\x02\x02\u025E\x81\x03\x02\x02\x02\u025F\u025D" +
-		"\x03\x02\x02\x02\u0260\u0268\x05\x80A\x02\u0261\u0262\x05\x80A\x02\u0262" +
-		'\u0263\x07!\x02\x02\u0263\u0264\x05\x82B\x02\u0264\u0265\x07"\x02\x02' +
-		"\u0265\u0266\x05\x82B\x02\u0266\u0268\x03\x02\x02\x02\u0267\u0260\x03" +
-		"\x02\x02\x02\u0267\u0261\x03\x02\x02\x02\u0268\x83\x03\x02\x02\x02\u0269" +
-		"\u026F\x05\x82B\x02\u026A\u026B\x05R*\x02\u026B\u026C\x05\x86D\x02\u026C" +
-		"\u026D\x05\x84C\x02\u026D\u026F\x03\x02\x02\x02\u026E\u0269\x03\x02\x02" +
-		"\x02\u026E\u026A\x03\x02\x02\x02\u026F\x85\x03\x02\x02\x02\u0270\u0271" +
-		"\t\x0F\x02\x02\u0271\x87\x03\x02\x02\x02\u0272\u0277\x05\x84C\x02\u0273" +
-		"\u0274\x07\x1F\x02\x02\u0274\u0276\x05\x84C\x02\u0275\u0273\x03\x02\x02" +
-		"\x02\u0276\u0279\x03\x02\x02\x02\u0277\u0275\x03\x02\x02\x02\u0277\u0278" +
-		"\x03\x02\x02\x02\u0278\x89\x03\x02\x02\x02\u0279\u0277\x03\x02\x02\x02" +
-		"\u027A\u027E\x05\x8CG\x02\u027B\u027E\x05\x8EH\x02\u027C\u027E\x05\x90" +
-		"I\x02\u027D\u027A\x03\x02\x02\x02\u027D\u027B\x03\x02\x02\x02\u027D\u027C" +
-		"\x03\x02\x02\x02\u027E\x8B\x03\x02\x02\x02\u027F\u0280\x05\x92J\x02\u0280" +
-		"\x8D\x03\x02\x02\x02\u0281\u0282\x05\x92J\x02\u0282\u0283\x07=\x02\x02" +
-		"\u0283\u0284\x05\x92J\x02\u0284\u0285\x07?\x02\x02\u0285\x8F\x03\x02\x02" +
-		"\x02\u0286\u0287\x07\x1B\x02\x02\u0287\u0288\x07#\x02\x02\u0288\u0289" +
-		"\x05\x92J\x02\u0289\u028A\x07$\x02\x02\u028A\x91\x03\x02\x02\x02\u028B" +
-		"\u028C\t\x10\x02\x02\u028C\x93\x03\x02\x02\x02;\x95\x9C\xA3\xA8\xAF\xB1" +
-		"\xB7\xBD\xCD\xD4\xE3\xE7\xF0\xF9\u0103\u0110\u0115\u011B\u011F\u0125\u012B" +
-		"\u0143\u014F\u0161\u0169\u016D\u0172\u0175\u017A\u017D\u0187\u018A\u0196" +
-		"\u019B\u01A0\u01B0\u01B2\u01BA\u01C8\u01CE\u01D4\u01DC\u01ED\u01F7\u0202" +
-		"\u020E\u021B\u0226\u0231\u023C\u0247\u0252\u025D\u0267\u026E\u0277\u027D";
+		"\x02\x02\x02\u023C\u023D\x03\x02\x02\x02\u023D{\x03\x02\x02\x02\u023E" +
+		"\u023C\x03\x02\x02\x02\u023F\u0240\b?\x01\x02\u0240\u0241\x05z>\x02\u0241" +
+		"\u0247\x03\x02\x02\x02\u0242\u0243\f\x03\x02\x02\u0243\u0244\x07B\x02" +
+		"\x02\u0244\u0246\x05z>\x02\u0245\u0242\x03\x02\x02\x02\u0246\u0249\x03" +
+		"\x02\x02\x02\u0247\u0245\x03\x02\x02\x02\u0247\u0248\x03\x02\x02\x02\u0248" +
+		"}\x03\x02\x02\x02\u0249\u0247\x03\x02\x02\x02\u024A\u024B\b@\x01\x02\u024B" +
+		"\u024C\x05|?\x02\u024C\u0252\x03\x02\x02\x02\u024D\u024E\f\x03\x02\x02" +
+		"\u024E\u024F\x072\x02\x02\u024F\u0251\x05|?\x02\u0250\u024D\x03\x02\x02" +
+		"\x02\u0251\u0254\x03\x02\x02\x02\u0252\u0250\x03\x02\x02\x02\u0252\u0253" +
+		"\x03\x02\x02\x02\u0253\x7F\x03\x02\x02\x02\u0254\u0252\x03\x02\x02\x02" +
+		"\u0255\u0256\bA\x01\x02\u0256\u0257\x05~@\x02\u0257\u025D\x03\x02\x02" +
+		"\x02\u0258\u0259\f\x03\x02\x02\u0259\u025A\x073\x02\x02\u025A\u025C\x05" +
+		"~@\x02\u025B\u0258\x03\x02\x02\x02\u025C\u025F\x03\x02\x02\x02\u025D\u025B" +
+		"\x03\x02\x02\x02\u025D\u025E\x03\x02\x02\x02\u025E\x81\x03\x02\x02\x02" +
+		"\u025F\u025D\x03\x02\x02\x02\u0260\u0268\x05\x80A\x02\u0261\u0262\x05" +
+		"\x80A\x02\u0262\u0263\x07!\x02\x02\u0263\u0264\x05\x82B\x02\u0264\u0265" +
+		'\x07"\x02\x02\u0265\u0266\x05\x82B\x02\u0266\u0268\x03\x02\x02\x02\u0267' +
+		"\u0260\x03\x02\x02\x02\u0267\u0261\x03\x02\x02\x02\u0268\x83\x03\x02\x02" +
+		"\x02\u0269\u026F\x05\x82B\x02\u026A\u026B\x05R*\x02\u026B\u026C\x05\x86" +
+		"D\x02\u026C\u026D\x05\x84C\x02\u026D\u026F\x03\x02\x02\x02\u026E\u0269" +
+		"\x03\x02\x02\x02\u026E\u026A\x03\x02\x02\x02\u026F\x85\x03\x02\x02\x02" +
+		"\u0270\u0271\t\x0F\x02\x02\u0271\x87\x03\x02\x02\x02\u0272\u0277\x05\x84" +
+		"C\x02\u0273\u0274\x07\x1F\x02\x02\u0274\u0276\x05\x84C\x02\u0275\u0273" +
+		"\x03\x02\x02\x02\u0276\u0279\x03\x02\x02\x02\u0277\u0275\x03\x02\x02\x02" +
+		"\u0277\u0278\x03\x02\x02\x02\u0278\x89\x03\x02\x02\x02\u0279\u0277\x03" +
+		"\x02\x02\x02\u027A\u027E\x05\x8CG\x02\u027B\u027E\x05\x8EH\x02\u027C\u027E" +
+		"\x05\x90I\x02\u027D\u027A\x03\x02\x02\x02\u027D\u027B\x03\x02\x02\x02" +
+		"\u027D\u027C\x03\x02\x02\x02\u027E\x8B\x03\x02\x02\x02\u027F\u0280\x05" +
+		"\x92J\x02\u0280\x8D\x03\x02\x02\x02\u0281\u0282\x05\x92J\x02\u0282\u0283" +
+		"\x07=\x02\x02\u0283\u0284\x05\x92J\x02\u0284\u0285\x07?\x02\x02\u0285" +
+		"\x8F\x03\x02\x02\x02\u0286\u0287\x07\x1B\x02\x02\u0287\u0288\x07#\x02" +
+		"\x02\u0288\u0289\x05\x92J\x02\u0289\u028A\x07$\x02\x02\u028A\x91\x03\x02" +
+		"\x02\x02\u028B\u028C\t\x10\x02\x02\u028C\x93\x03\x02\x02\x02;\x95\x9C" +
+		"\xA3\xA8\xAF\xB1\xB7\xBD\xCD\xD4\xE3\xE7\xF0\xF9\u0103\u0110\u0115\u011B" +
+		"\u011F\u0125\u012B\u0143\u014F\u0161\u0169\u016D\u0172\u0175\u017A\u017D" +
+		"\u0187\u018A\u0196\u019B\u01A0\u01B0\u01B2\u01BA\u01C8\u01CE\u01D4\u01DC" +
+		"\u01ED\u01F7\u0202\u020E\u021B\u0226\u0231\u023C\u0247\u0252\u025D\u0267" +
+		"\u026E\u0277\u027D";
 	public static readonly _serializedATN: string = Utils.join(
 		[KipperParser._serializedATNSegment0, KipperParser._serializedATNSegment1],
 		"",
@@ -7144,6 +7166,9 @@ export class UnaryOperatorContext extends KipperParserRuleContext {
 	}
 	public Not(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Not, 0);
+	}
+	public BitwiseNot(): TerminalNode | undefined {
+		return this.tryGetToken(KipperParser.BitwiseNot, 0);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);

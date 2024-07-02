@@ -46,6 +46,12 @@ export class BitwiseAndExpression extends BitwiseExpression<
 	}
 
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		this.programCtx
+			.typeCheck(this)
+			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
+
 		this.typeSemantics = {
 			evaluatedType: CheckedType.fromCompilableType("num"),
 		};

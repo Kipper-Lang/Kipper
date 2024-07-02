@@ -347,15 +347,35 @@ export type KipperBitwiseXorOperator = "^";
  * The bitwise-xor operator, which can be used to combine two numbers bitwise.
  * @example
  * EXP ^ EXP;
- * @since 0.9.0
+ * @since 0.11.0
  */
 export const kipperBitwiseXorOperator: KipperBitwiseXorOperator = "^";
+
+/**
+ * The bitwise-not operator, which can be used to negate a number bitwise.
+ * @example
+ * ~EXP;
+ * @since 0.11.0
+ */
+export type KipperBitwiseNotOperator = "~";
+
+/**
+ * The bitwise-not operator, which can be used to negate a number bitwise.
+ * @example
+ * ~EXP;
+ * @since 0.11.0
+ */
+export const kipperBitwiseNotOperator: KipperBitwiseNotOperator = "~";
 
 /**
  * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
  * @since 0.9.0
  */
-export type KipperBitwiseOperator = KipperBitwiseAndOperator | KipperBitwiseOrOperator | KipperBitwiseXorOperator;
+export type KipperBitwiseOperator =
+	| KipperBitwiseAndOperator
+	| KipperBitwiseOrOperator
+	| KipperBitwiseXorOperator
+	| KipperBitwiseShiftOperator;
 
 /**
  * All available equality operators inside Kipper, which can be used to compare two expressions against each other.
@@ -480,7 +500,7 @@ export const kipperIncrementOrDecrementOperators: Array<KipperIncrementOrDecreme
  * This type specifically exists for the {@link OperatorModifiedUnaryExpression}.
  * @since 0.9.0
  */
-export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOperator;
+export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOperator | KipperBitwiseNotOperator;
 
 /**
  * Modifier Unary operators, which are used to modify the value of an expression.
@@ -491,13 +511,17 @@ export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOpera
 export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = [
 	kipperNegateOperator,
 	...kipperSignOperators,
+	kipperBitwiseNotOperator,
 ];
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperIncrementOrDecrementOperator;
+export type KipperUnaryOperator =
+	| KipperUnaryModifierOperator
+	| KipperIncrementOrDecrementOperator
+	| KipperBitwiseNotOperator;
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.

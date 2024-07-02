@@ -1,6 +1,6 @@
 /**
  * The semantics of a bitwise expression.
- * @since 0.10.0
+ * @since 0.11.0
  */
 import { ExpressionTypeSemantics } from "../expression-type-semantics";
 
