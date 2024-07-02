@@ -8,7 +8,7 @@ import type { KipperBitwiseOperator } from "../../../../const";
 import type { Expression } from "../expression";
 
 /**
- * Semantics of a bitwise expression, which combines two expressions and evaluates to a number.
+ * Semantics for AST Node {@link BitwiseExpression}.
  * @since 0.11.0
  */
 export interface BitwiseExpressionSemantics extends ExpressionSemantics {
