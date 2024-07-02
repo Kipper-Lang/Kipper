@@ -40,7 +40,7 @@
     "ts-node": "10.9.2",
     "tsify": "5.0.4",
     "uglify-js": "3.17.4",
-    "uuid": "9.0.0",
+    "uuid": "9.0.1",
     "watchify": "4.0.0"
   },
   "engines": {
