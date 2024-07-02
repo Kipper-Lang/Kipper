@@ -97,6 +97,7 @@ To use development versions of Kipper download the
   - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
   - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
   - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
+  - `KipperCompileTarget.postProcess()`, which is always called after the target code generation.
 
 ### Changed
 
