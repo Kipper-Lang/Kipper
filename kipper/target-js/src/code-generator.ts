@@ -48,6 +48,8 @@ import type {
 	WhileLoopIterationStatement,
 	ObjectPrimaryExpression,
 	ObjectProperty,
+	InterfaceDeclaration,
+	ClassDeclaration,
 } from "@kipper/core";
 import {
 	VariableDeclaration,
@@ -375,6 +377,20 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Only add ' = EXP' if assignValue is defined
 		return [[storage, " ", semanticData.identifier, ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"]];
+	};
+
+	/**
+	 * Translates a {@link AssignmentExpression} into the JavaScript language.
+	 */
+	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ClassDeclaration} into the JavaScript language.
+	 */
+	classDeclaration = async (node: ClassDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
 	};
 
 	/**
