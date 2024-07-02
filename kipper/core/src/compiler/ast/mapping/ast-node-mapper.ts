@@ -10,6 +10,7 @@ import {
 	AssignmentExpressionContext,
 	BitwiseAndExpressionContext,
 	BitwiseOrExpressionContext,
+	BitwiseShiftExpressionContext,
 	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
@@ -101,7 +102,7 @@ import {
 } from "../nodes";
 import { BitwiseXorExpression } from "../nodes/expressions/bitwise-expression/bitwise-xor-expression";
 import { BitwiseAndExpression, BitwiseOrExpression } from "../nodes/expressions/bitwise-expression";
-import { BitwiseSignedRightShiftExpression } from "../nodes/expressions/bitwise-expression/bitwise-signed-right-shift-expression/bitwise-signed-right-shift-expression";
+import { BitwiseShiftExpression } from "../nodes/expressions/bitwise-expression/bitwise-shift-expression/bitwise-shift-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -155,6 +156,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpression,
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
+		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
@@ -218,6 +220,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -288,6 +291,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseOrExpression: BitwiseOrExpression,
 		RULE_bitwiseAndExpression: BitwiseAndExpression,
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
+		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
 
 	/**

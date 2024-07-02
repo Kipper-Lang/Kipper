@@ -9,9 +9,13 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import type {
+import {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
+	ActualBitwiseAndExpressionContext,
+	ActualBitwiseOrExpressionContext,
+	ActualBitwiseShiftExpressionContext,
+	ActualBitwiseXorExpressionContext,
 	ActualCastOrConvertExpressionContext,
 	ActualConditionalExpressionContext,
 	ActualEqualityExpressionContext,
@@ -20,6 +24,10 @@ import type {
 	ActualMultiplicativeExpressionContext,
 	ActualRelationalExpressionContext,
 	ArrayPrimaryExpressionContext,
+	BitwiseAndExpressionContext,
+	BitwiseOrExpressionContext,
+	BitwiseShiftExpressionContext,
+	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CompilationUnitContext,
@@ -711,6 +719,54 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitActualLogicalOrExpression: (ctx: ActualLogicalOrExpressionContext) => void = this.handleExitingTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'bitwiseOrExpression' rule, and only going to handle the rule 'actualBitwiseOrExpression',
+	// which implements a more precise 'bitwiseOrExpression' rule.
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseOrExpression
+	 */
+	public enterActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseOrExpression
+	 */
+	public exitActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseAndExpression
+	 */
+	public enterActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseAndExpression
+	 */
+	public exitActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseXorExpression
+	 */
+	public enterActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseXorExpression
+	 */
+	public exitActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseShiftExpression
+	 */
+	public enterActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseShiftExpression
+	 */
+	public exitActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
+		this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule

@@ -324,52 +324,16 @@ export type KipperBitwiseOrOperator = "|";
 export const kipperBitwiseOrOperator: KipperBitwiseOrOperator = "|";
 
 /**
- * The bitwise left-shift operator, which can be used to shift a number to the left by a certain amount of bits.
- * @example
- * EXP << EXP;
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
  * @since 0.9.0
  */
-export type KipperBitwiseZeroFillLeftShiftOperator = "<<";
+export type KipperBitwiseShiftOperator = "<<" | ">>" | ">>>";
 
 /**
- * The bitwise left-shift operator, which can be used to shift a number to the left by a certain amount of bits.
- * @example
- * EXP << EXP;
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
  * @since 0.9.0
  */
-export const kipperBitwiseLeftZeroFillShiftOperator: KipperBitwiseZeroFillLeftShiftOperator = "<<";
-
-/**
- * The bitwise right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
- * @example
- * EXP >> EXP;
- * @since 0.9.0
- */
-export type KipperBitwiseSignedRightShiftOperator = ">>";
-
-/**
- * The bitwise right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
- * @example
- * EXP >> EXP;
- * @since 0.9.0
- */
-export const kipperBitwiseRightShiftOperator: KipperBitwiseSignedRightShiftOperator = ">>";
-
-/**
- * The bitwise zero-fill right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
- * @example
- * EXP >>> EXP;
- * @since 0.9.0
- */
-export type KipperBitwiseZeroFillRightShiftOperator = ">>>";
-
-/**
- * The bitwise zero-fill right-shift operator, which can be used to shift a number to the right by a certain amount of bits.
- * @example
- * EXP >>> EXP;
- * @since 0.9.0
- */
-export const kipperBitwiseZeroFillRightShiftOperator: KipperBitwiseZeroFillRightShiftOperator = ">>>";
+export const kipperBitwiseShiftOperators: Array<KipperBitwiseShiftOperator> = ["<<", ">>", ">>>"];
 
 /**
  * The bitwise-xor operator, which can be used to combine two numbers bitwise.

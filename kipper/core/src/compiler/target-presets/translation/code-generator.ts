@@ -2,7 +2,7 @@
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
@@ -41,15 +41,13 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseXorExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import { BitwiseAndExpression } from "../../ast/nodes/expressions/bitwise-expression";
-import { BitwiseOrExpression } from "../../ast/nodes/expressions/bitwise-expression";
-import { BitwiseXorExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-xor-expression";
-import { BitwiseZeroFillLeftShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-left-shift-expression";
-import { BitwiseZeroFillRightShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-zero-fill-right-shift-expression";
-import { BitwiseSignedRightShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-signed-right-shift-expression/bitwise-signed-right-shift-expression";
+import { BitwiseShiftExpression } from "../../ast/nodes/expressions/bitwise-expression/bitwise-shift-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -337,18 +335,5 @@ export abstract class KipperTargetCodeGenerator {
 
 	public abstract bitwiseXorExpression: TargetASTNodeCodeGenerator<BitwiseXorExpression, TranslatedExpression>;
 
-	public abstract bitwiseSignedRightShiftExpression: TargetASTNodeCodeGenerator<
-		BitwiseSignedRightShiftExpression,
-		TranslatedExpression
-	>;
-
-	public abstract bitwiseZeroFillLeftShiftExpression: TargetASTNodeCodeGenerator<
-		BitwiseZeroFillLeftShiftExpression,
-		TranslatedExpression
-	>;
-
-	public abstract bitwiseZeroFillRightShiftExpression: TargetASTNodeCodeGenerator<
-		BitwiseZeroFillRightShiftExpression,
-		TranslatedExpression
-	>;
+	public abstract bitwiseShiftExpression: TargetASTNodeCodeGenerator<BitwiseShiftExpression, TranslatedExpression>;
 }

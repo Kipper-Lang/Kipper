@@ -10,6 +10,8 @@ import {
 	TranslatedExpression,
 	BitwiseExpressionSemantics,
 	BitwiseExpression,
+	BitwiseXorExpression,
+	BitwiseShiftExpression,
 } from "@kipper/core";
 import {
 	AdditiveExpression,
@@ -707,31 +709,31 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 
+	/**
+	 * Translates a {@link BitwiseOrExpression} into the JavaScript language.
+	 */
 	bitwiseOrExpression = async (node: BitwiseOrExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
+	/**
+	 * Translates a {@link BitwiseAndExpression} into the JavaScript language.
+	 */
 	bitwiseAndExpression = async (node: BitwiseAndExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
-	bitwiseXorExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+	/**
+	 * Translates a {@link BitwiseXorExpression} into the JavaScript language.
+	 */
+	bitwiseXorExpression = async (node: BitwiseXorExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 
-	bitwiseShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
-		return await this.translateOperatorExpressionWithOperands(node);
-	};
-
-	bitwiseZeroFillLeftShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
-		return await this.translateOperatorExpressionWithOperands(node);
-	};
-
-	bitwiseZeroFillRightShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
-		return await this.translateOperatorExpressionWithOperands(node);
-	};
-
-	bitwiseSignedRightShiftExpression = async (node: BitwiseExpression): Promise<TranslatedExpression> => {
+	/**
+	 * Translates a {@link BitwiseShiftExpression} into the JavaScript language.
+	 */
+	bitwiseShiftExpression = async (node: BitwiseShiftExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
 	};
 }

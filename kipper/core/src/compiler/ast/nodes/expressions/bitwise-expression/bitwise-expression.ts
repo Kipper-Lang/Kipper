@@ -11,7 +11,8 @@ import { BitwiseExpressionSemantics } from "./bitwise-expression-semantics";
 export type ASTBitwiseExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseOrExpression
-	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression;
+	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
+	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression;
 
 export type ParserBitwiseExpressionContext = InstanceType<
 	(typeof ASTNodeMapper.expressionKindToRuleContextMap)[ASTBitwiseExpressionKind]

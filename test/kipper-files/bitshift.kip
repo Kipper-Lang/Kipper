@@ -1,3 +1,4 @@
 var a: num = 10;
 var b: num = 5;
-print(f"Result: {a << b}");
+var c: num = a >>> b;
+print(f"Result: {c}");

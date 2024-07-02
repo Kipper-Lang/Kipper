@@ -2,10 +2,14 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
+	BitwiseAndExpressionContext,
+	BitwiseOrExpressionContext,
+	BitwiseShiftExpressionContext,
+	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
@@ -75,7 +79,11 @@ export type ParserExpressionContext =
 	| DotNotationMemberAccessExpressionContext
 	| BracketNotationMemberAccessExpressionContext
 	| GenericTypeSpecifierExpressionContext
-	| TypeofTypeSpecifierExpressionContext;
+	| TypeofTypeSpecifierExpressionContext
+	| BitwiseOrExpressionContext
+	| BitwiseAndExpressionContext
+	| BitwiseXorExpressionContext
+	| BitwiseShiftExpressionContext;
 
 /**
  * Union type of all usable statement rule context classes implemented by the {@link ParseRuleKindMapping} for a
@@ -171,6 +179,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseOrExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
+	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;
 
 /**
@@ -241,6 +250,7 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseOrExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseAndExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseXorExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
 
 /**
