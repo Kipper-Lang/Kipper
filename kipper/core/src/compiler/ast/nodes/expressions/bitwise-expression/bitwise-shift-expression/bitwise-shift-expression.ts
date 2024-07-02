@@ -142,7 +142,6 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 		};
 	}
 
-
 	public checkForWarnings = undefined;
 
 	/**

@@ -6,6 +6,10 @@ import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CompilableASTNode,
@@ -41,10 +45,6 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	BitwiseAndExpression,
-	BitwiseOrExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -308,7 +308,6 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link EqualityExpression} into a specific language.
 	 */
 	public abstract equalityExpression: TargetASTNodeCodeGenerator<EqualityExpression, TranslatedExpression>;
-
 
 	/**
 	 * Translates a {@link BitwiseAndExpression} into a specific language.

@@ -45,8 +45,8 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
+import { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import { BitwiseAndExpression, BitwiseOrExpression, BitwiseXorExpression, BitwiseShiftExpression } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.

@@ -10,11 +10,7 @@
  */
 
 import { BitwiseExpression } from "../bitwise-expression";
-import {
-	BitwiseOrExpressionContext,
-	KindParseRuleMapping,
-	ParseRuleKindMapping,
-} from "../../../../../parser";
+import { BitwiseOrExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { CompilableASTNode } from "../../../../compilable-ast-node";
 import { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
