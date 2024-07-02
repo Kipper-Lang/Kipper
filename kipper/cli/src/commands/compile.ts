@@ -5,13 +5,11 @@
 import type { args } from "@oclif/parser";
 import { Command, flags } from "@oclif/command";
 import { Logger } from "tslog";
+import type { CompileConfig, KipperCompileResult, KipperCompileTarget } from "@kipper/core";
 import {
-	CompileConfig,
 	defaultOptimisationOptions,
 	EvaluatedCompileConfig,
 	KipperCompiler,
-	KipperCompileResult,
-	KipperCompileTarget,
 	KipperError,
 	KipperLogger,
 	LogLevel,
@@ -70,6 +68,12 @@ export default class Compile extends Command {
 			char: "b",
 			default: <boolean>defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
+			allowNo: true,
+		}),
+		"dry-run": flags.boolean({
+			char: "d",
+			default: false,
+			description: "Run the compiler without writing any output. Useful for checking for errors.",
 			allowNo: true,
 		}),
 		warnings: flags.boolean({
@@ -156,7 +160,7 @@ export default class Compile extends Command {
 	}
 
 	@prettifiedErrors<Compile>()
-	public async run(logger?: KipperLogger) {
+	public async run(logger?: KipperLogger): Promise<boolean> {
 		const { flags, config } = await this.getRunConfig();
 
 		logger = logger ?? new KipperLogger(CLIEmitHandler.emit, LogLevel.INFO, flags["warnings"]);
@@ -178,28 +182,28 @@ export default class Compile extends Command {
 			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
 				// Ignore the error thrown by the compiler (the logger already logged it)
 				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
-				return;
+				return false;
 			}
 			throw e;
 		}
 
 		// If the compilation failed, abort
 		if (!result.success) {
-			return;
-		}
+			return false;
+		} else if (!flags["dry-run"]) {
+			const out = await writeCompilationResult(result, config.outDir, config.outPath, config.encoding);
+			logger.debug(`Generated file '${out}'.`);
 
-		// Write the file output for this compilation
-		const out = await writeCompilationResult(result, config.outDir, config.outPath, config.encoding);
-		logger.debug(`Generated file '${out}'.`);
-
-		// Copy resources if they exist
-		if (config.resources) {
-			await copyConfigResources(config.resources);
-			logger.debug(`Finished copying resources specified in config.`);
+			// Copy resources if they exist
+			if (config.resources) {
+				await copyConfigResources(config.resources);
+				logger.debug(`Finished copying resources specified in config.`);
+			}
 		}
 
 		// Finished!
 		const duration: number = (new Date().getTime() - startTime) / 1000;
-		logger.info(`Done in ${duration}s.`);
+		logger.info(`Done in ${duration}s.` + (flags["dry-run"] ? " (Dry run)" : ""));
+		return true;
 	}
 }

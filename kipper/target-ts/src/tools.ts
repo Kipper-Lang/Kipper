@@ -2,7 +2,7 @@
  * Tools for handling the translation of Kipper code to TypeScript.
  * @since 0.8.0
  */
-import {
+import type {
 	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,

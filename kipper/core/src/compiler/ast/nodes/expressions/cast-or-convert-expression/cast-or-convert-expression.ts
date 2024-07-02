@@ -12,8 +12,9 @@ import type { CastOrConvertExpressionTypeSemantics } from "./cast-or-convert-exp
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { Expression } from "../expression";
-import { CastOrConvertExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { UncheckedType } from "../../../../analysis";
+import type { CastOrConvertExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { UncheckedType } from "../../../../analysis";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
 import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
@@ -144,7 +145,7 @@ export class CastOrConvertExpression extends Expression<
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
-	 * This will log all warnings using {@link this.programCtx.logger} and store them in {@link this.KipperProgramContext.warnings}.
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!

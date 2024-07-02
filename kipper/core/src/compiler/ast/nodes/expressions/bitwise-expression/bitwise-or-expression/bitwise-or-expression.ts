@@ -10,13 +10,14 @@
  */
 
 import { BitwiseExpression } from "../bitwise-expression";
-import { BitwiseOrExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
-import { Expression } from "../../expression";
+import type { BitwiseOrExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
-import { BitwiseOrExpressionSemantics } from "./bitwise-or-expression-semantics";
-import { BitwiseOrExpressionTypeSemantics } from "./bitwise-or-expression-type-semantics";
+import type { BitwiseOrExpressionSemantics } from "./bitwise-or-expression-semantics";
+import type { BitwiseOrExpressionTypeSemantics } from "./bitwise-or-expression-type-semantics";
 
 /**
  * Bitwise OR expression AST node.

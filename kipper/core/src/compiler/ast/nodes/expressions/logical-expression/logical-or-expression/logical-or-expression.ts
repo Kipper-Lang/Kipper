@@ -12,8 +12,9 @@ import type { LogicalOrExpressionSemantics } from "./logical-or-expression-seman
 import type { LogicalOrExpressionTypeSemantics } from "./logical-or-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { LogicalExpression } from "../logical-expression";
-import { KindParseRuleMapping, LogicalOrExpressionContext, ParseRuleKindMapping } from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { LogicalOrExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { kipperLogicalOrOperator } from "../../../../../const";
 import { CheckedType } from "../../../../../analysis";

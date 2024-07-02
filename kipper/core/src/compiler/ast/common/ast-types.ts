@@ -2,7 +2,7 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -47,7 +47,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../../parser";
-import { KindParseRuleMapping } from "../../parser";
+import type { KindParseRuleMapping } from "../../parser";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
@@ -154,6 +154,8 @@ export type ASTStatementKind =
 export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_numberPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_arrayPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_objectProperty
+	| typeof ParseRuleKindMapping.RULE_objectPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_boolPrimaryExpression
@@ -225,6 +227,8 @@ export type ASTStatementRuleName =
 export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_numberPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_arrayPrimaryExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_objectProperty]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_objectPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_boolPrimaryExpression]

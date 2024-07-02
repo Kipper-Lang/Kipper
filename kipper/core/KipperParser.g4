@@ -7,12 +7,14 @@ parser grammar KipperParser;
 options {
   tokenVocab=KipperLexer;
   contextSuperClass=KipperParserRuleContext;
+  superClass=KipperParserBase;
 }
 
 @parser::header {
 	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 	// kind values.
 	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+	import KipperParserBase from "./base/KipperParserBase";
 }
 
 // Entry Point for an entire file
@@ -84,20 +86,20 @@ initializer
 // -- Statements
 
 statement
-    :   compoundStatement
-    |   expressionStatement
+    :   expressionStatement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
     | 	returnStatement
+    |	compoundStatement
     ;
 
 compoundStatement
-    :   '{' blockItemList? '}'
+    :   {this.notInsideExpressionStatement()}? '{' blockItemList? '}'
     ;
 
 expressionStatement
-    :   expression SemiColon
+    :   {this.enterExpressionStatement()} expression SemiColon {this.exitExpressionStatement()}
     ;
 
 selectionStatement
@@ -152,12 +154,13 @@ returnStatement
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
     :   tangledPrimaryExpression
+    |   arrayPrimaryExpression
+    |   objectPrimaryExpression
     |   boolPrimaryExpression
     | 	identifierPrimaryExpression
     |   stringPrimaryExpression
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
-    |   arrayPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
     ;
 
@@ -175,6 +178,11 @@ identifierPrimaryExpression
 
 identifier
 	:	Identifier
+	;
+
+identifierOrStringPrimaryExpression
+	:	identifier
+	|	stringPrimaryExpression
 	;
 
 stringPrimaryExpression
@@ -201,7 +209,15 @@ numberPrimaryExpression
 	;
 
 arrayPrimaryExpression
-	:	'[' (expression (',' expression)*)? ']'
+	:	'[' (expression (',' expression)*)? ','? ']'
+	;
+
+objectPrimaryExpression
+	:	'{' (objectProperty (',' objectProperty)*)? ','? '}'
+	;
+
+objectProperty
+	:	identifierOrStringPrimaryExpression ':' expression
 	;
 
 voidOrNullOrUndefinedPrimaryExpression

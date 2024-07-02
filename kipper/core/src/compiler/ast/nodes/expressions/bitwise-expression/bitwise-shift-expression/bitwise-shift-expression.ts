@@ -11,20 +11,16 @@
  */
 
 import { BitwiseExpression } from "../bitwise-expression";
-import {
-	BitwiseOrExpressionContext,
-	BitwiseShiftExpressionContext,
-	BitwiseShiftOperatorsContext,
-	KindParseRuleMapping,
-	ParseRuleKindMapping,
-} from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
-import { Expression } from "../../expression";
+import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../parser";
+import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
-import { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
-import { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
-import { KipperBitwiseShiftOperator, kipperBitwiseShiftOperators } from "../../../../../const";
+import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
+import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
+import type { KipperBitwiseShiftOperator } from "../../../../../const";
+import { kipperBitwiseShiftOperators } from "../../../../../const";
 
 /**
  * Bitwise shift expression node.

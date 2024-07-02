@@ -9,7 +9,7 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import {
+import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualBitwiseAndExpressionContext,
@@ -54,6 +54,8 @@ import {
 	KipperParserRuleContext,
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
+	ObjectPrimaryExpressionContext,
+	ObjectPropertyContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
 	ParameterListContext,
@@ -366,6 +368,32 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public enterObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.

@@ -9,35 +9,37 @@ import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
 	UnaryExpressionSemantics,
-} from "../../ast";
-import {
 	AssignmentExpression,
-	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
-	IdentifierPrimaryExpression,
-	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	MemberAccessExpression,
-	ParameterDeclaration,
 	RelationalExpression,
-	ReturnStatement,
 	Statement,
-	TangledPrimaryExpression,
 	UnaryExpression,
+} from "../../ast";
+import {
+	CompoundStatement,
+	IdentifierPrimaryExpression,
+	IfStatement,
+	ParameterDeclaration,
+	ReturnStatement,
+	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
-import {
+import type {
 	KipperArithmeticOperator,
 	KipperBitwiseOperator,
 	KipperCompilableType,
+	KipperReferenceable,
+	KipperReferenceableFunction,
+} from "../../const";
+import {
 	kipperCompilableTypes,
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
 	kipperPlusOperator,
-	KipperReferenceable,
-	KipperReferenceableFunction,
 	kipperStrType,
 	kipperSupportedConversions,
 } from "../../const";
@@ -60,7 +62,8 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
+import type { UncheckedType } from "../type";
+import { CheckedType, UndefinedCustomType } from "../type";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -699,6 +702,31 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					); // TODO! Add support for lists
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks whether the conditional expression is valid.
+	 * @param trueBranch The expression which is called when the condition evaluates to true.
+	 * @param falseBranch The expression which is called when the condition evaluates to false.
+	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
+	 * @since 0.11.0
+	 */
+	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+		const trueBranchType = KipperTypeChecker.getTypeForAnalysis(trueBranch.getTypeSemanticData().evaluatedType);
+		const falseBranchType = KipperTypeChecker.getTypeForAnalysis(falseBranch.getTypeSemanticData().evaluatedType);
+
+		// If the branch types are undefined, skip type checking (the types are invalid anyway)
+		if (trueBranchType === undefined || falseBranchType === undefined) {
+			return;
+		}
+
+		if (trueBranchType !== falseBranchType) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError(
+					"Conditional expressions with mismatching branch return types are not implemented yet",
+				),
+			);
 		}
 	}
 }

@@ -4,7 +4,7 @@
  */
 
 import { KipperError } from "./errors";
-import { KipperWarning } from "./warnings";
+import type { KipperWarning } from "./warnings";
 
 /**
  * The log levels for the {@link KipperLogger}, but as numeric values to allow comparisons.

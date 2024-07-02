@@ -2,7 +2,7 @@
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
@@ -34,6 +34,7 @@ import {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -48,6 +49,7 @@ import {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import type { ObjectProperty } from "../../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -187,7 +189,17 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link ArrayPrimaryExpression} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract arrayLiteralExpression: TargetASTNodeCodeGenerator<ArrayPrimaryExpression, TranslatedExpression>;
+	public abstract arrayPrimaryExpression: TargetASTNodeCodeGenerator<ArrayPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into a specific language.
+	 */
+	public abstract objectPrimaryExpression: TargetASTNodeCodeGenerator<ObjectPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link ObjectProperty} into a specific language.
+	 */
+	public abstract objectProperty: TargetASTNodeCodeGenerator<ObjectProperty, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into a specific language.

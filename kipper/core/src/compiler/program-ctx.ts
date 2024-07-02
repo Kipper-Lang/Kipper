@@ -14,10 +14,13 @@ import type { KipperWarning } from "../warnings";
 import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
 import type { EvaluatedCompileConfig } from "./compile-config";
-import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
+import type { InternalReference, Reference } from "./analysis";
+import { GlobalScope, KipperSemanticChecker, KipperTypeChecker } from "./analysis";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { KipperLogger, LogLevel } from "../logger";
+import type { OptimisationOptions } from "./optimiser";
+import { KipperOptimiser } from "./optimiser";
+import type { KipperLogger } from "../logger";
+import { LogLevel } from "../logger";
 import { KipperWarningIssuer } from "./analysis/analyser/warning-issuer";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
@@ -198,6 +201,7 @@ export class KipperProgramContext {
 		);
 	}
 
+	// @ts-ignore
 	/**
 	 * Asserts a certain truth.
 	 * @param ctx The AST node context item.

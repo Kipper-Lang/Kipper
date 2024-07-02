@@ -4,6 +4,7 @@
  */
 import type { InverseMap } from "../../tools/types";
 import { inverseMap } from "../../tools";
+import { KipperParser } from "./antlr";
 
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the
@@ -18,7 +19,6 @@ import { inverseMap } from "../../tools";
  * @since 0.10.0
  */
 export const ParseRuleKindMapping = {
-	// Standard rules copied from KipperParser
 	RULE_compilationUnit: 0,
 	RULE_translationUnit: 1,
 	RULE_externalItem: 2,
@@ -52,49 +52,52 @@ export const ParseRuleKindMapping = {
 	RULE_boolPrimaryExpression: 30,
 	RULE_identifierPrimaryExpression: 31,
 	RULE_identifier: 32,
-	RULE_stringPrimaryExpression: 33,
-	RULE_fStringPrimaryExpression: 34,
-	RULE_fStringSingleQuoteAtom: 35,
-	RULE_fStringDoubleQuoteAtom: 36,
-	RULE_numberPrimaryExpression: 37,
-	RULE_arrayPrimaryExpression: 38,
-	RULE_voidOrNullOrUndefinedPrimaryExpression: 39,
-	RULE_computedPrimaryExpression: 40,
-	RULE_argumentExpressionList: 41,
-	RULE_dotNotation: 42,
-	RULE_bracketNotation: 43,
-	RULE_sliceNotation: 44,
-	RULE_postfixExpression: 45,
-	RULE_incrementOrDecrementPostfixExpression: 46,
-	RULE_unaryExpression: 47,
-	RULE_incrementOrDecrementUnaryExpression: 48,
-	RULE_operatorModifiedUnaryExpression: 49,
-	RULE_incrementOrDecrementOperator: 50,
-	RULE_unaryOperator: 51,
-	RULE_castOrConvertExpression: 52,
-	RULE_multiplicativeExpression: 53,
-	RULE_additiveExpression: 54,
-	RULE_bitwiseShiftExpression: 55,
-	RULE_bitwiseShiftOperators: 56,
-	RULE_relationalExpression: 57,
-	RULE_equalityExpression: 58,
-	RULE_bitwiseAndExpression: 59,
-	RULE_bitwiseXorExpression: 60,
-	RULE_bitwiseOrExpression: 61,
-	RULE_logicalAndExpression: 62,
-	RULE_logicalOrExpression: 63,
-	RULE_conditionalExpression: 64,
-	RULE_assignmentExpression: 65,
-	RULE_assignmentOperator: 66,
-	RULE_expression: 67,
-	RULE_typeSpecifierExpression: 68,
-	RULE_identifierTypeSpecifierExpression: 69,
-	RULE_genericTypeSpecifierExpression: 70,
-	RULE_typeofTypeSpecifierExpression: 71,
-	RULE_typeSpecifierIdentifier: 72,
+	RULE_identifierOrStringPrimaryExpression: 33,
+	RULE_stringPrimaryExpression: 34,
+	RULE_fStringPrimaryExpression: 35,
+	RULE_fStringSingleQuoteAtom: 36,
+	RULE_fStringDoubleQuoteAtom: 37,
+	RULE_numberPrimaryExpression: 38,
+	RULE_arrayPrimaryExpression: 39,
+	RULE_objectPrimaryExpression: 40,
+	RULE_objectProperty: 41,
+	RULE_voidOrNullOrUndefinedPrimaryExpression: 42,
+	RULE_computedPrimaryExpression: 43,
+	RULE_argumentExpressionList: 44,
+	RULE_dotNotation: 45,
+	RULE_bracketNotation: 46,
+	RULE_sliceNotation: 47,
+	RULE_postfixExpression: 48,
+	RULE_incrementOrDecrementPostfixExpression: 49,
+	RULE_unaryExpression: 50,
+	RULE_incrementOrDecrementUnaryExpression: 51,
+	RULE_operatorModifiedUnaryExpression: 52,
+	RULE_incrementOrDecrementOperator: 53,
+	RULE_unaryOperator: 54,
+	RULE_castOrConvertExpression: 55,
+	RULE_multiplicativeExpression: 56,
+	RULE_additiveExpression: 57,
+	RULE_bitwiseShiftExpression: 58,
+	RULE_bitwiseShiftOperators: 59,
+	RULE_relationalExpression: 60,
+	RULE_equalityExpression: 61,
+	RULE_bitwiseAndExpression: 62,
+	RULE_bitwiseXorExpression: 63,
+	RULE_bitwiseOrExpression: 64,
+	RULE_logicalAndExpression: 65,
+	RULE_logicalOrExpression: 66,
+	RULE_conditionalExpression: 67,
+	RULE_assignmentExpression: 68,
+	RULE_assignmentOperator: 69,
+	RULE_expression: 70,
+	RULE_typeSpecifierExpression: 71,
+	RULE_identifierTypeSpecifierExpression: 72,
+	RULE_genericTypeSpecifierExpression: 73,
+	RULE_typeofTypeSpecifierExpression: 74,
+	RULE_typeSpecifierIdentifier: 75,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
-	RULE_memberAccessExpression: 73, // -> See 'computedPrimaryExpression'
-	RULE_functionCallExpression: 74, // -> See 'computedPrimaryExpression'
+	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
+	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'
 } as const;
 
 /**

@@ -8,9 +8,10 @@
 	},
 	"rules": {
 		"linebreak-style": ["error", "unix"],
-		"max-params": 0,
-		"no-unused-vars": "off",
 		"@typescript-eslint/no-unused-vars": [1, { "vars": "local", "args": "none" }],
+		"@typescript-eslint/consistent-type-imports": "error",
+		"no-unused-vars": "off",
+		"max-params": 0,
 		"no-warning-comments": 0,
 		"no-useless-catch": 1,
 		"comma-dangle": 0,

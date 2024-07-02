@@ -2,14 +2,19 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
-import { InternalFunction, kipperInternalBuiltInFunctions } from "./runtime-built-ins";
-import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
+import type { InternalFunction } from "./runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
+import type { CodePointCharStream } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
-import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
+import type { ParseData } from "./parser";
+import { KipperLexer, KipperParser, KipperParseStream } from "./parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
-import { KipperError, KipperSyntaxError } from "../errors";
-import { CompileConfig, EvaluatedCompileConfig } from "./compile-config";
+import type { KipperSyntaxError } from "../errors";
+import { KipperError } from "../errors";
+import type { CompileConfig } from "./compile-config";
+import { EvaluatedCompileConfig } from "./compile-config";
 import { KipperCompileResult } from "./compile-result";
 
 /**

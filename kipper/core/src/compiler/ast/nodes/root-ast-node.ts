@@ -16,8 +16,9 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type { Declaration } from "./declarations";
 import type { Statement } from "./index";
 import type { TranslatedCodeLine } from "../../const";
-import { KipperError } from "../../../errors";
-import { CompilationUnitContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../parser";
+import type { KipperError } from "../../../errors";
+import type { CompilationUnitContext } from "../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../parser";
 import { handleSemanticError } from "../../analysis";
 
 /**

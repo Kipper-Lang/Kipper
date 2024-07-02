@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
 	TranslatedCodeToken,
 	ComparativeExpressionSemantics,
 	LogicalExpressionSemantics,
@@ -12,8 +12,8 @@ import {
 	BitwiseExpression,
 	BitwiseXorExpression,
 	BitwiseShiftExpression,
-} from "@kipper/core";
-import {
+	BitwiseOrExpression,
+	BitwiseAndExpression,
 	AdditiveExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
@@ -47,20 +47,22 @@ import {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
-	CompoundStatement,
 	DoWhileLoopIterationStatement,
 	ForLoopIterationStatement,
+	MemberAccessExpression,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopIterationStatement,
+	ObjectPrimaryExpression,
+	ObjectProperty,
+} from "@kipper/core";
+import {
+	VariableDeclaration,
+	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopIterationStatement,
-	BitwiseOrExpression,
-	BitwiseAndExpression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -242,7 +244,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.10.0
 	 */
 	doWhileLoopIterationStatement = async (node: DoWhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["do", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "} " : "", "while", " ", "(", ...condition, ")"],
+		];
 	};
 
 	/**
@@ -384,7 +397,23 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectProperty} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
 		return [];
 	};
 
@@ -670,46 +699,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link LogicalAndExpression} into the JavaScript language.
-	 */
-	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
-		return await this.translateOperatorExpressionWithOperands(node);
-	};
-
-	/**
-	 * Translates a {@link LogicalOrExpression} into the JavaScript language.
-	 */
-	logicalOrExpression = async (node: LogicalOrExpression): Promise<TranslatedExpression> => {
-		return await this.translateOperatorExpressionWithOperands(node);
-	};
-
-	/**
-	 * Translates a {@link ConditionalExpression} into the JavaScript language.
-	 */
-	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
-		return [];
-	};
-
-	/**
-	 * Translates a {@link AssignmentExpression} into the JavaScript language.
-	 */
-	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-		let identifier = semanticData.identifier;
-
-		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
-		// accordingly.
-		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
-			identifier = TargetJS.getBuiltInIdentifier(identifier);
-		}
-
-		// The expression that is assigned to the reference
-		const assignExp = await semanticData.value.translateCtxAndChildren();
-
-		return [identifier, " ", semanticData.operator, " ", ...assignExp];
-	};
-
-	/**
 	 * Translates a {@link BitwiseOrExpression} into the JavaScript language.
 	 */
 	bitwiseOrExpression = async (node: BitwiseOrExpression): Promise<TranslatedExpression> => {
@@ -735,5 +724,50 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	bitwiseShiftExpression = async (node: BitwiseShiftExpression): Promise<TranslatedExpression> => {
 		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link LogicalAndExpression} into the JavaScript language.
+	 */
+	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link LogicalOrExpression} into the JavaScript language.
+	 */
+	logicalOrExpression = async (node: LogicalOrExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link ConditionalExpression} into the JavaScript language.
+	 */
+	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.condition.translateCtxAndChildren();
+		const trueBranch = await semanticData.trueBranch.translateCtxAndChildren();
+		const falseBranch = await semanticData.falseBranch.translateCtxAndChildren();
+
+		return [...condition, " ? ", ...trueBranch, " : ", ...falseBranch];
+	};
+
+	/**
+	 * Translates a {@link AssignmentExpression} into the JavaScript language.
+	 */
+	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		let identifier = semanticData.identifier;
+
+		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
+		// accordingly.
+		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
+			identifier = TargetJS.getBuiltInIdentifier(identifier);
+		}
+
+		// The expression that is assigned to the reference
+		const assignExp = await semanticData.value.translateCtxAndChildren();
+
+		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 }

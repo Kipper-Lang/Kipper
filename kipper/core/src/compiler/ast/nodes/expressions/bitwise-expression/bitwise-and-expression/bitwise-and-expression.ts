@@ -8,12 +8,13 @@
  * 0 & 0 // 0
  */
 
-import { BitwiseAndExpressionSemantics } from "./bitwise-and-expression-semantics";
-import { BitwiseAndExpressionTypeSemantics } from "./bitwise-and-expression-type-semantics";
+import type { BitwiseAndExpressionSemantics } from "./bitwise-and-expression-semantics";
+import type { BitwiseAndExpressionTypeSemantics } from "./bitwise-and-expression-type-semantics";
 import { BitwiseExpression } from "../bitwise-expression";
-import { BitwiseAndExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
-import { Expression } from "../../expression";
+import type { BitwiseAndExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 

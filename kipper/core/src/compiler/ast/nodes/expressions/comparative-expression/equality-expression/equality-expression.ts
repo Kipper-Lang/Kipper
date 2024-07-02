@@ -12,11 +12,13 @@ import type { EqualityExpressionTypeSemantics } from "./equality-expression-type
 import type { Expression } from "../../expression";
 import { ComparativeExpression } from "../comparative-expression";
 import { CheckedType } from "../../../../../analysis";
-import { EqualityExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { EqualityExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { KipperEqualityOperator, kipperEqualityOperators } from "../../../../../const";
+import type { KipperEqualityOperator } from "../../../../../const";
+import { kipperEqualityOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
 
 /**
  * Equality expression, which can be used to compare two expressions for equality.

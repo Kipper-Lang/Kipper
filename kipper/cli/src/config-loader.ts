@@ -2,7 +2,8 @@
  * Load a Kipper configuration file for the CLI.
  * @since 0.11.0
  */
-import { EvaluatedKipperConfigFile, KipperConfigFile, KipperConfigInterpreter } from "@kipper/config";
+import type { EvaluatedKipperConfigFile } from "@kipper/config";
+import { KipperConfigFile, KipperConfigInterpreter } from "@kipper/config";
 import * as fs from "fs";
 
 export let defaultConfigInterpreter = new KipperConfigInterpreter();

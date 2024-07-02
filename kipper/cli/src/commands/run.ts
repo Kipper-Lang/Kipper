@@ -106,11 +106,15 @@ export default class Run extends Compile {
 	}
 
 	@prettifiedErrors<Run>()
-	public async run() {
+	public async run(): Promise<boolean> {
 		const { flags, config } = await this.getRunConfig();
 		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.WARN, flags["warnings"]);
 
-		await super.run(logger);
+		const state = await super.run(logger);
+		if (!state) return false;
+
+		// We only execute the program if the compilation was successful
 		await this.executeKipperProgram(config.outPath);
+		return true;
 	}
 }

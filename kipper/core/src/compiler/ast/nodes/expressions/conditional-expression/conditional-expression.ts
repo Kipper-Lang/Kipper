@@ -10,8 +10,10 @@ import type { ConditionalExpressionSemantics } from "./conditional-expression-se
 import type { ConditionalExpressionTypeSemantics } from "./conditional-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import { ConditionalExpressionContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { ConditionalExpressionContext } from "../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { KipperNotImplementedError } from "../../../../../errors";
+import * as console from "node:console";
 
 /**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
@@ -81,9 +83,15 @@ export class ConditionalExpression extends Expression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
+		const condition = this.children[0];
+		const trueBranch = this.children[1];
+		const falseBranch = this.children[2];
+
+		this.semanticData = {
+			condition: condition,
+			trueBranch: trueBranch,
+			falseBranch: falseBranch,
+		};
 	}
 
 	/**
@@ -95,9 +103,12 @@ export class ConditionalExpression extends Expression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Conditional Expressions have not been implemented yet."));
+		const semanticData = this.getSemanticData();
+		this.programCtx.typeCheck(this).validConditionalExpression(semanticData.trueBranch, semanticData.falseBranch);
+
+		this.typeSemantics = {
+			evaluatedType: semanticData.trueBranch.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	/**

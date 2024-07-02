@@ -3,9 +3,9 @@
  * @since 0.11.0
  */
 
-import { ExpressionSemantics } from "../expression-semantics";
-import { KipperBitwiseOperator } from "../../../../const";
-import { Expression } from "../expression";
+import type { ExpressionSemantics } from "../expression-semantics";
+import type { KipperBitwiseOperator } from "../../../../const";
+import type { Expression } from "../expression";
 
 /**
  * Semantics of a bitwise expression, which combines two expressions and evaluates to a number.

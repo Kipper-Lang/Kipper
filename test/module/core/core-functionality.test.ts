@@ -1,4 +1,5 @@
-import { KipperCompiler, KipperCompileResult } from "@kipper/core";
+import type { KipperCompileResult } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
@@ -567,6 +568,51 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("Conditional Expression", () => {
+		it("Simple conditional expression", async () => {
+			const fileContent = "const x: num = true ? 5 : 10;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "const x: number = true ? 5 : 10", "Invalid TypeScript code (Expected different output)");
+		});
+
+		// Test for a nested conditional expression
+		it("Nested conditional expression", async () => {
+			const fileContent = "const x: num = true ? (false ? 5 : 10) : (false ? 15 : 20);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"const x: number = true ? (false ? 5 : 10) : (false ? 15 : 20);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		// Test for multiple conditional expressions
+		it("Multiple conditional expressions", async () => {
+			const fileContent = "const x: num = true ? 5 : false ? 10 : 15;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"const x: number = true ? 5 : false ? 10 : 15;",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
+
 	describe("While loop", () => {
 		it("Simple Loop with compound statement", async () => {
 			const fileContent = "var x: num = 1; while (x <= 5) { x += 1; }; print(x as str);";
@@ -743,6 +789,92 @@ describe("Core functionality", () => {
 
 			const jsCode = ts.transpile(code);
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
+		});
+	});
+
+	//do while loop tests
+	describe("Do While loop", () => {
+		it("Simple Loop with compound statement", async () => {
+			const fileContent = "var x: num = 1; do { x += 1; } while (x <= 5); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "do {\n  x += 1;\n} while (x <= 5)", "Invalid TypeScript code (Expected different output)");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with expression statement", async () => {
+			const fileContent = "var x: num = 1; do x += 1; while (x <= 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "do \n  x += 1;\nwhile (x <= 10)", "Invalid TypeScript code (Expected different output)");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "11", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with if statement", async () => {
+			const fileContent = "var x: num = 1; do { if (x != 10) x += 1; } while (x < 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  if (x !== 10) {\n    x += 1;\n  } \n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "10", "Expected different output"), jsCode);
+		});
+
+		it("Can be interrupted with break", async () => {
+			const fileContent = "var x: num = 1; do { if (x == 5) break; x += 1; } while (x < 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  if (x === 5) {\n    break;\n  } \n  x += 1;\n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
+		});
+
+		it("Can be interrupted with continue", async () => {
+			const fileContent =
+				"var x: num = 1; var y: num = 1; do { x++; if (x > 5) continue; y++; } while (x < 10); print(y as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  x++;\n  if (x > 5) {\n    continue;\n  } \n  y++;\n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
 		});
 	});
 

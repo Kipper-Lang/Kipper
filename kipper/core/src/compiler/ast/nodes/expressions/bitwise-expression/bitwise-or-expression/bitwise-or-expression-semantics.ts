@@ -1,6 +1,6 @@
-import { BitwiseExpressionSemantics } from "../bitwise-expression-semantics";
-import { Expression } from "../../expression";
-import { KipperBitwiseOrOperator } from "../../../../../const";
+import type { BitwiseExpressionSemantics } from "../bitwise-expression-semantics";
+import type { Expression } from "../../expression";
+import type { KipperBitwiseOrOperator } from "../../../../../const";
 
 export interface BitwiseOrExpressionSemantics extends BitwiseExpressionSemantics {
 	leftOp: Expression;

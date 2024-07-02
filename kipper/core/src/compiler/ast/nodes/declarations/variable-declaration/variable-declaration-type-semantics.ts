@@ -3,7 +3,7 @@
  * @since 0.10.0
  */
 import type { CheckedType } from "../../../../analysis";
-import { DeclarationTypeSemantics } from "../declaration-type-semantics";
+import type { DeclarationTypeSemantics } from "../declaration-type-semantics";
 
 /**
  * Type semantics for AST Node {@link VariableDeclaration}.

@@ -1,8 +1,10 @@
-import { Config, ConfigInterpreter, type ConfigInterpreterScheme } from "./abstract/config-interpreter";
+import type { Config } from "./abstract/config-interpreter";
+import { ConfigInterpreter, type ConfigInterpreterScheme } from "./abstract/config-interpreter";
 import { KipperConfigFile } from "./kipper-config-file";
-import { EvaluatedKipperConfigFile, RawEvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
+import type { RawEvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
+import { EvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
+import type { ConfigErrorMetaData } from "./errors";
 import {
-	ConfigErrorMetaData,
 	IncompatibleVersionError,
 	InvalidMappingSyntaxError,
 	InvalidVersionSyntaxError,

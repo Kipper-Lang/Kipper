@@ -1,6 +1,6 @@
 import { Lexer } from "antlr4ts/Lexer";
-import { CharStream } from "antlr4ts/CharStream";
-import { Vocabulary } from "antlr4ts/Vocabulary";
+import type { CharStream } from "antlr4ts/CharStream";
+import type { Vocabulary } from "antlr4ts/Vocabulary";
 
 export default abstract class KipperLexerBase extends Lexer {
 	abstract readonly channelNames: string[];

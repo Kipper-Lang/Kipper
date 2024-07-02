@@ -6,11 +6,8 @@ import type { TypeofTypeSpecifierExpressionSemantics } from "./typeof-type-speci
 import type { TypeofTypeSpecifierExpressionTypeSemantics } from "./typeof-type-specifier-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
-import {
-	KindParseRuleMapping,
-	ParseRuleKindMapping,
-	TypeofTypeSpecifierExpressionContext,
-} from "../../../../../parser";
+import type { TypeofTypeSpecifierExpressionContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 
 /**
