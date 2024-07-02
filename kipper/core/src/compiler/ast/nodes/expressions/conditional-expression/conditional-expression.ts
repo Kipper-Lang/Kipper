@@ -87,10 +87,6 @@ export class ConditionalExpression extends Expression<
 		const trueBranch = this.children[1];
 		const falseBranch = this.children[2];
 
-		if (!condition || !trueBranch || !falseBranch) {
-			throw new KipperNotImplementedError("ConditionalExpression.primarySemanticAnalysis");
-		}
-
 		this.semanticData = {
 			condition: condition,
 			trueBranch: trueBranch,
