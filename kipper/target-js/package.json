@@ -17,7 +17,7 @@
 		"json-parse-even-better-errors": "3.0.0",
 		"run-script-os": "1.1.6",
 		"ts-node": "10.9.2",
-		"@types/node": "18.16.16"
+		"@types/node": "18.19.39"
 	},
   "engines": {
     "node": ">=16.0.0",

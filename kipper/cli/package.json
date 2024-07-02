@@ -19,7 +19,7 @@
     "tslog": "3.3.4"
   },
   "devDependencies": {
-    "@types/node": "18.16.16",
+    "@types/node": "18.19.39",
     "@types/sinon": "10.0.20",
     "@oclif/test": "2.5.6",
     "ts-node": "10.9.2",
