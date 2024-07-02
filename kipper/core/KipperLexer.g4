@@ -62,7 +62,7 @@ Else : 'else';
 // for - loop
 For : 'for';
 
-// Enum Variable
+// enums
 Enum : 'enum';
 
 // function-related
@@ -70,6 +70,10 @@ DefFunc : 'def';
 Return : 'return';
 CallFunc : 'call';
 RetIndicator : '->';
+
+// class and interface-related
+Class : 'class';
+Interface : 'interface';
 
 // boolean constants
 True : 'true';

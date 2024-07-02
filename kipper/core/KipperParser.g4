@@ -42,12 +42,10 @@ blockItem
 
 declaration
     :   variableDeclaration SemiColon
-    | 	functionDeclaration SemiColon?
+    | 	functionDeclaration
+    |	interfaceDeclaration
+    |	classDeclaration
     ;
-
-functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
-	;
 
 variableDeclaration
 	:	storageTypeSpecifier initDeclarator
@@ -58,6 +56,14 @@ storageTypeSpecifier
     |   'const'
     ;
 
+initDeclarator
+    :   declarator ':' typeSpecifierExpression ('=' initializer)?
+    ;
+
+initializer
+    :   assignmentExpression
+    ;
+
 declarator
     :   directDeclarator
     ;
@@ -66,22 +72,25 @@ directDeclarator
     :   Identifier
     ;
 
-initDeclarator
-    :   declarator ':' typeSpecifierExpression ('=' initializer)?
-    ;
+functionDeclaration
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
+	;
 
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
-    // Note: Args and Kwargs, like in Python will be added later
     ;
 
 parameterDeclaration
     :   declarator ':' typeSpecifierExpression
     ;
 
-initializer
-    :   assignmentExpression
-    ;
+interfaceDeclaration
+	:	'interface' Identifier '{' '}'
+	;
+
+classDeclaration
+	:	'class' Identifier '{' '}'
+	;
 
 // -- Statements
 
