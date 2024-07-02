@@ -41,6 +41,7 @@ const ifStatementsFile = getFileName("if-statements.kip");
 const forLoopFile = getFileName("for-loop.kip");
 const whileLoopFile = getFileName("while-loop.kip");
 const doWhileLoopFile = getFileName("do-while-loop.kip");
+const bitwiseOperationsFile = getFileName("bitwise-operations.kip");
 
 describe("KipperCompiler", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
@@ -170,6 +171,16 @@ describe("KipperCompiler", () => {
 
 			it("While loop", async () => {
 				const fileContent = (await fs.readFile(whileLoopFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
+
+			it("Do-While loop", async () => {
+				const fileContent = (await fs.readFile(doWhileLoopFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
+
+			it("Bitwise operations", async () => {
+				const fileContent = (await fs.readFile(bitwiseOperationsFile, "utf8" as BufferEncoding)).toString();
 				await compiler.syntaxAnalyse(fileContent);
 			});
 		});
@@ -554,6 +565,30 @@ describe("KipperCompiler", () => {
 					testPrintOutput((message: any) => {
 						assert("10" === message, "Expected '10'");
 					}, jsCode);
+				});
+
+				it(`Bitwise operations [${target.fileExtension}]`, async () => {
+					const fileContent: string = (await fs.readFile(bitwiseOperationsFile, "utf8" as BufferEncoding)).toString();
+					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
+
+					const code: string = result.write();
+					assert(code);
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+
+					const jsCode = ts.transpile(result.write());
+					const output: string[] = [];
+					testPrintOutput((message: any) => {
+						output.push(message);
+					}, jsCode);
+
+					assert.equal(output[0], "Result: 9", "Expected 'Result: 9'");
+					assert.equal(output[1], "Result: 2", "Expected 'Result: 2'");
+					assert.equal(output[2], "Result: 11", "Expected 'Result: 11'");
+					assert.equal(output[3], "Result: 80", "Expected 'Result: 80'");
+					assert.equal(output[4], "Result: 1", "Expected 'Result: 1'");
+					assert.equal(output[5], "Result: -11", "Expected 'Result: -11'");
+					assert.equal(output[6], "Result: 1", "Expected 'Result: 1'");
+					assert.equal(output[7], "Result: 9", "Expected 'Result: 9'");
 				});
 			});
 		});
