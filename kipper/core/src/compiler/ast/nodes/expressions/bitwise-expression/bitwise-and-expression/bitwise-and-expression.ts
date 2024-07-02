@@ -1,3 +1,13 @@
+/**
+ * Bitwise and expression AST node.
+ * @since 0.11.0
+ * @example
+ * 1 & 1 // 1
+ * 1 & 0 // 0
+ * 0 & 1 // 0
+ * 0 & 0 // 0
+ */
+
 import { BitwiseAndExpressionSemantics } from "./bitwise-and-expression-semantics";
 import { BitwiseAndExpressionTypeSemantics } from "./bitwise-and-expression-type-semantics";
 import { BitwiseExpression } from "../bitwise-expression";
@@ -7,18 +17,47 @@ import { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 
+/**
+ * Bitwise and expression AST node.
+ * @since 0.11.0
+ * @example
+ * 1 & 1 // 1
+ * 1 & 0 // 0
+ * 0 & 1 // 0
+ * 0 & 0 // 0
+ */
 export class BitwiseAndExpression extends BitwiseExpression<
 	BitwiseAndExpressionSemantics,
 	BitwiseAndExpressionTypeSemantics
 > {
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
 	protected override readonly _antlrRuleCtx: BitwiseAndExpressionContext;
 
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseAndExpression;
 
+	/**
+	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
+	 * node wraps.
+	 *
+	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
+	 * {@link ParseRuleKindMapping.RULE_expression}.
+	 * @since 0.10.0
+	 */
 	public override get kind() {
 		return BitwiseAndExpression.kind;
 	}
 
+	/**
+	 * The name of the rule for this AST node.
+	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
 	public override get ruleName() {
@@ -30,6 +69,10 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
+	/**
+	 * The primary semantic analysis for this AST node.
+	 * @since 0.11.0
+	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const leftOp: Expression = this.children[0];
 		const rightOp: Expression = this.children[1];
@@ -45,6 +88,10 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		};
 	}
 
+	/**
+	 * The primary semantic type checking for this AST node.
+	 * @since 0.11.0
+	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
@@ -57,8 +104,16 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		};
 	}
 
+	/**
+	 * The primary code generation for this AST node.
+	 * @since 0.11.0
+	 */
 	public checkForWarnings = undefined;
 
+	/**
+	 * The primary code generation for this AST node.
+	 * @since 0.11.0
+	 */
 	public override get antlrRuleCtx(): BitwiseAndExpressionContext {
 		return this._antlrRuleCtx;
 	}
