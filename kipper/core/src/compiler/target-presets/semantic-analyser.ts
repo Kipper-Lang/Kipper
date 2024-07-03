@@ -26,6 +26,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -286,4 +287,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }

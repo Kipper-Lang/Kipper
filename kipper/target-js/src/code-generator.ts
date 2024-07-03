@@ -54,6 +54,7 @@ import type {
 	WhileLoopIterationStatement,
 	ObjectPrimaryExpression,
 	ObjectProperty,
+	LambdaExpression,
 } from "@kipper/core";
 import {
 	VariableDeclaration,
@@ -769,5 +770,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
+	};
+
+	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+		return []; // TODO
 	};
 }

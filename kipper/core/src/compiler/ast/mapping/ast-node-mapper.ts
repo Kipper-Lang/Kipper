@@ -51,6 +51,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 	ObjectPropertyContext,
+	LambdaExpressionContext,
 } from "../../parser";
 import type {
 	ASTDeclarationKind,
@@ -61,6 +62,7 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
+import { LambdaExpression } from "../nodes";
 import { ObjectProperty } from "../nodes";
 import {
 	AdditiveExpression,
@@ -162,6 +164,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
+		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
@@ -228,6 +231,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
+		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -301,6 +305,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseAndExpression: BitwiseAndExpression,
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
+		RULE_lambdaExpression: LambdaExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
 
 	/**

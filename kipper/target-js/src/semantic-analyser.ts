@@ -260,4 +260,9 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link BitwiseShiftExpression} instances.
 	 */
 	bitwiseShiftExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	lambdaExpression = undefined;
 }

@@ -52,6 +52,7 @@ import type {
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
+	LambdaExpressionContext,
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
@@ -673,6 +674,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseShiftExpression`
+	 */
+	public enterLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseShiftExpression`
+	 */
+	public exitLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
