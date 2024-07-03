@@ -1,9 +1,8 @@
-import { ProcessedType } from "./processed-type";
-import type { KipperCompilableType } from "../../const";
-import { KipperNotImplementedError } from "../../../errors";
+import type { KipperBuiltInType } from "../../const";
+import { ProcessedType } from "./base";
 
 export type CustomTypeConstraint = CustomPrimitiveTypeConstraint | CustomObjectTypeConstraint;
-export type CustomPrimitiveTypeConstraint = KipperCompilableType;
+export type CustomPrimitiveTypeConstraint = KipperBuiltInType;
 export type CustomObjectTypeConstraint = { [key: string]: CustomTypeConstraint };
 
 /**
@@ -13,9 +12,27 @@ export type CustomObjectTypeConstraint = { [key: string]: CustomTypeConstraint }
  * @since 0.11.0
  */
 export class CustomType extends ProcessedType {
-	public constructor(identifier: string, constraints: CustomTypeConstraint) {
-		// TODO! Implement proper custom types once we can migrate past the old type system
-		super(identifier, "void");
-		throw new KipperNotImplementedError("Custom types are not implement yet");
+	private readonly _constraints: CustomTypeConstraint;
+
+	public constructor(identifier: string, isCompilable: boolean, constraints: CustomTypeConstraint) {
+		super(identifier, isCompilable);
+		this._constraints = constraints;
+	}
+
+	/**
+	 * Returns the constraints of this type.
+	 * @since 0.11.0
+	 */
+	public get constraints(): CustomTypeConstraint {
+		return this._constraints;
+	}
+
+	/**
+	 * Checks whether this type is assignable to another type.
+	 * @param type The type to check against.
+	 * @since 0.11.0
+	 */
+	isAssignableTo(type: ProcessedType): boolean {
+		return false;
 	}
 }

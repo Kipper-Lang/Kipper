@@ -31,12 +31,12 @@ import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration }
 import type {
 	KipperArithmeticOperator,
 	KipperBitwiseOperator,
-	KipperCompilableType,
+	KipperBuiltInType,
 	KipperReferenceable,
 	KipperReferenceableFunction,
 } from "../../const";
 import {
-	kipperCompilableTypes,
+	kipperBuiltInTypes,
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
 	kipperPlusOperator,
@@ -81,7 +81,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public typeExists(type: string): void {
-		if (kipperCompilableTypes.find((val) => val === type) === undefined) {
+		if (kipperBuiltInTypes.find((val) => val === type) === undefined) {
 			throw this.assertError(new UnknownTypeError(type));
 		}
 	}
@@ -98,7 +98,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			// Ensure the type exists
 			this.typeExists(type.identifier);
 
-			return ProcessedType.fromCompilableType(<KipperCompilableType>type.identifier);
+			return ProcessedType.fromCompilableType(<KipperBuiltInType>type.identifier);
 		} catch (e) {
 			// If the error is not a KipperError, rethrow it (since it is not a type error, and we don't know what happened)
 			if (!(e instanceof KipperError)) {
@@ -126,10 +126,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @returns True if the types are matching, otherwise false.
 	 * @since 0.10.0
 	 */
-	public checkMatchingTypes(type1: KipperCompilableType, type2: KipperCompilableType): boolean {
+	public checkMatchingTypes(type1: KipperBuiltInType, type2: KipperBuiltInType): boolean {
 		if (type1 !== type2) {
 			// 'void' is compatible with 'undefined'
-			let interchangeableTypes = ["void", "undefined"];
+
 
 			// Ensure that 'true' is still returned when type1 and type2 are compatible
 			return interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2);
@@ -322,12 +322,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.9.0
 	 */
 	public validUnaryExpression(operand: UnaryExpression | IncrementOrDecrementPostfixExpression): void {
-		const semanticData = <UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics>(
-			operand.getSemanticData()
-		);
+		const semanticData = operand.getSemanticData() as
+			UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics;
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
-
-		// Get the compile-types type of the expression
 		const expType = expTypeSemantics.evaluatedType.get();
 
 		// If the expression type is undefined, skip type checking (the type is invalid anyway)
@@ -340,7 +337,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType));
 		}
 
-		// Ensure that the operand of an '++' and '--' modifier expression is a reference
+			// Ensure that the operand of an '++' and '--' modifier expression is a reference
 		let isReference = semanticData.operand instanceof IdentifierPrimaryExpression;
 		if ((<Array<string>>kipperIncrementOrDecrementOperators).includes(semanticData.operator) && !isReference) {
 			// Edge-case: If the operand is a tangled expression, it should still work if the child is an identifier

@@ -2,7 +2,7 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, KipperCompilableType } from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, KipperBuiltInType } from "@kipper/core";
 import {
 	kipperBoolType,
 	KipperCompileTarget,
@@ -59,11 +59,11 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	}
 
 	/**
-	 * Fetches the typescript equivalent for a {@link KipperCompilableType}.
+	 * Fetches the typescript equivalent for a {@link KipperBuiltInType}.
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType(kipperType: KipperCompilableType | Array<KipperCompilableType>): string {
+	public static getTypeScriptType(kipperType: KipperBuiltInType | Array<KipperBuiltInType>): string {
 		if (Array.isArray(kipperType)) {
 			// Recursively call this function for each type in the array
 			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;

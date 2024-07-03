@@ -287,6 +287,16 @@ export class TypeNotCompilableError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a type is used for type checking that can not be used for type checking.
+ * @since 0.11.0
+ */
+export class TypeCanNotBeUsedForTypeCheckingError extends KipperInternalError {
+	constructor() {
+		super("This Type can not be used for type checking. This is a bug in the compiler.");
+	}
+}
+
+/**
  * Error that is thrown whenever a parent node attempts to access the {@link CompilableASTNode.semanticData} of a child,
  * but the child had an error during semantic analysis. This is to prevent the parent from using the child's data
  * despite the child having an error.
@@ -577,13 +587,8 @@ export class ArithmeticOperationTypeError extends TypeError {
  * @since 0.6.0
  */
 export class BitwiseOperationTypeError extends TypeError {
-	constructor(firstType?: string, secondType?: string) {
-		if (firstType && secondType) {
-			// If the types caused the error, specify them in the error message
-			super(`Invalid bitwise operation between operands of type '${firstType}' and '${secondType}'.`);
-		} else {
-			super(`Invalid bitwise operation.`);
-		}
+	constructor(firstType: string, secondType: string) {
+		super(`Bitwise expressions are only allowed for type 'num'. Received '${firstType}' and '${secondType}'.`);
 	}
 }
 

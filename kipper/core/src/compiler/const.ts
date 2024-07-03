@@ -150,7 +150,7 @@ export const kipperBoolType: KipperBoolType = "bool";
  * list<T>
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type KipperListType<T extends KipperType> = "list";
+export type KipperListType<T extends KipperBuiltInType> = "list";
 
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
@@ -193,28 +193,17 @@ export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
  * only used for error handling/recovery and skips type checking altogether.
  * @since 0.10.0
  */
-export type KipperCompilableType = KipperMetaType | KipperPrimitiveType | KipperFuncType | KipperListType<any>;
+export type KipperBuiltInType = KipperMetaType | KipperPrimitiveType | KipperFuncType | KipperListType<any>;
 
 /**
  * All compilable and valid base types inside Kipper.
  * @since 0.10.0
  */
-export const kipperCompilableTypes: Array<KipperCompilableType> = [
+export const kipperBuiltInTypes: Array<KipperBuiltInType> = [
 	kipperFuncType,
 	...kipperPrimitiveTypes,
 	kipperListType,
 ];
-
-/**
- * All error types inside Kipper, which indicate an invalid type that can not be used for type checking.
- * @since 0.10.0
- */
-export type KipperErrorType = UndefinedType;
-
-/**
- * All available variable types inside Kipper.
- */
-export type KipperType = KipperCompilableType | KipperErrorType;
 
 /**
  * List of all supported variable type conversions that can be performed in a Kipper program.
@@ -223,7 +212,7 @@ export type KipperType = KipperCompilableType | KipperErrorType;
  * which generates for each conversion the translator function in the specific target.
  * @since 0.8.0
  */
-export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
+export const kipperSupportedConversions: Array<[KipperBuiltInType, KipperBuiltInType]> = [
 	["num", "str"],
 	["bool", "str"],
 	["void", "str"],

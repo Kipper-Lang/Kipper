@@ -1,4 +1,4 @@
-import { Type } from "./type";
+import { Type } from "./base";
 
 /**
  * An unchecked type wrapper that may contain any type, even if it does not exist or is invalid.
