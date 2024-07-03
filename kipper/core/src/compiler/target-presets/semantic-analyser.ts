@@ -8,6 +8,10 @@ import type {
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
@@ -48,7 +52,6 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
-import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 

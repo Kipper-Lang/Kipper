@@ -8,7 +8,7 @@
 import type { VariableDeclarationSemantics } from "./variable-declaration-semantics";
 import type { VariableDeclarationTypeSemantics } from "./variable-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { ScopeVariableDeclaration, RawType } from "../../../../analysis";
+import type { RawType, ScopeVariableDeclaration } from "../../../../analysis";
 import type { Expression, IdentifierTypeSpecifierExpression } from "../../expressions";
 import type { ParseTree } from "antlr4ts/tree";
 import type { KipperStorageType } from "../../../../const";

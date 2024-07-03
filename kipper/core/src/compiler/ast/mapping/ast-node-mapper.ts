@@ -67,6 +67,10 @@ import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
@@ -105,10 +109,6 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	BitwiseOrExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
-	BitwiseAndExpression,
 } from "../nodes";
 
 /**

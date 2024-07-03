@@ -8,7 +8,6 @@ import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../analysis";
 import type { InterfaceDeclarationContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { Declaration } from "../../declaration";
 import { KipperNotImplementedError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
 

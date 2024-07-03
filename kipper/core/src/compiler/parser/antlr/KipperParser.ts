@@ -2,20 +2,15 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+import { ASTKind, KipperParserRuleContext, ParseRuleKindMapping } from "..";
 import KipperParserBase from "./base/KipperParserBase";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
-import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";

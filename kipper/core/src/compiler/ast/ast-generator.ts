@@ -76,7 +76,7 @@ import type {
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { Declaration, Expression, Statement, RootASTNode } from "./nodes";
+import { Declaration, Expression, RootASTNode, Statement } from "./nodes";
 import { DeclarationASTNodeFactory, ExpressionASTNodeFactory, StatementASTNodeFactory } from "./factories";
 import { KipperInternalError } from "../../errors";
 

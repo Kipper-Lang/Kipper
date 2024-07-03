@@ -32,6 +32,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InterfaceDeclarationContext,
 	JumpStatementContext,
+	KindParseRuleMapping,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
@@ -49,7 +50,6 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../../parser";
-import type { KindParseRuleMapping } from "../../parser";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
