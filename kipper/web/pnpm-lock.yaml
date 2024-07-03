@@ -24,8 +24,8 @@ devDependencies:
     specifier: 17.0.0
     version: 17.0.0
   json-parse-even-better-errors:
-    specifier: 3.0.0
-    version: 3.0.0
+    specifier: 3.0.2
+    version: 3.0.2
   minimist:
     specifier: 1.2.8
     version: 1.2.8
@@ -945,8 +945,8 @@ packages:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
     dev: true
 
-  /json-parse-even-better-errors@3.0.0:
-    resolution: {integrity: sha512-iZbGHafX/59r39gPwVPRBGw0QQKnA7tte5pSMrhWOW7swGsVvVTjmfyAV9pNqk8YGT7tRCdxRu8uzcgZwoDooA==}
+  /json-parse-even-better-errors@3.0.2:
+    resolution: {integrity: sha512-fi0NG4bPjCHunUJffmLd0gxssIgkNmArMvis4iNah6Owg1MCJjWhEcDLmsK6iGkJq3tHwbDkTlce70/tmXN4cQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
 
