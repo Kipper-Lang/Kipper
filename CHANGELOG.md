@@ -60,6 +60,10 @@ To use development versions of Kipper download the
   - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
   - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
   - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
+  - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassDeclaration`, which represents an AST class declaration.
+  - `BuiltInType`, which represents a built-in type.
+  - `CustomType`, which represents a user defined type.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
@@ -93,6 +97,13 @@ To use development versions of Kipper download the
   - `BitwiseXorExpressionTypeSemantics`, which represents the type semantics of a bitwise XOR expression.
   - `BitwiseShiftExpressionSemantics`, which represents the semantics of a bitwise shift expression.
   - `BitwiseShiftExpressionTypeSemantics`, which represents the type semantics of a bitwise shift expression.
+  - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
+  - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
+  - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
+  - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
+  - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
+  - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
 - New parameters:
   - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
