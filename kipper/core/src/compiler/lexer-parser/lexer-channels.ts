@@ -10,7 +10,7 @@ export const DEFAULT_TOKEN_CHANNEL = 0;
  * The hidden channel where all whitespaces and newlines are stored.
  * @since 0.11.0
  */
-export const HIDDEN  = 1;
+export const HIDDEN = 1;
 
 /**
  * The comment channels where all comments are stored.

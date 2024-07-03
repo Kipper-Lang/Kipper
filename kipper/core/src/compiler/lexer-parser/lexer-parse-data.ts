@@ -12,10 +12,31 @@ export interface LexerParserData {
 	 * @since 0.11.0
 	 */
 	channels: {
-		DEFAULT_TOKEN_CHANNEL: CommonTokenStream,
-		HIDDEN: CommonTokenStream,
-		COMMENT: CommonTokenStream,
-		PRAGMA: CommonTokenStream,
+		/**
+		 * Token stream which contains all tokens regardless of channel.
+		 * @since 0.11.0
+		 */
+		ALL: CommonTokenStream;
+		/**
+		 * The default channel ID which all parser-relevant tokens are stored.
+		 * @since 0.11.0
+		 */
+		DEFAULT_TOKEN_CHANNEL: CommonTokenStream;
+		/**
+		 * The hidden channel where all whitespaces and newlines are stored.
+		 * @since 0.11.0
+		 */
+		HIDDEN: CommonTokenStream;
+		/**
+		 * The comment channels where all comments are stored.
+		 * @since 0.11.0
+		 */
+		COMMENT: CommonTokenStream;
+		/**
+		 * The pragma channel where all pragma instructions are stored which modify the compiler behaviour.
+		 * @since 0.11.0
+		 */
+		PRAGMA: CommonTokenStream;
 	};
 	/**
 	 * The input file stream.

@@ -11,7 +11,7 @@ import type {
 	KipperLexer,
 	KipperParser,
 	LexerParserData,
-	KipperFileStream
+	KipperFileStream,
 } from "./lexer-parser";
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";

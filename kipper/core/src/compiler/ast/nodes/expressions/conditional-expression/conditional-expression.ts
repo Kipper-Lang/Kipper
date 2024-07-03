@@ -12,8 +12,6 @@ import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
 import type { ConditionalExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../errors";
-import * as console from "node:console";
 
 /**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right

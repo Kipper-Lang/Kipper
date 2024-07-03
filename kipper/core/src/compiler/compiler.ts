@@ -94,13 +94,14 @@ export class KipperCompiler {
 
 		// Let the lexer run and generate a token stream for each channel
 		const channels: LexerParserData["channels"] = {
+			ALL: new CommonTokenStream(lexer),
 			DEFAULT_TOKEN_CHANNEL: new CommonTokenStream(lexer, Channel.DEFAULT_TOKEN_CHANNEL),
 			HIDDEN: new CommonTokenStream(lexer, Channel.HIDDEN),
 			COMMENT: new CommonTokenStream(lexer, Channel.COMMENT),
 			PRAGMA: new CommonTokenStream(lexer, Channel.PRAGMA),
 		};
 
-		const parser = new KipperParser(channels.DEFAULT_TOKEN_CHANNEL);
+		const parser = new KipperParser(channels.ALL);
 
 		parser.removeErrorListeners(); // removing all error listeners
 		parser.addErrorListener(errorListener); // adding our own error listener
@@ -128,13 +129,7 @@ export class KipperCompiler {
 			compilerOptions instanceof EvaluatedCompileConfig ? compilerOptions : new EvaluatedCompileConfig(compilerOptions);
 
 		// Creates a new program context using the parse data and compilation configuration
-		return new KipperProgramContext(
-			parseData,
-			this.logger,
-			config.target,
-			this.internalFunctions,
-			config,
-		);
+		return new KipperProgramContext(parseData, this.logger, config.target, this.internalFunctions, config);
 	}
 
 	/**
