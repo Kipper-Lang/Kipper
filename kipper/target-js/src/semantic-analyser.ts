@@ -2,7 +2,14 @@
  * The TypeScript target-specific semantic analyser.
  * @since 0.10.0
  */
-import type { FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "@kipper/core";
+import type {
+	ClassDeclaration,
+	Declaration,
+	FunctionDeclaration,
+	InterfaceDeclaration,
+	ParameterDeclaration,
+	VariableDeclaration,
+} from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
 
@@ -17,9 +24,7 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * @param declaration The variable, function or parameter declaration.
 	 * @private
 	 */
-	protected checkViabilityOfIdentifier(
-		declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration,
-	): void {
+	protected checkViabilityOfIdentifier(declaration: Declaration): void {
 		const identifier = declaration.getSemanticData().identifier;
 
 		// Throw an error in case the declaration identifier is reserved
@@ -100,6 +105,14 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	variableDeclaration = async (node: VariableDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	interfaceDeclaration = async (node: InterfaceDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	classDeclaration = async (node: ClassDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
 
@@ -220,6 +233,26 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
 	equalityExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseAndExpression} instances.
+	 */
+	bitwiseAndExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseOrExpression} instances.
+	 */
+	bitwiseOrExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseXorExpression} instances.
+	 */
+	bitwiseXorExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseShiftExpression} instances.
+	 */
+	bitwiseShiftExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.

@@ -136,6 +136,15 @@ LessEqual : '<=';
 Greater : '>';
 GreaterEqual : '>=';
 
+// Bitwise Operators
+BitwiseAnd : '&';
+BitwiseOr : '|';
+BitwiseXor : '^';
+BitwiseNot : '~';
+BitwiseZeroFillLeftShift : '<<';
+BitwiseSignedRightShift : '>>';
+BitwiseZeroFillRightShift : '>>>';
+
 // Property accessing
 Dot : '.';
 

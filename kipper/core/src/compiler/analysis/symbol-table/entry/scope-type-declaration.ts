@@ -4,10 +4,11 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
-	ClassDeclaration, ClassDeclarationSemantics,
+	ClassDeclaration,
+	ClassDeclarationSemantics,
 	FunctionDeclarationSemantics,
 	InterfaceDeclaration,
-	InterfaceDeclarationSemantics
+	InterfaceDeclarationSemantics,
 } from "../../../ast";
 import { CheckedType } from "../../type";
 

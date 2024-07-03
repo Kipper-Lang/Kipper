@@ -7,8 +7,14 @@ import KipperParserBase from "./base/KipperParserBase";
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
+import { PassOnBitwiseShiftExpressionContext } from "./KipperParser";
+import { ActualBitwiseShiftExpressionContext } from "./KipperParser";
+import { PassOnBitwiseAndExpressionContext } from "./KipperParser";
+import { ActualBitwiseAndExpressionContext } from "./KipperParser";
 import { PassOnLogicalAndExpressionContext } from "./KipperParser";
 import { ActualLogicalAndExpressionContext } from "./KipperParser";
+import { PassOnBitwiseXorExpressionContext } from "./KipperParser";
+import { ActualBitwiseXorExpressionContext } from "./KipperParser";
 import { ExternalBlockItemContext } from "./KipperParser";
 import { PassOncomputedPrimaryExpressionContext } from "./KipperParser";
 import { FunctionCallExpressionContext } from "./KipperParser";
@@ -20,6 +26,8 @@ import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
 import { ActualCastOrConvertExpressionContext } from "./KipperParser";
+import { PassOnBitwiseOrExpressionContext } from "./KipperParser";
+import { ActualBitwiseOrExpressionContext } from "./KipperParser";
 import { PassOnEqualityExpressionContext } from "./KipperParser";
 import { ActualEqualityExpressionContext } from "./KipperParser";
 import { PassOnAdditiveExpressionContext } from "./KipperParser";
@@ -92,8 +100,13 @@ import { UnaryOperatorContext } from "./KipperParser";
 import { CastOrConvertExpressionContext } from "./KipperParser";
 import { MultiplicativeExpressionContext } from "./KipperParser";
 import { AdditiveExpressionContext } from "./KipperParser";
+import { BitwiseShiftExpressionContext } from "./KipperParser";
+import { BitwiseShiftOperatorsContext } from "./KipperParser";
 import { RelationalExpressionContext } from "./KipperParser";
 import { EqualityExpressionContext } from "./KipperParser";
+import { BitwiseAndExpressionContext } from "./KipperParser";
+import { BitwiseXorExpressionContext } from "./KipperParser";
+import { BitwiseOrExpressionContext } from "./KipperParser";
 import { LogicalAndExpressionContext } from "./KipperParser";
 import { LogicalOrExpressionContext } from "./KipperParser";
 import { ConditionalExpressionContext } from "./KipperParser";
@@ -111,6 +124,58 @@ import { TypeSpecifierIdentifierContext } from "./KipperParser";
  * `KipperParser`.
  */
 export interface KipperParserListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by the `passOnBitwiseShiftExpression`
+	 * labeled alternative in `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnBitwiseShiftExpression?: (ctx: PassOnBitwiseShiftExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnBitwiseShiftExpression`
+	 * labeled alternative in `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnBitwiseShiftExpression?: (ctx: PassOnBitwiseShiftExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseShiftExpression`
+	 * labeled alternative in `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualBitwiseShiftExpression?: (ctx: ActualBitwiseShiftExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseShiftExpression`
+	 * labeled alternative in `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualBitwiseShiftExpression?: (ctx: ActualBitwiseShiftExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `passOnBitwiseAndExpression`
+	 * labeled alternative in `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnBitwiseAndExpression?: (ctx: PassOnBitwiseAndExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnBitwiseAndExpression`
+	 * labeled alternative in `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnBitwiseAndExpression?: (ctx: PassOnBitwiseAndExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseAndExpression`
+	 * labeled alternative in `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualBitwiseAndExpression?: (ctx: ActualBitwiseAndExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseAndExpression`
+	 * labeled alternative in `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualBitwiseAndExpression?: (ctx: ActualBitwiseAndExpressionContext) => void;
+
 	/**
 	 * Enter a parse tree produced by the `passOnLogicalAndExpression`
 	 * labeled alternative in `KipperParser.logicalAndExpression`.
@@ -136,6 +201,32 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitActualLogicalAndExpression?: (ctx: ActualLogicalAndExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `passOnBitwiseXorExpression`
+	 * labeled alternative in `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnBitwiseXorExpression?: (ctx: PassOnBitwiseXorExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnBitwiseXorExpression`
+	 * labeled alternative in `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnBitwiseXorExpression?: (ctx: PassOnBitwiseXorExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseXorExpression`
+	 * labeled alternative in `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualBitwiseXorExpression?: (ctx: ActualBitwiseXorExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseXorExpression`
+	 * labeled alternative in `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualBitwiseXorExpression?: (ctx: ActualBitwiseXorExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `externalBlockItem`
@@ -279,6 +370,32 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitActualCastOrConvertExpression?: (ctx: ActualCastOrConvertExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `passOnBitwiseOrExpression`
+	 * labeled alternative in `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnBitwiseOrExpression?: (ctx: PassOnBitwiseOrExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnBitwiseOrExpression`
+	 * labeled alternative in `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnBitwiseOrExpression?: (ctx: PassOnBitwiseOrExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseOrExpression`
+	 * labeled alternative in `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualBitwiseOrExpression?: (ctx: ActualBitwiseOrExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseOrExpression`
+	 * labeled alternative in `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualBitwiseOrExpression?: (ctx: ActualBitwiseOrExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnEqualityExpression`
@@ -1097,6 +1214,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitAdditiveExpression?: (ctx: AdditiveExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBitwiseShiftExpression?: (ctx: BitwiseShiftExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bitwiseShiftExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBitwiseShiftExpression?: (ctx: BitwiseShiftExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.bitwiseShiftOperators`.
+	 * @param ctx the parse tree
+	 */
+	enterBitwiseShiftOperators?: (ctx: BitwiseShiftOperatorsContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bitwiseShiftOperators`.
+	 * @param ctx the parse tree
+	 */
+	exitBitwiseShiftOperators?: (ctx: BitwiseShiftOperatorsContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.relationalExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -1117,6 +1256,39 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitEqualityExpression?: (ctx: EqualityExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBitwiseAndExpression?: (ctx: BitwiseAndExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bitwiseAndExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBitwiseAndExpression?: (ctx: BitwiseAndExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBitwiseXorExpression?: (ctx: BitwiseXorExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bitwiseXorExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBitwiseXorExpression?: (ctx: BitwiseXorExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterBitwiseOrExpression?: (ctx: BitwiseOrExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.bitwiseOrExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitBitwiseOrExpression?: (ctx: BitwiseOrExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.logicalAndExpression`.

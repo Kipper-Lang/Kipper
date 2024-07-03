@@ -8,6 +8,10 @@ import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
+	BitwiseAndExpressionContext,
+	BitwiseOrExpressionContext,
+	BitwiseShiftExpressionContext,
+	BitwiseXorExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
@@ -101,6 +105,10 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	BitwiseOrExpression,
+	BitwiseXorExpression,
+	BitwiseShiftExpression,
+	BitwiseAndExpression,
 } from "../nodes";
 
 /**
@@ -156,6 +164,10 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: MemberAccessExpression,
+		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpression,
+		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
+		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
+		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
 
 	/**
@@ -220,6 +232,10 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]: IdentifierTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
+		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -291,6 +307,10 @@ export class ASTNodeMapper {
 		RULE_genericTypeSpecifierExpression: GenericTypeSpecifierExpression,
 		RULE_typeofTypeSpecifierExpression: TypeofTypeSpecifierExpression,
 		RULE_memberAccessExpression: MemberAccessExpression,
+		RULE_bitwiseOrExpression: BitwiseOrExpression,
+		RULE_bitwiseAndExpression: BitwiseAndExpression,
+		RULE_bitwiseXorExpression: BitwiseXorExpression,
+		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
 
 	/**

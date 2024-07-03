@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
+  ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
   ([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
 - Implemented Do-While-Loop (`do ... while ...`) iteration statements.
@@ -53,6 +55,11 @@ To use development versions of Kipper download the
   - `PromptModule` in `@kipper/cli`, which contains all prompt-related functions and classes.
   - `ObjectPrimaryExpression`, which represents an AST object primary expression.
   - `ObjectProperty`, which represents an AST object property.
+  - `BitwiseExpression`, which represents an AST bitwise expression.
+  - `BitwiseAndExpression`, which represents an AST bitwise AND expression.
+  - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
+  - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
+  - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
@@ -76,6 +83,16 @@ To use development versions of Kipper download the
   - `ObjectPrimaryExpressionTypeSemantics`, which represents the type semantics of an object primary expression.
   - `ObjectPropertySemantics`, which represents the semantics of an object property.
   - `ObjectPropertyTypeSemantics`, which represents the type semantics of an object property.
+  - `BitwiseExpressionSemantics`, which represents the semantics of a bitwise expression.
+  - `BitwiseExpressionTypeSemantics`, which represents the type semantics of a bitwise expression.
+  - `BitwiseAndExpressionSemantics`, which represents the semantics of a bitwise AND expression.
+  - `BitwiseAndExpressionTypeSemantics`, which represents the type semantics of a bitwise AND expression.
+  - `BitwiseOrExpressionSemantics`, which represents the semantics of a bitwise OR expression.
+  - `BitwiseOrExpressionTypeSemantics`, which represents the type semantics of a bitwise OR expression.
+  - `BitwiseXorExpressionSemantics`, which represents the semantics of a bitwise XOR expression.
+  - `BitwiseXorExpressionTypeSemantics`, which represents the type semantics of a bitwise XOR expression.
+  - `BitwiseShiftExpressionSemantics`, which represents the semantics of a bitwise shift expression.
+  - `BitwiseShiftExpressionTypeSemantics`, which represents the type semantics of a bitwise shift expression.
 - New parameters:
   - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.

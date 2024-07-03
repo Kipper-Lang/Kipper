@@ -5,5 +5,5 @@
 export * from "./type-declaration";
 export * from "./type-declaration-semantics";
 export * from "./type-declaration-type-semantics";
-export * from  "./class-declaration/";
+export * from "./class-declaration/";
 export * from "./interface-declaration/";
