@@ -47,8 +47,8 @@ devDependencies:
     specifier: 18.19.39
     version: 18.19.39
   '@types/sinon':
-    specifier: 10.0.20
-    version: 10.0.20
+    specifier: 17.0.3
+    version: 17.0.3
   json-parse-even-better-errors:
     specifier: 2.3.1
     version: 2.3.1
@@ -775,8 +775,8 @@ packages:
       '@types/node': 18.19.39
     dev: true
 
-  /@types/sinon@10.0.20:
-    resolution: {integrity: sha512-2APKKruFNCAZgx3daAyACGzWuJ028VVCUDk6o2rw/Z4PXT0ogwdV4KUegW0MwVs0Zu59auPXbbuBJHF12Sx1Eg==}
+  /@types/sinon@17.0.3:
+    resolution: {integrity: sha512-j3uovdn8ewky9kRBG19bOwaZbexJu/XjtkHyjvUgt4xfPFz18dcORIMqnYh66Fx3Powhcr85NT5+er3+oViapw==}
     dependencies:
       '@types/sinonjs__fake-timers': 8.1.2
     dev: true
@@ -1524,7 +1524,7 @@ packages:
       '@types/chai': 4.3.3
       '@types/lodash': 4.14.182
       '@types/node': 18.19.39
-      '@types/sinon': 10.0.20
+      '@types/sinon': 17.0.3
       lodash: 4.17.21
       mock-stdin: 1.0.0
       nock: 13.5.4
