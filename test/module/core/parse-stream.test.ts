@@ -1,9 +1,8 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import * as path from "path";
-import { KipperFileStream } from "../../../kipper/core/src/compiler/lexer-parser";
+import { KipperFileStream, KipperConfigError } from "@kipper/core";
 import { CharStreams } from "antlr4ts";
-import { KipperConfigError } from "@kipper/core";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 

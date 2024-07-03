@@ -1,13 +1,6 @@
 import { assert } from "chai";
 import type { KipperCompileResult } from "@kipper/core";
-import {
-	KipperCompiler,
-	KipperError,
-	KipperLogger,
-	KipperFileStream,
-	KipperSyntaxError,
-	LogLevel,
-} from "@kipper/core";
+import { KipperCompiler, KipperError, KipperLogger, KipperFileStream, KipperSyntaxError, LogLevel } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
