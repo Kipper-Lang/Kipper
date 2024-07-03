@@ -4,10 +4,10 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
-	ClassDeclaration,
+	ClassDeclaration, ClassDeclarationSemantics,
 	FunctionDeclarationSemantics,
 	InterfaceDeclaration,
-	InterfaceDeclarationSemantics,
+	InterfaceDeclarationSemantics
 } from "../../../ast";
 import { CheckedType } from "../../type";
 
@@ -28,7 +28,7 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): InterfaceDeclarationSemantics | FunctionDeclarationSemantics {
+	private get semanticData(): InterfaceDeclarationSemantics | ClassDeclarationSemantics {
 		return this._node.getSemanticData();
 	}
 

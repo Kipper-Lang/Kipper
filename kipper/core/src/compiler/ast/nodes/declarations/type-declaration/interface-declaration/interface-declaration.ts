@@ -4,18 +4,19 @@
  */
 import type { InterfaceDeclarationSemantics } from "./interface-declaration-semantics";
 import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
-import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../analysis";
-import type { InterfaceDeclarationContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Declaration } from "../declaration";
-import { KipperNotImplementedError } from "../../../../../errors";
+import type { CompilableNodeParent } from "../../../../compilable-ast-node";
+import type { ScopeTypeDeclaration } from "../../../../../analysis";
+import type { InterfaceDeclarationContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { Declaration } from "../../declaration";
+import { KipperNotImplementedError } from "../../../../../../errors";
+import { TypeDeclaration } from "../type-declaration";
 
 /**
  * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
  * @since 0.11.0
  */
-export class InterfaceDeclaration extends Declaration<
+export class InterfaceDeclaration extends TypeDeclaration<
 	InterfaceDeclarationSemantics,
 	InterfaceDeclarationTypeSemantics
 > {

@@ -2,23 +2,23 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.11.0
  */
-import type { ScopeNode } from "../../../scope-node";
+import type { ScopeNode } from "../../../../scope-node";
 import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
 import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
-import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../analysis";
-import type { ClassDeclarationContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Declaration } from "../declaration";
-import { KipperNotImplementedError } from "../../../../../errors";
-import { ClassScope } from "../../../../analysis/symbol-table/class-scope";
+import type { CompilableNodeParent } from "../../../../compilable-ast-node";
+import type { ScopeTypeDeclaration } from "../../../../../analysis";
+import type { ClassDeclarationContext } from "../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import { KipperNotImplementedError } from "../../../../../../errors";
+import { ClassScope } from "../../../../../analysis/symbol-table/class-scope";
+import { TypeDeclaration } from "../type-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.11.0
  */
 export class ClassDeclaration
-	extends Declaration<ClassDeclarationSemantics, ClassDeclarationTypeSemantics>
+	extends TypeDeclaration<ClassDeclarationSemantics, ClassDeclarationTypeSemantics>
 	implements ScopeNode<ClassScope>
 {
 	/**
