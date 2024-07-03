@@ -1,6 +1,7 @@
 import type { KipperFileStream } from "./file-stream";
 import type { CompilationUnitContext, KipperLexer, KipperParser } from "./antlr/";
 import type { CommonTokenStream } from "antlr4ts";
+import type { Token } from "antlr4ts/Token";
 
 /**
  * Parse data for a {@link KipperProgramContext}.
@@ -18,25 +19,25 @@ export interface LexerParserData {
 		 */
 		ALL: CommonTokenStream;
 		/**
-		 * The default channel ID which all parser-relevant tokens are stored.
+		 * The default channel which all parser-relevant tokens are stored.
 		 * @since 0.11.0
 		 */
-		DEFAULT_TOKEN_CHANNEL: CommonTokenStream;
+		DEFAULT_TOKEN_CHANNEL: Array<Token>;
 		/**
 		 * The hidden channel where all whitespaces and newlines are stored.
 		 * @since 0.11.0
 		 */
-		HIDDEN: CommonTokenStream;
+		HIDDEN: Array<Token>;
 		/**
 		 * The comment channels where all comments are stored.
 		 * @since 0.11.0
 		 */
-		COMMENT: CommonTokenStream;
+		COMMENT: Array<Token>;
 		/**
 		 * The pragma channel where all pragma instructions are stored which modify the compiler behaviour.
 		 * @since 0.11.0
 		 */
-		PRAGMA: CommonTokenStream;
+		PRAGMA: Array<Token>;
 	};
 	/**
 	 * The input file stream.

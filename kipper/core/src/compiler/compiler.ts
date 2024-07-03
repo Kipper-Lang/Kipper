@@ -4,7 +4,7 @@
  */
 import type { InternalFunction } from "./runtime-built-ins";
 import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
-import type { CodePointCharStream } from "antlr4ts";
+import type { CodePointCharStream, Token } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import type { LexerParserData } from "./lexer-parser";
@@ -73,6 +73,24 @@ export class KipperCompiler {
 	}
 
 	/**
+	 * Returns all tokens for a specific channel from the token stream.
+	 * @param tokenStream The token stream to get the tokens from.
+	 * @param channel The channel to get the tokens from.
+	 * @private
+	 * @since 0.11.0
+	 */
+	private getTokensForChannel(tokenStream: CommonTokenStream, channel: number): Array<Token> {
+		const tokens: Array<Token> = [];
+		for (let i = 0; i < tokenStream.size; i++) {
+			const token = tokenStream.get(i);
+			if (token.channel === channel) {
+				tokens.push(token);
+			}
+		}
+		return tokens;
+	}
+
+	/**
 	 * Parses a file and generates a parse tree using the Antlr4 {@link KipperLexer} and {@link KipperParser}.
 	 * @param parseStream The {@link KipperFileStream} instance that contains the required file content.
 	 * @returns An object containing the parse data.
@@ -93,16 +111,18 @@ export class KipperCompiler {
 		lexer.addErrorListener(errorListener); // adding our own error listener
 
 		// Let the lexer run and generate a token stream for each channel
+		const tokenStream = new CommonTokenStream(lexer);
+		tokenStream.fill();
+
 		const channels: LexerParserData["channels"] = {
-			ALL: new CommonTokenStream(lexer),
-			DEFAULT_TOKEN_CHANNEL: new CommonTokenStream(lexer, Channel.DEFAULT_TOKEN_CHANNEL),
-			HIDDEN: new CommonTokenStream(lexer, Channel.HIDDEN),
-			COMMENT: new CommonTokenStream(lexer, Channel.COMMENT),
-			PRAGMA: new CommonTokenStream(lexer, Channel.PRAGMA),
+			ALL: tokenStream,
+			DEFAULT_TOKEN_CHANNEL: this.getTokensForChannel(tokenStream, Channel.DEFAULT_TOKEN_CHANNEL),
+			HIDDEN: this.getTokensForChannel(tokenStream, Channel.HIDDEN),
+			COMMENT: this.getTokensForChannel(tokenStream, Channel.COMMENT),
+			PRAGMA: this.getTokensForChannel(tokenStream, Channel.PRAGMA),
 		};
 
 		const parser = new KipperParser(channels.ALL);
-
 		parser.removeErrorListeners(); // removing all error listeners
 		parser.addErrorListener(errorListener); // adding our own error listener
 
