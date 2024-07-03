@@ -46,6 +46,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
+import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
@@ -245,6 +246,26 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link EqualityExpression} instances.
 	 */
 	public abstract equalityExpression?: TargetASTNodeSemanticAnalyser<EqualityExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseAndExpression} instances.
+	 */
+	public abstract bitwiseAndExpression?: TargetASTNodeSemanticAnalyser<BitwiseAndExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseOrExpression} instances.
+	 */
+	public abstract bitwiseOrExpression?: TargetASTNodeSemanticAnalyser<BitwiseOrExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseXorExpression} instances.
+	 */
+	public abstract bitwiseXorExpression?: TargetASTNodeSemanticAnalyser<BitwiseXorExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseShiftExpression} instances.
+	 */
+	public abstract bitwiseShiftExpression?: TargetASTNodeSemanticAnalyser<BitwiseShiftExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link LogicalAndExpression} instances.

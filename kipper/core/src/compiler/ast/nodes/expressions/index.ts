@@ -19,3 +19,4 @@ export * from "./cast-or-convert-expression/";
 export * from "./conditional-expression/";
 export * from "./function-call-expression/";
 export * from "./member-access-expression/";
+export * from "./bitwise-expression/";

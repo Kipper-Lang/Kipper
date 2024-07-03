@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="kipper run" type="NodeJSConfigurationType" application-parameters="run -s &quot;&quot;" path-to-js-file="./kipper/cli/bin/run" working-dir="$PROJECT_DIR$/">
-    <method v="2" />
-  </configuration>
+	<configuration default="false" name="kipper run" type="NodeJSConfigurationType" application-parameters="run -s &quot;&quot;" path-to-js-file="./kipper/cli/bin/run" working-dir="$PROJECT_DIR$/">
+		<method v="2" />
+	</configuration>
 </component>
