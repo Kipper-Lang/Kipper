@@ -564,7 +564,7 @@ export class KipperProgramContext {
 		this.logger.info(`Analysing semantics.`);
 		await this.semanticAnalysis();
 
-		// If the semantic analysis failed, return an empty array
+		// If the semantic analysis failed, return nothing
 		if (this.hasFailed) {
 			return undefined;
 		}
