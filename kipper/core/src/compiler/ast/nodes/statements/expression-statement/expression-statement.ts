@@ -5,8 +5,8 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { ExpressionStatementSemantics } from "./expression-statement-semantics";
 import type { ExpressionStatementTypeSemantics } from "./expression-statement-type-semantics";
 import { Statement } from "../statement";
-import type { ExpressionStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { ExpressionStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { Expression } from "../../expressions";
 
 /**

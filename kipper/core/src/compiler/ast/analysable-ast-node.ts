@@ -4,7 +4,7 @@
  * {@link CompilableASTNode}.
  * @since 0.10.0
  */
-import type { KipperParserRuleContext } from "../parser";
+import type { KipperParserRuleContext } from "../lexer-parser";
 import type { TargetASTNodeSemanticAnalyser } from "../target-presets";
 import type { TargetAnalysableNode } from "./target-node";
 import type { SemanticData, TypeData } from "./ast-node";

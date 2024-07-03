@@ -12,8 +12,8 @@ import type { LogicalAndExpressionSemantics } from "./logical-and-expression-sem
 import type { LogicalAndExpressionTypeSemantics } from "./logical-and-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { LogicalExpression } from "../logical-expression";
-import type { LogicalAndExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { LogicalAndExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";

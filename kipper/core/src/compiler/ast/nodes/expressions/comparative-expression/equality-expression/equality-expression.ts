@@ -12,8 +12,8 @@ import type { EqualityExpressionTypeSemantics } from "./equality-expression-type
 import type { Expression } from "../../expression";
 import { ComparativeExpression } from "../comparative-expression";
 import { CheckedType } from "../../../../../analysis";
-import type { EqualityExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { EqualityExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import type { KipperEqualityOperator } from "../../../../../const";
 import { kipperEqualityOperators } from "../../../../../const";

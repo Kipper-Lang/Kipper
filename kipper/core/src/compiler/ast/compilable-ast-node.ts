@@ -9,7 +9,7 @@ import type {
 	KipperTargetSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
 } from "../target-presets";
-import type { KipperParser, KipperParserRuleContext } from "../parser";
+import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";

@@ -6,8 +6,8 @@ import type { KipperNullType, KipperUndefinedType, KipperVoidType } from "../../
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-null-or-undefined-primary-expression-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
-import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { CheckedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 

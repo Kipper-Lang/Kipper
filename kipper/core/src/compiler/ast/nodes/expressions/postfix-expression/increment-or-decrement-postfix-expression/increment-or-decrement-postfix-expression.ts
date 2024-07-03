@@ -10,8 +10,8 @@ import type { IncrementOrDecrementPostfixExpressionTypeSemantics } from "./incre
 import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
 import type { Expression } from "../../expression";
 import { PostfixExpression } from "../postfix-expression";
-import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";

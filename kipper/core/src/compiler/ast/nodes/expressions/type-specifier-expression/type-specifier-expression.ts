@@ -5,7 +5,7 @@
  */
 import type { TypeSpecifierExpressionSemantics } from "./type-specifier-expression-semantics";
 import type { TypeSpecifierExpressionTypeSemantics } from "./type-specifier-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
 import { Expression } from "../expression";
 

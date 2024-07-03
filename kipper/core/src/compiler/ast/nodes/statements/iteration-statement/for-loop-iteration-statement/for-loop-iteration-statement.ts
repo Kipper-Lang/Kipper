@@ -9,8 +9,8 @@ import type { ForLoopStatementSemantics } from "./for-loop-iteration-statement-s
 import type { ForLoopStatementTypeSemantics } from "./for-loop-iteration-statement-type-semantics";
 import type { CompilableNodeChild, CompilableNodeParent } from "../../../../compilable-ast-node";
 import { IterationStatement } from "../iteration-statement";
-import type { ForLoopIterationStatementContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { ForLoopIterationStatementContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { Expression } from "../../../expressions";
 import { LocalScope } from "../../../../../analysis";
 

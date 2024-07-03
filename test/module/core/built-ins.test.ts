@@ -1,7 +1,7 @@
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
 import type { CompileConfig, KipperCompileResult, KipperError } from "@kipper/core";
-import { KipperCompiler, KipperParseStream } from "@kipper/core";
+import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { testPrintOutput } from "./core-functionality.test";
@@ -144,7 +144,7 @@ describe("Built-ins", () => {
 
 	describe("Built-in variables", () => {
 		it("__name__", async () => {
-			const stream = new KipperParseStream({ stringContent: "print(__name__);", name: "test.kip" });
+			const stream = new KipperFileStream({ stringContent: "print(__name__);", name: "test.kip" });
 			const result = await compiler.compile(stream, { target: new TargetTS() });
 
 			assert.include(result.write(), "print(__name__);");

@@ -1,18 +1,14 @@
-/**
- * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
- * @since 0.0.3
- */
 import type { CodePointCharStream } from "antlr4ts";
 import { CharStreams } from "antlr4ts";
 import { KipperConfigError } from "../../errors";
 
 /**
- * A UTF-16 Parse stream, which stores the content of a file/string in an {@link CodePointCharStream}.
+ * A UTF-16 file stream, which stores the content of a file/string in an {@link CodePointCharStream}.
  *
  * If {@link name} is not set during construction, it will default to "anonymous-script".
  * @since 0.0.3
  */
-export class KipperParseStream {
+export class KipperFileStream {
 	private readonly _name: string;
 
 	private readonly _filePath: string;
@@ -20,7 +16,7 @@ export class KipperParseStream {
 	private readonly _charStream: CodePointCharStream;
 
 	/**
-	 * Constructor for the {@link KipperParseStream} class.
+	 * Constructor for the {@link KipperFileStream} class.
 	 * @param options.stringContent The content of the stream. If {@link options.charStream} is set, this will be ignored,
 	 * and the {@link options.charStream.toString} will be used instead.
 	 * @param options.name The relative or absolute path to the file

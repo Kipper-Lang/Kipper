@@ -17,8 +17,8 @@ import type { Declaration } from "./declarations";
 import type { Statement } from "./index";
 import type { TranslatedCodeLine } from "../../const";
 import type { KipperError } from "../../../errors";
-import type { CompilationUnitContext } from "../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../parser";
+import type { CompilationUnitContext } from "../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../lexer-parser";
 import { handleSemanticError } from "../../analysis";
 
 /**

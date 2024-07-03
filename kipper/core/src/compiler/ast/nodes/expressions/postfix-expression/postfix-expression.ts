@@ -6,7 +6,7 @@
  */
 import type { PostfixExpressionSemantics } from "./postfix-expression-semantics";
 import type { PostfixExpressionTypeSemantics } from "./postfix-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 

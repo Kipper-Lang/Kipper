@@ -4,7 +4,7 @@ import {
 	KipperCompiler,
 	KipperError,
 	KipperLogger,
-	KipperParseStream,
+	KipperFileStream,
 	KipperSyntaxError,
 	LogLevel,
 } from "@kipper/core";
@@ -88,7 +88,7 @@ describe("KipperCompiler", () => {
 		describe("Error", () => {
 			it("Invalid file", async () => {
 				const fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream({ stringContent: fileContent });
+				const stream = new KipperFileStream({ stringContent: fileContent });
 				try {
 					await compiler.syntaxAnalyse(stream);
 					assert(false, "Expected an error");
@@ -191,7 +191,7 @@ describe("KipperCompiler", () => {
 
 		it("Validate file ctx return", async () => {
 			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-			let stream = new KipperParseStream({ stringContent: fileContent });
+			let stream = new KipperFileStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
@@ -205,7 +205,7 @@ describe("KipperCompiler", () => {
 
 		it("Check valid escaped characters", async () => {
 			const fileContent = "'\\r \\n \\r \\n';";
-			let stream = new KipperParseStream({ stringContent: fileContent });
+			let stream = new KipperFileStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
