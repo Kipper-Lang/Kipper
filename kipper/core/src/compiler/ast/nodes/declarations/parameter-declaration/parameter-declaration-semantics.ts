@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-import type { UncheckedType } from "../../../../analysis";
+import type { RawType } from "../../../../analysis";
 import type { FunctionDeclaration, IdentifierTypeSpecifierExpression } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 
@@ -20,7 +20,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The {@link KipperType type} of the parameter.
 	 * @since 0.5.0
 	 */
-	valueType: UncheckedType;
+	valueType: RawType;
 	/**
 	 * The type specifier expression for the parameter type.
 	 * @since 0.10.0

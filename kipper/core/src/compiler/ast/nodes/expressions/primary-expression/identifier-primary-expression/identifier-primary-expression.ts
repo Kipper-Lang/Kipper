@@ -9,7 +9,7 @@ import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-prim
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { IdentifierPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType, ScopeDeclaration } from "../../../../../analysis";
+import { ProcessedType, ScopeDeclaration } from "../../../../../analysis";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";
 
@@ -119,12 +119,12 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		const semanticData = this.getSemanticData();
 		const refTarget = semanticData.ref.refTarget;
 
-		let type: CheckedType;
+		let type: ProcessedType;
 		if (refTarget instanceof ScopeDeclaration) {
 			type = refTarget.type;
 		} else {
 			// Built-in function -> type is 'func'
-			type = CheckedType.fromCompilableType("valueType" in refTarget ? refTarget.valueType : "func");
+			type = ProcessedType.fromCompilableType("valueType" in refTarget ? refTarget.valueType : "func");
 		}
 
 		this.typeSemantics = {

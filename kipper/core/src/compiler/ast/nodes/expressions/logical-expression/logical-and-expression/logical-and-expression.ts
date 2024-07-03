@@ -16,7 +16,7 @@ import type { LogicalAndExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 
 /**
  * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will
@@ -115,7 +115,7 @@ export class LogicalAndExpression extends LogicalExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: ProcessedType.fromCompilableType("bool"),
 		};
 	}
 

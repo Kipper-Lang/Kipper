@@ -8,7 +8,7 @@
 import type { VariableDeclarationSemantics } from "./variable-declaration-semantics";
 import type { VariableDeclarationTypeSemantics } from "./variable-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { ScopeVariableDeclaration, UncheckedType } from "../../../../analysis";
+import type { ScopeVariableDeclaration, RawType } from "../../../../analysis";
 import type { Expression, IdentifierTypeSpecifierExpression } from "../../expressions";
 import type { ParseTree } from "antlr4ts/tree";
 import type { KipperStorageType } from "../../../../const";
@@ -160,7 +160,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
+		const valueType: RawType = typeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: isDefined,

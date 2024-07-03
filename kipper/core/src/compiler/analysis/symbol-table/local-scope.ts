@@ -3,10 +3,10 @@
  * namespace.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, ScopeNode, VariableDeclaration } from "../../ast/";
+import type { FunctionDeclaration, ScopeNode, TypeDeclaration, VariableDeclaration } from "../../ast/";
 import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
-import type { ScopeDeclaration, ScopeFunctionDeclaration } from "./entry";
+import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration } from "./entry";
 import { ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
 
@@ -43,6 +43,12 @@ export class LocalScope extends Scope {
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
+	}
+
+	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration {
+		throw this.ctx.programCtx
+			.semanticCheck(declaration)
+			.notImplementedError(new KipperNotImplementedError("Local types have not been implemented yet."));
 	}
 
 	public getEntry(identifier: string): ScopeDeclaration | undefined {

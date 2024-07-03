@@ -10,7 +10,7 @@ import type {
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { LocalScope } from "../index";
-import type { CheckedType } from "../../type";
+import type { ProcessedType } from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -64,7 +64,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * The type of this parameter.
 	 * @since 0.10.0
 	 */
-	public get type(): CheckedType {
+	public get type(): ProcessedType {
 		return this.typeData.valueType;
 	}
 
@@ -111,6 +111,6 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type.kipperType === "func";
+		return this.type.rawType === "func";
 	}
 }

@@ -7,7 +7,7 @@ import type { StringPrimaryExpressionTypeSemantics } from "./string-primary-expr
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { StringPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -91,7 +91,7 @@ export class StringPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("str"),
+			evaluatedType: ProcessedType.fromCompilableType("str"),
 		};
 	}
 

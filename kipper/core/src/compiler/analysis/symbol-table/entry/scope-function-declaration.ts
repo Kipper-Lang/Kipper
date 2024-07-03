@@ -9,7 +9,7 @@ import type {
 	ParameterDeclaration,
 } from "../../../ast";
 import { ScopeDeclaration } from "./scope-declaration";
-import { CheckedType } from "../../type";
+import { ProcessedType } from "../../types";
 
 /**
  * Represents the definition of a function inside a {@link Scope}.
@@ -59,14 +59,14 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The type of this function. This is always "func".
 	 * @since 0.10.0
 	 */
-	public get type(): CheckedType {
-		return CheckedType.fromCompilableType("func");
+	public get type(): ProcessedType {
+		return ProcessedType.fromCompilableType("func");
 	}
 
 	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
-	public get returnType(): CheckedType {
+	public get returnType(): ProcessedType {
 		return this.typeData.returnType;
 	}
 

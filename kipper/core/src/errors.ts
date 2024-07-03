@@ -273,7 +273,7 @@ export class UnableToGetInnerScopeError extends KipperInternalError {
 /**
  * Error that is thrown whenever {@link CheckedType.getCompilableType} is called, despite the type not being compilable.
  *
- * This is thrown to avoid the compiler from using {@link UndefinedCustomType} for a compilation, as that would cause
+ * This is thrown to avoid the compiler from using {@link UndefinedType} for a compilation, as that would cause
  * undefined behavior.
  * @since 0.10.0
  */

@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link IdentifierPrimaryExpression}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../../analysis";
+import type { ProcessedType } from "../../../../../analysis";
 import type { PrimaryExpressionTypeSemantics } from "../primary-expression-type-semantics";
 
 /**
@@ -17,5 +17,5 @@ export interface IdentifierPrimaryExpressionTypeSemantics extends PrimaryExpress
 	 * {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
 	 * @since 0.10.0
 	 */
-	evaluatedType: CheckedType;
+	evaluatedType: ProcessedType;
 }

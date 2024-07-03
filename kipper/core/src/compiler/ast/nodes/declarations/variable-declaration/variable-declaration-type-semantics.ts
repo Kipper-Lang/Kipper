@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../analysis";
 import type { DeclarationTypeSemantics } from "../declaration-type-semantics";
 
 /**
@@ -16,5 +16,5 @@ export interface VariableDeclarationTypeSemantics extends DeclarationTypeSemanti
 	 * This is the type evaluated using the {@link VariableDeclarationSemantics.valueType valueType identifier}.
 	 * @since 0.10.0
 	 */
-	valueType: CheckedType;
+	valueType: ProcessedType;
 }

@@ -17,7 +17,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parse
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { kipperLogicalOrOperator } from "../../../../../const";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 
 /**
  * Logical-or expression, representing an expression which can be used to combine multiple conditions. It returns true
@@ -116,7 +116,7 @@ export class LogicalOrExpression extends LogicalExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: ProcessedType.fromCompilableType("bool"),
 		};
 	}
 

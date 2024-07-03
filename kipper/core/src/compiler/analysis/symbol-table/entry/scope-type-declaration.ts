@@ -3,23 +3,18 @@
  * @since 0.11.0
  */
 import { ScopeDeclaration } from "./scope-declaration";
-import type {
-	ClassDeclaration,
-	ClassDeclarationSemantics,
-	FunctionDeclarationSemantics,
-	InterfaceDeclaration,
-	InterfaceDeclarationSemantics,
-} from "../../../ast";
-import { CheckedType } from "../../type";
+import type { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
+import { ProcessedType } from "../../types";
+import { KipperNotImplementedError } from "../../../../errors";
 
 /**
  * Represents the definition of a type such as a class or interface in a scope.
  * @since 0.11.0
  */
 export class ScopeTypeDeclaration extends ScopeDeclaration {
-	private readonly _node: InterfaceDeclaration | ClassDeclaration;
+	private readonly _node: TypeDeclaration;
 
-	public constructor(node: InterfaceDeclaration | ClassDeclaration) {
+	public constructor(node: TypeDeclaration) {
 		super();
 		this._node = node;
 	}
@@ -29,14 +24,14 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): InterfaceDeclarationSemantics | ClassDeclarationSemantics {
+	private get semanticData(): TypeDeclarationSemantics {
 		return this._node.getSemanticData();
 	}
 
 	/**
 	 * Returns the {@link InterfaceDeclaration} or {@link ClassDeclaration AST node} this scope type declaration bases on.
 	 */
-	public get node(): InterfaceDeclaration | ClassDeclaration {
+	public get node(): TypeDeclaration {
 		return this._node;
 	}
 
@@ -51,8 +46,16 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * The type of this type. This is always "type".
 	 * @since 0.11.0
 	 */
-	public get type(): CheckedType {
-		return CheckedType.fromCompilableType("type");
+	public get type(): ProcessedType {
+		return ProcessedType.fromCompilableType("type");
+	}
+
+	/**
+	 * The value of this type, which is the type itself i.e. what value does this type represent.
+	 * @since 0.11.0
+	 */
+	public get typeValue(): ProcessedType {
+		throw new KipperNotImplementedError("Custom types are not implement yet");
 	}
 
 	/**

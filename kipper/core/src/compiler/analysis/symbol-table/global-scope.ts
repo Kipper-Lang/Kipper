@@ -6,6 +6,8 @@
 import type { KipperProgramContext } from "../../program-ctx";
 import type { FunctionDeclaration, VariableDeclaration } from "../../ast";
 import type { ScopeDeclaration } from "./entry";
+import type { TypeDeclaration } from "../../ast";
+import { ScopeTypeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
 
@@ -43,6 +45,17 @@ export class GlobalScope extends Scope {
 		this.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this.programCtx.globalScope);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
+		this.entries.set(identifier, scopeDeclaration);
+		return scopeDeclaration;
+	}
+
+	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration {
+		const identifier = declaration.getSemanticData().identifier;
+
+		// Ensuring that the declaration does not overwrite other declarations
+		this.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this.programCtx.globalScope);
+
+		const scopeDeclaration = new ScopeTypeDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

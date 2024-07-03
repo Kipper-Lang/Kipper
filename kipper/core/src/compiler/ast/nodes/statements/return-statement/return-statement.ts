@@ -7,7 +7,7 @@ import type { ReturnStatementSemantics } from "./return-statement-semantics";
 import type { ReturnStatementTypeSemantics } from "./return-statement-type-semantics";
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
-import { CheckedType } from "../../../../analysis";
+import { ProcessedType } from "../../../../analysis";
 import type { ReturnStatementContext } from "../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 
@@ -116,7 +116,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 
 		this.typeSemantics = {
 			returnType:
-				semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? CheckedType.fromCompilableType("void"),
+				semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? ProcessedType.fromCompilableType("void"),
 		};
 	}
 

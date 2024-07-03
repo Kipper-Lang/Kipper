@@ -2,8 +2,13 @@
  * A symbol-table implementation in form of a scope that may contain both variables and functions.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, VariableDeclaration } from "../../ast";
-import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../ast";
+import type {
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeTypeDeclaration,
+	ScopeVariableDeclaration,
+} from "./entry";
 import type { SymbolTable } from "./symbol-table";
 
 /**
@@ -49,6 +54,14 @@ export abstract class Scope implements SymbolTable {
 	 * @since 0.8.0
 	 */
 	public abstract addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration;
+
+	/**
+	 * Adds a new type declaration to the {@link entries symbol table entries}.
+	 * @param declaration The declaration to add.
+	 * @returns The generated {@link ScopeTypeDeclaration scope declaration}.
+	 * @since 0.11.0
+	 */
+	public abstract addType(declaration: TypeDeclaration): ScopeTypeDeclaration;
 
 	/**
 	 * Searches for a reference/entry with the specific identifier in the local hash table entries (local scope).

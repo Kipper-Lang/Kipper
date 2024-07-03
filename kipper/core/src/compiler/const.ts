@@ -7,7 +7,7 @@ import type {
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
-	UndefinedCustomType,
+	UndefinedType,
 } from "./analysis";
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 
@@ -209,7 +209,7 @@ export const kipperCompilableTypes: Array<KipperCompilableType> = [
  * All error types inside Kipper, which indicate an invalid type that can not be used for type checking.
  * @since 0.10.0
  */
-export type KipperErrorType = UndefinedCustomType;
+export type KipperErrorType = UndefinedType;
 
 /**
  * All available variable types inside Kipper.

@@ -14,7 +14,7 @@ import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../.
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 
 /**
  * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.
@@ -112,7 +112,7 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
 			// This will always be a number
-			evaluatedType: CheckedType.fromKipperType("num"),
+			evaluatedType: ProcessedType.fromKipperType("num"),
 		};
 
 		// Ensure that this expression is valid (e.g. the operand is a number)

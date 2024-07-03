@@ -4,7 +4,7 @@
  */
 import type { ExpressionSemantics } from "../expression-semantics";
 import type { Expression } from "../expression";
-import type { UncheckedType } from "../../../../analysis";
+import type { RawType } from "../../../../analysis";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 
 /**
@@ -21,7 +21,7 @@ export interface CastOrConvertExpressionSemantics extends ExpressionSemantics {
 	 * The type the {@link exp} should be converted to.
 	 * @since 0.10.0
 	 */
-	castType: UncheckedType;
+	castType: RawType;
 	/**
 	 * The type specifier that determined {@link castType}.
 	 * @since 0.10.0

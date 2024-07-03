@@ -14,7 +14,7 @@ import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expres
 import { Expression } from "../expression";
 import type { CastOrConvertExpressionContext } from "../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import type { UncheckedType } from "../../../../analysis";
+import type { RawType } from "../../../../analysis";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
 import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
@@ -93,7 +93,7 @@ export class CastOrConvertExpression extends Expression<
 
 		// Get the type using the type specifier
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[1];
-		const type: UncheckedType = typeSpecifier.getSemanticData().typeIdentifier;
+		const type: RawType = typeSpecifier.getSemanticData().typeIdentifier;
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {

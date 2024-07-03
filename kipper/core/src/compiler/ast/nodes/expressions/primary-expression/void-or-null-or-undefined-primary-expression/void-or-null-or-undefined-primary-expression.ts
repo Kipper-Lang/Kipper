@@ -8,7 +8,7 @@ import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -93,7 +93,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 		// The evaluated type of this expression will always be equal to the constant identifier that this expression
 		// contains e.g. either 'void', 'null' or 'undefined'.
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType(semanticData.constantIdentifier),
+			evaluatedType: ProcessedType.fromCompilableType(semanticData.constantIdentifier),
 		};
 	}
 

@@ -8,7 +8,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { KipperBoolTypeLiterals } from "../../../../../const";
 import type { BoolPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -91,7 +91,7 @@ export class BoolPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'bool'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: ProcessedType.fromCompilableType("bool"),
 		};
 	}
 

@@ -16,7 +16,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parse
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 
 /**
  * Bitwise and expression AST node.
@@ -102,7 +102,7 @@ export class BitwiseAndExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("num"),
+			evaluatedType: ProcessedType.fromCompilableType("num"),
 		};
 	}
 

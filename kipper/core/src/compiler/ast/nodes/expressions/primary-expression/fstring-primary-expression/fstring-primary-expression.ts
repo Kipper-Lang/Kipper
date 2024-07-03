@@ -14,7 +14,7 @@ import {
 	ParseRuleKindMapping,
 } from "../../../../../parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { getParseRuleSource } from "../../../../../../tools";
 
 /**
@@ -116,7 +116,7 @@ export class FStringPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("str"),
+			evaluatedType: ProcessedType.fromCompilableType("str"),
 		};
 	}
 

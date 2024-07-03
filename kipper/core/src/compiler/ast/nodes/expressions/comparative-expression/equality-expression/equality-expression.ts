@@ -11,7 +11,7 @@ import type { EqualityExpressionSemantics } from "./equality-expression-semantic
 import type { EqualityExpressionTypeSemantics } from "./equality-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { ComparativeExpression } from "../comparative-expression";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import type { EqualityExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
@@ -122,7 +122,7 @@ export class EqualityExpression extends ComparativeExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Equality expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: ProcessedType.fromCompilableType("bool"),
 		};
 	}
 

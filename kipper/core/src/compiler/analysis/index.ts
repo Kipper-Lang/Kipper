@@ -5,5 +5,5 @@
 export * from "./handle-error";
 export * from "./analyser/";
 export * from "./symbol-table/";
-export * from "./type";
+export * from "./types";
 export * from "./reference";

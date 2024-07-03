@@ -13,7 +13,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType, UncheckedType } from "../../../../../analysis";
+import { ProcessedType, RawType } from "../../../../../analysis";
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.
@@ -85,7 +85,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			typeIdentifier: new UncheckedType(this.sourceCode),
+			typeIdentifier: new RawType(this.sourceCode),
 		};
 	}
 
@@ -101,7 +101,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier);
 		this.typeSemantics = {
 			// A type specifier will always evaluate to be of type 'type'
-			evaluatedType: CheckedType.fromCompilableType("type"),
+			evaluatedType: ProcessedType.fromCompilableType("type"),
 			storedType: valueType,
 		};
 	}

@@ -7,7 +7,7 @@ import type { NumberPrimaryExpressionTypeSemantics } from "./number-primary-expr
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { NumberPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -92,7 +92,7 @@ export class NumberPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'number'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("num"),
+			evaluatedType: ProcessedType.fromCompilableType("num"),
 		};
 	}
 

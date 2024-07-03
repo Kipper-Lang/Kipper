@@ -16,7 +16,7 @@ import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMappin
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
 import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
 import type { KipperBitwiseShiftOperator } from "../../../../../const";
@@ -134,7 +134,7 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("num"),
+			evaluatedType: ProcessedType.fromCompilableType("num"),
 		};
 	}
 

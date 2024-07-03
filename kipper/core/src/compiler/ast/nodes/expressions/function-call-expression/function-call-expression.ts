@@ -15,7 +15,7 @@ import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { CheckedType } from "../../../../analysis";
+import { ProcessedType } from "../../../../analysis";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.
@@ -134,11 +134,11 @@ export class FunctionCallExpression extends Expression<
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
 
 		// Get the type that the function call will evaluate to
-		let evaluatedType: CheckedType;
-		if (calledFunc.returnType instanceof CheckedType) {
+		let evaluatedType: ProcessedType;
+		if (calledFunc.returnType instanceof ProcessedType) {
 			evaluatedType = calledFunc.returnType;
 		} else {
-			evaluatedType = CheckedType.fromCompilableType(calledFunc.returnType);
+			evaluatedType = ProcessedType.fromCompilableType(calledFunc.returnType);
 		}
 
 		// The evaluated type is always equal to the return of the function

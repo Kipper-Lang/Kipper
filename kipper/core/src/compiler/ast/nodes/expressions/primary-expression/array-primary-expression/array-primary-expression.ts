@@ -7,7 +7,7 @@ import type { ArrayPrimaryExpressionTypeSemantics } from "./array-primary-expres
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ArrayPrimaryExpressionContext } from "../../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { CheckedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -90,7 +90,7 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'list'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("list"),
+			evaluatedType: ProcessedType.fromCompilableType("list"),
 		};
 	}
 

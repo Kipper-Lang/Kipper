@@ -4,7 +4,7 @@
  */
 import type { Declaration } from "../../../ast";
 import type { KipperProgramContext } from "../../../program-ctx";
-import type { CheckedType } from "../../type";
+import type { ProcessedType } from "../../types";
 
 /**
  * An symbol table entry of a variable, parameter or function declaration inside a Kipper scope.
@@ -30,7 +30,7 @@ export abstract class ScopeDeclaration {
 	 * The value type of this declaration.
 	 * @since 0.10.0
 	 */
-	public abstract get type(): CheckedType;
+	public abstract get type(): ProcessedType;
 
 	/**
 	 * Returns whether the scope declaration was defined during its declaration.
