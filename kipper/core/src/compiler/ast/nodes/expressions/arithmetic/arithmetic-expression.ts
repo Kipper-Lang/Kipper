@@ -6,9 +6,9 @@
  */
 import type { ArithmeticExpressionSemantics } from "./arithmetic-expression-semantics";
 import type { ArithmeticExpressionTypeSemantics } from "./arithmetic-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Expression } from "../expression";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
+import { Expression } from "../expression";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link ArithmeticExpression} AST node.

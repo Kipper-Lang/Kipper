@@ -11,13 +11,13 @@ import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
 import type { RawType, ScopeFunctionDeclaration } from "../../../../analysis";
 import { FunctionScope } from "../../../../analysis";
-import type { FunctionDeclarationContext } from "../../../../parser";
+import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
 	CompoundStatementContext,
 	DeclaratorContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
-} from "../../../../parser";
+} from "../../../../lexer-parser";
 import { Declaration } from "../declaration";
 import { ParameterDeclaration } from "../parameter-declaration";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";

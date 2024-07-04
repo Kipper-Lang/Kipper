@@ -13,14 +13,14 @@ import type { Expression, IdentifierTypeSpecifierExpression } from "../../expres
 import type { ParseTree } from "antlr4ts/tree";
 import type { KipperStorageType } from "../../../../const";
 import { Declaration } from "../declaration";
-import type { VariableDeclarationContext } from "../../../../parser";
+import type { VariableDeclarationContext } from "../../../../lexer-parser";
 import {
 	DeclaratorContext,
 	InitDeclaratorContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
 	StorageTypeSpecifierContext,
-} from "../../../../parser";
+} from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**

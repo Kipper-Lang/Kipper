@@ -11,8 +11,8 @@ import type { IdentifierTypeSpecifierExpressionSemantics } from "./identifier-ty
 import type { IdentifierTypeSpecifierExpressionTypeSemantics } from "./identifier-type-specifier-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
-import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { ProcessedType, RawType } from "../../../../../analysis";
 
 /**

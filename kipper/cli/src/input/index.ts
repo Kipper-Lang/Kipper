@@ -4,4 +4,4 @@
  * @since 0.10.3
  */
 export * from "./target";
-export * from "./file-stream";
+export * from "./input-file";

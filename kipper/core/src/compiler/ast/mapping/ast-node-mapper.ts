@@ -53,7 +53,7 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-} from "../../parser";
+} from "../../lexer-parser";
 import type {
 	ASTDeclarationKind,
 	ASTDeclarationRuleName,

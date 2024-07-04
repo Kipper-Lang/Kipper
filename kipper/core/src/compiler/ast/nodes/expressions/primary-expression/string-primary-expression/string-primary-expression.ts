@@ -5,8 +5,8 @@
 import type { StringPrimaryExpressionSemantics } from "./string-primary-expression-semantics";
 import type { StringPrimaryExpressionTypeSemantics } from "./string-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { StringPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { StringPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 

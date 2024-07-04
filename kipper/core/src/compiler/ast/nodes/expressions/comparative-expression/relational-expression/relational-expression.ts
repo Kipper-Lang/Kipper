@@ -17,8 +17,8 @@ import type { RelationalExpressionSemantics } from "./relational-expression-sema
 import type { RelationalExpressionTypeSemantics } from "./relational-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { ComparativeExpression } from "../comparative-expression";
-import type { RelationalExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { RelationalExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { KipperRelationalOperator } from "../../../../../const";
 import { kipperRelationalOperators } from "../../../../../const";

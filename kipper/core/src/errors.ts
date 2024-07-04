@@ -7,7 +7,7 @@ import type { InputMismatchException, LexerNoViableAltException, NoViableAltExce
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { CompilableASTNode, KipperParseStream, KipperProgramContext } from "./compiler";
+import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
 import { getParseRuleSource } from "./tools";
 
 /**
@@ -34,7 +34,7 @@ export interface TracebackMetadata {
 	 * The token stream (source code) of the program.
 	 * @since 0.8.0
 	 */
-	streamSrc: KipperParseStream | undefined;
+	streamSrc: KipperFileStream | undefined;
 	/**
 	 * The AST Node that caused the error.
 	 * @since 0.10.0

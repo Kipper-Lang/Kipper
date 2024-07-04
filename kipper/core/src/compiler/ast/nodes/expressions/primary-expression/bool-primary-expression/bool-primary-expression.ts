@@ -6,8 +6,8 @@ import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-s
 import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { KipperBoolTypeLiterals } from "../../../../../const";
-import type { BoolPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { BoolPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { ProcessedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 

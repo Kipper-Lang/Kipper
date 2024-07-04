@@ -4,13 +4,13 @@ import * as path from "path";
 import type { KipperParserRuleContext } from "@kipper/core";
 import type {
 	KipperProgramContext,
-	ParseData,
+	LexerParserData,
 	TargetASTNodeSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
 	CompilableNodeParent,
 } from "@kipper/core";
-import { CompilableASTNode, KipperCompiler, KipperParseStream, RootASTNode } from "@kipper/core";
+import { CompilableASTNode, KipperCompiler, KipperFileStream, RootASTNode } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -52,8 +52,8 @@ describe("AST Nodes", () => {
 		describe("sourceCode", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-				let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-				let parseData: ParseData = await new KipperCompiler().parse(stream);
+				let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+				let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 					target: defaultTarget,
 				});
@@ -183,8 +183,8 @@ describe("AST Nodes", () => {
 
 		it("programCtx", async () => {
 			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-			let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+			let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
@@ -200,8 +200,8 @@ describe("AST Nodes", () => {
 
 		it("parent", async () => {
 			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-			let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+			let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
