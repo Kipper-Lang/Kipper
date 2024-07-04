@@ -24,7 +24,7 @@ jobs:
       - name: Build project to allow for browserify to run
         run: pnpm build
       - name: Run size-limit
-        uses: andresz1/size-limit-action@v1.7.0
+        uses: andresz1/size-limit-action@v1.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           script: pnpm exec size-limit --json
