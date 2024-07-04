@@ -71,7 +71,8 @@ export class FunctionDeclaration
 		return FunctionDeclaration.kind;
 	}
 
-	/**
+	/*	/**
+	 *
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */

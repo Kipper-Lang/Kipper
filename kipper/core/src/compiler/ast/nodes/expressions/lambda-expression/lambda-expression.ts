@@ -2,9 +2,7 @@
  * Lambda expression class, which represents a lambda expression in the AST.
  * @since 0.11.0
  * @example
- * ```kipper
  * let add = (a, b) => a + b;
- * ```
  */
 import { Expression } from "../expression";
 import type { LambdaExpressionSemantics } from "./lambda-expression-semantics";
@@ -14,15 +12,26 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { ScopeNode } from "../../../scope-node";
 import { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";
-import type { CompoundStatement, Statement } from "../../statements";
+import type { Statement } from "../../statements";
+import { CompoundStatement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { ParameterDeclaration } from "../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import { CheckedType } from "../../../../analysis";
 
+/**
+ * Lambda expression class, which represents a lambda expression in the AST.
+ * @since 0.11.0
+ * @example
+ * let add = (a, b) => a + b;
+ */
 export class LambdaExpression
-	extends Expression<LambdaExpressionSemantics, LambdaExpressionTypeSemantics, Expression | ParameterDeclaration | CompoundStatement>
-	implements ScopeNode<LambdaScope>
-{
+	extends Expression<
+		LambdaExpressionSemantics,
+		LambdaExpressionTypeSemantics,
+		Expression | ParameterDeclaration | CompoundStatement
+	>
+	implements ScopeNode<LambdaScope> {
 	/**
 	 * The inner scope of this lambda expression.
 	 */
@@ -114,9 +123,30 @@ export class LambdaExpression
 		if (!retTypeSpecifier) {
 			throw new UnableToDetermineSemanticDataError();
 		}
+
+		this.programCtx.semanticCheck(this).validFunctionBody(body);
+		this.semanticData = {
+			returnTypeSpecifier: retTypeSpecifier,
+			params: params,
+			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
+		};
 	}
 
-	public async primarySemanticTypeChecking(): Promise<void> {}
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+
+		// Get the type that will be returned using the return type specifier
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
+		this.typeSemantics = {
+			evaluatedType: CheckedType.fromCompilableType("func"),
+			returnType: returnType,
+		};
+
+		// Ensure that all code paths return a value
+		if (semanticData.functionBody instanceof CompoundStatement) {
+			this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
+		}
+	}
 
 	public checkForWarnings = undefined;
 

@@ -2,7 +2,6 @@
  * Target-specific Semantic Analyser.
  * @since 0.10.0
  */
-
 import type {
 	AdditiveExpression,
 	AnalysableASTNode,
@@ -49,7 +48,7 @@ import type {
 } from "../ast";
 import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
+import type { ObjectProperty } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.

@@ -7,11 +7,12 @@ import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { FunctionScope, ScopeParameterDeclaration } from "../../../../analysis";
 import type { FunctionDeclaration } from "../function-declaration";
-import type { IdentifierTypeSpecifierExpression } from "../../expressions";
+import type { IdentifierTypeSpecifierExpression, LambdaExpression } from "../../expressions";
 import { Declaration } from "../declaration";
 import type { ParameterDeclarationContext } from "../../../../parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import { getParseTreeSource } from "../../../../../tools";
+import type { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";
 
 /**
  * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
@@ -111,7 +112,7 @@ export class ParameterDeclaration extends Declaration<
 	 * {@link this.semantic.func.innerScope the scope of the parent function}.
 	 * @since 0.10.0
 	 */
-	public async addParamToFunctionScope(scopeToUse: FunctionScope): Promise<void> {
+	public async addParamToFunctionScope(scopeToUse: FunctionScope | LambdaScope): Promise<void> {
 		this.scopeDeclaration = scopeToUse.addArgument(this);
 	}
 
@@ -140,7 +141,7 @@ export class ParameterDeclaration extends Declaration<
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
 			valueTypeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().typeIdentifier,
-			func: <FunctionDeclaration>this.parent,
+			func: <FunctionDeclaration | LambdaExpression>this.parent,
 		};
 
 		// Register this parameter in the function scope

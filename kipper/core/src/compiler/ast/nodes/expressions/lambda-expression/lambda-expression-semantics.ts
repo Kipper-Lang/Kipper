@@ -6,6 +6,7 @@ import type { ExpressionSemantics } from "../expression-semantics";
 import type { ParameterDeclaration } from "../../declarations";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import type { CompoundStatement } from "../../statements";
+import { Expression } from "../expression";
 
 /**
  * Semantics for AST Node {@link LambdaExpression}.
@@ -14,16 +15,19 @@ import type { CompoundStatement } from "../../statements";
 export interface LambdaExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The type specifier expression for the return type.
+	 * @since 0.11.0
 	 */
 	returnTypeSpecifier: IdentifierTypeSpecifierExpression;
 
 	/**
 	 * The parameters of the lambda expression.
+	 * @since 0.11.0
 	 */
 	params: Array<ParameterDeclaration>;
 
 	/**
 	 * The body of the lambda expression.
+	 * @since 0.11.0
 	 */
-	functionBody: CompoundStatement;
+	functionBody: Expression | CompoundStatement;
 }

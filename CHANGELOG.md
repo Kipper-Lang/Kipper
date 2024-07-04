@@ -17,8 +17,9 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
+
 - Added Lambda Expressions, which are anonymous functions that can be used as expressions.
-	([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
+  ([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
 - Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
   ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
@@ -62,7 +63,7 @@ To use development versions of Kipper download the
   - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
   - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
   - `LambdaExpression`, which represents an AST lambda expression.
-- New interfaces: 
+- New interfaces:
   - `LambdaExpressionSemantics`, which represents the AST node for a lambda expression.
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.

@@ -3,26 +3,24 @@
  * @since 0.10.0
  */
 import type {
-	TranslatedCodeToken,
-	ComparativeExpressionSemantics,
-	LogicalExpressionSemantics,
-	TranslatedCodeLine,
-	TranslatedExpression,
-	BitwiseExpressionSemantics,
-	BitwiseExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
-	BitwiseOrExpression,
-	BitwiseAndExpression,
 	AdditiveExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseExpression,
+	BitwiseExpressionSemantics,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
+	ComparativeExpressionSemantics,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
-	Expression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -33,12 +31,16 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ArrayPrimaryExpression,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalExpression,
+	LogicalExpressionSemantics,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -46,24 +48,22 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TranslatedCodeLine,
+	TranslatedCodeToken,
+	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	DoWhileLoopIterationStatement,
-	ForLoopIterationStatement,
-	MemberAccessExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	ObjectPrimaryExpression,
-	ObjectProperty,
-	LambdaExpression,
 } from "@kipper/core";
 import {
-	VariableDeclaration,
 	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
+	VariableDeclaration,
+	Expression
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -89,15 +89,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
-			['"use strict"', ";"],
+			["\"use strict\"", ";"],
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
-				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
-					' globalThis !== "undefined" ?' +
-					" globalThis : typeof" +
-					' window !== "undefined" ?' +
-					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
+				"var __globalScope = typeof __globalScope !== \"undefined\" ? __globalScope : typeof" +
+				" globalThis !== \"undefined\" ?" +
+				" globalThis : typeof" +
+				" window !== \"undefined\" ?" +
+				" window : typeof global !== \"undefined\" ? global : typeof self !== \"undefined\" ? self : {}",
 				";",
 			],
 			// Create global kipper object - Always prefer the global '__kipper' instance
@@ -107,12 +107,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
 			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				"__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name=\"TypeError\"; }})",
 				";",
 			],
 			["// @ts-ignore"],
 			[
-				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				"__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name=\"IndexError\"; }})",
 				";",
 			],
 		];
@@ -773,6 +773,25 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
-		return []; // TODO
+		// Step 1: Extract Semantic Data
+		const semanticData = node.getSemanticData();
+		const params = semanticData.params;
+		const body = semanticData.functionBody;
+
+		// Step 2: Translate Parameters
+		let translatedParams = params.map(param => param.getSemanticData().identifier).join(", ");
+
+		let translatedBody;
+		let translatedBodyAsync = await body.translateCtxAndChildren();
+
+		if(body instanceof Expression){
+			translatedBody = translatedBodyAsync.map(line => line.toString().trim()).join("");
+		}
+		else {
+			translatedBody = this.compoundStatement(body);
+		}
+
+		// Step 4: Format Lambda Expression
+		return [`(${translatedParams}) => ${translatedBody}`];
 	};
 }

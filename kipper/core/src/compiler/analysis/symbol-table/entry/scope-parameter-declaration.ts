@@ -5,6 +5,7 @@
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
 	FunctionDeclaration,
+	LambdaExpression,
 	ParameterDeclaration,
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
@@ -80,7 +81,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * Returns the function this parameter is defined in.
 	 * @since 0.10.0
 	 */
-	public get func(): FunctionDeclaration {
+	public get func(): FunctionDeclaration | LambdaExpression {
 		return this.semanticData.func;
 	}
 
