@@ -138,8 +138,8 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	/**
 	 * The built-in functions that will be available in a Kipper program.
 	 *
-	 * This will be extended by {@link extendBuiltInFunctions}. All built-in functions defined here must be implemented by the
-	 * {@link target.builtInGenerator}.
+	 * This will be extended by {@link extendBuiltInFunctions}. All built-in functions defined here must be implemented by
+	 * the {@link target.builtInGenerator}.
 	 */
 	public readonly builtInFunctions: Array<BuiltInFunction>;
 

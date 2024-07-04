@@ -2,19 +2,19 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, KipperBuiltInType } from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, KipperBuiltInTypeLiteral } from "@kipper/core";
 import {
-	kipperBoolType,
+	kipperBoolTypeLiteral,
 	KipperCompileTarget,
-	kipperFuncType,
-	kipperListType,
-	kipperMetaType,
+	kipperFuncTypeLiteral,
+	kipperListTypeLiteral,
+	kipperMetaTypeLiteral,
 	KipperNotImplementedError,
-	kipperNullType,
-	kipperNumType,
-	kipperStrType,
-	kipperUndefinedType,
-	kipperVoidType,
+	kipperNullTypeLiteral,
+	kipperNumTypeLiteral,
+	kipperStrTypeLiteral,
+	kipperUndefinedTypeLiteral,
+	kipperVoidTypeLiteral,
 } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
@@ -59,34 +59,34 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	}
 
 	/**
-	 * Fetches the typescript equivalent for a {@link KipperBuiltInType}.
+	 * Fetches the typescript equivalent for a {@link KipperBuiltInTypeLiteral}.
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType(kipperType: KipperBuiltInType | Array<KipperBuiltInType>): string {
+	public static getTypeScriptType(kipperType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>): string {
 		if (Array.isArray(kipperType)) {
 			// Recursively call this function for each type in the array
 			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;
 		}
 
 		switch (kipperType) {
-			case kipperBoolType:
+			case kipperBoolTypeLiteral:
 				return "boolean";
-			case kipperFuncType:
+			case kipperFuncTypeLiteral:
 				return "Function";
-			case kipperListType:
+			case kipperListTypeLiteral:
 				return "Array";
-			case kipperMetaType:
+			case kipperMetaTypeLiteral:
 				return "object";
-			case kipperNullType:
+			case kipperNullTypeLiteral:
 				return "null";
-			case kipperNumType:
+			case kipperNumTypeLiteral:
 				return "number";
-			case kipperStrType:
+			case kipperStrTypeLiteral:
 				return "string";
-			case kipperUndefinedType:
+			case kipperUndefinedTypeLiteral:
 				return "undefined";
-			case kipperVoidType:
+			case kipperVoidTypeLiteral:
 				return "void";
 			default:
 				throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);

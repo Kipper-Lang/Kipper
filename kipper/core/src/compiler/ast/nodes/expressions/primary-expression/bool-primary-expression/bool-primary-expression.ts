@@ -5,7 +5,7 @@
 import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-semantics";
 import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { KipperBoolTypeLiterals } from "../../../../../const";
+import type { KipperBoolTypeConstants } from "../../../../../const";
 import type { BoolPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { ProcessedType } from "../../../../../analysis";
@@ -76,7 +76,7 @@ export class BoolPrimaryExpression extends PrimaryExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			value: <KipperBoolTypeLiterals>this.sourceCode,
+			value: <KipperBoolTypeConstants>this.sourceCode,
 		};
 	}
 

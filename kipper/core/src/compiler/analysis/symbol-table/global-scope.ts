@@ -4,10 +4,12 @@
  * @since 0.8.0
  */
 import type { KipperProgramContext } from "../../program-ctx";
-import type { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../ast";
 import type { ScopeDeclaration } from "./entry";
+import { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
+import {KipperBuiltInTypeLiteral} from "../../const";
 import { Scope } from "./scope";
+import {BuiltInType} from "../types";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
@@ -47,14 +49,15 @@ export class GlobalScope extends Scope {
 		return scopeDeclaration;
 	}
 
-	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration {
-		const identifier = declaration.getSemanticData().identifier;
+	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration;
+	public addType(identifier: BuiltInType): ScopeTypeDeclaration;
+	public addType(declarationOrIdentifier: BuiltInType | TypeDeclaration): ScopeTypeDeclaration {
+		// Depending on the type of the argument, create either a built-in type or a custom type
+		const scopeDeclaration =  declarationOrIdentifier instanceof TypeDeclaration ?
+			ScopeTypeDeclaration.fromTypeDeclaration(declarationOrIdentifier) :
+			ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier);
 
-		// Ensuring that the declaration does not overwrite other declarations
-		this.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this.programCtx.globalScope);
-
-		const scopeDeclaration = new ScopeTypeDeclaration(declaration);
-		this.entries.set(identifier, scopeDeclaration);
+		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
 

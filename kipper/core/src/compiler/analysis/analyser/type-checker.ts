@@ -27,20 +27,26 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import {
+	Scope,
+	ScopeDeclaration,
+	ScopeParameterDeclaration,
+	ScopeTypeDeclaration,
+	ScopeVariableDeclaration
+} from "../symbol-table";
 import type {
 	KipperArithmeticOperator,
 	KipperBitwiseOperator,
-	KipperBuiltInType,
+	KipperBuiltInTypeLiteral,
 	KipperReferenceable,
 	KipperReferenceableFunction,
 } from "../../const";
 import {
-	kipperBuiltInTypes,
+	kipperBuiltInTypeLiterals,
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
 	kipperPlusOperator,
-	kipperStrType,
+	kipperStrTypeLiteral,
 	kipperSupportedConversions,
 } from "../../const";
 import {
@@ -58,7 +64,7 @@ import {
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
-	ReadOnlyWriteTypeError,
+	ReadOnlyWriteTypeError, ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
@@ -76,31 +82,35 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Asserts that the passed type identifier exists.
+	 * Fetches the type from the identifier and throws an error if the type is not found.
 	 * @param type The type to check.
+	 * @param scope The scope to check in.
 	 * @since 0.7.0
 	 */
-	public typeExists(type: string): void {
-		if (kipperBuiltInTypes.find((val) => val === type) === undefined) {
+	public getTypeFromIdentifier(type: string, scope: Scope): ScopeTypeDeclaration {
+		const scopeEntry = scope.getEntryRecursively(type);
+		if (scopeEntry === undefined) {
 			throw this.assertError(new UnknownTypeError(type));
+		} else if (!(scopeEntry instanceof ScopeTypeDeclaration)) {
+			throw this.assertError(new ReferenceCanNotBeUsedAsTypeError(type));
 		}
+		return scopeEntry;
 	}
 
 	/**
 	 * Creates a new {@link ProcessedType} instance based on the passed {@link KipperType}.
 	 *
-	 * If the type is invalid, the function will still return a {@link ProcessedType}, but the field
+	 * If the rawType is invalid, the function will still return a {@link ProcessedType}, but the field
 	 * {@link ProcessedType.isCompilable} will be false and the instance WILL NOT be usable for a compilation.
-	 * @param type The unchecked type to analyse.
+	 * @param rawType The unchecked rawType to analyse.
+	 * @param scope The scope to check in.
 	 */
-	public getCheckedType(type: RawType): ProcessedType {
+	public getCheckedType(rawType: RawType, scope: Scope): ProcessedType {
 		try {
-			// Ensure the type exists
-			this.typeExists(type.identifier);
-
-			return ProcessedType.fromCompilableType(<KipperBuiltInType>type.identifier);
+			const type = this.getTypeFromIdentifier(rawType.identifier, scope);
+			return
 		} catch (e) {
-			// If the error is not a KipperError, rethrow it (since it is not a type error, and we don't know what happened)
+			// If the error is not a KipperError, rethrow it (since it is not a rawType error, and we don't know what happened)
 			if (!(e instanceof KipperError)) {
 				throw e;
 			}
@@ -110,31 +120,13 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				// throwing any errors, which would be VERY bad.)
 				this.programCtx.reportError(e);
 
-				// Recover from the error by wrapping the undefined type
-				return ProcessedType.fromKipperType(new UndefinedType(type.identifier));
+				// Recover from the error by wrapping the undefined rawType
+				return ProcessedType.fromKipperType(new UndefinedType(rawType.identifier));
 			}
 
 			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
 			throw e;
 		}
-	}
-
-	/**
-	 * Checks whether the passed types are matching.
-	 * @param type1 The first type that is given.
-	 * @param type2 The second type that is given.
-	 * @returns True if the types are matching, otherwise false.
-	 * @since 0.10.0
-	 */
-	public checkMatchingTypes(type1: KipperBuiltInType, type2: KipperBuiltInType): boolean {
-		if (type1 !== type2) {
-			// 'void' is compatible with 'undefined'
-
-
-			// Ensure that 'true' is still returned when type1 and type2 are compatible
-			return interchangeableTypes.includes(type1) && interchangeableTypes.includes(type2);
-		}
-		return true;
 	}
 
 	/**
@@ -378,12 +370,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// Numbers may use all arithmetic operators
 		if (leftOpType !== "num" || rightOpType !== "num") {
 			// Strings can use '+' to concat strings
-			if (op === kipperPlusOperator && leftOpType == kipperStrType && rightOpType == kipperStrType) {
+			if (op === kipperPlusOperator && leftOpType == kipperStrTypeLiteral && rightOpType == kipperStrTypeLiteral) {
 				return;
 			}
 
 			// Strings can use * to repeat a string n times
-			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrType && rightOpType == "num") {
+			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrTypeLiteral && rightOpType == "num") {
 				return;
 			}
 

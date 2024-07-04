@@ -643,6 +643,16 @@ export class UnknownTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used that is not a type.
+ * @since 0.11.0
+ */
+export class ReferenceCanNotBeUsedAsTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Reference '${identifier}' can not be used as a type.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a relational comparison is used with types that are not comparable.
  * @since 0.9.0
  */

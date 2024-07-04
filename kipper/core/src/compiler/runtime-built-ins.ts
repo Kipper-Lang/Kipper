@@ -2,7 +2,7 @@
  * Built-Ins file, which provides the blueprints for the Kipper built-in functions and variables.
  * @since 0.1.0
  */
-import type { KipperBuiltInType } from "./const";
+import type { KipperBuiltInTypeLiteral } from "./const";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -26,7 +26,7 @@ export interface BuiltInFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	valueType: KipperBuiltInType;
+	valueType: KipperBuiltInTypeLiteral;
 }
 
 /**
@@ -54,7 +54,7 @@ export interface BuiltInFunction {
 	 * The expected return of the function. If the return type is {@link KipperVoidType void}, then the function will not
 	 * return anything.
 	 */
-	returnType: KipperBuiltInType;
+	returnType: KipperBuiltInTypeLiteral;
 }
 
 /**
@@ -80,7 +80,7 @@ export interface InternalFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	valueType: KipperBuiltInType | Array<KipperBuiltInType>;
+	valueType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>;
 }
 
 /**
@@ -114,7 +114,7 @@ export interface InternalFunction {
 	 * union.
 	 * @since 0.8.0
 	 */
-	returnType: KipperBuiltInType;
+	returnType: KipperBuiltInTypeLiteral;
 }
 
 /**
@@ -132,7 +132,7 @@ export interface BuiltInVariable {
 	 * The type of the variable.
 	 * @since 0.10.0
 	 */
-	valueType: KipperBuiltInType;
+	valueType: KipperBuiltInTypeLiteral;
 	/**
 	 * If true then the variable is local to the current file. If false then the variable is global and can be accessed
 	 * from any file.

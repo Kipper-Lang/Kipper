@@ -1,4 +1,5 @@
 import type { SemanticData } from "../../../ast-node";
+import {ProcessedType} from "../../../../analysis";
 
 /**
  * Semantics for a {@link TypeDeclaration}.

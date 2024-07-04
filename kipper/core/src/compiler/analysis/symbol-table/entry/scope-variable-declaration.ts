@@ -5,7 +5,7 @@
 import type { VariableDeclaration, VariableDeclarationSemantics, VariableDeclarationTypeSemantics } from "../../../ast";
 import type { KipperStorageType } from "../../../const";
 import type { Scope } from "../index";
-import type { ProcessedType } from "../../types";
+import {BuiltInTypes, ProcessedType} from "../../types";
 import { ScopeDeclaration } from "./scope-declaration";
 
 /**
@@ -102,6 +102,6 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type.rawType === "func";
+		return this.type === BuiltInTypes.func;
 	}
 }

@@ -9,7 +9,7 @@ import type {
 	ParameterDeclaration,
 } from "../../../ast";
 import { ScopeDeclaration } from "./scope-declaration";
-import { ProcessedType } from "../../types";
+import {BuiltInTypes, ProcessedType} from "../../types";
 
 /**
  * Represents the definition of a function inside a {@link Scope}.
@@ -60,7 +60,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get type(): ProcessedType {
-		return ProcessedType.fromCompilableType("func");
+		return BuiltInTypes.func;
 	}
 
 	/**

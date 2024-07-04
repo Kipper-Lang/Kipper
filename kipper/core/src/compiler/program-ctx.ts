@@ -15,12 +15,12 @@ import type {
 } from "./lexer-parser";
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
-import type { TranslatedCodeLine } from "./const";
+import {kipperBuiltInTypeLiterals, TranslatedCodeLine} from "./const";
 import type { KipperWarning } from "../warnings";
-import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
+import {CompilableASTNode, Expression, RootASTNode, TypeDeclaration} from "./ast";
 import { KipperFileASTGenerator } from "./ast";
 import type { EvaluatedCompileConfig } from "./compile-config";
-import type { InternalReference, Reference } from "./analysis";
+import {BuiltInType, BuiltInTypes, InternalReference, Reference, ScopeTypeDeclaration} from "./analysis";
 import { GlobalScope, KipperSemanticChecker, KipperTypeChecker } from "./analysis";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import type { OptimisationOptions } from "./optimiser";
@@ -472,6 +472,19 @@ export class KipperProgramContext {
 	}
 
 	/**
+	 * Sets up the built-ins for this program. This function should be called before the semantic analysis is run.
+	 *
+	 * TODO! For now this only registers the built-in types in the global scope so they can be use, but in the future
+	 * this should also generate the built-in functions and variables.
+	 * @since 0.11.0
+	 */
+	public async setUpBuiltInsInGlobalScope(): Promise<void> {
+		for (const [_, type] of Object.entries(BuiltInTypes)) {
+			this._globalScope.addType(type);
+		}
+	}
+
+	/**
 	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
 	 * and warnings using the {@link this.logger logger of this instance} and throw errors in case any logical issues are
 	 * detected.
@@ -573,6 +586,8 @@ export class KipperProgramContext {
 		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
 
 		// Running the semantic analysis for the AST
+		this.logger.debug("Setting up built-ins in global scope.");
+		await this.setUpBuiltInsInGlobalScope();
 		this.logger.info(`Analysing semantics.`);
 		await this.semanticAnalysis();
 

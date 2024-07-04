@@ -1,5 +1,5 @@
 import { ProcessedType } from "./base/processed-type";
-import type { KipperBuiltInType } from "../../const";
+import {KipperBuiltInTypeLiteral, kipperBuiltInTypeLiterals} from "../../const";
 import { KipperNotImplementedError } from "../../../errors";
 import type { CompilableType } from "./base/compilable-type";
 
@@ -10,7 +10,7 @@ import type { CompilableType } from "./base/compilable-type";
 export class BuiltInType extends ProcessedType implements CompilableType {
 	public static readonly interchangeableTypes = ["void", "undefined"];
 
-	public constructor(identifier: KipperBuiltInType) {
+	public constructor(identifier: KipperBuiltInTypeLiteral) {
 		super(identifier, true);
 		throw new KipperNotImplementedError("Built-in type wrapper classes are not implement yet");
 	}
@@ -25,10 +25,30 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 	 * @since 0.11.0
 	 */
 	public isAssignableTo(type: ProcessedType): boolean {
-		if (this.identifier !== type.identifier) {
-			return BuiltInType.interchangeableTypes.includes(this.identifier)
-				&& BuiltInType.interchangeableTypes.includes(type.identifier);
+		if (this === type) {
+			return true
+		} else if (
+			BuiltInType.interchangeableTypes.includes(this.identifier)
+			&& BuiltInType.interchangeableTypes.includes(type.identifier)
+		) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 }
+
+/**
+ * A map of all built-in types that are used in the type analysis phase.
+ * @since 0.11.0
+ */
+export const BuiltInTypes = {
+	type: new BuiltInType("type"),
+	undefined: new BuiltInType("undefined"),
+	void: new BuiltInType("void"),
+	null: new BuiltInType("null"),
+	bool: new BuiltInType("bool"),
+	num: new BuiltInType("num"),
+	str: new BuiltInType("str"),
+	func: new BuiltInType("func"),
+	list: new BuiltInType("list"),
+} satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;

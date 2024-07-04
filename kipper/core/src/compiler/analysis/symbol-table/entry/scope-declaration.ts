@@ -15,15 +15,15 @@ import type { ProcessedType } from "../../types";
  * @since 0.1.2
  */
 export abstract class ScopeDeclaration {
-	public abstract get node(): Declaration;
+	public abstract get node(): Declaration | undefined;
 
 	public abstract get identifier(): string;
 
 	/**
 	 * Fetches the {@link KipperProgramContext program context instance} for this token.
 	 */
-	public get programCtx(): KipperProgramContext {
-		return this.node.programCtx;
+	public get programCtx(): KipperProgramContext | undefined {
+		return this.node?.programCtx;
 	}
 
 	/**

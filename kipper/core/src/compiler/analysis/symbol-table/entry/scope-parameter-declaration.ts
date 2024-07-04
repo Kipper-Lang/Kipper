@@ -10,7 +10,7 @@ import type {
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { LocalScope } from "../index";
-import type { ProcessedType } from "../../types";
+import {BuiltInTypes, ProcessedType} from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -111,6 +111,6 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type.rawType === "func";
+		return this.type === BuiltInTypes.func;
 	}
 }

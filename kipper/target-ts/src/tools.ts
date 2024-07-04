@@ -6,7 +6,7 @@ import type {
 	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	KipperBuiltInType,
+	KipperBuiltInTypeLiteral,
 	InternalFunction,
 	InternalFunctionArgument,
 } from "@kipper/core";
@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
  */
 export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperBuiltInType | Array<KipperBuiltInType> }>;
-	returnType: KipperBuiltInType | Array<KipperBuiltInType>;
+	params: Array<{ identifier: string; type: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral> }>;
+	returnType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -56,8 +56,8 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createTSFunctionSignature(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperBuiltInType | Array<KipperBuiltInType> }>;
-		returnType: KipperBuiltInType | Array<KipperBuiltInType>;
+		params: Array<{ identifier: string; type: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral> }>;
+		returnType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>;
 	},
 	ignoreParams: boolean = false,
 ): string {

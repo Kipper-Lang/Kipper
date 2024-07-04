@@ -3,8 +3,8 @@
  * @since 0.11.0
  */
 import { ScopeDeclaration } from "./scope-declaration";
-import type { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
-import { ProcessedType } from "../../types";
+import { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
+import {BuiltInType, BuiltInTypes, CustomType, ProcessedType, Type} from "../../types";
 import { KipperNotImplementedError } from "../../../../errors";
 
 /**
@@ -12,11 +12,35 @@ import { KipperNotImplementedError } from "../../../../errors";
  * @since 0.11.0
  */
 export class ScopeTypeDeclaration extends ScopeDeclaration {
-	private readonly _node: TypeDeclaration;
+	private readonly _node?: TypeDeclaration;
+	private readonly _builtInType?: ProcessedType;
 
-	public constructor(node: TypeDeclaration) {
+	private constructor(
+		declaration?: TypeDeclaration,
+		builtInType?: BuiltInType,
+	) {
 		super();
-		this._node = node;
+
+		this._node = declaration;
+		this._builtInType = builtInType;
+	}
+
+	/**
+	 * Creates a new scope type declaration from a type declaration.
+	 * @param node The type declaration node.
+	 * @since 0.11.0
+	 */
+	public static fromTypeDeclaration(node: TypeDeclaration): ScopeTypeDeclaration {
+		return new ScopeTypeDeclaration(node);
+	}
+
+	/**
+	 * Creates a new scope type declaration from a built-in type.
+	 * @param identifier The identifier of the built-in type.
+	 * @since 0.11.0
+	 */
+	public static fromBuiltInType(type: BuiltInType): ScopeTypeDeclaration {
+		return new ScopeTypeDeclaration(undefined, type);
 	}
 
 	/**
@@ -24,14 +48,14 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): TypeDeclarationSemantics {
-		return this._node.getSemanticData();
+	private get semanticData(): TypeDeclarationSemantics | undefined {
+		return this._node?.getSemanticData();
 	}
 
 	/**
 	 * Returns the {@link InterfaceDeclaration} or {@link ClassDeclaration AST node} this scope type declaration bases on.
 	 */
-	public get node(): TypeDeclaration {
+	public get node(): TypeDeclaration | undefined {
 		return this._node;
 	}
 
@@ -39,7 +63,7 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * The identifier of this type.
 	 */
 	public get identifier(): string {
-		return this.semanticData.identifier;
+		return this.semanticData?.identifier || this._builtInType!!.identifier;
 	}
 
 	/**
@@ -47,15 +71,16 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @since 0.11.0
 	 */
 	public get type(): ProcessedType {
-		return ProcessedType.fromCompilableType("type");
+		return BuiltInTypes.type;
 	}
 
 	/**
 	 * The value of this type, which is the type itself i.e. what value does this type represent.
+	 * @throws {UndefinedSemanticsError} If this is accessed, before the type for the declaration finished.
 	 * @since 0.11.0
 	 */
-	public get typeValue(): ProcessedType {
-		throw new KipperNotImplementedError("Custom types are not implement yet");
+	public get typeValue(): CustomType | ProcessedType {
+		return this.node?.getTypeSemanticData()?.type || this._builtInType!!;
 	}
 
 	/**

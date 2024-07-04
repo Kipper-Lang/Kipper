@@ -2,7 +2,7 @@
  * Constant expression, representing the void, null or undefined keyword.
  * @since 0.10.0
  */
-import type { KipperNullType, KipperUndefinedType, KipperVoidType } from "../../../../../const";
+import type { KipperNullTypeLiteral, KipperUndefinedTypeLiteral, KipperVoidTypeLiteral } from "../../../../../const";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-null-or-undefined-primary-expression-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
@@ -77,7 +77,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			// Syntactically there can only be 'void', 'null' or 'undefined' stored in this expression
-			constantIdentifier: <KipperVoidType | KipperNullType | KipperUndefinedType>this.sourceCode,
+			constantIdentifier: <KipperVoidTypeLiteral | KipperNullTypeLiteral | KipperUndefinedTypeLiteral>this.sourceCode,
 			value: this.sourceCode, // The value of this expression is equal to the constant identifier in string form
 		};
 	}
