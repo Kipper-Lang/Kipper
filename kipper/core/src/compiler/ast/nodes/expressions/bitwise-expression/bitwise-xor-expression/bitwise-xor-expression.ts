@@ -8,8 +8,8 @@
  * 0 ^ 0 // 0
  */
 import { BitwiseExpression } from "../bitwise-expression";
-import type { BitwiseXorExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { BitwiseXorExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";

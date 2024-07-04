@@ -11,8 +11,8 @@
  */
 
 import { BitwiseExpression } from "../bitwise-expression";
-import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../parser";
-import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../lexer-parser";
+import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";

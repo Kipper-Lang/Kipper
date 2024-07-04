@@ -46,8 +46,8 @@ import type {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-} from "../../parser";
-import type { KindParseRuleMapping } from "../../parser";
+} from "../../lexer-parser";
+import type { KindParseRuleMapping } from "../../lexer-parser";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an

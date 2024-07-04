@@ -7,8 +7,8 @@ import type { WhileLoopStatementSemantics } from "./while-loop-iteration-stateme
 import type { WhileLoopStatementTypeSemantics } from "./while-loop-iteration-statement-type-semantics";
 import type { Expression } from "../../../expressions";
 import { IterationStatement } from "../iteration-statement";
-import type { WhileLoopIterationStatementContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { WhileLoopIterationStatementContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { Statement } from "../../statement";
 
 /**

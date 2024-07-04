@@ -8,8 +8,8 @@ import type { CompoundStatementSemantics } from "./compound-statement-semantics"
 import type { CompoundStatementTypeSemantics } from "./compound-statement-type-semantics";
 import { Statement } from "../statement";
 import { LocalScope } from "../../../../analysis";
-import type { CompoundStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { CompoundStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Compound statement class, which represents a compound statement containing other items in the Kipper

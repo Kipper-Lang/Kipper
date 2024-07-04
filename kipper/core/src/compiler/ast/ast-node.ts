@@ -8,7 +8,7 @@
 import type { ParseTree } from "antlr4ts/tree";
 import { getParseRuleSource } from "../../tools";
 import { UnableToDetermineSemanticDataError, UndefinedSemanticsError } from "../../errors";
-import type { KipperParserRuleContext } from "../parser";
+import type { KipperParserRuleContext } from "../lexer-parser";
 
 /**
  * Semantics type which defines the blueprint for {@link CompilableASTNode.semanticData semanticData} inside a

@@ -3,7 +3,7 @@
  * @since 0.8.0
  */
 import type { CompilableASTNode } from "../../../ast";
-import type { KipperParseStream } from "../../../parser";
+import type { KipperFileStream } from "../../../lexer-parser";
 import type { KipperError } from "../../../../errors";
 import { getParseRuleSource } from "../../../../tools";
 
@@ -16,7 +16,7 @@ export abstract class KipperSemanticErrorHandler {
 	protected col: number | undefined;
 	protected ctx: CompilableASTNode | undefined;
 	protected filePath: string | undefined;
-	protected stream: KipperParseStream | undefined;
+	protected stream: KipperFileStream | undefined;
 
 	/**
 	 * Sets the traceback related metadata that will be used to create a traceback for an {@link KipperError} instance.
@@ -31,7 +31,7 @@ export abstract class KipperSemanticErrorHandler {
 		line?: number;
 		col?: number;
 		filePath?: string;
-		stream?: KipperParseStream;
+		stream?: KipperFileStream;
 	}): void {
 		this.ctx = data.ctx;
 

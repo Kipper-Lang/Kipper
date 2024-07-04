@@ -6,8 +6,8 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { JumpStatementSemantics } from "./jump-statement-semantics";
 import type { JumpStatementTypeSemantics } from "./jump-statement-type-semantics";
 import { Statement } from "../statement";
-import type { JumpStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { JumpStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { Expression } from "../../expressions";
 
 /**

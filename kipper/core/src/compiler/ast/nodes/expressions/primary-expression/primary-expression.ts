@@ -6,7 +6,7 @@
  */
 import type { PrimaryExpressionSemantics } from "./primary-expression-semantics";
 import type { PrimaryExpressionTypeSemantics } from "./primary-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 

@@ -1,5 +1,5 @@
-import type { KipperError, KipperProgramContext, ParseData } from "@kipper/core";
-import { KipperCompiler, KipperParseStream } from "@kipper/core";
+import type { KipperError, KipperProgramContext, LexerParserData } from "@kipper/core";
+import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { defaultConfig } from "../index";
 import { assert } from "chai";
 
@@ -8,8 +8,8 @@ describe("InvalidGlobalError", () => {
 		it(globalName, async () => {
 			let compiler = new KipperCompiler();
 			try {
-				const parseData: ParseData = await compiler.parse(
-					new KipperParseStream({ stringContent: `var ${globalName}: num = 4;` }),
+				const parseData: LexerParserData = await compiler.parse(
+					new KipperFileStream({ stringContent: `var ${globalName}: num = 4;` }),
 				);
 				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, defaultConfig);
 
