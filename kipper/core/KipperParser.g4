@@ -85,8 +85,25 @@ parameterDeclaration
     ;
 
 interfaceDeclaration
-	:	'interface' Identifier '{' '}'
-	;
+    :   'interface' Identifier '{' interfaceMemberList? '}'
+    ;
+
+interfaceMemberList
+    :   interfaceMemberDeclaration+
+    ;
+
+interfaceMemberDeclaration
+    :   propertySignature
+    |   methodSignature
+    ;
+
+propertySignature
+    :   Identifier ':' typeSpecifierExpression SemiColon
+    ;
+
+methodSignature
+    :   Identifier '(' parameterList? ')' '->' typeSpecifierExpression SemiColon
+    ;
 
 classDeclaration
 	:	'class' Identifier '{' '}'

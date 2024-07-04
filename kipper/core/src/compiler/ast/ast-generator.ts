@@ -9,7 +9,7 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import type {
+import {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualBitwiseAndExpressionContext,
@@ -25,7 +25,7 @@ import type {
 	ActualRelationalExpressionContext,
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
-	BracketNotationMemberAccessExpressionContext,
+	BracketNotationMemberAccessExpressionContext, ClassDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -48,7 +48,7 @@ import type {
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
-	InitializerContext,
+	InitializerContext, InterfaceDeclarationContext, InterfaceMemberDeclarationContext,
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
@@ -1062,6 +1062,33 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.structDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterInterfaceDeclaration: (ctx: InterfaceDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.structDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitInterfaceDeclaration: (ctx: InterfaceDeclarationContext) => void = this.handleExitingTreeNode;
+
+	public enterInterfaceMemberDeclaration: (ctx: InterfaceMemberDeclarationContext) => void = this.handleEnteringTreeNode;
+	public exitInterfaceMemberDeclaration: (ctx: InterfaceMemberDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Other

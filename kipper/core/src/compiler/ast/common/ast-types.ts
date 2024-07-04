@@ -132,6 +132,7 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_parameterDeclaration
 	| typeof ParseRuleKindMapping.RULE_variableDeclaration
 	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceMemberList
 	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 
 /**
@@ -209,6 +210,7 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMemberList]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
 
 /**

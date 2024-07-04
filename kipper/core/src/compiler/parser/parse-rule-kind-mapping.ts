@@ -35,6 +35,7 @@ export const ParseRuleKindMapping = {
 	RULE_parameterList: KipperParser.RULE_parameterList,
 	RULE_parameterDeclaration: KipperParser.RULE_parameterDeclaration,
 	RULE_interfaceDeclaration: KipperParser.RULE_interfaceDeclaration,
+	RULE_interfaceMemberList: KipperParser.RULE_interfaceMemberList,
 	RULE_classDeclaration: KipperParser.RULE_classDeclaration,
 	RULE_statement: KipperParser.RULE_statement,
 	RULE_compoundStatement: KipperParser.RULE_compoundStatement,

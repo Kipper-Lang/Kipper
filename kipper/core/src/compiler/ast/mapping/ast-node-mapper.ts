@@ -32,7 +32,7 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
-	InterfaceDeclarationContext,
+	InterfaceDeclarationContext, InterfaceMemberDeclarationContext,
 	JumpStatementContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
@@ -110,6 +110,10 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
+import { InterfacePropertyDeclaration } from "../nodes/declarations/type-declaration/interface-declaration/interface-property-declaration/interface-property-declaration";
+import {
+	InterfaceMemberListDeclaration
+} from "../nodes/declarations/type-declaration/interface-declaration/interface-member-list-declaration/interface-member-list-declaration";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -128,6 +132,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclaration,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclaration,
 		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclaration,
+		[ParseRuleKindMapping.RULE_interfaceMemberList]: InterfaceMemberListDeclaration,
 		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
@@ -197,6 +202,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclarationContext,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclarationContext,
 		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfaceMemberList]: InterfaceMemberDeclarationContext,
 		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
@@ -271,6 +277,7 @@ export class ASTNodeMapper {
 		RULE_variableDeclaration: VariableDeclaration,
 		RULE_parameterDeclaration: ParameterDeclaration,
 		RULE_interfaceDeclaration: InterfaceDeclaration,
+		RULE_interfaceMemberList: InterfaceMemberListDeclaration,
 		RULE_classDeclaration: ClassDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
