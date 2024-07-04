@@ -17,7 +17,7 @@ import type { CompileConfig } from "./compile-config";
 import { EvaluatedCompileConfig } from "./compile-config";
 import { KipperCompileResult } from "./compile-result";
 import * as Channel from "./lexer-parser/lexer-channels";
-import { PragmaProcessor } from "./PragmaProcessor";
+import { PragmaProcessor } from "./pragma-processor";
 
 /**
  * The main Compiler class that contains the functions for parsing and compiling a file.
@@ -180,19 +180,10 @@ export class KipperCompiler {
 		try {
 			parseData = await this.parse(inStream);
 
-			// Process pragmas
-			const pragmaProcessor = new PragmaProcessor();
-			pragmaProcessor.process(parseData.channels.PRAGMA);
+			// Process any pragmas which were registered
+			const pragmaModifiedCompilerOptions = await PragmaProcessor.process(compilerOptions, parseData.channels.PRAGMA);
 
-			if(!pragmaProcessor.isOptimized()) {
-				if(compilerOptions.optimisationOptions !== undefined) {
-					// Disable optimisation if the pragma 'not-optimized' was found
-					compilerOptions.optimisationOptions.optimiseBuiltIns = false;
-					compilerOptions.optimisationOptions.optimiseInternals = false;
-				}
-			}
-
-			programCtx = await this.getProgramCtx(parseData, compilerOptions);
+			programCtx = await this.getProgramCtx(parseData, pragmaModifiedCompilerOptions);
 
 			// Start compilation of the Kipper program
 			this.logger.debug("Creating ctx object for compilation metadata and semantic data");

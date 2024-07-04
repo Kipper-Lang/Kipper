@@ -32,7 +32,7 @@ LineComment
 	;
 
 Pragma
-	:	'#'	CommentContent
+	:	'#pragma' CommentContent
 		-> channel(PRAGMA)
 	;
 
