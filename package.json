@@ -14,7 +14,7 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@oclif/test": "2.3.21",
-    "@size-limit/preset-big-lib": "8.2.4",
+    "@size-limit/preset-big-lib": "11.1.4",
     "@types/chai": "4.3.0",
     "@types/mocha": "10.0.1",
     "@types/node": "18.16.16",
