@@ -8,7 +8,7 @@ import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { testPrintOutput } from "./core-functionality.test";
 
-function getFileName(pathString: string): string {
+export function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
 }
 

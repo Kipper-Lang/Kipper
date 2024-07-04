@@ -17,7 +17,7 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-
+- Implemented Processing for File Scoped Pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
 - Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
   ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
@@ -60,6 +60,7 @@ To use development versions of Kipper download the
   - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
   - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
   - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
+  - `PragmaProcessor` which handles the processing of all possible Pragmas.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
@@ -121,6 +122,7 @@ To use development versions of Kipper download the
   - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
   - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
   - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
+  - `PragmaProcessor.processSingleLine()`, which changes the compiler options according to the pragmas found in the file.
 
 ### Changed
 
