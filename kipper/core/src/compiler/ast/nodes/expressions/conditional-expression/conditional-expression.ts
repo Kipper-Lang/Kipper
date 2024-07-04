@@ -25,7 +25,8 @@ import * as console from "node:console";
  */
 export class ConditionalExpression extends Expression<
 	ConditionalExpressionSemantics,
-	ConditionalExpressionTypeSemantics
+	ConditionalExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

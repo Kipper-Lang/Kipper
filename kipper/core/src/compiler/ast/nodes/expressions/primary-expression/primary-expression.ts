@@ -51,7 +51,7 @@ export type ParserPrimaryExpressionRuleName = (typeof KindParseRuleMapping)[ASTP
 export abstract class PrimaryExpression<
 	Semantics extends PrimaryExpressionSemantics = PrimaryExpressionSemantics,
 	TypeSemantics extends PrimaryExpressionTypeSemantics = PrimaryExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPrimaryExpressionContext;
 	public abstract get kind(): ASTPrimaryExpressionKind;
 	public abstract get ruleName(): ParserPrimaryExpressionRuleName;

@@ -43,7 +43,7 @@ export type ParserArithmeticExpressionRuleName = (typeof KindParseRuleMapping)[A
 export abstract class ArithmeticExpression<
 	Semantics extends ArithmeticExpressionSemantics = ArithmeticExpressionSemantics,
 	TypeSemantics extends ArithmeticExpressionTypeSemantics = ArithmeticExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserArithmeticExpressionContext;
 	public abstract get kind(): ASTArithmeticExpressionKind;
 	public abstract get ruleName(): ParserArithmeticExpressionRuleName;

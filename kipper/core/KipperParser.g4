@@ -166,7 +166,7 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     ;
 
 lambdaExpression
-   :   '(' parameterList? ')' '->' (expression | compoundStatement)
+   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
    ;
 
 tangledPrimaryExpression

@@ -61,17 +61,17 @@ export class KipperWarningIssuer extends KipperSemanticErrorHandler {
 	}
 
 	/**
-	 * Checks whether the given expression statement is useless, and if so, issues a warning.
-	 * @param expStatement The expression statement to check.
+	 * Checks whether the given statement is useless, and if so, issues a warning.
+	 * @param statement The statement to check.
 	 * @since 0.10.0
 	 */
-	public uselessStatement(expStatement: ExpressionStatement): void {
-		const hasSideEffects = (node: Expression): boolean =>
+	public uselessStatement(statement: CompilableASTNode): void {
+		const hasSideEffects = (node: CompilableASTNode): boolean =>
 			node.hasSideEffects() || node.children.some((child) => hasSideEffects(child));
 
 		// Check whether the expression statement has side effects
-		const expStatementHasSideEffects = expStatement.children.some(hasSideEffects);
-		if (!expStatementHasSideEffects) {
+		const statementHasSideEffects = statement.children.some(hasSideEffects);
+		if (!statementHasSideEffects) {
 			this.issueWarning(new UselessExpressionStatementWarning());
 		}
 	}

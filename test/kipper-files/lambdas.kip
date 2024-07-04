@@ -1,0 +1,2 @@
+var x: func = (y: num): num -> y + 1;
+//print(f"Result: {x(1) as str}");

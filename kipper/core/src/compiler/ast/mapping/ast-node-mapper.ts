@@ -165,7 +165,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpression,
-	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
+	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
 	 * A mapping matching all {@link ASTStatementKind statement kinds} to their respective constructable AST node
@@ -306,7 +306,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
 		RULE_lambdaExpression: LambdaExpression,
-	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
+	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**
 	 * A mapping matching all {@link ASTStatementRuleName statement rule names} to their respective constructable AST

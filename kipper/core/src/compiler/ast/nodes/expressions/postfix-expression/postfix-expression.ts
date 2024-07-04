@@ -41,7 +41,7 @@ export type ParserPostfixExpressionRuleName = (typeof KindParseRuleMapping)[ASTP
 export abstract class PostfixExpression<
 	Semantics extends PostfixExpressionSemantics = PostfixExpressionSemantics,
 	TypeSemantics extends PostfixExpressionTypeSemantics = PostfixExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPostfixExpressionContext;
 	public abstract get kind(): ASTPostfixExpressionKind;
 	public abstract get ruleName(): ParserPostfixExpressionRuleName;

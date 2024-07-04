@@ -24,7 +24,8 @@ import { getParseRuleSource } from "../../../../../../tools";
  */
 export class FStringPrimaryExpression extends Expression<
 	FStringPrimaryExpressionSemantics,
-	FStringPrimaryExpressionTypeSemantics
+	FStringPrimaryExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

@@ -14,9 +14,13 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { ScopeNode } from "../../../scope-node";
 import { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";
+import type { CompoundStatement, Statement } from "../../statements";
+import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
+import { ParameterDeclaration } from "../../declarations";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 export class LambdaExpression
-	extends Expression<LambdaExpressionSemantics, LambdaExpressionTypeSemantics>
+	extends Expression<LambdaExpressionSemantics, LambdaExpressionTypeSemantics, Expression | ParameterDeclaration | CompoundStatement>
 	implements ScopeNode<LambdaScope>
 {
 	/**
@@ -85,7 +89,32 @@ export class LambdaExpression
 		return this._antlrRuleCtx;
 	}
 
-	public async primarySemanticAnalysis(): Promise<void> {}
+	public async primarySemanticAnalysis(): Promise<void> {
+		let body: Statement | undefined;
+		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
+		let params: Array<ParameterDeclaration> = [];
+
+		// Create shallow copy of the children
+		let children = [...this.children];
+
+		// Evaluate the primary semantic data for the function
+		while (children.length > 0) {
+			let child = children.shift();
+
+			if (child instanceof ParameterDeclaration) {
+				params.push(child);
+			} else {
+				// Once the return type has been reached, stop, as the last two items should be the return type and func body
+				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
+				body = <any>children.pop();
+				break;
+			}
+		}
+
+		if (!retTypeSpecifier) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+	}
 
 	public async primarySemanticTypeChecking(): Promise<void> {}
 

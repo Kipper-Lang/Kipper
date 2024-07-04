@@ -3,7 +3,6 @@
  * @since 0.11.0
  */
 import type { ExpressionSemantics } from "../expression-semantics";
-import type { UncheckedType } from "../../../../analysis";
 import type { ParameterDeclaration } from "../../declarations";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import type { CompoundStatement } from "../../statements";
@@ -13,11 +12,6 @@ import type { CompoundStatement } from "../../statements";
  * @since 0.11.0
  */
 export interface LambdaExpressionSemantics extends ExpressionSemantics {
-	/**
-	 * The return type of the lambda expression.
-	 */
-	returnType: UncheckedType;
-
 	/**
 	 * The type specifier expression for the return type.
 	 */
