@@ -11,8 +11,8 @@ import type { AdditiveExpressionSemantics } from "./additive-expression-semantic
 import type { AdditiveExpressionTypeSemantics } from "./additive-expression-type-semantics";
 import type { Expression } from "../../expression";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { AdditiveExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { AdditiveExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { KipperAdditiveOperator } from "../../../../../const";
 import { kipperAdditiveOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";

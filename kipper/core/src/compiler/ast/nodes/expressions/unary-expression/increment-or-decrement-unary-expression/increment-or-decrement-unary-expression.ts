@@ -11,8 +11,8 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
 import { UnaryExpression } from "../unary-expression";
-import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 

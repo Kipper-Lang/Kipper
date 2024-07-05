@@ -10,11 +10,11 @@ import type { OperatorModifiedUnaryExpressionSemantics } from "./operator-modifi
 import type { OperatorModifiedUnaryTypeSemantics } from "./operator-modified-unary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
-import type { KipperNegateOperator, KipperSignOperator } from "../../../../../const";
+import type { KipperBitwiseNotOperator, KipperNegateOperator, KipperSignOperator } from "../../../../../const";
 import { kipperUnaryModifierOperators } from "../../../../../const";
 import { UnaryExpression } from "../unary-expression";
-import type { OperatorModifiedUnaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../parser";
+import type { OperatorModifiedUnaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CheckedType } from "../../../../../analysis";
 
@@ -90,12 +90,14 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		const children = this.getAntlrRuleChildren();
 
 		// Get the operator
-		const unaryOperator = <KipperNegateOperator | KipperSignOperator | undefined>children.find((token) => {
-			return (
-				token instanceof UnaryOperatorContext &&
-				kipperUnaryModifierOperators.find((op) => op === token.text) !== undefined
-			);
-		})?.text;
+		const unaryOperator = <KipperNegateOperator | KipperSignOperator | KipperBitwiseNotOperator | undefined>(
+			children.find((token) => {
+				return (
+					token instanceof UnaryOperatorContext &&
+					kipperUnaryModifierOperators.find((op) => op === token.text) !== undefined
+				);
+			})?.text
+		);
 
 		// Get the expression of this unary expression
 		const exp: Expression = this.children[0];

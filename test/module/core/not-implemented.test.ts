@@ -34,9 +34,9 @@ describe("NotImplemented", () => {
 		assert.fail("Expected NotImplementedError");
 	});
 
-	it("Conditional Expression", async () => {
+	it("Conditional Expression with union types", async () => {
 		try {
-			await new KipperCompiler().compile("var x: num = true ? 1 : 2;", {
+			await new KipperCompiler().compile("var x: num = true ? 1 : '2';", {
 				abortOnFirstError: true,
 				target: defaultTarget,
 			});

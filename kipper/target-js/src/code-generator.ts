@@ -8,6 +8,12 @@ import type {
 	LogicalExpressionSemantics,
 	TranslatedCodeLine,
 	TranslatedExpression,
+	BitwiseExpressionSemantics,
+	BitwiseExpression,
+	BitwiseXorExpression,
+	BitwiseShiftExpression,
+	BitwiseOrExpression,
+	BitwiseAndExpression,
 	AdditiveExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
@@ -254,7 +260,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link WhileLoopIterationStatement} into the JavaScript language.
-	 * @since 0.// Check whether the loop body is a compound statement10.0
+	 * @since 0.10.0
 	 */
 	whileLoopIterationStatement = async (node: WhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -658,10 +664,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @private
 	 */
 	protected translateOperatorExpressionWithOperands = async (
-		node: ComparativeExpression | LogicalExpression,
+		node: ComparativeExpression | LogicalExpression | BitwiseExpression,
 	): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
+		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics | BitwiseExpressionSemantics =
+			node.getSemanticData();
 
 		// Generate the code for the operands
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
@@ -692,6 +699,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates a {@link BitwiseOrExpression} into the JavaScript language.
+	 */
+	bitwiseOrExpression = async (node: BitwiseOrExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseAndExpression} into the JavaScript language.
+	 */
+	bitwiseAndExpression = async (node: BitwiseAndExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseXorExpression} into the JavaScript language.
+	 */
+	bitwiseXorExpression = async (node: BitwiseXorExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseShiftExpression} into the JavaScript language.
+	 */
+	bitwiseShiftExpression = async (node: BitwiseShiftExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
 	 * Translates a {@link LogicalAndExpression} into the JavaScript language.
 	 */
 	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
@@ -709,7 +744,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ConditionalExpression} into the JavaScript language.
 	 */
 	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.condition.translateCtxAndChildren();
+		const trueBranch = await semanticData.trueBranch.translateCtxAndChildren();
+		const falseBranch = await semanticData.falseBranch.translateCtxAndChildren();
+
+		return [...condition, " ? ", ...trueBranch, " : ", ...falseBranch];
 	};
 
 	/**

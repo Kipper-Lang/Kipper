@@ -1,0 +1,3 @@
+// Test
+print(2 as str);
+print(true as str);

@@ -3,7 +3,7 @@
  * expressions. This abstract class only exists to provide the commonality between the different comparative expressions.
  * @since 0.9.0
  */
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ComparativeExpressionSemantics } from "./comparative-expression-semantics";
 import type { ComparativeExpressionTypeSemantics } from "./comparative-expression-type-semantics";
 import { Expression } from "../expression";

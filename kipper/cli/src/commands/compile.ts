@@ -15,7 +15,7 @@ import {
 	LogLevel,
 } from "@kipper/core";
 import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { getParseStream, getTarget, KipperEncodings, KipperParseFile, verifyEncoding } from "../input/";
+import { getParseStream, getTarget, KipperEncodings, KipperInputFile, verifyEncoding } from "../input/";
 import { writeCompilationResult } from "../output";
 import { prettifiedErrors } from "../decorators";
 import { loadAutoConfig } from "../config-loader";
@@ -123,7 +123,7 @@ export default class Compile extends Command {
 
 		// Output
 		const encoding = flags["encoding"] || "utf-8";
-		const fileName = stream instanceof KipperParseFile ? stream.path.name : stream.name;
+		const fileName = stream instanceof KipperInputFile ? stream.path.name : stream.name;
 		const outPath = `${path.resolve(outDir)}/${fileName}.${target.fileExtension}`;
 
 		return {

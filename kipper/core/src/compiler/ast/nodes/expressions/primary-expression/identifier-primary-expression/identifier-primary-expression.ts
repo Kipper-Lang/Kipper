@@ -7,8 +7,8 @@
 import type { IdentifierPrimaryExpressionSemantics } from "./identifier-primary-expression-semantics";
 import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { IdentifierPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { IdentifierPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { CheckedType, ScopeDeclaration } from "../../../../../analysis";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";

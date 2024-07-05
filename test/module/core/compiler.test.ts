@@ -1,13 +1,6 @@
 import { assert } from "chai";
 import type { KipperCompileResult } from "@kipper/core";
-import {
-	KipperCompiler,
-	KipperError,
-	KipperLogger,
-	KipperParseStream,
-	KipperSyntaxError,
-	LogLevel,
-} from "@kipper/core";
+import { KipperCompiler, KipperError, KipperLogger, KipperFileStream, KipperSyntaxError, LogLevel } from "@kipper/core";
 import { promises as fs } from "fs";
 import * as ts from "typescript";
 import * as path from "path";
@@ -15,7 +8,7 @@ import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { testPrintOutput } from "./core-functionality.test";
 
-function getFileName(pathString: string): string {
+export function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);
 }
 
@@ -41,6 +34,7 @@ const ifStatementsFile = getFileName("if-statements.kip");
 const forLoopFile = getFileName("for-loop.kip");
 const whileLoopFile = getFileName("while-loop.kip");
 const doWhileLoopFile = getFileName("do-while-loop.kip");
+const bitwiseOperationsFile = getFileName("bitwise-operations.kip");
 
 describe("KipperCompiler", () => {
 	const defaultTarget = new KipperTypeScriptTarget();
@@ -87,7 +81,7 @@ describe("KipperCompiler", () => {
 		describe("Error", () => {
 			it("Invalid file", async () => {
 				const fileContent = (await fs.readFile(invalidFile, "utf8" as BufferEncoding)).toString();
-				const stream = new KipperParseStream({ stringContent: fileContent });
+				const stream = new KipperFileStream({ stringContent: fileContent });
 				try {
 					await compiler.syntaxAnalyse(stream);
 					assert(false, "Expected an error");
@@ -172,6 +166,16 @@ describe("KipperCompiler", () => {
 				const fileContent = (await fs.readFile(whileLoopFile, "utf8" as BufferEncoding)).toString();
 				await compiler.syntaxAnalyse(fileContent);
 			});
+
+			it("Do-While loop", async () => {
+				const fileContent = (await fs.readFile(doWhileLoopFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
+
+			it("Bitwise operations", async () => {
+				const fileContent = (await fs.readFile(bitwiseOperationsFile, "utf8" as BufferEncoding)).toString();
+				await compiler.syntaxAnalyse(fileContent);
+			});
 		});
 	});
 
@@ -180,7 +184,7 @@ describe("KipperCompiler", () => {
 
 		it("Validate file ctx return", async () => {
 			const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-			let stream = new KipperParseStream({ stringContent: fileContent });
+			let stream = new KipperFileStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
@@ -194,7 +198,7 @@ describe("KipperCompiler", () => {
 
 		it("Check valid escaped characters", async () => {
 			const fileContent = "'\\r \\n \\r \\n';";
-			let stream = new KipperParseStream({ stringContent: fileContent });
+			let stream = new KipperFileStream({ stringContent: fileContent });
 			let parseData = await compiler.parse(stream);
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
@@ -554,6 +558,30 @@ describe("KipperCompiler", () => {
 					testPrintOutput((message: any) => {
 						assert("10" === message, "Expected '10'");
 					}, jsCode);
+				});
+
+				it(`Bitwise operations [${target.fileExtension}]`, async () => {
+					const fileContent: string = (await fs.readFile(bitwiseOperationsFile, "utf8" as BufferEncoding)).toString();
+					const result: KipperCompileResult = await compiler.compile(fileContent, { target: target });
+
+					const code: string = result.write();
+					assert(code);
+					assert(code.includes(TargetTS.getBuiltInIdentifier("print")));
+
+					const jsCode = ts.transpile(result.write());
+					const output: string[] = [];
+					testPrintOutput((message: any) => {
+						output.push(message);
+					}, jsCode);
+
+					assert.equal(output[0], "Result: 9", "Expected 'Result: 9'");
+					assert.equal(output[1], "Result: 2", "Expected 'Result: 2'");
+					assert.equal(output[2], "Result: 11", "Expected 'Result: 11'");
+					assert.equal(output[3], "Result: 80", "Expected 'Result: 80'");
+					assert.equal(output[4], "Result: 1", "Expected 'Result: 1'");
+					assert.equal(output[5], "Result: -11", "Expected 'Result: -11'");
+					assert.equal(output[6], "Result: 1", "Expected 'Result: 1'");
+					assert.equal(output[7], "Result: 9", "Expected 'Result: 9'");
 				});
 			});
 		});

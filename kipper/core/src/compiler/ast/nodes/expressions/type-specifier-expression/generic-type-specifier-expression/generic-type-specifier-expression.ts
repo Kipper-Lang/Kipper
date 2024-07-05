@@ -8,8 +8,8 @@ import type { GenericTypeSpecifierExpressionSemantics } from "./generic-type-spe
 import type { GenericTypeSpecifierExpressionTypeSemantics } from "./generic-type-specifier-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
-import type { GenericTypeSpecifierExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { GenericTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 
 /**

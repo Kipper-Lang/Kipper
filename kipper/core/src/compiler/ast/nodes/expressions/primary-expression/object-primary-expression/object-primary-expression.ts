@@ -5,8 +5,8 @@
 import type { ObjectPrimaryExpressionSemantics } from "./object-primary-expression-semantics";
 import type { ObjectPrimaryExpressionTypeSemantics } from "./object-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { ObjectPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { ObjectPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 import { PrimaryExpression } from "../primary-expression";
 

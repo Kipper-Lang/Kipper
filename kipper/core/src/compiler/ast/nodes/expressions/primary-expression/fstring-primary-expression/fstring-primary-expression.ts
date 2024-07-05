@@ -5,14 +5,14 @@
 import type { FStringPrimaryExpressionSemantics } from "./fstring-primary-expression-semantics";
 import type { FStringPrimaryExpressionTypeSemantics } from "./fstring-primary-expression-type-semantics";
 import { Expression } from "../../expression";
-import type { FStringPrimaryExpressionContext } from "../../../../../parser";
+import type { FStringPrimaryExpressionContext } from "../../../../../lexer-parser";
 import {
 	ExpressionContext,
 	FStringDoubleQuoteAtomContext,
 	FStringSingleQuoteAtomContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
-} from "../../../../../parser";
+} from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { CheckedType } from "../../../../../analysis";
 import { getParseRuleSource } from "../../../../../../tools";

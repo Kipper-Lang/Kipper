@@ -5,8 +5,8 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { SwitchStatementSemantics } from "./switch-statement-semantics";
 import type { SwitchStatementTypeSemantics } from "./switch-statement-type-semantics";
 import { Statement } from "../statement";
-import type { SwitchStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { SwitchStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../errors";
 
 /**

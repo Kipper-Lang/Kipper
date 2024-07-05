@@ -30,6 +30,7 @@ import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import type {
 	KipperArithmeticOperator,
+	KipperBitwiseOperator,
 	KipperCompilableType,
 	KipperReferenceable,
 	KipperReferenceableFunction,
@@ -46,6 +47,7 @@ import {
 	ArgumentTypeError,
 	ArithmeticOperationTypeError,
 	AssignmentTypeError,
+	BitwiseOperationTypeError,
 	ExpressionNotCallableError,
 	IncompleteReturnsInCodePathsError,
 	InvalidAmountOfArgumentsError,
@@ -410,6 +412,29 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
+	 * Asserts that the passed type allows the bitwise operation.
+	 * @param leftOp The left operand expression.
+	 * @param rightOp The right operand expression.
+	 * @param op The bitwise operation that is performed.
+	 * @throws {BitwiseOperationTypeError} If the type of the left or right operand is not a number.
+	 * @since 0.11.0
+	 */
+	public validBitwiseExpression(leftOp: Expression, rightOp: Expression, op: KipperBitwiseOperator): void {
+		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
+		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
+
+		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
+		if (leftOpType === undefined || rightOpType === undefined) {
+			return;
+		}
+
+		// Ensure that both expressions are of type 'num'
+		if (leftOpType !== "num" || rightOpType !== "num") {
+			throw this.assertError(new BitwiseOperationTypeError(leftOpType, rightOpType));
+		}
+	}
+
+	/**
 	 * Asserts that the type conversion for the {@link operand} is valid.
 	 * @param operand The expression to convert.
 	 * @param targetType The type to convert to.
@@ -677,6 +702,31 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					); // TODO! Add support for lists
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks whether the conditional expression is valid.
+	 * @param trueBranch The expression which is called when the condition evaluates to true.
+	 * @param falseBranch The expression which is called when the condition evaluates to false.
+	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
+	 * @since 0.11.0
+	 */
+	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+		const trueBranchType = KipperTypeChecker.getTypeForAnalysis(trueBranch.getTypeSemanticData().evaluatedType);
+		const falseBranchType = KipperTypeChecker.getTypeForAnalysis(falseBranch.getTypeSemanticData().evaluatedType);
+
+		// If the branch types are undefined, skip type checking (the types are invalid anyway)
+		if (trueBranchType === undefined || falseBranchType === undefined) {
+			return;
+		}
+
+		if (trueBranchType !== falseBranchType) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError(
+					"Conditional expressions with mismatching branch return types are not implemented yet",
+				),
+			);
 		}
 	}
 }
