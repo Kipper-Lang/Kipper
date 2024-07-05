@@ -31,7 +31,8 @@ export class LambdaExpression
 		LambdaExpressionTypeSemantics,
 		Expression | ParameterDeclaration | CompoundStatement
 	>
-	implements ScopeNode<LambdaScope> {
+	implements ScopeNode<LambdaScope>
+{
 	/**
 	 * The inner scope of this lambda expression.
 	 */
@@ -124,11 +125,13 @@ export class LambdaExpression
 			throw new UnableToDetermineSemanticDataError();
 		}
 
+		const retType = retTypeSpecifier.getSemanticData().typeIdentifier;
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 		this.semanticData = {
+			returnType: retType,
 			returnTypeSpecifier: retTypeSpecifier,
 			params: params,
-			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
+			functionBody: <CompoundStatement | Expression>body, // Will always syntactically be a compound statement
 		};
 	}
 
