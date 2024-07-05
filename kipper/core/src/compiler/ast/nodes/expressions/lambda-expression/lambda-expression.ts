@@ -125,8 +125,10 @@ export class LambdaExpression
 			throw new UnableToDetermineSemanticDataError();
 		}
 
+		const retType = retTypeSpecifier.getSemanticData().typeIdentifier;
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 		this.semanticData = {
+			returnType: retType,
 			returnTypeSpecifier: retTypeSpecifier,
 			params: params,
 			functionBody: <CompoundStatement | Expression>body, // Will always syntactically be a compound statement

@@ -781,7 +781,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		// Step 2: Translate Parameters
 		let translatedParams = params.map((param) => param.getSemanticData().identifier).join(", ");
 
-
 		let translatedBody;
 		let translatedBodyAsync = await body.translateCtxAndChildren();
 
