@@ -17,6 +17,7 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
+
 - Implemented Processing for File Scoped Pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
 - Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
   ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
