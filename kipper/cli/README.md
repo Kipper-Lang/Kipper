@@ -44,7 +44,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.7 linux-x64 node-v20.10.0
+@kipper/cli/0.11.0-alpha.8 linux-x64 node-v20.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -101,7 +101,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.7/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -118,7 +118,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.7/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/help.ts)_
 
 ## `kipper new [LOCATION]`
 
@@ -135,7 +135,7 @@ OPTIONS
   -d, --default  Use the default settings for the new project. Skips the setup wizard.
 ```
 
-_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.7/kipper/cli/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/new.ts)_
 
 ## `kipper run [FILE]`
 
@@ -174,7 +174,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.7/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -185,7 +185,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.7/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper
