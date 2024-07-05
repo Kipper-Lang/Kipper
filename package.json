@@ -24,7 +24,7 @@
     "browserify": "17.0.0",
     "chai": "4.3.6",
     "coverage-badge-creator": "1.0.17",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "json-parse-even-better-errors": "3.0.0",
     "minimist": "1.2.8",
     "mkdirp": "3.0.1",
