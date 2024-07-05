@@ -6,7 +6,7 @@ import type { ExpressionSemantics } from "../expression-semantics";
 import type { ParameterDeclaration } from "../../declarations";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import type { CompoundStatement } from "../../statements";
-import { Expression } from "../expression";
+import type { Expression } from "../expression";
 
 /**
  * Semantics for AST Node {@link LambdaExpression}.

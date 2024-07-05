@@ -1,6 +1,5 @@
 var x: func = (y: num, z: str): num -> {
-		var t: num = len(z);
-		return y + t;
+		return y;
 };
 
 //var x: func = (y: num, z: str): num -> y + len(z);

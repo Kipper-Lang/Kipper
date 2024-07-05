@@ -5,14 +5,15 @@
  */
 import type { KipperReferenceable } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import {
+import type {
 	CompilableNodeChild,
 	CompilableNodeParent,
-	JumpStatement, LambdaExpression,
+	JumpStatement,
 	ReturnStatement,
 	ScopeNode,
 	VariableDeclaration,
 } from "../../ast";
+import { LambdaExpression } from "../../ast";
 import {
 	CompoundStatement,
 	Expression,
@@ -215,7 +216,10 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
 		// declaration. This is to ensure a return statement is always used inside a function.
 		let currentParent: CompilableNodeParent | undefined = retStatement.parent;
-		while (!(currentParent instanceof FunctionDeclaration || currentParent instanceof LambdaExpression) && currentParent) {
+		while (
+			!(currentParent instanceof FunctionDeclaration || currentParent instanceof LambdaExpression) &&
+			currentParent
+		) {
 			currentParent = currentParent.parent;
 		}
 

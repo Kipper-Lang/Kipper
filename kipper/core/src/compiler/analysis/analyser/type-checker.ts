@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import {
+import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
 	UnaryExpressionSemantics,
@@ -16,7 +16,8 @@ import {
 	MemberAccessExpression,
 	RelationalExpression,
 	Statement,
-	UnaryExpression, LambdaExpression,
+	UnaryExpression,
+	LambdaExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -516,7 +517,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// return type.
 		if (returnType !== "void") {
 			// Recursively check all code paths to ensure all return a value.
-			const checkChildrenCodePaths = (parent: Statement | Expression | CompoundStatement ): boolean => {
+			const checkChildrenCodePaths = (parent: Statement | Expression | CompoundStatement): boolean => {
 				let returnPathsCovered = false;
 
 				// If the parent is an if statement, we have to check the if and else branches directly
