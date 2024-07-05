@@ -34,7 +34,6 @@
     "prettier": "2.8.8",
     "run-script-os": "1.1.6",
     "semver": "7.6.0",
-    "size-limit": "11.1.4",
     "source-map-support": "0.5.21",
     "ts-mocha": "10.0.0",
     "ts-node": "10.9.2",
@@ -72,16 +71,6 @@
   "oclif": {
     "commands": "./kipper/cli/lib/commands"
   },
-  "size-limit": [
-    {
-      "path": "./kipper/web/kipper-standalone.min.js",
-      "limit": "200 kB"
-    },
-    {
-      "path": "./kipper/web/kipper-standalone.js",
-      "limit": "400 kB"
-    }
-  ],
   "scripts": {
     "fastbuild": "pnpm run -r build && tsc",
     "build": "pnpm run fastbuild",
@@ -100,7 +89,6 @@
     "bump": "run-script-os",
     "bump:linux:macos:default": "bash ./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
-    "size-limit": "size-limit",
     "cleanup": "run-script-os",
     "cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
     "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib",
