@@ -29,7 +29,7 @@
     "minimist": "1.2.8",
     "mkdirp": "3.0.1",
     "mocha": "10.6.0",
-    "nyc": "15.1.0",
+    "nyc": "17.0.0",
     "prettier": "2.8.8",
     "run-script-os": "1.1.6",
     "semver": "7.6.0",
