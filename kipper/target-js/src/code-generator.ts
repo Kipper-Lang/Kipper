@@ -785,9 +785,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		let translatedBodyAsync = await body.translateCtxAndChildren();
 
 		if (body instanceof Expression) {
-			translatedBody = translatedBodyAsync.map((line) => line.toString().trim()).join("");
+			translatedBody = translatedBodyAsync.map((line) => {
+				if(line instanceof Array) {
+					return line.join(" ").trim();
+				}
+				return line;
+			}).join("");
 		} else {
-			translatedBody = this.compoundStatement(body);
+			translatedBody = await this.compoundStatement(body);
+			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");
 		}
 
 		// Step 4: Format Lambda Expression

@@ -1,6 +1,4 @@
-var x: func = (y: num, z: str): num -> {
-		return y;
-};
+var x: func = (y: num, z: str): num -> y + len(z);
 
 //var x: func = (y: num, z: str): num -> y + len(z);
 //print(f"Result: {x(1) as str}");
