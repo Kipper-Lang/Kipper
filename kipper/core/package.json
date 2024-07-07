@@ -23,7 +23,7 @@
 		"ts-node": "10.9.2",
 		"@types/node": "20.14.9",
 		"size-limit": "8.2.6",
-		"@size-limit/preset-big-lib": "8.2.6"
+		"@size-limit/preset-big-lib": "11.1.4"
 	},
   "engines": {
     "node": ">=16.0.0",
