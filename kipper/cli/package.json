@@ -11,7 +11,7 @@
     "@kipper/core": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
-    "@oclif/command": "1.8.31",
+    "@oclif/command": "1.8.36",
     "@oclif/config": "1.18.8",
     "@oclif/plugin-help": "3.3.1",
     "@oclif/parser": "3.8.10",
