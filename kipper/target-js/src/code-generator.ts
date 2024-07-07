@@ -785,12 +785,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		let translatedBodyAsync = await body.translateCtxAndChildren();
 
 		if (body instanceof Expression) {
-			translatedBody = translatedBodyAsync.map((line) => {
-				if(line instanceof Array) {
-					return line.join(" ").trim();
-				}
-				return line;
-			}).join("");
+			translatedBody = translatedBodyAsync
+				.map((line) => {
+					if (line instanceof Array) {
+						return line.join(" ").trim();
+					}
+					return line;
+				})
+				.join("");
 		} else {
 			translatedBody = await this.compoundStatement(body);
 			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");

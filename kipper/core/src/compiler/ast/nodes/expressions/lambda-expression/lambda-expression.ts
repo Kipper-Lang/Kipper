@@ -147,9 +147,7 @@ export class LambdaExpression
 
 		// Ensure that all code paths return a value
 		if (semanticData.functionBody instanceof CompoundStatement) {
-			this.programCtx
-				.typeCheck(this)
-				.validReturnCodePathsInFunctionBody(this);
+			this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 		}
 	}
 
