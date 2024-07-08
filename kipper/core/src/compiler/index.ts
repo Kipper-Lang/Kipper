@@ -3,7 +3,7 @@
  * @since 0.0.1
  */
 export * from "./const";
-export * from "./parser/";
+export * from "./lexer-parser/";
 export * from "./ast/";
 export * from "./analysis/";
 export * from "./target-presets/";

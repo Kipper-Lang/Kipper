@@ -1,7 +1,7 @@
 import type { ObjectPropertySemantics } from "./object-property-semantics";
 import type { ObjectPropertyTypeSemantics } from "./object-property-type-semantics";
-import type { ObjectPropertyContext } from "../../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
+import type { ObjectPropertyContext } from "../../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import { PrimaryExpression } from "../../primary-expression";
 import type { CompilableASTNode } from "../../../../../compilable-ast-node";
 

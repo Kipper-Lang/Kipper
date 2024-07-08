@@ -2,7 +2,7 @@
  * BitwiseExpression which represents a bitwise operation.
  * @since 0.11.0
  */
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
 import { Expression } from "../expression";
 import type { BitwiseExpressionTypeSemantics } from "./bitwise-expression-type-semantics";

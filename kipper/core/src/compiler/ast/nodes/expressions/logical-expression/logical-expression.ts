@@ -6,7 +6,7 @@
  */
 import type { LogicalExpressionSemantics } from "./logical-expression-semantics";
 import type { LogicalExpressionTypeSemantics } from "./logical-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 

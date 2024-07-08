@@ -46,7 +46,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.5 linux-x64 node-v18.18.2
+@kipper/cli/0.11.0-alpha.8 linux-x64 node-v20.10.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -59,34 +59,11 @@ USAGE
 
 <!-- commands -->
 
-- [`kipper analyse [FILE]`](#kipper-analyse-file)
 - [`kipper compile [FILE]`](#kipper-compile-file)
 - [`kipper help [COMMAND]`](#kipper-help-command)
 - [`kipper new [LOCATION]`](#kipper-new-location)
 - [`kipper run [FILE]`](#kipper-run-file)
 - [`kipper version`](#kipper-version)
-
-## `kipper analyse [FILE]`
-
-Analyse a Kipper file and validate its syntax and semantic integrity.
-
-```
-USAGE
-  $ kipper analyse [FILE]
-
-ARGUMENTS
-  FILE  The file that should be analysed.
-
-OPTIONS
-  -e, --encoding=encoding        [default: utf8] The encoding that should be used to read the file (ascii,utf8,utf16le).
-
-  -s, --string-code=string-code  The content of a Kipper file that can be passed as a replacement for the 'file'
-                                 parameter.
-
-  -w, --[no-]warnings            Show warnings that were emitted during the analysis.
-```
-
-_See code: [src/commands/analyse.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
@@ -102,6 +79,8 @@ ARGUMENTS
 OPTIONS
   -b, --[no-]optimise-builtins   Optimise the generated built-in functions using tree-shaking to reduce the size of the
                                  output.
+
+  -d, --[no-]dry-run             Run the compiler without writing any output. Useful for checking for errors.
 
   -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf8,utf16le).
 
@@ -126,7 +105,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -143,7 +122,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/help.ts)_
 
 ## `kipper new [LOCATION]`
 
@@ -160,7 +139,7 @@ OPTIONS
   -d, --default  Use the default settings for the new project. Skips the setup wizard.
 ```
 
-_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/new.ts)_
 
 ## `kipper run [FILE]`
 
@@ -199,7 +178,7 @@ OPTIONS
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -210,7 +189,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.5/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/version.ts)_
 
 <!-- commandsstop -->
 

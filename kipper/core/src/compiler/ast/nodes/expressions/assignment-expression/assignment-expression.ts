@@ -15,8 +15,8 @@
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { AssignmentExpressionSemantics } from "./assignment-expression-semantics";
 import type { AssignmentExpressionTypeSemantics } from "./assignment-expression-type-semantics";
-import type { AssignmentExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../parser";
+import type { AssignmentExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { IdentifierPrimaryExpression } from "../primary-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";

@@ -5,13 +5,13 @@
  */
 import type { MemberAccessExpressionSemantics } from "./member-access-expression-semantics";
 import type { MemberAccessExpressionTypeSemantics } from "./member-access-expression-type-semantics";
-import type { SliceNotationContext, SliceNotationMemberAccessExpressionContext } from "../../../../parser";
+import type { SliceNotationContext, SliceNotationMemberAccessExpressionContext } from "../../../../lexer-parser";
 import {
 	BracketNotationMemberAccessExpressionContext,
 	DotNotationMemberAccessExpressionContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
-} from "../../../../parser";
+} from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../errors";

@@ -7,8 +7,8 @@
 import { Expression } from "../expression";
 import type { LambdaExpressionSemantics } from "./lambda-expression-semantics";
 import type { LambdaExpressionTypeSemantics } from "./lambda-expression-type-semantics";
-import type { LambdaExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { LambdaExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { ScopeNode } from "../../../scope-node";
 import { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";

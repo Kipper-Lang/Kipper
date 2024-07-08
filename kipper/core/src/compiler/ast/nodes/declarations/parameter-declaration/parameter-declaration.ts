@@ -9,8 +9,8 @@ import type { FunctionScope, ScopeParameterDeclaration } from "../../../../analy
 import type { FunctionDeclaration } from "../function-declaration";
 import type { IdentifierTypeSpecifierExpression, LambdaExpression } from "../../expressions";
 import { Declaration } from "../declaration";
-import type { ParameterDeclarationContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { ParameterDeclarationContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { getParseTreeSource } from "../../../../../tools";
 import type { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";
 

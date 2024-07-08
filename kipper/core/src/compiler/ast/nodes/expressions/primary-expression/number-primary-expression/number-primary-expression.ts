@@ -5,8 +5,8 @@
 import type { NumberPrimaryExpressionSemantics } from "./number-primary-expression-semantics";
 import type { NumberPrimaryExpressionTypeSemantics } from "./number-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { NumberPrimaryExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { NumberPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { CheckedType } from "../../../../../analysis";
 import { PrimaryExpression } from "../primary-expression";
 

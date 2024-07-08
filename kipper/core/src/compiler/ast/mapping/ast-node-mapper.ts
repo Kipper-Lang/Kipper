@@ -52,7 +52,7 @@ import {
 	WhileLoopIterationStatementContext,
 	ObjectPropertyContext,
 	LambdaExpressionContext,
-} from "../../parser";
+} from "../../lexer-parser";
 import type {
 	ASTDeclarationKind,
 	ASTDeclarationRuleName,
@@ -62,8 +62,6 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
-import { LambdaExpression } from "../nodes";
-import { ObjectProperty } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -107,6 +105,8 @@ import {
 	BitwiseXorExpression,
 	BitwiseShiftExpression,
 	BitwiseAndExpression,
+	ObjectProperty,
+	LambdaExpression,
 } from "../nodes";
 
 /**

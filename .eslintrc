@@ -32,6 +32,6 @@
 		"BufferEncoding": true
 	},
   "ignorePatterns": [
-    "parser/antlr/*.ts"
+    "lexer-parser/antlr/*.ts"
   ]
 }

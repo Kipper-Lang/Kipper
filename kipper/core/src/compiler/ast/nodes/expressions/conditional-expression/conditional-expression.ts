@@ -10,10 +10,8 @@ import type { ConditionalExpressionSemantics } from "./conditional-expression-se
 import type { ConditionalExpressionTypeSemantics } from "./conditional-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import type { ConditionalExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { KipperNotImplementedError } from "../../../../../errors";
-import * as console from "node:console";
+import type { ConditionalExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
