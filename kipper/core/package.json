@@ -56,7 +56,7 @@
 		"antlr4": "pnpm run antlr4-no-rebuild",
 		"antlr4-no-rebuild": "antlr4ts -visitor -o src/compiler/lexer-parser/antlr ./KipperLexer.g4 ./KipperParser.g4",
 		"postantlr4-no-rebuild": "run-script-os",
-		"postantlr4-no-rebuild:linux:macos:default": "cp src/compiler/lexer-parser/antlr/*.interp ./lib/compiler/parser/antlr/ && cp src/compiler/lexer-parser/antlr/*.tokens ./lib/compiler/parser/antlr/ && cp src/compiler/lexer-parser/antlr/*.tokens ./",
+		"postantlr4-no-rebuild:linux:macos:default": "cp src/compiler/lexer-parser/antlr/*.interp ./lib/compiler/lexer-parser/antlr/ && cp src/compiler/lexer-parser/antlr/*.tokens ./lib/compiler/lexer-parser/antlr/ && cp src/compiler/lexer-parser/antlr/*.tokens ./",
 		"postantlr4-no-rebuild:windows": "copy .\\src\\compiler\\lexer-parser\\antlr\\*.interp .\\lib\\compiler\\lexer-parser\\antlr\\ /Y && copy .\\src\\compiler\\lexer-parser\\antlr\\*.tokens .\\lib\\compiler\\lexer-parser\\antlr\\ && copy .\\src\\compiler\\lexer-parser\\antlr\\*.tokens .\\",
 		"postantlr4": "pnpm run build",
 		"lint": "pnpm run tslint",

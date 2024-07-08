@@ -1,0 +1,11 @@
+var x: func = (y: num, z: str): num -> {
+		if (y > 0) {
+			return y + len(z);
+		} else {
+			return y - len(z);
+		}
+};
+print("Test");
+
+//var x: func = (y: num, z: str): num -> y + len(z);
+//print(f"Result: {x(1) as str}");

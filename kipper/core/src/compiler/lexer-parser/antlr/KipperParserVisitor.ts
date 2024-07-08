@@ -69,6 +69,7 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
+import { LambdaExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
@@ -591,6 +592,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitPrimaryExpression?: (ctx: PrimaryExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.lambdaExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLambdaExpression?: (ctx: LambdaExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.tangledPrimaryExpression`.

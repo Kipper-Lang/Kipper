@@ -3,7 +3,7 @@
  * @since 0.10.0
  */
 import type { SemanticData } from "../../../ast-node";
-import type { Expression } from "../../expressions";
+import type { Expression, LambdaExpression } from "../../expressions";
 import type { FunctionDeclaration } from "../../declarations";
 
 /**
@@ -20,5 +20,5 @@ export interface ReturnStatementSemantics extends SemanticData {
 	 * The function that this return statement is in.
 	 * @since 0.10.0
 	 */
-	function: FunctionDeclaration;
+	function: FunctionDeclaration | LambdaExpression;
 }

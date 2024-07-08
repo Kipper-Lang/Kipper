@@ -80,6 +80,17 @@ export abstract class CompilableASTNode<
 	}
 
 	/**
+	 * Returns whether this AST node has any side effects. This means that the node will change the state of the
+	 * program in some way and not only return a value.
+	 *
+	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
+	 * @since 0.11.0
+	 */
+	public hasSideEffects(): boolean {
+		return false;
+	}
+
+	/**
 	 * The parser that generated the parse tree and {@link antlrRuleCtx antlr rule context}.
 	 * @since 0.8.0
 	 */

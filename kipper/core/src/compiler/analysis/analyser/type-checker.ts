@@ -17,6 +17,7 @@ import type {
 	RelationalExpression,
 	Statement,
 	UnaryExpression,
+	LambdaExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -501,7 +502,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
-	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
 		const returnType = KipperTypeChecker.getTypeForAnalysis(typeData.returnType);
@@ -516,7 +517,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// return type.
 		if (returnType !== "void") {
 			// Recursively check all code paths to ensure all return a value.
-			const checkChildrenCodePaths = (parent: Statement): boolean => {
+			const checkChildrenCodePaths = (parent: Statement | Expression | CompoundStatement): boolean => {
 				let returnPathsCovered = false;
 
 				// If the parent is an if statement, we have to check the if and else branches directly

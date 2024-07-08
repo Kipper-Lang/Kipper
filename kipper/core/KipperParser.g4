@@ -162,7 +162,12 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
+    |   lambdaExpression
     ;
+
+lambdaExpression
+   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
+   ;
 
 tangledPrimaryExpression
 	:   '(' expression ')'

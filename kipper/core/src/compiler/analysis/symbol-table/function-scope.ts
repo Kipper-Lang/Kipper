@@ -3,7 +3,7 @@
  * the global namespace.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, ParameterDeclaration } from "../../ast";
+import type { FunctionDeclaration, LambdaExpression, ParameterDeclaration } from "../../ast";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeParameterDeclaration } from "./entry";
 import { LocalScope } from "./local-scope";
@@ -15,7 +15,7 @@ import { LocalScope } from "./local-scope";
 export class FunctionScope extends LocalScope {
 	protected readonly _arguments: Map<string, ScopeParameterDeclaration>;
 
-	constructor(public ctx: FunctionDeclaration) {
+	constructor(public ctx: FunctionDeclaration | LambdaExpression) {
 		super(ctx);
 		this._arguments = new Map<string, ScopeParameterDeclaration>();
 	}

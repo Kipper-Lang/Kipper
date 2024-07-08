@@ -23,6 +23,7 @@ import type { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext 
 export abstract class Expression<
 	Semantics extends ExpressionSemantics = ExpressionSemantics,
 	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
+	Children extends CompilableASTNode = CompilableASTNode,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -31,7 +32,7 @@ export abstract class Expression<
 	 */
 	protected override readonly _antlrRuleCtx: ParserExpressionContext;
 
-	protected override _children: Array<Expression>;
+	protected override _children: Array<Children>;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -62,23 +63,12 @@ export abstract class Expression<
 		parent.addNewChild(this);
 	}
 
-	public get children(): Array<Expression> {
+	public get children(): Array<Children> {
 		return this._children;
 	}
 
-	public addNewChild(newChild: Expression) {
+	public addNewChild(newChild: Children) {
 		this._children.push(newChild);
-	}
-
-	/**
-	 * Returns whether this expression has any side effects. This means that the expression will change the state of the
-	 * program in some way and not only return a value.
-	 *
-	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
-	 * @since 0.10.0
-	 */
-	public hasSideEffects(): boolean {
-		return false;
 	}
 
 	/**

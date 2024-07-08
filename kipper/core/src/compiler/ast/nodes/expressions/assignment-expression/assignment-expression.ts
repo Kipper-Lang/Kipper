@@ -39,7 +39,11 @@ import { ScopeVariableDeclaration } from "../../../../analysis";
  * x /= 5
  * x %= 55
  */
-export class AssignmentExpression extends Expression<AssignmentExpressionSemantics, AssignmentExpressionTypeSemantics> {
+export class AssignmentExpression extends Expression<
+	AssignmentExpressionSemantics,
+	AssignmentExpressionTypeSemantics,
+	Expression
+> {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.

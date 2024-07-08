@@ -27,7 +27,8 @@ import { CheckedType } from "../../../../analysis";
  */
 export class FunctionCallExpression extends Expression<
 	FunctionCallExpressionSemantics,
-	FunctionCallExpressionTypeSemantics
+	FunctionCallExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

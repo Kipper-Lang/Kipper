@@ -33,7 +33,8 @@ export type MemberAccessExpressionContext =
  */
 export class MemberAccessExpression extends Expression<
 	MemberAccessExpressionSemantics,
-	MemberAccessExpressionTypeSemantics
+	MemberAccessExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
