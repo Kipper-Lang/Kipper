@@ -2,7 +2,7 @@
  * Lambda expression class, which represents a lambda expression in the AST.
  * @since 0.11.0
  * @example
- * let add = (a, b) => a + b;
+ * var add: num = (a: num, b: num) => a + b;
  */
 import { Expression } from "../expression";
 import type { LambdaExpressionSemantics } from "./lambda-expression-semantics";
@@ -23,7 +23,7 @@ import { CheckedType } from "../../../../analysis";
  * Lambda expression class, which represents a lambda expression in the AST.
  * @since 0.11.0
  * @example
- * let add = (a, b) => a + b;
+ * var add: num = (a: num, b: num) -> a + b;
  */
 export class LambdaExpression
 	extends Expression<
