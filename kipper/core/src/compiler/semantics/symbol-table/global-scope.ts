@@ -5,7 +5,7 @@
  */
 import type { KipperProgramContext } from "../../program-ctx";
 import type { ScopeDeclaration } from "./entry";
-import {FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration} from "../../ast";
+import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./base/scope";
 
@@ -15,9 +15,7 @@ import { Scope } from "./base/scope";
  * @since 0.8.0
  */
 export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
-	constructor(
-		public ctx: RootASTNode
-	) {
+	constructor(public ctx: RootASTNode) {
 		super();
 	}
 
@@ -51,7 +49,7 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 
 	public addType(declarationOrIdentifier: TypeDeclaration): ScopeTypeDeclaration {
 		// Depending on the type of the argument, create either a built-in type or a custom type
-		const scopeDeclaration = ScopeTypeDeclaration.fromTypeDeclaration(declarationOrIdentifier)
+		const scopeDeclaration = ScopeTypeDeclaration.fromTypeDeclaration(declarationOrIdentifier);
 
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;

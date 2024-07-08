@@ -190,7 +190,11 @@ export const kipperPrimitiveTypeLiterals: Array<KipperPrimitiveTypeLiteral> = [
  * only used for error handling/recovery and skips type checking altogether.
  * @since 0.10.0
  */
-export type KipperBuiltInTypeLiteral = KipperMetaTypeLiteral | KipperPrimitiveTypeLiteral | KipperFuncTypeLiteral | KipperListTypeLiteral;
+export type KipperBuiltInTypeLiteral =
+	| KipperMetaTypeLiteral
+	| KipperPrimitiveTypeLiteral
+	| KipperFuncTypeLiteral
+	| KipperListTypeLiteral;
 
 /**
  * All compilable and valid base types inside Kipper.

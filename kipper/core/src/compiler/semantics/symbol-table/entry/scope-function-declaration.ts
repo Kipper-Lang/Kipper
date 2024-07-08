@@ -9,9 +9,9 @@ import type {
 	ParameterDeclaration,
 } from "../../../ast";
 import { ScopeDeclaration } from "./scope-declaration";
-import {ProcessedType} from "../../types";
-import {BuiltInFunction, BuiltInFunctionArgument} from "../../runtime-built-ins";
-import {BuiltInTypes} from "../universum-scope";
+import type { ProcessedType } from "../../types";
+import type { BuiltInFunction, BuiltInFunctionArgument } from "../../runtime-built-ins";
+import { BuiltInTypes } from "../universum-scope";
 
 /**
  * Represents the definition of a function inside a {@link Scope}.
@@ -21,10 +21,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	private readonly _declaration?: FunctionDeclaration;
 	private readonly _builtInFunction?: BuiltInFunction;
 
-	private constructor(
-		declaration?: FunctionDeclaration,
-		builtInFunction?: BuiltInFunction,
-	) {
+	private constructor(declaration?: FunctionDeclaration, builtInFunction?: BuiltInFunction) {
 		super();
 		this._declaration = declaration;
 		this._builtInFunction = builtInFunction;

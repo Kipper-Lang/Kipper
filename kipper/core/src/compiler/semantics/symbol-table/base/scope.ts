@@ -10,7 +10,7 @@ import type {
 	ScopeVariableDeclaration,
 } from "../entry";
 import type { SymbolTable } from "./symbol-table";
-import {BuiltInType} from "../../types";
+import { BuiltInType } from "../../types";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},
@@ -19,11 +19,7 @@ import {BuiltInType} from "../../types";
  * A scope can be a child of another scope or the global scope of a {@link KipperProgramContext program}.
  * @since 0.8.0
  */
-export abstract class Scope<
-	VarT = any,
-	FuncT = any,
-	TypeT = any,
-> implements SymbolTable {
+export abstract class Scope<VarT = any, FuncT = any, TypeT = any> implements SymbolTable {
 	protected readonly _entries: Map<string, ScopeDeclaration>;
 
 	protected constructor() {

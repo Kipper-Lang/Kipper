@@ -1,5 +1,5 @@
-import {ProcessedType} from "../types";
-import {BuiltInFunctionArgument} from "./built-in-function-argument";
+import type { ProcessedType } from "../types";
+import type { BuiltInFunctionArgument } from "./built-in-function-argument";
 
 /**
  * Interface representation of a {@link BuiltInFunction}, which is available inside a Kipper program using the specified
@@ -31,11 +31,7 @@ export class BuiltInFunction {
 	 */
 	public readonly returnType: ProcessedType;
 
-	public constructor(
-		identifier: string,
-		params: Array<BuiltInFunctionArgument>,
-		returnType: ProcessedType,
-	) {
+	public constructor(identifier: string, params: Array<BuiltInFunctionArgument>, returnType: ProcessedType) {
 		this.identifier = identifier;
 		this.params = params;
 		this.returnType = returnType;

@@ -1,5 +1,5 @@
-import {KipperBuiltInTypeLiteral} from "../../const";
-import {ProcessedType} from "../types";
+import { KipperBuiltInTypeLiteral } from "../../const";
+import type { ProcessedType } from "../types";
 
 /**
  * Interface representation of an argument of a {@link InternalFunction}.

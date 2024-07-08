@@ -9,7 +9,8 @@ import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-prim
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { IdentifierPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import {BuiltInTypes, ProcessedType, ScopeDeclaration} from "../../../../../semantics";
+import type { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes, ScopeDeclaration } from "../../../../../semantics";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";
 
@@ -82,12 +83,7 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		const identifier = this.sourceCode;
 
 		// Make sure the referenced variable even exists!
-		const ref = this.programCtx
-			.semanticCheck(this)
-			.getExistingReference(
-				identifier,
-				this.scope
-			);
+		const ref = this.programCtx.semanticCheck(this).getExistingReference(identifier, this.scope);
 
 		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {

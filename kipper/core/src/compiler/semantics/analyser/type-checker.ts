@@ -27,13 +27,13 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
+import type { Scope } from "../symbol-table";
 import {
 	BuiltInTypes,
-	Scope,
 	ScopeDeclaration,
 	ScopeParameterDeclaration,
 	ScopeTypeDeclaration,
-	ScopeVariableDeclaration
+	ScopeVariableDeclaration,
 } from "../symbol-table";
 import type {
 	KipperArithmeticOperator,
@@ -65,7 +65,8 @@ import {
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
-	ReadOnlyWriteTypeError, ReferenceCanNotBeUsedAsTypeError,
+	ReadOnlyWriteTypeError,
+	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
@@ -250,7 +251,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		if (!argType.isAssignableTo(receivedType)) {
-			throw this.assertError(new ArgumentTypeError(semanticData.identifier, argType.identifier, receivedType.identifier));
+			throw this.assertError(
+				new ArgumentTypeError(semanticData.identifier, argType.identifier, receivedType.identifier),
+			);
 		}
 	}
 
@@ -312,7 +315,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validUnaryExpression(operand: UnaryExpression | IncrementOrDecrementPostfixExpression): void {
 		const semanticData = operand.getSemanticData() as
-			UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics;
+			| UnaryExpressionSemantics
+			| IncrementOrDecrementPostfixExpressionSemantics;
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 		const expType = expTypeSemantics.evaluatedType.get();
 
@@ -326,7 +330,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType));
 		}
 
-			// Ensure that the operand of an '++' and '--' modifier expression is a reference
+		// Ensure that the operand of an '++' and '--' modifier expression is a reference
 		let isReference = semanticData.operand instanceof IdentifierPrimaryExpression;
 		if ((<Array<string>>kipperIncrementOrDecrementOperators).includes(semanticData.operator) && !isReference) {
 			// Edge-case: If the operand is a tangled expression, it should still work if the child is an identifier

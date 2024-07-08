@@ -17,7 +17,7 @@ describe("no-optimise", () => {
 
 		assert.isDefined(instance.programCtx);
 		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		assert.include(instance.write(), "__kipper.voidToStr = function voidToStr(): string { return \"void\"; };");
+		assert.include(instance.write(), '__kipper.voidToStr = function voidToStr(): string { return "void"; };');
 	});
 
 	it("should not be optimised", async () => {
@@ -26,6 +26,6 @@ describe("no-optimise", () => {
 
 		assert.isDefined(instance.programCtx);
 		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		assert.notInclude(instance.write(), "__kipper.voidToStr = function voidToStr(): string { return \"void\"; };");
+		assert.notInclude(instance.write(), '__kipper.voidToStr = function voidToStr(): string { return "void"; };');
 	});
 });

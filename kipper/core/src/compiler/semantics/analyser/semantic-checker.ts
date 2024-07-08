@@ -51,7 +51,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.8.0
 	 */
 	protected getReference(identifier: string, scope: Scope): KipperReferenceable | undefined {
-		return scope.getEntryRecursively(identifier)
+		return scope.getEntryRecursively(identifier);
 	}
 
 	/**
@@ -60,10 +60,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @param scope The scope to search in.
 	 * @since 0.7.0
 	 */
-	public getExistingReference(
-		identifier: string,
-		scope: Scope
-	): KipperReferenceable {
+	public getExistingReference(identifier: string, scope: Scope): KipperReferenceable {
 		const ref = this.getReference(identifier, scope);
 		if (!ref) {
 			throw this.assertError(new UnknownReferenceError(identifier));

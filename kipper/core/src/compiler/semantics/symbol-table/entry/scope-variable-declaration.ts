@@ -4,10 +4,10 @@
  */
 import type { VariableDeclaration, VariableDeclarationSemantics, VariableDeclarationTypeSemantics } from "../../../ast";
 import type { KipperStorageType } from "../../../const";
-import {BuiltInTypes} from "../index";
-import { ProcessedType} from "../../types";
+import { BuiltInTypes } from "../index";
+import type { ProcessedType } from "../../types";
 import { ScopeDeclaration } from "./scope-declaration";
-import {BuiltInVariable} from "../../runtime-built-ins";
+import type { BuiltInVariable } from "../../runtime-built-ins";
 
 /**
  * Represents a variable scope entry that may be a child of the global scope or local scope.
@@ -23,10 +23,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 */
 	public valueWasUpdated: boolean = false;
 
-	public constructor(
-		declaration?: VariableDeclaration,
-		builtInVariable?: BuiltInVariable,
-	) {
+	public constructor(declaration?: VariableDeclaration, builtInVariable?: BuiltInVariable) {
 		super();
 		this._declaration = declaration;
 		this._builtInVariable = builtInVariable;

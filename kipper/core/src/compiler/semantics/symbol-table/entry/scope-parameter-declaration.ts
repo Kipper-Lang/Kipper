@@ -9,8 +9,9 @@ import type {
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
-import {BuiltInTypes, LocalScope} from "../index";
-import {ProcessedType} from "../../types";
+import type { LocalScope } from "../index";
+import { BuiltInTypes } from "../index";
+import type { ProcessedType } from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.

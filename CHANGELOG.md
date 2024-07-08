@@ -65,9 +65,9 @@ To use development versions of Kipper download the
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
-	- `PragmaProcessor` which handles the processing of all possible Pragmas.
+  - `PragmaProcessor` which handles the processing of all possible Pragmas.
 - New errors:
-  - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid 
+  - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
     type. This is an error indicating an invalid logic that should be fixed.
 - New interfaces:
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.

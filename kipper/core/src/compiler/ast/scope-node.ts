@@ -8,7 +8,7 @@ import type { Scope } from "../semantics";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../target-presets";
 import type { TranslatedCodeLine } from "../const";
-import {ParserASTNode, SemanticData, TypeData} from "./ast-node";
+import type { ParserASTNode, SemanticData, TypeData } from "./ast-node";
 
 /**
  * Scope-node interface, which represents an {@link ParserASTNode} that supports being used as the parent of a

@@ -3,10 +3,11 @@
  * @since 0.11.0
  */
 import { ScopeDeclaration } from "./scope-declaration";
-import { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
-import {BuiltInType, CustomType, ProcessedType, Type} from "../../types"
+import type { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
+import type { BuiltInType, CustomType, ProcessedType } from "../../types";
+import { Type } from "../../types";
 import { KipperNotImplementedError } from "../../../../errors";
-import {BuiltInTypes} from "../universum-scope";
+import { BuiltInTypes } from "../universum-scope";
 
 /**
  * Represents the definition of a type such as a class or interface in a scope.
@@ -16,10 +17,7 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	private readonly _node?: TypeDeclaration;
 	private readonly _builtInType?: ProcessedType;
 
-	private constructor(
-		declaration?: TypeDeclaration,
-		builtInType?: BuiltInType,
-	) {
+	private constructor(declaration?: TypeDeclaration, builtInType?: BuiltInType) {
 		super();
 
 		this._node = declaration;

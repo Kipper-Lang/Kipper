@@ -1,9 +1,10 @@
-import {Scope} from "./base";
-import {ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration} from "./entry";
-import {BuiltInType} from "../types";
-import {KipperProgramContext} from "../../program-ctx";
-import {BuiltInFunction, BuiltInVariable} from "../runtime-built-ins";
-import {KipperBuiltInTypeLiteral} from "../../const";
+import { Scope } from "./base";
+import type { ScopeDeclaration } from "./entry";
+import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
+import { BuiltInType } from "../types";
+import type { KipperProgramContext } from "../../program-ctx";
+import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
+import type { KipperBuiltInTypeLiteral } from "../../const";
 
 /**
  * Contains all the built-in types that are used in the type analysis phase.
@@ -33,7 +34,7 @@ export const BuiltInFunctions = {
 				valueType: BuiltInTypes.str,
 			},
 		],
-		BuiltInTypes.void
+		BuiltInTypes.void,
 	),
 	len: new BuiltInFunction(
 		"len",
@@ -44,7 +45,7 @@ export const BuiltInFunctions = {
 				valueType: BuiltInTypes.str,
 			},
 		],
-		BuiltInTypes.num
+		BuiltInTypes.num,
 	),
 } satisfies Record<string, BuiltInFunction>;
 
@@ -53,11 +54,7 @@ export const BuiltInFunctions = {
  * @since 0.10.0
  */
 export const BuiltInVariables = {
-	__name__: new BuiltInVariable(
-		"__name__",
-		BuiltInTypes.str,
-		true
-	),
+	__name__: new BuiltInVariable("__name__", BuiltInTypes.str, true),
 } satisfies Record<string, BuiltInVariable>;
 
 /**
@@ -93,7 +90,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addVariable(declaration: BuiltInVariable): ScopeVariableDeclaration {
-		const scopeDeclaration = ScopeVariableDeclaration.fromBuiltInVariable(declaration)
+		const scopeDeclaration = ScopeVariableDeclaration.fromBuiltInVariable(declaration);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
@@ -105,7 +102,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addFunction(declaration: BuiltInFunction): ScopeFunctionDeclaration {
-		const scopeDeclaration = ScopeFunctionDeclaration.fromBuiltInFunction(declaration)
+		const scopeDeclaration = ScopeFunctionDeclaration.fromBuiltInFunction(declaration);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
@@ -117,7 +114,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addType(declarationOrIdentifier: BuiltInType): ScopeTypeDeclaration {
-		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier)
+		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

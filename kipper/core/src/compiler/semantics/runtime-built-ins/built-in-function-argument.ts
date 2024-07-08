@@ -1,6 +1,6 @@
-import {KipperBuiltInTypeLiteral} from "../../const";
-import {ProcessedType} from "../types";
-import {UniverseScope} from "../symbol-table";
+import { KipperBuiltInTypeLiteral } from "../../const";
+import type { ProcessedType } from "../types";
+import { UniverseScope } from "../symbol-table";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.
@@ -28,10 +28,7 @@ export class BuiltInFunctionArgument {
 	 */
 	public readonly valueType: ProcessedType;
 
-	public constructor(
-		identifier: string,
-		valueType: ProcessedType,
-	) {
+	public constructor(identifier: string, valueType: ProcessedType) {
 		this.identifier = identifier;
 		this.valueType = valueType;
 	}

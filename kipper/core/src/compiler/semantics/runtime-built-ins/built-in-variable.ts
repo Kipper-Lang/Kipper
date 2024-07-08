@@ -1,6 +1,6 @@
-import {KipperBuiltInTypeLiteral} from "../../const";
-import {ProcessedType} from "../types";
-import {UniverseScope} from "../symbol-table";
+import { KipperBuiltInTypeLiteral } from "../../const";
+import type { ProcessedType } from "../types";
+import { UniverseScope } from "../symbol-table";
 
 /**
  * Interface representation of a {@link BuiltInVariable}, which is available inside a Kipper program using the specified
@@ -31,11 +31,7 @@ export class BuiltInVariable {
 	 */
 	public readonly local: boolean;
 
-	public constructor(
-		identifier: string,
-		valueType: ProcessedType,
-		local: boolean,
-	) {
+	public constructor(identifier: string, valueType: ProcessedType, local: boolean) {
 		this.identifier = identifier;
 		this.valueType = valueType;
 		this.local = local;

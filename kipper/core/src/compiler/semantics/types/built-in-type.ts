@@ -1,5 +1,6 @@
 import { ProcessedType } from "./base/processed-type";
-import {KipperBuiltInTypeLiteral, kipperBuiltInTypeLiterals} from "../../const";
+import type { KipperBuiltInTypeLiteral } from "../../const";
+import { kipperBuiltInTypeLiterals } from "../../const";
 import { KipperNotImplementedError } from "../../../errors";
 import type { CompilableType } from "./base/compilable-type";
 
@@ -26,14 +27,13 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 	 */
 	public isAssignableTo(type: ProcessedType): boolean {
 		if (this === type) {
-			return true
+			return true;
 		} else if (
-			BuiltInType.interchangeableTypes.includes(this.identifier)
-			&& BuiltInType.interchangeableTypes.includes(type.identifier)
+			BuiltInType.interchangeableTypes.includes(this.identifier) &&
+			BuiltInType.interchangeableTypes.includes(type.identifier)
 		) {
 			return true;
 		}
 		return false;
 	}
 }
-

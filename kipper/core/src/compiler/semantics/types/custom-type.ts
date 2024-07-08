@@ -19,12 +19,7 @@ export class CustomType extends ProcessedType {
 	 */
 	public readonly kind: CustomTypeKind;
 
-	public constructor(
-		identifier: string,
-		isCompilable: boolean,
-		kind: CustomTypeKind,
-		fields: CustomTypeFields,
-	) {
+	public constructor(identifier: string, isCompilable: boolean, kind: CustomTypeKind, fields: CustomTypeFields) {
 		super(identifier, isCompilable);
 		this._fields = fields;
 		this.kind = kind;

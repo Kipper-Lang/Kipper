@@ -1,4 +1,4 @@
-import { InternalFunction } from "./internal-function";
+import type { InternalFunction } from "./internal-function";
 
 /**
  * Contains all the internal built-in functions, which are used by Kipper to provide internal functionality. These

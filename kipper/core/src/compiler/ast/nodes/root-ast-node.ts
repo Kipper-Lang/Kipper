@@ -13,24 +13,22 @@ import type {
 	TargetSetUpCodeGenerator,
 	TargetWrapUpCodeGenerator,
 } from "../../target-presets";
-import type {EvaluatedCompileConfig} from "../../compile-config";
-import type {KipperProgramContext} from "../../program-ctx";
-import type {Declaration} from "./declarations";
-import type {Statement} from "./index";
-import type {TranslatedCodeLine} from "../../const";
-import type {KipperError} from "../../../errors";
-import type {CompilationUnitContext} from "../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../lexer-parser";
-import {FunctionScope, GlobalScope, handleSemanticError} from "../../semantics";
-import {ScopeNode} from "../scope-node";
+import type { EvaluatedCompileConfig } from "../../compile-config";
+import type { KipperProgramContext } from "../../program-ctx";
+import type { Declaration } from "./declarations";
+import type { Statement } from "./index";
+import type { TranslatedCodeLine } from "../../const";
+import type { KipperError } from "../../../errors";
+import type { CompilationUnitContext } from "../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../lexer-parser";
+import { FunctionScope, GlobalScope, handleSemanticError } from "../../semantics";
+import type { ScopeNode } from "../scope-node";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
-export class RootASTNode
-	extends ParserASTNode<NoSemantics, NoTypeSemantics>
-	implements ScopeNode<GlobalScope> {
+export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> implements ScopeNode<GlobalScope> {
 	protected readonly _antlrRuleCtx: CompilationUnitContext;
 	protected readonly _programCtx: KipperProgramContext;
 	protected readonly _parent: undefined;
