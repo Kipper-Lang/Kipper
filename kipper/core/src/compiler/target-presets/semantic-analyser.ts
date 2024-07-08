@@ -52,7 +52,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
-import { KipperSemanticErrorHandler } from "../analysis";
+import { KipperSemanticErrorHandler } from "../semantics";
 import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**

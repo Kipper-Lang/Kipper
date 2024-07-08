@@ -9,7 +9,7 @@ import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-prim
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { IdentifierPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType, ScopeDeclaration } from "../../../../../analysis";
+import {BuiltInTypes, ProcessedType, ScopeDeclaration} from "../../../../../semantics";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";
 
@@ -84,7 +84,10 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		// Make sure the referenced variable even exists!
 		const ref = this.programCtx
 			.semanticCheck(this)
-			.getExistingReference(identifier, "innerScope" in this.scopeCtx ? this.scopeCtx : undefined);
+			.getExistingReference(
+				identifier,
+				this.scope
+			);
 
 		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {
@@ -124,7 +127,7 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 			type = refTarget.type;
 		} else {
 			// Built-in function -> type is 'func'
-			type = ProcessedType.fromCompilableType("valueType" in refTarget ? refTarget.valueType : "func");
+			type = "valueType" in refTarget ? refTarget.valueType : BuiltInTypes.func;
 		}
 
 		this.typeSemantics = {

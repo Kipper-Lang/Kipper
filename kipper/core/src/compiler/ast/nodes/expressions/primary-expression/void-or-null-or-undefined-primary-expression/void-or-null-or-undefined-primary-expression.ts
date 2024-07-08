@@ -8,7 +8,7 @@ import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 
 /**

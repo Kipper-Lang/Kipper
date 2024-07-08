@@ -3,19 +3,19 @@
  * namespace.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, ScopeNode, TypeDeclaration, VariableDeclaration } from "../../ast/";
+import {CompilableASTNode, FunctionDeclaration, ScopeNode, TypeDeclaration, VariableDeclaration} from "../../ast/";
 import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
 import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration } from "./entry";
 import { ScopeVariableDeclaration } from "./entry";
-import { Scope } from "./scope";
+import { Scope } from "./base/scope";
 
 /**
  * A scope that is bound to a {@link CompoundStatement} and not the global namespace.
  * @since 0.8.0
  */
-export class LocalScope extends Scope {
-	constructor(public ctx: ScopeNode<LocalScope>) {
+export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
+	constructor(public ctx: ScopeNode<LocalScope> & CompilableASTNode) {
 		super();
 	}
 

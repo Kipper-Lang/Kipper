@@ -9,8 +9,8 @@ import type {
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
-import type { LocalScope } from "../index";
-import {BuiltInTypes, ProcessedType} from "../../types";
+import {BuiltInTypes, LocalScope} from "../index";
+import {ProcessedType} from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -19,9 +19,17 @@ import {BuiltInTypes, ProcessedType} from "../../types";
 export class ScopeParameterDeclaration extends ScopeDeclaration {
 	private readonly _node: ParameterDeclaration;
 
-	public constructor(node: ParameterDeclaration) {
+	private constructor(node: ParameterDeclaration) {
 		super();
 		this._node = node;
+	}
+
+	/**
+	 * Creates a new scope parameter declaration from a parameter declaration.
+	 * @param node The parameter declaration node.
+	 */
+	public static fromParameterDeclaration(node: ParameterDeclaration): ScopeParameterDeclaration {
+		return new ScopeParameterDeclaration(node);
 	}
 
 	/**

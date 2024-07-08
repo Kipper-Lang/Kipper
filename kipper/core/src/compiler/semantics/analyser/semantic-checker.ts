@@ -47,28 +47,24 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	/**
 	 * Tries to find a reference for the given identifier and scope.
 	 * @param identifier The identifier to search for.
-	 * @param scopeCtx The scopeCtx to search in. If undefined, the global scope is used.
+	 * @param scope The scope to search in.
 	 * @since 0.8.0
 	 */
-	protected getReference(identifier: string, scopeCtx?: ScopeNode<LocalScope>): KipperReferenceable | undefined {
-		return (
-			(scopeCtx // First try to fetch from the local scope if it is defined
-				? scopeCtx.innerScope.getEntryRecursively(identifier)
-				: this.programCtx.globalScope.getEntry(identifier)) ??
-			this.programCtx.globalScope.getEntry(identifier) ?? // Fall back to looking globally
-			this.programCtx.getBuiltInFunction(identifier) ?? // Fall back to searching through built-in functions
-			this.programCtx.getBuiltInVariable(identifier) // Fall back to searching through built-in variables
-		);
+	protected getReference(identifier: string, scope: Scope): KipperReferenceable | undefined {
+		return scope.getEntryRecursively(identifier)
 	}
 
 	/**
 	 * Tries to fetch the function, and if it fails it will throw an {@link UnknownReferenceError}.
 	 * @param identifier The identifier to fetch.
-	 * @param localScopeNode The ctx of the local scope, which will be also checked if it is defined.
+	 * @param scope The scope to search in.
 	 * @since 0.7.0
 	 */
-	public getExistingReference(identifier: string, localScopeNode?: ScopeNode<LocalScope>): KipperReferenceable {
-		const ref = this.getReference(identifier, localScopeNode);
+	public getExistingReference(
+		identifier: string,
+		scope: Scope
+	): KipperReferenceable {
+		const ref = this.getReference(identifier, scope);
 		if (!ref) {
 			throw this.assertError(new UnknownReferenceError(identifier));
 		}
@@ -135,7 +131,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public globalCanBeRegistered(identifier: string): void {
-		let identifierAlreadyExists: boolean = this.programCtx.globalScope.getEntry(identifier) !== undefined;
+		let identifierAlreadyExists: boolean = this.programCtx.universeScope.getEntry(identifier) !== undefined;
 		let globalAlreadyExists: boolean =
 			this.programCtx.getBuiltInFunction(identifier) !== undefined ||
 			this.programCtx.getBuiltInVariable(identifier) !== undefined;

@@ -3,7 +3,7 @@
  * @since 0.3.0
  */
 import type { KipperStorageType } from "../../../../const";
-import type { RawType, Scope } from "../../../../analysis";
+import type { RawType, Scope } from "../../../../semantics";
 import type { Expression, IdentifierTypeSpecifierExpression } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 

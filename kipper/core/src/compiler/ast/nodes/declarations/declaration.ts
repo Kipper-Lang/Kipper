@@ -14,7 +14,7 @@ import type { DeclarationTypeSemantics } from "./declaration-type-semantics";
 import type { TranslatedCodeLine } from "../../../const";
 import type { ASTDeclarationKind, ASTDeclarationRuleName, ParserDeclarationContext } from "../../common";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
-import type { ScopeDeclaration } from "../../../analysis";
+import type { ScopeDeclaration } from "../../../semantics";
 import { CompilableASTNode, type CompilableNodeParent } from "../../compilable-ast-node";
 import { MissingRequiredSemanticDataError, UndefinedDeclarationCtxError } from "../../../../errors";
 

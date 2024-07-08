@@ -37,18 +37,3 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 	}
 }
 
-/**
- * A map of all built-in types that are used in the type analysis phase.
- * @since 0.11.0
- */
-export const BuiltInTypes = {
-	type: new BuiltInType("type"),
-	undefined: new BuiltInType("undefined"),
-	void: new BuiltInType("void"),
-	null: new BuiltInType("null"),
-	bool: new BuiltInType("bool"),
-	num: new BuiltInType("num"),
-	str: new BuiltInType("str"),
-	func: new BuiltInType("func"),
-	list: new BuiltInType("list"),
-} satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;

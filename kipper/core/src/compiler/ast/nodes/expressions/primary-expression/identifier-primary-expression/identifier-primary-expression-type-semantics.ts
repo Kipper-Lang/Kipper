@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link IdentifierPrimaryExpression}.
  * @since 0.10.0
  */
-import type { ProcessedType } from "../../../../../analysis";
+import type { ProcessedType } from "../../../../../semantics";
 import type { PrimaryExpressionTypeSemantics } from "../primary-expression-type-semantics";
 
 /**

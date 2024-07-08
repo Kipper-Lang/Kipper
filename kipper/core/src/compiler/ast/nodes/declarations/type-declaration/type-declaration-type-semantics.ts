@@ -1,5 +1,5 @@
 import type { TypeData } from "../../../ast-node";
-import {CustomType} from "../../../../analysis";
+import {CustomType} from "../../../../semantics";
 
 /**
  * Type semantics for a {@link TypeDeclaration}.

@@ -1,4 +1,4 @@
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
 import type { TypeDeclarationSemantics } from "./type-declaration-semantics";
 import type { TypeDeclarationTypeSemantics } from "./type-declaration-type-semantics";

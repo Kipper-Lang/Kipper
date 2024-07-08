@@ -6,11 +6,11 @@ import type { ScopeNode } from "../../../../scope-node";
 import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
 import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../../analysis";
-import type { ClassDeclarationContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import type { ClassDeclarationContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
-import { ClassScope } from "../../../../../analysis/symbol-table/class-scope";
+import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
 
 /**

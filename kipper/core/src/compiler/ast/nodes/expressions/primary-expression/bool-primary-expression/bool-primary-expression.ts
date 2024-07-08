@@ -8,7 +8,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { KipperBoolTypeConstants } from "../../../../../const";
 import type { BoolPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 
 /**

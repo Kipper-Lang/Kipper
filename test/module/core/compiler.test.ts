@@ -294,7 +294,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 4, "Expected four global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 4, "Expected four global scope entries");
 				});
 
 				it(`Arithmetics [${target.fileExtension}]`, async () => {
@@ -304,7 +304,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 					assert.include(result.write(), fileContent, "Expected compiled code to not change");
 				});
 
@@ -315,7 +315,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 1, "Expected one global scope entry");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 1, "Expected one global scope entry");
 				});
 
 				it(`Nested scopes [${target.fileExtension}]`, async () => {
@@ -325,7 +325,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 4, "Expected four global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 4, "Expected four global scope entries");
 				});
 
 				it(`Single Function call [${target.fileExtension}]`, async () => {
@@ -335,7 +335,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -360,7 +360,7 @@ describe("KipperCompiler", () => {
 
 					assert(result.programCtx);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -377,7 +377,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 1, "Expected one global scope entry");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 1, "Expected one global scope entry");
 				});
 
 				it(`Multi Function definition [${target.fileExtension}]`, async () => {
@@ -387,7 +387,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 3, "Expected three global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 3, "Expected three global scope entries");
 				});
 
 				it(`Function call argument [${target.fileExtension}]`, async () => {
@@ -397,7 +397,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -414,7 +414,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 1, "Expected one global scope entry");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 1, "Expected one global scope entry");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -430,7 +430,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 1, "Expected one global scope entry");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 1, "Expected one global scope entry");
 				});
 
 				it(`Bool [${target.fileExtension}]`, async () => {
@@ -440,7 +440,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 2, "Expected two global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 2, "Expected two global scope entries");
 				});
 
 				it(`Type conversion [${target.fileExtension}]`, async () => {
@@ -450,7 +450,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 4, "Expected four global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 4, "Expected four global scope entries");
 
 					const code = result.write();
 					assert(code);
@@ -467,7 +467,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 3, "Expected three global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 3, "Expected three global scope entries");
 
 					const code = result.write();
 					assert(code);
@@ -482,7 +482,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 
 					// Compile the program to JavaScript and evaluate it
 					const jsCode = ts.transpile(result.write());
@@ -498,7 +498,7 @@ describe("KipperCompiler", () => {
 					assert.isDefined(result.programCtx);
 					assert.isDefined(result.programCtx!!.internals);
 					assert.equal(result.programCtx!!.errors.length, 0, "Expected no compilation errors");
-					assert.equal(result.programCtx!!.globalScope.entries.size, 0, "Expected no global scope entries");
+					assert.equal(result.programCtx!!.universeScope.entries.size, 0, "Expected no global scope entries");
 
 					const code = result.write();
 					assert(code);

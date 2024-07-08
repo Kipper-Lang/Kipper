@@ -14,7 +14,7 @@ import {
 	ParseRuleKindMapping,
 } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import { getParseRuleSource } from "../../../../../../tools";
 
 /**

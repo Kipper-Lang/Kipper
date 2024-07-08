@@ -5,9 +5,9 @@
 import type { InterfaceDeclarationSemantics } from "./interface-declaration-semantics";
 import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../../analysis";
-import type { InterfaceDeclarationContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
 

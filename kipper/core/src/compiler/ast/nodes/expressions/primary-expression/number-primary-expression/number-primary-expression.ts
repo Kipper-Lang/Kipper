@@ -7,7 +7,7 @@ import type { NumberPrimaryExpressionTypeSemantics } from "./number-primary-expr
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { NumberPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 
 /**

@@ -12,7 +12,7 @@ import { IterationStatement } from "../iteration-statement";
 import type { ForLoopIterationStatementContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { Expression } from "../../../expressions";
-import { LocalScope } from "../../../../../analysis";
+import { LocalScope } from "../../../../../semantics";
 
 /**
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable

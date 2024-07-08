@@ -23,7 +23,7 @@ import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import type { KipperAssignOperator } from "../../../../const";
 import { kipperArithmeticAssignOperators } from "../../../../const";
 import { getParseRuleSource } from "../../../../../tools";
-import { ScopeVariableDeclaration } from "../../../../analysis";
+import { ScopeVariableDeclaration } from "../../../../semantics";
 
 /**
  * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to

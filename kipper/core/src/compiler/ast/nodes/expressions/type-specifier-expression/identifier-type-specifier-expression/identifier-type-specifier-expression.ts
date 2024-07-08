@@ -13,7 +13,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType, RawType } from "../../../../../analysis";
+import { ProcessedType, RawType } from "../../../../../semantics";
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.

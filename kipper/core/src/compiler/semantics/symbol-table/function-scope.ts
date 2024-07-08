@@ -42,7 +42,7 @@ export class FunctionScope extends LocalScope {
 		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
-		const scopeDeclaration = new ScopeParameterDeclaration(declaration);
+		const scopeDeclaration = ScopeParameterDeclaration.fromParameterDeclaration(declaration);
 		this.arguments.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

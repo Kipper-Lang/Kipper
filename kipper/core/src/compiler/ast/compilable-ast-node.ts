@@ -14,7 +14,7 @@ import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
-import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
+import type { FunctionScope, GlobalScope, LocalScope } from "../semantics";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
 import { AnalysableASTNode } from "./analysable-ast-node";
@@ -42,7 +42,6 @@ export abstract class CompilableASTNode<
 	extends AnalysableASTNode<Semantics, TypeSemantics>
 	implements TargetCompilableNode
 {
-	protected _scopeCtx: ScopeNode<LocalScope | FunctionScope> | KipperProgramContext | undefined;
 	protected override _parent: CompilableNodeParent;
 	protected override _children: Array<CompilableNodeChild>;
 
@@ -117,22 +116,14 @@ export abstract class CompilableASTNode<
 	 * @since 0.8.0
 	 */
 	public get scope(): LocalScope | GlobalScope {
-		if ("innerScope" in this.scopeCtx) {
-			return (<ScopeNode<LocalScope | FunctionScope>>this.scopeCtx).innerScope;
-		} else {
-			return (<KipperProgramContext>this.scopeCtx).globalScope;
-		}
+		return this.scopeCtx.innerScope;
 	}
 
 	/**
 	 * The context / AST node of the {@link scope}.
 	 * @since 0.8.0
 	 */
-	public get scopeCtx(): ScopeNode<LocalScope | FunctionScope> | KipperProgramContext {
-		if (this._scopeCtx) {
-			return this._scopeCtx;
-		}
-
+	public get scopeCtx(): ScopeNode<LocalScope | GlobalScope> {
 		let parent: CompilableNodeParent = this.parent;
 		while (parent.parent !== undefined && !("innerScope" in parent)) {
 			parent = parent.parent;
@@ -140,9 +131,9 @@ export abstract class CompilableASTNode<
 
 		// If there is no parent -> root node, return the program context
 		if (parent.parent === undefined) {
-			return (<RootASTNode>parent).programCtx;
+			return <RootASTNode>parent;
 		}
-		return <ScopeNode<LocalScope | FunctionScope>>parent;
+		return <ScopeNode<LocalScope>>parent;
 	}
 
 	/**

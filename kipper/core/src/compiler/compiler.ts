@@ -2,8 +2,8 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
-import type { InternalFunction } from "./runtime-built-ins";
-import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
+import type { InternalFunction } from "./semantics/runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "./semantics/runtime-built-ins";
 import type { CodePointCharStream, Token } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";

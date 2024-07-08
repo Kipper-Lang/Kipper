@@ -24,7 +24,7 @@ import type { KipperRelationalOperator } from "../../../../../const";
 import { kipperRelationalOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 
 /**
  * Relational expression, which can be used to compare two numeric expressions.

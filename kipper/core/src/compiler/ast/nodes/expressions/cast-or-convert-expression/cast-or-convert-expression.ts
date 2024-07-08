@@ -14,10 +14,10 @@ import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expres
 import { Expression } from "../expression";
 import type { CastOrConvertExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import type { RawType } from "../../../../analysis";
+import type { RawType } from "../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
-import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "../../../../semantics/runtime-built-ins";
 
 /**
  * Convert expressions, which are used to convert a value to a different type.

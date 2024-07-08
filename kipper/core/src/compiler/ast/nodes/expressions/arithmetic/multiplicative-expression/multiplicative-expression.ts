@@ -20,7 +20,7 @@ import { kipperMultiplicativeOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ArithmeticExpression } from "../arithmetic-expression";
-import { kipperInternalBuiltInFunctions } from "../../../../../runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "../../../../../semantics/runtime-built-ins";
 
 /**
  * Multiplicative expression, which can be used to perform multiplicative operations on two expressions.

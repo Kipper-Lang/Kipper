@@ -19,7 +19,7 @@ export function ensureTracebackDataExists(e: KipperError): void {
 export function ensureErrorWasReported(programCtx?: KipperProgramContext): void {
 	if (programCtx) {
 		assert(programCtx.hasFailed, "Expected program to have failed");
-		assert(programCtx.abstractSyntaxTree?.hasFailed, "Expected AST root-node to have failed");
+		assert(programCtx.rootASTNode?.hasFailed, "Expected AST root-node to have failed");
 	}
 }
 

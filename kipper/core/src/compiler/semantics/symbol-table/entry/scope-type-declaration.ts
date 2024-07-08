@@ -4,8 +4,9 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
-import {BuiltInType, BuiltInTypes, CustomType, ProcessedType, Type} from "../../types";
+import {BuiltInType, CustomType, ProcessedType, Type} from "../../types"
 import { KipperNotImplementedError } from "../../../../errors";
+import {BuiltInTypes} from "../universum-scope";
 
 /**
  * Represents the definition of a type such as a class or interface in a scope.

@@ -15,7 +15,7 @@ import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { ProcessedType } from "../../../../analysis";
+import { ProcessedType } from "../../../../semantics";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.

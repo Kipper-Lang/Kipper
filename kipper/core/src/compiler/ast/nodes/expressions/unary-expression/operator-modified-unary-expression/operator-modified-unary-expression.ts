@@ -16,7 +16,7 @@ import { UnaryExpression } from "../unary-expression";
 import type { OperatorModifiedUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 
 /**
  * Operator modified expressions, which are used to modify the value of an expression based on an

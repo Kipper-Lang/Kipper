@@ -14,7 +14,7 @@ import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../.
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 
 /**
  * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.

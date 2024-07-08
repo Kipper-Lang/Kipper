@@ -16,15 +16,6 @@ export abstract class ProcessedType extends Type {
 	}
 
 	/**
-	 * Gets the actual type stored in this class, which may be undefined if the type doesn't exist ({@link isCompilable}
-	 * is false).
-	 * @since 0.11.0
-	 */
-	public get(): string | undefined {
-		return this.isCompilable ? this.identifier : undefined;
-	}
-
-	/**
 	 * The identifier of this type.
 	 */
 	public get identifier(): string {

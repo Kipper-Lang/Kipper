@@ -5,7 +5,7 @@
 import type { ParameterDeclarationSemantics } from "./parameter-declaration-semantics";
 import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { FunctionScope, ScopeParameterDeclaration } from "../../../../analysis";
+import type { FunctionScope, ScopeParameterDeclaration } from "../../../../semantics";
 import type { FunctionDeclaration } from "../function-declaration";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
 import { Declaration } from "../declaration";

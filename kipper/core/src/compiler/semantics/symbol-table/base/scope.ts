@@ -2,14 +2,15 @@
  * A symbol-table implementation in form of a scope that may contain both variables and functions.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../ast";
+import type { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../../ast";
 import type {
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
 	ScopeTypeDeclaration,
 	ScopeVariableDeclaration,
-} from "./entry";
+} from "../entry";
 import type { SymbolTable } from "./symbol-table";
+import {BuiltInType} from "../../types";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},
@@ -18,7 +19,11 @@ import type { SymbolTable } from "./symbol-table";
  * A scope can be a child of another scope or the global scope of a {@link KipperProgramContext program}.
  * @since 0.8.0
  */
-export abstract class Scope implements SymbolTable {
+export abstract class Scope<
+	VarT = any,
+	FuncT = any,
+	TypeT = any,
+> implements SymbolTable {
 	protected readonly _entries: Map<string, ScopeDeclaration>;
 
 	protected constructor() {
@@ -45,7 +50,7 @@ export abstract class Scope implements SymbolTable {
 	 * @returns The generated {@link ScopeVariableDeclaration scope declaration}.
 	 * @since 0.8.0
 	 */
-	public abstract addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration;
+	public abstract addVariable(declaration: VarT): ScopeVariableDeclaration;
 
 	/**
 	 * Adds a new function declaration to the {@link entries symbol table entries}.
@@ -53,7 +58,7 @@ export abstract class Scope implements SymbolTable {
 	 * @returns The generated {@link ScopeFunctionDeclaration scope declaration}.
 	 * @since 0.8.0
 	 */
-	public abstract addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration;
+	public abstract addFunction(declaration: FuncT): ScopeFunctionDeclaration;
 
 	/**
 	 * Adds a new type declaration to the {@link entries symbol table entries}.
@@ -61,7 +66,7 @@ export abstract class Scope implements SymbolTable {
 	 * @returns The generated {@link ScopeTypeDeclaration scope declaration}.
 	 * @since 0.11.0
 	 */
-	public abstract addType(declaration: TypeDeclaration): ScopeTypeDeclaration;
+	public abstract addType(declaration: TypeT): ScopeTypeDeclaration;
 
 	/**
 	 * Searches for a reference/entry with the specific identifier in the local hash table entries (local scope).

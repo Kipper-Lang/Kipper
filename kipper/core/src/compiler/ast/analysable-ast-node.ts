@@ -14,7 +14,7 @@ import { MissingRequiredSemanticDataError } from "../../errors";
 import type { KipperProgramContext } from "../program-ctx";
 import type { RootASTNode } from "./nodes/root-ast-node";
 import type { EvaluatedCompileConfig } from "../compile-config";
-import { handleSemanticError } from "../analysis";
+import { handleSemanticError } from "../semantics";
 
 /**
  * An eligible parent for an analysable AST node.

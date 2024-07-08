@@ -8,28 +8,34 @@ import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
+	TargetASTNodeSemanticAnalyser,
 	TargetSetUpCodeGenerator,
 	TargetWrapUpCodeGenerator,
 } from "../../target-presets";
-import type { EvaluatedCompileConfig } from "../../compile-config";
-import type { KipperProgramContext } from "../../program-ctx";
-import type { Declaration } from "./declarations";
-import type { Statement } from "./index";
-import type { TranslatedCodeLine } from "../../const";
-import type { KipperError } from "../../../errors";
-import type { CompilationUnitContext } from "../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../lexer-parser";
-import { handleSemanticError } from "../../analysis";
+import type {EvaluatedCompileConfig} from "../../compile-config";
+import type {KipperProgramContext} from "../../program-ctx";
+import type {Declaration} from "./declarations";
+import type {Statement} from "./index";
+import type {TranslatedCodeLine} from "../../const";
+import type {KipperError} from "../../../errors";
+import type {CompilationUnitContext} from "../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../lexer-parser";
+import {FunctionScope, GlobalScope, handleSemanticError} from "../../semantics";
+import {ScopeNode} from "../scope-node";
 
 /**
  * The root node of an abstract syntax tree, which contains all AST nodes of a file.
  * @since 0.8.0
  */
-export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
+export class RootASTNode
+	extends ParserASTNode<NoSemantics, NoTypeSemantics>
+	implements ScopeNode<GlobalScope> {
 	protected readonly _antlrRuleCtx: CompilationUnitContext;
 	protected readonly _programCtx: KipperProgramContext;
 	protected readonly _parent: undefined;
 	protected readonly _children: Array<Declaration | Statement>;
+	protected readonly _innerScope: GlobalScope;
 
 	/**
 	 * The static kind for this AST Node.
@@ -73,6 +79,15 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> {
 		this._programCtx = programCtx;
 		this._children = [];
 		this._parent = undefined;
+		this._innerScope = new GlobalScope(this);
+	}
+
+	/**
+	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
+	 * @since 0.10.0
+	 */
+	public get innerScope(): GlobalScope {
+		return this._innerScope;
 	}
 
 	/**

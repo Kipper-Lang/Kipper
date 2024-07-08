@@ -16,7 +16,7 @@ import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMappin
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
 import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
 import type { KipperBitwiseShiftOperator } from "../../../../../const";

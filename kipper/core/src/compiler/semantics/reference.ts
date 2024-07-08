@@ -4,7 +4,7 @@
  */
 import type { Expression } from "../ast";
 import type { KipperReferenceable } from "../const";
-import type { InternalFunction } from "../runtime-built-ins";
+import { InternalFunction } from "./runtime-internals";
 
 /**
  * A {@link KipperReferenceable reference} to an identifier that stores a value or function.

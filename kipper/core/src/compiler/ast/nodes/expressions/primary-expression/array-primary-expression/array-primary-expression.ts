@@ -7,7 +7,7 @@ import type { ArrayPrimaryExpressionTypeSemantics } from "./array-primary-expres
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ArrayPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 
 /**

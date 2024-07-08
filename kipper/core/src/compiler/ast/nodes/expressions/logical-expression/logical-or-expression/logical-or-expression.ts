@@ -17,7 +17,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { kipperLogicalOrOperator } from "../../../../../const";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 
 /**
  * Logical-or expression, representing an expression which can be used to combine multiple conditions. It returns true

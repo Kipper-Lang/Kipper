@@ -10,7 +10,7 @@ describe("GlobalScope", () => {
 		it("should have an empty hash map", async () => {
 			const compileResult = await new KipperCompiler().compile("", { target: defaultTarget });
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 			assert.equal(scope.entries.size, 0);
 		});
 	});
@@ -19,7 +19,7 @@ describe("GlobalScope", () => {
 		it("one", async () => {
 			const compileResult = await new KipperCompiler().compile("var test: num = 5;", { target: defaultTarget });
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have one variable
 			assert.equal(scope.entries.size, 1);
@@ -42,7 +42,7 @@ describe("GlobalScope", () => {
 				target: defaultTarget,
 			});
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have two variables
 			assert.equal(scope.entries.size, 2);
@@ -78,7 +78,7 @@ describe("GlobalScope", () => {
 				{ target: defaultTarget },
 			);
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have three variables
 			assert.equal(scope.entries.size, 3);
@@ -126,7 +126,7 @@ describe("GlobalScope", () => {
 				target: defaultTarget,
 			});
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have one function
 			assert.equal(scope.entries.size, 1);
@@ -151,7 +151,7 @@ describe("GlobalScope", () => {
 				{ target: defaultTarget },
 			);
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have two functions
 			assert.equal(scope.entries.size, 2);
@@ -189,7 +189,7 @@ describe("GlobalScope", () => {
 				{ target: defaultTarget },
 			);
 			assert.isDefined(compileResult.programCtx);
-			const scope = compileResult.programCtx!!.globalScope;
+			const scope = compileResult.programCtx!!.universeScope;
 
 			// Should have three functions
 			assert.equal(scope.entries.size, 3);

@@ -15,7 +15,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { ProcessedType } from "../../../../../semantics";
 import type { BitwiseOrExpressionSemantics } from "./bitwise-or-expression-semantics";
 import type { BitwiseOrExpressionTypeSemantics } from "./bitwise-or-expression-type-semantics";
 

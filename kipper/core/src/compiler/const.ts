@@ -8,8 +8,8 @@ import type {
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
 	UndefinedType,
-} from "./analysis";
-import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
+} from "./semantics";
+import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./semantics/";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -223,7 +223,7 @@ export const kipperSupportedConversions: Array<[KipperBuiltInTypeLiteral, Kipper
 /**
  * All available storage types inside Kipper, which define how a variable is stored/can be accessed.
  */
-export type KipperStorageType = "var" | "const";
+export type KipperStorageType = "var" | "const" | "built-in";
 
 /**
  * All available storage types inside Kipper, which define how a variable is stored/can be accessed.

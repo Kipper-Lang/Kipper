@@ -7,7 +7,7 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatementSemantics } from "./compound-statement-semantics";
 import type { CompoundStatementTypeSemantics } from "./compound-statement-type-semantics";
 import { Statement } from "../statement";
-import { LocalScope } from "../../../../analysis";
+import { LocalScope } from "../../../../semantics";
 import type { CompoundStatementContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
