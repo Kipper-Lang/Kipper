@@ -6,11 +6,15 @@
     "Dependencies"
   ],
   "compatibility": { 
-    "pnpm": "^7.0.0" 
+    "pnpm": "^8.0.0" 
   },
   "lockFileMaintenance": {
     "enabled": true
   },
+	"baseBranches": [
+		"dev-main",
+		"dev-next"
+	],
   "packageRules": [
 		{
       "matchDepTypes": ["devDependencies"],
