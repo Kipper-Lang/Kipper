@@ -10,7 +10,6 @@ import {
 	defaultOptimisationOptions,
 	EvaluatedCompileConfig,
 	KipperCompiler,
-	KipperError,
 	KipperLogger,
 	LogLevel,
 } from "@kipper/core";
@@ -176,12 +175,7 @@ export default class Compile extends Command {
 		const startTime: number = new Date().getTime();
 
 		// Compile the file
-		let result: KipperCompileResult;
-		try {
-			result = await compiler.compile(config.stream, config.compilerOptions);
-		} catch (e) {
-			throw e;
-		}
+		let result: KipperCompileResult = await compiler.compile(config.stream, config.compilerOptions);
 
 		// If the compilation failed, abort
 		if (!result.success) {

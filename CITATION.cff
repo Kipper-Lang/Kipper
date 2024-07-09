@@ -13,8 +13,8 @@ authors:
 identifiers:
   - type: url
     value: >-
-      https://github.com/Kipper-Lang/Kipper/releases/tag/v0.11.0-alpha.6
-    description: The GitHub release URL of tag 0.11.0-alpha.6
+      https://github.com/Kipper-Lang/Kipper/releases/tag/v0.11.0-beta.0
+    description: The GitHub release URL of tag 0.11.0-beta.0
 repository-code: 'https://github.com/Kipper-Lang/Kipper/'
 url: 'https://kipper-lang.org'
 abstract: >-
@@ -31,6 +31,6 @@ keywords:
   - oop-programming
   - type-safety
 license: GPL-3.0-or-later
-license-url: 'https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.6/LICENSE'
-version: 0.11.0-alpha.6
+license-url: 'https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/LICENSE'
+version: 0.11.0-beta.0
 date-released: '2024-07-01'
