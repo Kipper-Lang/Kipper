@@ -10,12 +10,13 @@ import type { FunctionCallExpressionSemantics } from "./function-call-expression
 import type { FunctionCallExpressionTypeSemantics } from "./function-call-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { KipperReferenceableFunction } from "../../../../const";
-import type { IdentifierPrimaryExpressionSemantics } from "../primary-expression";
-import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
+import { Expression } from "../expression";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import type { Reference } from "../../../../analysis";
 import { CheckedType } from "../../../../analysis";
+import type { IdentifierPrimaryExpressionSemantics } from "../primary-expression";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.
@@ -98,11 +99,19 @@ export class FunctionCallExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
-		const identifierSemantics = <IdentifierPrimaryExpressionSemantics>this.children[0].getSemanticData();
+		const toCall = this.children[0];
+		const toCallSemantics = toCall?.getSemanticData();
 
 		// Ensure that the identifier is present
-		if (!identifierSemantics || !identifierSemantics.ref) {
+		if (!toCallSemantics) {
 			throw new UnableToDetermineSemanticDataError();
+		}
+
+		let identifier: string | undefined = undefined;
+		let ref: Reference | undefined = undefined;
+		if ("ref" in toCallSemantics && "identifier" in toCallSemantics) {
+			identifier = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).identifier;
+			ref = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).ref;
 		}
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
@@ -110,9 +119,9 @@ export class FunctionCallExpression extends Expression<
 		const args: Array<Expression> = this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		this.semanticData = {
-			identifier: identifierSemantics.identifier,
+			identifier: identifier,
+			target: ref ?? toCall,
 			args: args,
-			callTarget: identifierSemantics.ref,
 		};
 	}
 
@@ -128,8 +137,8 @@ export class FunctionCallExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		// Ensure that the reference is a callable function
-		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
-		const calledFunc = <KipperReferenceableFunction>semanticData.callTarget.refTarget;
+		this.programCtx.typeCheck(this).refTargetCallable(semanticData.target);
+		const calledFunc = <KipperReferenceableFunction>(<Reference>semanticData.target).refTarget;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
