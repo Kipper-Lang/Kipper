@@ -55,35 +55,11 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`kipper analyse [FILE]`](#kipper-analyse-file)
 * [`kipper compile [FILE]`](#kipper-compile-file)
 * [`kipper help [COMMAND]`](#kipper-help-command)
 * [`kipper new [LOCATION]`](#kipper-new-location)
 * [`kipper run [FILE]`](#kipper-run-file)
 * [`kipper version`](#kipper-version)
-
-## `kipper analyse [FILE]`
-
-Analyse a Kipper file and validate its syntax and semantic integrity.
-
-```
-USAGE
-  $ kipper analyse [FILE]
-
-ARGUMENTS
-  FILE  The file that should be analysed.
-
-OPTIONS
-  -e, --encoding=encoding        [default: utf8] The encoding that should be used to read the file
-                                 (ascii,utf-8,utf8,utf16le).
-
-  -s, --string-code=string-code  The content of a Kipper file that can be passed as a replacement for the 'file'
-                                 parameter.
-
-  -w, --[no-]warnings            Show warnings that were emitted during the analysis.
-```
-
-_See code: [src/commands/analyse.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/analyse.ts)_
 
 ## `kipper compile [FILE]`
 
