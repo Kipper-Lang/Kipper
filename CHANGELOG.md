@@ -204,6 +204,8 @@ To use development versions of Kipper download the
 
 ### Removed
 
+- Removed deprecated flag `--abort-on-first-error` in favour of `--no-recover`.
+	([#501](https://github.com/Kipper-Lang/Kipper/issues/501)).
 - Removed CLI command `analyse` in favor of the flag `--dry-run` in the CLI command `compile`.
   ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
 - Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
