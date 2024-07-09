@@ -132,6 +132,7 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Fixed bug allowing the use of any expressinos for call expressions as that is not implemented yet.
 - Standardised error output for the CLI as described in [#435](https://github.com/Kipper-Lang/Kipper/issues/435).
   (This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
   i.e. `0.11.0-alpha.0` does _not_ have this change).
