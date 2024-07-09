@@ -21,7 +21,7 @@ export function prettifiedErrors<TProto extends Command>() {
 
 		const func = async function (this: Command, ...argArray: Array<any>): Promise<any> {
 			try {
-				await originalFunc.call(this, ...argArray);
+				return await originalFunc.call(this, ...argArray);
 			} catch (error) {
 				const cliError = error instanceof KipperCLIError || error instanceof OclifCLIError;
 				const configError = error instanceof ConfigError;
