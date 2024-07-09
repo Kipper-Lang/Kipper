@@ -3,7 +3,6 @@
  * @since 0.5.0
  */
 import type { Reference } from "../../../../analysis";
-import type { KipperReferenceable } from "../../../../const";
 import type { Expression } from "../expression";
 import type { ExpressionSemantics } from "../expression-semantics";
 

@@ -33,7 +33,6 @@ import type {
 	KipperArithmeticOperator,
 	KipperBitwiseOperator,
 	KipperCompilableType,
-	KipperReferenceable,
 	KipperReferenceableFunction,
 } from "../../const";
 import {
