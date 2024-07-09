@@ -9,7 +9,8 @@ import type {
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
-import type { LocalScope } from "../index";
+import type { FunctionScope } from "../index";
+import { LocalScope } from "../index";
 import { BuiltInTypes } from "../index";
 import type { ProcessedType } from "../../types";
 
@@ -31,6 +32,26 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 */
 	public static fromParameterDeclaration(node: ParameterDeclaration): ScopeParameterDeclaration {
 		return new ScopeParameterDeclaration(node);
+	}
+
+	/**
+	 * Returns whether this parameter declaration is a built-in declaration.
+	 *
+	 * This will always be false, since a parameter declaration is never a built-in declaration.
+	 * @since 0.11.0
+	 */
+	public override get isBuiltIn(): false {
+		return false;
+	}
+
+	/**
+	 * Returns the built-in structure of this declaration, if this declaration is based on one.
+	 *
+	 * This will always be undefined, since a parameter declaration is never a built-in declaration.
+	 * @since 0.11.0
+	 */
+	public override get builtInStructure(): undefined {
+		return undefined;
 	}
 
 	/**
@@ -81,7 +102,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * Returns the scope associated with this {@link ScopeDeclaration}.
 	 * @since 0.10.0
 	 */
-	public get scope(): LocalScope {
+	public get scope(): FunctionScope {
 		return this.func.innerScope;
 	}
 

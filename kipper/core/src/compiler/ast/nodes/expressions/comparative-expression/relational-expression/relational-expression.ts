@@ -24,7 +24,7 @@ import type { KipperRelationalOperator } from "../../../../../const";
 import { kipperRelationalOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Relational expression, which can be used to compare two numeric expressions.
@@ -134,7 +134,7 @@ export class RelationalExpression extends ComparativeExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Relational expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("bool"),
+			evaluatedType: BuiltInTypes.bool,
 		};
 
 		// Type check the relational expression and ensure its operands are of type 'num'

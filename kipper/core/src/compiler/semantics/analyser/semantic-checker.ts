@@ -11,12 +11,11 @@ import type {
 	Expression,
 	JumpStatement,
 	ReturnStatement,
-	ScopeNode,
 	VariableDeclaration,
 } from "../../ast";
 import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import type { LocalScope, Scope } from "../symbol-table";
+import type { Scope } from "../symbol-table";
 import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
@@ -75,7 +74,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public refTargetDefined(ref: KipperReferenceable): void {
-		if (ref instanceof ScopeDeclaration && !ref.hasValue) {
+		if (!ref.hasValue) {
 			throw this.assertError(new UndefinedReferenceError(ref.identifier));
 		}
 	}
@@ -116,7 +115,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public builtInNotDefined(identifier: string): void {
-		if (this.programCtx.getBuiltInFunction(identifier)) {
+		if (this.programCtx.universeScope.getEntry(identifier) !== undefined) {
 			throw this.assertError(new BuiltInOverwriteError(identifier));
 		}
 	}

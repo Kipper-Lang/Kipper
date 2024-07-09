@@ -14,7 +14,7 @@ import { UnaryExpression } from "../unary-expression";
 import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
@@ -112,7 +112,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
 			// This will always be a number
-			evaluatedType: ProcessedType.fromKipperType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 
 		// Ensure that this expression is valid (e.g. the operand is a number)

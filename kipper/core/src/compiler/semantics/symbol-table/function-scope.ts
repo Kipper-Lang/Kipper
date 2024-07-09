@@ -59,18 +59,4 @@ export class FunctionScope extends LocalScope {
 	public override getEntry(identifier: string): ScopeDeclaration | undefined {
 		return this.getArgument(identifier) ?? this.entries.get(identifier);
 	}
-
-	public override getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
-		const localRef = this.getEntry(identifier);
-		if (!localRef) {
-			// If the scope of the ctx (Compound statement) is another local scope, then go upwards recursively again.
-			if (this.ctx.scope instanceof LocalScope) {
-				return this.ctx.scope.getEntryRecursively(identifier);
-			} else {
-				// Fetching from the global scope
-				return this.ctx.scope.getEntry(identifier);
-			}
-		}
-		return localRef;
-	}
 }

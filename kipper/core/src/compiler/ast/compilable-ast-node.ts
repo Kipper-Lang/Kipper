@@ -11,10 +11,9 @@ import type {
 } from "../target-presets";
 import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
-import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
-import type { FunctionScope, GlobalScope, LocalScope } from "../semantics";
+import type { GlobalScope, LocalScope } from "../semantics";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
 import { AnalysableASTNode } from "./analysable-ast-node";

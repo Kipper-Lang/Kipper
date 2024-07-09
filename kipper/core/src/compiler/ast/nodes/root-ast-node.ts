@@ -8,8 +8,6 @@ import type {
 	KipperCompileTarget,
 	KipperTargetCodeGenerator,
 	KipperTargetSemanticAnalyser,
-	TargetASTNodeCodeGenerator,
-	TargetASTNodeSemanticAnalyser,
 	TargetSetUpCodeGenerator,
 	TargetWrapUpCodeGenerator,
 } from "../../target-presets";
@@ -21,7 +19,7 @@ import type { TranslatedCodeLine } from "../../const";
 import type { KipperError } from "../../../errors";
 import type { CompilationUnitContext } from "../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../lexer-parser";
-import { FunctionScope, GlobalScope, handleSemanticError } from "../../semantics";
+import { GlobalScope, handleSemanticError } from "../../semantics";
 import type { ScopeNode } from "../scope-node";
 
 /**
@@ -77,7 +75,7 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 		this._programCtx = programCtx;
 		this._children = [];
 		this._parent = undefined;
-		this._innerScope = new GlobalScope(this);
+		this._innerScope = new GlobalScope(this, this.programCtx.universeScope);
 	}
 
 	/**

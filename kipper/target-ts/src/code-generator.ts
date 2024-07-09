@@ -35,7 +35,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = TargetTS.getTypeScriptType(typeData.valueType.getCompilableType());
+		const tsType = TargetTS.getTypeScriptType(typeData.valueType.identifier);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined

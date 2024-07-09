@@ -2,7 +2,6 @@
  * A symbol-table implementation in form of a scope that may contain both variables and functions.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, TypeDeclaration, VariableDeclaration } from "../../../ast";
 import type {
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
@@ -10,7 +9,6 @@ import type {
 	ScopeVariableDeclaration,
 } from "../entry";
 import type { SymbolTable } from "./symbol-table";
-import { BuiltInType } from "../../types";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},

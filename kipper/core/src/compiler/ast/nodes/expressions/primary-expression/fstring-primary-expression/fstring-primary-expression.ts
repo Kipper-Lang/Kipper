@@ -14,7 +14,7 @@ import {
 	ParseRuleKindMapping,
 } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes, ProcessedType } from "../../../../../semantics";
 import { getParseRuleSource } from "../../../../../../tools";
 
 /**
@@ -116,7 +116,7 @@ export class FStringPrimaryExpression extends Expression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// This will always be of type 'str'
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("str"),
+			evaluatedType: BuiltInTypes.str,
 		};
 	}
 

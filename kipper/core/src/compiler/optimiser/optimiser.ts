@@ -4,7 +4,8 @@
  */
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
-import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "../semantics/";
+import type { InternalFunction, Reference, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../semantics/";
+import { BuiltInFunction, BuiltInVariable } from "../semantics/";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -54,27 +55,28 @@ export class KipperOptimiser {
 	 * @since 0.8.0
 	 */
 	private async optimiseBuiltIns(): Promise<void> {
-		// Optimise the registered built-in variables by optimising them using the stored references.
-		const newBuiltInVariables: Array<BuiltInVariable> = [];
+		const strippedBuiltInVariables: Array<Reference<ScopeVariableDeclaration>> = [];
 		for (const ref of this.programCtx.builtInVariableReferences) {
-			const alreadyIncluded: boolean = newBuiltInVariables.find((r) => r === ref.refTarget) !== undefined;
-			if (!alreadyIncluded) {
-				newBuiltInVariables.push(ref.refTarget);
+			const included: boolean =
+				strippedBuiltInVariables.find((includedRef) => includedRef.refTarget === ref.refTarget) !== undefined;
+			if (!included) {
+				strippedBuiltInVariables.push(ref);
 			}
 		}
 		this.programCtx.clearBuiltInVariables();
-		this.programCtx.registerBuiltInVariables(newBuiltInVariables);
+		this.programCtx.registerBuiltInVariables(strippedBuiltInVariables.map((v) => v.refTarget.builtInStructure!!));
 
 		// Optimise the registered built-in functions by optimising them using the stored references.
-		const newBuiltInFunctions: Array<BuiltInFunction> = [];
+		const strippedBuiltInFunctions: Array<Reference<ScopeFunctionDeclaration>> = [];
 		for (const ref of this.programCtx.builtInFunctionReferences) {
-			const alreadyIncluded: boolean = newBuiltInFunctions.find((r) => r === ref.refTarget) !== undefined;
+			const alreadyIncluded: boolean =
+				strippedBuiltInFunctions.find((includedRef) => includedRef.refTarget === ref.refTarget) !== undefined;
 			if (!alreadyIncluded) {
-				newBuiltInFunctions.push(ref.refTarget);
+				strippedBuiltInFunctions.push(ref);
 			}
 		}
 		this.programCtx.clearBuiltInFunctions();
-		this.programCtx.registerBuiltInFunctions(newBuiltInFunctions);
+		this.programCtx.registerBuiltInFunctions(strippedBuiltInFunctions.map((v) => v.refTarget.builtInStructure!!));
 	}
 
 	/**

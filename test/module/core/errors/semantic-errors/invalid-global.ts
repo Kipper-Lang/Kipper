@@ -1,4 +1,5 @@
 import type { KipperError, KipperProgramContext, LexerParserData } from "@kipper/core";
+import { BuiltInTypes } from "@kipper/core";
 import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { defaultConfig } from "../index";
 import { assert } from "chai";
@@ -14,8 +15,8 @@ describe("InvalidGlobalError", () => {
 				const programCtx: KipperProgramContext = await compiler.getProgramCtx(parseData, defaultConfig);
 
 				// Duplicate identifier
-				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: "void" });
-				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: "void" });
+				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: BuiltInTypes.void });
+				programCtx.registerBuiltInFunctions({ identifier: globalName, params: [], returnType: BuiltInTypes.void });
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidGlobalError", "Expected different error");
 				assert((<KipperError>e).line !== undefined, "Expected existing 'line' meta field");

@@ -174,13 +174,13 @@ export class FunctionDeclaration
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: RawType = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const returnType: RawType = retTypeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnTypeSpecifier: retTypeSpecifier,
-			returnType: type,
+			returnType: returnType,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};

@@ -13,7 +13,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 import type { BitwiseXorExpressionSemantics } from "./bitwise-xor-expression-semantics";
 import type { BitwiseXorExpressionTypeSemantics } from "./bitwise-xor-expression-type-semantics";
 
@@ -114,7 +114,7 @@ export class BitwiseXorExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 	}
 

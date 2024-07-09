@@ -7,7 +7,6 @@
  * 0 & 1 // 0
  * 0 & 0 // 0
  */
-
 import type { BitwiseAndExpressionSemantics } from "./bitwise-and-expression-semantics";
 import type { BitwiseAndExpressionTypeSemantics } from "./bitwise-and-expression-type-semantics";
 import { BitwiseExpression } from "../bitwise-expression";
@@ -16,7 +15,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Bitwise and expression AST node.
@@ -102,7 +101,7 @@ export class BitwiseAndExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 	}
 

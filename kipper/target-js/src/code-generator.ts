@@ -57,6 +57,7 @@ import type {
 	InterfaceDeclaration,
 	ClassDeclaration,
 } from "@kipper/core";
+import { BuiltInTypes } from "@kipper/core";
 import {
 	VariableDeclaration,
 	CompoundStatement,
@@ -437,14 +438,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-		let identifier: string = semanticData.identifier;
+		const refTarget = node.getSemanticData().ref.refTarget;
+		let identifier: string = refTarget.isBuiltIn
+			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
+			: refTarget.identifier;
 
-		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
-		// accordingly.
-		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
-			identifier = TargetJS.getBuiltInIdentifier(semanticData.ref.refTarget);
-		}
 		return [identifier];
 	};
 
@@ -580,8 +578,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const func = node.getTypeSemanticData().func;
 
 		// Get the proper identifier for the function
-		const identifier =
-			func instanceof ScopeFunctionDeclaration ? func.identifier : TargetJS.getBuiltInIdentifier(func.identifier);
+		const identifier = func.isBuiltIn ? TargetJS.getBuiltInIdentifier(func.builtInStructure!!) : func.identifier;
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
@@ -637,7 +634,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
 			return exp;
 		} else {
-			const func: string = TargetJS.getBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			const func: string = TargetJS.getBuiltInIdentifier(
+				getConversionFunctionIdentifier(originalType.identifier, destType.identifier),
+			);
 			return [func, "(", ...exp, ")"];
 		}
 	};
@@ -654,7 +653,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 
 		// In this case it should be a string multiplication
-		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
+		if (semanticData.leftOp.getTypeSemanticData().evaluatedType === BuiltInTypes.str) {
 			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
 		}
 
@@ -773,15 +772,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		let identifier = semanticData.identifier;
-
-		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
-		// accordingly.
-		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
-			identifier = TargetJS.getBuiltInIdentifier(identifier);
-		}
-
-		// The expression that is assigned to the reference
+		const refTarget = semanticData.assignTarget.refTarget;
+		const identifier = refTarget.isBuiltIn
+			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
+			: refTarget.identifier;
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];

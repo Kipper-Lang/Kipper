@@ -1,4 +1,5 @@
 import type { InternalFunction } from "./internal-function";
+import { BuiltInTypes } from "../symbol-table";
 
 /**
  * Contains all the internal built-in functions, which are used by Kipper to provide internal functionality. These
@@ -13,115 +14,115 @@ export const kipperInternalBuiltInFunctions = {
 		params: [
 			{
 				identifier: "value",
-				valueType: "num",
+				valueType: BuiltInTypes.num,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 	boolToStr: {
 		identifier: "boolToStr",
 		params: [
 			{
 				identifier: "value",
-				valueType: "bool",
+				valueType: BuiltInTypes.bool,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 	voidToStr: {
 		identifier: "voidToStr",
 		params: [
 			{
 				identifier: "value",
-				valueType: "void",
+				valueType: BuiltInTypes.void,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 	nullToStr: {
 		identifier: "nullToStr",
 		params: [
 			{
 				identifier: "value",
-				valueType: "null",
+				valueType: BuiltInTypes.null,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 	undefinedToStr: {
 		identifier: "undefinedToStr",
 		params: [
 			{
 				identifier: "value",
-				valueType: "undefined",
+				valueType: BuiltInTypes.undefined,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 	strToNum: {
 		identifier: "strToNum",
 		params: [
 			{
 				identifier: "value",
-				valueType: "str",
+				valueType: BuiltInTypes.str,
 			},
 		],
-		returnType: "num",
+		returnType: BuiltInTypes.num,
 	},
 	boolToNum: {
 		identifier: "boolToNum",
 		params: [
 			{
 				identifier: "value",
-				valueType: "bool",
+				valueType: BuiltInTypes.bool,
 			},
 		],
-		returnType: "num",
+		returnType: BuiltInTypes.num,
 	},
 	slice: {
 		identifier: "slice",
 		params: [
 			{
 				identifier: "objLike",
-				valueType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
+				valueType: BuiltInTypes.str, // TODO: Implement this for all objLike types (At the moment only strings are supported)
 			},
 			{
 				identifier: "start",
-				valueType: ["num", "undefined"], // Optional
+				valueType: [BuiltInTypes.num, BuiltInTypes.undefined], // Optional
 			},
 			{
 				identifier: "end",
-				valueType: ["num", "undefined"], // Optional
+				valueType: [BuiltInTypes.num, BuiltInTypes.undefined], // Optional
 			},
 		],
-		returnType: "str", // TODO: Implement this for all objLike types (At the moment only strings are supported)
+		returnType: BuiltInTypes.str, // TODO: Implement this for all objLike types (At the moment only strings are supported)
 	},
 	index: {
 		identifier: "index",
 		params: [
 			{
 				identifier: "arrayLike",
-				valueType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+				valueType: BuiltInTypes.str, // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
 			},
 			{
 				identifier: "indexOrKey",
-				valueType: "num",
+				valueType: BuiltInTypes.num,
 			},
 		],
-		returnType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+		returnType: BuiltInTypes.str, // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
 	},
 	repeatString: {
 		identifier: "repeatString",
 		params: [
 			{
 				identifier: "toRepeat",
-				valueType: "str",
+				valueType: BuiltInTypes.str,
 			},
 			{
 				identifier: "times",
-				valueType: "num",
+				valueType: BuiltInTypes.num,
 			},
 		],
-		returnType: "str",
+		returnType: BuiltInTypes.str,
 	},
 } satisfies Record<string, InternalFunction>;

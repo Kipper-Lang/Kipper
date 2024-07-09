@@ -27,7 +27,7 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import type { Scope } from "../symbol-table";
+import type { Scope, ScopeFunctionDeclaration } from "../symbol-table";
 import {
 	BuiltInTypes,
 	ScopeDeclaration,
@@ -35,19 +35,11 @@ import {
 	ScopeTypeDeclaration,
 	ScopeVariableDeclaration,
 } from "../symbol-table";
-import type {
-	KipperArithmeticOperator,
-	KipperBitwiseOperator,
-	KipperBuiltInTypeLiteral,
-	KipperReferenceable,
-	KipperReferenceableFunction,
-} from "../../const";
+import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
 import {
-	kipperBuiltInTypeLiterals,
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
 	kipperPlusOperator,
-	kipperStrTypeLiteral,
 	kipperSupportedConversions,
 } from "../../const";
 import {
@@ -70,8 +62,8 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import type { RawType } from "../types";
-import { ProcessedType, UndefinedType } from "../types";
+import type { RawType, ProcessedType } from "../types";
+import { UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -110,7 +102,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public getCheckedType(rawType: RawType, scope: Scope): ProcessedType {
 		try {
 			const type = this.getTypeFromIdentifier(rawType.identifier, scope);
-			return type.type;
+			return type.typeValue;
 		} catch (e) {
 			// If the error is not a KipperError, rethrow it (since it is not a rawType error, and we don't know what happened)
 			if (!(e instanceof KipperError)) {
@@ -140,14 +132,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public refTargetCallable(ref: KipperReferenceable): void {
 		if (ref instanceof ScopeDeclaration) {
-			const refType = ref.type.get();
-			if (refType === undefined) {
+			const refType = ref.type;
+			if (!refType.isCompilable) {
 				return; // Ignore undefined types - Skip type checking (the type is invalid anyway)
 			}
 
 			// If the reference is not callable, throw an error
 			if (!ref.isCallable) {
-				throw this.assertError(new ExpressionNotCallableError(refType));
+				throw this.assertError(new ExpressionNotCallableError(refType.identifier));
 			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
 				// Calling a function stored in a variable or parameter is not implemented yet
 				throw this.notImplementedError(
@@ -265,7 +257,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: KipperReferenceableFunction, args: Array<Expression>): void {
+	public validFunctionCallArguments(func: ScopeFunctionDeclaration, args: Array<Expression>): void {
 		if (func.params.length != args.length) {
 			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
 		}
@@ -291,17 +283,17 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const rightOpTypeData = semanticData.rightOp.getTypeSemanticData();
 
 		// Get the compile-types for the operands
-		const leftOpType = leftOpTypeData.evaluatedType.get();
-		const rightOpType = rightOpTypeData.evaluatedType.get();
+		const leftOpType = leftOpTypeData.evaluatedType;
+		const rightOpType = rightOpTypeData.evaluatedType;
 
-		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (leftOpType === undefined || rightOpType === undefined) {
+		// If either one of the types can't be compiled or evaluated then we skip this step
+		if (!leftOpType.isCompilable || !rightOpType.isCompilable) {
 			return;
 		}
 
 		// Ensure that both expressions are of type 'num'
-		if (leftOpType !== "num" || rightOpType !== "num") {
-			throw this.assertError(new InvalidRelationalComparisonTypeError(leftOpType, rightOpType));
+		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
+			throw this.assertError(new InvalidRelationalComparisonTypeError(leftOpType.identifier, rightOpType.identifier));
 		}
 	}
 
@@ -318,16 +310,16 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			| UnaryExpressionSemantics
 			| IncrementOrDecrementPostfixExpressionSemantics;
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
-		const expType = expTypeSemantics.evaluatedType.get();
+		const expType = expTypeSemantics.evaluatedType;
 
-		// If the expression type is undefined, skip type checking (the type is invalid anyway)
-		if (expType === undefined) {
+		// If the type is undefined, skip type checking (the type is invalid anyway)
+		if (!expType.isCompilable) {
 			return;
 		}
 
 		// Ensure that the operator '+', '-', '++' and '--' are only used on numbers
-		if (semanticData.operator !== "!" && expType !== "num") {
-			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType));
+		if (semanticData.operator !== "!" && expType !== BuiltInTypes.num) {
+			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType.identifier));
 		}
 
 		// Ensure that the operand of an '++' and '--' modifier expression is a reference
@@ -360,8 +352,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validArithmeticExpression(leftOp: Expression, rightOp: Expression, op: KipperArithmeticOperator): void {
 		// Get the compile-types for both operands
-		const leftOpType = leftOp.getTypeSemanticData().evaluatedType.get();
-		const rightOpType = rightOp.getTypeSemanticData().evaluatedType.get();
+		const leftOpType = leftOp.getTypeSemanticData().evaluatedType;
+		const rightOpType = rightOp.getTypeSemanticData().evaluatedType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
 		if (leftOpType === undefined || rightOpType === undefined) {
@@ -369,19 +361,23 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Numbers may use all arithmetic operators
-		if (leftOpType !== "num" || rightOpType !== "num") {
+		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
 			// Strings can use '+' to concat strings
-			if (op === kipperPlusOperator && leftOpType == kipperStrTypeLiteral && rightOpType == kipperStrTypeLiteral) {
+			if (op === kipperPlusOperator && leftOpType == BuiltInTypes.str && rightOpType == BuiltInTypes.str) {
 				return;
 			}
 
 			// Strings can use * to repeat a string n times
-			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrTypeLiteral && rightOpType == "num") {
+			if (
+				op === kipperMultiplicativeOperators[0] &&
+				leftOpType == BuiltInTypes.str &&
+				rightOpType == BuiltInTypes.num
+			) {
 				return;
 			}
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
-			throw this.assertError(new ArithmeticOperationTypeError(leftOpType, rightOpType));
+			throw this.assertError(new ArithmeticOperationTypeError(leftOpType.identifier, rightOpType.identifier));
 		}
 	}
 
@@ -394,17 +390,17 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.11.0
 	 */
 	public validBitwiseExpression(leftOp: Expression, rightOp: Expression, op: KipperBitwiseOperator): void {
-		const leftOpType = leftOp.getTypeSemanticData().evaluatedType.get();
-		const rightOpType = rightOp.getTypeSemanticData().evaluatedType.get();
+		const leftOpType = leftOp.getTypeSemanticData().evaluatedType;
+		const rightOpType = rightOp.getTypeSemanticData().evaluatedType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (leftOpType === undefined || rightOpType === undefined) {
+		if (!leftOpType.isCompilable || !rightOpType.isCompilable) {
 			return;
 		}
 
 		// Ensure that both expressions are of type 'num'
-		if (leftOpType !== "num" || rightOpType !== "num") {
-			throw this.assertError(new BitwiseOperationTypeError(leftOpType, rightOpType));
+		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
+			throw this.assertError(new BitwiseOperationTypeError(leftOpType.identifier, rightOpType.identifier));
 		}
 	}
 
@@ -417,23 +413,28 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validConversion(operand: Expression, targetType: ProcessedType): void {
 		// Get the compile-types for the specified conversion types
-		const originalCompileType = operand.getTypeSemanticData().evaluatedType.get();
-		const targetCompileType = targetType.get();
+		const originalCompileType = operand.getTypeSemanticData().evaluatedType;
+		const targetCompileType = targetType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (originalCompileType === undefined || targetCompileType === undefined) {
+		if (!originalCompileType.isCompilable || !targetCompileType.isCompilable) {
 			return;
 		}
 
-		// Check whether a supported pair of types exist.
+		// Return early if the types are the same
+		if (originalCompileType === targetCompileType) {
+			return;
+		}
+
+		// Check whether a supported pair of types exist
 		const viableConversion =
 			kipperSupportedConversions.find(
-				(types) => types[0] === originalCompileType && types[1] === targetType.rawType,
+				(types) => BuiltInTypes[types[0]] === originalCompileType && BuiltInTypes[types[1]] === targetType,
 			) !== undefined;
-
-		// In case that the targetType are not the same and no conversion is possible, throw an error!
-		if (originalCompileType !== targetCompileType && !viableConversion) {
-			throw this.assertError(new InvalidConversionTypeError(originalCompileType, targetCompileType));
+		if (!viableConversion) {
+			throw this.assertError(
+				new InvalidConversionTypeError(originalCompileType.identifier, targetCompileType.identifier),
+			);
 		}
 	}
 
@@ -479,7 +480,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.returnType.get();
+		const returnType = typeData.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {
@@ -489,7 +490,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// If the function return type is not 'void' then there must be a return statement in all code paths
 		// Note: We will ignore types here, since the return statements themselves with check later if they have the proper
 		// return type.
-		if (returnType !== "void") {
+		if (returnType !== BuiltInTypes.void) {
 			// Recursively check all code paths to ensure all return a value.
 			const checkChildrenCodePaths = (parent: Statement): boolean => {
 				let returnPathsCovered = false;
@@ -560,7 +561,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public objectLikeIsIndexableOrAccessible(objLike: Expression): void {
-		const objType = objLike.getTypeSemanticData().evaluatedType.get();
+		const objType = objLike.getTypeSemanticData().evaluatedType;
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
 		if (objType === undefined) {
@@ -568,8 +569,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// TODO! Add support for 'object' types once they are implemented
-		if (objType !== "str" && objType !== "list") {
-			throw this.assertError(new ValueNotIndexableTypeError(objType));
+		if (objType !== BuiltInTypes.str && objType !== BuiltInTypes.list) {
+			throw this.assertError(new ValueNotIndexableTypeError(objType.identifier));
 		}
 	}
 
@@ -581,8 +582,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public validBracketNotationKey(objLike: Expression, key: Expression): void {
-		const objType = objLike.getTypeSemanticData().evaluatedType.get();
-		const keyType = key.getTypeSemanticData().evaluatedType.get();
+		const objType = objLike.getTypeSemanticData().evaluatedType;
+		const keyType = key.getTypeSemanticData().evaluatedType;
 
 		// If the obj or key type are undefined, skip type checking  (the types are invalid anyway)
 		if (objType === undefined || keyType === undefined) {
@@ -590,8 +591,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
-		if (keyType !== "num") {
-			throw this.assertError(new InvalidKeyTypeError(objType, keyType));
+		if (keyType !== BuiltInTypes.num) {
+			throw this.assertError(new InvalidKeyTypeError(objType.identifier, keyType.identifier));
 		}
 	}
 
@@ -603,9 +604,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public validSliceNotationKey(objLike: Expression, key: { start?: Expression; end?: Expression }): void {
-		const objType = objLike.getTypeSemanticData().evaluatedType.get();
-		const startType = key.start ? key.start.getTypeSemanticData().evaluatedType.get() : undefined;
-		const endType = key.end ? key.end.getTypeSemanticData().evaluatedType.get() : undefined;
+		const objType = objLike.getTypeSemanticData().evaluatedType;
+		const startType = key.start ? key.start.getTypeSemanticData().evaluatedType : undefined;
+		const endType = key.end ? key.end.getTypeSemanticData().evaluatedType : undefined;
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
 		if (objType === undefined) {
@@ -613,10 +614,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
-		if (startType !== undefined && startType !== "num") {
-			throw this.assertError(new InvalidKeyTypeError(objType, startType), key.start);
-		} else if (endType !== undefined && endType !== "num") {
-			throw this.assertError(new InvalidKeyTypeError(objType, endType), key.end);
+		if (startType !== undefined && startType !== BuiltInTypes.num) {
+			throw this.assertError(new InvalidKeyTypeError(objType.identifier, startType.identifier), key.start);
+		} else if (endType !== undefined && endType !== BuiltInTypes.num) {
+			throw this.assertError(new InvalidKeyTypeError(objType.identifier, endType.identifier), key.end);
 		}
 	}
 
@@ -632,7 +633,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		this.objectLikeIsIndexableOrAccessible(semanticData.objectLike);
 
 		const preAnalysisType = semanticData.objectLike.getTypeSemanticData().evaluatedType;
-		const objType = preAnalysisType.get();
+		const objType = preAnalysisType;
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
 		if (objType === undefined) {
@@ -645,11 +646,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
 				);
 			case "bracket": {
-				if (objType === "str") {
+				if (objType === BuiltInTypes.str) {
 					// Also ensure the key is valid
 					this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
 
-					return ProcessedType.fromCompilableType("str");
+					return BuiltInTypes.str;
 				} else {
 					// Must be a list -> Not implemented yet
 					throw this.notImplementedError(
@@ -658,14 +659,14 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				}
 			}
 			case "slice": {
-				if (objType === "str") {
+				if (objType === BuiltInTypes.str) {
 					// Also ensure the key is valid
 					this.validSliceNotationKey(
 						semanticData.objectLike,
 						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
 					);
 
-					return ProcessedType.fromCompilableType("str");
+					return BuiltInTypes.str;
 				} else {
 					// Must be a list -> Not implemented yet
 					throw this.notImplementedError(
@@ -684,8 +685,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.11.0
 	 */
 	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
-		const trueBranchType = trueBranch.getTypeSemanticData().evaluatedType.get();
-		const falseBranchType = falseBranch.getTypeSemanticData().evaluatedType.get();
+		const trueBranchType = trueBranch.getTypeSemanticData().evaluatedType;
+		const falseBranchType = falseBranch.getTypeSemanticData().evaluatedType;
 
 		// If the branch types are undefined, skip type checking (the types are invalid anyway)
 		if (trueBranchType === undefined || falseBranchType === undefined) {

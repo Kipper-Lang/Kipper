@@ -1,6 +1,5 @@
 import { ProcessedType } from "./base/processed-type";
 import type { KipperBuiltInTypeLiteral } from "../../const";
-import { kipperBuiltInTypeLiterals } from "../../const";
 import { KipperNotImplementedError } from "../../../errors";
 import type { CompilableType } from "./base/compilable-type";
 
@@ -13,7 +12,6 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 
 	public constructor(identifier: KipperBuiltInTypeLiteral) {
 		super(identifier, true);
-		throw new KipperNotImplementedError("Built-in type wrapper classes are not implement yet");
 	}
 
 	public get isCompilable(): true {

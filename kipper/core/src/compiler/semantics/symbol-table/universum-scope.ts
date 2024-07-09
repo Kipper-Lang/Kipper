@@ -90,7 +90,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addVariable(declaration: BuiltInVariable): ScopeVariableDeclaration {
-		const scopeDeclaration = ScopeVariableDeclaration.fromBuiltInVariable(declaration);
+		const scopeDeclaration = ScopeVariableDeclaration.fromBuiltInVariable(declaration, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
@@ -102,7 +102,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addFunction(declaration: BuiltInFunction): ScopeFunctionDeclaration {
-		const scopeDeclaration = ScopeFunctionDeclaration.fromBuiltInFunction(declaration);
+		const scopeDeclaration = ScopeFunctionDeclaration.fromBuiltInFunction(declaration, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
@@ -114,7 +114,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addType(declarationOrIdentifier: BuiltInType): ScopeTypeDeclaration {
-		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier);
+		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
@@ -125,7 +125,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @returns The scope declaration if it exists, otherwise `undefined`.
 	 * @since 0.11.0
 	 */
-	getEntry(identifier: string): ScopeDeclaration | undefined {
+	public getEntry(identifier: string): ScopeDeclaration | undefined {
 		return this.entries.get(identifier);
 	}
 
@@ -135,7 +135,23 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @returns The scope declaration if it exists, otherwise `undefined`.
 	 * @since 0.11.0
 	 */
-	getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
+	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
 		return this.getEntry(identifier);
+	}
+
+	/**
+	 * DANGEROUS METHOD! Clears all the universal functions and create dangling references.
+	 * @since 0.11.0
+	 */
+	public clearUniversalFunctions(): void {
+		this.entries.clear();
+	}
+
+	/**
+	 * DANGEROUS METHOD! Clears all the universal variables and create dangling references.
+	 * @since 0.11.0
+	 */
+	public clearUniversalVariables(): void {
+		this.entries.clear();
 	}
 }

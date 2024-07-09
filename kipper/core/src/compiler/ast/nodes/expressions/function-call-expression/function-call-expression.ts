@@ -9,13 +9,12 @@
 import type { FunctionCallExpressionSemantics } from "./function-call-expression-semantics";
 import type { FunctionCallExpressionTypeSemantics } from "./function-call-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
-import type { KipperReferenceableFunction } from "../../../../const";
 import type { IdentifierPrimaryExpressionSemantics } from "../primary-expression";
 import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { ProcessedType } from "../../../../semantics";
+import type { Reference, ScopeFunctionDeclaration } from "../../../../semantics";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.
@@ -111,7 +110,8 @@ export class FunctionCallExpression extends Expression<
 		this.semanticData = {
 			identifier: identifierSemantics.identifier,
 			args: args,
-			callTarget: identifierSemantics.ref,
+			// TODO! Fix this as we need to check its type instead of force casting
+			callTarget: <Reference<ScopeFunctionDeclaration>>identifierSemantics.ref,
 		};
 	}
 
@@ -128,22 +128,14 @@ export class FunctionCallExpression extends Expression<
 
 		// Ensure that the reference is a callable function
 		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
-		const calledFunc = <KipperReferenceableFunction>semanticData.callTarget.refTarget;
+		const calledFunc = semanticData.callTarget.refTarget;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
 
-		// Get the type that the function call will evaluate to
-		let evaluatedType: ProcessedType;
-		if (calledFunc.returnType instanceof ProcessedType) {
-			evaluatedType = calledFunc.returnType;
-		} else {
-			evaluatedType = ProcessedType.fromCompilableType(calledFunc.returnType);
-		}
-
 		// The evaluated type is always equal to the return of the function
 		this.typeSemantics = {
-			evaluatedType: evaluatedType,
+			evaluatedType: calledFunc.returnType,
 			func: calledFunc,
 		};
 	}

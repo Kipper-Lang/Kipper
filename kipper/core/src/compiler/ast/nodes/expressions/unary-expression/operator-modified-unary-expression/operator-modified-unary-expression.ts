@@ -16,7 +16,7 @@ import { UnaryExpression } from "../unary-expression";
 import type { OperatorModifiedUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Operator modified expressions, which are used to modify the value of an expression based on an
@@ -125,7 +125,7 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		const semanticData = this.getSemanticData();
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType(semanticData.operator === "!" ? "bool" : "num"),
+			evaluatedType: semanticData.operator === "!" ? BuiltInTypes.bool : BuiltInTypes.num,
 		};
 
 		// Ensure the operator is compatible with the type of the operand

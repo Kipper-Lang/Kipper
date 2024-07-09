@@ -15,7 +15,7 @@ import {
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { kipperInternalBuiltInFunctions } from "../../../../semantics/runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "../../../../semantics";
 
 /**
  * A union of all possible {@link KipperParserRuleContext} rule contexts that {@link MemberAccessExpression} implements.

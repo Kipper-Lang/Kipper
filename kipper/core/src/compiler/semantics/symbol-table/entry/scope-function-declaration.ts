@@ -11,6 +11,7 @@ import type {
 import { ScopeDeclaration } from "./scope-declaration";
 import type { ProcessedType } from "../../types";
 import type { BuiltInFunction, BuiltInFunctionArgument } from "../../runtime-built-ins";
+import type { UniverseScope } from "../universum-scope";
 import { BuiltInTypes } from "../universum-scope";
 
 /**
@@ -18,13 +19,12 @@ import { BuiltInTypes } from "../universum-scope";
  * @since 0.1.2
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
-	private readonly _declaration?: FunctionDeclaration;
-	private readonly _builtInFunction?: BuiltInFunction;
-
-	private constructor(declaration?: FunctionDeclaration, builtInFunction?: BuiltInFunction) {
+	private constructor(
+		private readonly _declaration?: FunctionDeclaration,
+		private readonly _builtInFunction?: BuiltInFunction,
+		private readonly _universeScope?: UniverseScope,
+	) {
 		super();
-		this._declaration = declaration;
-		this._builtInFunction = builtInFunction;
 	}
 
 	/**
@@ -39,8 +39,24 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * Creates a new scope function declaration from a function declaration.
 	 * @param declaration The function declaration node.
 	 */
-	static fromBuiltInFunction(declaration: BuiltInFunction): ScopeFunctionDeclaration {
-		return new ScopeFunctionDeclaration(undefined, declaration);
+	static fromBuiltInFunction(declaration: BuiltInFunction, universeScope: UniverseScope): ScopeFunctionDeclaration {
+		return new ScopeFunctionDeclaration(undefined, declaration, universeScope);
+	}
+
+	/**
+	 * Returns whether this function declaration is a built-in function.
+	 * @since 0.11.0
+	 */
+	public override get isBuiltIn(): boolean {
+		return this._builtInFunction !== undefined;
+	}
+
+	/**
+	 * Returns the built-in structure of this declaration, if this declaration is based on one.
+	 * @since 0.11.0
+	 */
+	public override get builtInStructure(): BuiltInFunction | undefined {
+		return this._builtInFunction;
 	}
 
 	/**
@@ -87,7 +103,14 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
 	public get returnType(): ProcessedType {
-		return this.typeData?.returnType ?? BuiltInTypes.void;
+		return this.typeData?.returnType ?? this._builtInFunction?.returnType!!;
+	}
+
+	/**
+	 * Returns the scope associated with this {@link ScopeDeclaration}.
+	 */
+	public get scope() {
+		return this._declaration?.scope ?? this._universeScope!!;
 	}
 
 	/**

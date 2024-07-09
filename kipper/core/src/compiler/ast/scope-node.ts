@@ -6,8 +6,6 @@
  */
 import type { Scope } from "../semantics";
 import type { CompilableASTNode } from "./compilable-ast-node";
-import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../target-presets";
-import type { TranslatedCodeLine } from "../const";
 import type { ParserASTNode, SemanticData, TypeData } from "./ast-node";
 
 /**

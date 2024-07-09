@@ -20,7 +20,7 @@ import { kipperMultiplicativeOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ArithmeticExpression } from "../arithmetic-expression";
-import { kipperInternalBuiltInFunctions } from "../../../../../semantics/runtime-built-ins";
+import { BuiltInTypes, kipperInternalBuiltInFunctions } from "../../../../../semantics";
 
 /**
  * Multiplicative expression, which can be used to perform multiplicative operations on two expressions.
@@ -141,8 +141,8 @@ export class MultiplicativeExpression extends ArithmeticExpression<
 		};
 
 		if (
-			semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str" &&
-			semanticData.rightOp.getTypeSemanticData().evaluatedType.getCompilableType() === "num"
+			semanticData.leftOp.getTypeSemanticData().evaluatedType === BuiltInTypes.str &&
+			semanticData.rightOp.getTypeSemanticData().evaluatedType === BuiltInTypes.num
 		) {
 			this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["repeatString"]);
 		}

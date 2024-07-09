@@ -7,7 +7,7 @@ import type { ReturnStatementSemantics } from "./return-statement-semantics";
 import type { ReturnStatementTypeSemantics } from "./return-statement-type-semantics";
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
-import { ProcessedType } from "../../../../semantics";
+import { BuiltInTypes } from "../../../../semantics";
 import type { ReturnStatementContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
@@ -115,8 +115,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		this.programCtx.typeCheck(this).validReturnStatement(this);
 
 		this.typeSemantics = {
-			returnType:
-				semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? ProcessedType.fromCompilableType("void"),
+			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void,
 		};
 	}
 

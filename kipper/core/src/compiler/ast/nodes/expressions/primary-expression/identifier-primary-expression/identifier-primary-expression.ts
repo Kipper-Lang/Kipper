@@ -9,7 +9,7 @@ import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-prim
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { IdentifierPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { ProcessedType } from "../../../../../semantics";
+import { ProcessedType, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../../../../semantics";
 import { BuiltInTypes, ScopeDeclaration } from "../../../../../semantics";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";
@@ -94,7 +94,7 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 			},
 		};
 
-		if (!(ref instanceof ScopeDeclaration)) {
+		if (ref.isBuiltIn && (ref instanceof ScopeVariableDeclaration || ref instanceof ScopeFunctionDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
 		} else {
 			// If the reference is not used inside an assignment expression, ensure that the reference is defined
@@ -118,16 +118,8 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		const semanticData = this.getSemanticData();
 		const refTarget = semanticData.ref.refTarget;
 
-		let type: ProcessedType;
-		if (refTarget instanceof ScopeDeclaration) {
-			type = refTarget.type;
-		} else {
-			// Built-in function -> type is 'func'
-			type = "valueType" in refTarget ? refTarget.valueType : BuiltInTypes.func;
-		}
-
 		this.typeSemantics = {
-			evaluatedType: type,
+			evaluatedType: refTarget.type,
 		};
 	}
 

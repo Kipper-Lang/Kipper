@@ -1,4 +1,3 @@
-import type { KipperBuiltInTypeLiteral } from "../../const";
 import { ProcessedType } from "./base";
 
 export type CustomTypeKind = "interface" | "class";

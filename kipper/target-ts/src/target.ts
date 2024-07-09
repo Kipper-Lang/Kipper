@@ -63,7 +63,7 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType(kipperType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>): string {
+	public static getTypeScriptType<T extends string>(kipperType: T | Array<T>): string {
 		if (Array.isArray(kipperType)) {
 			// Recursively call this function for each type in the array
 			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;

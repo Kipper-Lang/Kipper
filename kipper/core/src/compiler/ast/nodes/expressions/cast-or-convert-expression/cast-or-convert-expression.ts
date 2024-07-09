@@ -15,9 +15,9 @@ import { Expression } from "../expression";
 import type { CastOrConvertExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { RawType } from "../../../../semantics";
+import { kipperInternalBuiltInFunctions } from "../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
-import { kipperInternalBuiltInFunctions } from "../../../../semantics/runtime-built-ins";
 
 /**
  * Convert expressions, which are used to convert a value to a different type.

@@ -9,14 +9,13 @@
  * 2 >> 1 // 1
  * 2 >>> 1 // 1
  */
-
 import { BitwiseExpression } from "../bitwise-expression";
 import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../lexer-parser";
 import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../semantics";
+import { BuiltInTypes } from "../../../../../semantics";
 import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
 import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
 import type { KipperBitwiseShiftOperator } from "../../../../../const";
@@ -134,7 +133,7 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 	}
 

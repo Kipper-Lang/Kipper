@@ -13,7 +13,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { ProcessedType, RawType } from "../../../../../semantics";
+import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.
@@ -98,10 +98,10 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 		const semanticData = this.getSemanticData();
 
 		// Create a checked type instance (this function handles error recovery and invalid types)
-		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier);
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier, this.scope);
 		this.typeSemantics = {
 			// A type specifier will always evaluate to be of type 'type'
-			evaluatedType: ProcessedType.fromCompilableType("type"),
+			evaluatedType: BuiltInTypes.type,
 			storedType: valueType,
 		};
 	}

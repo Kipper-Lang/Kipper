@@ -4,7 +4,8 @@
  */
 import type { Declaration } from "../../../ast";
 import type { KipperProgramContext } from "../../../program-ctx";
-import type { ProcessedType } from "../../types";
+import type { BuiltInType, ProcessedType } from "../../types";
+import type { BuiltInFunction, BuiltInVariable } from "../../runtime-built-ins";
 
 /**
  * An symbol table entry of a variable, parameter or function declaration inside a Kipper scope.
@@ -16,7 +17,6 @@ import type { ProcessedType } from "../../types";
  */
 export abstract class ScopeDeclaration {
 	public abstract get node(): Declaration | undefined;
-
 	public abstract get identifier(): string;
 
 	/**
@@ -25,6 +25,18 @@ export abstract class ScopeDeclaration {
 	public get programCtx(): KipperProgramContext | undefined {
 		return this.node?.programCtx;
 	}
+
+	/**
+	 * Returns whether this declaration is a built-in declaration.
+	 * @since 0.11.0
+	 */
+	public abstract get isBuiltIn(): boolean;
+
+	/**
+	 * Returns the built-in structure of this declaration, if this declaration is based on one.
+	 * @since 0.11.0
+	 */
+	public abstract get builtInStructure(): BuiltInVariable | BuiltInFunction | BuiltInType | undefined;
 
 	/**
 	 * The value type of this declaration.

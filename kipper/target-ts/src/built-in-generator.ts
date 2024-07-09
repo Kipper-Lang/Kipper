@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
 export function genTSFunction(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral> }>;
-		returnType: KipperBuiltInTypeLiteral | Array<KipperBuiltInTypeLiteral>;
+		params: Array<{ identifier: string; type: string | Array<string> }>;
+		returnType: string | Array<string>;
 	},
 	body: string,
 	ignoreParams: boolean = false,
@@ -50,7 +50,7 @@ export function genTSVariable(varSpec: BuiltInVariable, value: string): Translat
 		TargetTS.getBuiltInIdentifier(varSpec),
 		":",
 		" ",
-		TargetTS.getTypeScriptType(varSpec.valueType),
+		TargetTS.getTypeScriptType(varSpec.valueType.identifier),
 		" ",
 		"=",
 		" ",

@@ -8,6 +8,7 @@ import type { ScopeDeclaration } from "./entry";
 import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./base/scope";
+import type { UniverseScope } from "./universum-scope";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
@@ -15,7 +16,7 @@ import { Scope } from "./base/scope";
  * @since 0.8.0
  */
 export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
-	constructor(public ctx: RootASTNode) {
+	constructor(public readonly ctx: RootASTNode, public readonly universe: UniverseScope) {
 		super();
 	}
 
@@ -23,7 +24,7 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 	 * The parent scope of this global scope. This is always `undefined`.
 	 * @since 0.10.0
 	 */
-	public parent = undefined;
+	public parent = this.universe;
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
@@ -60,7 +61,6 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
-		// No recursion, since the global scope is the top-most scope
-		return this.getEntry(identifier);
+		return this.getEntry(identifier) ?? this.parent.getEntryRecursively(identifier);
 	}
 }

@@ -2,12 +2,12 @@
  * Constant declarations and types for the compiler implementation.
  * @since 0.3.0
  */
-import type {
-	ScopeDeclaration,
+import type { ScopeDeclaration } from "./semantics";
+import {
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
+	ScopeTypeDeclaration,
 	ScopeVariableDeclaration,
-	UndefinedType,
 } from "./semantics";
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./semantics/";
 
@@ -618,42 +618,10 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
 
 /**
- * Represents all referencable functions that a user can use inside Kipper. This does not include internal functions.
- * @since 0.10.0
- */
-export type KipperReferenceableFunction = BuiltInFunction | ScopeFunctionDeclaration;
-
-/**
- * Represents a Kipper function that can be either declared or defined.
- * @since 0.6.0
- */
-export type KipperFunction = InternalFunction | KipperReferenceableFunction;
-
-/**
- * Represents a Kipper variable that can be either declared or defined.
- * @since 0.6.0
- */
-export type KipperVariable = BuiltInVariable | ScopeVariableDeclaration;
-
-/**
- * Represents a Kipper parameter inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
- * @since 0.10.0
- */
-export type KipperParam = ScopeParameterDeclaration;
-
-/**
- * Represents a Kipper argument inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
- *
- * @alias KipperParam
- * @since 0.10.0
- */
-export type KipperArg = KipperParam;
-
-/**
  * Represents a runtime variable or function that can be referenced.
  * @since 0.6.0
  */
-export type KipperReferenceable = KipperReferenceableFunction | KipperVariable | KipperParam | ScopeDeclaration;
+export type KipperReferenceable = ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.

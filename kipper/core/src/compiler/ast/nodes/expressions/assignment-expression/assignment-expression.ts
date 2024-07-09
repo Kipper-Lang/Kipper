@@ -137,7 +137,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 
 		// If the reference was a variable, indicate that the value was updated, since it's being assigned to
 		if (identifierSemantics.ref.refTarget instanceof ScopeVariableDeclaration) {
-			identifierSemantics.ref.refTarget.valueWasUpdated = true;
+			identifierSemantics.ref.refTarget.notifyOfUpdate();
 		}
 	}
 

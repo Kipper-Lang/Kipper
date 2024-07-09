@@ -19,7 +19,16 @@ import type { KipperWarning } from "../warnings";
 import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
 import type { EvaluatedCompileConfig } from "./compile-config";
-import type { BuiltInFunction, BuiltInVariable, InternalFunction, InternalReference, Reference } from "./semantics";
+import type {
+	BuiltInFunction,
+	BuiltInVariable,
+	GlobalScope,
+	InternalFunction,
+	InternalReference,
+	Reference,
+	ScopeFunctionDeclaration,
+} from "./semantics";
+import { ScopeVariableDeclaration } from "./semantics";
 import {
 	BuiltInFunctions,
 	BuiltInTypes,
@@ -52,9 +61,9 @@ export class KipperProgramContext {
 
 	private readonly _warnings: Array<KipperWarning>;
 
-	private readonly _builtInFunctionReferences: Array<Reference<BuiltInFunction>>;
+	private readonly _builtInFunctionReferences: Array<Reference<ScopeFunctionDeclaration>>;
 
-	private readonly _builtInVariableReferences: Array<Reference<BuiltInVariable>>;
+	private readonly _builtInVariableReferences: Array<Reference<ScopeVariableDeclaration>>;
 
 	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
@@ -294,9 +303,20 @@ export class KipperProgramContext {
 	/**
 	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
+	 * @since 0.11.0
 	 */
 	public get universeScope(): UniverseScope {
 		return this._universeScope;
+	}
+
+	/**
+	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
+	 * entire program.
+	 *
+	 * May be undefined if {@link generateAbstractSyntaxTree} has not been called yet.
+	 */
+	public get globalScope(): GlobalScope | undefined {
+		return this._rootASTNode?.innerScope;
 	}
 
 	/**
@@ -328,7 +348,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInFunctionReferences(): Array<Reference<BuiltInFunction>> {
+	public get builtInFunctionReferences(): Array<Reference<ScopeFunctionDeclaration>> {
 		return this._builtInFunctionReferences;
 	}
 
@@ -340,7 +360,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInVariableReferences(): Array<Reference<BuiltInVariable>> {
+	public get builtInVariableReferences(): Array<Reference<ScopeVariableDeclaration>> {
 		return this._builtInVariableReferences;
 	}
 
@@ -718,6 +738,7 @@ export class KipperProgramContext {
 	 */
 	public clearBuiltInFunctions() {
 		this.builtInFunctions.splice(0);
+		this.universeScope.clearUniversalFunctions();
 	}
 
 	/**
@@ -726,6 +747,7 @@ export class KipperProgramContext {
 	 */
 	public clearBuiltInVariables() {
 		this.builtInVariables.splice(0);
+		this.universeScope.clearUniversalVariables();
 	}
 
 	/**
@@ -734,16 +756,16 @@ export class KipperProgramContext {
 	 * @param refTarget The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression, refTarget: BuiltInFunction | BuiltInVariable) {
+	public addBuiltInReference(exp: Expression, refTarget: ScopeVariableDeclaration | ScopeFunctionDeclaration) {
 		const ref = {
 			refTarget: refTarget,
 			srcExpr: exp,
-		} satisfies Reference<BuiltInFunction | BuiltInVariable>;
+		} satisfies Reference<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
-		if ("valueType" in ref.refTarget) {
-			this._builtInVariableReferences.push(<Reference<BuiltInVariable>>ref);
+		if (ref.refTarget instanceof ScopeVariableDeclaration) {
+			this._builtInVariableReferences.push(<Reference<ScopeVariableDeclaration>>ref);
 		} else {
-			this._builtInFunctionReferences.push(<Reference<BuiltInFunction>>ref);
+			this._builtInFunctionReferences.push(<Reference<ScopeFunctionDeclaration>>ref);
 		}
 	}
 

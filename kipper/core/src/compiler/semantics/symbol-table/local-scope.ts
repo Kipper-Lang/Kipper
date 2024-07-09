@@ -64,13 +64,7 @@ export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
 		const localRef = this.getEntry(identifier);
 		if (!localRef) {
-			// If the scope of the ctx (Compound statement) is another local scope, then go upwards recursively again.
-			if (this.ctx.scope instanceof LocalScope) {
-				return this.parent.getEntryRecursively(identifier);
-			} else {
-				// Fetching from the global scope
-				return this.parent.getEntry(identifier);
-			}
+			return this.parent.getEntryRecursively(identifier);
 		}
 		return localRef;
 	}

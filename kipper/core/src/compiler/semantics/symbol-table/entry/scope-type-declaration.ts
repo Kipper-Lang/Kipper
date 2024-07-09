@@ -5,8 +5,7 @@
 import { ScopeDeclaration } from "./scope-declaration";
 import type { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
 import type { BuiltInType, CustomType, ProcessedType } from "../../types";
-import { Type } from "../../types";
-import { KipperNotImplementedError } from "../../../../errors";
+import type { UniverseScope } from "../universum-scope";
 import { BuiltInTypes } from "../universum-scope";
 
 /**
@@ -14,14 +13,12 @@ import { BuiltInTypes } from "../universum-scope";
  * @since 0.11.0
  */
 export class ScopeTypeDeclaration extends ScopeDeclaration {
-	private readonly _node?: TypeDeclaration;
-	private readonly _builtInType?: ProcessedType;
-
-	private constructor(declaration?: TypeDeclaration, builtInType?: BuiltInType) {
+	private constructor(
+		private readonly _declaration?: TypeDeclaration,
+		private readonly _builtInType?: BuiltInType,
+		private readonly _universeScope?: UniverseScope,
+	) {
 		super();
-
-		this._node = declaration;
-		this._builtInType = builtInType;
 	}
 
 	/**
@@ -36,10 +33,27 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	/**
 	 * Creates a new scope type declaration from a built-in type.
 	 * @param identifier The identifier of the built-in type.
+	 * @param universeScope The universe scope this type is associated with.
 	 * @since 0.11.0
 	 */
-	public static fromBuiltInType(type: BuiltInType): ScopeTypeDeclaration {
-		return new ScopeTypeDeclaration(undefined, type);
+	public static fromBuiltInType(type: BuiltInType, universeScope: UniverseScope): ScopeTypeDeclaration {
+		return new ScopeTypeDeclaration(undefined, type, universeScope);
+	}
+
+	/**
+	 * Returns whether this type declaration is a built-in type.
+	 * @since 0.11.0
+	 */
+	public override get isBuiltIn(): boolean {
+		return this._builtInType !== undefined;
+	}
+
+	/**
+	 * Returns the built-in structure of this declaration, if this declaration is based on one.
+	 * @since 0.11.0
+	 */
+	public override get builtInStructure(): BuiltInType | undefined {
+		return this._builtInType;
 	}
 
 	/**
@@ -48,14 +62,14 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @private
 	 */
 	private get semanticData(): TypeDeclarationSemantics | undefined {
-		return this._node?.getSemanticData();
+		return this._declaration?.getSemanticData();
 	}
 
 	/**
 	 * Returns the {@link InterfaceDeclaration} or {@link ClassDeclaration AST node} this scope type declaration bases on.
 	 */
 	public get node(): TypeDeclaration | undefined {
-		return this._node;
+		return this._declaration;
 	}
 
 	/**
@@ -90,6 +104,13 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 */
 	public get isDefined(): false {
 		return false;
+	}
+
+	/**
+	 * Returns the scope associated with this {@link ScopeDeclaration}.
+	 */
+	public get scope() {
+		return this._declaration?.scope ?? this._universeScope!!;
 	}
 
 	/**
