@@ -150,6 +150,18 @@ returnStatement
 	: 	'return' expression? SemiColon
 	;
 
+tryStatement
+ : 'try' compoundStatement catchClause+ (finallyClause)?
+ ;
+
+catchClause
+ : 'catch' '('identifierTypeSpecifierExpression ')' compoundStatement
+ ;
+
+finallyClause
+ : 'finally' compoundStatement
+ ;
+
 // -- Expressions
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions

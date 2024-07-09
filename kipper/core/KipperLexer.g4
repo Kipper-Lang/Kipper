@@ -68,6 +68,11 @@ Else : 'else';
 // for - loop
 For : 'for';
 
+// try-catch-finally
+Try : 'try';
+Catch : 'catch';
+Finally : 'finally';
+
 // Enum Variable
 Enum : 'enum';
 
