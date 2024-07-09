@@ -16,11 +16,11 @@ export default class Run extends Compile {
 
 	static override examples: Array<string> = [
 		"kipper run -t js",
-		"kipper run -t ts -s \"print('Hello, World!')\"",
-		"kipper run -t js -e utf8 -o build/ -s \"print('Hello, World!')\"",
-		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!')\"",
-		"kipper run -t js -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings",
-		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+		"kipper run -t ts -s \"print('Hello, World!');\"",
+		"kipper run -t js -e utf8 -o build/ -s \"print('Hello, World!');\"",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!');\"",
+		"kipper run -t js -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings --log-timestamp",
 	];
 
 	static override args: args.Input = [

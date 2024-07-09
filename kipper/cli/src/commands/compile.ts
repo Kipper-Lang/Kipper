@@ -27,11 +27,11 @@ export default class Compile extends Command {
 
 	static override examples: Array<string> = [
 		"kipper compile -t js",
-		"kipper compile -t ts -s \"print('Hello, World!')\"",
-		"kipper compile -t js -e utf8 -o build/ -s \"print('Hello, World!')\"",
-		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!')\"",
-		"kipper compile -t js -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings",
-		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+		"kipper compile -t ts -s \"print('Hello, World!');\"",
+		"kipper compile -t js -e utf8 -o build/ -s \"print('Hello, World!');\"",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!');\"",
+		"kipper compile -t js -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings --log-timestamp",
 		"kipper compile -t js ./path/to/file.kip",
 		"kipper compile -t ts ./path/to/file.kip -o build/ --log-timestamp",
 		"kipper compile -t js ./path/to/file.kip -o build/ --warnings --log-timestamp",
