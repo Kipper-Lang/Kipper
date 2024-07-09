@@ -1,6 +1,5 @@
 import { ProcessedType } from "./base/processed-type";
 import type { KipperBuiltInTypeLiteral } from "../../const";
-import { KipperNotImplementedError } from "../../../errors";
 import type { CompilableType } from "./base/compilable-type";
 
 /**

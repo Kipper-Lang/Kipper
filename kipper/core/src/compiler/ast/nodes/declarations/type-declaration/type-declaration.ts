@@ -37,6 +37,8 @@ export abstract class TypeDeclaration<
 	TypeSemantics extends TypeDeclarationTypeSemantics = TypeDeclarationTypeSemantics,
 > extends Declaration<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserTypeDeclarationContext;
+
 	public abstract get kind(): ASTTypeDeclarationKind;
+
 	public abstract get ruleName(): ParserTypeDeclarationRuleName;
 }

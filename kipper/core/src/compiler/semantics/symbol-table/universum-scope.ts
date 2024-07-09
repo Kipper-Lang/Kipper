@@ -63,6 +63,7 @@ export const BuiltInVariables = {
  */
 export class UniverseScope extends Scope<never, never, BuiltInType> {
 	public readonly parent: undefined;
+
 	public constructor(public ctx: KipperProgramContext) {
 		super();
 	}

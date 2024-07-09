@@ -42,8 +42,10 @@ export type ParserBitwiseExpressionRuleName = (typeof KindParseRuleMapping)[ASTB
 export abstract class BitwiseExpression<
 	Semantics extends BitwiseExpressionSemantics = BitwiseExpressionSemantics,
 	TypeSemantics extends BitwiseExpressionTypeSemantics = BitwiseExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserBitwiseExpressionContext;
+
 	public abstract get kind(): ASTBitwiseExpressionKind;
+
 	public abstract get ruleName(): ParserBitwiseExpressionRuleName;
 }

@@ -23,7 +23,9 @@ import type { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext 
 export abstract class Expression<
 	Semantics extends ExpressionSemantics = ExpressionSemantics,
 	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
+	Children extends CompilableASTNode = CompilableASTNode,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -31,7 +33,20 @@ export abstract class Expression<
 	 */
 	protected override readonly _antlrRuleCtx: ParserExpressionContext;
 
-	protected override _children: Array<Expression>;
+	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
+	}
+
+	protected override _children: Array<Children>;
+
+	public get children(): Array<Children> {
+		return this._children;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -53,32 +68,15 @@ export abstract class Expression<
 	 */
 	public abstract get ruleName(): ASTExpressionRuleName;
 
-	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-
-		// Manually add the child to the parent
-		parent.addNewChild(this);
-	}
-
-	public get children(): Array<Expression> {
-		return this._children;
-	}
-
-	public addNewChild(newChild: Expression) {
-		this._children.push(newChild);
-	}
-
 	/**
-	 * Returns whether this expression has any side effects. This means that the expression will change the state of the
-	 * program in some way and not only return a value.
-	 *
-	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
-	 * @since 0.10.0
+	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public hasSideEffects(): boolean {
-		return false;
+	public override get antlrRuleCtx(): ParserExpressionContext {
+		return this._antlrRuleCtx;
+	}
+
+	public addNewChild(newChild: Children) {
+		this._children.push(newChild);
 	}
 
 	/**
@@ -88,13 +86,6 @@ export abstract class Expression<
 	 * @since 0.9.0
 	 */
 	public abstract checkForWarnings?(): Promise<void>;
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ParserExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and all {@link this.children children nodes}.
@@ -183,6 +174,4 @@ export abstract class Expression<
 	public override async translateCtxAndChildren(): Promise<TranslatedExpression> {
 		return await this.targetCodeGenerator(this);
 	}
-
-	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 }

@@ -31,17 +31,33 @@ export class BitwiseAndExpression extends BitwiseExpression<
 	BitwiseAndExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseAndExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * The primary code generation for this AST node.
+	 * @since 0.11.0
+	 */
+	public checkForWarnings = undefined;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseAndExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseAndExpression;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: BitwiseAndExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseAndExpression;
+	constructor(antlrRuleCtx: BitwiseAndExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -55,19 +71,16 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		return BitwiseAndExpression.kind;
 	}
 
-	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
 	public override get ruleName() {
 		return BitwiseAndExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: BitwiseAndExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The primary code generation for this AST node.
+	 * @since 0.11.0
+	 */
+	public override get antlrRuleCtx(): BitwiseAndExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -104,22 +117,4 @@ export class BitwiseAndExpression extends BitwiseExpression<
 			evaluatedType: BuiltInTypes.num,
 		};
 	}
-
-	/**
-	 * The primary code generation for this AST node.
-	 * @since 0.11.0
-	 */
-	public checkForWarnings = undefined;
-
-	/**
-	 * The primary code generation for this AST node.
-	 * @since 0.11.0
-	 */
-	public override get antlrRuleCtx(): BitwiseAndExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseAndExpression;
-
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseAndExpression;
 }

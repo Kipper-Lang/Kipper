@@ -410,6 +410,7 @@ export class KipperLexer extends KipperLexerBase {
 	public get vocabulary(): Vocabulary {
 		return KipperLexer.VOCABULARY;
 	}
+
 	// tslint:enable:no-trailing-whitespace
 
 	constructor(input: CharStream) {
@@ -462,6 +463,7 @@ export class KipperLexer extends KipperLexerBase {
 				break;
 		}
 	}
+
 	private FStringSingleQuoteStart_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
 			case 0:
@@ -469,6 +471,7 @@ export class KipperLexer extends KipperLexerBase {
 				break;
 		}
 	}
+
 	private FStringDoubleQuoteStart_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
 			case 1:
@@ -476,6 +479,7 @@ export class KipperLexer extends KipperLexerBase {
 				break;
 		}
 	}
+
 	private FStringSingleQuoteEnd_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
 			case 2:
@@ -483,6 +487,7 @@ export class KipperLexer extends KipperLexerBase {
 				break;
 		}
 	}
+
 	private FStringDoubleQuoteEnd_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
 			case 3:
@@ -490,6 +495,7 @@ export class KipperLexer extends KipperLexerBase {
 				break;
 		}
 	}
+
 	// @Override
 	public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 		switch (ruleIndex) {
@@ -504,6 +510,7 @@ export class KipperLexer extends KipperLexerBase {
 		}
 		return true;
 	}
+
 	private FStringExpEnd_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 0:
@@ -511,6 +518,7 @@ export class KipperLexer extends KipperLexerBase {
 		}
 		return true;
 	}
+
 	private FStringSingleQuoteExpStart_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 1:
@@ -518,6 +526,7 @@ export class KipperLexer extends KipperLexerBase {
 		}
 		return true;
 	}
+
 	private FStringDoubleQuoteExpStart_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 2:

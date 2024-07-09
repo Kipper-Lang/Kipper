@@ -43,8 +43,10 @@ export type ParserLogicalExpressionRuleName = (typeof KindParseRuleMapping)[ASTL
 export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics = LogicalExpressionSemantics,
 	TypeSemantics extends LogicalExpressionTypeSemantics = LogicalExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContext;
+
 	public abstract get kind(): ASTLogicalExpressionKind;
+
 	public abstract get ruleName(): ParserLogicalExpressionRuleName;
 }

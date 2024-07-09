@@ -32,11 +32,36 @@ import { UnableToDetermineSemanticDataError } from "../../../../../errors";
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics, VariableDeclarationTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_variableDeclaration;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.variableDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.variableDeclaration;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: VariableDeclarationContext;
+
+	constructor(antlrRuleCtx: VariableDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * The private field '_children' that actually stores the variable data,
@@ -44,6 +69,10 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * @private
 	 */
 	protected override _children: Array<Expression>;
+
+	public override get children(): Array<Expression> {
+		return this._children;
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -53,10 +82,17 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_variableDeclaration;
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -71,12 +107,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -88,34 +118,11 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return VariableDeclaration.ruleName;
 	}
 
-	constructor(antlrRuleCtx: VariableDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): VariableDeclarationContext {
 		return this._antlrRuleCtx;
-	}
-
-	public override get children(): Array<Expression> {
-		return this._children;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
-	 */
-	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {
@@ -204,15 +211,4 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 			this.programCtx.typeCheck(this).validVariableDefinition(this.getScopeDeclaration(), semanticData.value);
 		}
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.variableDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.variableDeclaration;
 }

@@ -37,17 +37,29 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	BitwiseShiftExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseShiftExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	public checkForWarnings = undefined;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseShiftExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseShiftExpression;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: BitwiseShiftExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseShiftExpression;
+	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -62,12 +74,6 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -79,9 +85,12 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 		return BitwiseShiftExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr rule context for this AST node.
+	 * @since 0.11.0
+	 */
+	public override get antlrRuleCtx(): BitwiseOrExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -136,17 +145,4 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 			evaluatedType: BuiltInTypes.num,
 		};
 	}
-
-	public checkForWarnings = undefined;
-
-	/**
-	 * The antlr rule context for this AST node.
-	 * @since 0.11.0
-	 */
-	public override get antlrRuleCtx(): BitwiseOrExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseShiftExpression;
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseShiftExpression;
 }

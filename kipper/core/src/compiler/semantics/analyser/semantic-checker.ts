@@ -8,11 +8,11 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	CompilableNodeChild,
 	CompilableNodeParent,
-	Expression,
 	JumpStatement,
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
+import { LambdaExpression, Expression } from "../../ast";
 import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import type { Scope } from "../symbol-table";
@@ -186,7 +186,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.10.0
 	 */
 	public validFunctionBody(body: CompilableNodeChild | undefined): void {
-		if (!body || !(body instanceof CompoundStatement)) {
+		if (!body || !(body instanceof CompoundStatement || body instanceof Expression)) {
 			throw this.assertError(new MissingFunctionBodyError());
 		}
 	}
@@ -198,11 +198,14 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @returns The parent function if found.
 	 * @since 0.10.0
 	 */
-	public getReturnStatementParent(retStatement: ReturnStatement): FunctionDeclaration {
+	public getReturnStatementParent(retStatement: ReturnStatement): FunctionDeclaration | LambdaExpression {
 		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
 		// declaration. This is to ensure a return statement is always used inside a function.
 		let currentParent: CompilableNodeParent | undefined = retStatement.parent;
-		while (!(currentParent instanceof FunctionDeclaration) && currentParent) {
+		while (
+			!(currentParent instanceof FunctionDeclaration || currentParent instanceof LambdaExpression) &&
+			currentParent
+		) {
 			currentParent = currentParent.parent;
 		}
 

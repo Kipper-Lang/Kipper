@@ -26,8 +26,28 @@ import type { Reference, ScopeFunctionDeclaration } from "../../../../semantics"
  */
 export class FunctionCallExpression extends Expression<
 	FunctionCallExpressionSemantics,
-	FunctionCallExpressionTypeSemantics
+	FunctionCallExpressionTypeSemantics,
+	Expression
 > {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_functionCallExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
+	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -35,11 +55,10 @@ export class FunctionCallExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: FunctionCallExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_functionCallExpression;
+	constructor(antlrRuleCtx: FunctionCallExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -54,12 +73,6 @@ export class FunctionCallExpression extends Expression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -71,20 +84,15 @@ export class FunctionCallExpression extends Expression<
 		return FunctionCallExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: FunctionCallExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
-	public hasSideEffects(): boolean {
-		return true; // This expression has side effects as it calls a function
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): FunctionCallExpressionContext {
 		return this._antlrRuleCtx;
+	}
+
+	public hasSideEffects(): boolean {
+		return true; // This expression has side effects as it calls a function
 	}
 
 	/**
@@ -96,11 +104,19 @@ export class FunctionCallExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Get the identifier of the function that is called
-		const identifierSemantics = <IdentifierPrimaryExpressionSemantics>this.children[0].getSemanticData();
+		const toCall = this.children[0];
+		const toCallSemantics = toCall?.getSemanticData();
 
 		// Ensure that the identifier is present
-		if (!identifierSemantics || !identifierSemantics.ref) {
+		if (!toCallSemantics) {
 			throw new UnableToDetermineSemanticDataError();
+		}
+
+		let identifier: string | undefined = undefined;
+		let ref: Reference | undefined = undefined;
+		if ("ref" in toCallSemantics && "identifier" in toCallSemantics) {
+			identifier = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).identifier;
+			ref = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).ref;
 		}
 
 		// Every item from index 1 to the end is an argument (First child is the identifier).
@@ -108,10 +124,9 @@ export class FunctionCallExpression extends Expression<
 		const args: Array<Expression> = this.children.length > 1 ? this.children.slice(1, this.children.length) : [];
 
 		this.semanticData = {
-			identifier: identifierSemantics.identifier,
+			identifier: identifier,
+			target: ref ?? toCall,
 			args: args,
-			// TODO! Fix this as we need to check its type instead of force casting
-			callTarget: <Reference<ScopeFunctionDeclaration>>identifierSemantics.ref,
 		};
 	}
 
@@ -127,8 +142,8 @@ export class FunctionCallExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		// Ensure that the reference is a callable function
-		this.programCtx.typeCheck(this).refTargetCallable(semanticData.callTarget.refTarget);
-		const calledFunc = semanticData.callTarget.refTarget;
+		this.programCtx.typeCheck(this).refTargetCallable(semanticData.target);
+		const calledFunc = (<Reference<ScopeFunctionDeclaration>>semanticData.target).refTarget;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
@@ -139,15 +154,4 @@ export class FunctionCallExpression extends Expression<
 			func: calledFunc,
 		};
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
-	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
 }

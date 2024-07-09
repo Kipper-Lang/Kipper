@@ -22,18 +22,43 @@ export class ClassDeclaration
 	implements ScopeNode<ClassScope>
 {
 	/**
-	 * The private field '_innerScope' that actually stores the variable data,
-	 * which is returned inside the {@link this.innerScope}.
-	 * @private
+	/**
+	* The static kind for this AST Node.
+	 * @since 0.11.0
 	 */
-	private readonly _innerScope: ClassScope;
-
+	public static readonly kind = ParseRuleKindMapping.RULE_classDeclaration;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.11.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.classDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.classDeclaration;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ClassDeclarationContext;
+	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: ClassScope;
+
+	constructor(antlrRuleCtx: ClassDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._innerScope = new ClassScope(this);
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -43,11 +68,17 @@ export class ClassDeclaration
 	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
 
 	/**
-	/**
-	 * The static kind for this AST Node.
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_classDeclaration;
+	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -62,12 +93,6 @@ export class ClassDeclaration
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -77,12 +102,6 @@ export class ClassDeclaration
 	 */
 	public override get ruleName() {
 		return ClassDeclaration.ruleName;
-	}
-
-	constructor(antlrRuleCtx: ClassDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._innerScope = new ClassScope(this);
 	}
 
 	/**
@@ -98,19 +117,6 @@ export class ClassDeclaration
 	 */
 	public get innerScope(): ClassScope {
 		return this._innerScope;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.11.0
-	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public getScopeDeclaration(): ScopeTypeDeclaration {
@@ -144,15 +150,4 @@ export class ClassDeclaration
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.classDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.classDeclaration;
 }

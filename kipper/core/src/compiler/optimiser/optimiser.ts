@@ -5,7 +5,6 @@
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
 import type { InternalFunction, Reference, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../semantics/";
-import { BuiltInFunction, BuiltInVariable } from "../semantics/";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -47,6 +46,29 @@ export class KipperOptimiser {
 
 	constructor(programCtx: KipperProgramContext) {
 		this.programCtx = programCtx;
+	}
+
+	/**
+	 * Optimises the {@link astTree} and {@link programCtx} based on the {@link options} argument.
+	 *
+	 * This function takes in an abstract syntax tree that was semantically analysed and outputs a new optimised abstract
+	 * syntax tree that can be translated into a target language.
+	 * @param astTree
+	 * @param options
+	 * @since 0.8.0
+	 */
+	public async optimise(
+		astTree: RootASTNode,
+		options: OptimisationOptions = defaultOptimisationOptions,
+	): Promise<RootASTNode> {
+		if (options.optimiseInternals) {
+			await this.optimiseInternals();
+		}
+		if (options.optimiseBuiltIns) {
+			await this.optimiseBuiltIns();
+		}
+
+		return astTree;
 	}
 
 	/**
@@ -96,28 +118,5 @@ export class KipperOptimiser {
 		// Removing the old internals and replacing them with the new ones.
 		this.programCtx.internals.splice(0);
 		this.programCtx.internals.push(...newInternals);
-	}
-
-	/**
-	 * Optimises the {@link astTree} and {@link programCtx} based on the {@link options} argument.
-	 *
-	 * This function takes in an abstract syntax tree that was semantically analysed and outputs a new optimised abstract
-	 * syntax tree that can be translated into a target language.
-	 * @param astTree
-	 * @param options
-	 * @since 0.8.0
-	 */
-	public async optimise(
-		astTree: RootASTNode,
-		options: OptimisationOptions = defaultOptimisationOptions,
-	): Promise<RootASTNode> {
-		if (options.optimiseInternals) {
-			await this.optimiseInternals();
-		}
-		if (options.optimiseBuiltIns) {
-			await this.optimiseBuiltIns();
-		}
-
-		return astTree;
 	}
 }

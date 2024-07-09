@@ -1,7 +1,7 @@
 {
   "name": "@kipper/web",
   "description": "The standalone web-module for the Kipper compiler 🦊",
-  "version": "0.11.0-alpha.6",
+  "version": "0.11.0-rc.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "devDependencies": {
     "@kipper/target-js": "workspace:~",
@@ -11,7 +11,7 @@
     "typescript": "5.1.3",
     "prettier": "2.8.8",
     "browserify": "17.0.0",
-    "uglify-js": "3.17.4"
+    "uglify-js": "3.18.0"
   },
   "engines": {
     "node": "16.x || 18.x || 20.x || 22.x",

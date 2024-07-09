@@ -3,7 +3,10 @@
  * @since 0.0.3
  */
 import type {
+	ASTDeclarationKind,
+	ASTExpressionKind,
 	ASTNodeParserContext,
+	ASTStatementKind,
 	ParserDeclarationContext,
 	ParserExpressionContext,
 	ParserStatementContext,
@@ -52,6 +55,7 @@ import type {
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
+	LambdaExpressionContext,
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
@@ -86,36 +90,680 @@ import { KipperInternalError } from "../../errors";
  * @since 0.10.0
  */
 export class KipperFileASTGenerator implements KipperParserListener, ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by `KipperParser.identifierPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterIdentifierPrimaryExpression: (ctx: IdentifierPrimaryExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.identifierPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitIdentifierPrimaryExpression: (ctx: IdentifierPrimaryExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.stringPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterStringPrimaryExpression: (ctx: StringPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.stringPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitStringPrimaryExpression: (ctx: StringPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.fStringPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterFStringPrimaryExpression: (ctx: FStringPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.fStringPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitFStringPrimaryExpression: (ctx: FStringPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterTangledPrimaryExpression: (ctx: TangledPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.tangledPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitTangledPrimaryExpression: (ctx: TangledPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.numberPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterNumberPrimaryExpression: (ctx: NumberPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.numberPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitNumberPrimaryExpression: (ctx: NumberPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.arrayPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.arrayPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public enterObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.objectProperty`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 * @since 0.11.0
+	 */
+	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterBoolPrimaryExpression: (ctx: BoolPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.boolPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitBoolPrimaryExpression: (ctx: BoolPrimaryExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterVoidOrNullOrUndefinedPrimaryExpression: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitVoidOrNullOrUndefinedPrimaryExpression: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `dotNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterDotNotationMemberAccessExpression: (ctx: DotNotationMemberAccessExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// -------------------------------------------------------------------------------------------------------------------
+	//  Root Item section
+	// -------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Exit a parse tree produced by the `dotNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitDotNotationMemberAccessExpression: (ctx: DotNotationMemberAccessExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `bracketNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterBracketNotationMemberAccessExpression: (ctx: BracketNotationMemberAccessExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// -------------------------------------------------------------------------------------------------------------------
+	//  Expression section
+	// -------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Exit a parse tree produced by the `bracketNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitBracketNotationMemberAccessExpression: (ctx: BracketNotationMemberAccessExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `sliceNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
+	 */
+	public enterSliceNotationMemberAccessExpression: (ctx: SliceNotationMemberAccessExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `sliceNotationMemberAccessExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitSliceNotationMemberAccessExpression: (ctx: SliceNotationMemberAccessExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `functionCallExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
+	 */
+	public enterFunctionCallExpression: (ctx: FunctionCallExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `functionCallExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
+	 */
+	public exitFunctionCallExpression: (ctx: FunctionCallExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `explicitCallFunctionCallExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
+	 */
+	public enterExplicitCallFunctionCallExpression: (ctx: ExplicitCallFunctionCallExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `explicitCallFunctionCallExpression`
+	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
+	 */
+	public exitExplicitCallFunctionCallExpression: (ctx: ExplicitCallFunctionCallExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterIncrementOrDecrementPostfixExpression: (ctx: IncrementOrDecrementPostfixExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitIncrementOrDecrementPostfixExpression: (ctx: IncrementOrDecrementPostfixExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterIncrementOrDecrementUnaryExpression: (ctx: IncrementOrDecrementUnaryExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitIncrementOrDecrementUnaryExpression: (ctx: IncrementOrDecrementUnaryExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterOperatorModifiedUnaryExpression: (ctx: OperatorModifiedUnaryExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitOperatorModifiedUnaryExpression: (ctx: OperatorModifiedUnaryExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualCastOrConvertExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualCastOrConvertExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualMultiplicativeExpression`
+	 * Labeled alternative in `KipperParser.multiplicativeExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualMultiplicativeExpression: (ctx: ActualMultiplicativeExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualMultiplicativeExpression`
+	 * Labeled alternative in `KipperParser.multiplicativeExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualMultiplicativeExpression: (ctx: ActualMultiplicativeExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualAdditiveExpression`
+	 * labeled alternative in `KipperParser.additiveExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualAdditiveExpression: (ctx: ActualAdditiveExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualAdditiveExpression`
+	 * labeled alternative in `KipperParser.additiveExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualAdditiveExpression: (ctx: ActualAdditiveExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualRelationalExpression`
+	 * labeled alternative in `KipperParser.relationalExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualRelationalExpression: (ctx: ActualRelationalExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'computedPrimaryExpression' rule, and only going to handle the rules
+	// 'functionCallExpression' and 'memberAccessExpression' as they are the only ones which implements a more precise
+	// 'computedPrimaryExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the `actualRelationalExpression`
+	 * labeled alternative in `KipperParser.relationalExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualRelationalExpression: (ctx: ActualRelationalExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualEqualityExpression`
+	 * labeled alternative in `KipperParser.equalityExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualEqualityExpression`
+	 * labeled alternative in `KipperParser.equalityExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseShiftExpression`
+	 */
+	public enterLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseShiftExpression`
+	 */
+	public exitLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualLogicalAndExpression`
+	 * Labeled alternative in `KipperParser.logicalAndExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualLogicalAndExpression: (ctx: ActualLogicalAndExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualLogicalAndExpression`
+	 * Labeled alternative in `KipperParser.logicalAndExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualLogicalAndExpression: (ctx: ActualLogicalAndExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualLogicalOrExpression`
+	 * Labeled alternative in `KipperParser.logicalOrExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualLogicalOrExpression: (ctx: ActualLogicalOrExpressionContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `actualLogicalOrExpression`
+	 * Labeled alternative in `KipperParser.logicalOrExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualLogicalOrExpression: (ctx: ActualLogicalOrExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseOrExpression
+	 */
+	public enterActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'postfixExpression' rule, and only going to handle the rule
+	// 'incrementOrDecrementPostfixExpression', which implements a more precise 'postfixExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseOrExpression
+	 */
+	public exitActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseAndExpression
+	 */
+	public enterActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'unaryExpression' rule, and only going to handle the rules
+	// 'incrementOrDecrementUnaryExpression' and 'operatorModifiedUnaryExpression', which implement a more precise
+	// 'unaryExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseAndExpression
+	 */
+	public exitActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseXorExpression
+	 */
+	public enterActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseXorExpression
+	 */
+	public exitActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the KipperParser.bitwiseShiftExpression
+	 */
+	public enterActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'castOrConvertExpression' rule, and only going to handle the rule
+	// 'actualCastOrConvertExpression', which implements a more precise 'castOrConvertExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the KipperParser.bitwiseShiftExpression
+	 */
+	public exitActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualConditionalExpression`
+	 * Labeled alternative in `KipperParser.conditionalExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualConditionalExpression: (ctx: ActualConditionalExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'multiplicativeExpression' rule, and only going to handle the rule
+	// 'actualMultiplicativeExpression', which implements a more precise 'multiplicativeExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the `actualConditionalExpression`
+	 * Labeled alternative in `KipperParser.conditionalExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualConditionalExpression: (ctx: ActualConditionalExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `actualAssignmentExpression`
+	 * Labeled alternative in `KipperParser.assignmentExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterActualAssignmentExpression: (ctx: ActualAssignmentExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'additiveExpression' rule, and only going to handle the rule 'actualAdditiveExpression',
+	// which implements a more precise 'additiveExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time
+	// an expression is called.
+	/**
+	 * Exit a parse tree produced by the `actualAssignmentExpression`
+	 * Labeled alternative in `KipperParser.assignmentExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitActualAssignmentExpression: (ctx: ActualAssignmentExpressionContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.expressionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterExpressionStatement: (ctx: ExpressionStatementContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'relationalExpression' rule, and only going to handle the rule
+	// 'actualRelationalExpression', which implements a more precise 'relationalExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.expressionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitExpressionStatement: (ctx: ExpressionStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.compoundStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterCompoundStatement: (ctx: CompoundStatementContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'equalityExpression' rule, and only going to handle the rule 'actualEqualityExpression',
+	// which implements a more precise 'equalityExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.compoundStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitCompoundStatement: (ctx: CompoundStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `ifStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterIfStatement: (ctx: IfStatementContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by the `ifStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitIfStatement: (ctx: IfStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by the `switchStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterSwitchStatement: (ctx: SwitchStatementContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
+	// and 'actualLogicalAndExpression', which implement a more precise 'logicalAndExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by the `switchStatement`
+	 * labeled alternative in `KipperParser.selectionStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitSwitchStatement: (ctx: SwitchStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.forLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public enterForLoopIterationStatement: (ctx: ForLoopIterationStatementContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.forLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public exitForLoopIterationStatement: (ctx: ForLoopIterationStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.whileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public enterWhileLoopIterationStatement: (ctx: WhileLoopIterationStatementContext) => void =
+		this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.whileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public exitWhileLoopIterationStatement: (ctx: WhileLoopIterationStatementContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public enterDoWhileLoopIterationStatement: (ctx: DoWhileLoopIterationStatementContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'logicalOrExpression' rule, and only going to handle the rule 'actualLogicalOrExpression',
+	// which implements a more precise 'logicalOrExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
+	 * @param ctx the parse tree
+	 */
+	public exitDoWhileLoopIterationStatement: (ctx: DoWhileLoopIterationStatementContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterReturnStatement: (ctx: ReturnStatementContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'bitwiseOrExpression' rule, and only going to handle the rule 'actualBitwiseOrExpression',
+	// which implements a more precise 'bitwiseOrExpression' rule.
+	/**
+	 * Exit a parse tree produced by `KipperParser.returnStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitReturnStatement: (ctx: ReturnStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.jumpStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterJumpStatement: (ctx: JumpStatementContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.jumpStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitJumpStatement: (ctx: JumpStatementContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.variableDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterVariableDeclaration: (ctx: VariableDeclarationContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.variableDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitVariableDeclaration: (ctx: VariableDeclarationContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterFunctionDeclaration: (ctx: FunctionDeclarationContext) => void = this.handleEnteringTreeNode;
+	/**
+	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitFunctionDeclaration: (ctx: FunctionDeclarationContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule
+	// 'actualConditionalExpression', which implements a more precise 'conditionalExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.identifierTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public enterIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// NOTE:
+	// We are ignoring the 'assignmentExpression' rule, and only going to handle the rule
+	// 'actualAssignmentExpression', which implements a more precise 'assignmentExpression' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.identifierTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public exitIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.genericTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public enterGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// -- NOTE: We are ignoring standard expressions, as the children rules will handle everything. --
+	/**
+	 * Exit a parse tree produced by `KipperParser.genericTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public exitGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
+	/**
+	 * Enter a parse tree produced by `KipperParser.typeofTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public enterTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	// -------------------------------------------------------------------------------------------------------------------
+	//  Statement section
+	// -------------------------------------------------------------------------------------------------------------------
+	//
+	// NOTE:
+	// We are ignoring the 'statement' rule, and only going to handle the rules 'expressionStatement', 'labeledStatement'
+	// 'selectionStatement', 'iterationStatement' (do-while, while and loop), 'jumpStatement' and 'compoundStatement',
+	// which implement a more precise 'statement' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeofTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public exitTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
 	private readonly _rootNode: RootASTNode;
 	private readonly _expressionFactory: ExpressionASTNodeFactory;
 	private readonly _statementFactory: StatementASTNodeFactory;
-	private readonly _declarationFactory: DeclarationASTNodeFactory;
 
+	// NOTE:
+	// We are ignoring the 'selectionStatement' rule, and only going to handle the rules 'ifStatement' and
+	// 'switchStatement', which implement a more precise 'selectionStatement' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
+	private readonly _declarationFactory: DeclarationASTNodeFactory;
 	/**
 	 * If this is true, the current context is inside an external item and automatically indicates
 	 * {@link _isFunctionDefinition} is false.
 	 */
 	private _isExternalItem: boolean;
-
 	/**
 	 * If this is true, the current context is inside a function definition and automatically indicates
 	 * {@link _isExternalItem} is false.
 	 */
 	private _isFunctionDefinition: boolean;
-
 	/**
 	 * The current Kipper AST node that is being walked through right now. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentPrimaryNode: Declaration | Statement | undefined;
-
-	/**
-	 * The current expression that is being walked through. This is the instance where current metadata
-	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
-	 * through during this operation.
-	 */
-	private _currentExpression: Expression | undefined;
+	private _currentPrimaryNode: Declaration | Statement | Expression | undefined;
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);
@@ -134,6 +782,14 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	public get rootNode(): RootASTNode {
 		return this._rootNode;
 	}
+
+	// NOTE:
+	// We are ignoring the 'iterationStatement' rule, and only going to handle the rules 'forLoopIterationStatement',
+	// 'whileLoopIterationStatement' and 'doWhileLoopIterationStatement', which implement a more precise
+	// 'iterationStatement' rule.
+	//
+	// This is to simplify the walking process, without having to check if the expression is actually used every time an
+	// expression is called.
 
 	/**
 	 * Returns the {@link KipperProgramContext program context} that owns this listener and the root node.
@@ -170,92 +826,14 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	}
 
 	/**
-	 * Returns which token is being processed at the moment and where meta-data should be assigned to. If
-	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryNode}.
+	 * Returns which token is being processed at the moment and where meta-data should be assigned to.
 	 * @private
 	 */
-	private get getCurrentNode(): CompilableASTNode | RootASTNode {
-		if (this._currentExpression) {
-			return this._currentExpression;
-		} else if (this._currentPrimaryNode) {
+	private get currentNode(): CompilableASTNode | RootASTNode {
+		if (this._currentPrimaryNode) {
 			return this._currentPrimaryNode;
 		} else {
 			return this.rootNode;
-		}
-	}
-
-	/**
-	 * Handles an incoming statement context. The handling algorithm is as following:
-	 * - If {@link _currentPrimaryNode} is undefined, then it will be created and set as a child of
-	 * {@link _rootNode}
-	 * - Otherwise, generate a new {@link Statement} instance, which will be added to the {@link _currentPrimaryNode} as
-	 * a child. Afterwards {@link _currentPrimaryNode} will be set to this new instance, as all new context instances
-	 * must be assigned to it. When the context is left, then the old {@link _currentPrimaryNode} will be restored as
-	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
-	 * @private
-	 */
-	private handleEnteringTreeNode(ctx: ASTNodeParserContext) {
-		if (this.statementFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
-			// Create statement instance using factory
-			this._currentPrimaryNode = this.statementFactory.create(<ParserStatementContext>ctx, this.getCurrentNode);
-		} else if (this.declarationFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
-			// Create declaration instance using factory
-			this._currentPrimaryNode = this.declarationFactory.create(<ParserDeclarationContext>ctx, this.getCurrentNode);
-		} else if (this.expressionFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
-			/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
-			if (this.getCurrentNode instanceof RootASTNode) {
-				throw new KipperInternalError(
-					"An expression may not have the root file token as a parent. It must be child to a statement or a" +
-						" definition.",
-				);
-			}
-
-			// Create expression instance using factory
-			this._currentExpression = this.expressionFactory.create(<ParserExpressionContext>ctx, this.getCurrentNode);
-		} else {
-			throw new KipperInternalError(`The context '${ctx.astSyntaxKind}' is not supported by any of the factories.`);
-		}
-
-		this.programCtx.logger.debug(
-			`Created AST node of type '${this.getCurrentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
-				`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
-		);
-	}
-
-	/**
-	 * Handles an exiting node context. This is required to properly generate the AST node hierarchy.
-	 *
-	 * The handling algorithm for declaration/statement nodes as following:
-	 * - If {@link _currentPrimaryNode.parent} is of type {@link Declaration} or {@link Statement}, then set
-	 * {@link _currentPrimaryNode} to that parent.
-	 * - Otherwise set {@link _currentPrimaryNode} to {@link undefined} again. If {@link handleExitingTreeNode} is called
-	 * again, the {@link _currentPrimaryNode} will be defined again and the whole process starts over.
-	 *
-	 * The handling algorithm for expressions is:
-	 * - If {@link _currentExpression.parent} is of type {@link Expression}, then set {@link _currentExpression} to
-	 * that parent.
-	 * - Otherwise set {@link _currentExpression} to {@link undefined} again. If {@link handleExitingTreeNode} is called
-	 * again, the {@link _currentExpression} will be defined again and the whole process starts over.
-	 * @private
-	 */
-	private handleExitingTreeNode() {
-		if (this._currentExpression) {
-			// Ensure expressions stay separately handled from statements/declarations
-			const parent = this._currentExpression?.parent;
-			if (parent instanceof Expression) {
-				this._currentExpression = parent;
-			} else {
-				this._currentExpression = undefined;
-			}
-		} else {
-			// Ensure that the parents of the declaration/statements are properly
-			// handled. Whether it is a child node or directly at the top of the file.
-			const parent = this._currentPrimaryNode?.parent;
-			if (parent instanceof Declaration || parent instanceof Statement) {
-				this._currentPrimaryNode = parent;
-			} else {
-				this._currentPrimaryNode = undefined;
-			}
 		}
 	}
 
@@ -265,15 +843,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	public enterEveryRule?(/*@NotNull*/ ctx: ParserRuleContext | KipperParserRuleContext): void;
 
+	// -- Special statements
+
 	/**
 	 * Function that is called every time an item is exited.
 	 * @param ctx The context of the rule.
 	 */
 	public exitEveryRule?(/*@NotNull*/ ctx: ParserRuleContext | KipperParserRuleContext): void;
-
-	// -------------------------------------------------------------------------------------------------------------------
-	//  Root Item section
-	// -------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Enter a parse tree produced by the `externalItem`.
@@ -291,401 +867,15 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 		this._isExternalItem = false;
 	}
 
-	// -------------------------------------------------------------------------------------------------------------------
-	//  Expression section
-	// -------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.identifierPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterIdentifierPrimaryExpression: (ctx: IdentifierPrimaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.identifierPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitIdentifierPrimaryExpression: (ctx: IdentifierPrimaryExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.stringPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterStringPrimaryExpression: (ctx: StringPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.stringPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitStringPrimaryExpression: (ctx: StringPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.fStringPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterFStringPrimaryExpression: (ctx: FStringPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.fStringPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitFStringPrimaryExpression: (ctx: FStringPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterTangledPrimaryExpression: (ctx: TangledPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.tangledPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitTangledPrimaryExpression: (ctx: TangledPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.numberPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterNumberPrimaryExpression: (ctx: NumberPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.numberPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitNumberPrimaryExpression: (ctx: NumberPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.arrayPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.arrayPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitArrayPrimaryExpression: (ctx: ArrayPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.objectPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.objectPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitObjectPrimaryExpression: (ctx: ObjectPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.objectProperty`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 * @since 0.11.0
-	 */
-	public enterObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.objectProperty`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 * @since 0.11.0
-	 */
-	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterBoolPrimaryExpression: (ctx: BoolPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.boolPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitBoolPrimaryExpression: (ctx: BoolPrimaryExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterVoidOrNullOrUndefinedPrimaryExpression: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.voidOrNullOrUndefinedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitVoidOrNullOrUndefinedPrimaryExpression: (ctx: VoidOrNullOrUndefinedPrimaryExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'computedPrimaryExpression' rule, and only going to handle the rules
-	// 'functionCallExpression' and 'memberAccessExpression' as they are the only ones which implements a more precise
-	// 'computedPrimaryExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterDotNotationMemberAccessExpression: (ctx: DotNotationMemberAccessExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `dotNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitDotNotationMemberAccessExpression: (ctx: DotNotationMemberAccessExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterBracketNotationMemberAccessExpression: (ctx: BracketNotationMemberAccessExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `bracketNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitBracketNotationMemberAccessExpression: (ctx: BracketNotationMemberAccessExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `sliceNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
-	 */
-	public enterSliceNotationMemberAccessExpression: (ctx: SliceNotationMemberAccessExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `sliceNotationMemberAccessExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitSliceNotationMemberAccessExpression: (ctx: SliceNotationMemberAccessExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `functionCallExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
-	 */
-	public enterFunctionCallExpression: (ctx: FunctionCallExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `functionCallExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
-	 */
-	public exitFunctionCallExpression: (ctx: FunctionCallExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `explicitCallFunctionCallExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
-	 */
-	public enterExplicitCallFunctionCallExpression: (ctx: ExplicitCallFunctionCallExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `explicitCallFunctionCallExpression`
-	 * Labeled alternative in `KipperParser.computedPrimaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext})..
-	 */
-	public exitExplicitCallFunctionCallExpression: (ctx: ExplicitCallFunctionCallExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'postfixExpression' rule, and only going to handle the rule
-	// 'incrementOrDecrementPostfixExpression', which implements a more precise 'postfixExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterIncrementOrDecrementPostfixExpression: (ctx: IncrementOrDecrementPostfixExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementPostfixExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitIncrementOrDecrementPostfixExpression: (ctx: IncrementOrDecrementPostfixExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'unaryExpression' rule, and only going to handle the rules
-	// 'incrementOrDecrementUnaryExpression' and 'operatorModifiedUnaryExpression', which implement a more precise
-	// 'unaryExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterIncrementOrDecrementUnaryExpression: (ctx: IncrementOrDecrementUnaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.incrementOrDecrementUnaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitIncrementOrDecrementUnaryExpression: (ctx: IncrementOrDecrementUnaryExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterOperatorModifiedUnaryExpression: (ctx: OperatorModifiedUnaryExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.operatorModifiedUnaryExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitOperatorModifiedUnaryExpression: (ctx: OperatorModifiedUnaryExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'castOrConvertExpression' rule, and only going to handle the rule
-	// 'actualCastOrConvertExpression', which implements a more precise 'castOrConvertExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualCastOrConvertExpression`
-	 * labeled alternative in `KipperParser.castOrConvertExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualCastOrConvertExpression`
-	 * labeled alternative in `KipperParser.castOrConvertExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'multiplicativeExpression' rule, and only going to handle the rule
-	// 'actualMultiplicativeExpression', which implements a more precise 'multiplicativeExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualMultiplicativeExpression`
-	 * Labeled alternative in `KipperParser.multiplicativeExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualMultiplicativeExpression: (ctx: ActualMultiplicativeExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualMultiplicativeExpression`
-	 * Labeled alternative in `KipperParser.multiplicativeExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualMultiplicativeExpression: (ctx: ActualMultiplicativeExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'additiveExpression' rule, and only going to handle the rule 'actualAdditiveExpression',
-	// which implements a more precise 'additiveExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualAdditiveExpression`
-	 * labeled alternative in `KipperParser.additiveExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualAdditiveExpression: (ctx: ActualAdditiveExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualAdditiveExpression`
-	 * labeled alternative in `KipperParser.additiveExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualAdditiveExpression: (ctx: ActualAdditiveExpressionContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'relationalExpression' rule, and only going to handle the rule
-	// 'actualRelationalExpression', which implements a more precise 'relationalExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualRelationalExpression`
-	 * labeled alternative in `KipperParser.relationalExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualRelationalExpression: (ctx: ActualRelationalExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualRelationalExpression`
-	 * labeled alternative in `KipperParser.relationalExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualRelationalExpression: (ctx: ActualRelationalExpressionContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'equalityExpression' rule, and only going to handle the rule 'actualEqualityExpression',
-	// which implements a more precise 'equalityExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualEqualityExpression`
-	 * labeled alternative in `KipperParser.equalityExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualEqualityExpression`
-	 * labeled alternative in `KipperParser.equalityExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
-	// and 'actualLogicalAndExpression', which implement a more precise 'logicalAndExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
 	/**
 	 * Enter a parse tree produced by `KipperParser.logicalAndExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public enterLogicalAndExpression?(ctx: LogicalAndExpressionContext): void; // Unspecific parent -> skip
+
+	// -------------------------------------------------------------------------------------------------------------------
+	//  Declaration section
+	// -------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Exit a parse tree produced by `KipperParser.logicalAndExpression`.
@@ -708,137 +898,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	public exitPassOnLogicalAndExpression?(ctx: PassOnLogicalAndExpressionContext): void; // Pass-on -> skip
 
 	/**
-	 * Enter a parse tree produced by the `actualLogicalAndExpression`
-	 * Labeled alternative in `KipperParser.logicalAndExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualLogicalAndExpression: (ctx: ActualLogicalAndExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualLogicalAndExpression`
-	 * Labeled alternative in `KipperParser.logicalAndExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualLogicalAndExpression: (ctx: ActualLogicalAndExpressionContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'logicalOrExpression' rule, and only going to handle the rule 'actualLogicalOrExpression',
-	// which implements a more precise 'logicalOrExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualLogicalOrExpression`
-	 * Labeled alternative in `KipperParser.logicalOrExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualLogicalOrExpression: (ctx: ActualLogicalOrExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualLogicalOrExpression`
-	 * Labeled alternative in `KipperParser.logicalOrExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualLogicalOrExpression: (ctx: ActualLogicalOrExpressionContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'bitwiseOrExpression' rule, and only going to handle the rule 'actualBitwiseOrExpression',
-	// which implements a more precise 'bitwiseOrExpression' rule.
-
-	/**
-	 * Enter a parse tree produced by the KipperParser.bitwiseOrExpression
-	 */
-	public enterActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the KipperParser.bitwiseOrExpression
-	 */
-	public exitActualBitwiseOrExpression: (ctx: ActualBitwiseOrExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the KipperParser.bitwiseAndExpression
-	 */
-	public enterActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the KipperParser.bitwiseAndExpression
-	 */
-	public exitActualBitwiseAndExpression: (ctx: ActualBitwiseAndExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the KipperParser.bitwiseXorExpression
-	 */
-	public enterActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the KipperParser.bitwiseXorExpression
-	 */
-	public exitActualBitwiseXorExpression: (ctx: ActualBitwiseXorExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the KipperParser.bitwiseShiftExpression
-	 */
-	public enterActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the KipperParser.bitwiseShiftExpression
-	 */
-	public exitActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule
-	// 'actualConditionalExpression', which implements a more precise 'conditionalExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualConditionalExpression`
-	 * Labeled alternative in `KipperParser.conditionalExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualConditionalExpression: (ctx: ActualConditionalExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualConditionalExpression`
-	 * Labeled alternative in `KipperParser.conditionalExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualConditionalExpression: (ctx: ActualConditionalExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'assignmentExpression' rule, and only going to handle the rule
-	// 'actualAssignmentExpression', which implements a more precise 'assignmentExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `actualAssignmentExpression`
-	 * Labeled alternative in `KipperParser.assignmentExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterActualAssignmentExpression: (ctx: ActualAssignmentExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualAssignmentExpression`
-	 * Labeled alternative in `KipperParser.assignmentExpression`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitActualAssignmentExpression: (ctx: ActualAssignmentExpressionContext) => void = this.handleExitingTreeNode;
-
-	// -- NOTE: We are ignoring standard expressions, as the children rules will handle everything. --
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.expression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
@@ -849,77 +908,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitExpression?(ctx: ExpressionContext): void;
-
-	// -------------------------------------------------------------------------------------------------------------------
-	//  Statement section
-	// -------------------------------------------------------------------------------------------------------------------
-	//
-	// NOTE:
-	// We are ignoring the 'statement' rule, and only going to handle the rules 'expressionStatement', 'labeledStatement'
-	// 'selectionStatement', 'iterationStatement' (do-while, while and loop), 'jumpStatement' and 'compoundStatement',
-	// which implement a more precise 'statement' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.expressionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterExpressionStatement: (ctx: ExpressionStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.expressionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitExpressionStatement: (ctx: ExpressionStatementContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.compoundStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterCompoundStatement: (ctx: CompoundStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.compoundStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitCompoundStatement: (ctx: CompoundStatementContext) => void = this.handleExitingTreeNode;
-
-	// NOTE:
-	// We are ignoring the 'selectionStatement' rule, and only going to handle the rules 'ifStatement' and
-	// 'switchStatement', which implement a more precise 'selectionStatement' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by the `ifStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterIfStatement: (ctx: IfStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `ifStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitIfStatement: (ctx: IfStatementContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `switchStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterSwitchStatement: (ctx: SwitchStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `switchStatement`
-	 * labeled alternative in `KipperParser.selectionStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitSwitchStatement: (ctx: SwitchStatementContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.labeledStatement`.
@@ -937,135 +925,21 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 		// TODO! Implement switch statements
 	}
 
-	// NOTE:
-	// We are ignoring the 'iterationStatement' rule, and only going to handle the rules 'forLoopIterationStatement',
-	// 'whileLoopIterationStatement' and 'doWhileLoopIterationStatement', which implement a more precise
-	// 'iterationStatement' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time an
-	// expression is called.
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.forLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public enterForLoopIterationStatement: (ctx: ForLoopIterationStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.forLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public exitForLoopIterationStatement: (ctx: ForLoopIterationStatementContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.whileLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public enterWhileLoopIterationStatement: (ctx: WhileLoopIterationStatementContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.whileLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public exitWhileLoopIterationStatement: (ctx: WhileLoopIterationStatementContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public enterDoWhileLoopIterationStatement: (ctx: DoWhileLoopIterationStatementContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.doWhileLoopIterationStatement`.
-	 * @param ctx the parse tree
-	 */
-	public exitDoWhileLoopIterationStatement: (ctx: DoWhileLoopIterationStatementContext) => void =
-		this.handleExitingTreeNode;
-
-	// -- Special statements
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.returnStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterReturnStatement: (ctx: ReturnStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.returnStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitReturnStatement: (ctx: ReturnStatementContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.jumpStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterJumpStatement: (ctx: JumpStatementContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.jumpStatement`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitJumpStatement: (ctx: JumpStatementContext) => void = this.handleExitingTreeNode;
-
-	// -------------------------------------------------------------------------------------------------------------------
-	//  Declaration section
-	// -------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Enter a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public enterDeclaration?(ctx: DeclarationContext): void;
 
+	// -------------------------------------------------------------------------------------------------------------------
+	//  Other
+	// -------------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Exit a parse tree produced by `KipperParser.declaration`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitDeclaration?(ctx: DeclarationContext): void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.variableDeclaration`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterVariableDeclaration: (ctx: VariableDeclarationContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.variableDeclaration`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitVariableDeclaration: (ctx: VariableDeclarationContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterFunctionDeclaration: (ctx: FunctionDeclarationContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.functionDefinition`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitFunctionDeclaration: (ctx: FunctionDeclarationContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public enterParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.parameterDeclaration`.
-	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
-	 */
-	public exitParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleExitingTreeNode;
-
-	// -------------------------------------------------------------------------------------------------------------------
-	//  Other
-	// -------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.storageTypeSpecifier`.
@@ -1090,48 +964,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitInitDeclarator?(ctx: InitDeclaratorContext): void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.identifierTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public enterIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.identifierTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public exitIdentifierTypeSpecifierExpression: (ctx: IdentifierTypeSpecifierExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.genericTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public enterGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.genericTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public exitGenericTypeSpecifierExpression: (ctx: GenericTypeSpecifierExpressionContext) => void =
-		this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.typeofTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public enterTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
-		this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by `KipperParser.typeofTypeSpecifier`.
-	 * @param ctx the parse tree
-	 */
-	public exitTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
-		this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.typeSpecifier`.
@@ -1192,4 +1024,63 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitInitializer?(ctx: InitializerContext): void; // Unspecific parent -> skip
+
+	/**
+	 * Handles an incoming statement context. The handling algorithm is as following:
+	 * - If {@link _currentPrimaryNode} is undefined, then it will be created and set as a child of
+	 * {@link _rootNode}
+	 * - Otherwise, generate a new {@link Statement} instance, which will be added to the {@link _currentPrimaryNode} as
+	 * a child. Afterwards {@link _currentPrimaryNode} will be set to this new instance, as all new context instances
+	 * must be assigned to it. When the context is left, then the old {@link _currentPrimaryNode} will be restored as
+	 * {@link _currentPrimaryNode}, and all further context instances will be assigned to it.
+	 * @private
+	 */
+	private handleEnteringTreeNode(ctx: ASTNodeParserContext) {
+		if (this.isStatementContext(ctx)) {
+			this._currentPrimaryNode = this.statementFactory.create(<ParserStatementContext>ctx, this.currentNode);
+		} else if (this.isDeclarationContext(ctx)) {
+			this._currentPrimaryNode = this.declarationFactory.create(<ParserDeclarationContext>ctx, this.currentNode);
+		} else if (this.isExpressionContext(ctx)) {
+			/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
+			if (this.currentNode instanceof RootASTNode) {
+				throw new KipperInternalError(
+					"An expression may not have the root file token as a parent. It must be child to a statement or a" +
+						" definition.",
+				);
+			}
+			this._currentPrimaryNode = this.expressionFactory.create(<ParserExpressionContext>ctx, this.currentNode);
+		} else {
+			throw new KipperInternalError(`The context '${ctx.astSyntaxKind}' is not supported by any of the factories.`);
+		}
+
+		this.programCtx.logger.debug(
+			`Created AST node of type '${this.currentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
+				`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
+		);
+	}
+
+	private isStatementContext(ctx: ASTNodeParserContext): boolean {
+		return this.statementFactory.ruleIds.includes(<ASTStatementKind>ctx.astSyntaxKind);
+	}
+
+	private isDeclarationContext(ctx: ASTNodeParserContext): boolean {
+		return this.declarationFactory.ruleIds.includes(<ASTDeclarationKind>ctx.astSyntaxKind);
+	}
+
+	private isExpressionContext(ctx: ASTNodeParserContext): boolean {
+		return this.expressionFactory.ruleIds.includes(<ASTExpressionKind>ctx.astSyntaxKind);
+	}
+
+	/**
+	 * Handles an exiting node context. This is required to properly generate the AST node hierarchy.
+	 * @private
+	 */
+	private handleExitingTreeNode() {
+		const parent = this._currentPrimaryNode?.parent;
+		if (parent instanceof Declaration || parent instanceof Statement || parent instanceof Expression) {
+			this._currentPrimaryNode = parent;
+		} else {
+			this._currentPrimaryNode = undefined;
+		}
+	}
 }

@@ -42,8 +42,10 @@ export type ParserUnaryExpressionRuleName = (typeof KindParseRuleMapping)[ASTUna
 export abstract class UnaryExpression<
 	Semantics extends UnaryExpressionSemantics = UnaryExpressionSemantics,
 	TypeSemantics extends UnaryExpressionTypeSemantics = UnaryExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContext;
+
 	public abstract get kind(): ASTUnaryExpressionKind;
+
 	public abstract get ruleName(): ParserUnaryExpressionRuleName;
 }

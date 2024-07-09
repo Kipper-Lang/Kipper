@@ -14,17 +14,49 @@ import type { Expression } from "../../expressions";
  */
 export class ExpressionStatement extends Statement<ExpressionStatementSemantics, ExpressionStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_expressionStatement;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
+	 */
+	public primarySemanticAnalysis = undefined; // Expression statements will never have semantic data
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
+	 * @since 0.7.0
+	 */
+	public primarySemanticTypeChecking = undefined; // Expression statements will never have type checking
+	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
+	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
+	protected readonly _children: Array<Expression>;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_expressionStatement;
+	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+		this._semanticData = {};
+		this._typeSemantics = {};
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -39,12 +71,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -54,16 +80,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	 */
 	public override get ruleName() {
 		return ExpressionStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Expression>;
-
-	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-		this._semanticData = {};
-		this._typeSemantics = {};
 	}
 
 	/**
@@ -81,25 +97,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	}
 
 	/**
-	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
-	 * the children has already failed and as such no parent node should run type checking.
-	 */
-	public primarySemanticAnalysis = undefined; // Expression statements will never have semantic data
-
-	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
-	 */
-	public primarySemanticTypeChecking = undefined; // Expression statements will never have type checking
-
-	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
 	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
@@ -108,7 +105,4 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	public async checkForWarnings(): Promise<void> {
 		this.programCtx.warningCheck(this).uselessStatement(this);
 	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
-	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;
 }

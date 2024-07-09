@@ -5,9 +5,9 @@
 import type { ParameterDeclarationSemantics } from "./parameter-declaration-semantics";
 import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { FunctionScope, ScopeParameterDeclaration } from "../../../../semantics";
+import type { FunctionScope, LambdaScope, ScopeParameterDeclaration } from "../../../../semantics";
 import type { FunctionDeclaration } from "../function-declaration";
-import type { IdentifierTypeSpecifierExpression } from "../../expressions";
+import type { IdentifierTypeSpecifierExpression, LambdaExpression } from "../../expressions";
 import { Declaration } from "../declaration";
 import type { ParameterDeclarationContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
@@ -22,11 +22,35 @@ export class ParameterDeclaration extends Declaration<
 	ParameterDeclarationTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_parameterDeclaration;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.parameterDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.parameterDeclaration;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ParameterDeclarationContext;
+
+	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -36,10 +60,17 @@ export class ParameterDeclaration extends Declaration<
 	protected override _scopeDeclaration: ScopeParameterDeclaration | undefined;
 
 	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_parameterDeclaration;
+	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected override set scopeDeclaration(declaration: ScopeParameterDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -54,12 +85,6 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -71,29 +96,11 @@ export class ParameterDeclaration extends Declaration<
 		return ParameterDeclaration.ruleName;
 	}
 
-	constructor(antlrRuleCtx: ParameterDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): ParameterDeclarationContext {
 		return this._antlrRuleCtx;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
-	 */
-	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected override set scopeDeclaration(declaration: ScopeParameterDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public override getScopeDeclaration(): ScopeParameterDeclaration {
@@ -111,17 +118,9 @@ export class ParameterDeclaration extends Declaration<
 	 * {@link this.semantic.func.innerScope the scope of the parent function}.
 	 * @since 0.10.0
 	 */
-	public async addParamToFunctionScope(scopeToUse: FunctionScope): Promise<void> {
+	public async addParamToFunctionScope(scopeToUse: FunctionScope | LambdaScope): Promise<void> {
 		this.scopeDeclaration = scopeToUse.addArgument(this);
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
 
 	/**
 	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
@@ -140,7 +139,7 @@ export class ParameterDeclaration extends Declaration<
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
 			valueTypeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().typeIdentifier,
-			func: <FunctionDeclaration>this.parent,
+			func: <FunctionDeclaration | LambdaExpression>this.parent,
 		};
 
 		// Register this parameter in the function scope
@@ -169,7 +168,4 @@ export class ParameterDeclaration extends Declaration<
 			valueType: valueType,
 		};
 	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.parameterDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.parameterDeclaration;
 }

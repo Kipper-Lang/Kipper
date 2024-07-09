@@ -10,13 +10,12 @@ export type CustomTypeFields = Map<string, ProcessedType>;
  * @since 0.11.0
  */
 export class CustomType extends ProcessedType {
-	private readonly _fields: CustomTypeFields;
-
 	/**
 	 * The kind of this type. This is simply used to differentiate between classes and interfaces.
 	 * @since 0.11.0
 	 */
 	public readonly kind: CustomTypeKind;
+	private readonly _fields: CustomTypeFields;
 
 	public constructor(identifier: string, isCompilable: boolean, kind: CustomTypeKind, fields: CustomTypeFields) {
 		super(identifier, isCompilable);

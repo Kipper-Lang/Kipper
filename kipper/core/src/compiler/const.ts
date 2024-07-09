@@ -3,13 +3,6 @@
  * @since 0.3.0
  */
 import type { ScopeDeclaration } from "./semantics";
-import {
-	ScopeFunctionDeclaration,
-	ScopeParameterDeclaration,
-	ScopeTypeDeclaration,
-	ScopeVariableDeclaration,
-} from "./semantics";
-import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./semantics/";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should

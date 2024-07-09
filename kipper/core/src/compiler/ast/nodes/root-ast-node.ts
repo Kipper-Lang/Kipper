@@ -27,17 +27,30 @@ import type { ScopeNode } from "../scope-node";
  * @since 0.8.0
  */
 export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> implements ScopeNode<GlobalScope> {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_compilationUnit;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
 	protected readonly _antlrRuleCtx: CompilationUnitContext;
 	protected readonly _programCtx: KipperProgramContext;
 	protected readonly _parent: undefined;
 	protected readonly _children: Array<Declaration | Statement>;
 	protected readonly _innerScope: GlobalScope;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_compilationUnit;
+	constructor(programCtx: KipperProgramContext, antlrCtx: CompilationUnitContext) {
+		super(antlrCtx, undefined);
+		this._antlrRuleCtx = antlrCtx;
+		this._programCtx = programCtx;
+		this._children = [];
+		this._parent = undefined;
+		this._innerScope = new GlobalScope(this, this.programCtx.universeScope);
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -52,12 +65,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -67,15 +74,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 	 */
 	public override get ruleName() {
 		return RootASTNode.ruleName;
-	}
-
-	constructor(programCtx: KipperProgramContext, antlrCtx: CompilationUnitContext) {
-		super(antlrCtx, undefined);
-		this._antlrRuleCtx = antlrCtx;
-		this._programCtx = programCtx;
-		this._children = [];
-		this._parent = undefined;
-		this._innerScope = new GlobalScope(this, this.programCtx.universeScope);
 	}
 
 	/**
@@ -177,15 +175,6 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 	}
 
 	/**
-	 * Handles the specified error that occurred during the semantic analysis of this node in a standardised way.
-	 * @param error The error to handle.
-	 * @since 0.10.0
-	 */
-	protected handleSemanticError(error: Error | KipperError): void {
-		handleSemanticError(this, error);
-	}
-
-	/**
 	 * Semantically analyses the children tokens of this
 	 * {@link RootASTNode instance} and performs additional
 	 * {@link CompilableASTNode.targetSemanticAnalysis translation specific analysis}.
@@ -257,5 +246,14 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 
 		// Finished code for this Kipper file
 		return genCode;
+	}
+
+	/**
+	 * Handles the specified error that occurred during the semantic analysis of this node in a standardised way.
+	 * @param error The error to handle.
+	 * @since 0.10.0
+	 */
+	protected handleSemanticError(error: Error | KipperError): void {
+		handleSemanticError(this, error);
 	}
 }

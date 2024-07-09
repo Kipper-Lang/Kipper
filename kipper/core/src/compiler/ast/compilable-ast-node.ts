@@ -41,14 +41,18 @@ export abstract class CompilableASTNode<
 	extends AnalysableASTNode<Semantics, TypeSemantics>
 	implements TargetCompilableNode
 {
-	protected override _parent: CompilableNodeParent;
-	protected override _children: Array<CompilableNodeChild>;
+	abstract readonly targetCodeGenerator: TargetASTNodeCodeGenerator<
+		any,
+		TranslatedCodeLine | Array<TranslatedCodeLine>
+	>;
 
 	protected constructor(antlrCtx: KipperParserRuleContext, parent: CompilableNodeParent) {
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];
 	}
+
+	protected override _parent: CompilableNodeParent;
 
 	/**
 	 * Returns the {@link CompilableASTNode parent} that has this node as a child.
@@ -58,23 +62,14 @@ export abstract class CompilableASTNode<
 		return this._parent;
 	}
 
+	protected override _children: Array<CompilableNodeChild>;
+
 	/**
 	 * The children of this AST node.
 	 * @since 0.8.0
 	 */
 	public get children(): Array<CompilableNodeChild> {
 		return this._children;
-	}
-
-	/**
-	 * Adds new child ctx item to this AST node. The child item should be in the order that they appeared in the
-	 * {@link this.antlrCtx} parse tree.
-	 *
-	 * This will also automatically set the parent of {@link newChild} to this instance.
-	 * @since 0.8.0
-	 */
-	public addNewChild(newChild: CompilableNodeChild): void {
-		this._children.push(newChild);
 	}
 
 	/**
@@ -145,15 +140,32 @@ export abstract class CompilableASTNode<
 	}
 
 	/**
+	 * Adds new child ctx item to this AST node. The child item should be in the order that they appeared in the
+	 * {@link this.antlrCtx} parse tree.
+	 *
+	 * This will also automatically set the parent of {@link newChild} to this instance.
+	 * @since 0.8.0
+	 */
+	public addNewChild(newChild: CompilableNodeChild): void {
+		this._children.push(newChild);
+	}
+
+	/**
+	 * Returns whether this AST node has any side effects. This means that the node will change the state of the
+	 * program in some way and not only return a value.
+	 *
+	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
+	 * @since 0.11.0
+	 */
+	public hasSideEffects(): boolean {
+		return false;
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 * @since 0.8.0
 	 */
 	public async translateCtxAndChildren(): Promise<TranslatedCodeLine | Array<TranslatedCodeLine>> {
 		return await this.targetCodeGenerator(this);
 	}
-
-	abstract readonly targetCodeGenerator: TargetASTNodeCodeGenerator<
-		any,
-		TranslatedCodeLine | Array<TranslatedCodeLine>
-	>;
 }

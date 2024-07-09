@@ -17,6 +17,7 @@ import type { BuiltInFunction, BuiltInVariable } from "../../runtime-built-ins";
  */
 export abstract class ScopeDeclaration {
 	public abstract get node(): Declaration | undefined;
+
 	public abstract get identifier(): string;
 
 	/**
