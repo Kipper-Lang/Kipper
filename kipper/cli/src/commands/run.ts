@@ -17,10 +17,10 @@ export default class Run extends Compile {
 	static override examples: Array<string> = [
 		"kipper run -t js",
 		"kipper run -t ts -s \"print('Hello, World!')\"",
-		"kipper run -t js -e utf-8 -o build/ -s \"print('Hello, World!')\"",
-		"kipper run -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\"",
-		"kipper run -t js -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings",
-		"kipper run -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+		"kipper run -t js -e utf8 -o build/ -s \"print('Hello, World!')\"",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!')\"",
+		"kipper run -t js -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
 	];
 
 	static override args: args.Input = [
@@ -95,8 +95,8 @@ export default class Run extends Compile {
 	private async executeKipperProgram(entryFile: string): Promise<void> {
 		const kipperProgram = fork(this.detectTSNode(), [entryFile]);
 
-		// Per default the encoding should be 'utf-8'
-		kipperProgram.stdin?.setDefaultEncoding("utf-8");
+		// Per default the encoding should be 'utf8'
+		kipperProgram.stdin?.setDefaultEncoding("utf8");
 
 		// Close immediately after the Kipper program
 		kipperProgram.on("close", (code: number) => process.exit(code));

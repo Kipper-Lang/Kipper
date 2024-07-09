@@ -28,10 +28,10 @@ export default class Compile extends Command {
 	static override examples: Array<string> = [
 		"kipper compile -t js",
 		"kipper compile -t ts -s \"print('Hello, World!')\"",
-		"kipper compile -t js -e utf-8 -o build/ -s \"print('Hello, World!')\"",
-		"kipper compile -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\"",
-		"kipper compile -t js -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings",
-		"kipper compile -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+		"kipper compile -t js -e utf8 -o build/ -s \"print('Hello, World!')\"",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!')\"",
+		"kipper compile -t js -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
 		"kipper compile -t js ./path/to/file.kip",
 		"kipper compile -t ts ./path/to/file.kip -o build/ --log-timestamp",
 		"kipper compile -t js ./path/to/file.kip -o build/ --warnings --log-timestamp",
@@ -123,7 +123,7 @@ export default class Compile extends Command {
 			: preExistingCompileConfig?.target ?? getTarget("js");
 
 		// Output
-		const encoding = flags["encoding"] || "utf-8";
+		const encoding = flags["encoding"] || "utf8";
 		const fileName = stream instanceof KipperInputFile ? stream.path.name : stream.name;
 		const outPath = `${path.resolve(outDir)}/${fileName}.${target.fileExtension}`;
 
