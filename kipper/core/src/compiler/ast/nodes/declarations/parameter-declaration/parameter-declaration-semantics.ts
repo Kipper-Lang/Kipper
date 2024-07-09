@@ -3,7 +3,7 @@
  * @since 0.3.0
  */
 import type { UncheckedType } from "../../../../analysis";
-import type { FunctionDeclaration, IdentifierTypeSpecifierExpression } from "../../../nodes";
+import type { FunctionDeclaration, IdentifierTypeSpecifierExpression, LambdaExpression } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 
 /**
@@ -30,5 +30,5 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The parent function of this parameter.
 	 * @since 0.10.0
 	 */
-	func: FunctionDeclaration;
+	func: FunctionDeclaration | LambdaExpression;
 }

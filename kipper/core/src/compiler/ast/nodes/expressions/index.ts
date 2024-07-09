@@ -20,3 +20,4 @@ export * from "./conditional-expression/";
 export * from "./function-call-expression/";
 export * from "./member-access-expression/";
 export * from "./bitwise-expression/";
+export * from "./lambda-expression/";

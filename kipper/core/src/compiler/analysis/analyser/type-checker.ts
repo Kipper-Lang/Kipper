@@ -10,13 +10,13 @@ import type {
 	ParameterDeclarationSemantics,
 	UnaryExpressionSemantics,
 	AssignmentExpression,
-	Expression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
 	MemberAccessExpression,
 	RelationalExpression,
 	Statement,
 	UnaryExpression,
+	LambdaExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -25,6 +25,7 @@ import {
 	ParameterDeclaration,
 	ReturnStatement,
 	TangledPrimaryExpression,
+	Expression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
@@ -32,7 +33,6 @@ import type {
 	KipperArithmeticOperator,
 	KipperBitwiseOperator,
 	KipperCompilableType,
-	KipperReferenceable,
 	KipperReferenceableFunction,
 } from "../../const";
 import {
@@ -64,6 +64,7 @@ import {
 } from "../../../errors";
 import type { UncheckedType } from "../type";
 import { CheckedType, UndefinedCustomType } from "../type";
+import type { Reference } from "../reference";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -160,22 +161,27 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ExpressionNotCallableError} If the passed {@link ref} is not callable.
 	 * @since 0.10.0
 	 */
-	public refTargetCallable(ref: KipperReferenceable): void {
-		if (ref instanceof ScopeDeclaration) {
-			const refType = KipperTypeChecker.getTypeForAnalysis(ref.type);
-			if (refType === undefined) {
+	public refTargetCallable(ref: Expression | Reference): void {
+		if ("refTarget" in ref && ref.refTarget instanceof ScopeDeclaration) {
+			const target = ref.refTarget;
+			const targetType = KipperTypeChecker.getTypeForAnalysis(target.type);
+			if (targetType === undefined) {
 				return; // Ignore undefined types - Skip type checking (the type is invalid anyway)
 			}
 
 			// If the reference is not callable, throw an error
-			if (!ref.isCallable) {
-				throw this.assertError(new ExpressionNotCallableError(refType));
-			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
+			if (!target.isCallable) {
+				throw this.assertError(new ExpressionNotCallableError(targetType));
+			} else if (target instanceof ScopeParameterDeclaration || target instanceof ScopeVariableDeclaration) {
 				// Calling a function stored in a variable or parameter is not implemented yet
 				throw this.notImplementedError(
 					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
 				);
 			}
+		} else if (ref instanceof Expression) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError("Function calls from expressions are not implemented yet."),
+			);
 		}
 	}
 
@@ -501,7 +507,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
-	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
 		const returnType = KipperTypeChecker.getTypeForAnalysis(typeData.returnType);
@@ -516,7 +522,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// return type.
 		if (returnType !== "void") {
 			// Recursively check all code paths to ensure all return a value.
-			const checkChildrenCodePaths = (parent: Statement): boolean => {
+			const checkChildrenCodePaths = (parent: Statement | Expression | CompoundStatement): boolean => {
 				let returnPathsCovered = false;
 
 				// If the parent is an if statement, we have to check the if and else branches directly

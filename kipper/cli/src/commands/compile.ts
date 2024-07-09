@@ -10,7 +10,6 @@ import {
 	defaultOptimisationOptions,
 	EvaluatedCompileConfig,
 	KipperCompiler,
-	KipperError,
 	KipperLogger,
 	LogLevel,
 } from "@kipper/core";
@@ -25,8 +24,18 @@ import path from "node:path";
 export default class Compile extends Command {
 	static override description: string = "Compile a Kipper program into the specified target language.";
 
-	// TODO! Add examples when the command moves out of development
-	static override examples: Array<string> = [];
+	static override examples: Array<string> = [
+		"kipper compile -t js",
+		"kipper compile -t ts -s \"print('Hello, World!');\"",
+		"kipper compile -t js -e utf8 -o build/ -s \"print('Hello, World!');\"",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!');\"",
+		"kipper compile -t js -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings",
+		"kipper compile -t ts -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings --log-timestamp",
+		"kipper compile -t js ./path/to/file.kip",
+		"kipper compile -t ts ./path/to/file.kip -o build/ --log-timestamp",
+		"kipper compile -t js ./path/to/file.kip -o build/ --warnings --log-timestamp",
+		"kipper compile -t ts ./path/to/file.kip -o build/ -e utf16le --warnings --log-timestamp",
+	];
 
 	static override args: args.Input = [
 		{
@@ -93,15 +102,6 @@ export default class Compile extends Command {
 			description: "Recover from compiler errors and log all detected semantic issues.",
 			allowNo: true,
 		}),
-		/**
-		 * TODO! Remove this flag
-		 * @deprecated
-		 */
-		"abort-on-first-error": flags.boolean({
-			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
-			description: "Abort on the first error the compiler encounters.",
-			allowNo: true,
-		}),
 	};
 
 	/**
@@ -122,7 +122,7 @@ export default class Compile extends Command {
 			: preExistingCompileConfig?.target ?? getTarget("js");
 
 		// Output
-		const encoding = flags["encoding"] || "utf-8";
+		const encoding = flags["encoding"] || "utf8";
 		const fileName = stream instanceof KipperInputFile ? stream.path.name : stream.name;
 		const outPath = `${path.resolve(outDir)}/${fileName}.${target.fileExtension}`;
 
@@ -175,17 +175,7 @@ export default class Compile extends Command {
 		const startTime: number = new Date().getTime();
 
 		// Compile the file
-		let result: KipperCompileResult;
-		try {
-			result = await compiler.compile(config.stream, config.compilerOptions);
-		} catch (e) {
-			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
-				// Ignore the error thrown by the compiler (the logger already logged it)
-				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
-				return false;
-			}
-			throw e;
-		}
+		let result: KipperCompileResult = await compiler.compile(config.stream, config.compilerOptions);
 
 		// If the compilation failed, abort
 		if (!result.success) {

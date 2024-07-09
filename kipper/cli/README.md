@@ -44,7 +44,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.11.0-alpha.8 linux-x64 node-v20.10.0
+@kipper/cli/0.11.0-beta.0 linux-x64 node-v18.18.2
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -78,7 +78,7 @@ OPTIONS
 
   -d, --[no-]dry-run             Run the compiler without writing any output. Useful for checking for errors.
 
-  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf8,utf16le).
+  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf-8,utf8,utf16le).
 
   -i, --[no-]optimise-internals  Optimise the generated internal functions using tree-shaking to reduce the size of the
                                  output.
@@ -94,14 +94,24 @@ OPTIONS
 
   -w, --[no-]warnings            Show warnings that were emitted during the compilation.
 
-  --[no-]abort-on-first-error    Abort on the first error the compiler encounters.
-
   --[no-]log-timestamp           Show the timestamp of each log message.
 
   --[no-]recover                 Recover from compiler errors and log all detected semantic issues.
+
+EXAMPLES
+  kipper compile -t js
+  kipper compile -t ts -s "print('Hello, World!');"
+  kipper compile -t js -e utf8 -o build/ -s "print('Hello, World!');"
+  kipper compile -t ts -o build/ -e utf8 -s "print('Hello, World!');"
+  kipper compile -t js -o build/ -e utf8 -s "print('Hello, World!');" --warnings
+  kipper compile -t ts -o build/ -e utf8 -s "print('Hello, World!');" --warnings --log-timestamp
+  kipper compile -t js ./path/to/file.kip
+  kipper compile -t ts ./path/to/file.kip -o build/ --log-timestamp
+  kipper compile -t js ./path/to/file.kip -o build/ --warnings --log-timestamp
+  kipper compile -t ts ./path/to/file.kip -o build/ -e utf16le --warnings --log-timestamp
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -118,7 +128,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/help.ts)_
 
 ## `kipper new [LOCATION]`
 
@@ -135,7 +145,7 @@ OPTIONS
   -d, --default  Use the default settings for the new project. Skips the setup wizard.
 ```
 
-_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/new.ts)_
 
 ## `kipper run [FILE]`
 
@@ -152,7 +162,7 @@ OPTIONS
   -b, --[no-]optimise-builtins   Optimise the generated built-in functions using tree-shaking to reduce the size of the
                                  output.
 
-  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf8,utf16le).
+  -e, --encoding=encoding        The encoding that should be used to read the file (ascii,utf-8,utf8,utf16le).
 
   -i, --[no-]optimise-internals  Optimise the generated internal functions using tree-shaking to reduce the size of the
                                  output.
@@ -167,14 +177,20 @@ OPTIONS
 
   -w, --[no-]warnings            Show warnings that were emitted during the compilation.
 
-  --[no-]abort-on-first-error    Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.
-
   --[no-]log-timestamp           Show the timestamp of each log message.
 
   --[no-]recover                 Recover from compiler errors and display all detected compiler errors.
+
+EXAMPLES
+  kipper run -t js
+  kipper run -t ts -s "print('Hello, World!');"
+  kipper run -t js -e utf8 -o build/ -s "print('Hello, World!');"
+  kipper run -t ts -o build/ -e utf8 -s "print('Hello, World!');"
+  kipper run -t js -o build/ -e utf8 -s "print('Hello, World!');" --warnings
+  kipper run -t ts -o build/ -e utf8 -s "print('Hello, World!');" --warnings --log-timestamp
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -185,7 +201,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-alpha.8/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-beta.0/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper

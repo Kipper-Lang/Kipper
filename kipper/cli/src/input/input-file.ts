@@ -14,13 +14,13 @@ import type { EvaluatedKipperConfigFile } from "@kipper/config";
  * Valid encodings that Kipper supports.
  * @since 0.1.0
  */
-export type KipperEncoding = "ascii" | "utf8" | "utf16le";
+export type KipperEncoding = "ascii" | "utf-8" | "utf8" | "utf16le";
 
 /**
  * Array of all valid encodings that Kipper supports.
  * @since 0.1.0
  */
-export const KipperEncodings: Array<KipperEncoding> = ["ascii", "utf8", "utf16le"];
+export const KipperEncodings: Array<KipperEncoding> = ["ascii", "utf-8", "utf8", "utf16le"];
 
 /**
  * Checks whether the encoding is supported. If it is, then it will return it as {@link KipperEncoding}, otherwise it

@@ -19,6 +19,8 @@ To use development versions of Kipper download the
 ### Added
 
 - Implemented Processing for File Scoped Pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
+- Added Lambda Expressions, which are anonymous functions that can be used as expressions.
+  ([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
 - Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
   ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
@@ -61,8 +63,11 @@ To use development versions of Kipper download the
   - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
   - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
   - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
+  - `LambdaExpression`, which represents an AST lambda expression.
   - `PragmaProcessor` which handles the processing of all possible Pragmas.
 - New interfaces:
+  - `LambdaExpressionSemantics`, which represents the semantics of a lambda expression.
+  - `LambdaExpressionTypeSemantics`, which represents the type semantics of a lambda expression.
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
   - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
@@ -127,6 +132,7 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Fixed bug allowing the use of any expressions for call expressions as that is not implemented yet.
 - Standardised error output for the CLI as described in [#435](https://github.com/Kipper-Lang/Kipper/issues/435).
   (This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
   i.e. `0.11.0-alpha.0` does _not_ have this change).
@@ -139,6 +145,7 @@ To use development versions of Kipper download the
   - Class `KipperParseStream` to `KipperFileStream` including its file to `file-stream.ts`.
   - CLI Class `KipperParseFile` to `KipperInputFile` including its file to `input-file.ts`.
   - Class `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
   - Function `getTSFunction()` to `genTSFunction()`.
   - Grammar Rule `typeSpecifier` to `typeSpecifierExpression` and its AST class `TypeSpecifier` to
     `TypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
@@ -161,6 +168,7 @@ To use development versions of Kipper download the
   - Grammar Rule `doWhileLoopStatement` to `doWhileLoopIterationStatement` and its AST class
     `DoWhileLoopStatement` to `DoWhileLoopIterationStatement`. This also includes changing the name in the
     `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
   - Class `ArrayLiteralPrimaryExpression` to `ArrayPrimaryExpression`.
   - Interface `ArrayLiteralPrimaryExpressionSemantics` to `ArrayPrimaryExpressionSemantics`.
   - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
@@ -196,6 +204,8 @@ To use development versions of Kipper download the
 
 ### Removed
 
+- Removed deprecated flag `--abort-on-first-error` in favour of `--no-recover`.
+  ([#501](https://github.com/Kipper-Lang/Kipper/issues/501)).
 - Removed CLI command `analyse` in favor of the flag `--dry-run` in the CLI command `compile`.
   ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
 - Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and

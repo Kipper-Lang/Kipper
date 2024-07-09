@@ -3,26 +3,24 @@
  * @since 0.10.0
  */
 import type {
-	TranslatedCodeToken,
-	ComparativeExpressionSemantics,
-	LogicalExpressionSemantics,
-	TranslatedCodeLine,
-	TranslatedExpression,
-	BitwiseExpressionSemantics,
-	BitwiseExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
-	BitwiseOrExpression,
-	BitwiseAndExpression,
 	AdditiveExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseExpression,
+	BitwiseExpressionSemantics,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
+	ComparativeExpressionSemantics,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
-	Expression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -33,12 +31,16 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ArrayPrimaryExpression,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalExpression,
+	LogicalExpressionSemantics,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -46,23 +48,22 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TranslatedCodeLine,
+	TranslatedCodeToken,
+	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	DoWhileLoopIterationStatement,
-	ForLoopIterationStatement,
-	MemberAccessExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	ObjectPrimaryExpression,
-	ObjectProperty,
 } from "@kipper/core";
 import {
-	VariableDeclaration,
 	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
+	VariableDeclaration,
+	Expression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -769,5 +770,35 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
+	};
+
+	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+		// Step 1: Extract Semantic Data
+		const semanticData = node.getSemanticData();
+		const params = semanticData.params;
+		const body = semanticData.functionBody;
+
+		// Step 2: Translate Parameters
+		let translatedParams = params.map((param) => param.getSemanticData().identifier).join(", ");
+
+		let translatedBody;
+		let translatedBodyAsync = await body.translateCtxAndChildren();
+
+		if (body instanceof Expression) {
+			translatedBody = translatedBodyAsync
+				.map((line) => {
+					if (line instanceof Array) {
+						return line.join(" ").trim();
+					}
+					return line;
+				})
+				.join("");
+		} else {
+			translatedBody = await this.compoundStatement(body);
+			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");
+		}
+
+		// Step 4: Format Lambda Expression
+		return [`(${translatedParams}) => ${translatedBody}`];
 	};
 }

@@ -23,7 +23,8 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-pa
  */
 export class ConditionalExpression extends Expression<
 	ConditionalExpressionSemantics,
-	ConditionalExpressionTypeSemantics
+	ConditionalExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

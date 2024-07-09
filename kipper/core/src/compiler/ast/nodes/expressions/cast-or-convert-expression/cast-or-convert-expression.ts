@@ -30,7 +30,8 @@ import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
  */
 export class CastOrConvertExpression extends Expression<
 	CastOrConvertExpressionSemantics,
-	CastOrConvertExpressionTypeSemantics
+	CastOrConvertExpressionTypeSemantics,
+	Expression
 > {
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,

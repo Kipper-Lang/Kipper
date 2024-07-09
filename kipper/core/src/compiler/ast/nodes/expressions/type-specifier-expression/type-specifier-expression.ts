@@ -42,7 +42,7 @@ export type ParserTypeSpecifierExpressionRuleName = (typeof KindParseRuleMapping
 export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics = TypeSpecifierExpressionSemantics,
 	TypeSemantics extends TypeSpecifierExpressionTypeSemantics = TypeSpecifierExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContext;
 	public abstract get kind(): ASTTypeSpecifierExpressionKind;
 	public abstract get ruleName(): ParserTypeSpecifierExpressionRuleName;

@@ -2,7 +2,6 @@
  * Target-specific Semantic Analyser.
  * @since 0.10.0
  */
-
 import type {
 	AdditiveExpression,
 	AnalysableASTNode,
@@ -26,6 +25,7 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -48,7 +48,7 @@ import type {
 } from "../ast";
 import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
-import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
+import type { ObjectProperty } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -286,4 +286,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }
