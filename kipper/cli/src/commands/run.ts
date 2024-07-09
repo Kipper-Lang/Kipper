@@ -14,8 +14,14 @@ import Compile from "./compile";
 export default class Run extends Compile {
 	static override description: string = "Compile and execute a Kipper program.";
 
-	// TODO! Add examples when the command moves out of development
-	static override examples: Array<string> = [];
+	static override examples: Array<string> = [
+		"kipper run -t js",
+		"kipper run -t ts -s \"print('Hello, World!')\"",
+		"kipper run -t js -e utf-8 -o build/ -s \"print('Hello, World!')\"",
+		"kipper run -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\"",
+		"kipper run -t js -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings",
+		"kipper run -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+	];
 
 	static override args: args.Input = [
 		{

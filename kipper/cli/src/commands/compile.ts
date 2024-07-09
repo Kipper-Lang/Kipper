@@ -25,8 +25,18 @@ import path from "node:path";
 export default class Compile extends Command {
 	static override description: string = "Compile a Kipper program into the specified target language.";
 
-	// TODO! Add examples when the command moves out of development
-	static override examples: Array<string> = [];
+	static override examples: Array<string> = [
+		"kipper compile -t js",
+		"kipper compile -t ts -s \"print('Hello, World!')\"",
+		"kipper compile -t js -e utf-8 -o build/ -s \"print('Hello, World!')\"",
+		"kipper compile -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\"",
+		"kipper compile -t js -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings",
+		"kipper compile -t ts -o build/ -e utf-8 -s \"print('Hello, World!')\" --warnings --log-timestamp",
+		"kipper compile -t js ./path/to/file.kip",
+		"kipper compile -t ts ./path/to/file.kip -o build/ --log-timestamp",
+		"kipper compile -t js ./path/to/file.kip -o build/ --warnings --log-timestamp",
+		"kipper compile -t ts ./path/to/file.kip -o build/ -e utf16le --warnings --log-timestamp",
+	];
 
 	static override args: args.Input = [
 		{
