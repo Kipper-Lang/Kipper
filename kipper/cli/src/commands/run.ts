@@ -78,15 +78,6 @@ export default class Run extends Compile {
 			description: "Recover from compiler errors and display all detected compiler errors.",
 			allowNo: true,
 		}),
-		/**
-		 * TODO! Remove this flag
-		 * @deprecated
-		 */
-		"abort-on-first-error": flags.boolean({
-			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
-			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
-			allowNo: true,
-		}),
 	};
 
 	/**
