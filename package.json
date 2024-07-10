@@ -127,8 +127,11 @@
     "interfaces/.+",
     "classes/.+"
   ],
-  "overrides": {
-    "@parcel/watcher": "2.1.0",
-    "follow-redirects": "1.15.6"
+  "pnpm": {
+    "overrides": {
+      "@parcel/watcher": "2.1.0",
+      "svgo": "3.0.2",
+      "follow-redirects": "1.15.6"
+    }
   }
 }

@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@parcel/watcher': 2.1.0
+  svgo: 3.0.2
+  follow-redirects: 1.15.6
+
 devDependencies:
   '@parcel/babylon-walk':
     specifier: 2.2.1
@@ -862,7 +867,7 @@ packages:
       '@parcel/rust': 2.11.0
       '@parcel/types': 2.11.0(@parcel/core@2.11.0)
       '@parcel/utils': 2.11.0
-      '@parcel/watcher': 2.0.7
+      '@parcel/watcher': 2.1.0
       '@parcel/workers': 2.11.0(@parcel/core@2.11.0)
     dev: true
 
@@ -876,7 +881,7 @@ packages:
       '@parcel/fs-search': 2.6.2
       '@parcel/types': 2.6.2(@parcel/core@2.11.0)
       '@parcel/utils': 2.6.2
-      '@parcel/watcher': 2.0.7
+      '@parcel/watcher': 2.1.0
       '@parcel/workers': 2.6.2(@parcel/core@2.11.0)
     dev: true
 
@@ -890,7 +895,7 @@ packages:
       '@parcel/fs-search': 2.7.0
       '@parcel/types': 2.7.0(@parcel/core@2.11.0)
       '@parcel/utils': 2.7.0
-      '@parcel/watcher': 2.0.7
+      '@parcel/watcher': 2.1.0
       '@parcel/workers': 2.7.0(@parcel/core@2.11.0)
     dev: true
 
@@ -1091,10 +1096,10 @@ packages:
     engines: {node: '>= 12.0.0', parcel: ^2.11.0}
     dependencies:
       '@parcel/plugin': 2.11.0(@parcel/core@2.11.0)
-      htmlnano: 2.1.0(postcss@8.4.35)(svgo@2.8.0)(typescript@4.9.5)
+      htmlnano: 2.1.0(postcss@8.4.35)(svgo@3.0.2)(typescript@4.9.5)
       nullthrows: 1.1.1
       posthtml: 0.16.6
-      svgo: 2.8.0
+      svgo: 3.0.2
     transitivePeerDependencies:
       - '@parcel/core'
       - cssnano
@@ -1128,7 +1133,7 @@ packages:
       '@parcel/diagnostic': 2.11.0
       '@parcel/plugin': 2.11.0(@parcel/core@2.11.0)
       '@parcel/utils': 2.11.0
-      svgo: 2.8.0
+      svgo: 3.0.2
     transitivePeerDependencies:
       - '@parcel/core'
     dev: true
@@ -1715,11 +1720,13 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@parcel/watcher@2.0.7:
-    resolution: {integrity: sha512-gc3hoS6e+2XdIQ4HHljDB1l0Yx2EWh/sBBtCEFNKGSMlwASWeAQsOY/fPbxOBcZ/pg0jBh4Ga+4xHlZc4faAEQ==}
+  /@parcel/watcher@2.1.0:
+    resolution: {integrity: sha512-8s8yYjd19pDSsBpbkOHnT6Z2+UJSuLQx61pCFM0s5wSRvKCEMDjd/cHY3/GI1szHIWbpXpsJdg3V6ISGGx9xDw==}
     engines: {node: '>= 10.0.0'}
     requiresBuild: true
     dependencies:
+      is-glob: 4.0.3
+      micromatch: 4.0.5
       node-addon-api: 3.2.1
       node-gyp-build: 4.8.0
     dev: true
@@ -2649,16 +2656,6 @@ packages:
       postcss: 8.4.35
     dev: true
 
-  /css-select@4.3.0:
-    resolution: {integrity: sha512-wPpOYtnsVontu2mODhA19JrqWxNsfdatRKd64kmpRbQgh1KtItko5sTnEpPdpSaJszTOhEMlF/RPz28qj4HqhQ==}
-    dependencies:
-      boolbase: 1.0.0
-      css-what: 6.1.0
-      domhandler: 4.3.1
-      domutils: 2.8.0
-      nth-check: 2.1.1
-    dev: true
-
   /css-select@5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
     dependencies:
@@ -2667,14 +2664,6 @@ packages:
       domhandler: 5.0.3
       domutils: 3.1.0
       nth-check: 2.1.1
-    dev: true
-
-  /css-tree@1.1.3:
-    resolution: {integrity: sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      mdn-data: 2.0.14
-      source-map: 0.6.1
     dev: true
 
   /css-tree@2.2.1:
@@ -2760,13 +2749,6 @@ packages:
       lilconfig: 2.1.0
       postcss: 8.4.35
       yaml: 1.10.2
-    dev: true
-
-  /csso@4.2.0:
-    resolution: {integrity: sha512-wvlcdIbf6pwKEk7vHj8/Bkc0B4ylXZruLvOgs9doS5eOsOpuodOV2zJChSpkp+pRpYQLQMeF04nr3Z68Sta9jA==}
-    engines: {node: '>=8.0.0'}
-    dependencies:
-      css-tree: 1.1.3
     dev: true
 
   /csso@5.0.5:
@@ -3256,8 +3238,8 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /follow-redirects@1.15.5:
-    resolution: {integrity: sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==}
+  /follow-redirects@1.15.6:
+    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -3362,7 +3344,6 @@ packages:
 
   /glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
-    hasBin: true
     dependencies:
       foreground-child: 3.2.1
       jackspeak: 3.4.3
@@ -3506,44 +3487,6 @@ packages:
       whatwg-encoding: 2.0.0
     dev: true
 
-  /htmlnano@2.1.0(postcss@8.4.35)(svgo@2.8.0)(typescript@4.9.5):
-    resolution: {integrity: sha512-jVGRE0Ep9byMBKEu0Vxgl8dhXYOUk0iNQ2pjsG+BcRB0u0oDF5A9p/iBGMg/PGKYUyMD0OAGu8dVT5Lzj8S58g==}
-    peerDependencies:
-      cssnano: ^6.0.0
-      postcss: ^8.3.11
-      purgecss: ^5.0.0
-      relateurl: ^0.2.7
-      srcset: 4.0.0
-      svgo: ^3.0.2
-      terser: ^5.10.0
-      uncss: ^0.17.3
-    peerDependenciesMeta:
-      cssnano:
-        optional: true
-      postcss:
-        optional: true
-      purgecss:
-        optional: true
-      relateurl:
-        optional: true
-      srcset:
-        optional: true
-      svgo:
-        optional: true
-      terser:
-        optional: true
-      uncss:
-        optional: true
-    dependencies:
-      cosmiconfig: 8.3.6(typescript@4.9.5)
-      postcss: 8.4.35
-      posthtml: 0.16.6
-      svgo: 2.8.0
-      timsort: 0.3.0
-    transitivePeerDependencies:
-      - typescript
-    dev: true
-
   /htmlnano@2.1.0(postcss@8.4.35)(svgo@3.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-jVGRE0Ep9byMBKEu0Vxgl8dhXYOUk0iNQ2pjsG+BcRB0u0oDF5A9p/iBGMg/PGKYUyMD0OAGu8dVT5Lzj8S58g==}
     peerDependencies:
@@ -3552,7 +3495,7 @@ packages:
       purgecss: ^5.0.0
       relateurl: ^0.2.7
       srcset: 4.0.0
-      svgo: ^3.0.2
+      svgo: 3.0.2
       terser: ^5.10.0
       uncss: ^0.17.3
     peerDependenciesMeta:
@@ -3619,7 +3562,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.5
+      follow-redirects: 1.15.6
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -4120,10 +4063,6 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /mdn-data@2.0.14:
-    resolution: {integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==}
-    dev: true
-
   /mdn-data@2.0.28:
     resolution: {integrity: sha512-aylIc7Z9y4yzHYAJNuESG3hfhC+0Ibp/MAMiaOZgNv4pmEdFyfZhhhny4MNiAfWdBQ1RQ2mfDWmM1x8SvGyp8g==}
     dev: true
@@ -4281,7 +4220,6 @@ packages:
   /mkdirp@1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
-    hasBin: true
     dev: true
 
   /ms@2.1.2:
@@ -4388,7 +4326,6 @@ packages:
   /node-gyp@10.2.0:
     resolution: {integrity: sha512-sp3FonBAaFe4aYTcFdZUn2NYkbP7xroPGYvQmP4Nl5PxamznItBnNCgjrVTKrEfQynInMsJvZrdmqUnysCJ8rw==}
     engines: {node: ^16.14.0 || >=18.0.0}
-    hasBin: true
     dependencies:
       env-paths: 2.2.1
       exponential-backoff: 3.1.1
@@ -4411,7 +4348,6 @@ packages:
   /nopt@7.2.1:
     resolution: {integrity: sha512-taM24ViiimT/XntxbPyJQzCG+p4EKOpgD3mxFwW38mGjVUrfERQOeY4EDHjdnptttfHuHQXFx+lTP08Q+mLa/w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    hasBin: true
     dependencies:
       abbrev: 2.0.0
     dev: true
@@ -4931,7 +4867,7 @@ packages:
     dependencies:
       postcss: 8.4.35
       postcss-value-parser: 4.2.0
-      svgo: 2.8.0
+      svgo: 3.0.2
     dev: true
 
   /postcss-unique-selectors@5.1.1(postcss@8.4.35):
@@ -5331,10 +5267,6 @@ packages:
       minipass: 7.1.2
     dev: true
 
-  /stable@0.1.8:
-    resolution: {integrity: sha512-ji9qxRnOVfcuLDySj9qzhGSEFVobyt1kIOSkj1qZzYLzq7Tos/oUUWvotUPQLlrsidqsK6tBH89Bc9kL5zHA6w==}
-    dev: true
-
   /stream-browserify@3.0.0:
     resolution: {integrity: sha512-H73RAHsVBapbim0tU2JwwOiXUj+fikfiaoYAKHF3VJfA0pe2BCzkhAHBlLG6REzE+2WNZcxOXjK7lkso+9euLA==}
     dependencies:
@@ -5427,19 +5359,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       has-flag: 4.0.0
-    dev: true
-
-  /svgo@2.8.0:
-    resolution: {integrity: sha512-+N/Q9kV1+F+UeWYoSiULYo4xYSDQlTgb+ayMobAXPwMnLvop7oxKMo9OzIrX5x3eS4L4f2UHhc9axXwY8DpChg==}
-    engines: {node: '>=10.13.0'}
-    dependencies:
-      '@trysound/sax': 0.2.0
-      commander: 7.2.0
-      css-select: 4.3.0
-      css-tree: 1.1.3
-      csso: 4.2.0
-      picocolors: 1.0.0
-      stable: 0.1.8
     dev: true
 
   /svgo@3.0.2:
@@ -5592,7 +5511,6 @@ packages:
   /typedoc@0.24.6(typescript@4.9.5):
     resolution: {integrity: sha512-c3y3h45xJv3qYwKDAwU6Cl+26CjT0ZvblHzfHJ+SjQDM4p1mZxtgHky4lhmG0+nNarRht8kADfZlbspJWdZarQ==}
     engines: {node: '>= 14.14'}
-    hasBin: true
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x
     dependencies:
@@ -5638,7 +5556,6 @@ packages:
 
   /update-browserslist-db@1.0.13(browserslist@4.22.3):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
-    hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
     dependencies:
@@ -5753,7 +5670,6 @@ packages:
   /which@4.0.0:
     resolution: {integrity: sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==}
     engines: {node: ^16.13.0 || >=18.0.0}
-    hasBin: true
     dependencies:
       isexe: 3.1.1
     dev: true
