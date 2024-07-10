@@ -1,6 +1,7 @@
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
-import { CompileConfig, KipperCompiler, KipperCompileResult, KipperError, KipperParseStream } from "@kipper/core";
+import type { CompileConfig, KipperCompileResult, KipperError } from "@kipper/core";
+import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { testPrintOutput } from "./core-functionality.test";
@@ -31,7 +32,7 @@ describe("Built-ins", () => {
 				target: target,
 			};
 
-			describe(`print (${target.fileExtension})`, () => {
+			describe(`print [${target.fileExtension}]`, () => {
 				it("Should error with no argument", async () => {
 					const fileContent = "print();";
 					try {
@@ -85,7 +86,7 @@ describe("Built-ins", () => {
 				});
 			});
 
-			describe(`len (${target.fileExtension})`, () => {
+			describe(`len [${target.fileExtension}]`, () => {
 				it("Should error with no argument", async () => {
 					const fileContent = "len();";
 					try {
@@ -143,7 +144,7 @@ describe("Built-ins", () => {
 
 	describe("Built-in variables", () => {
 		it("__name__", async () => {
-			const stream = new KipperParseStream({ stringContent: "print(__name__);", name: "test.kip" });
+			const stream = new KipperFileStream({ stringContent: "print(__name__);", name: "test.kip" });
 			const result = await compiler.compile(stream, { target: new TargetTS() });
 
 			assert.include(result.write(), "print(__name__);");

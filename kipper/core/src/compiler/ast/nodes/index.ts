@@ -1,9 +1,8 @@
 /**
- * Language-specific AST nodes enriched with semantic data and logical handling that implement the semantic
- * analysis, type checking and translation of Kipper code.
- * @since 0.8.0
+ * Module containing all the AST node classes.
+ * @since 0.10.0
  */
+export * from "./declarations";
 export * from "./expressions";
-export * from "./definitions";
 export * from "./statements";
-export * from "./factories";
+export * from "./root-ast-node";

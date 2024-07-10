@@ -6,18 +6,27 @@
  * @since 0.0.3
  */
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
-import type { CompilationUnitContext, KipperLexer, KipperParser, KipperParseStream } from "./parser";
+import type {
+	CompilationUnitContext,
+	KipperLexer,
+	KipperParser,
+	LexerParserData,
+	KipperFileStream,
+} from "./lexer-parser";
 import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import type { KipperWarning } from "../warnings";
-import type { CompilableASTNode, RootASTNode, Expression } from "./ast";
-import type { EvaluatedCompileConfig } from "./compile-config";
+import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
-import { GlobalScope, InternalReference, KipperSemanticChecker, KipperTypeChecker, Reference } from "./analysis";
+import type { EvaluatedCompileConfig } from "./compile-config";
+import type { InternalReference, Reference } from "./analysis";
+import { GlobalScope, KipperSemanticChecker, KipperTypeChecker } from "./analysis";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
-import { KipperOptimiser, OptimisationOptions } from "./optimiser";
-import { KipperLogger, LogLevel } from "../logger";
+import type { OptimisationOptions } from "./optimiser";
+import { KipperOptimiser } from "./optimiser";
+import type { KipperLogger } from "../logger";
+import { LogLevel } from "../logger";
 import { KipperWarningIssuer } from "./analysis/analyser/warning-issuer";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
@@ -29,7 +38,7 @@ import { ParseTreeWalker } from "antlr4ts/tree";
  * @since 0.0.3
  */
 export class KipperProgramContext {
-	private readonly _stream: KipperParseStream;
+	private readonly _stream: KipperFileStream;
 
 	private readonly _antlrParseTree: CompilationUnitContext;
 
@@ -43,6 +52,14 @@ export class KipperProgramContext {
 
 	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
+	/**
+	 * The channels in which the lexer operated and placed all the lexed tokens.
+	 * @private
+	 * @see compiler/lexer-parser/lexer-channels.ts
+	 * @since 0.11.0
+	 */
+	private readonly _channels: LexerParserData["channels"];
+
 	private _abstractSyntaxTree: RootASTNode | undefined;
 
 	/**
@@ -53,7 +70,7 @@ export class KipperProgramContext {
 	private _compiledCode: Array<TranslatedCodeLine> | undefined;
 
 	/**
-	 * The global scope of this program, containing all variable and function definitions
+	 * The global scope of this program, containing all variable and function declarations
 	 * @private
 	 */
 	private readonly _globalScope: GlobalScope;
@@ -148,10 +165,7 @@ export class KipperProgramContext {
 	public readonly builtInVariables: Array<BuiltInVariable>;
 
 	constructor(
-		stream: KipperParseStream,
-		parseTreeEntry: CompilationUnitContext,
-		parser: KipperParser,
-		lexer: KipperLexer,
+		lexerParserData: LexerParserData,
 		logger: KipperLogger,
 		target: KipperCompileTarget,
 		internals: Array<InternalFunction>,
@@ -168,13 +182,14 @@ export class KipperProgramContext {
 		this.typeChecker = typeChecker ?? new KipperTypeChecker(this);
 		this.optimiser = optimiser ?? new KipperOptimiser(this);
 		this.warningIssuer = warningIssuer ?? new KipperWarningIssuer(this);
-		this.parser = parser;
-		this.lexer = lexer;
+		this.parser = lexerParserData.parser;
+		this.lexer = lexerParserData.lexer;
 		this.compileConfig = compileConfig;
 		this.builtInVariables = [];
 		this.builtInFunctions = [];
-		this._stream = stream;
-		this._antlrParseTree = parseTreeEntry;
+		this._stream = lexerParserData.fileStream;
+		this._channels = lexerParserData.channels;
+		this._antlrParseTree = lexerParserData.parseTree;
 		this._globalScope = new GlobalScope(this);
 		this._abstractSyntaxTree = undefined;
 		this._builtInFunctionReferences = [];
@@ -198,6 +213,7 @@ export class KipperProgramContext {
 		);
 	}
 
+	// @ts-ignore
 	/**
 	 * Asserts a certain truth.
 	 * @param ctx The AST node context item.
@@ -250,9 +266,9 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Returns the {@link KipperParseStream} which contains the raw file data.
+	 * Returns the {@link KipperFileStream} which contains the raw file data.
 	 */
-	public get stream(): KipperParseStream {
+	public get stream(): KipperFileStream {
 		return this._stream;
 	}
 

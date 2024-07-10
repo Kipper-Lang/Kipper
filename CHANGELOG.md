@@ -28,6 +28,203 @@ To use development versions of Kipper download the
 
 </details>
 
+## [0.11.0] - 2024-07-10
+
+### Added
+
+- Implemented Processing for File Scoped Pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
+- Added Lambda Expressions, which are anonymous functions that can be used as expressions.
+  ([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
+- Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
+  ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
+- Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
+  ([#534](https://github.com/Kipper-Lang/Kipper/issues/534))
+- Implemented Do-While-Loop (`do ... while ...`) iteration statements.
+  ([#271](https://github.com/Kipper-Lang/Kipper/issues/271))
+- Support for config files with a new monorepo package called `@kipper/config`, which implements config file loading
+  and parsing. This package is used by the Kipper CLI to automatically load and parse config files.
+  ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
+- Added setup wizard to the `@kipper/cli` to automatically create a Kipper project with a config file.
+  ([#502](https://github.com/Kipper-Lang/Kipper/issues/502)).
+- Support for complex string formatting (or also called templating) in the form of Python-like F-Strings.
+  ([#287](https://github.com/Kipper-Lang/Kipper/issues/287)).
+- Support for string multiplication using the `*` operator.
+  ([#478](https://github.com/Kipper-Lang/Kipper/issues/478)).
+- New CLI flag `--dry-run` in `compile`, which only compiles the program and does not write any outputs.
+  ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
+- New valid conversions:
+  - `void` to `str`.
+  - `null` to `str`.
+  - `undefined` to `str`.
+- New modules:
+  - `kipper/core/tools`, which contains all tools and utilities used by the compiler.
+  - `kipper/core/tools/decorators`, which contains all decorators used by the compiler.
+  - `kipper/core/tools/functions`, which contains all functions used by the compiler.
+  - `kipper/core/tools/types`, which contains all types used by the compiler.
+  - `kipper/core/compiler/ast/common`, which contains commonly used types and functions.
+  - `kipper/core/compiler/ast/factories`, which replaces the old file `factories.ts` and contains all AST factory
+    classes and types.
+  - `kipper/core/compiler/ast/mapping`, which contains all AST mapping objects and the `ASTNodeMapper` class.
+- New classes:
+  - `ASTNodeMapper`, which handles the mapping between kind numbers, rule names, AST classes and parser context classes.
+  - `PrimaryExpression`, which is an abstract base class for all primary expressions.
+  - `PostfixExpression`, which is an abstract base class for all postfix expressions.
+  - `PromptModule` in `@kipper/cli`, which contains all prompt-related functions and classes.
+  - `ObjectPrimaryExpression`, which represents an AST object primary expression.
+  - `ObjectProperty`, which represents an AST object property.
+  - `BitwiseExpression`, which represents an AST bitwise expression.
+  - `BitwiseAndExpression`, which represents an AST bitwise AND expression.
+  - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
+  - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
+  - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
+  - `LambdaExpression`, which represents an AST lambda expression.
+  - `PragmaProcessor` which handles the processing of all possible Pragmas.
+- New interfaces:
+  - `LambdaExpressionSemantics`, which represents the semantics of a lambda expression.
+  - `LambdaExpressionTypeSemantics`, which represents the type semantics of a lambda expression.
+  - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
+  - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
+  - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
+  - `PostfixExpressionTypeSemantics`, which represents the type semantics of a postfix expression.
+  - `IterationStatementTypeSemantics`, which represents the type semantics of an iteration statement.
+  - `ExpressionStatementSemantics`, which represents the semantics of an expression statement.
+  - `ExpressionStatementTypeSemantics`, which represents the type semantics of an expression statement.
+  - `StatementSemantics`, which represents the semantics of a statement.
+  - `StatementTypeSemantics`, which represents the type semantics of a statement.
+  - `IfStatementTypeSemantics`, which represents the type semantics of an if statement.
+  - `CompoundStatementSemantics`, which represents the semantics of a compound statement.
+  - `CompoundStatementTypeSemantics`, which represents the type semantics of a compound statement.
+  - `ForLoopStatementTypeSemantics`, which represents the type semantics of a for loop statement.
+  - `DoWhileLoopIterationStatementTypeSemantics`, which represents the type semantics of a do-while loop statement.
+  - `WhileLoopStatementTypeSemantics`, which represents the type semantics of a while loop statement.
+  - `JumpStatementTypeSemantics`, which represents the type semantics of a jump statement.
+  - `SwitchStatementSemantics`, which represents the semantics of a switch statement.
+  - `SwitchStatementTypeSemantics`, which represents the type semantics of a switch statement.
+  - `ObjectPrimaryExpressionSemantics`, which represents the semantics of an object primary expression.
+  - `ObjectPrimaryExpressionTypeSemantics`, which represents the type semantics of an object primary expression.
+  - `ObjectPropertySemantics`, which represents the semantics of an object property.
+  - `ObjectPropertyTypeSemantics`, which represents the type semantics of an object property.
+  - `BitwiseExpressionSemantics`, which represents the semantics of a bitwise expression.
+  - `BitwiseExpressionTypeSemantics`, which represents the type semantics of a bitwise expression.
+  - `BitwiseAndExpressionSemantics`, which represents the semantics of a bitwise AND expression.
+  - `BitwiseAndExpressionTypeSemantics`, which represents the type semantics of a bitwise AND expression.
+  - `BitwiseOrExpressionSemantics`, which represents the semantics of a bitwise OR expression.
+  - `BitwiseOrExpressionTypeSemantics`, which represents the type semantics of a bitwise OR expression.
+  - `BitwiseXorExpressionSemantics`, which represents the semantics of a bitwise XOR expression.
+  - `BitwiseXorExpressionTypeSemantics`, which represents the type semantics of a bitwise XOR expression.
+  - `BitwiseShiftExpressionSemantics`, which represents the semantics of a bitwise shift expression.
+  - `BitwiseShiftExpressionTypeSemantics`, which represents the type semantics of a bitwise shift expression.
+- New parameters:
+  - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `genTSFunction()`, which, if true makes the function signature define no parameters.
+  - `ignoreParams` in `createTSFunctionSignature()`, which, if true makes the function signature define no parameters.
+- New constants:
+  - `DEFAULT_TOKEN_CHANNEL`, which is the channel id of the default channel storing all the parser-relevant tokens that
+    the Lexer lexed.
+  - `HIDDEN`, which is the channel id of the channel storing all whitespaces and newlines that the Lexer lexed.
+  - `COMMENT`, which is the channel id of the channel storing all the comments that the Lexer lexed.
+  - `PRAGMA`, which is the channel id of the channel storing all pragma comments that the Lexer lexed.
+- New fields:
+  - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
+    context of the error.
+  - `ParserASTNode.ruleName`, which contains the rule name of the node.
+  - `LexerParserData.channels`, which stores the channels generated by the Lexer.
+- New types:
+  - `InverseMap`, which inverts a map by swapping the keys and values.
+- New functions:
+  - `KipperTargetBuiltInGenerator.voidToStr()`, for the built-in conversion from `void` to `str`.
+  - `KipperTargetBuiltInGenerator.nullToStr()`, for the built-in conversion from `null` to `str`.
+  - `KipperTargetBuiltInGenerator.undefinedToStr()`, for the built-in conversion from `undefined` to `str`.
+  - `replaceObjKeys()`, which replaces the keys of an object with the values returned by a function.
+  - `inverseMap()`, which inverts a map by swapping the keys and values.
+  - `loadConfig()` in `@kipper/cli`, which loads a config file from the specified path.
+  - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
+  - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
+  - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
+  - `PragmaProcessor.processSingleLine()`, which changes the compiler options according to the pragmas found in the file.
+
+### Changed
+
+- Fixed bug allowing the use of any expressions for call expressions as that is not implemented yet.
+- Standardised error output for the CLI as described in [#435](https://github.com/Kipper-Lang/Kipper/issues/435).
+  (This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
+  i.e. `0.11.0-alpha.0` does _not_ have this change).
+- Made `VoidOrNullOrUndefinedPrimaryExpression` a constant expression and inherit from the `ConstantExpression` class.
+  This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
+  also part of the `ParserConstantExpressionContext` type.
+- Renamed:
+  - Module `compiler/parser` to `lexer-parser`.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+  - Class `KipperParseStream` to `KipperFileStream` including its file to `file-stream.ts`.
+  - CLI Class `KipperParseFile` to `KipperInputFile` including its file to `input-file.ts`.
+  - Class `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - Function `getTSFunction()` to `genTSFunction()`.
+  - Grammar Rule `typeSpecifier` to `typeSpecifierExpression` and its AST class `TypeSpecifier` to
+    `TypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `identifierTypeSpecifier` to `identifierTypeSpecifierExpression` and its AST class
+    `IdentifierTypeSpecifier` to `IdentifierTypeSpecifierExpression`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `genericTypeSpecifier` to `genericTypeSpecifierExpression` and its AST class `GenericTypeSpecifier` to
+    `GenericTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `typeofTypeSpecifier` to `typeofTypeSpecifierExpression` and its AST class `TypeofTypeSpecifier` to
+    `TypeofTypeSpecifierExpression`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `forLoopStatement` to `forLoopIterationStatement` and its AST class `ForLoopStatement` to
+    `ForLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `whileLoopStatement` to `whileLoopIterationStatement` and its AST class `WhileLoopStatement` to
+    `WhileLoopIterationStatement`. This also includes changing the name in the `KipperTargetCodeGenerator`,
+    `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - Grammar Rule `doWhileLoopStatement` to `doWhileLoopIterationStatement` and its AST class
+    `DoWhileLoopStatement` to `DoWhileLoopIterationStatement`. This also includes changing the name in the
+    `KipperTargetCodeGenerator`, `KipperTargetSemanticAnalyser` and `KipperTargetBuiltInGenerator` classes.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+  - Class `ArrayLiteralPrimaryExpression` to `ArrayPrimaryExpression`.
+  - Interface `ArrayLiteralPrimaryExpressionSemantics` to `ArrayPrimaryExpressionSemantics`.
+  - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
+  - Interface `TangledPrimaryTypeSemantics` to `TangledPrimaryExpressionTypeSemantics`.
+  - Interface `DoWhileLoopStatementSemantics` to `DoWhileLoopIterationStatementSemantics`.
+  - Interface `ParseData` to `LexerParserData`.
+  - Method `TargetASTNodeCodeGenerator.arrayLiteralExpression` to `arrayPrimaryExpression`.
+  - Method `TargetASTNodeSemanticAnalyser.listPrimaryExpression` to `arrayPrimaryExpression`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - Field `LexerParserData.parseStream` to `fileStream`.
+- Moved:
+  - `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
+  - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module.
+  - `kipper/core/compiler/ast/ast-types.ts` to the new `kipper/core/compiler/ast/common` module.
+
+### Fixed
+
+- Redeclaration bug causing an `InternalError` after calling the compiler
+  ([#462](https://github.om/Kipper-Lang/Kipper/issues/462)).
+- Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
+  of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
+- Bug of invalid underline indent in error traceback.
+  ([#434](https://github.com/Kipper-Lang/Kipper/issues/434)).
+- CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
+  ([#451](https://github.com/Kipper-Lang/Kipper/issues/451)) (This is the same fix as in `0.10.3`, but was only
+  added to the dev branch with the release of `0.11.0-alpha.1` i.e. `0.11.0-alpha.0` still has this bug).
+- CLI error handling bug as described in [#491](https://github.com/Kipper-Lang/Kipper/issues/491). This includes
+  multiple bugs where errors were reported as "Unexpected CLI Error". (This is the same fix as in `0.10.4`, but with one
+  additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e.
+  `0.11.0-alpha.0` still has this bug).
+
+### Removed
+
+- Removed deprecated flag `--abort-on-first-error` in favour of `--no-recover`.
+  ([#501](https://github.com/Kipper-Lang/Kipper/issues/501)).
+- Removed CLI command `analyse` in favor of the flag `--dry-run` in the CLI command `compile`.
+  ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
+- Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
+  `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of
+  complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
+  `PrimaryExpression` instead.
+
 ## [0.10.4] - 2023-08-15
 
 ### Changed
@@ -35,16 +232,16 @@ To use development versions of Kipper download the
 - Moved function `executeKipperProgram` to `Run` as a private function.
 - Moved class `KipperCompileResult` to new file `compile-result.ts` in the same directory.
 - Field `KipperCompileResult.programCtx` can now be also `undefined`, due to the changed behaviour that now
-	a `KipperCompileResult` is also returned for syntax errors (where it has no value).
+  a `KipperCompileResult` is also returned for syntax errors (where it has no value).
 
 ### Fixed
 
-- CLI error handling bug as described in [#491](https://github.com/Luna-Klatzer/Kipper/issues/491). This includes
-	multiple bugs where errors were reported as "Unexpected CLI Error".
+- CLI error handling bug as described in [#491](https://github.com/Kipper-Lang/Kipper/issues/491). This includes
+  multiple bugs where errors were reported as "Unexpected CLI Error".
 
 ### Deprecated
 
-- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Luna-Klatzer/Kipper/issues/501).
+- CLI flag `--abort-on-first-error` in favour of `--no-recover`. [#501](https://github.com/Kipper-Lang/Kipper/issues/501).
 
 ## [0.10.3] - 2023-07-22
 
@@ -57,7 +254,7 @@ To use development versions of Kipper download the
 
 ### Changed
 
-- Standardised error output for the CLI as described in [#435](https://github.com/Luna-Klatzer/Kipper/issues/435).
+- Standardised error output for the CLI as described in [#435](https://github.com/Kipper-Lang/Kipper/issues/435).
 - Error message of `KipperInternalError`, which does not have " - Report this bug to the developer using the traceback!"
   as a suffix anymore.
 - Changed success message of the `kipper analyse` command `Finished code analysis in ...` to `Done in ...`.
@@ -66,7 +263,7 @@ To use development versions of Kipper download the
 ### Fixed
 
 - CLI bug where the `-t` shortcut flag was incorrectly shown for the command `help compile`.
-  ([#451](https://github.com/Luna-Klatzer/Kipper/issues/451))
+  ([#451](https://github.com/Kipper-Lang/Kipper/issues/451))
 
 ## [0.10.2] - 2023-06-16
 
@@ -83,18 +280,18 @@ To use development versions of Kipper download the
 ### Fixed
 
 - Redeclaration bug causing an `InternalError` after calling the compiler
-  ([#462](https://github.com/Luna-Klatzer/Kipper/issues/462)).
+  ([#462](https://github.com/Kipper-Lang/Kipper/issues/462)).
 - Compiler argument bug in `KipperCompiler`, where `abortOnFirstError` didn't precede `recover`, meaning that instead
   of an error being thrown the failed result was returned (As defined in the `recover` behaviour, which is incorrect).
 - Bug of invalid underline indent in error traceback.
-  ([#434](https://github.com/Luna-Klatzer/Kipper/issues/434)).
+  ([#434](https://github.com/Kipper-Lang/Kipper/issues/434)).
 
 ## [0.10.1] - 2023-02-21
 
 ### Fixed
 
 - Bug causing the compiler to not detect the expected useless statement warning for a useless arithmetic
-  expression. ([#426](https://github.com/Luna-Klatzer/Kipper/issues/426)).
+  expression. ([#426](https://github.com/Kipper-Lang/Kipper/issues/426)).
 
 ## [0.10.0] - 2023-02-19
 
@@ -102,37 +299,37 @@ To use development versions of Kipper download the
 
 - Added full support for custom-defined functions, function arguments, function return evaluation, function
   scopes/argument referencing and return-value code branch
-  inspection. ([#183](https://github.om/Luna-Klatzer/Kipper/issues/183)).
-- Implemented while-loop iteration statements ([#268](https://github.com/Luna-Klatzer/Kipper/issues/268)).
-- Implemented for-loop iteration statements ([#270](https://github.com/Luna-Klatzer/Kipper/issues/270)).
+  inspection. ([#183](https://github.om/Kipper-Lang/Kipper/issues/183)).
+- Implemented while-loop iteration statements ([#268](https://github.com/Kipper-Lang/Kipper/issues/268)).
+- Implemented for-loop iteration statements ([#270](https://github.com/Kipper-Lang/Kipper/issues/270)).
 - JavaScript compilation target with a new monorepo package called `@kipper/target-js`, which implements the semantic
   analysis and code generation for JavaScript, and provides the class `KipperJavaScriptTarget` (`TargetTS` available
   as alias), which can be used as the target in
-  the `CompileConfig`. ([#208](https://github.com/Luna-Klatzer/Kipper/issues/208)).
+  the `CompileConfig`. ([#208](https://github.com/Kipper-Lang/Kipper/issues/208)).
 - Standalone web-module package called `@kipper/web`, which from now on will provide the `kipper-standalone.js` script
   that can be used in a web-application. This also bundles `@kipper/target-js` and `@kipper/target-ts`, which can be
   also accessed using the identifiers `KipperJS` and `KipperTS` in the web environment.
-  ([#86](https://github.com/Luna-Klatzer/Kipper/issues/86)).
+  ([#86](https://github.com/Kipper-Lang/Kipper/issues/86)).
 - Implemented arithmetic assignment operators `+=`, `-=`, `*=`, `%=` and `/=`
-  ([#273](https://github.com/Luna-Klatzer/Kipper/issues/273)).
+  ([#273](https://github.com/Kipper-Lang/Kipper/issues/273)).
 - Support for unary and postfix increment and decrement (`++`, `--`) expressions
-  ([#272](https://github.com/Luna-Klatzer/Kipper/issues/272)).
+  ([#272](https://github.com/Kipper-Lang/Kipper/issues/272)).
 - Implemented member-access expressions using bracket and slice notation (`[]`, `[:]`), which can be used to access
   specific elements of a string (In the future, this will also be used to access elements of arrays and objects).
-  ([#372](https://github.com/Luna-Klatzer/Kipper/issues/372)).
+  ([#372](https://github.com/Kipper-Lang/Kipper/issues/372)).
 - Support for single-line comments separated by a newline char.
-  ([#400](https://github.com/Luna-Klatzer/Kipper/issues/400)).
+  ([#400](https://github.com/Kipper-Lang/Kipper/issues/400)).
 - Implemented new built-in function `len()`, which returns the length of a string (In the future also arrays).
-  ([#411](https://github.com/Luna-Klatzer/Kipper/issues/411)).
+  ([#411](https://github.com/Kipper-Lang/Kipper/issues/411)).
 - Support for jump statements `continue` and `break` for iteration statements.
-  ([#269](https://github.com/Luna-Klatzer/Kipper/issues/269)).
+  ([#269](https://github.com/Kipper-Lang/Kipper/issues/269)).
 - New built-in variable `__name__` returning the name of the current file. This also includes general support for
   built-in variables in the compiler.
-  ([#412](https://github.com/Luna-Klatzer/Kipper/issues/412)).
+  ([#412](https://github.com/Kipper-Lang/Kipper/issues/412)).
 - New built-in Kipper type `null` and `undefined`, and support for the constant identifier `void`, `null` and
   `undefined`.
 - Finished implementation of warning reporting system and added warning for useless expression statements.
-  ([#413](https://github.com/Luna-Klatzer/Kipper/issues/413)).
+  ([#413](https://github.com/Kipper-Lang/Kipper/issues/413)).
 - New Kipper CLI flag `-t/--target` to specify the target to use for a compilation or execution.
 - Use of `"use strict";` in the TypeScript target to enforce the use of strict mode during runtime.
 - New generic parameter `TypeSemantics` to `ASTNode`, which defines the type data that the AST Node should
@@ -344,7 +541,7 @@ To use development versions of Kipper download the
   the semantic analysis and code generation for TypeScript, and provides the class `KipperTypeScriptTarget`
   (`TargetTS` available as alias), which can be used as the target in the `CompileConfig`.
 - Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
-  ([#198](https://github.com/Luna-Klatzer/Kipper/issues/198))
+  ([#198](https://github.com/Kipper-Lang/Kipper/issues/198))
 - Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type checking and
   target-specific semantic analysis into their own processing steps. (E.g. First, all AST nodes are semantically
   analysed, then type checked and semantically analysed for the target language)
@@ -455,7 +652,7 @@ To use development versions of Kipper download the
 ### Changed
 
 - Fixed traceback bug for re-declarations inside compound statements generating an invalid error message and traceback.
-  ([#240](https://github.com/Luna-Klatzer/Kipper/issues/240))
+  ([#240](https://github.com/Kipper-Lang/Kipper/issues/240))
 - Updated Kipper compiler error message.
 
 ## [0.9.1] - 2022-06-29
@@ -472,11 +669,11 @@ To use development versions of Kipper download the
 - Entry point file for the root package `kipper`, which exports `@kipper/core` allowing the `kipper`
   package to be used in projects.
 - Syntax support and code generation for if, else-if and else statements
-  ([#182](https://github.com/Luna-Klatzer/Kipper/issues/182)).
+  ([#182](https://github.com/Kipper-Lang/Kipper/issues/182)).
 - Code generation of expression lists (e.g. expression statements containing multiple child expressions)
-  ([#173](https://github.com/Luna-Klatzer/Kipper/issues/173)).
+  ([#173](https://github.com/Kipper-Lang/Kipper/issues/173)).
 - Code generation for tangled expressions.
-  ([#203](https://github.com/Luna-Klatzer/Kipper/issues/203))
+  ([#203](https://github.com/Kipper-Lang/Kipper/issues/203))
 - Comparative and relational expressions, which allow for logical operations and comparisons on expressions. List of all
   supported operators, which can be used between two expressions.
   - `!=` (Not Equal Operator)
@@ -496,11 +693,11 @@ To use development versions of Kipper download the
   - `-` (Minus Operator)
 - Partial support for compiler warnings by allowing `KipperError` instances to be warnings if `isWarning` is set to
   true and implementing AST-based checks for warnings using the new function `CompilableASTNode.checkForWarnings()`.
-  ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
+  ([#199](https://github.com/Kipper-Lang/Kipper/issues/199))
 - New flag `-w/--warnings` in the commands `compile`, `run` and `analyse`, which enables logger warnings.
-  ([#199](https://github.com/Luna-Klatzer/Kipper/issues/199))
+  ([#199](https://github.com/Kipper-Lang/Kipper/issues/199))
 - Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary, octal and
-  hex numbers was already added.) ([#184](https://github.com/Luna-Klatzer/Kipper/issues/184))
+  hex numbers was already added.) ([#184](https://github.com/Kipper-Lang/Kipper/issues/184))
 - New errors:
   - `InvalidRelationalComparisonTypeError`, which is thrown whenever a relational comparison is used with types that
     are not comparable.
@@ -605,7 +802,7 @@ To use development versions of Kipper download the
 
 ### Changed
 
-- Fixed const assignment bug [#188](https://github.com/Luna-Klatzer/Kipper/issues/188), which allowed assignments to
+- Fixed const assignment bug [#188](https://github.com/Kipper-Lang/Kipper/issues/188), which allowed assignments to
   read-only (constant) variables.
 - Fixed invalid identifier translation of built-in references in the TypeScript target.
 - Renamed:
@@ -645,7 +842,7 @@ To use development versions of Kipper download the
 ### Added
 
 - Implemented type conversion expressions, which allow for the conversion of a value to another type.
-  ([#133](https://github.com/Luna-Klatzer/Kipper/issues/133)) The following conversions are supported:
+  ([#133](https://github.com/Kipper-Lang/Kipper/issues/133)) The following conversions are supported:
   - `str` as `num`
   - `num` as `str`
   - `bool` as `str`
@@ -655,11 +852,11 @@ To use development versions of Kipper download the
   so will be blocked by the parser). This also includes a new expression class `BoolPrimaryExpression`, a new
   target-specific semantics function `KipperTargetSemanticAnalyser.boolPrimaryExpression` and target-specific
   translation function `KipperTargetCodeGenerator.boolPrimaryExpression`.
-  ([#134](https://github.com/Luna-Klatzer/Kipper/issues/134))
+  ([#134](https://github.com/Kipper-Lang/Kipper/issues/134))
 - Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere with an internal
-  identifier or reserved identifier/keyword. ([#153](https://github.com/Luna-Klatzer/Kipper/issues/153))
+  identifier or reserved identifier/keyword. ([#153](https://github.com/Kipper-Lang/Kipper/issues/153))
 - Implemented tree-shaking for internal and built-in functions using the new class `KipperOptimiser`, which removes
-  any function definitions that are not used ([#159](https://github.com/Luna-Klatzer/Kipper/issues/159)).
+  any function definitions that are not used ([#159](https://github.com/Kipper-Lang/Kipper/issues/159)).
 - New field `KipperCompileTarget.builtInGenerator`, which will store the built-in generator for each target.
 - New classes and interfaces:
   - `KipperTargetBuiltInGenerator`, which updates the behaviour for generating built-in functions.
@@ -764,15 +961,15 @@ To use development versions of Kipper download the
 ### Added
 
 - Implemented code generation for declarations, definitions and variable assignments
-  ([#26](https://github.com/Luna-Klatzer/Kipper/issues/26)).
+  ([#26](https://github.com/Kipper-Lang/Kipper/issues/26)).
 - Implemented semantic analysis for `AssignmentExpression` and `VariableDeclaration`.
 - Implemented support for identifiers references, which means variables can now be used in the following contexts:
   - As a function call argument: `call print(identifier)`
   - As a value in an arithmetic expression: `identifier + identifier` or `identifier + 5`
 - Implemented CLI flag `-s/--stringCode`, which can be used as a replacement for the argument `file`.
-  ([#100](https://github.com/Luna-Klatzer/Kipper/issues/100)). This flag is available for `kipper analyse`,
+  ([#100](https://github.com/Kipper-Lang/Kipper/issues/100)). This flag is available for `kipper analyse`,
   `kipper compile` and `kipper run`)
-- Implemented single char flags for the CLI ([#109](https://github.com/Luna-Klatzer/Kipper/issues/109)).
+- Implemented single char flags for the CLI ([#109](https://github.com/Kipper-Lang/Kipper/issues/109)).
 - Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
 - New fields:
   - `VariableDeclarationSemantics.value`, which represents the expression that was assigned in the definition.
@@ -794,16 +991,16 @@ To use development versions of Kipper download the
 
 - Optimised Kipper parsing and lexing process by updating the parsing behaviour in Kipper.g4. Kipper should handle
   standard expressions a lot faster from no on.
-- Fixed bug [#104](https://github.com/Luna-Klatzer/Kipper/issues/104), which caused an invalid evaluation of the return
+- Fixed bug [#104](https://github.com/Kipper-Lang/Kipper/issues/104), which caused an invalid evaluation of the return
   type of string additive expressions causing invalid type errors when used with other expressions.
 - Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the Antlr4 Parser and
   Lexer, when reading files using the `utf16le` encoding.
-- Fixed NULL character issue [#114](https://github.com/Luna-Klatzer/Kipper/pull/114) when writing TypeScript code onto
+- Fixed NULL character issue [#114](https://github.com/Kipper-Lang/Kipper/pull/114) when writing TypeScript code onto
   files using the `utf16le` encoding. From now on a buffer will be created using the proper encoding (also for
   `ascii` and `utf8`) that should be properly writable to a file.
-- Fixed incomplete translation bug [#118](https://github.com/Luna-Klatzer/Kipper/issues/118) of chained arithmetic
+- Fixed incomplete translation bug [#118](https://github.com/Kipper-Lang/Kipper/issues/118) of chained arithmetic
   expressions with the same operator (`N + N + N`) resulting in incomplete TypeScript code.
-- Fixed bug [#111](https://github.com/Luna-Klatzer/Kipper/issues/111), which caused an invalid evaluation of the
+- Fixed bug [#111](https://github.com/Kipper-Lang/Kipper/issues/111), which caused an invalid evaluation of the
   return type of string expressions.
 - Updated logger messages.
 - Updated `compiler` folder structure of the core package:
@@ -824,7 +1021,7 @@ To use development versions of Kipper download the
 ### Removed
 
 - Unnecessary traceback when encountering Kipper runtime errors as explained in
-  [#110](https://github.com/Luna-Klatzer/Kipper/issues/109).
+  [#110](https://github.com/Kipper-Lang/Kipper/issues/109).
 - Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4. (Only identifiers
   may be used.)
 - Option to redeclare variables. From on a variable declaration can only be done once and afterwards the variable may
@@ -980,25 +1177,25 @@ To use development versions of Kipper download the
 
 - New function `KipperLogger.reportError()` for reporting and logging errors.
 - New function `KipperAntlrErrorListener.getSourceCode()` for fetching the source code for a syntax error.
-- Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42)).
+- Proper tracebacks handling for `KipperSyntaxError` ([#42](https://github.com/Kipper-Lang/Kipper/issues/42)).
 - Getter fields `line`, `col`, `filePath` and `tokenSrc` in `KipperError`, which returns the metadata for the error.
 - Fallback option for Lexer errors, where if `offendingSymbol` is `undefined` the entire line of code is set as
-  `tokenSrc` ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
+  `tokenSrc` ([#36](https://github.com/Kipper-Lang/Kipper/issues/36)).
 - Getter field `KipperParseStream.lines` returning all lines in the source file as an array.
 
 ### Changed
 
-- Fixed missing traceback line hinting ([#24](https://github.com/Luna-Klatzer/Kipper/issues/24)).
-- Fixed missing error and fatal error logs ([#34](https://github.com/Luna-Klatzer/Kipper/issues/34)).
+- Fixed missing traceback line hinting ([#24](https://github.com/Kipper-Lang/Kipper/issues/24)).
+- Fixed missing error and fatal error logs ([#34](https://github.com/Kipper-Lang/Kipper/issues/34)).
 - Renamed function `CompileAssert.error()` to `CompileAssert.throwError()` and added error logging for the error
   passed as argument.
 - Renamed `KipperErrorListener` to `KipperAntlrErrorListener`.
 - Renamed `InternalKipperError` to `KipperInternalError`.
-- Fixed usage of default antlr4 listeners for lexer errors ([#36](https://github.com/Luna-Klatzer/Kipper/issues/36)).
+- Fixed usage of default antlr4 listeners for lexer errors ([#36](https://github.com/Kipper-Lang/Kipper/issues/36)).
 
 ### Removed
 
-- Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Luna-Klatzer/Kipper/issues/42))
+- Field `KipperCompiler.errorListener`, as due to ([#42](https://github.com/Kipper-Lang/Kipper/issues/42))
   the `KipperAntlrErrorListener` will have to be initialised per compilation, not per compiler instance.
 - Namespace `Utils` and moved its methods into the global scope of the file to allow the following import scheme
   `import * as Utils from "@kipper/core/utils"`, where the user can themselves define the wanted scope identifier.
@@ -1217,31 +1414,32 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.4...HEAD
-[0.10.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.3...v0.10.4
-[0.10.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.2...v0.10.3
-[0.10.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.1...v0.10.2
-[0.10.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.10.0...v0.10.1
-[0.10.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.2...v0.10.0
-[0.9.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.1...v0.9.2
-[0.9.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.9.0...v0.9.1
-[0.9.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.3...v0.9.0
-[0.8.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.2...v0.8.3
-[0.8.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.1...v0.8.2
-[0.8.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.8.0...v0.8.1
-[0.8.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.6.1...v0.7.0
-[0.6.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.6.0...v0.6.1
-[0.6.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.5.0...v0.6.0
-[0.5.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.1...v0.3.0
-[0.2.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.2...v0.2.0
-[0.1.2]: https://github.com/Luna-Klatzer/Kipper/compare/v0.1.1...v0.1.2
-[0.1.1]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
-[0.1.0]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.5...v0.1.1
-[0.0.5]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
-[0.0.4]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.3...v0.0.5
-[0.0.3]: https://github.com/Luna-Klatzer/Kipper/compare/v0.0.2...v0.0.3
-[0.0.2]: https://github.com/Luna-Klatzer/Kipper/tags/v0.0.2
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
+[0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4
+[0.10.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.2...v0.10.3
+[0.10.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.1...v0.10.2
+[0.10.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.0...v0.10.1
+[0.10.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.9.2...v0.10.0
+[0.9.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.9.1...v0.9.2
+[0.9.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.8.3...v0.9.0
+[0.8.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.8.2...v0.8.3
+[0.8.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.8.1...v0.8.2
+[0.8.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.8.0...v0.8.1
+[0.8.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.6.1...v0.7.0
+[0.6.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.2.1...v0.3.0
+[0.2.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.1.2...v0.2.0
+[0.1.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.0.5...v0.1.1
+[0.1.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.0.5...v0.1.1
+[0.0.5]: https://github.com/Kipper-Lang/Kipper/compare/v0.0.3...v0.0.5
+[0.0.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.0.3...v0.0.5
+[0.0.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/Kipper-Lang/Kipper/tags/v0.0.2

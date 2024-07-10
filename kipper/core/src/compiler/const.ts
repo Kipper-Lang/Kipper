@@ -1,5 +1,5 @@
 /**
- * Constant definitions and types for the compiler implementation.
+ * Constant declarations and types for the compiler implementation.
  * @since 0.3.0
  */
 import type {
@@ -10,7 +10,7 @@ import type {
 	UndefinedCustomType,
 } from "./analysis";
 import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
-import { InternalFunction } from "./runtime-built-ins";
+import type { InternalFunction } from "./runtime-built-ins";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -226,9 +226,12 @@ export type KipperType = KipperCompilableType | KipperErrorType;
  */
 export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
 	["num", "str"],
-	["str", "num"],
 	["bool", "str"],
+	["void", "str"],
+	["null", "str"],
+	["undefined", "str"],
 	["bool", "num"],
+	["str", "num"],
 ];
 
 /**
@@ -287,6 +290,92 @@ export type KipperLogicalOperator = KipperLogicalAndOperator | KipperLogicalOrOp
  * @since 0.9.0
  */
 export const kipperLogicalOperator: Array<KipperLogicalOperator> = ["&&", "||"];
+
+/**
+ * The bitwise-and operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP & EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseAndOperator = "&";
+
+/**
+ * The bitwise-and operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP & EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseAndOperator: KipperBitwiseAndOperator = "&";
+
+/**
+ * The bitwise-or operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP | EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseOrOperator = "|";
+
+/**
+ * The bitwise-or operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP | EXP;
+ * @since 0.9.0
+ */
+export const kipperBitwiseOrOperator: KipperBitwiseOrOperator = "|";
+
+/**
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
+ * @since 0.9.0
+ */
+export type KipperBitwiseShiftOperator = "<<" | ">>" | ">>>";
+
+/**
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
+ * @since 0.9.0
+ */
+export const kipperBitwiseShiftOperators: Array<KipperBitwiseShiftOperator> = ["<<", ">>", ">>>"];
+
+/**
+ * The bitwise-xor operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP ^ EXP;
+ * @since 0.9.0
+ */
+export type KipperBitwiseXorOperator = "^";
+
+/**
+ * The bitwise-xor operator, which can be used to combine two numbers bitwise.
+ * @example
+ * EXP ^ EXP;
+ * @since 0.11.0
+ */
+export const kipperBitwiseXorOperator: KipperBitwiseXorOperator = "^";
+
+/**
+ * The bitwise-not operator, which can be used to negate a number bitwise.
+ * @example
+ * ~EXP;
+ * @since 0.11.0
+ */
+export type KipperBitwiseNotOperator = "~";
+
+/**
+ * The bitwise-not operator, which can be used to negate a number bitwise.
+ * @example
+ * ~EXP;
+ * @since 0.11.0
+ */
+export const kipperBitwiseNotOperator: KipperBitwiseNotOperator = "~";
+
+/**
+ * All available bitwise operators inside Kipper, which can be used to combine two numbers bitwise.
+ * @since 0.9.0
+ */
+export type KipperBitwiseOperator =
+	| KipperBitwiseAndOperator
+	| KipperBitwiseOrOperator
+	| KipperBitwiseXorOperator
+	| KipperBitwiseShiftOperator;
 
 /**
  * All available equality operators inside Kipper, which can be used to compare two expressions against each other.
@@ -411,7 +500,7 @@ export const kipperIncrementOrDecrementOperators: Array<KipperIncrementOrDecreme
  * This type specifically exists for the {@link OperatorModifiedUnaryExpression}.
  * @since 0.9.0
  */
-export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOperator;
+export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOperator | KipperBitwiseNotOperator;
 
 /**
  * Modifier Unary operators, which are used to modify the value of an expression.
@@ -422,13 +511,17 @@ export type KipperUnaryModifierOperator = KipperNegateOperator | KipperSignOpera
 export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = [
 	kipperNegateOperator,
 	...kipperSignOperators,
+	kipperBitwiseNotOperator,
 ];
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperIncrementOrDecrementOperator;
+export type KipperUnaryOperator =
+	| KipperUnaryModifierOperator
+	| KipperIncrementOrDecrementOperator
+	| KipperBitwiseNotOperator;
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.

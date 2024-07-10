@@ -7,12 +7,14 @@ parser grammar KipperParser;
 options {
   tokenVocab=KipperLexer;
   contextSuperClass=KipperParserRuleContext;
+  superClass=KipperParserBase;
 }
 
 @parser::header {
 	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 	// kind values.
-	import { KipperParserRuleContext, ParserASTMapping, ASTKind } from "..";
+	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+	import KipperParserBase from "./base/KipperParserBase";
 }
 
 // Entry Point for an entire file
@@ -44,7 +46,7 @@ declaration
     ;
 
 functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifier compoundStatement?
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
 	;
 
 variableDeclaration
@@ -65,7 +67,7 @@ directDeclarator
     ;
 
 initDeclarator
-    :   declarator ':' typeSpecifier ('=' initializer)?
+    :   declarator ':' typeSpecifierExpression ('=' initializer)?
     ;
 
 parameterList
@@ -74,7 +76,7 @@ parameterList
     ;
 
 parameterDeclaration
-    :   declarator ':' typeSpecifier
+    :   declarator ':' typeSpecifierExpression
     ;
 
 initializer
@@ -84,20 +86,20 @@ initializer
 // -- Statements
 
 statement
-    :   compoundStatement
-    |   expressionStatement
+    :   expressionStatement
     |   selectionStatement
     |   iterationStatement
     |   jumpStatement
     | 	returnStatement
+    |	compoundStatement
     ;
 
 compoundStatement
-    :   '{' blockItemList? '}'
+    :   {this.notInsideExpressionStatement()}? '{' blockItemList? '}'
     ;
 
 expressionStatement
-    :   expression SemiColon
+    :   {this.enterExpressionStatement()} expression SemiColon {this.exitExpressionStatement()}
     ;
 
 selectionStatement
@@ -152,14 +154,20 @@ returnStatement
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
     :   tangledPrimaryExpression
+    |   arrayPrimaryExpression
+    |   objectPrimaryExpression
     |   boolPrimaryExpression
     | 	identifierPrimaryExpression
     |   stringPrimaryExpression
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
-    |   arrayLiteralPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
+    |   lambdaExpression
     ;
+
+lambdaExpression
+   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
+   ;
 
 tangledPrimaryExpression
 	:   '(' expression ')'
@@ -177,20 +185,44 @@ identifier
 	:	Identifier
 	;
 
+identifierOrStringPrimaryExpression
+	:	identifier
+	|	stringPrimaryExpression
+	;
+
 stringPrimaryExpression
 	:	SingleQuoteStringLiteral | DoubleQuoteStringLiteral
 	;
 
 fStringPrimaryExpression
-	:	SingleQuoteFStringLiteral | DoubleQuoteFStringLiteral
+	:	FStringSingleQuoteStart fStringSingleQuoteAtom* FStringSingleQuoteEnd
+	|   FStringDoubleQuoteStart fStringDoubleQuoteAtom* FStringDoubleQuoteEnd
+	;
+
+fStringSingleQuoteAtom
+	: 	FStringSingleQuoteAtom
+	|	FStringExpStart expression? FStringExpEnd
+	;
+
+fStringDoubleQuoteAtom
+	: 	FStringDoubleQuoteAtom
+	|	FStringExpStart expression? FStringExpEnd
 	;
 
 numberPrimaryExpression
 	:	IntegerConstant | FloatingConstant
 	;
 
-arrayLiteralPrimaryExpression
-	:	'[' (expression (',' expression)*)? ']'
+arrayPrimaryExpression
+	:	'[' (expression (',' expression)*)? ','? ']'
+	;
+
+objectPrimaryExpression
+	:	'{' (objectProperty (',' objectProperty)*)? ','? '}'
+	;
+
+objectProperty
+	:	identifierOrStringPrimaryExpression ':' expression
 	;
 
 voidOrNullOrUndefinedPrimaryExpression
@@ -206,15 +238,15 @@ voidOrNullOrUndefinedPrimaryExpression
 // comes in the form of a special '_labelASTKind' property on the rule context, which defines which AST class should
 // implement the rule context.
 //
-// Note: All AST identifier numbers are stored in the 'ParserASTMapping' object.
+// Note: All AST identifier numbers are stored in the 'ParseRuleKindMapping' object.
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParserASTMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
-	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
-	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
-	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParserASTMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
+	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
+	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
 	;
 
 argumentExpressionList
@@ -262,12 +294,12 @@ incrementOrDecrementOperator
     ;
 
 unaryOperator
-    :   '+' | '-' | '!'
+    :   '+' | '-' | '!' | '~'
     ;
 
 castOrConvertExpression
     :   unaryExpression # passOnCastOrConvertExpression
-    |   unaryExpression 'as' typeSpecifier #actualCastOrConvertExpression
+    |   unaryExpression 'as' typeSpecifierExpression #actualCastOrConvertExpression
     ;
 
 multiplicativeExpression
@@ -280,9 +312,18 @@ additiveExpression
     |   additiveExpression ('+'|'-') multiplicativeExpression # actualAdditiveExpression
     ;
 
+bitwiseShiftExpression
+    :   additiveExpression # passOnBitwiseShiftExpression
+    |   bitwiseShiftExpression bitwiseShiftOperators bitwiseAndExpression # actualBitwiseShiftExpression
+    ;
+
+bitwiseShiftOperators
+	:   '<<' | '>>' | '>>>'
+	;
+
 relationalExpression
-    :   additiveExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') additiveExpression # actualRelationalExpression
+    :   bitwiseShiftExpression # passOnRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') bitwiseShiftExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -290,9 +331,24 @@ equalityExpression
     |   equalityExpression ('=='| '!=') relationalExpression # actualEqualityExpression
     ;
 
+bitwiseAndExpression
+    :   equalityExpression # passOnBitwiseAndExpression
+    |   bitwiseAndExpression '&' equalityExpression # actualBitwiseAndExpression
+    ;
+
+bitwiseXorExpression
+    :   bitwiseAndExpression # passOnBitwiseXorExpression
+    |   bitwiseXorExpression '^' bitwiseAndExpression # actualBitwiseXorExpression
+    ;
+
+bitwiseOrExpression
+    :   bitwiseXorExpression # passOnBitwiseOrExpression
+    |   bitwiseOrExpression '|' bitwiseXorExpression # actualBitwiseOrExpression
+    ;
+
 logicalAndExpression
-    :   equalityExpression # passOnLogicalAndExpression
-    |   logicalAndExpression '&&' equalityExpression # actualLogicalAndExpression
+    :   bitwiseOrExpression # passOnLogicalAndExpression
+    |   logicalAndExpression '&&' bitwiseOrExpression # actualLogicalAndExpression
     ;
 
 logicalOrExpression
@@ -318,20 +374,19 @@ expression
     :   assignmentExpression (',' assignmentExpression)* // Comma-separated expressions
     ;
 
-// TODO! Implement the following type specifiers as expressions
-typeSpecifier
-    :   identifierTypeSpecifier | genericTypeSpecifier | typeofTypeSpecifier
+typeSpecifierExpression
+    :   identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression
     ;
 
-identifierTypeSpecifier
+identifierTypeSpecifierExpression
 	:	typeSpecifierIdentifier
 	;
 
-genericTypeSpecifier
+genericTypeSpecifierExpression
 	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
 	;
 
-typeofTypeSpecifier
+typeofTypeSpecifierExpression
 	:	'typeof' '(' typeSpecifierIdentifier ')'
 	;
 

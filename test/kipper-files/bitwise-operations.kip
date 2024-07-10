@@ -1,0 +1,25 @@
+// This file tests the various bitwise operators in the language
+var a: num = 10;
+var c: num = a ^ 3;
+print(f"Result: {c}");
+
+var d: num = a & 3;
+print(f"Result: {d}");
+
+var e: num = a | 3;
+print(f"Result: {e}");
+
+var f: num = a << 3;
+print(f"Result: {f}");
+
+var g: num = a >> 3;
+print(f"Result: {g}");
+
+var h: num = ~a;
+print(f"Result: {h}");
+
+var i: num = a >>> 3;
+print(f"Result: {i}");
+
+var j: num = a ^ 3;
+print(f"Result: {j}");

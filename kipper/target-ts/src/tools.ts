@@ -2,7 +2,7 @@
  * Tools for handling the translation of Kipper code to TypeScript.
  * @since 0.8.0
  */
-import {
+import type {
 	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
@@ -50,15 +50,21 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 /**
  * Generates the TypeScript function signature, based on the {@link signature signature metadata}.
  * @param signature The function signature metadata.
+ * @param ignoreParams Whether or not to ignore the parameters of the function.
  * @since 0.10.0
  */
-export function createTSFunctionSignature(signature: {
-	identifier: string;
-	params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-	returnType: KipperCompilableType | Array<KipperCompilableType>;
-}): string {
+export function createTSFunctionSignature(
+	signature: {
+		identifier: string;
+		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
+		returnType: KipperCompilableType | Array<KipperCompilableType>;
+	},
+	ignoreParams: boolean = false,
+): string {
 	const { identifier, params } = signature;
-	const argsSignature = `${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
+	const argsSignature = ignoreParams
+		? ""
+		: `${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
 
 	return `function ${identifier}(${argsSignature}): ${TargetTS.getTypeScriptType(signature.returnType)}`;
 }

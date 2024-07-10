@@ -1,7 +1,7 @@
 <!--
-Please read through the given
+Please read through the given types of changes and select the correct one using an 'x' instead of the ' ' (space) in the brackets.
 
-Comments are marked by arrows, like in lines 1 and 5. They will not be visible in the final pull request!
+Note: Comments are marked by arrows, like here. They will not be visible in the final pull request!
 -->
 
 ## What type of change does this PR perform?
@@ -9,9 +9,8 @@ Comments are marked by arrows, like in lines 1 and 5. They will not be visible i
 <!-- Please put an X in the box of the line that applies -->
 <!-- If you are unsure if your code is a breaking change, read this: https://nordicapis.com/what-are-breaking-changes-and-how-do-you-avoid-them -->
 
-- [ ] Maintenance (Non-breaking change that updates dependencies)
 - [ ] Info or documentation change (Non-breaking change that updates repo info files (e.g. README.md, CONTRIBUTING.md, etc.) or online documentation)
-- [ ] Website feature update or docs development changes (Change that changes the design or functionality of the websites or docs)
+- [ ] Website (Change that changes the design or functionality of the websites or docs)
 - [ ] Development or internal changes (These changes do not add new features or fix bugs, but update the code in other ways)
 - [ ] Bug fix (Non-breaking change which fixes an issue)
 - [ ] New feature (Non-breaking change which adds functionality)
@@ -28,29 +27,9 @@ Comments are marked by arrows, like in lines 1 and 5. They will not be visible i
 Closes #INSERT_NR
 -->
 
-## List of Changes
-
-<!-- Please explain the changes in this PR and their influence. If this fixes an issue, describe what fixed the issue. -->
-
-<!-- Create for every essential change a list item (Link any issues, discussions or PRs if needed!) -->
-
-- Change Nr. 1
-- Change Nr. 2
-- ...
-
-## Does this PR create new warnings?
-
-<!-- Add any new warnings or possible issues that could occur with this PR. -->
-
-- Warning Nr. 1
-- Warning Nr. 2
-- ...
-
-<!-- Just write none if they are no warnings, like this:
-None.
--->
-
 ## Detailed Changelog
+
+_Not present for website/docs changes_
 
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added and remove any header with no item.). -->
 
@@ -65,6 +44,18 @@ None.
 ### Removed
 
 <!-- Just write none if they are no changelog entries (although you should definitely do some if they change source code), like this:
+None.
+-->
+
+## Does this PR create new warnings?
+
+<!-- Add any new warnings or possible issues that could occur with this PR. -->
+
+- Warning Nr. 1
+- Warning Nr. 2
+- ...
+
+<!-- Just write none if they are no warnings, like this:
 None.
 -->
 

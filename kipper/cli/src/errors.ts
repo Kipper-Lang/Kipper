@@ -53,3 +53,13 @@ export class KipperInvalidInputError extends KipperCLIError {
 		super(err);
 	}
 }
+
+/**
+ * Represents an error that is thrown whenever an unsupported configuration is used.
+ * @since 0.11.0
+ */
+export class KipperUnsupportedConfigError extends KipperCLIError {
+	constructor(err: string) {
+		super(err);
+	}
+}

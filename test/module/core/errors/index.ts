@@ -1,5 +1,6 @@
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import { CompileConfig, KipperError, KipperProgramContext } from "@kipper/core";
+import { KipperJavaScriptTarget } from "@kipper/target-js";
+import type { CompileConfig, KipperError, KipperProgramContext } from "@kipper/core";
 import { assert } from "chai";
 
 export const defaultTarget = new KipperTypeScriptTarget();
@@ -7,6 +8,13 @@ export const defaultTarget = new KipperTypeScriptTarget();
 export const defaultConfig: CompileConfig = {
 	abortOnFirstError: true,
 	target: defaultTarget,
+};
+
+export const jsTarget = new KipperJavaScriptTarget();
+
+export const jsConfig: CompileConfig = {
+	abortOnFirstError: true,
+	target: jsTarget,
 };
 
 export function ensureTracebackDataExists(e: KipperError): void {

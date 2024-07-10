@@ -1,40 +1,48 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.10.4",
+  "version": "0.11.0",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run"
   },
   "dependencies": {
+    "@kipper/config": "workspace:~",
     "@kipper/core": "workspace:~",
     "@kipper/target-js": "workspace:~",
     "@kipper/target-ts": "workspace:~",
     "@oclif/command": "1.8.36",
-    "@oclif/config": "1.18.17",
+		"@oclif/config": "1.18.17",
     "@oclif/plugin-help": "3.3.1",
     "@oclif/parser": "3.8.17",
     "@oclif/errors": "1.3.6",
-    "@oclif/plugin-warn-if-update-available": "3.1.7",
-    "tslog": "3.3.4"
+		"@oclif/plugin-warn-if-update-available": "2.0.37",
+		"tslib": "~2.6.2",
+		"tslog": "3.3.4",
+		"ts-node": "10.9.2",
+		"chalk": "4.1.2",
+		"inquirer": "7.3.3"
   },
   "devDependencies": {
     "@types/node": "20.14.9",
     "@types/sinon": "17.0.3",
-    "@oclif/test": "2.5.6",
+		"@types/inquirer": "7.3.3",
+		"@sinonjs/fake-timers": "11.2.2",
+		"@oclif/test": "2.5.6",
+		"json-parse-even-better-errors": "3.0.2",
     "ts-node": "10.9.2",
-    "@sinonjs/fake-timers": "11.2.2",
+		"copyfiles": "2.4.1",
     "rimraf": "5.0.7",
     "os-tmpdir": "2.0.0",
     "pseudomap": "1.0.2",
     "typescript": "5.1.3",
     "oclif": "3.17.2",
-    "json-parse-even-better-errors": "3.0.2",
-    "semver": "7.6.2"
-  },
+    "semver": "7.6.2",
+		"prettier": "2.8.8"
+	},
   "engines": {
-    "node": ">=16.0.0",
-    "pnpm": ">=8"
+    "node": "16.x || 18.x || 20.x || 22.x",
+    "pnpm": "8"
   },
   "files": [
     "lib",
@@ -45,10 +53,10 @@
     "LICENSE"
   ],
   "homepage": "https://kipper-lang.org",
-  "bugs": "https://github.com/Luna-Klatzer/Kipper/issues",
+  "bugs": "https://github.com/Kipper-Lang/Kipper/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Luna-Klatzer/Kipper"
+    "url": "https://github.com/Kipper-Lang/Kipper"
   },
   "keywords": [
     "kipper",
@@ -68,7 +76,7 @@
       "@oclif/plugin-warn-if-update-available"
     ],
     "helpClass": "./lib/help",
-    "repositoryPrefix": "https://github.com/Luna-Klatzer/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>",
+    "repositoryPrefix": "https://github.com/Kipper-Lang/Kipper/blob/v<%- version %>/kipper/cli/<%- commandPath %>",
     "warn-if-update-available": {
       "timeoutInDays": 7,
       "message": "<%= config.name %> npm package update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>."
@@ -76,13 +84,20 @@
   },
   "scripts": {
     "postpack": "rimraf oclif.manifest.json",
-    "prepack": "rimraf lib && tsc -b && oclif manifest && oclif readme",
+    "prepack": "rimraf lib && pnpm run build && oclif manifest && oclif readme",
     "version": "oclif readme && git add README.md && pnpm version",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "build": "tsc",
+    "postbuild": "copyfiles ./src/templates/**/* ./lib/templates/ --flat --all",
     "tslint": "eslint ./src/ --ext .ts --config ./../../.eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config ./../../.eslintrc --fix",
-    "start": "node ./bin/run"
+    "start": "node ./bin/run",
+    "start:analyse": "node ./bin/run analyse",
+    "start:compile": "node ./bin/run compile",
+    "start:help": "node ./bin/run help",
+    "start:new": "node ./bin/run new",
+    "start:run": "node ./bin/run run",
+    "start:version": "node ./bin/run version"
   }
 }

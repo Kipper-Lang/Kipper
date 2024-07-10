@@ -2,16 +2,19 @@
  * Target-specific Semantic Analyser.
  * @since 0.10.0
  */
-
 import type {
 	AdditiveExpression,
+	AnalysableASTNode,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	CompoundStatement,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -22,30 +25,30 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
-	ArrayLiteralPrimaryExpression,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
+	ReturnStatement,
+	SemanticData,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TypeData,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
-	TypeData,
-	SemanticData,
-	DoWhileLoopStatement,
-	ForLoopStatement,
-	ReturnStatement,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
-	AnalysableASTNode,
-	MemberAccessExpression,
+	WhileLoopIterationStatement,
 } from "../ast";
+import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
+import type { ObjectProperty } from "../ast";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -84,22 +87,22 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract expressionStatement?: TargetASTNodeSemanticAnalyser<ExpressionStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract doWhileLoopStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopStatement>;
+	public abstract doWhileLoopIterationStatement?: TargetASTNodeSemanticAnalyser<DoWhileLoopIterationStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract whileLoopStatement?: TargetASTNodeSemanticAnalyser<WhileLoopStatement>;
+	public abstract whileLoopIterationStatement?: TargetASTNodeSemanticAnalyser<WhileLoopIterationStatement>;
 
 	/**
-	 * Translates a {@link ForLoopStatement} into a specific language.
+	 * Translates a {@link ForLoopIterationStatement} into a specific language.
 	 * @since 0.10.0
 	 */
-	public abstract forLoopStatement?: TargetASTNodeSemanticAnalyser<ForLoopStatement>;
+	public abstract forLoopIterationStatement?: TargetASTNodeSemanticAnalyser<ForLoopIterationStatement>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link JumpStatement} instances.
@@ -134,9 +137,19 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract numberPrimaryExpression?: TargetASTNodeSemanticAnalyser<NumberPrimaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
-	public abstract listPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayLiteralPrimaryExpression>;
+	public abstract arrayPrimaryExpression?: TargetASTNodeSemanticAnalyser<ArrayPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ObjectPrimaryExpression} instances.
+	 */
+	public abstract objectPrimaryExpression?: TargetASTNodeSemanticAnalyser<ObjectPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ObjectProperty} instances.
+	 */
+	public abstract objectProperty?: TargetASTNodeSemanticAnalyser<ObjectProperty>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
@@ -235,6 +248,26 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract equalityExpression?: TargetASTNodeSemanticAnalyser<EqualityExpression>;
 
 	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseAndExpression} instances.
+	 */
+	public abstract bitwiseAndExpression?: TargetASTNodeSemanticAnalyser<BitwiseAndExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseOrExpression} instances.
+	 */
+	public abstract bitwiseOrExpression?: TargetASTNodeSemanticAnalyser<BitwiseOrExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseXorExpression} instances.
+	 */
+	public abstract bitwiseXorExpression?: TargetASTNodeSemanticAnalyser<BitwiseXorExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link BitwiseShiftExpression} instances.
+	 */
+	public abstract bitwiseShiftExpression?: TargetASTNodeSemanticAnalyser<BitwiseShiftExpression>;
+
+	/**
 	 * Performs translation-specific semantic analysis for {@link LogicalAndExpression} instances.
 	 */
 	public abstract logicalAndExpression?: TargetASTNodeSemanticAnalyser<LogicalAndExpression>;
@@ -253,4 +286,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }

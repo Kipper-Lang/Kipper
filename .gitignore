@@ -28,6 +28,10 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+coverage/*
+
+# antlr4 generated files
+gen/*
 
 # nyc __tests__ coverage
 .nyc_output
@@ -78,3 +82,6 @@ typings/
 *.tsbuildinfo
 
 *.idea
+
+# Nyc
+.nyc_output/

@@ -8,36 +8,38 @@ import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	IncrementOrDecrementPostfixExpressionSemantics,
 	ParameterDeclarationSemantics,
-	SemanticData,
-	TypeData,
 	UnaryExpressionSemantics,
+	AssignmentExpression,
+	FunctionDeclaration,
+	IncrementOrDecrementPostfixExpression,
+	MemberAccessExpression,
+	RelationalExpression,
+	Statement,
+	UnaryExpression,
+	LambdaExpression,
 } from "../../ast";
 import {
-	AssignmentExpression,
-	Expression,
-	RelationalExpression,
-	UnaryExpression,
 	CompoundStatement,
-	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	IfStatement,
-	IncrementOrDecrementPostfixExpression,
 	ParameterDeclaration,
 	ReturnStatement,
-	Statement,
 	TangledPrimaryExpression,
-	MemberAccessExpression,
+	Expression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import { ScopeDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration } from "../symbol-table";
-import {
+import type {
 	KipperArithmeticOperator,
+	KipperBitwiseOperator,
 	KipperCompilableType,
+	KipperReferenceableFunction,
+} from "../../const";
+import {
 	kipperCompilableTypes,
 	kipperIncrementOrDecrementOperators,
+	kipperMultiplicativeOperators,
 	kipperPlusOperator,
-	KipperReferenceable,
-	KipperReferenceableFunction,
 	kipperStrType,
 	kipperSupportedConversions,
 } from "../../const";
@@ -45,6 +47,7 @@ import {
 	ArgumentTypeError,
 	ArithmeticOperationTypeError,
 	AssignmentTypeError,
+	BitwiseOperationTypeError,
 	ExpressionNotCallableError,
 	IncompleteReturnsInCodePathsError,
 	InvalidAmountOfArgumentsError,
@@ -59,7 +62,9 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import { CheckedType, UncheckedType, UndefinedCustomType } from "../type";
+import type { UncheckedType } from "../type";
+import { CheckedType, UndefinedCustomType } from "../type";
+import type { Reference } from "../reference";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -156,22 +161,27 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ExpressionNotCallableError} If the passed {@link ref} is not callable.
 	 * @since 0.10.0
 	 */
-	public refTargetCallable(ref: KipperReferenceable): void {
-		if (ref instanceof ScopeDeclaration) {
-			const refType = KipperTypeChecker.getTypeForAnalysis(ref.type);
-			if (refType === undefined) {
+	public refTargetCallable(ref: Expression | Reference): void {
+		if ("refTarget" in ref && ref.refTarget instanceof ScopeDeclaration) {
+			const target = ref.refTarget;
+			const targetType = KipperTypeChecker.getTypeForAnalysis(target.type);
+			if (targetType === undefined) {
 				return; // Ignore undefined types - Skip type checking (the type is invalid anyway)
 			}
 
 			// If the reference is not callable, throw an error
-			if (!ref.isCallable) {
-				throw this.assertError(new ExpressionNotCallableError(refType));
-			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
+			if (!target.isCallable) {
+				throw this.assertError(new ExpressionNotCallableError(targetType));
+			} else if (target instanceof ScopeParameterDeclaration || target instanceof ScopeVariableDeclaration) {
 				// Calling a function stored in a variable or parameter is not implemented yet
 				throw this.notImplementedError(
 					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
 				);
 			}
+		} else if (ref instanceof Expression) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError("Function calls from expressions are not implemented yet."),
+			);
 		}
 	}
 
@@ -397,8 +407,36 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				return;
 			}
 
+			// Strings can use * to repeat a string n times
+			if (op === kipperMultiplicativeOperators[0] && leftOpType == kipperStrType && rightOpType == "num") {
+				return;
+			}
+
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
 			throw this.assertError(new ArithmeticOperationTypeError(leftOpType, rightOpType));
+		}
+	}
+
+	/**
+	 * Asserts that the passed type allows the bitwise operation.
+	 * @param leftOp The left operand expression.
+	 * @param rightOp The right operand expression.
+	 * @param op The bitwise operation that is performed.
+	 * @throws {BitwiseOperationTypeError} If the type of the left or right operand is not a number.
+	 * @since 0.11.0
+	 */
+	public validBitwiseExpression(leftOp: Expression, rightOp: Expression, op: KipperBitwiseOperator): void {
+		const leftOpType = KipperTypeChecker.getTypeForAnalysis(leftOp.getTypeSemanticData().evaluatedType);
+		const rightOpType = KipperTypeChecker.getTypeForAnalysis(rightOp.getTypeSemanticData().evaluatedType);
+
+		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
+		if (leftOpType === undefined || rightOpType === undefined) {
+			return;
+		}
+
+		// Ensure that both expressions are of type 'num'
+		if (leftOpType !== "num" || rightOpType !== "num") {
+			throw this.assertError(new BitwiseOperationTypeError(leftOpType, rightOpType));
 		}
 	}
 
@@ -469,7 +507,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
-	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
 		const returnType = KipperTypeChecker.getTypeForAnalysis(typeData.returnType);
@@ -484,7 +522,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// return type.
 		if (returnType !== "void") {
 			// Recursively check all code paths to ensure all return a value.
-			const checkChildrenCodePaths = (parent: Statement<SemanticData, TypeData>): boolean => {
+			const checkChildrenCodePaths = (parent: Statement | Expression | CompoundStatement): boolean => {
 				let returnPathsCovered = false;
 
 				// If the parent is an if statement, we have to check the if and else branches directly
@@ -670,6 +708,31 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					); // TODO! Add support for lists
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks whether the conditional expression is valid.
+	 * @param trueBranch The expression which is called when the condition evaluates to true.
+	 * @param falseBranch The expression which is called when the condition evaluates to false.
+	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
+	 * @since 0.11.0
+	 */
+	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+		const trueBranchType = KipperTypeChecker.getTypeForAnalysis(trueBranch.getTypeSemanticData().evaluatedType);
+		const falseBranchType = KipperTypeChecker.getTypeForAnalysis(falseBranch.getTypeSemanticData().evaluatedType);
+
+		// If the branch types are undefined, skip type checking (the types are invalid anyway)
+		if (trueBranchType === undefined || falseBranchType === undefined) {
+			return;
+		}
+
+		if (trueBranchType !== falseBranchType) {
+			throw this.notImplementedError(
+				new KipperNotImplementedError(
+					"Conditional expressions with mismatching branch return types are not implemented yet",
+				),
+			);
 		}
 	}
 }

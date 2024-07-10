@@ -1,4 +1,4 @@
-import { KipperCompileTarget } from "@kipper/core";
+import type { KipperCompileTarget } from "@kipper/core";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { KipperInvalidInputError } from "../errors";

@@ -3,8 +3,13 @@
  * @since 0.8.0
  */
 import type { TranslatedCodeLine } from "../const";
-import type { KipperCompileTarget, KipperTargetCodeGenerator, KipperTargetSemanticAnalyser } from "../target-presets";
-import type { KipperParser, KipperParserRuleContext } from "../parser";
+import type {
+	KipperCompileTarget,
+	KipperTargetCodeGenerator,
+	KipperTargetSemanticAnalyser,
+	TargetASTNodeCodeGenerator,
+} from "../target-presets";
+import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
 import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
@@ -12,7 +17,6 @@ import type { RootASTNode, SemanticData } from "./index";
 import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
-import type { TargetASTNodeCodeGenerator } from "../target-presets";
 import { AnalysableASTNode } from "./analysable-ast-node";
 
 /**
@@ -73,6 +77,17 @@ export abstract class CompilableASTNode<
 	 */
 	public addNewChild(newChild: CompilableNodeChild): void {
 		this._children.push(newChild);
+	}
+
+	/**
+	 * Returns whether this AST node has any side effects. This means that the node will change the state of the
+	 * program in some way and not only return a value.
+	 *
+	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
+	 * @since 0.11.0
+	 */
+	public hasSideEffects(): boolean {
+		return false;
 	}
 
 	/**
