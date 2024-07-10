@@ -6,6 +6,7 @@ nav:
   - ./goals-and-roadmap.md
   - ./supported-platforms.md
   - ./usage-examples.md
+  - ./api/
   - ./variables.md
   - ./datatypes/
   - ./expressions/
