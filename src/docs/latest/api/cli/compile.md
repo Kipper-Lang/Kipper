@@ -1,5 +1,5 @@
 ---
-title: Kipper Compile
+title: compile
 dropdownTitle: compile
 ---
 
@@ -7,7 +7,7 @@ dropdownTitle: compile
 
 Compile a Kipper program into the specified target language.
 
-```
+```sh
 USAGE
   $ kipper compile [FILE]
 
@@ -53,4 +53,4 @@ EXAMPLES
   kipper compile -t ts ./path/to/file.kip -o build/ -e utf16le --warnings --log-timestamp
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-rc.0/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0/kipper/cli/src/commands/compile.ts)_

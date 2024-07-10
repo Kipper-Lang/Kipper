@@ -1,13 +1,13 @@
 ---
-title: Kipper Help
-dropdownTitle: run
+title: help
+dropdownTitle: help
 ---
 
 ## `kipper help [COMMAND]`
 
 Display help for the Kipper CLI.
 
-```
+```sh
 USAGE
   $ kipper help [COMMAND]
 
@@ -18,4 +18,4 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-rc.0/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0/kipper/cli/src/commands/help.ts)_

@@ -1,5 +1,5 @@
 ---
-title: Kipper Version
+title: version
 dropdownTitle: version
 ---
 
@@ -7,9 +7,9 @@ dropdownTitle: version
 
 Display the currently installed Kipper version.
 
-```
+```sh
 USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-rc.0/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0/kipper/cli/src/commands/version.ts)_

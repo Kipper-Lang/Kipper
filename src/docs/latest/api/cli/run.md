@@ -1,5 +1,5 @@
 ---
-title: Kipper Run
+title: run
 dropdownTitle: run
 ---
 
@@ -7,7 +7,7 @@ dropdownTitle: run
 
 Compile and execute a Kipper program.
 
-```
+```sh
 USAGE
   $ kipper run [FILE]
 
@@ -46,4 +46,4 @@ EXAMPLES
   kipper run -t ts -o build/ -e utf8 -s "print('Hello, World!');" --warnings --log-timestamp
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0-rc.0/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.11.0/kipper/cli/src/commands/run.ts)_
