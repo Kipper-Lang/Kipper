@@ -157,7 +157,7 @@ export async function getBuildData(dataFile: Path): Promise<Record<string, any>>
 		versions: {
 			next: json["dist-tags"]["next"],
 			latest: json["dist-tags"]["latest"],
-			"0.10.0": "0.10.0",
+			"0.10.4": "0.10.4",
 			"0.9.2": "0.9.2",
 		},
 		docsVersions: await (async () => {
