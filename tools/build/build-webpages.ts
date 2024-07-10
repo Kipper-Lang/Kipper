@@ -377,7 +377,7 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 
 	// Only if '--no-api-docs' is not specified then we build the API docs
 	if (!noAPIDocsFlag) {
-    const packagesToDocument = ["core", "target-ts", "target-js"];
+    const packagesToDocument = ["core", "target-ts", "target-js", "config"];
     const packageProjectPath: RelativePath = "/kipper/";
 
 		// Build the API docs - Injecting the API docs into the already compiled build folder

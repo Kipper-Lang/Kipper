@@ -1,6 +1,6 @@
 ---
-title: index
-dropdownTitle: "@kipper/target-js"
+title: config
+dropdownTitle: "@kipper/config"
 nav:
   - index.md
 ---

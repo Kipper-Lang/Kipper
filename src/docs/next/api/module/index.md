@@ -4,6 +4,7 @@ dropdownTitle: Module
 nav:
 - index.md
 - core/
+- config/
 - 'target-js/'
 - 'target-ts/'
 ---
