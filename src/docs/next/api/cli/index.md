@@ -3,6 +3,11 @@ title: Overview
 dropdownTitle: CLI
 nav:
   - index.md
+  - new.md
+  - run.md
+  - compile.md
+  - help.md
+  - version.md
 ---
 
 # Kipper CLI API
@@ -14,13 +19,26 @@ Unlike the programmatic API, the CLI can be interacted with using the command li
 and passing flags (arguments) to the `kipper` command, which is per default available in your package or globally when
 the `@kipper/cli` package is installed.
 
-<div class="important">
-<p>
-The API docs are a work-in-progress and will be slowly, but surely realised with the development of Kipper.
-As such this part of the docs is not fully realised yet, and will be updated in the future.
-</p>
-<p>
-Please go <a href="../compiler-setup.html#configuring-the-kipper-compiler-cli">Compiler Setup</a> for CLI
-configuration info.
-</p>
-</div>
+## Usage
+
+<!-- usage -->
+```sh-session
+$ npm install -g @kipper/cli
+$ kipper COMMAND
+running command...
+$ kipper (--version)
+@kipper/cli/0.11.0-rc.0 linux-x64 node-v18.18.2
+$ kipper --help [COMMAND]
+USAGE
+  $ kipper COMMAND
+...
+```
+<!-- usagestop -->
+
+## Available Commands
+
+- [`kipper new [LOCATION]`](./new.html): Initialises a new Kipper project.
+- [`kipper run [FILE]`](./run.html): Compiles and runs a Kipper program.
+- [`kipper compile [FILE]`](./compile.html): Compiles a Kipper program to a target language.
+- [`kipper help [COMMAND]`](./help.html): Displays help information about the Kipper CLI.
+- [`kipper version`](./version.html): Displays the version of the Kipper CLI.

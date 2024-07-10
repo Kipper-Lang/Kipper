@@ -28,8 +28,16 @@ EXP ( + | - | * | / | ** | % ) EXP
 
 ### Multiply Operator
 
+Standard multiplications can be done between operands of the type `num`.
+
 ```kipper
 2.4 * 5; // -> 12
+```
+
+Additionally, string repetitions can be also performed using the `*` operator.
+
+```kipper
+"Hello " * 3; // -> "Hello Hello Hello "
 ```
 
 ### Divide Operator

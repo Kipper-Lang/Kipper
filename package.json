@@ -21,7 +21,6 @@
     "prod-build": "pnpm run build --prod",
     "postprod-build": "pnpm run postbuild",
     "gh-pages-build": "pnpm run parcel-dev-build --public-url https://kipper-lang.org",
-    "start": "pnpm run dev",
     "lint": "pnpm run tslint && pnpm run prettier",
     "lint:fix": "pnpm run tslint:fix && pnpm run prettier",
     "prettier": "prettier --write ./src/ && prettier --write ./tools/",
@@ -30,7 +29,8 @@
     "tslint:fix": "eslint ./src/ --ext .ts --config .eslintrc --fix",
     "posttest": "pnpm run lint & pnpm run prettier",
     "predev": "pnpm run build",
-    "dev": "http-server ./dist -p 1234 -e html --cors"
+    "dev": "http-server ./dist -p 1234 -e html --cors",
+    "push-new-version": "ts-node ./tools/versioning/push-new-version.ts"
   },
   "devDependencies": {
     "@parcel/babylon-walk": "2.2.1",

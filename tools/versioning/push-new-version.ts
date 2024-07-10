@@ -5,7 +5,7 @@
  * Usage: node push-new-version.ts <version>
  */
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 const rootDir = path.resolve(__dirname, "..", "..");
 const docsDir = path.join(rootDir, "src", "docs");
@@ -14,7 +14,7 @@ const docsDir = path.join(rootDir, "src", "docs");
  * Ensures that the specified version is valid.
  * @throws {Error} If the version is invalid or undefined.
  */
-function ensureVersionIsValid(version: string) {
+async function ensureVersionIsValid(version: string) {
 	if (!version) {
 		throw new Error("No version specified.");
 	}
@@ -27,45 +27,37 @@ function ensureVersionIsValid(version: string) {
 /**
  * Creates a new version folder with the specified version number and copies the 'latest' folder into it.
  */
-function createVersionFolder(version: string) {
+async function createVersionFolder(version: string) {
 	const versionDir = path.join(docsDir, version);
 	console.log(` - Creating version folder: ${versionDir}`);
-	fs.mkdirSync(versionDir);
+	await fs.mkdir(versionDir);
 
 	// Copy all files in the 'latest' folder into the new version folder.
 	const latestDir = path.join(docsDir, "latest");
-	console.log(` - Copying 'latest' folder content to version folder '${version}'`);
-	fs.readdirSync(latestDir).forEach((file: string) => {
-		fs.copyFileSync(
-			path.join(latestDir, file), // src
-			path.join(versionDir, file), // dest
-		);
-	});
+	console.log(` - Moving 'latest' folder content to version folder '${version}'`);
+	await fs.cp(latestDir, versionDir, { recursive: true });
+  await fs.rm(latestDir, { recursive: true });
+  await fs.mkdir(latestDir);
 }
 
 /**
  * Moves the files from the 'next' folder to the 'latest' folder and replace its content.
  */
-function replaceLatestWithNext() {
+async function replaceLatestWithNext() {
 	const nextDir = path.join(docsDir, "next");
 	const latestDir = path.join(docsDir, "latest");
 
-	console.log(` - Moving 'next' folder content to 'latest' folder`);
-	fs.rmSync(latestDir, { recursive: true });
-	fs.mkdirSync(latestDir);
-	fs.readdirSync(nextDir).forEach((file: string) => {
-		fs.copyFileSync(
-			path.join(nextDir, file), // src
-			path.join(latestDir, file), // dest
-		);
-	});
+	console.log(` - Copying 'next' folder content to 'latest' folder (Preserving current state to allow for further updates)`);
+	await fs.cp(nextDir, latestDir, { recursive: true });
+  await fs.rm(nextDir, { recursive: true });
+  await fs.mkdir(nextDir);
 }
 
-function main() {
+async function main() {
 	const version = process.argv[2];
-	ensureVersionIsValid(version);
-	createVersionFolder(version);
-	replaceLatestWithNext();
+	await ensureVersionIsValid(version);
+	await createVersionFolder(version);
+	await replaceLatestWithNext();
 }
 
-main();
+void main();
