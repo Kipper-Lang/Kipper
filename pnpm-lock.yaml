@@ -152,9 +152,6 @@ devDependencies:
   '@parcel/utils':
     specifier: 2.11.0
     version: 2.11.0
-  '@parcel/watcher':
-    specifier: 2.0.7
-    version: 2.0.7
   '@parcel/workers':
     specifier: 2.11.0
     version: 2.11.0(@parcel/core@2.11.0)
@@ -5137,7 +5134,6 @@ packages:
   /typedoc@0.24.6(typescript@4.9.5):
     resolution: {integrity: sha512-c3y3h45xJv3qYwKDAwU6Cl+26CjT0ZvblHzfHJ+SjQDM4p1mZxtgHky4lhmG0+nNarRht8kADfZlbspJWdZarQ==}
     engines: {node: '>= 14.14'}
-    hasBin: true
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x
     dependencies:
@@ -5169,7 +5165,6 @@ packages:
 
   /update-browserslist-db@1.0.13(browserslist@4.22.3):
     resolution: {integrity: sha512-xebP81SNcPuNpPP3uzeW1NYXxI3rxyJzF3pD6sH4jE7o/IX+WtSpwnVU+qIsDPyk0d3hmFQ7mjqc6AtV604hbg==}
-    hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
     dependencies:
