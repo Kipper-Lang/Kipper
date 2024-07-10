@@ -7,6 +7,7 @@ nav:
   - ./assignment-expression.md
   - ./conditional-expression.md
   - ./logical-expression.md
+  - ./bitwise-expression.md
   - ./relational-expression.md
   - ./convert-expression.md
   - ./f-string-expression.md
