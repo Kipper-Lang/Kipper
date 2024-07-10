@@ -18,6 +18,20 @@ To use development versions of Kipper download the
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+</details>
+
+## [0.11.0] - 2024-07-10
+
+### Added
+
 - Implemented Processing for File Scoped Pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
 - Added Lambda Expressions, which are anonymous functions that can be used as expressions.
   ([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
@@ -200,8 +214,6 @@ To use development versions of Kipper download the
   additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e.
   `0.11.0-alpha.0` still has this bug).
 
-### Deprecated
-
 ### Removed
 
 - Removed deprecated flag `--abort-on-first-error` in favour of `--no-recover`.
@@ -212,8 +224,6 @@ To use development versions of Kipper download the
   `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of
   complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
   `PrimaryExpression` instead.
-
-</details>
 
 ## [0.10.4] - 2023-08-15
 
@@ -1404,7 +1414,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...HEAD
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4
 [0.10.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.2...v0.10.3
 [0.10.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.1...v0.10.2
