@@ -1,4 +1,5 @@
-import { KipperCompiler, KipperCompileResult } from "@kipper/core";
+import type { KipperCompileResult } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
@@ -567,6 +568,51 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("Conditional Expression", () => {
+		it("Simple conditional expression", async () => {
+			const fileContent = "const x: num = true ? 5 : 10;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "const x: number = true ? 5 : 10", "Invalid TypeScript code (Expected different output)");
+		});
+
+		// Test for a nested conditional expression
+		it("Nested conditional expression", async () => {
+			const fileContent = "const x: num = true ? (false ? 5 : 10) : (false ? 15 : 20);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"const x: number = true ? (false ? 5 : 10) : (false ? 15 : 20);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		// Test for multiple conditional expressions
+		it("Multiple conditional expressions", async () => {
+			const fileContent = "const x: num = true ? 5 : false ? 10 : 15;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"const x: number = true ? 5 : false ? 10 : 15;",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
+
 	describe("While loop", () => {
 		it("Simple Loop with compound statement", async () => {
 			const fileContent = "var x: num = 1; while (x <= 5) { x += 1; }; print(x as str);";
@@ -746,6 +792,92 @@ describe("Core functionality", () => {
 		});
 	});
 
+	//do while loop tests
+	describe("Do While loop", () => {
+		it("Simple Loop with compound statement", async () => {
+			const fileContent = "var x: num = 1; do { x += 1; } while (x <= 5); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "do {\n  x += 1;\n} while (x <= 5)", "Invalid TypeScript code (Expected different output)");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with expression statement", async () => {
+			const fileContent = "var x: num = 1; do x += 1; while (x <= 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(code, "do \n  x += 1;\nwhile (x <= 10)", "Invalid TypeScript code (Expected different output)");
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "11", "Expected different output"), jsCode);
+		});
+
+		it("Simple Loop with if statement", async () => {
+			const fileContent = "var x: num = 1; do { if (x != 10) x += 1; } while (x < 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  if (x !== 10) {\n    x += 1;\n  } \n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "10", "Expected different output"), jsCode);
+		});
+
+		it("Can be interrupted with break", async () => {
+			const fileContent = "var x: num = 1; do { if (x == 5) break; x += 1; } while (x < 10); print(x as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  if (x === 5) {\n    break;\n  } \n  x += 1;\n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
+		});
+
+		it("Can be interrupted with continue", async () => {
+			const fileContent =
+				"var x: num = 1; var y: num = 1; do { x++; if (x > 5) continue; y++; } while (x < 10); print(y as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const code = instance.write();
+			assert.include(
+				code,
+				"do {\n  x++;\n  if (x > 5) {\n    continue;\n  } \n  y++;\n} while (x < 10)",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(code);
+			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
+		});
+	});
+
 	describe("Member access", () => {
 		describe("Dot notation", () => {});
 
@@ -835,6 +967,276 @@ describe("Core functionality", () => {
 
 				const jsCode = ts.transpile(instance.write());
 				testPrintOutput((message: any) => assert.equal(message, "1234", "Expected different output"), jsCode);
+			});
+		});
+	});
+
+	describe("F-String", () => {
+		const types = [
+			{ type: "str", value: "' 1234 '" },
+			{ type: "num", value: 12345 },
+			{ type: "bool", value: true },
+			{ type: "null", value: null },
+			{ type: "undefined", value: undefined },
+		];
+		types.forEach((arg) => {
+			describe(`Inserting [${arg.type}]`, () => {
+				it("Inserting single value", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+
+				it("Inserting two values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value} - 2. ${arg.value}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+
+				it("Inserting three values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}} - 3. {${arg.value}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value} - 2. ${arg.value} - 3. ${arg.value}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+			});
+		});
+
+		const types2 = [
+			{ type: "str", value1: "' 12'", value2: "'34 '" },
+			{ type: "num", value1: 12, value2: 34 },
+		];
+		types2.forEach((arg) => {
+			describe(`Inserting additive expression [${arg.type}]`, () => {
+				it("Inserting single value", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+
+				it("Inserting two values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}} - 2. {${arg.value1} + ${arg.value2}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+
+				it("Inserting three values", async () => {
+					const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}} - 2. {${arg.value1} + ${arg.value2}} - 3. {${arg.value1} + ${arg.value2}}");`;
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+					assert.isDefined(instance.programCtx);
+					assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+					assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+					const jsCode = ts.transpile(instance.write());
+					testPrintOutput(
+						(msg: any) =>
+							assert.equal(
+								msg,
+								// @ts-ignore
+								`Test: 1. ${arg.value1 + arg.value2} - 2. ${arg.value1 + arg.value2} - 3. ${
+									// @ts-ignore
+									arg.value1 + arg.value2
+								}`.replace(/'/g, ""),
+							),
+						jsCode,
+					);
+				});
+			});
+		});
+
+		describe("Inserting function expression", () => {
+			const functionContent = "def test() -> str { return 'SUCCESS'; }";
+
+			it("Inserting single value", async () => {
+				const fileContent = `${functionContent}; print(f"Test: 1. {test()}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. SUCCESS`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
+			});
+
+			it("Inserting two values", async () => {
+				const fileContent = `${functionContent}; print(f"Test: 1. {test()} - 2. {test()}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. SUCCESS - 2. SUCCESS`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
+			});
+
+			it("Inserting three values", async () => {
+				const fileContent = `${functionContent}; print(f"Test: 1. {test()} - 2. {test()} - 3. {test()}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. SUCCESS - 2. SUCCESS - 3. SUCCESS`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
+			});
+		});
+
+		describe("Inserting nested f-strings", () => {
+			it("One level", async () => {
+				const fileContent = `print(f"Test: 1. {f'{1 + 1}'}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. 2`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
+			});
+
+			it("Two levels", async () => {
+				const fileContent = `print(f"Test: 1. {f'{f'{1 + 1}'}'}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. 2`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
+			});
+
+			it("Three levels", async () => {
+				const fileContent = `print(f"Test: 1. {f'{f'{f'{1 + 1}'}'}'}");`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert(instance.programCtx!!.errors.length === 0, "Expected no compilation errors");
+				assert(instance.programCtx!!.stream.stringContent === fileContent, "Expected matching streams");
+
+				const jsCode = ts.transpile(instance.write());
+				testPrintOutput(
+					(msg: any) =>
+						assert.equal(
+							msg,
+							// @ts-ignore
+							`Test: 1. 2`.replace(/'/g, ""),
+						),
+					jsCode,
+				);
 			});
 		});
 	});

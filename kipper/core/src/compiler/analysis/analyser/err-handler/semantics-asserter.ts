@@ -5,10 +5,10 @@
  */
 import type { KipperProgramContext } from "../../../program-ctx";
 import type { KipperError } from "../../../../errors";
+import type { KipperNotImplementedError } from "../../../../errors";
 import type { CompilableASTNode } from "../../../ast";
-import { KipperNotImplementedError } from "../../../../errors";
 import { KipperSemanticErrorHandler } from "./semantics-error-handler";
-import { getParseRuleSource } from "../../../../utils";
+import { getParseRuleSource } from "../../../../tools";
 
 /**
  * Kipper Asserter, which is used to assert certain truths and throw {@link KipperError KipperErrors} in case that

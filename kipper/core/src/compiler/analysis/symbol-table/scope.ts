@@ -3,8 +3,8 @@
  * @since 0.8.0
  */
 import type { FunctionDeclaration, VariableDeclaration } from "../../ast";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
-import { SymbolTable } from "./symbol-table";
+import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { SymbolTable } from "./symbol-table";
 
 /**
  * A scope in a Kipper program, which can contain {@link ScopeVariableDeclaration variables},

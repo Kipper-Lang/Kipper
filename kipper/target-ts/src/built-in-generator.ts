@@ -6,22 +6,24 @@
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import type { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
 import { TargetTS } from "./target";
 
 /**
  * Generates a TypeScript function from the given signature and body.
  * @param signature The signature of the function.
  * @param body The body of the function.
+ * @param ignoreParams Whether or not to ignore the parameters of the function.
  * @since 0.10.0
  */
-export function getTSFunction(
+export function genTSFunction(
 	signature: {
 		identifier: string;
 		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
 		returnType: KipperCompilableType | Array<KipperCompilableType>;
 	},
 	body: string,
+	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
 	return [
 		[
@@ -29,7 +31,7 @@ export function getTSFunction(
 			" ",
 			"=",
 			" ",
-			createTSFunctionSignature(signature),
+			createTSFunctionSignature(signature, ignoreParams),
 			" ",
 			body,
 			";",
@@ -67,21 +69,36 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0].identifier;
 
-		return getTSFunction(signature, `{ return (${convArgIdentifier}).toString(); }`);
-	}
-
-	override async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
-		const signature = getTSFunctionSignature(funcSpec);
-		const convArgIdentifier = signature.params[0].identifier;
-
-		return getTSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
+		return genTSFunction(signature, `{ return (${convArgIdentifier}).toString(); }`);
 	}
 
 	override async boolToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0].identifier;
 
-		return getTSFunction(signature, `{ return \`\${${convArgIdentifier}}\`; }`);
+		return genTSFunction(signature, `{ return \`\${${convArgIdentifier}}\`; }`);
+	}
+
+	async voidToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		return genTSFunction(signature, `{ return "void"; }`, true);
+	}
+
+	async nullToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		return genTSFunction(signature, `{ return "null"; }`, true);
+	}
+
+	async undefinedToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		return genTSFunction(signature, `{ return "undefined"; }`, true);
+	}
+
+	override async strToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const convArgIdentifier = signature.params[0].identifier;
+
+		return genTSFunction(signature, `{ return parseInt(${convArgIdentifier}); }`);
 	}
 
 	override async boolToNum(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
@@ -89,7 +106,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		const convArgIdentifier = signature.params[0].identifier;
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO
-		return getTSFunction(signature, `{ return ${convArgIdentifier} ? 1 : 0; }`);
+		return genTSFunction(signature, `{ return ${convArgIdentifier} ? 1 : 0; }`);
 	}
 
 	override async slice(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
@@ -98,7 +115,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		const startIdentifier = signature.params[1].identifier;
 		const endIdentifier = signature.params[2].identifier;
 
-		return getTSFunction(
+		return genTSFunction(
 			signature,
 			`{ return ${objLikeIdentifier} ? ${objLikeIdentifier}.slice(${startIdentifier}, ${endIdentifier}) : ${objLikeIdentifier}; }`,
 		);
@@ -109,7 +126,7 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		const arrayLikeIdentifier = signature.params[0].identifier;
 		const indexIdentifier = signature.params[1].identifier;
 
-		return getTSFunction(
+		return genTSFunction(
 			signature,
 			`{ if (${indexIdentifier} >= ${arrayLikeIdentifier}.length) ` +
 				`throw new __kipper.IndexError(\`Index '\${${indexIdentifier}}' out of bonds of array-like.\`); ` +
@@ -117,19 +134,27 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		);
 	}
 
+	override async repeatString(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getTSFunctionSignature(funcSpec);
+		const repeatArgIdentifier = signature.params[0].identifier;
+		const timesArgIdentifier = signature.params[1].identifier;
+
+		return genTSFunction(signature, `{ return ${repeatArgIdentifier}.repeat(${timesArgIdentifier}); }`);
+	}
+
 	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0].identifier;
 
 		// Define the function signature and its body. We will simply use 'console.log(msg)' for printing out IO.
-		return getTSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
+		return genTSFunction(signature, `{ console.log(${printArgIdentifier}); }`);
 	}
 
 	async len(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const lenArgIdentifier = signature.params[0].identifier;
 
-		return getTSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
+		return genTSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {

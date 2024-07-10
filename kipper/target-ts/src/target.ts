@@ -2,11 +2,9 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
+import type { BuiltInFunction, BuiltInVariable, KipperCompilableType } from "@kipper/core";
 import {
-	BuiltInFunction,
-	BuiltInVariable,
 	kipperBoolType,
-	KipperCompilableType,
 	KipperCompileTarget,
 	kipperFuncType,
 	kipperListType,

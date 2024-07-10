@@ -29,6 +29,8 @@ Closes #INSERT_NR
 
 ## Detailed Changelog
 
+_Not present for website/docs changes_
+
 <!-- Detailed changelog that may be copied from `CHANGELOG.md` (Only add the items you've added and remove any header with no item.). -->
 
 ### Added

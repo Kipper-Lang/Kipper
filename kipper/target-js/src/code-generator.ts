@@ -2,20 +2,25 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
-	ComparativeExpressionSemantics,
-	LogicalExpressionSemantics,
-	TranslatedCodeLine,
-	TranslatedExpression,
+import type {
 	AdditiveExpression,
+	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseExpression,
+	BitwiseExpressionSemantics,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ComparativeExpression,
+	ComparativeExpressionSemantics,
 	ConditionalExpression,
+	DoWhileLoopIterationStatement,
 	EqualityExpression,
-	Expression,
 	ExpressionStatement,
+	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
 	FunctionDeclaration,
@@ -26,12 +31,16 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	ArrayLiteralPrimaryExpression,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalExpression,
+	LogicalExpressionSemantics,
 	LogicalOrExpression,
+	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
+	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -39,21 +48,22 @@ import {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TranslatedCodeLine,
+	TranslatedCodeToken,
+	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
-	VariableDeclaration,
+	VoidOrNullOrUndefinedPrimaryExpression,
+	WhileLoopIterationStatement,
 } from "@kipper/core";
 import {
 	CompoundStatement,
-	DoWhileLoopStatement,
-	ForLoopStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	MemberAccessExpression,
 	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	VoidOrNullOrUndefinedPrimaryExpression,
-	WhileLoopStatement,
+	VariableDeclaration,
+	Expression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -83,7 +93,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
-				'var __kipperGlobalScope = typeof __kipperGlobalScope !== "undefined" ? __kipperGlobalScope : typeof' +
+				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
 					' globalThis !== "undefined" ?' +
 					" globalThis : typeof" +
 					' window !== "undefined" ?' +
@@ -92,15 +102,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			],
 			// Create global kipper object - Always prefer the global '__kipper' instance
 			["// @ts-ignore"],
-			["var __kipper = __kipperGlobalScope.__kipper = __kipperGlobalScope.__kipper || __kipper || {}", ";"],
+			["var __kipper = __globalScope.__kipper = __globalScope.__kipper || __kipper || {}", ";"],
 			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError ||  (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
 				";",
 			],
+			["// @ts-ignore"],
 			[
-				'__kipper.IndexError = __kipper.IndexError ||  (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
 				";",
 			],
 		];
@@ -229,18 +241,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link DoWhileLoopStatement} into the JavaScript language.
+	 * Translates a {@link DoWhileLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	doWhileLoopStatement = async (node: DoWhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+	doWhileLoopIterationStatement = async (node: DoWhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.loopCondition.translateCtxAndChildren();
+		const statement = await semanticData.loopBody.translateCtxAndChildren();
+
+		// Check whether the loop body is a compound statement
+		const isCompound = semanticData.loopBody instanceof CompoundStatement;
+
+		return [
+			["do", " ", isCompound ? "{" : ""],
+			...(isCompound ? removeBraces(statement) : indentLines(statement)),
+			[isCompound ? "} " : "", "while", " ", "(", ...condition, ")"],
+		];
 	};
 
 	/**
-	 * Translates a {@link WhileLoopStatement} into the JavaScript language.
+	 * Translates a {@link WhileLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	whileLoopStatement = async (node: WhileLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+	whileLoopIterationStatement = async (node: WhileLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const condition = await semanticData.loopCondition.translateCtxAndChildren();
 		const statement = await semanticData.loopBody.translateCtxAndChildren();
@@ -256,10 +279,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ForLoopStatement} into the JavaScript language.
+	 * Translates a {@link ForLoopIterationStatement} into the JavaScript language.
 	 * @since 0.10.0
 	 */
-	forLoopStatement = async (node: ForLoopStatement): Promise<Array<TranslatedCodeLine>> => {
+	forLoopIterationStatement = async (node: ForLoopIterationStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 
 		// Translate the parts of the for loop statement - Everything except the loop body is optional
@@ -373,9 +396,25 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link ArrayLiteralPrimaryExpression} into the JavaScript language.
+	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
-	arrayLiteralExpression = async (node: ArrayLiteralPrimaryExpression): Promise<TranslatedExpression> => {
+	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ObjectProperty} into the JavaScript language.
+	 * @since 0.11.0
+	 */
+	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
 		return [];
 	};
 
@@ -467,7 +506,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link FStringPrimaryExpression} into the JavaScript language.
 	 */
 	fStringPrimaryExpression = async (node: FStringPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const atoms: Array<TranslatedCodeToken> = [];
+		for (const atom of node.getSemanticData().atoms) {
+			if (typeof atom === "string") {
+				atoms.push(atom);
+			} else {
+				atoms.push("${", ...(await atom.translateCtxAndChildren()), "}");
+			}
+		}
+
+		return ["`", ...atoms, "`"];
 	};
 
 	/**
@@ -585,9 +633,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	multiplicativeExpression = async (node: MultiplicativeExpression): Promise<TranslatedExpression> => {
 		// Get the semantic data
 		const semanticData = node.getSemanticData();
+		const stringRepeatFunction = TargetJS.getBuiltInIdentifier("repeatString");
 
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
+
+		// In this case it should be a string multiplication
+		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
+			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
+		}
+
 		return [...exp1, " ", semanticData.operator, " ", ...exp2];
 	};
 
@@ -610,10 +665,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @private
 	 */
 	protected translateOperatorExpressionWithOperands = async (
-		node: ComparativeExpression | LogicalExpression,
+		node: ComparativeExpression | LogicalExpression | BitwiseExpression,
 	): Promise<TranslatedExpression> => {
 		// Get the semantic data
-		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics = node.getSemanticData();
+		const semanticData: ComparativeExpressionSemantics | LogicalExpressionSemantics | BitwiseExpressionSemantics =
+			node.getSemanticData();
 
 		// Generate the code for the operands
 		const exp1: TranslatedExpression = await semanticData.leftOp.translateCtxAndChildren();
@@ -644,6 +700,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates a {@link BitwiseOrExpression} into the JavaScript language.
+	 */
+	bitwiseOrExpression = async (node: BitwiseOrExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseAndExpression} into the JavaScript language.
+	 */
+	bitwiseAndExpression = async (node: BitwiseAndExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseXorExpression} into the JavaScript language.
+	 */
+	bitwiseXorExpression = async (node: BitwiseXorExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
+	 * Translates a {@link BitwiseShiftExpression} into the JavaScript language.
+	 */
+	bitwiseShiftExpression = async (node: BitwiseShiftExpression): Promise<TranslatedExpression> => {
+		return await this.translateOperatorExpressionWithOperands(node);
+	};
+
+	/**
 	 * Translates a {@link LogicalAndExpression} into the JavaScript language.
 	 */
 	logicalAndExpression = async (node: LogicalAndExpression): Promise<TranslatedExpression> => {
@@ -661,7 +745,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ConditionalExpression} into the JavaScript language.
 	 */
 	conditionalExpression = async (node: ConditionalExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const condition = await semanticData.condition.translateCtxAndChildren();
+		const trueBranch = await semanticData.trueBranch.translateCtxAndChildren();
+		const falseBranch = await semanticData.falseBranch.translateCtxAndChildren();
+
+		return [...condition, " ? ", ...trueBranch, " : ", ...falseBranch];
 	};
 
 	/**
@@ -681,5 +770,35 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
+	};
+
+	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+		// Step 1: Extract Semantic Data
+		const semanticData = node.getSemanticData();
+		const params = semanticData.params;
+		const body = semanticData.functionBody;
+
+		// Step 2: Translate Parameters
+		let translatedParams = params.map((param) => param.getSemanticData().identifier).join(", ");
+
+		let translatedBody;
+		let translatedBodyAsync = await body.translateCtxAndChildren();
+
+		if (body instanceof Expression) {
+			translatedBody = translatedBodyAsync
+				.map((line) => {
+					if (line instanceof Array) {
+						return line.join(" ").trim();
+					}
+					return line;
+				})
+				.join("");
+		} else {
+			translatedBody = await this.compoundStatement(body);
+			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");
+		}
+
+		// Step 4: Format Lambda Expression
+		return [`(${translatedParams}) => ${translatedBody}`];
 	};
 }

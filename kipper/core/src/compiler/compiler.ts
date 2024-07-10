@@ -2,15 +2,22 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
-import { InternalFunction, kipperInternalBuiltInFunctions } from "./runtime-built-ins";
-import { CodePointCharStream, CommonTokenStream } from "antlr4ts";
+import type { InternalFunction } from "./runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
+import type { CodePointCharStream, Token } from "antlr4ts";
+import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
-import { KipperLexer, KipperParser, KipperParseStream, ParseData } from "./parser";
+import type { LexerParserData } from "./lexer-parser";
+import { KipperLexer, KipperParser, KipperFileStream } from "./lexer-parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
-import { KipperError, KipperSyntaxError } from "../errors";
-import { CompileConfig, EvaluatedCompileConfig } from "./compile-config";
+import type { KipperSyntaxError } from "../errors";
+import { KipperError } from "../errors";
+import type { CompileConfig } from "./compile-config";
+import { EvaluatedCompileConfig } from "./compile-config";
 import { KipperCompileResult } from "./compile-result";
+import * as Channel from "./lexer-parser/lexer-channels";
+import { PragmaProcessor } from "./pragma-processor";
 
 /**
  * The main Compiler class that contains the functions for parsing and compiling a file.
@@ -49,17 +56,17 @@ export class KipperCompiler {
 
 	/**
 	 * Handles the input for a file-based function of the {@link KipperCompiler}.
-	 * @param stream The input, which may be either a {@link String} or {@link KipperParseStream}.
+	 * @param stream The input, which may be either a {@link String} or {@link KipperFileStream}.
 	 * @param name The encoding to read the file with.
 	 */
 	private async handleStreamInput(
-		stream: string | KipperParseStream,
+		stream: string | KipperFileStream,
 		name: string = "anonymous-script",
-	): Promise<KipperParseStream> {
-		if (stream instanceof KipperParseStream) {
+	): Promise<KipperFileStream> {
+		if (stream instanceof KipperFileStream) {
 			return stream;
 		} else {
-			return new KipperParseStream({
+			return new KipperFileStream({
 				name: name,
 				stringContent: stream,
 			});
@@ -67,12 +74,30 @@ export class KipperCompiler {
 	}
 
 	/**
+	 * Returns all tokens for a specific channel from the token stream.
+	 * @param tokenStream The token stream to get the tokens from.
+	 * @param channel The channel to get the tokens from.
+	 * @private
+	 * @since 0.11.0
+	 */
+	private getTokensForChannel(tokenStream: CommonTokenStream, channel: number): Array<Token> {
+		const tokens: Array<Token> = [];
+		for (let i = 0; i < tokenStream.size; i++) {
+			const token = tokenStream.get(i);
+			if (token.channel === channel) {
+				tokens.push(token);
+			}
+		}
+		return tokens;
+	}
+
+	/**
 	 * Parses a file and generates a parse tree using the Antlr4 {@link KipperLexer} and {@link KipperParser}.
-	 * @param parseStream The {@link KipperParseStream} instance that contains the required file content.
+	 * @param parseStream The {@link KipperFileStream} instance that contains the required file content.
 	 * @returns An object containing the parse data.
 	 * @throws KipperSyntaxError If a syntax exception was encountered while running.
 	 */
-	public async parse(parseStream: KipperParseStream): Promise<ParseData> {
+	public async parse(parseStream: KipperFileStream): Promise<LexerParserData> {
 		this._logger.info(`Parsing file content.`);
 
 		// Creating the char stream, based on the input
@@ -86,10 +111,19 @@ export class KipperCompiler {
 		lexer.removeErrorListeners(); // removing all error listeners
 		lexer.addErrorListener(errorListener); // adding our own error listener
 
-		// Let the lexer run and generate a token stream
+		// Let the lexer run and generate a token stream for each channel
 		const tokenStream = new CommonTokenStream(lexer);
-		const parser = new KipperParser(tokenStream);
+		tokenStream.fill();
 
+		const channels: LexerParserData["channels"] = {
+			ALL: tokenStream,
+			DEFAULT_TOKEN_CHANNEL: this.getTokensForChannel(tokenStream, Channel.DEFAULT_TOKEN_CHANNEL),
+			HIDDEN: this.getTokensForChannel(tokenStream, Channel.HIDDEN),
+			COMMENT: this.getTokensForChannel(tokenStream, Channel.COMMENT),
+			PRAGMA: this.getTokensForChannel(tokenStream, Channel.PRAGMA),
+		};
+
+		const parser = new KipperParser(channels.ALL);
 		parser.removeErrorListeners(); // removing all error listeners
 		parser.addErrorListener(errorListener); // adding our own error listener
 
@@ -97,7 +131,7 @@ export class KipperCompiler {
 		const parseTree = parser.compilationUnit();
 
 		this._logger.debug(`Finished generation of parse tree.`);
-		return { parseStream, parseTree, parser, lexer };
+		return { channels, fileStream: parseStream, parseTree, parser, lexer };
 	}
 
 	/**
@@ -109,23 +143,14 @@ export class KipperCompiler {
 	 * @since 0.10.0
 	 */
 	public async getProgramCtx(
-		parseData: ParseData,
+		parseData: LexerParserData,
 		compilerOptions: CompileConfig | EvaluatedCompileConfig,
 	): Promise<KipperProgramContext> {
 		const config: EvaluatedCompileConfig =
 			compilerOptions instanceof EvaluatedCompileConfig ? compilerOptions : new EvaluatedCompileConfig(compilerOptions);
 
 		// Creates a new program context using the parse data and compilation configuration
-		return new KipperProgramContext(
-			parseData.parseStream,
-			parseData.parseTree,
-			parseData.parser,
-			parseData.lexer,
-			this.logger,
-			config.target,
-			this.internalFunctions,
-			config,
-		);
+		return new KipperProgramContext(parseData, this.logger, config.target, this.internalFunctions, config);
 	}
 
 	/**
@@ -134,27 +159,31 @@ export class KipperCompiler {
 	 * This function is async to not render-block the browser and allow rendering to happen in-between the
 	 * async processing.
 	 * @param stream The input to compile, which may be either a {@link String} or
-	 * {@link KipperParseStream}.
+	 * {@link KipperFileStream}.
 	 * @param compilerOptions Compilation Configuration, which defines how the compiler should handle the
 	 * program and compilation.
 	 * @returns The created {@link KipperCompileResult} instance.
 	 * @throws {KipperError} If any syntactical, semantic or logical issues were encountered during the compilation.
 	 */
 	public async compile(
-		stream: string | KipperParseStream,
+		stream: string | KipperFileStream,
 		compilerOptions: CompileConfig,
 	): Promise<KipperCompileResult> {
 		// Handle the input and format it
-		let inStream: KipperParseStream = await this.handleStreamInput(stream, compilerOptions.fileName);
+		let inStream: KipperFileStream = await this.handleStreamInput(stream, compilerOptions.fileName);
 
 		// Log as the initialisation finished
 		this.logger.info(`Starting compilation for '${inStream.name}'.`);
 
-		let parseData: ParseData | undefined = undefined;
-		let programCtx: KipperProgramContext | undefined = undefined;
+		let parseData: LexerParserData | undefined;
+		let programCtx: KipperProgramContext | undefined;
 		try {
 			parseData = await this.parse(inStream);
-			programCtx = await this.getProgramCtx(parseData, compilerOptions);
+
+			// Process any pragmas which were registered
+			const pragmaModifiedCompilerOptions = await PragmaProcessor.process(compilerOptions, parseData.channels.PRAGMA);
+
+			programCtx = await this.getProgramCtx(parseData, pragmaModifiedCompilerOptions);
 
 			// Start compilation of the Kipper program
 			this.logger.debug("Creating ctx object for compilation metadata and semantic data");
@@ -213,13 +242,13 @@ export class KipperCompiler {
 	 *
 	 * This function is async to not render-block the browser and allow rendering to happen in-between the
 	 * async processing.
-	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperParseStream}.
+	 * @param stream The input to analyse, which may be either a {@link String} or {@link KipperFileStream}.
 	 * @throws {KipperSyntaxError} If a syntax exception was encountered while running.
 	 */
-	public async syntaxAnalyse(stream: string | KipperParseStream): Promise<void> {
+	public async syntaxAnalyse(stream: string | KipperFileStream): Promise<void> {
 		// TODO! Remove this function and replace it with a new compilation option 'noCodeGeneration'
 		// Maybe? -> Open for debate
-		let inStream: KipperParseStream = await this.handleStreamInput(stream);
+		let inStream: KipperFileStream = await this.handleStreamInput(stream);
 
 		this.logger.info(`Starting syntax check for '${inStream.name}'.`);
 

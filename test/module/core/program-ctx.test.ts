@@ -1,11 +1,6 @@
 import { assert } from "chai";
-import {
-	BuiltInFunction,
-	EvaluatedCompileConfig,
-	InvalidGlobalError,
-	KipperCompiler,
-	KipperParseStream,
-} from "@kipper/core";
+import type { BuiltInFunction } from "@kipper/core";
+import { EvaluatedCompileConfig, InvalidGlobalError, KipperCompiler, KipperFileStream } from "@kipper/core";
 import { promises as fs } from "fs";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import * as path from "path";
@@ -14,7 +9,7 @@ const mainFile = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
 
 describe("KipperProgramContext", async () => {
 	const fileContent = (await fs.readFile(mainFile, "utf8" as BufferEncoding)).toString();
-	const stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
+	const stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
 	const defaultTarget = new KipperTypeScriptTarget();
 
 	describe("constructor", async () => {

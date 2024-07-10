@@ -52,7 +52,7 @@ If you are working on or creating a bug issue, it is important to try and reprod
 projects that recreate the situation that the bug was encountered in.
 
 In case you are creating a bug issue, it is also important to provide steps on how to reproduce the issue and info
-about your environment. The [bug issue template](https://github.com/Luna-Klatzer/Kipper/issues/new/choose) will help you
+about your environment. The [bug issue template](https://github.com/Kipper-Lang/Kipper/issues/new/choose) will help you
 
 ### Feature issue
 

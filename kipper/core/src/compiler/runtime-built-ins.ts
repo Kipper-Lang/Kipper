@@ -181,13 +181,53 @@ export const kipperRuntimeBuiltInFunctions: Record<string, BuiltInFunction> = {
  * This contains *every* builtin that also must be implemented by every target in the {@link KipperTargetBuiltInGenerator}.
  * @since 0.8.0
  */
-export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = {
+export const kipperInternalBuiltInFunctions = {
 	numToStr: {
 		identifier: "numToStr",
 		params: [
 			{
 				identifier: "value",
 				valueType: "num",
+			},
+		],
+		returnType: "str",
+	},
+	boolToStr: {
+		identifier: "boolToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "bool",
+			},
+		],
+		returnType: "str",
+	},
+	voidToStr: {
+		identifier: "voidToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "void",
+			},
+		],
+		returnType: "str",
+	},
+	nullToStr: {
+		identifier: "nullToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "null",
+			},
+		],
+		returnType: "str",
+	},
+	undefinedToStr: {
+		identifier: "undefinedToStr",
+		params: [
+			{
+				identifier: "value",
+				valueType: "undefined",
 			},
 		],
 		returnType: "str",
@@ -201,16 +241,6 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 			},
 		],
 		returnType: "num",
-	},
-	boolToStr: {
-		identifier: "boolToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: "bool",
-			},
-		],
-		returnType: "str",
 	},
 	boolToNum: {
 		identifier: "boolToNum",
@@ -254,7 +284,21 @@ export const kipperInternalBuiltInFunctions: Record<string, InternalFunction> = 
 		],
 		returnType: "str", // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
 	},
-};
+	repeatString: {
+		identifier: "repeatString",
+		params: [
+			{
+				identifier: "toRepeat",
+				valueType: "str",
+			},
+			{
+				identifier: "times",
+				valueType: "num",
+			},
+		],
+		returnType: "str",
+	},
+} satisfies Record<string, InternalFunction>;
 
 /**
  * Contains all the built-in variables in Kipper that are available per default in every program.

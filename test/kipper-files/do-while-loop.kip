@@ -1,0 +1,6 @@
+var i: num = 0;
+do {
+	i++;
+} while (i < 10);
+
+print(i as str);

@@ -19,8 +19,8 @@
 
 ## Primary logo
 
-![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Logo-with-head.png)
+![](https://raw.githubusercontent.com/Kipper-Lang/Kipper/main/img/Kipper-Logo-with-head.png)
 
 ## Fox head logo
 
-![](https://raw.githubusercontent.com/Luna-Klatzer/Kipper/main/img/Kipper-Fox-Head.png)
+![](https://raw.githubusercontent.com/Kipper-Lang/Kipper/main/img/Kipper-Fox-Head.png)

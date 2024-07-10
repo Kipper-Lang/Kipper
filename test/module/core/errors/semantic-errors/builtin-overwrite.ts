@@ -1,4 +1,5 @@
-import { CompileConfig, KipperCompiler, KipperError } from "@kipper/core";
+import type { CompileConfig, KipperError } from "@kipper/core";
+import { KipperCompiler } from "@kipper/core";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
@@ -13,7 +14,7 @@ describe("BuiltInOverwriteError", () => {
 			extendBuiltInFunctions: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
 		};
 
-		describe(`Global Scope - ${test.t} Overwrite`, () => {
+		describe(`Global Scope - Overwrite [${test.t}]`, () => {
 			it("Redeclaration by variable", async () => {
 				try {
 					await new KipperCompiler().compile(`var ${test.i}: num = 4;`, config);

@@ -2,13 +2,8 @@
  * The TypeScript target-specific semantic analyser.
  * @since 0.10.0
  */
-import {
-	FunctionDeclaration,
-	ParameterDeclaration,
-	VariableDeclaration,
-	KipperTargetSemanticAnalyser,
-	ReservedIdentifierOverwriteError,
-} from "@kipper/core";
+import type { FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "@kipper/core";
+import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
 
 /**
@@ -58,22 +53,22 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	expressionStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link DoWhileLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	doWhileLoopStatement = undefined;
+	doWhileLoopIterationStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link WhileLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link WhileLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	whileLoopStatement = undefined;
+	whileLoopIterationStatement = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ForLoopStatement} instances.
+	 * Performs typescript-specific semantic analysis for {@link ForLoopIterationStatement} instances.
 	 * @since 0.10.0
 	 */
-	forLoopStatement = undefined;
+	forLoopIterationStatement = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link JumpStatement} instances.
@@ -114,9 +109,21 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	numberPrimaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link ArrayLiteralPrimaryExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link ArrayPrimaryExpression} instances.
 	 */
-	listPrimaryExpression = undefined;
+	arrayPrimaryExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ObjectPrimaryExpression} instances.
+	 * @since 0.11.0
+	 */
+	objectPrimaryExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ObjectPropertyPrimaryExpression} instances.
+	 * @since 0.11.0
+	 */
+	objectProperty = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link IdentifierPrimaryExpression} instances.
@@ -233,4 +240,29 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	assignmentExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseAndExpression} instances.
+	 */
+	bitwiseAndExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseOrExpression} instances.
+	 */
+	bitwiseOrExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseXorExpression} instances.
+	 */
+	bitwiseXorExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link BitwiseShiftExpression} instances.
+	 */
+	bitwiseShiftExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	lambdaExpression = undefined;
 }

@@ -3,10 +3,11 @@
  * namespace.
  * @since 0.8.0
  */
-import type { ScopeNode, FunctionDeclaration, VariableDeclaration } from "../../ast/";
+import type { FunctionDeclaration, ScopeNode, VariableDeclaration } from "../../ast/";
 import type { GlobalScope } from "./global-scope";
 import { KipperNotImplementedError } from "../../../errors";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { ScopeDeclaration, ScopeFunctionDeclaration } from "./entry";
+import { ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./scope";
 
 /**
@@ -36,7 +37,7 @@ export class LocalScope extends Scope {
 	public addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
 
-		// Ensuring that the declaration does not overwrite other definitions
+		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
 		const scopeDeclaration = new ScopeVariableDeclaration(declaration);

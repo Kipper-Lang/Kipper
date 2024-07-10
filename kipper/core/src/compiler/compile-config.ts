@@ -2,14 +2,11 @@
  * Configuration for a Kipper program that can be passed to {@link KipperCompiler.compile}.
  * @since 0.10.0
  */
-import {
-	BuiltInFunction,
-	BuiltInVariable,
-	kipperRuntimeBuiltInFunctions,
-	kipperRuntimeBuiltInVariables,
-} from "./runtime-built-ins";
-import { KipperCompileTarget } from "./target-presets";
-import { defaultOptimisationOptions, OptimisationOptions } from "./optimiser";
+import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
+import { kipperRuntimeBuiltInFunctions, kipperRuntimeBuiltInVariables } from "./runtime-built-ins";
+import type { KipperCompileTarget } from "./target-presets";
+import type { OptimisationOptions } from "./optimiser";
+import { defaultOptimisationOptions } from "./optimiser";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileConfig}
@@ -217,7 +214,7 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 * @since 0.10.0
 	 * @private
 	 */
-	private getConfigOption<T>(option: keyof typeof EvaluatedCompileConfig["defaults"], rawConfig: CompileConfig): T {
+	private getConfigOption<T>(option: keyof (typeof EvaluatedCompileConfig)["defaults"], rawConfig: CompileConfig): T {
 		if (rawConfig[option] !== undefined) {
 			return rawConfig[option] as T;
 		}

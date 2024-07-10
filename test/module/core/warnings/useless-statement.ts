@@ -20,7 +20,7 @@ describe("UselessExpressionStatementWarning", () => {
 			{ code: "1 + 2;", name: "Single" },
 			{ code: "1 + 2 + 3 / 4 * 5 ** 6;", name: "Chained" },
 		].forEach((o) => {
-			it(`Useless arithmetic expression (${o.name})`, async () => {
+			it(`Useless arithmetic expression [${o.name}]`, async () => {
 				let result = await new KipperCompiler().compile(o.code, defaultConfig);
 
 				// Ensure a warning is given and is not undefined

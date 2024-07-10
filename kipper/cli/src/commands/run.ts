@@ -3,31 +3,25 @@
  * @since 0.0.3
  */
 import type { args } from "@oclif/parser";
-import { Command, flags } from "@oclif/command";
-import { Logger } from "tslog";
-import {
-	CompileConfig,
-	defaultOptimisationOptions,
-	EvaluatedCompileConfig,
-	KipperCompiler,
-	KipperCompileResult,
-	KipperCompileTarget,
-	KipperError,
-	KipperLogger,
-	KipperParseStream,
-	LogLevel,
-} from "@kipper/core";
-import { spawn } from "child_process";
-import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
-import { getParseStream, getTarget, KipperEncoding, KipperEncodings, verifyEncoding } from "../input/";
-import { writeCompilationResult } from "../output";
+import { flags } from "@oclif/command";
+import { EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
+import { fork } from "child_process";
+import { CLIEmitHandler } from "../logger";
+import { KipperEncodings, verifyEncoding } from "../input/";
 import { prettifiedErrors } from "../decorators";
+import Compile from "./compile";
 
-export default class Run extends Command {
+export default class Run extends Compile {
 	static override description: string = "Compile and execute a Kipper program.";
 
-	// TODO! Add examples when the command moves out of development
-	static override examples: Array<string> = [];
+	static override examples: Array<string> = [
+		"kipper run -t js",
+		"kipper run -t ts -s \"print('Hello, World!');\"",
+		"kipper run -t js -e utf8 -o build/ -s \"print('Hello, World!');\"",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!');\"",
+		"kipper run -t js -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings",
+		"kipper run -t ts -o build/ -e utf8 -s \"print('Hello, World!');\" --warnings --log-timestamp",
+	];
 
 	static override args: args.Input = [
 		{
@@ -40,19 +34,16 @@ export default class Run extends Command {
 	static override flags: flags.Input<any> = {
 		target: flags.string({
 			char: "t",
-			default: "js",
 			description: "The target language where the compiled program should be emitted to.",
 			options: ["js", "ts"],
 		}),
 		encoding: flags.string({
 			char: "e",
-			default: "utf8",
 			description: `The encoding that should be used to read the file (${KipperEncodings.join()}).`,
 			parse: verifyEncoding,
 		}),
 		"output-dir": flags.string({
 			char: "o",
-			default: "build",
 			description:
 				"The build directory where the compiled files should be placed. If the path does not exist, it will be created.",
 		}),
@@ -62,13 +53,11 @@ export default class Run extends Command {
 		}),
 		"optimise-internals": flags.boolean({
 			char: "i",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated internal functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
 		"optimise-builtins": flags.boolean({
 			char: "b",
-			default: defaultOptimisationOptions.optimiseInternals,
 			description: "Optimise the generated built-in functions using tree-shaking to reduce the size of the output.",
 			allowNo: true,
 		}),
@@ -89,116 +78,40 @@ export default class Run extends Command {
 			description: "Recover from compiler errors and display all detected compiler errors.",
 			allowNo: true,
 		}),
-		/**
-		 * TODO! Remove this flag
-		 * @deprecated
-		 */
-		"abort-on-first-error": flags.boolean({
-			default: EvaluatedCompileConfig.defaults.abortOnFirstError,
-			description: "Abort on the first error the compiler encounters. Same behaviour as '--no-recover'.",
-			allowNo: true,
-		}),
 	};
 
 	/**
-	 * Gets the configuration for the invocation of this command.
+	 * Detects the location for ts-node and returns the path to the executable.
 	 * @private
 	 */
-	private async getRunConfig() {
-		const { args, flags } = this.parse(Run);
-
-		// Compilation-required
-		const stream: KipperParseStream = await getParseStream(args, flags);
-		const target: KipperCompileTarget = await getTarget(flags["target"]);
-
-		// Output
-		const outputDir: string = flags["output-dir"];
-		const encoding = flags["encoding"] as KipperEncoding;
-
-		return {
-			args,
-			flags,
-			config: {
-				stream,
-				target,
-				outputDir,
-				encoding,
-				compilerOptions: {
-					target: target,
-					optimisationOptions: {
-						optimiseInternals: flags["optimise-internals"],
-						optimiseBuiltIns: flags["optimise-builtins"],
-					},
-					recover: flags["recover"],
-					abortOnFirstError: flags["abort-on-first-error"],
-				} as CompileConfig,
-			},
-		};
+	private detectTSNode(): string {
+		return require.resolve("ts-node/dist/bin.js");
 	}
 
 	/**
 	 * Run the Kipper program in a new spawned process.
-	 * @param jsCode The JavaScript code to execute using the same JavaScript runtime as this CLI is being executed from.
+	 * @param entryFile The file that should be executed.
 	 */
-	private async executeKipperProgram(jsCode: string): Promise<void> {
-		const kipperProgram = spawn(process.execPath, ["-e", jsCode]);
+	private async executeKipperProgram(entryFile: string): Promise<void> {
+		const kipperProgram = fork(this.detectTSNode(), [entryFile]);
 
-		// Per default the encoding should be 'utf-8'
-		kipperProgram.stdin.setDefaultEncoding("utf-8");
-
-		// Set how to handle streams
-		kipperProgram.stdout.pipe(process.stdout);
-		kipperProgram.stderr.pipe(process.stderr);
+		// Per default the encoding should be 'utf8'
+		kipperProgram.stdin?.setDefaultEncoding("utf8");
 
 		// Close immediately after the Kipper program
 		kipperProgram.on("close", (code: number) => process.exit(code));
 	}
 
 	@prettifiedErrors<Run>()
-	public async run() {
+	public async run(): Promise<boolean> {
 		const { flags, config } = await this.getRunConfig();
-		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.ERROR, flags["warnings"]);
-		const compiler = new KipperCompiler(logger);
+		const logger = new KipperLogger(CLIEmitHandler.emit, LogLevel.WARN, flags["warnings"]);
 
-		// If 'log-timestamp' is set, set the logger to use the timestamp
-		if (flags["log-timestamp"]) {
-			CLIEmitHandler.cliLogger = new Logger({ ...defaultKipperLoggerConfig, displayDateTime: true });
-		}
+		const state = await super.run(logger);
+		if (!state) return false;
 
-		let result: KipperCompileResult;
-		try {
-			result = await compiler.compile(config.stream, config.compilerOptions);
-		} catch (e) {
-			if (e instanceof KipperError && config.compilerOptions.abortOnFirstError) {
-				// Ignore the error thrown by the compiler (the logger already logged it)
-				// TODO! This will be removed once 'abortOnFirstError' has been fully removed with v0.11.0 -> #501
-				return;
-			}
-			throw e;
-		}
-
-		// If the compilation failed, abort
-		if (!result.success) {
-			return;
-		}
-
-		// Write the file output for this compilation
-		await writeCompilationResult(result, config.stream, config.outputDir, config.target, config.encoding);
-
-		// Get the JS code that should be evaluated
-		let jsProgram: string;
-		if (config.target.targetName === "typescript") {
-			// Also do the compilation now with the JavaScript target
-			let jsProgramCtx = await compiler.compile(config.stream, {
-				...config.compilerOptions,
-				target: getTarget("js"),
-			});
-			jsProgram = jsProgramCtx.write();
-		} else {
-			jsProgram = result.write();
-		}
-
-		// Execute the program
-		await this.executeKipperProgram(jsProgram);
+		// We only execute the program if the compilation was successful
+		await this.executeKipperProgram(config.outPath);
+		return true;
 	}
 }

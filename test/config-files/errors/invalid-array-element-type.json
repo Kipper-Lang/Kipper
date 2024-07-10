@@ -1,0 +1,15 @@
+{
+	"outDir": "dist",
+	"srcDir": "test/kipper-files",
+	"compiler": {
+		"version": "*",
+		"target": "ts"
+	},
+	"files": [
+		true
+	],
+	"resources": [
+		"img/icon.png",
+		"img/Kipper-Logo-without-head.png:icon.png"
+	]
+}
