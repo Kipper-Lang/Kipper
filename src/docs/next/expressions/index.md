@@ -58,109 +58,179 @@ The following table shows all valid operators and expressions in the Kipper lang
 </thead>
 <tbody>
   <tr>
-    <td>14</td>
+    <td>19</td>
     <td><code>( ... )</code></td>
     <td>
       Tangled expression - Forced increased precedence
     <td>n/a</td>
   </tr>
   <tr>
-    <td>13</td>
+    <td>18</td>
     <td>
-      <code>++ ...</code> / <code>-- ...</code><br />
+      <code>... ( ... )</code><br />
       <code>call ... ( ... )</code><br />
       <code>... [ ... ]</code><br/>
+      <code>... [ ... : ... ]</code><br/>
       <code>... . ...</code>
     </td>
     <td>
       Prefix increment and decrement (Suffix)<br />
-      Function Call<br />
-      List subscripting<br />
-      Object member accessing<br />
+      Function call<br />
+      Function call (Legacy)<br />
+      Computed member access<br />
+      Slice subscripting<br />
+      Dot-notation member access<br />
     </td>
     <td>Left-To-Right</td>
   </tr>
   <tr>
-    <td>12</td>
+    <td>17</td>
     <td>
-      <code>... ++</code>/ <code>... --</code><br />
+      <code>... ++</code><br />
+			<code>... --</code><br />
     </td>
     <td>
-      Postfix increment and decrement<br />
+      Postfix increment<br />
+			Postfix decrement<br />
     </td>
-    <td>n/a</td>
+    <td rowspan="3">n/a</td>
   </tr>
   <tr>
-    <td>11</td>
+    <td>16</td>
     <td>
-      <code>+ ...</code> / <code>- ...</code><br />
+      <code>+ ...</code><br />
+			<code>- ...</code><br />
       <code>! ...</code><br />
+			<code>~ ...</code><br />
+      <code>++ ... </code><br />
+			<code>-- ...</code><br />
     </td>
     <td>
-      Unary plus and minus<br />
-      Logical NOT<br />
+      Unary plus<br />
+			Unary minus<br />
+			Logical NOT<br />
+			Bitwise NOT<br />
+			Prefix increment<br />
+			Prefix decrement<br />
     </td>
-    <td>Right-To-Left</td>
   </tr>
-    <tr>
-    <td>10</td>
+	<tr>
+    <td>15</td>
     <td>
       <code>... as ...</code>
     </td>
     <td>
       Type conversion
     </td>
-    <td rowspan="7">Left-To-Right</td>
   </tr>
+	<tr>
+    <td>14</td>
+		<td>
+      <code>... ** ...</code>
+		</td>
+    <td>
+      Exponentiation<br />
+    </td>
+    <td>right-to-left</td>
+	</tr>
   <tr>
-    <td>9</td>
+    <td>13</td>
     <td>
       <code>... * ...</code><br />
       <code>... / ...</code><br />
       <code>... % ...</code><br />
-      <code>... ** ...</code>
     </td>
     <td>
       Multiplication<br />
       Division<br />
       Modulus<br />
-      Power-To<br />
+      Exponentiation<br />
     </td>
+    <td>left-to-right</td>
   </tr>
   <tr>
-    <td>8</td>
+    <td>12</td>
     <td>
-      <code>... + ...</code> / <code>... - ...</code>
+      <code>... + ...</code><br />
+			<code>... - ...</code>
     </td>
-    <td>Addition and subtraction<br /></td>
+    <td>
+			Addition <br />
+			Subtraction <br />
+		</td>
+    <td>left-to-right</td>
+  </tr>
+	<tr>
+    <td>11</td>
+		<td>
+      <code>... << ...</code><br />
+			<code>... >> ...</code><br />
+			<code>... >>> ...</code>
+		</td>
+		<td>
+			Bitwise shift left<br />
+			Bitwise shift right<br />
+			Bitwise shift right zero fill<br />
+		</td>
+		<td>left-to-right</td>
+	</tr>
+  <tr>
+    <td>10</td>
+    <td>
+      <code>... &lt; ...</code><br />
+			<code>... &lt;= ...</code><br />
+      <code>... &gt; ...</code><br />
+			<code>... =&gt; ...</code><br />
+		</td>
+    <td>
+      More than <br />
+			More or Equal to <br />
+      Less than<br />
+			Less or Equal to <br />
+    </td>
+		<td>left-to-right</td>
   </tr>
   <tr>
-    <td>7</td>
+    <td>9</td>
     <td>
-      <code>... &lt; ...</code> / <code>... &lt;= ...</code><br />
-      <code>... &gt; ...</code> / <code>... =&gt; ...</code><br />
-    </td>
+      <code>... == ...</code><br />
+			<code>... != ...</code><br />
+		</td>
     <td>
-      More than / More or Equal to<br />
-      Less than / Less or Equal to<br />
-    </td>
+			Equal to<br />
+			Not Equal to<br />
+		</td>
+		<td>left-to-right</td>
   </tr>
-  <tr>
-    <td>6</td>
-    <td>
-      <code>... == ...</code> / <code>... != ...</code>
-    </td>
-    <td>Relational comparison (Equal / Not equal to)<br /></td>
-  </tr>
+	<tr>
+		<td>8</td>
+    <td><code>... & ...</code><br /></td>
+    <td>Bitwise AND<br /></td>
+		<td>left-to-right</td>
+	</tr>
+	<tr>
+		<td>7</td>
+    <td><code>... ^ ...</code><br /></td>
+    <td>Bitwise XOR<br /></td>
+		<td>left-to-right</td>
+	</tr>
+	<tr>
+		<td>6</td>
+    <td><code>... | ...</code><br /></td>
+    <td>Bitwise OR<br /></td>
+		<td>left-to-right</td>
+	</tr>
   <tr>
     <td>5</td>
     <td><code>... &amp;&amp; ...</code><br /></td>
     <td>Logical AND<br /></td>
+		<td>left-to-right</td>
   </tr>
   <tr>
     <td>4</td>
     <td><code>... || ...</code></td>
     <td>Logical OR<br /></td>
+		<td>left-to-right</td>
   </tr>
   <tr>
     <td>3</td>
@@ -172,14 +242,19 @@ The following table shows all valid operators and expressions in the Kipper lang
     <td>2</td>
     <td>
       <code>... = ...</code><br />
-      <code>... += ...</code> / <code>... -= ...</code><br />
+      <code>... += ...</code><br />
+			<code>... -= ...</code><br />
       <code>... *= ...</code><br />
       <code>... /= ...</code><br />
       <code>... %= ...</code>
     </td>
     <td>
-      Simple assignment<br />Increment or Decrement assignment<br />Multiplicative assignment<br />Divisional
-      assignment<br />Rest of Division / Remainder assignment<br />
+			Assignment<br />
+			Incremental assignment<br />
+			Decremental assignment<br />
+			Multiplicative assignment<br />
+			Divisional assignment<br />
+			Modulo assignment<br />
     </td>
   </tr>
   <tr>
@@ -235,15 +310,3 @@ example the following would be interpreted as (left-associative):
 ```kipper
 32 / 4 / 4; // -> ((32 / 4) / 4) -> (8 / 4) -> 2
 ```
-
-## List of expressions in the Kipper language
-
-This is a concise list of all expressions in the Kipper language that may be used:
-
-- [Arithmetic Expression](./arithmetic-expression.html)
-- [Conditional Expression](./conditional-expression.html)
-- [Logical Expression](./logical-expression.html)
-- [Relational Expression](./relational-expression.html)
-- [Convert Expression](./convert-expression.html)
-- [F-String Expression](./f-string-expression.html)
-- [Function Call Expression](./function-call-expression.html)
