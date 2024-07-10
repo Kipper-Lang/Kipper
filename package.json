@@ -129,9 +129,11 @@
   ],
   "pnpm": {
     "overrides": {
-      "@parcel/watcher": "2.1.0",
-      "svgo": "3.0.2",
-      "follow-redirects": "1.15.6"
+      "@parcel/watcher": "2.4.1",
+      "follow-redirects": "1.15.6",
+      "node-gyp-build": "4.1.1",
+      "node-gyp": "10.0.1",
+      "svgo": "3.0.2"
     }
   }
 }
