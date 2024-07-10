@@ -8,13 +8,13 @@ single expression, and can be used to invert the result of a logical expression.
 
 ## Syntax
 
-### Logical AND and Logical OR
+For the logical `AND` and `OR`:
 
 ```kipper
 EXP ( && | || ) EXP
 ```
 
-### Logical NOT
+For the logical `NOT`:
 
 ```kipper
 !VALUE;

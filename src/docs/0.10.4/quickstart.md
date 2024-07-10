@@ -197,18 +197,17 @@ npx kipper
 	</p>
 </div>
 
-### Setting up a new project with `kipper new`
+Also, make sure to try and run a Kipper file after the installation to ensure the Kipper compiler and Node runtime are fully working:
 
-To create a new Kipper project using the CLI, you can use the Kipper project setup wizard. This will create a new
-project directory with the necessary files and folders for a Kipper project.
-
-To create a new project, run the following command:
-
-```bash
-kipper new
-```
-
-You may specify a location, but if not specified, the project will be created in the current working directory.
+- Use `run` and directly execute:
+  ```bash
+  kipper run main.kip
+  ```
+- Or use `compile` and invoke `node` (or `ts-node` if the target is `ts`)
+  ```bash
+  kipper compile main.kip --target=js
+  node ./build/main.js
+  ```
 
 ## Importing Kipper as a module
 
@@ -233,7 +232,7 @@ Example package.json:
 Afterwards, you can include the `@kipper/core` package in your JavaScript or TypeScript file. This package contains the
 full Kipper Compiler and API, which can be customised according to your needs.
 
-Kipper is shipped as a Commonjs module and can therefore be imported using `require()` in Javascript or `import` in
+Kipper is shipped as a CommonJS module and can therefore be imported using `require()` in Javascript or `import` in
 TypeScript.
 
 ### Example

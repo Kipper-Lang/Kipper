@@ -59,7 +59,7 @@ def func2() -> void {
 
 ### Assigning `void` value to a `void` variable
 
-```kipper
+```ts
 var var23: void = func2();
 ```
 

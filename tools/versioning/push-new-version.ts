@@ -49,8 +49,6 @@ async function replaceLatestWithNext() {
 
 	console.log(` - Copying 'next' folder content to 'latest' folder (Preserving current state to allow for further updates)`);
 	await fs.cp(nextDir, latestDir, { recursive: true });
-  await fs.rm(nextDir, { recursive: true });
-  await fs.mkdir(nextDir);
 }
 
 async function main() {

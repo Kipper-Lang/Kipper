@@ -16,7 +16,7 @@ The above expression will be evaluated to `Hello World!` if `name` is `World`.
 
 The syntax of F-String Expression is as follows:
 
-```kipper
+```ts
 f"STR{EXP}STR";
 ```
 
@@ -25,40 +25,38 @@ of the string will be left as is. Expressions may appear anywhere in the string,
 
 ## Examples
 
-### String Formatting
+### Simple F-String Expression
 
-```kipper
-var name: str = "Luna";
-var age: num = 20;
-print(f"Hello {name}! You are {age} years old.");
-```
-
-### Simplified String Concatenation
-
-```kipper
-var welcome: str = "Hello ";
+```ts
 var name: str = "World";
-print(f"{welcome}{name}");
+print(f"Hello {name}!"); // -> "Hello World!"
 ```
 
-### Using Expressions in F-Strings
+### F-String Expression with multiple expressions
 
-```kipper
-var name: str = "user";
-var age: num = 20;
-print(f"Hello {name}! You are {age} years old. Next year you will be {age + 1} years old.");
+```ts
+var name: str = "World";
+var age: num = 42;
+print(f"Hello {name}! You are {age} years old."); // -> "Hello World! You are 42 years old."
 ```
 
-### Using F-Strings in F-Strings (Nested Expressions)
+### F-String Expression with expressions at the beginning and the end
 
-```kipper
-def printWelcome(name: str, age: num) -> void {
-    var olderKeyword: str = "adult";
-    var youngerKeyword: str = "child";
-    print(f"Hello {name}! {age > 18 ? f"You are an {olderKeyword}." : f"You are a {youngerKeyword}."}");
-}
- 
-var name: str = "Luna";
-var age: num = 20;
-printWelcome(name, age);
+```ts
+var name: str = "Kipper";
+print(f"{name} is the best!"); // -> "Kipper is the best!"
+```
+
+### Nested F-String Expression
+
+```ts
+var name: str = "World";
+print(f"Hello {f"nested {name}"}!"); // -> "Hello nested World!"
+```
+
+### F-String Expression with escaped curly braces
+
+```ts
+var name: str = "World";
+print(f"Hello {f"\{name\}"}!"); // -> "Hello {name}!"
 ```
