@@ -6,7 +6,7 @@
  */
 import type { PrimaryExpressionSemantics } from "./primary-expression-semantics";
 import type { PrimaryExpressionTypeSemantics } from "./primary-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 
@@ -51,8 +51,10 @@ export type ParserPrimaryExpressionRuleName = (typeof KindParseRuleMapping)[ASTP
 export abstract class PrimaryExpression<
 	Semantics extends PrimaryExpressionSemantics = PrimaryExpressionSemantics,
 	TypeSemantics extends PrimaryExpressionTypeSemantics = PrimaryExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPrimaryExpressionContext;
+
 	public abstract get kind(): ASTPrimaryExpressionKind;
+
 	public abstract get ruleName(): ParserPrimaryExpressionRuleName;
 }

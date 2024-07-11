@@ -4,7 +4,7 @@
  */
 import type { ExpressionSemantics } from "../expression-semantics";
 import type { Expression } from "../expression";
-import type { RawType } from "../../../../analysis";
+import type { RawType } from "../../../../semantics";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 
 /**

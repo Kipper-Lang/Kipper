@@ -7,16 +7,15 @@
  * 0 & 1 // 0
  * 0 & 0 // 0
  */
-
 import type { BitwiseAndExpressionSemantics } from "./bitwise-and-expression-semantics";
 import type { BitwiseAndExpressionTypeSemantics } from "./bitwise-and-expression-type-semantics";
 import { BitwiseExpression } from "../bitwise-expression";
-import type { BitwiseAndExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { BitwiseAndExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Bitwise and expression AST node.
@@ -32,17 +31,27 @@ export class BitwiseAndExpression extends BitwiseExpression<
 	BitwiseAndExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseAndExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: BitwiseAndExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseAndExpression;
+	constructor(antlrRuleCtx: BitwiseAndExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -56,19 +65,16 @@ export class BitwiseAndExpression extends BitwiseExpression<
 		return BitwiseAndExpression.kind;
 	}
 
-	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
 	public override get ruleName() {
 		return BitwiseAndExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: BitwiseAndExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The primary code generation for this AST node.
+	 * @since 0.11.0
+	 */
+	public override get antlrRuleCtx(): BitwiseAndExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -102,7 +108,7 @@ export class BitwiseAndExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 	}
 
@@ -112,15 +118,6 @@ export class BitwiseAndExpression extends BitwiseExpression<
 	 */
 	public checkForWarnings = undefined;
 
-	/**
-	 * The primary code generation for this AST node.
-	 * @since 0.11.0
-	 */
-	public override get antlrRuleCtx(): BitwiseAndExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
 	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseAndExpression;
-
 	readonly targetCodeGenerator = this.codeGenerator.bitwiseAndExpression;
 }

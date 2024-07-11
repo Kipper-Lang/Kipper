@@ -33,6 +33,7 @@ import type {
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
+	InterfaceMemberDeclarationContext,
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
@@ -51,9 +52,7 @@ import type {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-} from "../../parser";
-import { InterfaceMemberDeclarationContext } from "../../parser";
-import { InterfaceMemberDeclaration } from "../nodes";
+} from "../../lexer-parser";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
@@ -196,6 +195,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression
+	| typeof ParseRuleKindMapping.RULE_lambdaExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;
 
 /**
@@ -273,6 +273,7 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseAndExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseXorExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
 
 /**

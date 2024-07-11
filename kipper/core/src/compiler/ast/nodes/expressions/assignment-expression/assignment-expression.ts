@@ -15,15 +15,15 @@
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { AssignmentExpressionSemantics } from "./assignment-expression-semantics";
 import type { AssignmentExpressionTypeSemantics } from "./assignment-expression-type-semantics";
-import type { AssignmentExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../parser";
+import type { AssignmentExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { IdentifierPrimaryExpression } from "../primary-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import type { KipperAssignOperator } from "../../../../const";
 import { kipperArithmeticAssignOperators } from "../../../../const";
 import { getParseRuleSource } from "../../../../../tools";
-import { ScopeVariableDeclaration } from "../../../../analysis";
+import { ScopeVariableDeclaration } from "../../../../semantics";
 
 /**
  * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to
@@ -39,7 +39,23 @@ import { ScopeVariableDeclaration } from "../../../../analysis";
  * x /= 5
  * x %= 55
  */
-export class AssignmentExpression extends Expression<AssignmentExpressionSemantics, AssignmentExpressionTypeSemantics> {
+export class AssignmentExpression extends Expression<
+	AssignmentExpressionSemantics,
+	AssignmentExpressionTypeSemantics,
+	Expression
+> {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_assignmentExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -47,11 +63,10 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_assignmentExpression;
+	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -66,12 +81,6 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -83,9 +92,11 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 		return AssignmentExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): AssignmentExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	public hasSideEffects(): boolean {
@@ -137,7 +148,7 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 
 		// If the reference was a variable, indicate that the value was updated, since it's being assigned to
 		if (identifierSemantics.ref.refTarget instanceof ScopeVariableDeclaration) {
-			identifierSemantics.ref.refTarget.valueWasUpdated = true;
+			identifierSemantics.ref.refTarget.notifyOfUpdate();
 		}
 	}
 
@@ -168,13 +179,6 @@ export class AssignmentExpression extends Expression<AssignmentExpressionSemanti
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): AssignmentExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.assignmentExpression;
 	readonly targetCodeGenerator = this.codeGenerator.assignmentExpression;

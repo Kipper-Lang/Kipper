@@ -4,13 +4,13 @@ import * as path from "path";
 import type { KipperParserRuleContext } from "@kipper/core";
 import type {
 	KipperProgramContext,
-	ParseData,
+	LexerParserData,
 	TargetASTNodeSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
 	CompilableNodeParent,
 } from "@kipper/core";
-import { CompilableASTNode, KipperCompiler, KipperParseStream, RootASTNode } from "@kipper/core";
+import { CompilableASTNode, KipperCompiler, KipperFileStream, RootASTNode } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 
 const fileLocation: string = path.resolve(`${__dirname}/../../kipper-files/main.kip`);
@@ -52,8 +52,8 @@ describe("AST Nodes", () => {
 		describe("sourceCode", () => {
 			it("Validating integrity of content", async () => {
 				let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-				let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-				let parseData: ParseData = await new KipperCompiler().parse(stream);
+				let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+				let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 				let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 					target: defaultTarget,
 				});
@@ -77,7 +77,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
@@ -88,7 +88,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child for RootASTNode");
@@ -103,7 +103,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.sourceCode, "", "Expected source code to be empty");
@@ -114,7 +114,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile(sourceCode, { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.sourceCode, sourceCode, "Expected source code to match");
@@ -126,7 +126,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("var valid: str = '1';", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.hasFailed, false, "Expected 'hasFailed' to be false");
@@ -136,7 +136,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("var invalid: str = 1;", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.isTrue(ast.hasFailed, "Expected 'hasFailed' to be false");
@@ -148,7 +148,7 @@ describe("AST Nodes", () => {
 				const result = await new KipperCompiler().compile("", { target: defaultTarget });
 
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 0, "Expected 0 children");
@@ -161,7 +161,7 @@ describe("AST Nodes", () => {
 					{ target: defaultTarget },
 				);
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 1, "Expected 1 child");
@@ -174,7 +174,7 @@ describe("AST Nodes", () => {
 					{ target: defaultTarget },
 				);
 				assert.isDefined(result.programCtx);
-				const ast = <RootASTNode>result.programCtx!!.abstractSyntaxTree;
+				const ast = <RootASTNode>result.programCtx!!.rootASTNode;
 
 				assert.notEqual(ast, undefined, "Expected AST to be present");
 				assert.equal(ast.children.length, 3, "Expected 2 children");
@@ -183,35 +183,35 @@ describe("AST Nodes", () => {
 
 		it("programCtx", async () => {
 			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-			let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+			let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
 
 			// Generate the AST by compiling the program (as 'generateAbstractSyntaxTree' is private)
 			await programCtx.compileProgram();
-			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
+			const ast = <RootASTNode>programCtx.rootASTNode;
 
 			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
-			assert.notEqual(programCtx.abstractSyntaxTree, undefined, "Expected AST to be present");
+			assert.notEqual(programCtx.rootASTNode, undefined, "Expected AST to be present");
 			assert.equal(ast.programCtx, programCtx, "Expected programCtx to match");
 		});
 
 		it("parent", async () => {
 			let fileContent = (await fs.readFile(fileLocation, "utf8" as BufferEncoding)).toString();
-			let stream: KipperParseStream = new KipperParseStream({ stringContent: fileContent });
-			let parseData: ParseData = await new KipperCompiler().parse(stream);
+			let stream: KipperFileStream = new KipperFileStream({ stringContent: fileContent });
+			let parseData: LexerParserData = await new KipperCompiler().parse(stream);
 			let programCtx: KipperProgramContext = await new KipperCompiler().getProgramCtx(parseData, {
 				target: defaultTarget,
 			});
 
 			// Generate the AST by compiling the program (as 'generateAbstractSyntaxTree' is private)
 			await programCtx.compileProgram();
-			const ast = <RootASTNode>programCtx.abstractSyntaxTree;
+			const ast = <RootASTNode>programCtx.rootASTNode;
 
 			assert.notEqual(programCtx, undefined, "Expected programCtx to be present");
-			assert.notEqual(programCtx.abstractSyntaxTree, undefined, "Expected AST to be present");
+			assert.notEqual(programCtx.rootASTNode, undefined, "Expected AST to be present");
 			assert.equal(ast.parent, undefined, "Expected parent to be undefined");
 		});
 	});

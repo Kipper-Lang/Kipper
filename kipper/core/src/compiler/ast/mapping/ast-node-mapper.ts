@@ -37,6 +37,7 @@ import {
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
+	LambdaExpressionContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
@@ -56,7 +57,7 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-} from "../../parser";
+} from "../../lexer-parser";
 import type {
 	ASTDeclarationKind,
 	ASTDeclarationRuleName,
@@ -95,6 +96,7 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
 	JumpStatement,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -176,7 +178,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
-	} satisfies Record<ASTExpressionKind, typeof Expression<any, any>>;
+		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpression,
+	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
 	 * A mapping matching all {@link ASTStatementKind statement kinds} to their respective constructable AST node
@@ -246,6 +249,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
+		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -323,7 +327,8 @@ export class ASTNodeMapper {
 		RULE_bitwiseAndExpression: BitwiseAndExpression,
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
-	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any>>;
+		RULE_lambdaExpression: LambdaExpression,
+	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**
 	 * A mapping matching all {@link ASTStatementRuleName statement rule names} to their respective constructable AST

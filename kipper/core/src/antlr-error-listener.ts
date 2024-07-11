@@ -8,7 +8,7 @@ import { LexerOrParserSyntaxError } from "./errors";
 import { Interval } from "antlr4ts/misc/Interval";
 import { CommonToken } from "antlr4ts";
 import type { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
-import type { KipperParseStream } from "./compiler";
+import type { KipperFileStream } from "./compiler";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 
@@ -18,9 +18,9 @@ import type { Recognizer } from "antlr4ts/Recognizer";
 export class KipperAntlrErrorListener<TSymbol> implements ANTLRErrorListener<TSymbol> {
 	public readonly logger: KipperLogger;
 
-	public readonly parseStream: KipperParseStream;
+	public readonly parseStream: KipperFileStream;
 
-	constructor(logger: KipperLogger, parseStream: KipperParseStream) {
+	constructor(logger: KipperLogger, parseStream: KipperFileStream) {
 		this.logger = logger;
 		this.parseStream = parseStream;
 	}

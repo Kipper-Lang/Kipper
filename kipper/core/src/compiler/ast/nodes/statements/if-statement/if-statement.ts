@@ -7,8 +7,8 @@ import type { IfStatementSemantics } from "./if-statement-semantics";
 import type { IfStatementTypeSemantics } from "./if-statement-type-semantics";
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
-import type { IfStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { IfStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
@@ -17,17 +17,32 @@ import { UnableToDetermineSemanticDataError } from "../../../../../errors";
  */
 export class IfStatement extends Statement<IfStatementSemantics, IfStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_ifStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IfStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_ifStatement;
+	protected readonly _children: Array<Expression | Statement>;
+
+	constructor(antlrRuleCtx: IfStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+		this._typeSemantics = {};
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -42,12 +57,6 @@ export class IfStatement extends Statement<IfStatementSemantics, IfStatementType
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -57,15 +66,6 @@ export class IfStatement extends Statement<IfStatementSemantics, IfStatementType
 	 */
 	public override get ruleName() {
 		return IfStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Expression | Statement>;
-
-	constructor(antlrRuleCtx: IfStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-		this._typeSemantics = {};
 	}
 
 	/**

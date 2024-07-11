@@ -7,9 +7,9 @@ import type { ReturnStatementSemantics } from "./return-statement-semantics";
 import type { ReturnStatementTypeSemantics } from "./return-statement-type-semantics";
 import type { Expression } from "../../expressions";
 import { Statement } from "../statement";
-import { ProcessedType } from "../../../../analysis";
-import type { ReturnStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import { BuiltInTypes } from "../../../../semantics";
+import type { ReturnStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
@@ -17,17 +17,31 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
  */
 export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_returnStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ReturnStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_returnStatement;
+	protected readonly _children: Array<Expression>;
+
+	constructor(antlrRuleCtx: ReturnStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -42,12 +56,6 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -57,14 +65,6 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 */
 	public override get ruleName() {
 		return ReturnStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Expression>;
-
-	constructor(antlrRuleCtx: ReturnStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
 	}
 
 	/**
@@ -115,8 +115,7 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 		this.programCtx.typeCheck(this).validReturnStatement(this);
 
 		this.typeSemantics = {
-			returnType:
-				semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? ProcessedType.fromCompilableType("void"),
+			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void,
 		};
 	}
 

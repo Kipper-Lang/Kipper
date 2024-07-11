@@ -5,8 +5,8 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { SwitchStatementSemantics } from "./switch-statement-semantics";
 import type { SwitchStatementTypeSemantics } from "./switch-statement-type-semantics";
 import { Statement } from "../statement";
-import type { SwitchStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { SwitchStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../errors";
 
 /**
@@ -14,17 +14,31 @@ import { KipperNotImplementedError } from "../../../../../errors";
  */
 export class SwitchStatement extends Statement<SwitchStatementSemantics, SwitchStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_switchStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_switchStatement;
+	protected readonly _children: Array<Statement>;
+
+	constructor(antlrRuleCtx: SwitchStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -39,12 +53,6 @@ export class SwitchStatement extends Statement<SwitchStatementSemantics, SwitchS
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -54,14 +62,6 @@ export class SwitchStatement extends Statement<SwitchStatementSemantics, SwitchS
 	 */
 	public override get ruleName() {
 		return SwitchStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Statement>;
-
-	constructor(antlrRuleCtx: SwitchStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
 	}
 
 	/**

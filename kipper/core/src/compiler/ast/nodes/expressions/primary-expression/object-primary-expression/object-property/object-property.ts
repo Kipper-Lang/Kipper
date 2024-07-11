@@ -1,7 +1,7 @@
 import type { ObjectPropertySemantics } from "./object-property-semantics";
 import type { ObjectPropertyTypeSemantics } from "./object-property-type-semantics";
-import type { ObjectPropertyContext } from "../../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../parser";
+import type { ObjectPropertyContext } from "../../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import { PrimaryExpression } from "../../primary-expression";
 import type { CompilableASTNode } from "../../../../../compilable-ast-node";
 
@@ -12,17 +12,28 @@ import type { CompilableASTNode } from "../../../../../compilable-ast-node";
  */
 export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, ObjectPropertyTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_objectProperty;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ObjectPropertyContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_objectProperty;
+	constructor(antlrRuleCtx: ObjectPropertyContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -37,12 +48,6 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -54,9 +59,11 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 		return ObjectProperty.ruleName;
 	}
 
-	constructor(antlrRuleCtx: ObjectPropertyContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): ObjectPropertyContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -82,20 +89,7 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 		return; // For now, we don't have any type checking for object properties.
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ObjectPropertyContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.objectProperty;
 	readonly targetCodeGenerator = this.codeGenerator.objectProperty;

@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
  * @since 0.8.0
  */
-import type { RawType } from "../../../../../analysis";
+import type { RawType } from "../../../../../semantics";
 import type { TypeSpecifierExpressionSemantics } from "../type-specifier-expression-semantics";
 
 /**

@@ -19,7 +19,7 @@ const templates = {
 };
 
 export default class New extends Command {
-	static override description: string = "Generate a new Kipper using a setup wizard.";
+	static override description: string = "Generate a new Kipper project with a kip-config.json using a setup wizard.";
 
 	// TODO! Add examples when the command moves out of development
 	static override examples: Array<string> = [];

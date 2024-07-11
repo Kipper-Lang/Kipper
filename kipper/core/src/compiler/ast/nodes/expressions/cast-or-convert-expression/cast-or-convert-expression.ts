@@ -12,12 +12,12 @@ import type { CastOrConvertExpressionTypeSemantics } from "./cast-or-convert-exp
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { Expression } from "../expression";
-import type { CastOrConvertExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import type { RawType } from "../../../../analysis";
+import type { CastOrConvertExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import type { RawType } from "../../../../semantics";
+import { kipperInternalBuiltInFunctions } from "../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { getConversionFunctionIdentifier } from "../../../../../tools";
-import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
 
 /**
  * Convert expressions, which are used to convert a value to a different type.
@@ -30,8 +30,20 @@ import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
  */
 export class CastOrConvertExpression extends Expression<
 	CastOrConvertExpressionSemantics,
-	CastOrConvertExpressionTypeSemantics
+	CastOrConvertExpressionTypeSemantics,
+	Expression
 > {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_castOrConvertExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -39,11 +51,10 @@ export class CastOrConvertExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: CastOrConvertExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_castOrConvertExpression;
+	constructor(antlrRuleCtx: CastOrConvertExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -58,12 +69,6 @@ export class CastOrConvertExpression extends Expression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -75,9 +80,11 @@ export class CastOrConvertExpression extends Expression<
 		return CastOrConvertExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: CastOrConvertExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): CastOrConvertExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -142,20 +149,7 @@ export class CastOrConvertExpression extends Expression<
 		}
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): CastOrConvertExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.castOrConvertExpression;
 	readonly targetCodeGenerator = this.codeGenerator.castOrConvertExpression;

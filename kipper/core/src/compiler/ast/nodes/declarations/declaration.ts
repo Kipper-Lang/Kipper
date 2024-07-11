@@ -14,7 +14,7 @@ import type { DeclarationTypeSemantics } from "./declaration-type-semantics";
 import type { TranslatedCodeLine } from "../../../const";
 import type { ASTDeclarationKind, ASTDeclarationRuleName, ParserDeclarationContext } from "../../common";
 import type { TargetASTNodeCodeGenerator, TargetASTNodeSemanticAnalyser } from "../../../target-presets";
-import type { ScopeDeclaration } from "../../../analysis";
+import type { ScopeDeclaration } from "../../../semantics";
 import { CompilableASTNode, type CompilableNodeParent } from "../../compilable-ast-node";
 import { MissingRequiredSemanticDataError, UndefinedDeclarationCtxError } from "../../../../errors";
 
@@ -40,12 +40,33 @@ export abstract class Declaration<
 	 */
 	protected override readonly _antlrRuleCtx: ParserDeclarationContext;
 
+	protected constructor(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
+	}
+
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
 	protected _scopeDeclaration: ScopeDeclaration | undefined;
+
+	/**
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
+	 */
+	public get scopeDeclaration(): ScopeDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -66,32 +87,11 @@ export abstract class Declaration<
 	 */
 	public abstract get ruleName(): ASTDeclarationRuleName;
 
-	protected constructor(antlrRuleCtx: ParserDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-
-		// Manually add the child to the parent
-		parent.addNewChild(this);
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): ParserDeclarationContext {
 		return this._antlrRuleCtx;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
-	 */
-	public get scopeDeclaration(): ScopeDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	/**

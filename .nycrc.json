@@ -6,7 +6,7 @@
 	],
 	"extension": ["ts"],
 	"exclude": [
-		"**/parser/antlr/*.*",
+		"**/lexer-parser/antlr/*.*",
 		"**/*.test.ts",
 		"**/*.spec.ts",
 		"**/*.d.ts",

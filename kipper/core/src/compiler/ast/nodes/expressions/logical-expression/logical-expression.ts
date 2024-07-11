@@ -6,7 +6,7 @@
  */
 import type { LogicalExpressionSemantics } from "./logical-expression-semantics";
 import type { LogicalExpressionTypeSemantics } from "./logical-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 
@@ -43,8 +43,10 @@ export type ParserLogicalExpressionRuleName = (typeof KindParseRuleMapping)[ASTL
 export abstract class LogicalExpression<
 	Semantics extends LogicalExpressionSemantics = LogicalExpressionSemantics,
 	TypeSemantics extends LogicalExpressionTypeSemantics = LogicalExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserLogicalExpressionContext;
+
 	public abstract get kind(): ASTLogicalExpressionKind;
+
 	public abstract get ruleName(): ParserLogicalExpressionRuleName;
 }

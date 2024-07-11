@@ -9,14 +9,13 @@
  * 2 >> 1 // 1
  * 2 >>> 1 // 1
  */
-
 import { BitwiseExpression } from "../bitwise-expression";
-import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../parser";
-import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../lexer-parser";
+import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
 import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
 import type { KipperBitwiseShiftOperator } from "../../../../../const";
@@ -38,17 +37,27 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	BitwiseShiftExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseShiftExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: BitwiseShiftExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseShiftExpression;
+	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -63,12 +72,6 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -80,9 +83,12 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 		return BitwiseShiftExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: BitwiseShiftExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr rule context for this AST node.
+	 * @since 0.11.0
+	 */
+	public override get antlrRuleCtx(): BitwiseOrExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -134,19 +140,11 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 			.validBitwiseExpression(semanticData.leftOp, semanticData.rightOp, semanticData.operator);
 
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 	}
 
 	public checkForWarnings = undefined;
-
-	/**
-	 * The antlr rule context for this AST node.
-	 * @since 0.11.0
-	 */
-	public override get antlrRuleCtx(): BitwiseOrExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseShiftExpression;
 	readonly targetCodeGenerator = this.codeGenerator.bitwiseShiftExpression;

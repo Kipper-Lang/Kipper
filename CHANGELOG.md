@@ -18,6 +18,64 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
+  the entire core type system has been reworked and adjusted to also support custom types as well as complex types
+  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
+  implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+- New module:
+  - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
+  - `semantics/runtime-internals`, which contains the runtime internal functions.
+  - `semantics/types`, which contains the runtime types.
+- New classes:
+  - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassDeclaration`, which represents an AST class declaration.
+  - `BuiltInType`, which represents a built-in type.
+  - `CustomType`, which represents a user defined type.
+  - `ScopeTypeDeclaration`, which represents a scope type declaration.
+  - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
+    declared. This serves as the parent of the global scope.
+  - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
+- New errors:
+  - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
+    type. This is an error indicating an invalid logic that should be fixed.
+- New interfaces:
+  - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
+  - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
+  - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
+  - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
+  - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
+  - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
+  - `CompilableType`, which represents a type that can be compiled.
+
+### Changed
+
+- Changed type from interface to class:
+  - `InternalFunction`, which represents an internal function.
+  - `BuiltInFunction`, which represents a built-in function.
+  - `InternalFunctionArgument`, which represents an internal function argument.
+  - `BuiltInVariable`, which represents a built-in variable.
+- Renamed:
+  - Module `analysis` to `semantics`.
+  - Class `UncheckedType` to `RawType`.
+  - Class `CheckedType` to `ProcessedType`.
+  - Class `UndefinedCustomType` to `UndefinedType`.
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+</details>
+
+## [0.11.0] - 2024-07-10
+
+### Added
+
+- Implemented Processing for File Scoped pragmas ([#480](https://github.com/Kipper-Lang/Kipper/issues/480))
+- Added Lambda Expressions, which are anonymous functions that can be used as expressions.
+  ([#572](https://github.com/Kipper-Lang/Kipper/issues/572))
 - Implemented Bitwise Operations (`&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`).
   ([#493](https://github.com/Kipper-Lang/Kipper/issues/493))
 - Implemented Conditional Expression (`COND ? EXP : EXP`) as a ternary operator.
@@ -60,11 +118,11 @@ To use development versions of Kipper download the
   - `BitwiseOrExpression`, which represents an AST bitwise OR expression.
   - `BitwiseXorExpression`, which represents an AST bitwise XOR expression.
   - `BitwiseShiftExpression`, which represents an AST bitwise shift expression.
-  - `InterfaceDeclaration`, which represents an AST interface declaration.
-  - `ClassDeclaration`, which represents an AST class declaration.
-  - `BuiltInType`, which represents a built-in type.
-  - `CustomType`, which represents a user defined type.
+  - `LambdaExpression`, which represents an AST lambda expression.
+  - `PragmaProcessor` which handles the processing of all possible Pragmas.
 - New interfaces:
+  - `LambdaExpressionSemantics`, which represents the semantics of a lambda expression.
+  - `LambdaExpressionTypeSemantics`, which represents the type semantics of a lambda expression.
   - `PrimaryExpressionSemantics`, which represents the semantics of a primary expression.
   - `PrimaryExpressionTypeSemantics`, which represents the type semantics of a primary expression.
   - `PostfixExpressionSemantics`, which represents the semantics of a postfix expression.
@@ -97,22 +155,22 @@ To use development versions of Kipper download the
   - `BitwiseXorExpressionTypeSemantics`, which represents the type semantics of a bitwise XOR expression.
   - `BitwiseShiftExpressionSemantics`, which represents the semantics of a bitwise shift expression.
   - `BitwiseShiftExpressionTypeSemantics`, which represents the type semantics of a bitwise shift expression.
-  - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
-  - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
-  - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
-  - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
-  - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
-  - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
-  - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
 - New parameters:
   - `ignoreParams` in `genJSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createJSFunctionSignature()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `genTSFunction()`, which, if true makes the function signature define no parameters.
   - `ignoreParams` in `createTSFunctionSignature()`, which, if true makes the function signature define no parameters.
-- New field:
+- New constants:
+  - `DEFAULT_TOKEN_CHANNEL`, which is the channel id of the default channel storing all the parser-relevant tokens that
+    the Lexer lexed.
+  - `HIDDEN`, which is the channel id of the channel storing all whitespaces and newlines that the Lexer lexed.
+  - `COMMENT`, which is the channel id of the channel storing all the comments that the Lexer lexed.
+  - `PRAGMA`, which is the channel id of the channel storing all pragma comments that the Lexer lexed.
+- New fields:
   - `KipperError.programCtx`, which contains, if `KipperError.tracebackData.errorNode` is not undefined, the program
     context of the error.
   - `ParserASTNode.ruleName`, which contains the rule name of the node.
+  - `LexerParserData.channels`, which stores the channels generated by the Lexer.
 - New types:
   - `InverseMap`, which inverts a map by swapping the keys and values.
 - New functions:
@@ -125,9 +183,11 @@ To use development versions of Kipper download the
   - `loadAutoConfig()` in `@kipper/cli`, which loads a config file from the current working directory.
   - `copyConfigResources()` in `@kipper/cli`, which copies the resources from the config file to the output directory.
   - `KipperTypeChecker.validConditionalExpression()`, which ensures that a conditional expression is valid.
+  - `PragmaProcessor.processSingleLine()`, which changes the compiler options according to the pragmas found in the file.
 
 ### Changed
 
+- Fixed bug allowing the use of any expressions for call expressions as that is not implemented yet.
 - Standardised error output for the CLI as described in [#435](https://github.com/Kipper-Lang/Kipper/issues/435).
   (This is the same change as in `0.10.3`, but was only added to the dev branch with the release of `0.11.0-alpha.1`
   i.e. `0.11.0-alpha.0` does _not_ have this change).
@@ -135,6 +195,10 @@ To use development versions of Kipper download the
   This means it's AST kind number is now also added to the `ASTConstantExpressionKind` type and its context class is
   also part of the `ParserConstantExpressionContext` type.
 - Renamed:
+  - Module `compiler/parser` to `lexer-parser`.
+  - File `kipper/core/compiler/parser/parser-ast-mapping.ts` to `parse-rule-kind-mappings.ts`.
+  - Class `KipperParseStream` to `KipperFileStream` including its file to `file-stream.ts`.
+  - CLI Class `KipperParseFile` to `KipperInputFile` including its file to `input-file.ts`.
   - Class `FunctionCallPostfixTypeSemantics` to `FunctionCallExpressionTypeSemantics`.
   - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
   - Function `getTSFunction()` to `genTSFunction()`.
@@ -165,8 +229,11 @@ To use development versions of Kipper download the
   - Interface `ArrayLiteralPrimaryExpressionTypeSemantics` to `ArrayPrimaryExpressionTypeSemantics`.
   - Interface `TangledPrimaryTypeSemantics` to `TangledPrimaryExpressionTypeSemantics`.
   - Interface `DoWhileLoopStatementSemantics` to `DoWhileLoopIterationStatementSemantics`.
+  - Interface `ParseData` to `LexerParserData`.
   - Method `TargetASTNodeCodeGenerator.arrayLiteralExpression` to `arrayPrimaryExpression`.
   - Method `TargetASTNodeSemanticAnalyser.listPrimaryExpression` to `arrayPrimaryExpression`.
+  - Field `FStringPrimaryExpressionSemantics.items` to `atoms`.
+  - Field `LexerParserData.parseStream` to `fileStream`.
 - Moved:
   - `kipper/core/utils.ts` to `kipper/core/tools` and separated it into multiple files & modules.
   - `kipper/core/compiler/ast/root-ast-node.ts` to the `kipper/core/compiler/ast/nodes` module.
@@ -188,18 +255,16 @@ To use development versions of Kipper download the
   additional edge-case covered. This fix was only added to the dev branch with the release of `0.11.0-alpha.1` i.e.
   `0.11.0-alpha.0` still has this bug).
 
-### Deprecated
-
 ### Removed
 
+- Removed deprecated flag `--abort-on-first-error` in favour of `--no-recover`.
+  ([#501](https://github.com/Kipper-Lang/Kipper/issues/501)).
 - Removed CLI command `analyse` in favor of the flag `--dry-run` in the CLI command `compile`.
   ([#532](https://github.com/Kipper-Lang/Kipper/issues/532)).
 - Removed AST parent class `ConstantExpression`, its interfaces `ConstantExpressionSemantics` and
   `ConstantExpressionTypeSemantics`, as they were not really needed and unnecessarily added another level of
   complexity to the AST. All classes which previously inherited from `ConstantExpression` now inherit from
   `PrimaryExpression` instead.
-
-</details>
 
 ## [0.10.4] - 2023-08-15
 
@@ -1390,7 +1455,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...HEAD
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4
 [0.10.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.2...v0.10.3
 [0.10.2]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.1...v0.10.2

@@ -5,7 +5,8 @@
 lexer grammar KipperLexer;
 
 channels {
-	COMMENT // Channel for all types of comments
+	COMMENT, // Channel for all types of comments
+	PRAGMA
 }
 
 tokens {
@@ -26,8 +27,13 @@ BlockComment
 	;
 
 LineComment
-	:	'//' ~[\r\n\u2028\u2029]*
+	:	'//' CommentContent
 		-> channel(COMMENT)
+	;
+
+Pragma
+	:	'#pragma' CommentContent
+		-> channel(PRAGMA)
 	;
 
 // const / var
@@ -373,3 +379,8 @@ DoubleQuoteSChar
     :   ~["\\\r\n]
     |   EscapeSequence
     ;
+
+fragment
+CommentContent
+	:	~[\r\n\u2028\u2029]*
+	;

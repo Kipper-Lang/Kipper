@@ -2,7 +2,6 @@
  * Target-specific Semantic Analyser.
  * @since 0.10.0
  */
-
 import type {
 	AdditiveExpression,
 	AnalysableASTNode,
@@ -32,6 +31,7 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
 	JumpStatement,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -51,11 +51,11 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	InterfacePropertyDeclaration,
+	InterfaceMethodDeclaration,
+	ObjectProperty,
 } from "../ast";
-import { KipperSemanticErrorHandler } from "../analysis";
-import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
-import type { InterfacePropertyDeclaration } from "../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
-import type { InterfaceMethodDeclaration } from "../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
+import { KipperSemanticErrorHandler } from "../semantics";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -147,6 +147,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.
 	 */
 	public abstract interfaceDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	public abstract interfacePropertyDeclaration?: TargetASTNodeSemanticAnalyser<InterfacePropertyDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	public abstract interfaceMethodDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceMethodDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
@@ -305,12 +315,7 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
-	public abstract interfacePropertyDeclaration?: TargetASTNodeSemanticAnalyser<InterfacePropertyDeclaration>;
-
-	/**
-	 * Performs translation-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
-	 */
-	public abstract interfaceMethodDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceMethodDeclaration>;
+	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }

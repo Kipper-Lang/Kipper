@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link TypeSpecifierExpression}.
  * @since 0.10.0
  */
-import type { ProcessedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
 
 /**

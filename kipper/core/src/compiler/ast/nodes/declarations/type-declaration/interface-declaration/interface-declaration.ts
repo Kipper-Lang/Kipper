@@ -5,12 +5,12 @@
 import type { InterfaceDeclarationSemantics } from "./interface-declaration-semantics";
 import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../../analysis";
-import type { InterfaceDeclarationContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
+import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
-import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
 
 /**
  * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
@@ -21,11 +21,29 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	InterfaceDeclarationTypeSemantics
 > {
 	/**
+	/**
+	* The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_interfaceDeclaration;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: InterfaceDeclarationContext;
+
+	constructor(antlrRuleCtx: InterfaceDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -35,11 +53,17 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
 
 	/**
-	/**
-	 * The static kind for this AST Node.
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_interfaceDeclaration;
+	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -54,12 +78,6 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -71,29 +89,11 @@ export class InterfaceDeclaration extends TypeDeclaration<
 		return InterfaceDeclaration.ruleName;
 	}
 
-	constructor(antlrRuleCtx: InterfaceDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): InterfaceDeclarationContext {
 		return this._antlrRuleCtx;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.11.0
-	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public getScopeDeclaration(): ScopeTypeDeclaration {

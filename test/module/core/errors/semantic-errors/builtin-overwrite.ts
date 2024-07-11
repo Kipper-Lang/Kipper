@@ -1,4 +1,5 @@
 import type { CompileConfig, KipperError } from "@kipper/core";
+import { BuiltInTypes } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
@@ -11,7 +12,7 @@ describe("BuiltInOverwriteError", () => {
 		const config: CompileConfig = {
 			...defaultConfig,
 			// prettier-ignore
-			extendBuiltInFunctions: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: "void", }, ] : [],
+			extendBuiltInFunctions: test.i !== "print" ? [{ identifier: test.i, params: [], returnType: BuiltInTypes.void, }, ] : [],
 		};
 
 		describe(`Global Scope - Overwrite [${test.t}]`, () => {

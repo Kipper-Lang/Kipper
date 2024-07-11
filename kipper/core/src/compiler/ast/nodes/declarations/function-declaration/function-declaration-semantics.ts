@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-import type { RawType } from "../../../../analysis";
+import type { RawType } from "../../../../semantics";
 import type { CompoundStatement, IdentifierTypeSpecifierExpression, ParameterDeclaration } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 

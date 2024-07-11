@@ -296,4 +296,9 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	assignmentExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
+	 */
+	lambdaExpression = undefined;
 }

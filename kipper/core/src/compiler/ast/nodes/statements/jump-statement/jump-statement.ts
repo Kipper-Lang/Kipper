@@ -6,8 +6,8 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { JumpStatementSemantics } from "./jump-statement-semantics";
 import type { JumpStatementTypeSemantics } from "./jump-statement-type-semantics";
 import { Statement } from "../statement";
-import type { JumpStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { JumpStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { Expression } from "../../expressions";
 
 /**
@@ -16,17 +16,31 @@ import type { Expression } from "../../expressions";
  */
 export class JumpStatement extends Statement<JumpStatementSemantics, JumpStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_jumpStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: JumpStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_jumpStatement;
+	protected readonly _children: Array<Expression>;
+
+	constructor(antlrRuleCtx: JumpStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -41,12 +55,6 @@ export class JumpStatement extends Statement<JumpStatementSemantics, JumpStateme
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -56,14 +64,6 @@ export class JumpStatement extends Statement<JumpStatementSemantics, JumpStateme
 	 */
 	public override get ruleName() {
 		return JumpStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Expression>;
-
-	constructor(antlrRuleCtx: JumpStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
 	}
 
 	/**

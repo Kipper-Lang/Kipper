@@ -10,8 +10,8 @@ import type { ConditionalExpressionSemantics } from "./conditional-expression-se
 import type { ConditionalExpressionTypeSemantics } from "./conditional-expression-type-semantics";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import type { ConditionalExpressionContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { ConditionalExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Conditional expression, which evaluates a condition and evaluates the left expression if it is true, or the right
@@ -23,8 +23,20 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
  */
 export class ConditionalExpression extends Expression<
 	ConditionalExpressionSemantics,
-	ConditionalExpressionTypeSemantics
+	ConditionalExpressionTypeSemantics,
+	Expression
 > {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_conditionalExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -32,11 +44,10 @@ export class ConditionalExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: ConditionalExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_conditionalExpression;
+	constructor(antlrRuleCtx: ConditionalExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -51,12 +62,6 @@ export class ConditionalExpression extends Expression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -68,9 +73,11 @@ export class ConditionalExpression extends Expression<
 		return ConditionalExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: ConditionalExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): ConditionalExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -109,20 +116,7 @@ export class ConditionalExpression extends Expression<
 		};
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ConditionalExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.conditionalExpression;
 	readonly targetCodeGenerator = this.codeGenerator.conditionalExpression;

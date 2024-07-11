@@ -12,11 +12,11 @@ import type { LogicalAndExpressionSemantics } from "./logical-and-expression-sem
 import type { LogicalAndExpressionTypeSemantics } from "./logical-and-expression-type-semantics";
 import type { Expression } from "../../expression";
 import { LogicalExpression } from "../logical-expression";
-import type { LogicalAndExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { LogicalAndExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { ProcessedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will
@@ -33,17 +33,28 @@ export class LogicalAndExpression extends LogicalExpression<
 	LogicalAndExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_logicalAndExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: LogicalAndExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_logicalAndExpression;
+	constructor(antlrRuleCtx: LogicalAndExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -58,12 +69,6 @@ export class LogicalAndExpression extends LogicalExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -75,9 +80,11 @@ export class LogicalAndExpression extends LogicalExpression<
 		return LogicalAndExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: LogicalAndExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): LogicalAndExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -115,24 +122,11 @@ export class LogicalAndExpression extends LogicalExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Logical expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: ProcessedType.fromCompilableType("bool"),
+			evaluatedType: BuiltInTypes.bool,
 		};
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): LogicalAndExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.logicalAndExpression;
 	readonly targetCodeGenerator = this.codeGenerator.logicalAndExpression;

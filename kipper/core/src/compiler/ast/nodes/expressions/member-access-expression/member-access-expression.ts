@@ -5,17 +5,17 @@
  */
 import type { MemberAccessExpressionSemantics } from "./member-access-expression-semantics";
 import type { MemberAccessExpressionTypeSemantics } from "./member-access-expression-type-semantics";
-import type { SliceNotationContext, SliceNotationMemberAccessExpressionContext } from "../../../../parser";
+import type { SliceNotationContext, SliceNotationMemberAccessExpressionContext } from "../../../../lexer-parser";
 import {
 	BracketNotationMemberAccessExpressionContext,
 	DotNotationMemberAccessExpressionContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
-} from "../../../../parser";
+} from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { kipperInternalBuiltInFunctions } from "../../../../runtime-built-ins";
+import { kipperInternalBuiltInFunctions } from "../../../../semantics";
 
 /**
  * A union of all possible {@link KipperParserRuleContext} rule contexts that {@link MemberAccessExpression} implements.
@@ -33,8 +33,21 @@ export type MemberAccessExpressionContext =
  */
 export class MemberAccessExpression extends Expression<
 	MemberAccessExpressionSemantics,
-	MemberAccessExpressionTypeSemantics
+	MemberAccessExpressionTypeSemantics,
+	Expression
 > {
+	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_memberAccessExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -42,11 +55,10 @@ export class MemberAccessExpression extends Expression<
 	 */
 	protected override readonly _antlrRuleCtx: MemberAccessExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_memberAccessExpression;
+	constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -61,12 +73,6 @@ export class MemberAccessExpression extends Expression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -76,11 +82,6 @@ export class MemberAccessExpression extends Expression<
 	 */
 	public override get ruleName() {
 		return MemberAccessExpression.ruleName;
-	}
-
-	constructor(antlrRuleCtx: MemberAccessExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
 	/**
@@ -169,12 +170,6 @@ export class MemberAccessExpression extends Expression<
 		};
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.memberAccessExpression;

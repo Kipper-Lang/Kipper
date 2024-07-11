@@ -2,7 +2,7 @@
  * Type semantics for a {@link ReturnStatement}.
  * @since 0.10.0
  */
-import type { ProcessedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { StatementTypeSemantics } from "../statement-type-semantics";
 
 /**

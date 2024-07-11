@@ -8,8 +8,8 @@ import type { GenericTypeSpecifierExpressionSemantics } from "./generic-type-spe
 import type { GenericTypeSpecifierExpressionTypeSemantics } from "./generic-type-specifier-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
-import type { GenericTypeSpecifierExpressionContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
+import type { GenericTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 
 /**
@@ -23,17 +23,28 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	GenericTypeSpecifierExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_genericTypeSpecifierExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: GenericTypeSpecifierExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_genericTypeSpecifierExpression;
+	constructor(antlrRuleCtx: GenericTypeSpecifierExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -48,12 +59,6 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -65,9 +70,11 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 		return GenericTypeSpecifierExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: GenericTypeSpecifierExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): GenericTypeSpecifierExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -94,20 +101,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): GenericTypeSpecifierExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.genericTypeSpecifierExpression;
 	readonly targetCodeGenerator = this.codeGenerator.genericTypeSpecifierExpression;

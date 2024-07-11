@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-import type { RawType } from "../../../../analysis";
-import type { FunctionDeclaration, IdentifierTypeSpecifierExpression } from "../../../nodes";
+import type { RawType } from "../../../../semantics";
 import type { DeclarationSemantics } from "../declaration-semantics";
+import type { FunctionDeclaration, IdentifierTypeSpecifierExpression, LambdaExpression } from "../../../nodes";
 
 /**
  * Semantics for AST Node {@link ParameterDeclaration}.
@@ -30,5 +30,5 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The parent function of this parameter.
 	 * @since 0.10.0
 	 */
-	func: FunctionDeclaration;
+	func: FunctionDeclaration | LambdaExpression;
 }

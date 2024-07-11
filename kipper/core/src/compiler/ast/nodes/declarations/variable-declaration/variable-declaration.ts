@@ -8,19 +8,19 @@
 import type { VariableDeclarationSemantics } from "./variable-declaration-semantics";
 import type { VariableDeclarationTypeSemantics } from "./variable-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { RawType, ScopeVariableDeclaration } from "../../../../analysis";
+import type { RawType, ScopeVariableDeclaration } from "../../../../semantics";
 import type { Expression, IdentifierTypeSpecifierExpression } from "../../expressions";
 import type { ParseTree } from "antlr4ts/tree";
 import type { KipperStorageType } from "../../../../const";
 import { Declaration } from "../declaration";
-import type { VariableDeclarationContext } from "../../../../parser";
+import type { VariableDeclarationContext } from "../../../../lexer-parser";
 import {
 	DeclaratorContext,
 	InitDeclaratorContext,
 	KindParseRuleMapping,
 	ParseRuleKindMapping,
 	StorageTypeSpecifierContext,
-} from "../../../../parser";
+} from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
@@ -32,11 +32,29 @@ import { UnableToDetermineSemanticDataError } from "../../../../../errors";
  */
 export class VariableDeclaration extends Declaration<VariableDeclarationSemantics, VariableDeclarationTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_variableDeclaration;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: VariableDeclarationContext;
+
+	constructor(antlrRuleCtx: VariableDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * The private field '_children' that actually stores the variable data,
@@ -44,6 +62,10 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	 * @private
 	 */
 	protected override _children: Array<Expression>;
+
+	public override get children(): Array<Expression> {
+		return this._children;
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -53,10 +75,17 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_variableDeclaration;
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -71,12 +100,6 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -88,34 +111,11 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		return VariableDeclaration.ruleName;
 	}
 
-	constructor(antlrRuleCtx: VariableDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
 	public override get antlrRuleCtx(): VariableDeclarationContext {
 		return this._antlrRuleCtx;
-	}
-
-	public override get children(): Array<Expression> {
-		return this._children;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
-	 */
-	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public getScopeDeclaration(): ScopeVariableDeclaration {

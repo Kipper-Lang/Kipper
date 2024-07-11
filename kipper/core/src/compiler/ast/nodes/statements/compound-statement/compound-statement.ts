@@ -7,9 +7,9 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatementSemantics } from "./compound-statement-semantics";
 import type { CompoundStatementTypeSemantics } from "./compound-statement-type-semantics";
 import { Statement } from "../statement";
-import { LocalScope } from "../../../../analysis";
-import type { CompoundStatementContext } from "../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import { LocalScope } from "../../../../semantics";
+import type { CompoundStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Compound statement class, which represents a compound statement containing other items in the Kipper
@@ -20,17 +20,36 @@ export class CompoundStatement
 	implements ScopeNode<LocalScope>
 {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_compoundStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: CompoundStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_compoundStatement;
+	protected readonly _children: Array<Statement>;
+
+	private readonly _innerScope: LocalScope;
+
+	constructor(antlrRuleCtx: CompoundStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+		this._semanticData = {};
+		this._typeSemantics = {};
+		this._innerScope = new LocalScope(this);
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -45,12 +64,6 @@ export class CompoundStatement
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -60,19 +73,6 @@ export class CompoundStatement
 	 */
 	public override get ruleName() {
 		return CompoundStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Statement>;
-
-	private readonly _innerScope: LocalScope;
-
-	constructor(antlrRuleCtx: CompoundStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-		this._semanticData = {};
-		this._typeSemantics = {};
-		this._innerScope = new LocalScope(this);
 	}
 
 	/**

@@ -5,7 +5,7 @@
  */
 import type { TypeSpecifierExpressionSemantics } from "./type-specifier-expression-semantics";
 import type { TypeSpecifierExpressionTypeSemantics } from "./type-specifier-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
 import { Expression } from "../expression";
 
@@ -42,8 +42,10 @@ export type ParserTypeSpecifierExpressionRuleName = (typeof KindParseRuleMapping
 export abstract class TypeSpecifierExpression<
 	Semantics extends TypeSpecifierExpressionSemantics = TypeSpecifierExpressionSemantics,
 	TypeSemantics extends TypeSpecifierExpressionTypeSemantics = TypeSpecifierExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserTypeSpecifierExpressionContext;
+
 	public abstract get kind(): ASTTypeSpecifierExpressionKind;
+
 	public abstract get ruleName(): ParserTypeSpecifierExpressionRuleName;
 }

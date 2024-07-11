@@ -6,9 +6,9 @@
  */
 import type { ArithmeticExpressionSemantics } from "./arithmetic-expression-semantics";
 import type { ArithmeticExpressionTypeSemantics } from "./arithmetic-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../parser";
-import { Expression } from "../expression";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../mapping";
+import { Expression } from "../expression";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link ArithmeticExpression} AST node.
@@ -42,8 +42,10 @@ export type ParserArithmeticExpressionRuleName = (typeof KindParseRuleMapping)[A
 export abstract class ArithmeticExpression<
 	Semantics extends ArithmeticExpressionSemantics = ArithmeticExpressionSemantics,
 	TypeSemantics extends ArithmeticExpressionTypeSemantics = ArithmeticExpressionTypeSemantics,
-> extends Expression<Semantics, TypeSemantics> {
+> extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserArithmeticExpressionContext;
+
 	public abstract get kind(): ASTArithmeticExpressionKind;
+
 	public abstract get ruleName(): ParserArithmeticExpressionRuleName;
 }

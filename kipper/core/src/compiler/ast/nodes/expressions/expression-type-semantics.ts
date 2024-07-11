@@ -2,7 +2,7 @@
  * Type semantics for an expression class that must be evaluated during Type Checking.
  * @since 0.10.0
  */
-import type { ProcessedType } from "../../../analysis";
+import type { ProcessedType } from "../../../semantics";
 import type { TypeData } from "../../ast-node";
 
 /**
