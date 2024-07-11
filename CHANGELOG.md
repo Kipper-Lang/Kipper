@@ -18,11 +18,20 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that the entire core type system has been reworked and adjusted to also support custom types as well as complex types (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+- New module:
+  - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
+  - `semantics/runtime-internals`, which contains the runtime internal functions.
+  - `semantics/types`, which contains the runtime types.
 - New classes:
   - `InterfaceDeclaration`, which represents an AST interface declaration.
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
+  - `ScopeTypeDeclaration`, which represents a scope type declaration.
+  - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
+		declared. This serves as the parent of the global scope.
+  - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
     type. This is an error indicating an invalid logic that should be fixed.
@@ -34,8 +43,20 @@ To use development versions of Kipper download the
   - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
   - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
+  - `CompilableType`, which represents a type that can be compiled.
 
 ### Changed
+
+- Changed type from interface to class:
+	- `InternalFunction`, which represents an internal function.
+	- `BuiltInFunction`, which represents a built-in function.
+  - `InternalFunctionArgument`, which represents an internal function argument.
+	- `BuiltInVariable`, which represents a built-in variable.
+- Renamed:
+  - Module `analysis` to `semantics`.
+  - Class `UncheckedType` to `RawType`.
+  - Class `CheckedType` to `ProcessedType`.
+  - Class `UndefinedCustomType` to `UndefinedType`.
 
 ### Fixed
 
