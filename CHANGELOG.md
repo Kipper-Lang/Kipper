@@ -18,7 +18,10 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that the entire core type system has been reworked and adjusted to also support custom types as well as complex types (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that 
+	the entire core type system has been reworked and adjusted to also support custom types as well as complex types
+  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the 
+	implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
