@@ -1307,4 +1307,44 @@ describe("Core functionality", () => {
 			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different result"), jsCode);
 		});
 	});
+
+	describe("Interfaces", async () => {
+		it("Can initialize empty interface", async () => {
+			const fileContent = "interface Test { }";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "interface Test {\n}", "Invalid TypeScript code (Expected different output)");
+		});
+
+		it("can initialize interface with members", async () => {
+			const fileContent = "interface Test {\n x: num;\n y: str;\n greet(name: str) : str;}";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"interface Test {\n x: number;\n y: string;\n greet(name: string): string;\n}",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should can initialize with mixed members", async () => {
+			const fileContent = "interface Test {\n x: num;\n isTrue(f: bool): str;\n y: str;\n greet(name: str) : str;}";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"interface Test {\n x: number;\n isTrue(f: boolean): string;\n y: string;\n greet(name: string): string;\n}",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
 });
