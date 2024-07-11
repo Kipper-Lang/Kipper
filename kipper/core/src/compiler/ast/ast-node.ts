@@ -15,13 +15,13 @@ import type { KipperParserRuleContext } from "../lexer-parser";
  * {@link CompilableASTNode}.
  * @since 0.3.0
  */
-export type SemanticData = Record<string, any>;
+export type SemanticData = { [key: string]: any };
 
 /**
  * Type semantics for an expression class that must be evaluated during Type Checking.
  * @since 0.10.0
  */
-export type TypeData = Record<string, any>;
+export type TypeData = { [key: string]: any };
 
 /**
  * Empty semantics interface for hinting an AST node has *no* semantics.

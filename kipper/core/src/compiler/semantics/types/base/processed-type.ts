@@ -51,7 +51,7 @@ export abstract class ProcessedType extends Type {
 	 * @param propertyName The name of the property that is being assigned. This is used for error messages.
 	 * @param argumentName The name of the argument that is being assigned to. This is used for error messages.
 	 * @throws TypeError If the types are not assignable.
-	 * @since 0.11.0
+	 * @since 0.12.0
 	 */
 	public abstract assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void;
 }
