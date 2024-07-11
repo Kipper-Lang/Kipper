@@ -1,16 +1,13 @@
 import { ProcessedType } from "./base";
-import {KipperInternalError, TypeError} from "../../../errors";
+import type { TypeError } from "../../../errors";
+import { KipperInternalError } from "../../../errors";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	PropertyAssignmentTypeError,
 	PropertyNotFoundError,
 } from "../../../errors";
-import {
-	ClassDeclaration,
-	InterfaceDeclaration,
-	ObjectPrimaryExpression,
-} from "../../ast";
+import type { ClassDeclaration, InterfaceDeclaration, ObjectPrimaryExpression } from "../../ast";
 
 /**
  * Represents the kind of a custom type.

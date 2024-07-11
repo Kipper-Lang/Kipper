@@ -18,10 +18,10 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that 
-	the entire core type system has been reworked and adjusted to also support custom types as well as complex types
-  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the 
-	implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+- Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
+  the entire core type system has been reworked and adjusted to also support custom types as well as complex types
+  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
+  implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
@@ -33,7 +33,7 @@ To use development versions of Kipper download the
   - `CustomType`, which represents a user defined type.
   - `ScopeTypeDeclaration`, which represents a scope type declaration.
   - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
-		declared. This serves as the parent of the global scope.
+    declared. This serves as the parent of the global scope.
   - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
@@ -51,10 +51,10 @@ To use development versions of Kipper download the
 ### Changed
 
 - Changed type from interface to class:
-	- `InternalFunction`, which represents an internal function.
-	- `BuiltInFunction`, which represents a built-in function.
+  - `InternalFunction`, which represents an internal function.
+  - `BuiltInFunction`, which represents a built-in function.
   - `InternalFunctionArgument`, which represents an internal function argument.
-	- `BuiltInVariable`, which represents a built-in variable.
+  - `BuiltInVariable`, which represents a built-in variable.
 - Renamed:
   - Module `analysis` to `semantics`.
   - Class `UncheckedType` to `RawType`.
