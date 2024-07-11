@@ -85,28 +85,25 @@ parameterDeclaration
     ;
 
 interfaceDeclaration
-    :   'interface' Identifier '{' interfaceMemberList? '}'
-    ;
-
-interfaceMemberList
-    :   interfaceMemberDeclaration+
+    :   'interface' declarator '{' interfaceMemberDeclaration* '}'
     ;
 
 interfaceMemberDeclaration
-    :   propertySignature
-    |   methodSignature
+    :   interfacePropertyDeclaration
+    |   interfaceMethodDeclaration
     ;
 
-propertySignature
-    :   Identifier ':' typeSpecifierExpression SemiColon
+interfacePropertyDeclaration
+    :   declarator ':' typeSpecifierExpression SemiColon
     ;
 
-methodSignature
-    :   Identifier '(' parameterList? ')' '->' typeSpecifierExpression SemiColon
+interfaceMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
     ;
+
 
 classDeclaration
-	:	'class' Identifier '{' '}'
+	:	'class' declarator '{' '}'
 	;
 
 // -- Statements

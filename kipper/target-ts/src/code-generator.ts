@@ -2,11 +2,19 @@
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
  * @since 0.8.0
  */
-import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";
-import type { FunctionDeclaration } from "@kipper/core";
+import type {
+	FunctionDeclaration,
+	InterfaceDeclaration,
+	InterfacePropertyDeclaration,
+	KipperCompilableType,
+	ParameterDeclaration,
+	TranslatedCodeLine,
+	VariableDeclaration,
+} from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";
+import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -51,5 +59,73 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 				";",
 			],
 		];
+	};
+
+	override interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const interfaceName = semanticData.identifier;
+		const interfaceMembers = semanticData.members;
+
+		const memberDeclarations = await Promise.all(
+			interfaceMembers.map(async (member) => {
+				return member.translateCtxAndChildren();
+			}),
+		);
+
+		return [
+			["interface", " ", interfaceName, " ", "{"],
+			...memberDeclarations.flat().map((line) => [" ", ...line]),
+			["}"],
+		];
+	};
+
+	override interfaceMethodDeclaration = async (
+		node: InterfaceMethodDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const params = semanticData.parameters;
+		const returnTypeIdentifier = TargetTS.getTypeScriptType(
+			<KipperCompilableType>semanticData.returnType.getSemanticData().typeIdentifier.identifier,
+		);
+
+		const paramsCode: TranslatedCodeLine[] = await Promise.all(
+			params.map(async (param) => {
+				return param.translateCtxAndChildren();
+			}),
+		).then((results) => results.flat());
+
+		// Return the method declaration
+		return [
+			[
+				semanticData.identifier,
+				"(",
+				paramsCode.map((param) => param.join("")).join(", "),
+				")",
+				":",
+				" ",
+				returnTypeIdentifier,
+				";",
+			],
+		];
+	};
+
+	override interfacePropertyDeclaration = async (
+		node: InterfacePropertyDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const valueType = TargetTS.getTypeScriptType(<KipperCompilableType>semanticData.type.identifier);
+
+		// Return the property declaration
+		return [[identifier, ":", " ", valueType, ";"]];
+	};
+
+	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const valueType = TargetTS.getTypeScriptType(<KipperCompilableType>semanticData.valueType.identifier);
+
+		// Return the parameter declaration
+		return [[identifier, ":", " ", valueType]];
 	};
 }

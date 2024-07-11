@@ -51,6 +51,7 @@ import type {
 	ForLoopIterationStatement,
 	MemberAccessExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -68,6 +69,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
+import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -356,7 +358,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [[`${semanticData.identifier}`]];
 	};
 
 	/**
@@ -389,6 +392,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into the JavaScript language.
+	 */
+	interfacePropertyDeclaration = async (node: InterfacePropertyDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into the JavaScript language.
+	 * @param node
+	 */
+	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 

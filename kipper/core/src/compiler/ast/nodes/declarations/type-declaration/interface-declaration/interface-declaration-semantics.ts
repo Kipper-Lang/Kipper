@@ -3,6 +3,8 @@
  * @since 0.11.0
  */
 import type { TypeDeclarationSemantics } from "../type-declaration-semantics";
+import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
+import { InterfaceMemberDeclarationSemantics } from "./interface-member-declaration";
 
 /**
  * Semantics for AST Node {@link ClassDeclaration}.
@@ -14,4 +16,10 @@ export interface InterfaceDeclarationSemantics extends TypeDeclarationSemantics 
 	 * @since 0.11.0
 	 */
 	identifier: string;
+
+	/**
+	 * The members of this interface.
+	 * @since 0.11.0
+	 */
+	members: Array<InterfaceMemberDeclaration>;
 }

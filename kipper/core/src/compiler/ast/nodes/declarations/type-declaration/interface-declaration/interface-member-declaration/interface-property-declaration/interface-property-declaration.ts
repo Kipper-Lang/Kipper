@@ -1,31 +1,32 @@
 /**
- * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
+ * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.11.0
  */
-import type { InterfaceDeclarationSemantics } from "./interface-declaration-semantics";
-import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
-import type { CompilableNodeParent } from "../../../../compilable-ast-node";
-import type { ScopeTypeDeclaration } from "../../../../../analysis";
-import type { InterfaceDeclarationContext } from "../../../../../parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../parser";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { TypeDeclaration } from "../type-declaration";
-import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
+import type { ScopeTypeDeclaration } from "../../../../../../../analysis";
+import { RawType } from "../../../../../../../analysis";
+import type { InterfacePropertyDeclarationContext } from "../../../../../../../parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../parser";
+import { InterfaceMemberDeclaration } from "../interface-member-declaration";
+import type { InterfacePropertyDeclarationSemantics } from "./interface-property-declaration-semantics";
+import type { InterfacePropertyDeclarationTypeSemantics } from "./interface-property-declaration-type-semantics";
+import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";
+import { UnableToDetermineSemanticDataError } from "../../../../../../../../errors";
+import type { IdentifierTypeSpecifierExpression } from "../../../../../expressions";
 
 /**
- * Represents an interface declaration in the Kipper language, which may contain methods and fields declarations.
+ * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.11.0
  */
-export class InterfaceDeclaration extends TypeDeclaration<
-	InterfaceDeclarationSemantics,
-	InterfaceDeclarationTypeSemantics
+export class InterfacePropertyDeclaration extends InterfaceMemberDeclaration<
+	InterfacePropertyDeclarationSemantics,
+	InterfacePropertyDeclarationTypeSemantics
 > {
-	/**
+	/**parent
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: InterfaceDeclarationContext;
+	protected override readonly _antlrRuleCtx: InterfacePropertyDeclarationContext;
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -36,10 +37,10 @@ export class InterfaceDeclaration extends TypeDeclaration<
 
 	/**
 	/**
-	 * The static kind for this AST Node.
+	* The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_interfaceDeclaration;
+	public static readonly kind = ParseRuleKindMapping.RULE_interfacePropertyDeclaration;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -50,7 +51,7 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * @since 0.11.0
 	 */
 	public override get kind() {
-		return InterfaceDeclaration.kind;
+		return InterfacePropertyDeclaration.kind;
 	}
 
 	/**
@@ -68,10 +69,10 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return InterfaceDeclaration.ruleName;
+		return InterfacePropertyDeclaration.ruleName;
 	}
 
-	constructor(antlrRuleCtx: InterfaceDeclarationContext, parent: CompilableNodeParent) {
+	constructor(antlrRuleCtx: InterfacePropertyDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -79,10 +80,9 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): InterfaceDeclarationContext {
+	public override get antlrRuleCtx(): InterfacePropertyDeclarationContext {
 		return this._antlrRuleCtx;
 	}
-
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -113,11 +113,14 @@ export class InterfaceDeclaration extends TypeDeclaration<
 		if (!antlrChildren?.length) {
 			throw new UnableToDetermineSemanticDataError();
 		}
-		const identifier = antlrChildren[1].text;
+
+		const identifier = antlrChildren[0].text;
+		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		this.semanticData = {
 			identifier: identifier,
-			members: [...this.children] as Array<InterfaceMemberDeclaration>,
+			typeSpecifier: typeSpecifier,
+			type: typeSpecifier.getSemanticData().typeIdentifier,
 		};
 	}
 
@@ -130,9 +133,14 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
+		const semanticData = this.getSemanticData();
+
+		// Get the type that will be returned using the value type specifier
+		semanticData.typeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
+		const valueType = semanticData.typeSpecifier.getTypeSemanticData().storedType;
+		this.typeSemantics = {
+			valueType: valueType,
+		};
 	}
 
 	/**
@@ -143,6 +151,6 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 */
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.interfaceDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.interfaceDeclaration;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.interfacePropertyDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.interfacePropertyDeclaration;
 }

@@ -9,7 +9,7 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import {
+import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualBitwiseAndExpressionContext,
@@ -25,7 +25,8 @@ import {
 	ActualRelationalExpressionContext,
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
-	BracketNotationMemberAccessExpressionContext, ClassDeclarationContext,
+	BracketNotationMemberAccessExpressionContext,
+	ClassDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -48,7 +49,10 @@ import {
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
-	InitializerContext, InterfaceDeclarationContext, InterfaceMemberDeclarationContext,
+	InitializerContext,
+	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
@@ -73,6 +77,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../parser";
+import { InterfaceMemberDeclarationContext } from "../parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
@@ -1075,8 +1080,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	public exitInterfaceDeclaration: (ctx: InterfaceDeclarationContext) => void = this.handleExitingTreeNode;
 
-	public enterInterfaceMemberDeclaration: (ctx: InterfaceMemberDeclarationContext) => void = this.handleEnteringTreeNode;
-	public exitInterfaceMemberDeclaration: (ctx: InterfaceMemberDeclarationContext) => void = this.handleExitingTreeNode;
+	public enterInterfacePropertyDeclaration: (ctx: InterfacePropertyDeclarationContext) => void =
+		this.handleEnteringTreeNode;
+
+	public exitInterfacePropertyDeclaration: (ctx: InterfacePropertyDeclarationContext) => void =
+		this.handleExitingTreeNode;
+
+	public enterInterfaceMethodDeclaration: (ctx: InterfaceMethodDeclarationContext) => void =
+		this.handleEnteringTreeNode;
+
+	public exitInterfaceMethodDeclaration: (ctx: InterfaceMethodDeclarationContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.classDeclaration`.

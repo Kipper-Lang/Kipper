@@ -31,6 +31,8 @@ import type {
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
@@ -50,6 +52,8 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../../parser";
+import { InterfaceMemberDeclarationContext } from "../../parser";
+import { InterfaceMemberDeclaration } from "../nodes";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
@@ -111,6 +115,8 @@ export type ParserDeclarationContext =
 	| ParameterDeclarationContext
 	| VariableDeclarationContext
 	| InterfaceDeclarationContext
+	| InterfacePropertyDeclarationContext
+	| InterfaceMethodDeclarationContext
 	| ClassDeclarationContext;
 
 /**
@@ -132,7 +138,8 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_parameterDeclaration
 	| typeof ParseRuleKindMapping.RULE_variableDeclaration
 	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
-	| typeof ParseRuleKindMapping.RULE_interfaceMemberList
+	| typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration
 	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 
 /**
@@ -210,7 +217,8 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMemberList]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
 
 /**

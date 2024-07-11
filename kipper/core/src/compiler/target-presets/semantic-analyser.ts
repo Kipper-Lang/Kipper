@@ -54,6 +54,8 @@ import type {
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../analysis";
 import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
+import type { InterfacePropertyDeclaration } from "../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
+import type { InterfaceMethodDeclaration } from "../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -301,4 +303,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link AssignmentExpression} instances.
 	 */
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	public abstract interfacePropertyDeclaration?: TargetASTNodeSemanticAnalyser<InterfacePropertyDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	public abstract interfaceMethodDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceMethodDeclaration>;
 }
