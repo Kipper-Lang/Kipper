@@ -2,13 +2,13 @@
  * Constant expression, representing the void, null or undefined keyword.
  * @since 0.10.0
  */
-import type { KipperNullType, KipperUndefinedType, KipperVoidType } from "../../../../../const";
+import type { KipperNullTypeLiteral, KipperUndefinedTypeLiteral, KipperVoidTypeLiteral } from "../../../../../const";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { VoidOrNullOrUndefinedPrimaryExpressionSemantics } from "./void-or-null-or-undefined-primary-expression-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics } from "./void-or-null-or-undefined-primary-expression-type-semantics";
 import type { VoidOrNullOrUndefinedPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { CheckedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 
 /**
@@ -20,17 +20,35 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 	VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.voidOrNullOrUndefinedPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.voidOrNullOrUndefinedPrimaryExpression;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression;
+	constructor(antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -45,12 +63,6 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -62,9 +74,11 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 		return VoidOrNullOrUndefinedPrimaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: VoidOrNullOrUndefinedPrimaryExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): VoidOrNullOrUndefinedPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -77,7 +91,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			// Syntactically there can only be 'void', 'null' or 'undefined' stored in this expression
-			constantIdentifier: <KipperVoidType | KipperNullType | KipperUndefinedType>this.sourceCode,
+			constantIdentifier: <KipperVoidTypeLiteral | KipperNullTypeLiteral | KipperUndefinedTypeLiteral>this.sourceCode,
 			value: this.sourceCode, // The value of this expression is equal to the constant identifier in string form
 		};
 	}
@@ -93,25 +107,7 @@ export class VoidOrNullOrUndefinedPrimaryExpression extends PrimaryExpression<
 		// The evaluated type of this expression will always be equal to the constant identifier that this expression
 		// contains e.g. either 'void', 'null' or 'undefined'.
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType(semanticData.constantIdentifier),
+			evaluatedType: BuiltInTypes[semanticData.constantIdentifier],
 		};
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): VoidOrNullOrUndefinedPrimaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.voidOrNullOrUndefinedPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.voidOrNullOrUndefinedPrimaryExpression;
 }

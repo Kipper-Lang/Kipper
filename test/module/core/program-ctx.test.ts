@@ -1,5 +1,6 @@
 import { assert } from "chai";
 import type { BuiltInFunction } from "@kipper/core";
+import { BuiltInFunctions, BuiltInTypes, BuiltInVariables } from "@kipper/core";
 import { EvaluatedCompileConfig, InvalidGlobalError, KipperCompiler, KipperFileStream } from "@kipper/core";
 import { promises as fs } from "fs";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
@@ -22,8 +23,10 @@ describe("KipperProgramContext", async () => {
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -38,8 +41,10 @@ describe("KipperProgramContext", async () => {
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -48,15 +53,17 @@ describe("KipperProgramContext", async () => {
 			let func: BuiltInFunction = {
 				identifier: "test",
 				params: [],
-				returnType: "void",
+				returnType: BuiltInTypes.void,
 			};
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length + 1,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -71,8 +78,10 @@ describe("KipperProgramContext", async () => {
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -81,15 +90,17 @@ describe("KipperProgramContext", async () => {
 			let func: BuiltInFunction = {
 				identifier: "test",
 				params: [],
-				returnType: "void",
+				returnType: BuiltInTypes.void,
 			};
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length + 1,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -118,8 +129,10 @@ describe("KipperProgramContext", async () => {
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length,
 				"Expected the program ctx built-ins to match the default built-ins",
 			);
@@ -130,7 +143,7 @@ describe("KipperProgramContext", async () => {
 			let func: BuiltInFunction = {
 				identifier: "test",
 				params: [],
-				returnType: "void",
+				returnType: BuiltInTypes.void,
 			};
 			programCtx.registerBuiltInFunctions(func);
 
@@ -147,15 +160,17 @@ describe("KipperProgramContext", async () => {
 			let func: BuiltInFunction = {
 				identifier: "test",
 				params: [],
-				returnType: "void",
+				returnType: BuiltInTypes.void,
 			};
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(
 				programCtx.builtIns.length,
 				Object.values([
-					...EvaluatedCompileConfig.defaults.builtInFunctions,
-					...EvaluatedCompileConfig.defaults.builtInVariables,
+					...Object.values(BuiltInFunctions),
+					...Object.values(BuiltInVariables),
+					...EvaluatedCompileConfig.defaults.extendBuiltInFunctions,
+					...EvaluatedCompileConfig.defaults.extendBuiltInVariables,
 				]).length + 1,
 				"Expected one additional built-in function after registration",
 			);

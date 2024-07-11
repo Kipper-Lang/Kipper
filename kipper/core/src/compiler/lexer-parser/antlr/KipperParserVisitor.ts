@@ -46,15 +46,17 @@ import { ExternalItemContext } from "./KipperParser";
 import { BlockItemListContext } from "./KipperParser";
 import { BlockItemContext } from "./KipperParser";
 import { DeclarationContext } from "./KipperParser";
-import { FunctionDeclarationContext } from "./KipperParser";
 import { VariableDeclarationContext } from "./KipperParser";
 import { StorageTypeSpecifierContext } from "./KipperParser";
+import { InitDeclaratorContext } from "./KipperParser";
+import { InitializerContext } from "./KipperParser";
 import { DeclaratorContext } from "./KipperParser";
 import { DirectDeclaratorContext } from "./KipperParser";
-import { InitDeclaratorContext } from "./KipperParser";
+import { FunctionDeclarationContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
-import { InitializerContext } from "./KipperParser";
+import { InterfaceDeclarationContext } from "./KipperParser";
+import { ClassDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
@@ -433,13 +435,6 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitDeclaration?: (ctx: DeclarationContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.functionDeclaration`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `KipperParser.variableDeclaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -452,6 +447,20 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.initDeclarator`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInitDeclarator?: (ctx: InitDeclaratorContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInitializer?: (ctx: InitializerContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.declarator`.
@@ -468,11 +477,11 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitDirectDeclarator?: (ctx: DirectDeclaratorContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.initDeclarator`.
+	 * Visit a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitInitDeclarator?: (ctx: InitDeclaratorContext) => Result;
+	visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.parameterList`.
@@ -489,11 +498,18 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitParameterDeclaration?: (ctx: ParameterDeclarationContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.initializer`.
+	 * Visit a parse tree produced by `KipperParser.interfaceDeclaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitInitializer?: (ctx: InitializerContext) => Result;
+	visitInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassDeclaration?: (ctx: ClassDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.statement`.

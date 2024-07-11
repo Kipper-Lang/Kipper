@@ -20,17 +20,47 @@ export class WhileLoopIterationStatement extends IterationStatement<
 	WhileLoopStatementTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_whileLoopIterationStatement;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
+	 * @since 0.7.0
+	 */
+	public primarySemanticTypeChecking = undefined; // While-loop statements will never have type checking
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopIterationStatement;
+	readonly targetCodeGenerator = this.codeGenerator.whileLoopIterationStatement;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: WhileLoopIterationStatementContext;
+	protected readonly _children: Array<CompilableNodeChild>;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_whileLoopIterationStatement;
+	constructor(antlrRuleCtx: WhileLoopIterationStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+		this._typeSemantics = {};
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -45,12 +75,6 @@ export class WhileLoopIterationStatement extends IterationStatement<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -60,15 +84,6 @@ export class WhileLoopIterationStatement extends IterationStatement<
 	 */
 	public override get ruleName() {
 		return WhileLoopIterationStatement.ruleName;
-	}
-
-	protected readonly _children: Array<CompilableNodeChild>;
-
-	constructor(antlrRuleCtx: WhileLoopIterationStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-		this._typeSemantics = {};
 	}
 
 	/**
@@ -101,25 +116,4 @@ export class WhileLoopIterationStatement extends IterationStatement<
 			loopBody: loopBody,
 		};
 	}
-
-	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
-	 */
-	public primarySemanticTypeChecking = undefined; // While-loop statements will never have type checking
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.whileLoopIterationStatement;
-	readonly targetCodeGenerator = this.codeGenerator.whileLoopIterationStatement;
 }

@@ -150,10 +150,6 @@ export default class Compile extends Command {
 							defaultOptimisationOptions.optimiseBuiltIns,
 					},
 					recover: flags["recover"] ?? preExistingCompileConfig?.recover ?? EvaluatedCompileConfig.defaults.recover,
-					abortOnFirstError:
-						flags["abort-on-first-error"] ??
-						preExistingCompileConfig?.abortOnFirstError ??
-						EvaluatedCompileConfig.defaults.abortOnFirstError,
 				} as CompileConfig,
 			},
 		};

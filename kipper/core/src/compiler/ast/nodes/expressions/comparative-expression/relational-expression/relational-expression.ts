@@ -24,7 +24,7 @@ import type { KipperRelationalOperator } from "../../../../../const";
 import { kipperRelationalOperators } from "../../../../../const";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Relational expression, which can be used to compare two numeric expressions.
@@ -46,17 +46,35 @@ export class RelationalExpression extends ComparativeExpression<
 	RelationalExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_relationalExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.relationalExpression;
+	readonly targetCodeGenerator = this.codeGenerator.relationalExpression;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: RelationalExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_relationalExpression;
+	constructor(antlrRuleCtx: RelationalExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -71,12 +89,6 @@ export class RelationalExpression extends ComparativeExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -88,9 +100,11 @@ export class RelationalExpression extends ComparativeExpression<
 		return RelationalExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: RelationalExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): RelationalExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -134,28 +148,10 @@ export class RelationalExpression extends ComparativeExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		// Relational expressions always return 'bool'
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("bool"),
+			evaluatedType: BuiltInTypes.bool,
 		};
 
 		// Type check the relational expression and ensure its operands are of type 'num'
 		this.programCtx.typeCheck(this).validRelationalExpression(this);
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): RelationalExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.relationalExpression;
-	readonly targetCodeGenerator = this.codeGenerator.relationalExpression;
 }

@@ -44,6 +44,8 @@ export abstract class BitwiseExpression<
 	TypeSemantics extends BitwiseExpressionTypeSemantics = BitwiseExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserBitwiseExpressionContext;
+
 	public abstract get kind(): ASTBitwiseExpressionKind;
+
 	public abstract get ruleName(): ParserBitwiseExpressionRuleName;
 }

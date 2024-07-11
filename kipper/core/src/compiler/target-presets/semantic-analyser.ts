@@ -7,8 +7,13 @@ import type {
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -24,6 +29,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
 	LambdaExpression,
 	LogicalAndExpression,
@@ -46,9 +52,8 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
-import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
-import { KipperSemanticErrorHandler } from "../analysis";
-import type { ObjectProperty } from "../ast";
+import { KipperSemanticErrorHandler } from "../semantics";
+import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -130,6 +135,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	public abstract variableDeclaration?: TargetASTNodeSemanticAnalyser<VariableDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
+	 */
+	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.
+	 */
+	public abstract interfaceDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.

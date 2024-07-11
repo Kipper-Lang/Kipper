@@ -6,7 +6,7 @@
 import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
 import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import type { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import type { BuiltInVariable, KipperBuiltInTypeLiteral, KipperProgramContext } from "@kipper/core";
 import { TargetTS } from "./target";
 
 /**
@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
 export function genTSFunction(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-		returnType: KipperCompilableType | Array<KipperCompilableType>;
+		params: Array<{ identifier: string; type: string | Array<string> }>;
+		returnType: string | Array<string>;
 	},
 	body: string,
 	ignoreParams: boolean = false,
@@ -50,7 +50,7 @@ export function genTSVariable(varSpec: BuiltInVariable, value: string): Translat
 		TargetTS.getBuiltInIdentifier(varSpec),
 		":",
 		" ",
-		TargetTS.getTypeScriptType(varSpec.valueType),
+		TargetTS.getTypeScriptType(varSpec.valueType.identifier),
 		" ",
 		"=",
 		" ",

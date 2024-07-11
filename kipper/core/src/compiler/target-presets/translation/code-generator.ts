@@ -12,6 +12,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
@@ -28,6 +29,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
 	LambdaExpression,
 	LogicalAndExpression,
@@ -180,6 +182,16 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract variableDeclaration: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link VariableDeclaration} into a specific language.
+	 */
+	public abstract classDeclaration: TargetASTNodeCodeGenerator<ClassDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link VariableDeclaration} into a specific language.
+	 */
+	public abstract interfaceDeclaration: TargetASTNodeCodeGenerator<InterfaceDeclaration, Array<TranslatedCodeLine>>;
 
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.

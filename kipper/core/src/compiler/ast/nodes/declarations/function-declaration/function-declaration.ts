@@ -9,8 +9,8 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import type { ScopeFunctionDeclaration, UncheckedType } from "../../../../analysis";
-import { FunctionScope } from "../../../../analysis";
+import type { RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import { FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
 	CompoundStatementContext,
@@ -32,18 +32,44 @@ export class FunctionDeclaration
 	implements ScopeNode<FunctionScope>
 {
 	/**
-	 * The private field '_innerScope' that actually stores the variable data,
-	 * which is returned inside the {@link this.innerScope}.
-	 * @private
+	/**
+	* The static kind for this AST Node.
+	 * @since 0.11.0
 	 */
-	private readonly _innerScope: FunctionScope;
-
+	public static readonly kind = ParseRuleKindMapping.RULE_functionDeclaration;
+	/*	/**
+	 *
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.functionDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.functionDeclaration;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
+	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: FunctionScope;
+
+	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._innerScope = new FunctionScope(this);
+	}
 
 	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
@@ -53,11 +79,17 @@ export class FunctionDeclaration
 	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
 
 	/**
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_functionDeclaration;
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -71,13 +103,6 @@ export class FunctionDeclaration
 		return FunctionDeclaration.kind;
 	}
 
-	/*	/**
-	 *
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
 	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
@@ -88,12 +113,6 @@ export class FunctionDeclaration
 	 */
 	public override get ruleName() {
 		return FunctionDeclaration.ruleName;
-	}
-
-	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._innerScope = new FunctionScope(this);
 	}
 
 	/**
@@ -109,19 +128,6 @@ export class FunctionDeclaration
 	 */
 	public get innerScope(): FunctionScope {
 		return this._innerScope;
-	}
-
-	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
-	 */
-	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
@@ -175,13 +181,13 @@ export class FunctionDeclaration
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: UncheckedType = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const returnType: RawType = retTypeSpecifier.getSemanticData().typeIdentifier;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnTypeSpecifier: retTypeSpecifier,
-			returnType: type,
+			returnType: returnType,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};
@@ -210,15 +216,4 @@ export class FunctionDeclaration
 		// Ensure that all code paths return a value
 		this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.functionDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.functionDeclaration;
 }

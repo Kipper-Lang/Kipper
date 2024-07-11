@@ -11,13 +11,12 @@ import type { LambdaExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { ScopeNode } from "../../../scope-node";
-import { LambdaScope } from "../../../../analysis/symbol-table/lambda-scope";
 import type { Statement } from "../../statements";
 import { CompoundStatement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { ParameterDeclaration } from "../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { CheckedType } from "../../../../analysis";
+import { BuiltInTypes, LambdaScope } from "../../../../semantics";
 
 /**
  * Lambda expression class, which represents a lambda expression in the AST.
@@ -34,9 +33,34 @@ export class LambdaExpression
 	implements ScopeNode<LambdaScope>
 {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_lambdaExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	public checkForWarnings = undefined;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.lambdaExpression;
+	readonly targetCodeGenerator = this.codeGenerator.lambdaExpression;
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: LambdaExpressionContext;
+	/**
 	 * The inner scope of this lambda expression.
 	 */
 	private readonly _innerScope: LambdaScope;
+
+	constructor(antlrRuleCtx: LambdaExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._innerScope = new LambdaScope(this);
+	}
 
 	/**
 	 * Gets the inner scope of this function, where also the {@link semanticData.params arguments} should be registered.
@@ -45,19 +69,6 @@ export class LambdaExpression
 	public get innerScope(): LambdaScope {
 		return this._innerScope;
 	}
-
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: LambdaExpressionContext;
-
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_lambdaExpression;
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -72,24 +83,12 @@ export class LambdaExpression
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
 		return LambdaExpression.ruleName;
-	}
-
-	constructor(antlrRuleCtx: LambdaExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._innerScope = new LambdaScope(this);
 	}
 
 	/**
@@ -141,7 +140,7 @@ export class LambdaExpression
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType("func"),
+			evaluatedType: BuiltInTypes.func,
 			returnType: returnType,
 		};
 
@@ -150,9 +149,4 @@ export class LambdaExpression
 			this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 		}
 	}
-
-	public checkForWarnings = undefined;
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.lambdaExpression;
-	readonly targetCodeGenerator = this.codeGenerator.lambdaExpression;
 }

@@ -5,7 +5,6 @@
  * @since 0.11.0
  */
 import {
-	ParseRuleKindMapping,
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -16,6 +15,7 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -32,14 +32,18 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InterfaceDeclarationContext,
 	JumpStatementContext,
+	LambdaExpressionContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
+	ObjectPropertyContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
+	ParseRuleKindMapping,
 	RelationalExpressionContext,
 	ReturnStatementContext,
 	SliceNotationMemberAccessExpressionContext,
@@ -50,8 +54,6 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	ObjectPropertyContext,
-	LambdaExpressionContext,
 } from "../../lexer-parser";
 import type {
 	ASTDeclarationKind,
@@ -66,8 +68,13 @@ import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -83,13 +90,16 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
+	LambdaExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -101,12 +111,6 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	BitwiseOrExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
-	BitwiseAndExpression,
-	ObjectProperty,
-	LambdaExpression,
 } from "../nodes";
 
 /**
@@ -125,6 +129,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclaration,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclaration,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclaration,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclaration,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -193,6 +199,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclarationContext,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclarationContext,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclarationContext,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -266,6 +274,8 @@ export class ASTNodeMapper {
 		RULE_functionDeclaration: FunctionDeclaration,
 		RULE_variableDeclaration: VariableDeclaration,
 		RULE_parameterDeclaration: ParameterDeclaration,
+		RULE_interfaceDeclaration: InterfaceDeclaration,
+		RULE_classDeclaration: ClassDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**

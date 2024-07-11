@@ -4,7 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable } from "@kipper/core";
+import type { BuiltInFunction, BuiltInType } from "@kipper/core";
+import { BuiltInVariable } from "@kipper/core";
 import { KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
@@ -99,16 +100,16 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	/**
 	 * Fetches the reserved identifier for the translated code.
 	 *
-	 * This will also ensure that {@link BuiltInVariable.local local variables} are not registered onto the global object.
+	 * This will also ensure that {@link BuiltInVariable local variables} are not registered onto the global object.
 	 * Those will simply stay as local variables with the same identifier.
 	 * @param signature The identifier or signature object to translate to its JavaScript form.
 	 * @since 0.10.0
 	 */
-	public static getBuiltInIdentifier(signature: string | BuiltInVariable | BuiltInFunction): string {
+	public static getBuiltInIdentifier(signature: string | BuiltInVariable | BuiltInFunction | BuiltInType): string {
 		if (typeof signature === "string") {
 			return `${this.internalObjectIdentifier}.${signature}`;
 		}
-		return "local" in signature && signature.local
+		return signature instanceof BuiltInVariable && signature.local
 			? signature.identifier
 			: this.getBuiltInIdentifier(signature.identifier);
 	}

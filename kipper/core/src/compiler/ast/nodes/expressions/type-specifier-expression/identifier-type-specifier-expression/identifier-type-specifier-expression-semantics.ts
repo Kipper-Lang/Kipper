@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link IdentifierTypeSpecifierExpression}.
  * @since 0.8.0
  */
-import type { UncheckedType } from "../../../../../analysis";
+import type { RawType } from "../../../../../semantics";
 import type { TypeSpecifierExpressionSemantics } from "../type-specifier-expression-semantics";
 
 /**
@@ -15,5 +15,5 @@ export interface IdentifierTypeSpecifierExpressionSemantics extends TypeSpecifie
 	 * therefore may be invalid/undefined.
 	 * @since 0.8.0
 	 */
-	typeIdentifier: UncheckedType;
+	typeIdentifier: RawType;
 }

@@ -3,9 +3,9 @@
  * @since 0.10.0
  */
 import type { TranslatedCodeLine } from "../../const";
-import type { BuiltInFunction, BuiltInVariable } from "../../runtime-built-ins";
-import type { InternalFunction } from "../../runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
+import type { InternalFunction } from "../../semantics";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.

@@ -14,7 +14,7 @@ import { MissingRequiredSemanticDataError } from "../../errors";
 import type { KipperProgramContext } from "../program-ctx";
 import type { RootASTNode } from "./nodes/root-ast-node";
 import type { EvaluatedCompileConfig } from "../compile-config";
-import { handleSemanticError } from "../analysis";
+import { handleSemanticError } from "../semantics";
 
 /**
  * An eligible parent for an analysable AST node.
@@ -39,11 +39,7 @@ export abstract class AnalysableASTNode<
 	extends ParserASTNode<Semantics, TypeSemantics>
 	implements TargetAnalysableNode
 {
-	protected override _children: Array<AnalysableNodeChild>;
-	protected override _parent: AnalysableNodeParent;
-	protected _errors: Array<KipperError>;
-	protected _skippedSemanticAnalysis: boolean;
-	protected _skippedSemanticTypeChecking: boolean;
+	abstract readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
 	protected _skippedTargetSemanticAnalysis: boolean;
 
 	protected constructor(antlrCtx: KipperParserRuleContext, parent: AnalysableNodeParent) {
@@ -56,6 +52,18 @@ export abstract class AnalysableASTNode<
 		this._skippedTargetSemanticAnalysis = false;
 	}
 
+	protected override _children: Array<AnalysableNodeChild>;
+
+	/**
+	 * The children of this AST node.
+	 * @since 0.8.0
+	 */
+	public get children(): Array<AnalysableNodeChild> {
+		return this._children;
+	}
+
+	protected override _parent: AnalysableNodeParent;
+
 	/**
 	 * Returns the {@link CompilableASTNode parent} that has this node as a child.
 	 * @since 0.8.0
@@ -64,12 +72,37 @@ export abstract class AnalysableASTNode<
 		return this._parent;
 	}
 
+	protected _errors: Array<KipperError>;
+
 	/**
-	 * The children of this AST node.
-	 * @since 0.8.0
+	 * The errors that were caused by this node. Includes all errors from children.
+	 * @since 0.10.0
 	 */
-	public get children(): Array<AnalysableNodeChild> {
-		return this._children;
+	public get errors(): Array<KipperError> {
+		return [...this._errors, ...this._children.flatMap((child) => child.errors)];
+	}
+
+	protected _skippedSemanticAnalysis: boolean;
+
+	/**
+	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} of {@link CompilableASTNode this node}
+	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to analyse
+	 * as the required semantic data from other nodes is missing.
+	 */
+	public get skippedSemanticAnalysis(): boolean {
+		return this._skippedSemanticAnalysis;
+	}
+
+	protected _skippedSemanticTypeChecking: boolean;
+
+	/**
+	 * Returns true if the {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node}
+	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to type check
+	 * as the required semantic data from other nodes is missing.
+	 * @since 0.10.0
+	 */
+	public get skippedSemanticTypeChecking(): boolean {
+		return this._skippedSemanticTypeChecking;
 	}
 
 	/**
@@ -89,25 +122,6 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
-	 * The errors that were caused by this node. Includes all errors from children.
-	 * @since 0.10.0
-	 */
-	public get errors(): Array<KipperError> {
-		return [...this._errors, ...this._children.flatMap((child) => child.errors)];
-	}
-
-	/**
-	 * Adds the specified {@link error} to the list of errors caused by this node.
-	 *
-	 * This is not the same as {@link KipperProgramContext.reportError}, since that function automatically logs the error
-	 * as well and this function does not! This is only intended to keep track if a node has failed.
-	 * @param error The error to add.
-	 */
-	public addError(error: KipperError) {
-		this._errors.push(error);
-	}
-
-	/**
 	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} or
 	 * {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node} or any
 	 * {@link children children nodes} failed.
@@ -120,31 +134,14 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
-	 * Returns true if the {@link this.primarySemanticAnalysis semantic analysis} of {@link CompilableASTNode this node}
-	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to analyse
-	 * as the required semantic data from other nodes is missing.
+	 * Adds the specified {@link error} to the list of errors caused by this node.
+	 *
+	 * This is not the same as {@link KipperProgramContext.reportError}, since that function automatically logs the error
+	 * as well and this function does not! This is only intended to keep track if a node has failed.
+	 * @param error The error to add.
 	 */
-	public get skippedSemanticAnalysis(): boolean {
-		return this._skippedSemanticAnalysis;
-	}
-
-	/**
-	 * Returns true if the {@link this.primarySemanticTypeChecking type checking} of {@link CompilableASTNode this node}
-	 * was skipped, due to required semantic data being missing. This indicates that the node is impossible to type check
-	 * as the required semantic data from other nodes is missing.
-	 * @since 0.10.0
-	 */
-	public get skippedSemanticTypeChecking(): boolean {
-		return this._skippedSemanticTypeChecking;
-	}
-
-	/**
-	 * Handles the specified error that occurred during the semantic analysis of this node in a standardised way.
-	 * @param error The error to handle.
-	 * @since 0.10.0
-	 */
-	protected handleSemanticError(error: Error | KipperError): void {
-		handleSemanticError(this, error);
+	public addError(error: KipperError) {
+		this._errors.push(error);
 	}
 
 	/**
@@ -202,21 +199,6 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
-	 * Runs {@link semanticAnalysis} of all children nodes.
-	 * @since 0.10.0
-	 * @protected
-	 */
-	protected async semanticallyAnalyseChildren(): Promise<void> {
-		for (const child of this.children) {
-			try {
-				await child.semanticAnalysis();
-			} catch (e) {
-				this.handleSemanticError(<Error>e);
-			}
-		}
-	}
-
-	/**
 	 * Semantically analyses the code inside this AST node and all {@link this.children children nodes}.
 	 *
 	 * This function will recursively call itself on the {@link this.children} instances and analyse the deepest children
@@ -247,21 +229,6 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
-	 * Runs {@link semanticTypeChecking} of all children nodes.
-	 * @since 0.10.0
-	 * @protected
-	 */
-	protected async semanticallyTypeCheckChildren(): Promise<void> {
-		for (const child of this.children) {
-			try {
-				await child.semanticTypeChecking();
-			} catch (e) {
-				this.handleSemanticError(<Error>e);
-			}
-		}
-	}
-
-	/**
 	 * Performs type checking on this AST node and all {@link this.children children nodes}. This uses the
 	 * {@link this.semanticData semantic data} that was evaluated during {@link this.semanticAnalysis semantic analysis}.
 	 * @since 0.10.0
@@ -283,21 +250,6 @@ export abstract class AnalysableASTNode<
 					this._skippedSemanticAnalysis = true;
 				}
 				throw e; // Pass on the error to the parent
-			}
-		}
-	}
-
-	/**
-	 * Runs {@link semanticTypeChecking} of all children nodes.
-	 * @since 0.10.0
-	 * @protected
-	 */
-	protected async targetSemanticallyAnalyseChildren(): Promise<void> {
-		for (const child of this.children) {
-			try {
-				await child.wrapUpSemanticAnalysis();
-			} catch (e) {
-				this.handleSemanticError(<Error>e);
 			}
 		}
 	}
@@ -347,6 +299,60 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
+	 * Handles the specified error that occurred during the semantic analysis of this node in a standardised way.
+	 * @param error The error to handle.
+	 * @since 0.10.0
+	 */
+	protected handleSemanticError(error: Error | KipperError): void {
+		handleSemanticError(this, error);
+	}
+
+	/**
+	 * Runs {@link semanticAnalysis} of all children nodes.
+	 * @since 0.10.0
+	 * @protected
+	 */
+	protected async semanticallyAnalyseChildren(): Promise<void> {
+		for (const child of this.children) {
+			try {
+				await child.semanticAnalysis();
+			} catch (e) {
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
+	 * Runs {@link semanticTypeChecking} of all children nodes.
+	 * @since 0.10.0
+	 * @protected
+	 */
+	protected async semanticallyTypeCheckChildren(): Promise<void> {
+		for (const child of this.children) {
+			try {
+				await child.semanticTypeChecking();
+			} catch (e) {
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
+	 * Runs {@link semanticTypeChecking} of all children nodes.
+	 * @since 0.10.0
+	 * @protected
+	 */
+	protected async targetSemanticallyAnalyseChildren(): Promise<void> {
+		for (const child of this.children) {
+			try {
+				await child.wrapUpSemanticAnalysis();
+			} catch (e) {
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
 	 * Semantically analyses the code inside this AST node.
 	 *
 	 * If this is {@link undefined} then it means there is no semantic analysis that needs to be done. This will also
@@ -374,6 +380,4 @@ export abstract class AnalysableASTNode<
 	 * @since 0.9.0
 	 */
 	protected abstract checkForWarnings?(): Promise<void>;
-
-	abstract readonly targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
 }

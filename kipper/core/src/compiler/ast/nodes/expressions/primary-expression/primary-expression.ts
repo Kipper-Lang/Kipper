@@ -53,6 +53,8 @@ export abstract class PrimaryExpression<
 	TypeSemantics extends PrimaryExpressionTypeSemantics = PrimaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPrimaryExpressionContext;
+
 	public abstract get kind(): ASTPrimaryExpressionKind;
+
 	public abstract get ruleName(): ParserPrimaryExpressionRuleName;
 }

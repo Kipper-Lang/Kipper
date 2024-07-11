@@ -43,6 +43,8 @@ export abstract class PostfixExpression<
 	TypeSemantics extends PostfixExpressionTypeSemantics = PostfixExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPostfixExpressionContext;
+
 	public abstract get kind(): ASTPostfixExpressionKind;
+
 	public abstract get ruleName(): ParserPostfixExpressionRuleName;
 }

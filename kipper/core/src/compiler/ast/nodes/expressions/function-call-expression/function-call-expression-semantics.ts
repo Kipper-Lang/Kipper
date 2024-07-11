@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */
-import type { Reference } from "../../../../analysis";
+import type { Reference } from "../../../../semantics";
 import type { Expression } from "../expression";
 import type { ExpressionSemantics } from "../expression-semantics";
 

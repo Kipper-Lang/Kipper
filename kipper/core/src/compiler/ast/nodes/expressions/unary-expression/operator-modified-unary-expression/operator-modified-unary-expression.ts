@@ -16,7 +16,7 @@ import { UnaryExpression } from "../unary-expression";
 import type { OperatorModifiedUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Operator modified expressions, which are used to modify the value of an expression based on an
@@ -31,17 +31,35 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	OperatorModifiedUnaryTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression;
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+	readonly targetSemanticAnalysis = this.semanticAnalyser.operatorModifiedUnaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.operatorModifiedUnaryExpression;
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: OperatorModifiedUnaryExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression;
+	constructor(antlrRuleCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -56,12 +74,6 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -73,9 +85,11 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		return OperatorModifiedUnaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: OperatorModifiedUnaryExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): OperatorModifiedUnaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -125,28 +139,10 @@ export class OperatorModifiedUnaryExpression extends UnaryExpression<
 		const semanticData = this.getSemanticData();
 
 		this.typeSemantics = {
-			evaluatedType: CheckedType.fromCompilableType(semanticData.operator === "!" ? "bool" : "num"),
+			evaluatedType: semanticData.operator === "!" ? BuiltInTypes.bool : BuiltInTypes.num,
 		};
 
 		// Ensure the operator is compatible with the type of the operand
 		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): OperatorModifiedUnaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
-
-	readonly targetSemanticAnalysis = this.semanticAnalyser.operatorModifiedUnaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.operatorModifiedUnaryExpression;
 }

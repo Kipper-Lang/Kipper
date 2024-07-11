@@ -2,7 +2,7 @@
  * Type semantics for an expression class that must be evaluated during Type Checking.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../analysis";
+import type { ProcessedType } from "../../../semantics";
 import type { TypeData } from "../../ast-node";
 
 /**
@@ -17,5 +17,5 @@ export interface ExpressionTypeSemantics extends TypeData {
 	 * This will always evaluate to "type", as a type specifier will always be a type.
 	 * @since 0.10.0
 	 */
-	evaluatedType: CheckedType;
+	evaluatedType: ProcessedType;
 }

@@ -7,9 +7,8 @@ import type { InputMismatchException, LexerNoViableAltException, NoViableAltExce
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperFileStream } from "./compiler";
-import type { CompilableASTNode, KipperProgramContext } from "./compiler";
-import { getParseRuleSource } from "./tools";
+import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
+import { addLeftIndent, getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -274,7 +273,7 @@ export class UnableToGetInnerScopeError extends KipperInternalError {
 /**
  * Error that is thrown whenever {@link CheckedType.getCompilableType} is called, despite the type not being compilable.
  *
- * This is thrown to avoid the compiler from using {@link UndefinedCustomType} for a compilation, as that would cause
+ * This is thrown to avoid the compiler from using {@link UndefinedType} for a compilation, as that would cause
  * undefined behavior.
  * @since 0.10.0
  */
@@ -284,6 +283,16 @@ export class TypeNotCompilableError extends KipperInternalError {
 			"Failed to determine the compilation type for a type. Most likely the type checking failed or the" +
 				" compilation was run despite type checking errors.",
 		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for type checking that can not be used for type checking.
+ * @since 0.11.0
+ */
+export class TypeCanNotBeUsedForTypeCheckingError extends KipperInternalError {
+	constructor() {
+		super("This Type can not be used for type checking. This is a bug in the compiler.");
 	}
 }
 
@@ -550,8 +559,8 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  * @since 0.7.0
  */
 export class TypeError extends KipperError {
-	constructor(msg: string) {
-		super(msg);
+	constructor(msg: string, cause?: TypeError) {
+		super(msg + (cause?.message ? `\n${addLeftIndent(cause.message)}` : ""));
 		this.name = "TypeError";
 	}
 }
@@ -578,22 +587,20 @@ export class ArithmeticOperationTypeError extends TypeError {
  * @since 0.6.0
  */
 export class BitwiseOperationTypeError extends TypeError {
-	constructor(firstType?: string, secondType?: string) {
-		if (firstType && secondType) {
-			// If the types caused the error, specify them in the error message
-			super(`Invalid bitwise operation between operands of type '${firstType}' and '${secondType}'.`);
-		} else {
-			super(`Invalid bitwise operation.`);
-		}
+	constructor(firstType: string, secondType: string) {
+		super(`Bitwise expressions are only allowed for type 'num'. Received '${firstType}' and '${secondType}'.`);
 	}
 }
 
 /**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class ArgumentTypeError extends TypeError {
-	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
-		super(`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`);
+export class ArgumentAssignmentTypeError extends TypeError {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(
+			`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
+			cause,
+		);
 	}
 }
 
@@ -604,8 +611,28 @@ export class ArgumentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(leftExpType: string, rightExpType: string) {
-		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`);
+	constructor(leftExpType: string, rightExpType: string, cause?: TypeError) {
+		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`, cause);
+	}
+}
+
+/**
+ * Error that is thrown whenever a property is assigned to that is not defined in the object.
+ * @since 0.11.0
+ */
+export class PropertyAssignmentTypeError extends TypeError {
+	constructor(identifier: string, propertyType: string, valueType: string, cause?: TypeError) {
+		super(`Type '${valueType}' is not assignable to property '${identifier}' of type '${propertyType}'.`, cause);
+	}
+}
+
+/**
+ * Error that is thrown whenever a property can not be found in the object.
+ * @since 0.11.0
+ */
+export class PropertyNotFoundError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in object of type '${objType}'.`);
 	}
 }
 
@@ -635,6 +662,16 @@ export class InvalidConversionTypeError extends TypeError {
 export class UnknownTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Unknown type '${type}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a type.
+ * @since 0.11.0
+ */
+export class ReferenceCanNotBeUsedAsTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Reference '${identifier}' can not be used as a type.`);
 	}
 }
 
