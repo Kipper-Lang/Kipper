@@ -8,7 +8,7 @@ import type { FailedPredicateException } from "antlr4ts/FailedPredicateException
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
 import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
-import { getParseRuleSource } from "./tools";
+import { addLeftIndent, getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -559,8 +559,8 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  * @since 0.7.0
  */
 export class TypeError extends KipperError {
-	constructor(msg: string) {
-		super(msg);
+	constructor(msg: string, cause?: TypeError) {
+		super(msg + (cause?.message ? `\n${addLeftIndent(cause.message)}` : ""));
 		this.name = "TypeError";
 	}
 }
@@ -595,9 +595,12 @@ export class BitwiseOperationTypeError extends TypeError {
 /**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class ArgumentTypeError extends TypeError {
-	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
-		super(`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`);
+export class ArgumentAssignmentTypeError extends TypeError {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(
+			`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
+			cause,
+		);
 	}
 }
 
@@ -608,8 +611,28 @@ export class ArgumentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(leftExpType: string, rightExpType: string) {
-		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`);
+	constructor(leftExpType: string, rightExpType: string, cause?: TypeError) {
+		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`, cause);
+	}
+}
+
+/**
+ * Error that is thrown whenever a property is assigned to that is not defined in the object.
+ * @since 0.11.0
+ */
+export class PropertyAssignmentTypeError extends TypeError {
+	constructor(identifier: string, propertyType: string, valueType: string, cause?: TypeError) {
+		super(`Type '${valueType}' is not assignable to property '${identifier}' of type '${propertyType}'.`, cause);
+	}
+}
+
+/**
+ * Error that is thrown whenever a property can not be found in the object.
+ * @since 0.11.0
+ */
+export class PropertyNotFoundError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in object of type '${objType}'.`);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { BuiltInFunctions, BuiltInVariables, ScopeFunctionDeclaration } from "@kipper/core";
+import { BuiltInFunctions, BuiltInVariables } from "@kipper/core";
 import { BuiltInTypes } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";

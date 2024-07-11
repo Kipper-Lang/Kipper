@@ -3,30 +3,30 @@ import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 
-describe("ArgumentTypeError", () => {
+describe("ArgumentAssignmentTypeError", () => {
 	describe("Error", () => {
 		it("Single argument (One invalid)", async () => {
 			try {
 				await new KipperCompiler().compile(`print(1);`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert.fail("Expected 'ArgumentTypeError'");
+			assert.fail("Expected 'ArgumentAssignmentTypeError'");
 		});
 
 		it("Two arguments (One invalid)", async () => {
 			try {
 				await new KipperCompiler().compile(`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`, defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert.fail("Expected 'ArgumentTypeError'");
+			assert.fail("Expected 'ArgumentAssignmentTypeError'");
 		});
 
 		it("Three arguments (One invalid)", async () => {
@@ -36,12 +36,12 @@ describe("ArgumentTypeError", () => {
 					defaultConfig,
 				);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "ArgumentTypeError", "Expected different error");
+				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert.fail("Expected 'ArgumentTypeError'");
+			assert.fail("Expected 'ArgumentAssignmentTypeError'");
 		});
 	});
 

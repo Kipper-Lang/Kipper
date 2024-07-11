@@ -43,10 +43,9 @@ import {
 	kipperPlusOperator,
 	kipperSupportedConversions,
 } from "../../const";
+import type { TypeError } from "../../../errors";
 import {
-	ArgumentTypeError,
 	ArithmeticOperationTypeError,
-	AssignmentTypeError,
 	BitwiseOperationTypeError,
 	ExpressionNotCallableError,
 	IncompleteReturnsInCodePathsError,
@@ -186,8 +185,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Ensure that the types are matching - if not, throw an error
-		if (!varType.isAssignableTo(valueType)) {
-			throw this.assertError(new AssignmentTypeError(varType.identifier, valueType.identifier));
+		try {
+			valueType.assertAssignableTo(varType);
+		} catch (e) {
+			throw this.assertError(<TypeError>e);
 		}
 
 		// Ensure that all arithmetic assignment operators except '+=' are only used on numbers
@@ -217,8 +218,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Ensure the value of the definition match the definition type
-		if (!rightExpType.isAssignableTo(leftExpType)) {
-			throw this.assertError(new AssignmentTypeError(rightExpType.identifier, leftExpType.identifier));
+		try {
+			rightExpType.assertAssignableTo(leftExpType);
+		} catch (e) {
+			throw this.assertError(<TypeError>e);
 		}
 	}
 
@@ -228,7 +231,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param receivedType The type that was received.
 	 * @example
 	 * call print("x"); // <-- Parameter type 'str' must match type of argument "x"
-	 * @throws {ArgumentTypeError} If the given argument type does not match the parameter type.
+	 * @throws {ArgumentAssignmentTypeError} If the given argument type does not match the parameter type.
 	 * @since 0.7.0
 	 */
 	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: ProcessedType): void {
@@ -249,10 +252,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		if (!argType.isAssignableTo(receivedType)) {
-			throw this.assertError(
-				new ArgumentTypeError(semanticData.identifier, argType.identifier, receivedType.identifier),
-			);
+		try {
+			receivedType.assertAssignableTo(argType, undefined, semanticData.identifier);
+		} catch (e) {
+			throw this.assertError(<TypeError>e);
 		}
 	}
 
@@ -261,7 +264,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param func The function that is called.
 	 * @param args The arguments for the call expression.
 	 * @throws {InvalidAmountOfArgumentsError} If the amount of arguments is invalid e.g. too many or too few.
-	 * @throws {ArgumentTypeError} If any given argument type does not match the required parameter type.
+	 * @throws {ArgumentAssignmentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
 	public validFunctionCallArguments(func: ScopeFunctionDeclaration, args: Array<Expression>): void {
@@ -471,8 +474,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// We need to check whether the types are matching, but *not* if the function return type is valid, since that
 		// will be done later by the function itself during the type checking.
-		if (statementValueType && !statementValueType.isAssignableTo(functionReturnType)) {
-			throw this.assertError(new AssignmentTypeError(statementValueType.identifier, functionReturnType.identifier));
+		try {
+			statementValueType.assertAssignableTo(functionReturnType);
+		} catch (e) {
+			throw this.assertError(<TypeError>e);
 		}
 	}
 

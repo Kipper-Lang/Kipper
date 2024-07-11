@@ -1,5 +1,5 @@
 import type { CompilableType } from "./compilable-type";
-import { TypeNotCompilableError } from "../../../../errors";
+import { TypeNotCompilableError, type TypeError } from "../../../../errors";
 import { Type } from "./type";
 
 /**
@@ -8,11 +8,8 @@ import { Type } from "./type";
  * @since 0.10.0
  */
 export abstract class ProcessedType extends Type {
-	protected readonly _isCompilable: boolean;
-
-	protected constructor(identifier: string, isCompilable: boolean) {
+	protected constructor(identifier: string) {
 		super(identifier);
-		this._isCompilable = isCompilable;
 	}
 
 	/**
@@ -29,9 +26,7 @@ export abstract class ProcessedType extends Type {
 	 * be stored using this class though (but NOT compiled!).
 	 * @since 0.10.0
 	 */
-	public get isCompilable(): boolean {
-		return this._isCompilable;
-	}
+	public abstract get isCompilable(): boolean;
 
 	/**
 	 * Gets the compilable type for this type.
@@ -53,7 +48,10 @@ export abstract class ProcessedType extends Type {
 	/**
 	 * Returns whether this type is assignable to the given {@link type}.
 	 * @param type The type to check against.
+	 * @param propertyName The name of the property that is being assigned. This is used for error messages.
+	 * @param argumentName The name of the argument that is being assigned to. This is used for error messages.
+	 * @throws TypeError If the types are not assignable.
 	 * @since 0.11.0
 	 */
-	public abstract isAssignableTo(type: ProcessedType): boolean;
+	public abstract assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void;
 }

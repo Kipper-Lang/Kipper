@@ -6,3 +6,4 @@ export * from "./parser-rules";
 export * from "./inverse-map";
 export * from "./replace-obj-keys";
 export * from "./other";
+export * from "./indent";

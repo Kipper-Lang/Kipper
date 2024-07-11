@@ -19,21 +19,21 @@ To use development versions of Kipper download the
 ### Added
 
 - New classes:
-	- `InterfaceDeclaration`, which represents an AST interface declaration.
-	- `ClassDeclaration`, which represents an AST class declaration.
-	- `BuiltInType`, which represents a built-in type.
-	- `CustomType`, which represents a user defined type.
+  - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassDeclaration`, which represents an AST class declaration.
+  - `BuiltInType`, which represents a built-in type.
+  - `CustomType`, which represents a user defined type.
 - New errors:
-	- `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
-		type. This is an error indicating an invalid logic that should be fixed.
+  - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
+    type. This is an error indicating an invalid logic that should be fixed.
 - New interfaces:
-	- `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
-	- `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
-	- `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
-	- `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
-	- `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
-	- `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
-	- `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
+  - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
+  - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
+  - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
+  - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
+  - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
+  - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
 
 ### Changed
 

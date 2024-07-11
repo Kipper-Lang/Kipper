@@ -10,7 +10,17 @@ import { TypeCanNotBeUsedForTypeCheckingError } from "../../../errors";
  */
 export class UndefinedType extends ProcessedType {
 	constructor(identifier: string) {
-		super(identifier, false);
+		super(identifier);
+	}
+
+	/**
+	 * Returns whether the type is compilable.
+	 *
+	 * This is ALWAYS false, since this type can not be used for type checking.
+	 * @since 0.10.0
+	 */
+	public get isCompilable(): false {
+		return false;
 	}
 
 	/**
@@ -18,7 +28,7 @@ export class UndefinedType extends ProcessedType {
 	 * @param type The type to check against.
 	 * @since 0.10.0
 	 */
-	isAssignableTo(type: ProcessedType): boolean {
+	assertAssignableTo(type: ProcessedType): boolean {
 		throw new TypeCanNotBeUsedForTypeCheckingError();
 	}
 }
