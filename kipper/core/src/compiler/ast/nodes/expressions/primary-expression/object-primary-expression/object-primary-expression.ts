@@ -9,6 +9,7 @@ import type { ObjectPrimaryExpressionContext } from "../../../../../lexer-parser
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError } from "../../../../../../errors";
 import { PrimaryExpression } from "../primary-expression";
+import { ObjectProperty } from "./object-property";
 
 /**
  * Object literal constant, which represents an object that was defined in the source code.
@@ -74,9 +75,11 @@ export class ObjectPrimaryExpression extends PrimaryExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Literals have not been implemented yet."));
+		const objectProperties = this.children;
+
+		this.semanticData = {
+			keyValuePairs: <ObjectProperty[]> objectProperties
+		};
 	}
 
 	/**

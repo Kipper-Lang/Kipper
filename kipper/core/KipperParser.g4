@@ -85,11 +85,25 @@ parameterDeclaration
     ;
 
 interfaceDeclaration
-	:	'interface' Identifier '{' '}'
-	;
+    :   'interface' declarator '{' interfaceMemberDeclaration* '}'
+    ;
+
+interfaceMemberDeclaration
+    :   interfacePropertyDeclaration
+    |   interfaceMethodDeclaration
+    ;
+
+interfacePropertyDeclaration
+    :   declarator ':' typeSpecifierExpression SemiColon
+    ;
+
+interfaceMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
+    ;
+
 
 classDeclaration
-	:	'class' Identifier '{' '}'
+	:	'class' declarator '{' '}'
 	;
 
 // -- Statements
@@ -163,6 +177,7 @@ returnStatement
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
     :   tangledPrimaryExpression
+    |   lambdaPrimaryExpression
     |   arrayPrimaryExpression
     |   objectPrimaryExpression
     |   boolPrimaryExpression
@@ -171,10 +186,9 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
-    |   lambdaExpression
     ;
 
-lambdaExpression
+lambdaPrimaryExpression
    :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
    ;
 

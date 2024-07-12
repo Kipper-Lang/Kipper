@@ -51,9 +51,11 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	InterfacePropertyDeclaration,
+	InterfaceMethodDeclaration,
+	ObjectProperty,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
-import type { ObjectProperty } from "../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -145,6 +147,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.
 	 */
 	public abstract interfaceDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	public abstract interfacePropertyDeclaration?: TargetASTNodeSemanticAnalyser<InterfacePropertyDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	public abstract interfaceMethodDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceMethodDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
@@ -305,5 +317,5 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	/**
 	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
-	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
+	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }

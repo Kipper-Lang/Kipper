@@ -39,15 +39,7 @@ export class FunctionCallExpression extends Expression<
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
-	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -154,4 +146,9 @@ export class FunctionCallExpression extends Expression<
 			func: calledFunc,
 		};
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.functionCallExpression;
+	readonly targetCodeGenerator = this.codeGenerator.functionCallExpression;
 }

@@ -32,20 +32,13 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.incrementOrDecrementUnaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.incrementOrDecrementUnaryExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -132,4 +125,9 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 		// Ensure that this expression is valid (e.g. the operand is a number)
 		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.incrementOrDecrementUnaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.incrementOrDecrementUnaryExpression;
 }

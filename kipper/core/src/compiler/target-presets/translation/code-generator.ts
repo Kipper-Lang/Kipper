@@ -53,6 +53,9 @@ import type {
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { ObjectProperty } from "../../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
+import type { InterfacePropertyDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
+import { InterfaceMemberDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration";
+import type { InterfaceMethodDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -192,6 +195,22 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract interfaceDeclaration: TargetASTNodeCodeGenerator<InterfaceDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into a specific language.
+	 */
+	public abstract interfacePropertyDeclaration: TargetASTNodeCodeGenerator<
+		InterfacePropertyDeclaration,
+		TranslatedCodeLine[]
+	>;
+
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into a specific language.
+	 */
+	public abstract interfaceMethodDeclaration: TargetASTNodeCodeGenerator<
+		InterfaceMethodDeclaration,
+		TranslatedCodeLine[]
+	>;
 
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.
@@ -377,5 +396,5 @@ export abstract class KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link LambdaExpression} into a specific language.
 	 */
-	public abstract lambdaExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
+	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
 }

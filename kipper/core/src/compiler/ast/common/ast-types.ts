@@ -31,6 +31,9 @@ import type {
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
+	InterfaceMemberDeclarationContext,
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
@@ -111,6 +114,8 @@ export type ParserDeclarationContext =
 	| ParameterDeclarationContext
 	| VariableDeclarationContext
 	| InterfaceDeclarationContext
+	| InterfacePropertyDeclarationContext
+	| InterfaceMethodDeclarationContext
 	| ClassDeclarationContext;
 
 /**
@@ -132,6 +137,8 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_parameterDeclaration
 	| typeof ParseRuleKindMapping.RULE_variableDeclaration
 	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration
 	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 
 /**
@@ -188,7 +195,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression
-	| typeof ParseRuleKindMapping.RULE_lambdaExpression
+	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;
 
 /**
@@ -210,6 +217,8 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
 
 /**
@@ -264,7 +273,7 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseAndExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseXorExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
 
 /**

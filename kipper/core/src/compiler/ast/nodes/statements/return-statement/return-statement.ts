@@ -21,26 +21,20 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_returnStatement;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.returnStatement;
-	readonly targetCodeGenerator = this.codeGenerator.returnStatement;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ReturnStatementContext;
+
 	protected readonly _children: Array<Expression>;
 
 	constructor(antlrRuleCtx: ReturnStatementContext, parent: CompilableNodeParent) {
@@ -124,4 +118,15 @@ export class ReturnStatement extends Statement<ReturnStatementSemantics, ReturnS
 			returnType: semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void,
 		};
 	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.returnStatement;
+	readonly targetCodeGenerator = this.codeGenerator.returnStatement;
 }
