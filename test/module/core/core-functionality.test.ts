@@ -1246,7 +1246,7 @@ describe("Core functionality", () => {
 		const compiler = new KipperCompiler();
 
 		it("parses simple lambda expression without syntax errors", async () => {
-			const code = `var add: func = (x: num, y: num): num -> x + y;`;
+			const code = `var add: Func = (x: num, y: num): num -> x + y;`;
 			try {
 				const result = await compiler.compile(code, jsConfig);
 
@@ -1261,7 +1261,7 @@ describe("Core functionality", () => {
 		});
 
 		it("correctly identifies semantic data for a lambda with compound statement", async () => {
-			const code = `var greet: func = (name: str): str -> { return "Hello, " + name; };`;
+			const code = `var greet: Func = (name: str): str -> { return "Hello, " + name; };`;
 			try {
 				const result = await compiler.compile(code, jsConfig);
 
@@ -1276,7 +1276,7 @@ describe("Core functionality", () => {
 		});
 
 		it("correctly identifies semantic data for a lambda with single statement", async () => {
-			const code = `var greet: func = (name: str): str -> "Hello, " + name;`;
+			const code = `var greet: Func = (name: str): str -> "Hello, " + name;`;
 			try {
 				const result = await compiler.compile(code, jsConfig);
 
@@ -1291,7 +1291,7 @@ describe("Core functionality", () => {
 		});
 
 		it("correctly identifies semantic data for a lambda with no parameters", async () => {
-			const code = `var greet: func = (): str -> "Hello, World!";`;
+			const code = `var greet: Func = (): str -> "Hello, World!";`;
 			try {
 				const result = await compiler.compile(code, jsConfig);
 
