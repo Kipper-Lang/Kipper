@@ -56,6 +56,9 @@ import { FunctionDeclarationContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InterfaceDeclarationContext } from "./KipperParser";
+import { InterfaceMemberDeclarationContext } from "./KipperParser";
+import { InterfacePropertyDeclarationContext } from "./KipperParser";
+import { InterfaceMethodDeclarationContext } from "./KipperParser";
 import { ClassDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
@@ -71,7 +74,7 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { LambdaExpressionContext } from "./KipperParser";
+import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
@@ -505,6 +508,27 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `KipperParser.interfaceMemberDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInterfaceMemberDeclaration?: (ctx: InterfaceMemberDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInterfacePropertyDeclaration?: (ctx: InterfacePropertyDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInterfaceMethodDeclaration?: (ctx: InterfaceMethodDeclarationContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `KipperParser.classDeclaration`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -610,11 +634,11 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPrimaryExpression?: (ctx: PrimaryExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Visit a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitLambdaExpression?: (ctx: LambdaExpressionContext) => Result;
+	visitLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.tangledPrimaryExpression`.

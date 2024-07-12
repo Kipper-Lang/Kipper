@@ -56,6 +56,9 @@ import { FunctionDeclarationContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
 import { InterfaceDeclarationContext } from "./KipperParser";
+import { InterfaceMemberDeclarationContext } from "./KipperParser";
+import { InterfacePropertyDeclarationContext } from "./KipperParser";
+import { InterfaceMethodDeclarationContext } from "./KipperParser";
 import { ClassDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
@@ -71,7 +74,7 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { LambdaExpressionContext } from "./KipperParser";
+import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
@@ -731,6 +734,39 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfaceMemberDeclaration?: (ctx: InterfaceMemberDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfaceMemberDeclaration?: (ctx: InterfaceMemberDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfacePropertyDeclaration?: (ctx: InterfacePropertyDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfacePropertyDeclaration?: (ctx: InterfacePropertyDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfaceMethodDeclaration?: (ctx: InterfaceMethodDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfaceMethodDeclaration?: (ctx: InterfaceMethodDeclarationContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.classDeclaration`.
 	 * @param ctx the parse tree
 	 */
@@ -896,15 +932,15 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitPrimaryExpression?: (ctx: PrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Enter a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	enterLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Exit a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	exitLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.

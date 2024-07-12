@@ -33,8 +33,6 @@ export abstract class Declaration<
 	Semantics extends DeclarationSemantics = DeclarationSemantics,
 	TypeData extends DeclarationTypeSemantics = DeclarationTypeSemantics,
 > extends CompilableASTNode<Semantics, TypeData> {
-	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
-	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -138,4 +136,7 @@ export abstract class Declaration<
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
 		return await this.targetCodeGenerator(this);
 	}
+
+	public abstract targetSemanticAnalysis: TargetASTNodeSemanticAnalyser<any> | undefined;
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }

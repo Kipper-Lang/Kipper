@@ -53,17 +53,17 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
 	InterfaceDeclaration,
 	ClassDeclaration,
+	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import {
 	CompoundStatement,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
 	VariableDeclaration,
 	Expression,
 	BuiltInTypes,
@@ -358,7 +358,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [[`${semanticData.identifier}`]];
 	};
 
 	/**
@@ -391,6 +392,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into the JavaScript language.
+	 */
+	interfacePropertyDeclaration = async (node: InterfacePropertyDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into the JavaScript language.
+	 * @param node
+	 */
+	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
 	};
 
@@ -785,7 +801,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link LambdaExpression} into the JavaScript language.
 	 */
-	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+	lambdaPrimaryExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
 		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;

@@ -7,8 +7,9 @@ import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
 import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
+import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
 
 /**
@@ -25,20 +26,13 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_interfaceDeclaration;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.interfaceDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.interfaceDeclaration;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -115,9 +109,16 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+		const identifier = antlrChildren[1].text;
+
+		this.semanticData = {
+			identifier: identifier,
+			members: [...this.children] as Array<InterfaceMemberDeclaration>,
+		};
 	}
 
 	/**
@@ -133,4 +134,15 @@ export class InterfaceDeclaration extends TypeDeclaration<
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
 	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.11.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.interfaceDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.interfaceDeclaration;
 }

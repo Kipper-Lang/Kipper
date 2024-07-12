@@ -18,26 +18,20 @@ export class SwitchStatement extends Statement<SwitchStatementSemantics, SwitchS
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_switchStatement;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.switchStatement;
-	readonly targetCodeGenerator = this.codeGenerator.switchStatement;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: SwitchStatementContext;
+
 	protected readonly _children: Array<Statement>;
 
 	constructor(antlrRuleCtx: SwitchStatementContext, parent: CompilableNodeParent) {
@@ -110,4 +104,15 @@ export class SwitchStatement extends Statement<SwitchStatementSemantics, SwitchS
 			.semanticCheck(this)
 			.notImplementedError(new KipperNotImplementedError("Switch statements have not been implemented yet."));
 	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.switchStatement;
+	readonly targetCodeGenerator = this.codeGenerator.switchStatement;
 }

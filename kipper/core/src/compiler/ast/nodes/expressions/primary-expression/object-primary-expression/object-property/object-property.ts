@@ -16,20 +16,13 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_objectProperty;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.objectProperty;
-	readonly targetCodeGenerator = this.codeGenerator.objectProperty;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -95,4 +88,9 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	public async primarySemanticTypeChecking(): Promise<void> {
 		return; // For now, we don't have any type checking for object properties.
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.objectProperty;
+	readonly targetCodeGenerator = this.codeGenerator.objectProperty;
 }

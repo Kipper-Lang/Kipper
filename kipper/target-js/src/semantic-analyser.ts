@@ -9,9 +9,12 @@ import type {
 	InterfaceDeclaration,
 	ParameterDeclaration,
 	VariableDeclaration,
+	InterfacePropertyDeclaration,
+	TargetASTNodeSemanticAnalyser,
 } from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
+import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -108,10 +111,30 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 		this.checkViabilityOfIdentifier(node);
 	};
 
+	/**
+	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
+	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
 
+	/**
+	 * Performs typescript-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	interfacePropertyDeclaration = async (node: InterfacePropertyDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
+	 */
 	classDeclaration = async (node: ClassDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
@@ -277,5 +300,5 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	/**
 	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
-	lambdaExpression = undefined;
+	lambdaPrimaryExpression = undefined;
 }

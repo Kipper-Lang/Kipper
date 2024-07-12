@@ -43,15 +43,7 @@ export class EqualityExpression extends ComparativeExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.equalityExpression;
-	readonly targetCodeGenerator = this.codeGenerator.equalityExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -139,4 +131,9 @@ export class EqualityExpression extends ComparativeExpression<
 			evaluatedType: BuiltInTypes.bool,
 		};
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.equalityExpression;
+	readonly targetCodeGenerator = this.codeGenerator.equalityExpression;
 }

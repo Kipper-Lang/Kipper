@@ -37,14 +37,13 @@ export class BitwiseOrExpression extends BitwiseExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_bitwiseOrExpression;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	public checkForWarnings = undefined;
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseOrExpression;
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseOrExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -116,4 +115,9 @@ export class BitwiseOrExpression extends BitwiseExpression<
 			evaluatedType: BuiltInTypes.num,
 		};
 	}
+
+	public checkForWarnings = undefined;
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseOrExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseOrExpression;
 }

@@ -6,3 +6,4 @@
 export * from "./interface-declaration";
 export * from "./interface-declaration-semantics";
 export * from "./interface-declaration-type-semantics";
+export * from "./interface-member-declaration/";

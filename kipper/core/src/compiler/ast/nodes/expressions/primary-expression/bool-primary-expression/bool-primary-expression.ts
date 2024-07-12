@@ -24,20 +24,13 @@ export class BoolPrimaryExpression extends PrimaryExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_boolPrimaryExpression;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.boolPrimaryExpression;
-	readonly targetCodeGenerator = this.codeGenerator.boolPrimaryExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -108,4 +101,9 @@ export class BoolPrimaryExpression extends PrimaryExpression<
 			evaluatedType: BuiltInTypes.bool,
 		};
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.boolPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.boolPrimaryExpression;
 }

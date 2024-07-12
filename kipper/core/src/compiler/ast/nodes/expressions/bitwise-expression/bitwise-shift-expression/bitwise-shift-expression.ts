@@ -46,9 +46,7 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	public checkForWarnings = undefined;
-	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseShiftExpression;
-	readonly targetCodeGenerator = this.codeGenerator.bitwiseShiftExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -145,4 +143,9 @@ export class BitwiseShiftExpression extends BitwiseExpression<
 			evaluatedType: BuiltInTypes.num,
 		};
 	}
+
+	public checkForWarnings = undefined;
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.bitwiseShiftExpression;
+	readonly targetCodeGenerator = this.codeGenerator.bitwiseShiftExpression;
 }

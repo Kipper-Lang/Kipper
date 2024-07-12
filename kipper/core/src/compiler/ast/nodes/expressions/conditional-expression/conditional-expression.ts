@@ -36,15 +36,7 @@ export class ConditionalExpression extends Expression<
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.conditionalExpression;
-	readonly targetCodeGenerator = this.codeGenerator.conditionalExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
@@ -123,4 +115,9 @@ export class ConditionalExpression extends Expression<
 			evaluatedType: semanticData.trueBranch.getTypeSemanticData().evaluatedType,
 		};
 	}
+
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.conditionalExpression;
+	readonly targetCodeGenerator = this.codeGenerator.conditionalExpression;
 }
