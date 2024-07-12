@@ -1,6 +1,7 @@
 import { GenericBuiltInType } from "../base/generic-built-in-type";
 import type { ProcessedType } from "../index";
 import type { TypeError } from "../../../../errors";
+import { KipperInternalError } from "../../../../errors";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
@@ -26,6 +27,17 @@ export class BuiltInTypeArray extends GenericBuiltInType {
 	 */
 	public get isCompilable(): boolean {
 		return this.genericTypeArguments[0].type.isCompilable;
+	}
+
+	public changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): BuiltInTypeArray {
+		if (genericTypeArguments.length !== this.genericTypeArguments.length) {
+			throw new KipperInternalError(
+				"The length of the new generic type arguments must be equal to the length of the current generic type arguments.",
+			);
+		}
+
+		// TODO! Implement generic type arguments
+		return new BuiltInTypeArray(genericTypeArguments[0]);
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {

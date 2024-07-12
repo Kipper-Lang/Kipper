@@ -119,7 +119,7 @@ export class InterfacePropertyDeclaration extends InterfaceMemberDeclaration<
 		this.semanticData = {
 			identifier: identifier,
 			typeSpecifier: typeSpecifier,
-			type: typeSpecifier.getSemanticData().typeIdentifier,
+			type: typeSpecifier.getSemanticData().rawType,
 		};
 	}
 

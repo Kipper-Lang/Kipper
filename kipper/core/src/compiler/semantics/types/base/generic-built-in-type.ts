@@ -2,6 +2,7 @@ import { BuiltInType } from "./built-in-type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 import type { KipperBuiltInTypeLiteral } from "../../../const";
 import type { ProcessedType } from "./index";
+import { KipperInternalError } from "../../../../errors";
 
 /**
  * Represents a generic built-in type that is used in the type analysis phase.
@@ -36,6 +37,8 @@ export abstract class GenericBuiltInType extends BuiltInType implements GenericT
 	public get isGeneric(): true {
 		return true;
 	}
+
+	public abstract changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): GenericType;
 
 	/**
 	 * Asserts that this type is assignable to another type.

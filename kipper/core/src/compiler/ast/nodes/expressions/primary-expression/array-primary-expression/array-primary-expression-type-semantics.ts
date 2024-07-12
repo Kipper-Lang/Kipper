@@ -3,7 +3,7 @@
  * @since 0.10.0
  */
 import type { PrimaryExpressionTypeSemantics } from "../primary-expression-type-semantics";
-import { ProcessedType } from "../../../../../semantics";
+import type { ProcessedType } from "../../../../../semantics";
 
 /**
  * Type semantics for AST Node {@link ArrayPrimaryExpression}.

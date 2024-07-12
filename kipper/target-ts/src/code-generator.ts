@@ -84,7 +84,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const semanticData = node.getSemanticData();
 		const params = semanticData.parameters;
 		const returnTypeIdentifier = TargetTS.getTypeScriptType(
-			semanticData.returnType.getSemanticData().typeIdentifier.identifier,
+			semanticData.returnType.getSemanticData().rawType.identifier,
 		);
 
 		const paramsCode: TranslatedCodeLine[] = await Promise.all(

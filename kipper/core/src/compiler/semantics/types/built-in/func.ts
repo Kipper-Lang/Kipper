@@ -25,6 +25,17 @@ export class BuiltInTypeFunc extends GenericBuiltInType {
 		return true;
 	}
 
+	public changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): BuiltInTypeFunc {
+		if (genericTypeArguments.length !== this.genericTypeArguments.length) {
+			throw new KipperInternalError(
+				"The length of the new generic type arguments must be equal to the length of the current generic type arguments.",
+			);
+		}
+
+		// TODO! Implement generic type arguments
+		return new BuiltInTypeFunc();
+	}
+
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
 		// TODO! Implement generic type arguments and function signature checking
 		if (this === type) {

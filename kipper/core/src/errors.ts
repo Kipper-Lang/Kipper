@@ -687,6 +687,30 @@ export class GenericArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown when an invalid amount of generic arguments is passed to a type.
+ * @since 0.12.0
+ */
+export class InvalidAmountOfGenericArgumentsError extends TypeError {
+	constructor(typeIdentifier: string, expected: number, received: number) {
+		super(
+			`Type '${typeIdentifier}' only accepts ${expected} generic argument${
+				expected === 1 ? "" : "s"
+			}, received ${received}.`,
+		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a generic type.
+ * @since 0.12.0
+ */
+export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Type '${identifier}' does not accept generic arguments.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a read-only variable is being assigned to.
  * @since 0.8.3
  */

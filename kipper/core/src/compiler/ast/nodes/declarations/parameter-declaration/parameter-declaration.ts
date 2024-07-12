@@ -131,7 +131,7 @@ export class ParameterDeclaration extends Declaration<
 		this.semanticData = {
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
 			valueTypeSpecifier: typeSpecifier,
-			valueType: typeSpecifier.getSemanticData().typeIdentifier,
+			valueType: typeSpecifier.getSemanticData().rawType,
 			func: <FunctionDeclaration | LambdaPrimaryExpression>this.parent,
 		};
 

@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import {
+import type {
 	AssignmentExpression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
@@ -45,6 +45,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { CanNotUseNonGenericAsGenericTypeError, InvalidAmountOfGenericArgumentsError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -63,7 +64,7 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import type { RawType, ProcessedType } from "../types";
+import type { RawType, ProcessedType, GenericType, GenericTypeArguments } from "../types";
 import { UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
@@ -122,6 +123,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
 			throw e;
+		}
+	}
+
+	/**
+	 * Ensures that the given {@link type generic type} is valid by checking whether the provided generic arguments
+	 * match the generic type's constraints.
+	 *
+	 * As generics are not fully implemented, this only checks for the number of arguments.
+	 * @param type The generic type to check.
+	 * @param args The generic arguments to check.
+	 */
+	public ensureValidGenericType(type: ProcessedType | GenericType, args: ProcessedType[]): void {
+		if (!type.isGeneric || !("genericTypeArguments" in type)) {
+			throw this.assertError(new CanNotUseNonGenericAsGenericTypeError(type.identifier));
+		} else if (type.genericTypeArguments.length !== args.length) {
+			throw this.assertError(
+				new InvalidAmountOfGenericArgumentsError(type.identifier, type.genericTypeArguments.length, args.length),
+			);
 		}
 	}
 

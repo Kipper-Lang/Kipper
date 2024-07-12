@@ -4606,7 +4606,7 @@ export class KipperParser extends KipperParserBase {
 				this.state = 736;
 				this.match(KipperParser.Less);
 				this.state = 737;
-				this.typeSpecifierIdentifier();
+				this.typeSpecifierExpression();
 				this.state = 738;
 				this.match(KipperParser.Greater);
 			}
@@ -5175,7 +5175,7 @@ export class KipperParser extends KipperParserBase {
 		"R\x02\u02DD\u02DA\x03\x02\x02\x02\u02DD\u02DB\x03\x02\x02\x02\u02DD\u02DC" +
 		"\x03\x02\x02\x02\u02DE\x9D\x03\x02\x02\x02\u02DF\u02E0\x05\xA4S\x02\u02E0" +
 		"\x9F\x03\x02\x02\x02\u02E1\u02E2\x05\xA4S\x02\u02E2\u02E3\x07@\x02\x02" +
-		"\u02E3\u02E4\x05\xA4S\x02\u02E4\u02E5\x07B\x02\x02\u02E5\xA1\x03\x02\x02" +
+		"\u02E3\u02E4\x05\x9CO\x02\u02E4\u02E5\x07B\x02\x02\u02E5\xA1\x03\x02\x02" +
 		"\x02\u02E6\u02E7\x07\x1E\x02\x02\u02E7\u02E8\x07&\x02\x02\u02E8\u02E9" +
 		"\x05\xA4S\x02\u02E9\u02EA\x07'\x02\x02\u02EA\xA3\x03\x02\x02\x02\u02EB" +
 		"\u02EC\t\x10\x02\x02\u02EC\xA5\x03\x02\x02\x02D\xA7\xAE\xB5\xBA\xC2\xCE" +
@@ -9201,17 +9201,14 @@ export class IdentifierTypeSpecifierExpressionContext extends KipperParserRuleCo
 }
 
 export class GenericTypeSpecifierExpressionContext extends KipperParserRuleContext {
-	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext[];
-	public typeSpecifierIdentifier(i: number): TypeSpecifierIdentifierContext;
-	public typeSpecifierIdentifier(i?: number): TypeSpecifierIdentifierContext | TypeSpecifierIdentifierContext[] {
-		if (i === undefined) {
-			return this.getRuleContexts(TypeSpecifierIdentifierContext);
-		} else {
-			return this.getRuleContext(i, TypeSpecifierIdentifierContext);
-		}
+	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
+		return this.getRuleContext(0, TypeSpecifierIdentifierContext);
 	}
 	public Less(): TerminalNode {
 		return this.getToken(KipperParser.Less, 0);
+	}
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
 	}
 	public Greater(): TerminalNode {
 		return this.getToken(KipperParser.Greater, 0);

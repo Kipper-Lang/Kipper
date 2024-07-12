@@ -132,7 +132,7 @@ export class LambdaPrimaryExpression
 			throw new UnableToDetermineSemanticDataError();
 		}
 
-		const retType = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const retType = retTypeSpecifier.getSemanticData().rawType;
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 		this.semanticData = {
 			returnType: retType,

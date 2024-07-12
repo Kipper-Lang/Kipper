@@ -100,7 +100,7 @@ export class CastOrConvertExpression extends Expression<
 
 		// Get the type using the type specifier
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[1];
-		const type: RawType = typeSpecifier.getSemanticData().typeIdentifier;
+		const type: RawType = typeSpecifier.getSemanticData().rawType;
 
 		// Ensure that the children are fully present and not undefined
 		if (!exp || !type) {
