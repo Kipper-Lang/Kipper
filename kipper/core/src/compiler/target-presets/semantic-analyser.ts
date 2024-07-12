@@ -317,5 +317,5 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	/**
 	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
-	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
+	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
 }

@@ -396,5 +396,5 @@ export abstract class KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link LambdaExpression} into a specific language.
 	 */
-	public abstract lambdaExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
+	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
 }

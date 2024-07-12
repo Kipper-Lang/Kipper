@@ -7,7 +7,7 @@
 import { Expression } from "../expression";
 import type { LambdaExpressionSemantics } from "./lambda-expression-semantics";
 import type { LambdaExpressionTypeSemantics } from "./lambda-expression-type-semantics";
-import type { LambdaExpressionContext } from "../../../../lexer-parser";
+import type { LambdaPrimaryExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { ScopeNode } from "../../../scope-node";
@@ -36,7 +36,7 @@ export class LambdaExpression
 	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_lambdaExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_lambdaPrimaryExpression;
 
 	/**
 	 * The static rule name for this AST Node.
@@ -49,14 +49,14 @@ export class LambdaExpression
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: LambdaExpressionContext;
+	protected override readonly _antlrRuleCtx: LambdaPrimaryExpressionContext;
 
 	/**
 	 * The inner scope of this lambda expression.
 	 */
 	private readonly _innerScope: LambdaScope;
 
-	constructor(antlrRuleCtx: LambdaExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: LambdaPrimaryExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._innerScope = new LambdaScope(this);
@@ -75,7 +75,7 @@ export class LambdaExpression
 	 * node wraps.
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
-	 * {@link ParseRuleKindMapping.RULE_lambdaExpression}.
+	 * {@link ParseRuleKindMapping.RULE_lambdaPrimaryExpression}.
 	 * @since 0.11.0
 	 */
 	public override get kind() {
@@ -94,7 +94,7 @@ export class LambdaExpression
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): LambdaExpressionContext {
+	public override get antlrRuleCtx(): LambdaPrimaryExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -168,6 +168,6 @@ export class LambdaExpression
 
 	public checkForWarnings = undefined;
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.lambdaExpression;
-	readonly targetCodeGenerator = this.codeGenerator.lambdaExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.lambdaPrimaryExpression;
+	readonly targetCodeGenerator = this.codeGenerator.lambdaPrimaryExpression;
 }

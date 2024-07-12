@@ -151,7 +151,7 @@ export class KipperParser extends KipperParserBase {
 	public static readonly RULE_jumpStatement = 31;
 	public static readonly RULE_returnStatement = 32;
 	public static readonly RULE_primaryExpression = 33;
-	public static readonly RULE_lambdaExpression = 34;
+	public static readonly RULE_lambdaPrimaryExpression = 34;
 	public static readonly RULE_tangledPrimaryExpression = 35;
 	public static readonly RULE_boolPrimaryExpression = 36;
 	public static readonly RULE_identifierPrimaryExpression = 37;
@@ -235,7 +235,7 @@ export class KipperParser extends KipperParserBase {
 		"jumpStatement",
 		"returnStatement",
 		"primaryExpression",
-		"lambdaExpression",
+		"lambdaPrimaryExpression",
 		"tangledPrimaryExpression",
 		"boolPrimaryExpression",
 		"identifierPrimaryExpression",
@@ -1942,7 +1942,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 2);
 					{
 						this.state = 381;
-						this.arrayPrimaryExpression();
+						this.lambdaPrimaryExpression();
 					}
 					break;
 
@@ -1950,7 +1950,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 3);
 					{
 						this.state = 382;
-						this.objectPrimaryExpression();
+						this.arrayPrimaryExpression();
 					}
 					break;
 
@@ -1958,7 +1958,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 4);
 					{
 						this.state = 383;
-						this.boolPrimaryExpression();
+						this.objectPrimaryExpression();
 					}
 					break;
 
@@ -1966,7 +1966,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 5);
 					{
 						this.state = 384;
-						this.identifierPrimaryExpression();
+						this.boolPrimaryExpression();
 					}
 					break;
 
@@ -1974,7 +1974,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 6);
 					{
 						this.state = 385;
-						this.stringPrimaryExpression();
+						this.identifierPrimaryExpression();
 					}
 					break;
 
@@ -1982,7 +1982,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 7);
 					{
 						this.state = 386;
-						this.fStringPrimaryExpression();
+						this.stringPrimaryExpression();
 					}
 					break;
 
@@ -1990,7 +1990,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 8);
 					{
 						this.state = 387;
-						this.numberPrimaryExpression();
+						this.fStringPrimaryExpression();
 					}
 					break;
 
@@ -1998,7 +1998,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 9);
 					{
 						this.state = 388;
-						this.voidOrNullOrUndefinedPrimaryExpression();
+						this.numberPrimaryExpression();
 					}
 					break;
 
@@ -2006,7 +2006,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 10);
 					{
 						this.state = 389;
-						this.lambdaExpression();
+						this.voidOrNullOrUndefinedPrimaryExpression();
 					}
 					break;
 			}
@@ -2024,9 +2024,9 @@ export class KipperParser extends KipperParserBase {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public lambdaExpression(): LambdaExpressionContext {
-		let _localctx: LambdaExpressionContext = new LambdaExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 68, KipperParser.RULE_lambdaExpression);
+	public lambdaPrimaryExpression(): LambdaPrimaryExpressionContext {
+		let _localctx: LambdaPrimaryExpressionContext = new LambdaPrimaryExpressionContext(this._ctx, this.state);
+		this.enterRule(_localctx, 68, KipperParser.RULE_lambdaPrimaryExpression);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
@@ -5024,9 +5024,9 @@ export class KipperParser extends KipperParserBase {
 		"\u017A\x07\x17\x02\x02\u0179\u017B\x05\x9AN\x02\u017A\u0179\x03\x02\x02" +
 		"\x02\u017A\u017B\x03\x02\x02\x02\u017B\u017C\x03\x02\x02\x02\u017C\u017D" +
 		"\x07#\x02\x02\u017DC\x03\x02\x02\x02\u017E\u0189\x05H%\x02\u017F\u0189" +
-		"\x05\\/\x02\u0180\u0189\x05^0\x02\u0181\u0189\x05J&\x02\u0182\u0189\x05" +
-		"L'\x02\u0183\u0189\x05R*\x02\u0184\u0189\x05T+\x02\u0185\u0189\x05Z." +
-		"\x02\u0186\u0189\x05b2\x02\u0187\u0189\x05F$\x02\u0188\u017E\x03\x02\x02" +
+		"\x05F$\x02\u0180\u0189\x05\\/\x02\u0181\u0189\x05^0\x02\u0182\u0189\x05" +
+		"J&\x02\u0183\u0189\x05L'\x02\u0184\u0189\x05R*\x02\u0185\u0189\x05T+" +
+		"\x02\u0186\u0189\x05Z.\x02\u0187\u0189\x05b2\x02\u0188\u017E\x03\x02\x02" +
 		"\x02\u0188\u017F\x03\x02\x02\x02\u0188\u0180\x03\x02\x02\x02\u0188\u0181" +
 		"\x03\x02\x02\x02\u0188\u0182\x03\x02\x02\x02\u0188\u0183\x03\x02\x02\x02" +
 		"\u0188\u0184\x03\x02\x02\x02\u0188\u0185\x03\x02\x02\x02\u0188\u0186\x03" +
@@ -6617,6 +6617,9 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	public tangledPrimaryExpression(): TangledPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, TangledPrimaryExpressionContext);
 	}
+	public lambdaPrimaryExpression(): LambdaPrimaryExpressionContext | undefined {
+		return this.tryGetRuleContext(0, LambdaPrimaryExpressionContext);
+	}
 	public arrayPrimaryExpression(): ArrayPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, ArrayPrimaryExpressionContext);
 	}
@@ -6640,9 +6643,6 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	}
 	public voidOrNullOrUndefinedPrimaryExpression(): VoidOrNullOrUndefinedPrimaryExpressionContext | undefined {
 		return this.tryGetRuleContext(0, VoidOrNullOrUndefinedPrimaryExpressionContext);
-	}
-	public lambdaExpression(): LambdaExpressionContext | undefined {
-		return this.tryGetRuleContext(0, LambdaExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -6673,7 +6673,7 @@ export class PrimaryExpressionContext extends KipperParserRuleContext {
 	}
 }
 
-export class LambdaExpressionContext extends KipperParserRuleContext {
+export class LambdaPrimaryExpressionContext extends KipperParserRuleContext {
 	public LeftParen(): TerminalNode {
 		return this.getToken(KipperParser.LeftParen, 0);
 	}
@@ -6703,24 +6703,24 @@ export class LambdaExpressionContext extends KipperParserRuleContext {
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_lambdaExpression;
+		return KipperParser.RULE_lambdaPrimaryExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterLambdaExpression) {
-			listener.enterLambdaExpression(this);
+		if (listener.enterLambdaPrimaryExpression) {
+			listener.enterLambdaPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitLambdaExpression) {
-			listener.exitLambdaExpression(this);
+		if (listener.exitLambdaPrimaryExpression) {
+			listener.exitLambdaPrimaryExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitLambdaExpression) {
-			return visitor.visitLambdaExpression(this);
+		if (visitor.visitLambdaPrimaryExpression) {
+			return visitor.visitLambdaPrimaryExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

@@ -59,7 +59,7 @@ import type {
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
-	LambdaExpressionContext,
+	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
@@ -101,35 +101,14 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	private readonly _declarationFactory: DeclarationASTNodeFactory;
 
 	/**
-	 * If this is true, the current context is inside an external item and automatically indicates
-	 * {@link _isFunctionDefinition} is false.
-	 */
-	private _isExternalItem: boolean;
-
-	/**
-	 * If this is true, the current context is inside a function definition and automatically indicates
-	 * {@link _isExternalItem} is false.
-	 */
-	private _isFunctionDefinition: boolean;
-
-	/**
 	 * The current Kipper AST node that is being walked through right now. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
 	 */
-	private _currentPrimaryNode: Declaration | Statement | undefined;
-
-	/**
-	 * The current expression that is being walked through. This is the instance where current metadata
-	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
-	 * through during this operation.
-	 */
-	private _currentExpression: Expression | undefined;
+	private _currentPrimaryNode: Declaration | Statement | Expression | undefined;
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);
-		this._isExternalItem = false;
-		this._isFunctionDefinition = false;
 		this._currentPrimaryNode = undefined;
 		this._expressionFactory = new ExpressionASTNodeFactory();
 		this._statementFactory = new StatementASTNodeFactory();
@@ -178,15 +157,24 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 		return this._declarationFactory;
 	}
 
+	private isStatementContext(ctx: ASTNodeParserContext): boolean {
+		return this.statementFactory.ruleIds.includes(<ASTStatementKind>ctx.astSyntaxKind);
+	}
+
+	private isDeclarationContext(ctx: ASTNodeParserContext): boolean {
+		return this.declarationFactory.ruleIds.includes(<ASTDeclarationKind>ctx.astSyntaxKind);
+	}
+
+	private isExpressionContext(ctx: ASTNodeParserContext): boolean {
+		return this.expressionFactory.ruleIds.includes(<ASTExpressionKind>ctx.astSyntaxKind);
+	}
+
 	/**
-	 * Returns which token is being processed at the moment and where meta-data should be assigned to. If
-	 * {@link _currentExpression} is defined, then that item will be returned, otherwise {@link _currentPrimaryNode}.
+	 * Returns which token is being processed at the moment and where meta-data should be assigned to.
 	 * @private
 	 */
-	private get getCurrentNode(): CompilableASTNode | RootASTNode {
-		if (this._currentExpression) {
-			return this._currentExpression;
-		} else if (this._currentPrimaryNode) {
+	private get currentNode(): CompilableASTNode | RootASTNode {
+		if (this._currentPrimaryNode) {
 			return this._currentPrimaryNode;
 		} else {
 			return this.rootNode;
@@ -204,67 +192,39 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @private
 	 */
 	private handleEnteringTreeNode(ctx: ASTNodeParserContext) {
-		if (this.statementFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
-			// Create statement instance using factory
-			this._currentPrimaryNode = this.statementFactory.create(<ParserStatementContext>ctx, this.getCurrentNode);
-		} else if (this.declarationFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
-			// Create declaration instance using factory
-			this._currentPrimaryNode = this.declarationFactory.create(<ParserDeclarationContext>ctx, this.getCurrentNode);
-		} else if (this.expressionFactory.ruleIds.find((id) => ctx.astSyntaxKind === id)) {
+		if (this.isStatementContext(ctx)) {
+			this._currentPrimaryNode = this.statementFactory.create(<ParserStatementContext>ctx, this.currentNode);
+		} else if (this.isDeclarationContext(ctx)) {
+			this._currentPrimaryNode = this.declarationFactory.create(<ParserDeclarationContext>ctx, this.currentNode);
+		} else if (this.isExpressionContext(ctx)) {
 			/* istanbul ignore if: internal errors should rarely happen if ever, and only in very very bad situations */
-			if (this.getCurrentNode instanceof RootASTNode) {
+			if (this.currentNode instanceof RootASTNode) {
 				throw new KipperInternalError(
 					"An expression may not have the root file token as a parent. It must be child to a statement or a" +
-						" definition.",
+					" definition.",
 				);
 			}
-
-			// Create expression instance using factory
-			this._currentExpression = this.expressionFactory.create(<ParserExpressionContext>ctx, this.getCurrentNode);
+			this._currentPrimaryNode = this.expressionFactory.create(<ParserExpressionContext>ctx, this.currentNode);
 		} else {
 			throw new KipperInternalError(`The context '${ctx.astSyntaxKind}' is not supported by any of the factories.`);
 		}
 
 		this.programCtx.logger.debug(
-			`Created AST node of type '${this.getCurrentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
-				`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
+			`Created AST node of type '${this.currentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
+			`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
 		);
 	}
 
 	/**
 	 * Handles an exiting node context. This is required to properly generate the AST node hierarchy.
-	 *
-	 * The handling algorithm for declaration/statement nodes as following:
-	 * - If {@link _currentPrimaryNode.parent} is of type {@link Declaration} or {@link Statement}, then set
-	 * {@link _currentPrimaryNode} to that parent.
-	 * - Otherwise set {@link _currentPrimaryNode} to {@link undefined} again. If {@link handleExitingTreeNode} is called
-	 * again, the {@link _currentPrimaryNode} will be defined again and the whole process starts over.
-	 *
-	 * The handling algorithm for expressions is:
-	 * - If {@link _currentExpression.parent} is of type {@link Expression}, then set {@link _currentExpression} to
-	 * that parent.
-	 * - Otherwise set {@link _currentExpression} to {@link undefined} again. If {@link handleExitingTreeNode} is called
-	 * again, the {@link _currentExpression} will be defined again and the whole process starts over.
 	 * @private
 	 */
 	private handleExitingTreeNode() {
-		if (this._currentExpression) {
-			// Ensure expressions stay separately handled from statements/declarations
-			const parent = this._currentExpression?.parent;
-			if (parent instanceof Expression) {
-				this._currentExpression = parent;
-			} else {
-				this._currentExpression = undefined;
-			}
+		const parent = this._currentPrimaryNode?.parent;
+		if (parent instanceof Declaration || parent instanceof Statement || parent instanceof Expression) {
+			this._currentPrimaryNode = parent;
 		} else {
-			// Ensure that the parents of the declaration/statements are properly
-			// handled. Whether it is a child node or directly at the top of the file.
-			const parent = this._currentPrimaryNode?.parent;
-			if (parent instanceof Declaration || parent instanceof Statement) {
-				this._currentPrimaryNode = parent;
-			} else {
-				this._currentPrimaryNode = undefined;
-			}
+			this._currentPrimaryNode = undefined;
 		}
 	}
 
@@ -288,17 +248,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by the `externalItem`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterExternalItem(ctx: ExternalItemContext): void {
-		this._isExternalItem = true;
-	}
+	public enterExternalItem?: (ctx: ExternalItemContext) => void = undefined;
 
 	/**
 	 * Exit a parse tree produced by the `externalItem`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitExternalItem(ctx: ExternalItemContext): void {
-		this._isExternalItem = false;
-	}
+	public exitExternalItem?: (ctx: ExternalItemContext) => void = undefined;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Expression section
@@ -403,6 +359,18 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @since 0.11.0
 	 */
 	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseShiftExpression
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterLambdaPrimaryExpression: (ctx: LambdaPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseShiftExpression
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitLambdaPrimaryExpression: (ctx: LambdaPrimaryExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.

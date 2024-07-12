@@ -74,7 +74,7 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { LambdaExpressionContext } from "./KipperParser";
+import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
@@ -932,15 +932,15 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitPrimaryExpression?: (ctx: PrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Enter a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	enterLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Exit a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	exitLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.

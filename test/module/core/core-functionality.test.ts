@@ -3,7 +3,7 @@ import { KipperCompiler } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import {jsConfig} from "./errors";
+import { jsConfig } from "./errors";
 
 /**
  * Tests the 'print' function of Kipper.

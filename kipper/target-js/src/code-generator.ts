@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
@@ -56,7 +56,8 @@ import {
 	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
 	InterfaceDeclaration,
-	ClassDeclaration, InterfaceMethodDeclaration,
+	ClassDeclaration,
+	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import {
 	CompoundStatement,
@@ -800,7 +801,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	/**
 	 * Translates a {@link LambdaExpression} into the JavaScript language.
 	 */
-	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+	lambdaPrimaryExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
 		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;
