@@ -432,7 +432,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
 	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const values = node.getSemanticData().value;
+		const translatedValues: Array<TranslatedExpression> = await Promise.all(
+			values.map(async (value, i) => {
+				const exp = await value.translateCtxAndChildren();
+				return [...exp, i + 1 === values.length ? "" : ", "];
+			}),
+		);
+		return ["[", ...translatedValues.flat(), "]"];
 	};
 
 	/**
