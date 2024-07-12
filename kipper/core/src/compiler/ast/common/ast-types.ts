@@ -33,7 +33,6 @@ import type {
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
-	InterfaceMemberDeclarationContext,
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,

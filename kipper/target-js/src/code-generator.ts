@@ -31,7 +31,7 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	JumpStatement,
 	KipperProgramContext,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
 	LogicalExpressionSemantics,
@@ -799,9 +799,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link LambdaExpression} into the JavaScript language.
+	 * Translates a {@link LambdaPrimaryExpression} into the JavaScript language.
 	 */
-	lambdaPrimaryExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+	lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
 		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;

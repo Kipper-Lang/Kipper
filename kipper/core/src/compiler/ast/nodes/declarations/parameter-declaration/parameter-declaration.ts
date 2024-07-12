@@ -7,7 +7,7 @@ import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { FunctionScope, LambdaScope, ScopeParameterDeclaration } from "../../../../semantics";
 import type { FunctionDeclaration } from "../function-declaration";
-import type { IdentifierTypeSpecifierExpression, LambdaExpression } from "../../expressions";
+import type { IdentifierTypeSpecifierExpression, LambdaPrimaryExpression } from "../../expressions";
 import { Declaration } from "../declaration";
 import type { ParameterDeclarationContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
@@ -132,7 +132,7 @@ export class ParameterDeclaration extends Declaration<
 			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
 			valueTypeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().typeIdentifier,
-			func: <FunctionDeclaration | LambdaExpression>this.parent,
+			func: <FunctionDeclaration | LambdaPrimaryExpression>this.parent,
 		};
 
 		// Register this parameter in the function scope

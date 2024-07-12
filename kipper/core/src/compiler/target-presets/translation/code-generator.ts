@@ -31,7 +31,7 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
 	JumpStatement,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -394,7 +394,7 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract assignmentExpression: TargetASTNodeCodeGenerator<AssignmentExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link LambdaExpression} into a specific language.
+	 * Translates a {@link LambdaPrimaryExpression} into a specific language.
 	 */
-	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
+	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaPrimaryExpression, TranslatedExpression>;
 }

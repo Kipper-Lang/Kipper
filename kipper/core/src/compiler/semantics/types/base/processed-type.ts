@@ -1,5 +1,5 @@
 import type { CompilableType } from "./compilable-type";
-import { TypeNotCompilableError, type TypeError } from "../../../../errors";
+import { type TypeError, TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
 
 /**
@@ -29,6 +29,16 @@ export abstract class ProcessedType extends Type {
 	public abstract get isCompilable(): boolean;
 
 	/**
+	 * Returns whether the type is a generic type.
+	 *
+	 * This is false unless overridden by a subclass.
+	 * @since 0.12.0
+	 */
+	public get isGeneric(): boolean {
+		return false;
+	}
+
+	/**
 	 * Gets the compilable type for this type.
 	 *
 	 * This function throws an error instead of returning undefined, since it's intended to be used in circumstances,
@@ -46,7 +56,7 @@ export abstract class ProcessedType extends Type {
 	}
 
 	/**
-	 * Returns whether this type is assignable to the given {@link type}.
+	 * Asserts that this type is assignable to the given {@link type}.
 	 * @param type The type to check against.
 	 * @param propertyName The name of the property that is being assigned. This is used for error messages.
 	 * @param argumentName The name of the argument that is being assigned to. This is used for error messages.
@@ -54,4 +64,20 @@ export abstract class ProcessedType extends Type {
 	 * @since 0.12.0
 	 */
 	public abstract assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void;
+
+	/**
+	 * Returns whether this type is assignable to the given {@link type}. This discards any error messages.
+	 *
+	 * This simply returns whether the {@link assertAssignableTo} function throws an error or not.
+	 * @param type The type to check against.
+	 * @since 0.12.0
+	 */
+	public isAssignableTo(type: ProcessedType): boolean {
+		try {
+			this.assertAssignableTo(type);
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
 }

@@ -7,8 +7,8 @@ import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
 import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
-import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
 

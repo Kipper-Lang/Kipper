@@ -3,7 +3,6 @@
  * @since 0.12.0
  */
 import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
-import { RawType } from "../../../../../../../semantics";
 import type { InterfacePropertyDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import { InterfaceMemberDeclaration } from "../interface-member-declaration";

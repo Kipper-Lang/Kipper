@@ -4,19 +4,19 @@
  * @example
  * var add: num = (a: num, b: num) => a + b;
  */
-import { Expression } from "../expression";
-import type { LambdaExpressionSemantics } from "./lambda-expression-semantics";
-import type { LambdaExpressionTypeSemantics } from "./lambda-expression-type-semantics";
-import type { LambdaPrimaryExpressionContext } from "../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../compilable-ast-node";
-import type { ScopeNode } from "../../../scope-node";
-import type { Statement } from "../../statements";
-import { CompoundStatement } from "../../statements";
-import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
-import { ParameterDeclaration } from "../../declarations";
-import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import { BuiltInTypes, LambdaScope } from "../../../../semantics";
+import { Expression } from "../../expression";
+import type { LambdaPrimaryExpressionSemantics } from "./lambda-primary-expression-semantics";
+import type { LambdaPrimaryExpressionTypeSemantics } from "./lambda-primary-expression-type-semantics";
+import type { LambdaPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { ScopeNode } from "../../../../scope-node";
+import type { Statement } from "../../../statements";
+import { CompoundStatement } from "../../../statements";
+import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
+import { ParameterDeclaration } from "../../../declarations";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { BuiltInTypes, LambdaScope } from "../../../../../semantics";
 
 /**
  * Lambda expression class, which represents a lambda expression in the AST.
@@ -24,10 +24,10 @@ import { BuiltInTypes, LambdaScope } from "../../../../semantics";
  * @example
  * var add: num = (a: num, b: num) -> a + b;
  */
-export class LambdaExpression
+export class LambdaPrimaryExpression
 	extends Expression<
-		LambdaExpressionSemantics,
-		LambdaExpressionTypeSemantics,
+		LambdaPrimaryExpressionSemantics,
+		LambdaPrimaryExpressionTypeSemantics,
 		Expression | ParameterDeclaration | CompoundStatement
 	>
 	implements ScopeNode<LambdaScope>
@@ -79,7 +79,7 @@ export class LambdaExpression
 	 * @since 0.11.0
 	 */
 	public override get kind() {
-		return LambdaExpression.kind;
+		return LambdaPrimaryExpression.kind;
 	}
 
 	/**
@@ -88,7 +88,7 @@ export class LambdaExpression
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return LambdaExpression.ruleName;
+		return LambdaPrimaryExpression.ruleName;
 	}
 
 	/**
@@ -156,7 +156,7 @@ export class LambdaExpression
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.func,
+			evaluatedType: BuiltInTypes.Func,
 			returnType: returnType,
 		};
 

@@ -596,9 +596,20 @@ export class BitwiseOperationTypeError extends TypeError {
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
 export class ArgumentAssignmentTypeError extends TypeError {
-	constructor(paramIdentifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+	constructor(
+		paramIdentifier: string,
+		expectedType: string,
+		receivedType: string,
+		cause?: TypeError,
+		expectedGenericTypes?: Array<string>,
+		receivedGenericTypes?: Array<string>,
+	) {
 		super(
-			`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
+			`Type '${AssignmentTypeError.formatGenericTypes(receivedType, expectedGenericTypes)}' is not assignable` +
+				`to parameter '${paramIdentifier}' of type '${AssignmentTypeError.formatGenericTypes(
+					expectedType,
+					receivedGenericTypes,
+				)}'.`,
 			cause,
 		);
 	}
@@ -611,8 +622,23 @@ export class ArgumentAssignmentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(leftExpType: string, rightExpType: string, cause?: TypeError) {
-		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`, cause);
+	constructor(
+		leftExpType: string,
+		rightExpType: string,
+		cause?: TypeError,
+		leftExpGenericTypes?: Array<string>,
+		rightExpGenericTypes?: Array<string>,
+	) {
+		super(
+			`Type '${AssignmentTypeError.formatGenericTypes(leftExpType, leftExpGenericTypes)}' is not assignable` +
+				`to type '${AssignmentTypeError.formatGenericTypes(rightExpType, rightExpGenericTypes)}'.`,
+			cause,
+		);
+	}
+
+	static formatGenericTypes(identifier: string, genericTypes?: Array<string>): string {
+		const params = genericTypes?.join(", ");
+		return `${identifier}${params ? `<${params}>` : ""}`;
 	}
 }
 
@@ -621,8 +647,22 @@ export class AssignmentTypeError extends TypeError {
  * @since 0.11.0
  */
 export class PropertyAssignmentTypeError extends TypeError {
-	constructor(identifier: string, propertyType: string, valueType: string, cause?: TypeError) {
-		super(`Type '${valueType}' is not assignable to property '${identifier}' of type '${propertyType}'.`, cause);
+	constructor(
+		identifier: string,
+		propertyType: string,
+		valueType: string,
+		cause?: TypeError,
+		propertyGenericTypes?: Array<string>,
+		valueGenericTypes?: Array<string>,
+	) {
+		super(
+			`Type '${AssignmentTypeError.formatGenericTypes(valueType, propertyGenericTypes)}' is not assignable to ` +
+				`property '${identifier}' of type '${AssignmentTypeError.formatGenericTypes(
+					propertyType,
+					valueGenericTypes,
+				)}'.`,
+			cause,
+		);
 	}
 }
 
@@ -633,6 +673,16 @@ export class PropertyAssignmentTypeError extends TypeError {
 export class PropertyNotFoundError extends TypeError {
 	constructor(objType: string, identifier: string) {
 		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a generic argument is used that is not assignable to the expected type.
+ * @since 0.12.0
+ */
+export class GenericArgumentTypeError extends TypeError {
+	constructor(identifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to generic argument '${identifier}' of type '${expectedType}'.`);
 	}
 }
 

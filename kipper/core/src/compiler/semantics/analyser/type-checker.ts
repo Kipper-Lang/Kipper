@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import type {
+import {
 	AssignmentExpression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
@@ -16,7 +16,8 @@ import type {
 	Statement,
 	UnaryExpression,
 	UnaryExpressionSemantics,
-	LambdaExpression,
+	LambdaPrimaryExpression,
+	ArrayPrimaryExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -489,7 +490,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
-	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaExpression): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
 		const returnType = typeData.returnType;
@@ -580,8 +581,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		// TODO! Add support for 'object' types once they are implemented
-		if (objType !== BuiltInTypes.str && objType !== BuiltInTypes.list) {
+		if (!objType.isAssignableTo(BuiltInTypes.str) && !objType.isAssignableTo(BuiltInTypes.Array)) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.identifier));
 		}
 	}
@@ -711,6 +711,28 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					"Conditional expressions with mismatching branch return types are not implemented yet",
 				),
 			);
+		}
+	}
+
+	/**
+	 * Checks whether the passed array expression is valid.
+	 *
+	 * This for now only checks that the types of the array elements are always the same.
+	 * @param param The array primary expression to check.
+	 */
+	validArrayExpression(param: ArrayPrimaryExpression) {
+		const children = param.getSemanticData().value;
+		if (children.length > 0) {
+			const expectedType = children[0].getTypeSemanticData().evaluatedType;
+
+			for (const child of children) {
+				if (child.getTypeSemanticData().evaluatedType !== expectedType) {
+					// Arrays may only have a single type of elements (for now)
+					throw this.notImplementedError(
+						new KipperNotImplementedError("Arrays with multiple types of elements are not implemented yet."),
+					);
+				}
+			}
 		}
 	}
 }
