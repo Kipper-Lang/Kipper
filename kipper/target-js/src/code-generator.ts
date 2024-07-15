@@ -92,15 +92,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
-			["\"use strict\"", ";"],
+			['"use strict"', ";"],
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
-				"var __globalScope = typeof __globalScope !== \"undefined\" ? __globalScope : typeof" +
-				" globalThis !== \"undefined\" ?" +
-				" globalThis : typeof" +
-				" window !== \"undefined\" ?" +
-				" window : typeof global !== \"undefined\" ? global : typeof self !== \"undefined\" ? self : {}",
+				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
+					' globalThis !== "undefined" ?' +
+					" globalThis : typeof" +
+					' window !== "undefined" ?' +
+					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
 				";",
 			],
 			// Create global kipper object - Always prefer the global '__kipper' instance
@@ -110,41 +110,41 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
 			["// @ts-ignore"],
 			[
-				"__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name=\"TypeError\"; }})",
+				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
 				";",
 			],
 			["// @ts-ignore"],
 			[
-				"__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name=\"IndexError\"; }})",
+				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
 				";",
 			],
 			// The following object is the template for runtime types
 			["// @ts-ignore"],
 			[
 				"class Type {" +
-				"constructor(name, fields = [], methods = [], baseType = null) {" +
-				"this.name = name;" +
-				"this.fields = fields;" +
-				"this.methods = methods;" +
-				"this.baseType = baseType;" +
-				"}" +
-				"isCompatibleWith(obj) {" +
-				"return this.name === obj.name;" +
-				"}",
+					"constructor(name, fields = [], methods = [], baseType = null) {" +
+					"this.name = name;" +
+					"this.fields = fields;" +
+					"this.methods = methods;" +
+					"this.baseType = baseType;" +
+					"}" +
+					"isCompatibleWith(obj) {" +
+					"return this.name === obj.name;" +
+					"}",
 				"}",
 			],
 			// The following objects are built-in types and functions that are used internally by Kipper and should not be
 			// modified by the user.
 			[
 				"__kipper.builtIn = __kipper.builtIn || {};" +
-				"__kipper.builtIn.int = __kipper.builtIn.int || new Type('int', undefined, undefined);" +
-				"__kipper.builtIn.str = __kipper.builtIn.str || new Type('str', undefined, undefined);" +
-				"__kipper.builtIn.bool = __kipper.builtIn.bool || new Type('bool', undefined, undefined);" +
-				"__kipper.builtIn.void = __kipper.builtIn.void || new Type('void', undefined, undefined);" +
-				"__kipper.builtIn.undefined = __kipper.builtIn.undefined || new Type('undefined', undefined, undefined);" +
-				"__kipper.builtIn.null = __kipper.builtIn.null || new Type('null', undefined, undefined);" +
-				"__kipper.builtIn.obj = __kipper.builtIn.obj || new Type('obj', undefined, undefined);" +
-				"__kipper.builtIn.array = __kipper.builtIn.array || new Type('array', undefined, undefined);",
+					"__kipper.builtIn.int = __kipper.builtIn.int || new Type('int', undefined, undefined);" +
+					"__kipper.builtIn.str = __kipper.builtIn.str || new Type('str', undefined, undefined);" +
+					"__kipper.builtIn.bool = __kipper.builtIn.bool || new Type('bool', undefined, undefined);" +
+					"__kipper.builtIn.void = __kipper.builtIn.void || new Type('void', undefined, undefined);" +
+					"__kipper.builtIn.undefined = __kipper.builtIn.undefined || new Type('undefined', undefined, undefined);" +
+					"__kipper.builtIn.null = __kipper.builtIn.null || new Type('null', undefined, undefined);" +
+					"__kipper.builtIn.obj = __kipper.builtIn.obj || new Type('obj', undefined, undefined);" +
+					"__kipper.builtIn.array = __kipper.builtIn.array || new Type('array', undefined, undefined);",
 			],
 		];
 	};

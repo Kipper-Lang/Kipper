@@ -52,6 +52,18 @@ export type KipperUndefinedTypeLiteral = "undefined";
 export const kipperUndefinedTypeLiteral: KipperUndefinedTypeLiteral = "undefined";
 
 /**
+ * Object type in Kipper.
+ * @since 0.12.0
+ */
+export type KipperObjectTypeLiteral = "obj";
+
+/**
+ * Object type in Kipper.
+ * @since 0.12.0
+ */
+export const kipperObjectTypeLiteral: KipperObjectTypeLiteral = "obj";
+
+/**
  * Function type in Kipper.
  * @since 0.6.0
  */
@@ -186,6 +198,7 @@ export const kipperPrimitiveTypeLiterals: Array<KipperPrimitiveTypeLiteral> = [
 export type KipperBuiltInTypeLiteral =
 	| KipperMetaTypeLiteral
 	| KipperPrimitiveTypeLiteral
+	| KipperObjectTypeLiteral
 	| KipperFuncTypeLiteral
 	| KipperListTypeLiteral;
 
@@ -198,6 +211,7 @@ export const kipperBuiltInTypeLiterals: Array<KipperBuiltInTypeLiteral> = [
 	kipperFuncTypeLiteral,
 	...kipperPrimitiveTypeLiterals,
 	kipperListTypeLiteral,
+	kipperObjectTypeLiteral,
 ];
 
 /**

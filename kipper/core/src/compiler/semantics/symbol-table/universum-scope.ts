@@ -20,6 +20,7 @@ export const BuiltInTypes = {
 	str: new BuiltInType("str"),
 	func: new BuiltInType("func"),
 	list: new BuiltInType("list"),
+	obj: new BuiltInType("obj"),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
 /**
