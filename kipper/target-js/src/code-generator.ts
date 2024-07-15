@@ -57,7 +57,11 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
+	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
+	InterfaceDeclaration,
+	ClassDeclaration,
+	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import {
 	BuiltInTypes,

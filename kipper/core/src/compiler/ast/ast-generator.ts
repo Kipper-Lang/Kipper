@@ -211,7 +211,7 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 
 		this.programCtx.logger.debug(
 			`Created AST node of type '${this.currentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
-				`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
+        `(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
 		);
 	}
 
