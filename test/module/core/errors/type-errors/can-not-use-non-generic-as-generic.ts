@@ -1,27 +1,26 @@
-import type { KipperCompileResult, KipperError } from "@kipper/core";
-import { KipperCompiler } from "@kipper/core";
+import { KipperCompiler, type KipperCompileResult, type KipperError } from "@kipper/core";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
-describe("ReadOnlyWriteTypeError", () => {
+describe("CanNotUseNonGenericAsGenericTypeError", () => {
 	it("Error", async () => {
 		try {
-			await new KipperCompiler().compile(`const invalid: str = "3"; invalid = "5";`, defaultConfig);
+			await new KipperCompiler().compile("var x: num<str>;", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "ReadOnlyWriteTypeError", "Expected different error");
+			assert.equal((<KipperError>e).constructor.name, "CanNotUseNonGenericAsGenericTypeError");
 			assert((<KipperError>e).name === "TypeError", "Expected different error");
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
-		assert.fail("Expected 'ReadOnlyWriteTypeError'");
+		assert.fail("Expected 'CanNotUseNonGenericAsGenericTypeError'");
 	});
 
 	it("NoError", async () => {
 		let result: KipperCompileResult | undefined = undefined;
 		try {
-			result = await new KipperCompiler().compile('var valid: str = "3"; valid = "5";', defaultConfig);
+			result = await new KipperCompiler().compile(`var x: Array<num>;`, defaultConfig);
 		} catch (e) {
-			assert.fail(`Expected no '${(<KipperError>e).name}'`);
+			assert.fail(`Expected no error. Received '${e}'.`);
 		}
 		assert.isDefined(result, "Expected defined compilation result");
 		assert.isDefined(result?.programCtx, "Expected programCtx to be defined");

@@ -90,8 +90,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("str as num", async () => {
@@ -105,8 +105,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("bool as str", async () => {
@@ -120,8 +120,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("bool as num", async () => {
@@ -135,8 +135,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 	});
 });

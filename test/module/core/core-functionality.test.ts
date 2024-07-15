@@ -903,7 +903,6 @@ describe("Core functionality", () => {
 
 		describe("Slice notation ", () => {
 			describe("str", () => {
-
 				it("Simple slice with both start and end", async () => {
 					const fileContent = 'var x: str = "1234"[1:2]; print(x);';
 					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
@@ -975,57 +974,57 @@ describe("Core functionality", () => {
 
 			describe("array", () => {
 				it("Simple slice with both start and end", async () => {
-					const fileContent = 'var x: Array<num> = [1, 2, 3, 4][1:2]; print(x[0] as str);';
-					const instance: KipperCompileResult = await compiler.compile(fileContent, {target: defaultTarget});
+					const fileContent = "var x: Array<num> = [1, 2, 3, 4][1:2]; print(x[0] as str);";
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 					assert.isDefined(instance.programCtx);
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 					assert.include(
 						instance.write(),
-						'let x: Array<number> = __kipper.slice([1, 2, 3, 4], 1, 2);',
+						"let x: Array<number> = __kipper.slice([1, 2, 3, 4], 1, 2);",
 						"Expected different TypeScript code",
 					);
 				});
 
 				it("Simple slice with only start", async () => {
-					const fileContent = 'var x: Array<num> = [1, 2, 3, 4][1:]; print(x[0] as str);';
-					const instance: KipperCompileResult = await compiler.compile(fileContent, {target: defaultTarget});
+					const fileContent = "var x: Array<num> = [1, 2, 3, 4][1:]; print(x[0] as str);";
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 					assert.isDefined(instance.programCtx);
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 					assert.include(
 						instance.write(),
-						'let x: Array<number> = __kipper.slice([1, 2, 3, 4], 1, undefined);',
+						"let x: Array<number> = __kipper.slice([1, 2, 3, 4], 1, undefined);",
 						"Expected different TypeScript code",
 					);
 				});
 
 				it("Simple slice with only end", async () => {
-					const fileContent = 'var x: Array<num> = [1, 2, 3, 4][:2]; print(x[0] as str);';
-					const instance: KipperCompileResult = await compiler.compile(fileContent, {target: defaultTarget});
+					const fileContent = "var x: Array<num> = [1, 2, 3, 4][:2]; print(x[0] as str);";
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 					assert.isDefined(instance.programCtx);
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 					assert.include(
 						instance.write(),
-						'let x: Array<number> = __kipper.slice([1, 2, 3, 4], undefined, 2);',
+						"let x: Array<number> = __kipper.slice([1, 2, 3, 4], undefined, 2);",
 						"Expected different TypeScript code",
 					);
 				});
 
 				it("Simple slice with neither start nor end", async () => {
-					const fileContent = 'var x: Array<num> = [1, 2, 3, 4][:]; print(x[0] as str);';
-					const instance: KipperCompileResult = await compiler.compile(fileContent, {target: defaultTarget});
+					const fileContent = "var x: Array<num> = [1, 2, 3, 4][:]; print(x[0] as str);";
+					const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 					assert.isDefined(instance.programCtx);
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 					assert.include(
 						instance.write(),
-						'let x: Array<number> = __kipper.slice([1, 2, 3, 4], undefined, undefined);',
+						"let x: Array<number> = __kipper.slice([1, 2, 3, 4], undefined, undefined);",
 						"Expected different TypeScript code",
 					);
 				});
@@ -1306,17 +1305,13 @@ describe("Core functionality", () => {
 	describe("Arrays", () => {
 		it("Simple array declaration", async () => {
 			const fileContent = `var x: Array<num> = [1, 2, 3];`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, {target: defaultTarget});
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
 
 			const code = instance.write();
-			assert.include(
-				code,
-				"let x: Array<number> = [1, 2, 3];",
-				"Invalid TypeScript code (Expected different output)",
-			);
+			assert.include(code, "let x: Array<number> = [1, 2, 3];", "Invalid TypeScript code (Expected different output)");
 		});
 
 		it("Assign array to array", async () => {
