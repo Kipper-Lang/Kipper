@@ -73,7 +73,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		return [
 			["interface", " ", interfaceName, " ", "{"],
-			...memberDeclarations.flat().map((line) => [" ", ...line]),
+			...memberDeclarations.flat().map((line) => ["  ", ...line]),
 			["}"],
 		];
 	};

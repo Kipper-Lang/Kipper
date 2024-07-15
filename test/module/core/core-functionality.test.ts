@@ -25,7 +25,7 @@ describe("Core functionality", () => {
 
 	describe("Comment", () => {
 		it("Single line", async () => {
-			const fileContent = 'var x: num = 5;\n// A comment\n print("");';
+			const fileContent = 'var x: num = 5;\n// A comment\n  print("");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -35,7 +35,7 @@ describe("Core functionality", () => {
 		});
 
 		it("Multi line", async () => {
-			const fileContent = 'var x: num = 5;\n/* A comment\n ... \n end of comment */\n print("");';
+			const fileContent = 'var x: num = 5;\n/* A comment\n  ... \n  end of comment */\n  print("");';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1385,7 +1385,7 @@ describe("Core functionality", () => {
 		});
 
 		it("can initialize interface with members", async () => {
-			const fileContent = "interface Test {\n x: num;\n y: str;\n greet(name: str) : str;}";
+			const fileContent = "interface Test {\n  x: num;\n  y: str;\n  greet(name: str) : str;}";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1393,13 +1393,13 @@ describe("Core functionality", () => {
 			let written = instance.write();
 			assert.include(
 				written,
-				"interface Test {\n x: number;\n y: string;\n greet(name: string): string;\n}",
+				"interface Test {\n  x: number;\n  y: string;\n  greet(name: string): string;\n}",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
 
 		it("should can initialize with mixed members", async () => {
-			const fileContent = "interface Test {\n x: num;\n isTrue(f: bool): str;\n y: str;\n greet(name: str) : str;}";
+			const fileContent = "interface Test {\n  x: num;\n  isTrue(f: bool): str;\n  y: str;\n  greet(name: str) : str;}";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1407,7 +1407,7 @@ describe("Core functionality", () => {
 			let written = instance.write();
 			assert.include(
 				written,
-				"interface Test {\n x: number;\n isTrue(f: boolean): string;\n y: string;\n greet(name: string): string;\n}",
+				"interface Test {\n  x: number;\n  isTrue(f: boolean): string;\n  y: string;\n  greet(name: string): string;\n}",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
