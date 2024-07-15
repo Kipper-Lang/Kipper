@@ -201,7 +201,7 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 			if (this.currentNode instanceof RootASTNode) {
 				throw new KipperInternalError(
 					"An expression may not have the root file token as a parent. It must be child to a statement or a" +
-					" definition.",
+						" definition.",
 				);
 			}
 			this._currentPrimaryNode = this.expressionFactory.create(<ParserExpressionContext>ctx, this.currentNode);
@@ -211,7 +211,7 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 
 		this.programCtx.logger.debug(
 			`Created AST node of type '${this.currentNode.constructor.name}' for context '${ctx.astSyntaxKind}'` +
-			`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
+				`(Loc: ${ctx.start.line}:${ctx.start.charPositionInLine})`,
 		);
 	}
 

@@ -5,6 +5,8 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../le
 import { PrimaryExpression } from "../../primary-expression";
 import type { CompilableASTNode } from "../../../../../compilable-ast-node";
 import type { StringPrimaryExpression } from "../../string-primary-expression";
+import type { Expression } from "../../../expression";
+import { UnableToDetermineSemanticDataError } from "../../../../../../../errors";
 
 /**
  * Object property, which represents a property inside an {@link ObjectPrimaryExpression object}. This is a key-value
@@ -75,20 +77,24 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		let id;
-		let expression;
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new UnableToDetermineSemanticDataError();
+		}
 
-		if(this.children.length < 2) {
-			id = this.antlrRuleCtx.children![0].text;
-			expression = this.children[0];
+		let id: string | StringPrimaryExpression;
+		let value: Expression;
+		if (this.children.length < 2) {
+			id = antlrChildren[0].text;
+			value = this.children[0];
 		} else {
-			id = (<StringPrimaryExpression> this.children[0]).getSemanticData().value;
-			expression = this.children[1];
+			id = (<StringPrimaryExpression>this.children[0]).getSemanticData().value;
+			value = this.children[1];
 		}
 
 		this.semanticData = {
 			identifier: id,
-			expressoDepresso: expression
+			expressoDepresso: value,
 		};
 	}
 
@@ -104,7 +110,11 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 		const semanticData = this.getSemanticData();
 
 		const expression = semanticData.expressoDepresso;
-		expression
+		expression.ensureTypeSemanticallyValid();
+
+		this.typeSemantics = {
+			evaluatedType: expression.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	public checkForWarnings = undefined; // TODO!

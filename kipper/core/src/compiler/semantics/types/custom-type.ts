@@ -113,14 +113,11 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromObjectLiteral(objectPrimaryExpression: ObjectPrimaryExpression): CustomType {
 		objectPrimaryExpression.ensureSemanticallyValid();
-		throw new KipperInternalError("Object literal custom types are not implemented.");
-
-		// TODO! Implement custom type generation from object literal
-		// const fields: CustomTypeFields = new Map();
-		// for (const field of objectLiteral.fields) {
-		// 	fields.set(field.identifier, field.type);
-		// }
-		// return new CustomType("object", "interface", fields);
+		const fields: CustomTypeFields = new Map();
+		for (const field of objectPrimaryExpression.getSemanticData().keyValuePairs) {
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().evaluatedType);
+		}
+		return new CustomType("", "interface", fields);
 	}
 
 	/**

@@ -6,10 +6,17 @@ import type { ObjectPrimaryExpressionSemantics } from "./object-primary-expressi
 import type { ObjectPrimaryExpressionTypeSemantics } from "./object-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ObjectPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { DeclaratorContext } from "../../../../../lexer-parser";
+import { InitDeclaratorContext, StorageTypeSpecifierContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
 import { PrimaryExpression } from "../primary-expression";
-import { ObjectProperty } from "./object-property";
+import { CustomType } from "../../../../../semantics";
+import type { ObjectProperty } from "./object-property";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import type { KipperStorageType } from "../../../../../const";
+import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
+import type { ParseTree } from "antlr4ts/tree";
+import type { Expression } from "../../expression";
 
 /**
  * Object literal constant, which represents an object that was defined in the source code.
@@ -75,10 +82,15 @@ export class ObjectPrimaryExpression extends PrimaryExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const objectProperties = this.children;
+		const children: Array<ParseTree> = this.getAntlrRuleChildren();
+		if (!children) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		const keyValuePairs = <ObjectProperty[]>this.children;
 
 		this.semanticData = {
-			keyValuePairs: <ObjectProperty[]> objectProperties
+			keyValuePairs: keyValuePairs,
 		};
 	}
 
@@ -91,9 +103,9 @@ export class ObjectPrimaryExpression extends PrimaryExpression<
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Object Literals have not been implemented yet."));
+		this.typeSemantics = {
+			evaluatedType: CustomType.fromObjectLiteral(this),
+		};
 	}
 
 	/**
