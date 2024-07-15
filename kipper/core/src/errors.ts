@@ -623,15 +623,15 @@ export class ArgumentAssignmentTypeError extends TypeError {
  */
 export class AssignmentTypeError extends TypeError {
 	constructor(
-		leftExpType: string,
-		rightExpType: string,
+		expectedType: string,
+		receivedType: string,
 		cause?: TypeError,
 		leftExpGenericTypes?: Array<string>,
 		rightExpGenericTypes?: Array<string>,
 	) {
 		super(
-			`Type '${AssignmentTypeError.formatGenericTypes(leftExpType, leftExpGenericTypes)}' is not assignable` +
-				`to type '${AssignmentTypeError.formatGenericTypes(rightExpType, rightExpGenericTypes)}'.`,
+			`Type '${AssignmentTypeError.formatGenericTypes(receivedType, leftExpGenericTypes)}' is not assignable` +
+				`to type '${AssignmentTypeError.formatGenericTypes(expectedType, rightExpGenericTypes)}'.`,
 			cause,
 		);
 	}

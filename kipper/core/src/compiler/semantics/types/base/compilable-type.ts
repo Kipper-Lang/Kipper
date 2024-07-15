@@ -1,8 +1,10 @@
+import { ProcessedType } from "./processed-type";
+
 /**
  * Represents a type that can be compiled i.e. a type that exists and type checks can be done on it.
  * @since 0.11.0
  */
-export interface CompilableType {
+export interface CompilableType extends ProcessedType {
 	/**
 	 * The identifier of this type.
 	 * @since 0.11.0

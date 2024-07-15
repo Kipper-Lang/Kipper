@@ -2,13 +2,13 @@
  * Tools for handling the translation of Kipper code to TypeScript.
  * @since 0.8.0
  */
-import type {
+import {
 	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
 	KipperBuiltInTypeLiteral,
 	InternalFunction,
-	InternalFunctionArgument,
+	InternalFunctionArgument, ProcessedType,
 } from "@kipper/core";
 import { TargetTS } from "./target";
 
@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
  */
 export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: string | Array<string> }>;
-	returnType: string | Array<string>;
+	params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
+	returnType: ProcessedType | Array<ProcessedType>;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -31,10 +31,10 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 			params: semanticData.params.map((param) => {
 				return {
 					identifier: param.getSemanticData().identifier,
-					type: param.getTypeSemanticData().valueType.identifier,
+					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.returnType.identifier,
+			returnType: typeData.returnType,
 		};
 	} else {
 		return {
@@ -42,10 +42,10 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 			params: funcSpec.params.map((arg: BuiltInFunctionArgument | InternalFunctionArgument) => {
 				return {
 					identifier: arg.identifier,
-					type: Array.isArray(arg.valueType) ? arg.valueType.map((t) => t.identifier) : arg.valueType.identifier,
+					type: Array.isArray(arg.valueType) ? arg.valueType : arg.valueType,
 				};
 			}),
-			returnType: funcSpec.returnType.identifier,
+			returnType: funcSpec.returnType,
 		};
 	}
 }
@@ -59,8 +59,8 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createTSFunctionSignature(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: string | Array<string> }>;
-		returnType: string | Array<string>;
+		params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
+		returnType: ProcessedType | Array<ProcessedType>;
 	},
 	ignoreParams: boolean = false,
 ): string {

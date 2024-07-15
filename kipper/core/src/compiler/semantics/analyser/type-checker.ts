@@ -64,7 +64,7 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import type { RawType, ProcessedType, GenericType, GenericTypeArguments } from "../types";
+import {RawType, ProcessedType, GenericType, GenericTypeArguments, BuiltInTypeArray} from "../types";
 import { UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
@@ -677,32 +677,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
 				);
 			case "bracket": {
-				if (objType === BuiltInTypes.str) {
-					// Also ensure the key is valid
-					this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
+				this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
 
-					return BuiltInTypes.str;
+				if (objType.isAssignableTo(BuiltInTypes.Array)) {
+					return (<BuiltInTypeArray>objType).genericTypeArguments[0].type;
 				} else {
-					// Must be a list -> Not implemented yet
-					throw this.notImplementedError(
-						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
-					); // TODO! Add support for lists
+					return BuiltInTypes.str;
 				}
 			}
 			case "slice": {
-				if (objType === BuiltInTypes.str) {
-					// Also ensure the key is valid
-					this.validSliceNotationKey(
-						semanticData.objectLike,
-						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
-					);
+				this.validSliceNotationKey(
+					semanticData.objectLike,
+					<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
+				);
 
-					return BuiltInTypes.str;
+				if (objType.isAssignableTo(BuiltInTypes.Array)) {
+					return objType;
 				} else {
-					// Must be a list -> Not implemented yet
-					throw this.notImplementedError(
-						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
-					); // TODO! Add support for lists
+					return BuiltInTypes.str;
 				}
 			}
 		}

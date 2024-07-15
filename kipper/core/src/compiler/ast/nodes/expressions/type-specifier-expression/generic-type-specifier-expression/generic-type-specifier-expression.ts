@@ -117,7 +117,6 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 			evaluatedType: BuiltInTypes.type,
 			storedType: (<GenericType>valueType).changeGenericTypeArguments(genericArguments),
 		};
-		console.log(this.typeSemantics);
 	}
 
 	public checkForWarnings = undefined; // TODO!
