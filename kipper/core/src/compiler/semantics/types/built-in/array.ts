@@ -56,39 +56,19 @@ export class BuiltInTypeArray extends GenericBuiltInType {
 			} catch (typeError) {
 				e = new GenericArgumentTypeError(
 					(<typeof this>type).genericTypeArguments[0].identifier,
-					(<typeof this>type).genericTypeArguments[0].type.identifier,
-					this.genericTypeArguments[0].type.identifier,
+					(<typeof this>type).genericTypeArguments[0].type.toString(),
+					this.genericTypeArguments[0].type.toString(),
 					<TypeError>typeError,
 				);
 			}
 		}
 
 		if (propertyName) {
-			throw new PropertyAssignmentTypeError(
-				propertyName,
-				type.identifier,
-				this.identifier,
-				e,
-				(<typeof this>type).genericTypeArgumentIdentifiers,
-				this.genericTypeArgumentIdentifiers,
-			);
+			throw new PropertyAssignmentTypeError(propertyName, type.toString(), this.toString(), e);
 		} else if (argumentName) {
-			throw new ArgumentAssignmentTypeError(
-				argumentName,
-				type.identifier,
-				this.identifier,
-				e,
-				(<typeof this>type).genericTypeArgumentIdentifiers,
-				this.genericTypeArgumentIdentifiers,
-			);
+			throw new ArgumentAssignmentTypeError(argumentName, type.toString(), this.toString(), e);
 		} else {
-			throw new AssignmentTypeError(
-				type.identifier,
-				this.identifier,
-				e,
-				(<typeof this>type).genericTypeArgumentIdentifiers,
-				this.genericTypeArgumentIdentifiers,
-			);
+			throw new AssignmentTypeError(type.toString(), this.toString(), e);
 		}
 	}
 }

@@ -14,6 +14,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
@@ -29,6 +30,9 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
 	LambdaPrimaryExpression,
@@ -53,20 +57,16 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
-	InterfaceDeclaration,
-	ClassDeclaration,
-	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import {
+	BuiltInTypes,
 	CompoundStatement,
+	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
 	VariableDeclaration,
-	Expression,
-	BuiltInTypes,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";

@@ -1,6 +1,7 @@
 import type { CompilableType } from "./compilable-type";
 import { type TypeError, TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
+import type { GenericType } from "./generic-type";
 
 /**
  * A processed type that may be used for type checking and compilation. This type is the general type that will be used
@@ -79,5 +80,14 @@ export abstract class ProcessedType extends Type {
 		} catch (e) {
 			return false;
 		}
+	}
+
+	public toString(): string {
+		let type = this.identifier;
+		if (this.isGeneric) {
+			type +=
+				"<" + (<GenericType>(<unknown>this)).genericTypeArguments?.map((arg) => arg.type.toString()).join(", ") + ">";
+		}
+		return type;
 	}
 }

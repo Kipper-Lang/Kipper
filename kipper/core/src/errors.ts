@@ -54,7 +54,13 @@ export class KipperError extends Error {
 	 */
 	public tracebackData: TracebackMetadata;
 
-	constructor(msg: string) {
+	/**
+	 * The cause of this error. This is used to chain errors together.
+	 * @since 0.12.0
+	 */
+	public cause?: KipperError;
+
+	constructor(msg: string, cause?: KipperError) {
 		super(msg);
 		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
@@ -64,6 +70,7 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 			errorNode: undefined,
 		};
+		this.cause = cause;
 	}
 
 	/**
@@ -127,7 +134,7 @@ export class KipperError extends Error {
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
 			`${tokenSrc ? `  ${tokenSrc}\n` : ""}` +
-			`${this.name}: ${this.message}`
+			`${this.name}: ${this.message}`.replace(/\\n/g, `\n`)
 		);
 	}
 
@@ -560,7 +567,7 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  */
 export class TypeError extends KipperError {
 	constructor(msg: string, cause?: TypeError) {
-		super(msg + (cause?.message ? `\n${addLeftIndent(cause.message)}` : ""));
+		super(`${msg}${cause?.message ? `\n${addLeftIndent(cause.message, "~> ")}` : ""}`, cause);
 		this.name = "TypeError";
 	}
 }
@@ -596,20 +603,9 @@ export class BitwiseOperationTypeError extends TypeError {
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
 export class ArgumentAssignmentTypeError extends TypeError {
-	constructor(
-		paramIdentifier: string,
-		expectedType: string,
-		receivedType: string,
-		cause?: TypeError,
-		expectedGenericTypes?: Array<string>,
-		receivedGenericTypes?: Array<string>,
-	) {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
 		super(
-			`Type '${AssignmentTypeError.formatGenericTypes(receivedType, expectedGenericTypes)}' is not assignable` +
-				`to parameter '${paramIdentifier}' of type '${AssignmentTypeError.formatGenericTypes(
-					expectedType,
-					receivedGenericTypes,
-				)}'.`,
+			`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
 			cause,
 		);
 	}
@@ -622,18 +618,8 @@ export class ArgumentAssignmentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(
-		expectedType: string,
-		receivedType: string,
-		cause?: TypeError,
-		leftExpGenericTypes?: Array<string>,
-		rightExpGenericTypes?: Array<string>,
-	) {
-		super(
-			`Type '${AssignmentTypeError.formatGenericTypes(receivedType, leftExpGenericTypes)}' is not assignable` +
-				`to type '${AssignmentTypeError.formatGenericTypes(expectedType, rightExpGenericTypes)}'.`,
-			cause,
-		);
+	constructor(expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to type '${expectedType}'.`, cause);
 	}
 
 	static formatGenericTypes(identifier: string, genericTypes?: Array<string>): string {
@@ -647,22 +633,8 @@ export class AssignmentTypeError extends TypeError {
  * @since 0.11.0
  */
 export class PropertyAssignmentTypeError extends TypeError {
-	constructor(
-		identifier: string,
-		propertyType: string,
-		valueType: string,
-		cause?: TypeError,
-		propertyGenericTypes?: Array<string>,
-		valueGenericTypes?: Array<string>,
-	) {
-		super(
-			`Type '${AssignmentTypeError.formatGenericTypes(valueType, propertyGenericTypes)}' is not assignable to ` +
-				`property '${identifier}' of type '${AssignmentTypeError.formatGenericTypes(
-					propertyType,
-					valueGenericTypes,
-				)}'.`,
-			cause,
-		);
+	constructor(identifier: string, propertyType: string, valueType: string, cause?: TypeError) {
+		super(`Type '${valueType}' is not assignable to property '${identifier}' of type '${propertyType}'.`, cause);
 	}
 }
 

@@ -1,4 +1,4 @@
-import { ProcessedType } from "./processed-type";
+import type { ProcessedType } from "./processed-type";
 
 /**
  * Represents a type that can be compiled i.e. a type that exists and type checks can be done on it.

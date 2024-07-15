@@ -18,4 +18,8 @@ export class RawType extends Type {
 	public get identifier(): string {
 		return super.identifier;
 	}
+
+	public toString(): string {
+		return this.identifier;
+	}
 }

@@ -3,10 +3,16 @@
  * functions.
  * @since 0.8.0
  */
-import {BuiltInFunction, InternalFunction, ProcessedType, TranslatedCodeLine} from "@kipper/core";
+import type {
+	BuiltInFunction,
+	BuiltInVariable,
+	InternalFunction,
+	KipperProgramContext,
+	ProcessedType,
+	TranslatedCodeLine,
+} from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
-import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import type { BuiltInVariable, KipperBuiltInTypeLiteral, KipperProgramContext } from "@kipper/core";
+import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { TargetTS } from "./target";
 
 /**

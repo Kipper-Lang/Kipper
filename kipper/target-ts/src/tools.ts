@@ -2,13 +2,13 @@
  * Tools for handling the translation of Kipper code to TypeScript.
  * @since 0.8.0
  */
-import {
-	FunctionDeclaration,
+import type {
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	KipperBuiltInTypeLiteral,
+	FunctionDeclaration,
 	InternalFunction,
-	InternalFunctionArgument, ProcessedType,
+	InternalFunctionArgument,
+	ProcessedType,
 } from "@kipper/core";
 import { TargetTS } from "./target";
 

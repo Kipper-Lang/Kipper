@@ -99,7 +99,7 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 		this.programCtx.typeCheck(this).validArrayExpression(this);
 
 		const valueType =
-			this.children.length > 1 ? this.children[0].getTypeSemanticData().evaluatedType : BuiltInTypes.any;
+			this.children.length > 0 ? this.children[0].getTypeSemanticData().evaluatedType : BuiltInTypes.any;
 		this.typeSemantics = {
 			evaluatedType: new BuiltInTypeArray(valueType),
 			valueType,

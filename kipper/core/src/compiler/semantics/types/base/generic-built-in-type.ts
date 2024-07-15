@@ -21,14 +21,6 @@ export abstract class GenericBuiltInType extends BuiltInType implements GenericT
 	}
 
 	/**
-	 * Returns the identifiers of the generic type arguments.
-	 * @since 0.12.0
-	 */
-	public get genericTypeArgumentIdentifiers(): Array<string> {
-		return Object.values(this.genericTypeArguments).map((arg) => arg.identifier);
-	}
-
-	/**
 	 * Returns whether the type is a generic type.
 	 *
 	 * This is ALWAYS true, since this is a generic type.
