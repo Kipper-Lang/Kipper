@@ -4,6 +4,9 @@ import type { ObjectPropertyContext } from "../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import { PrimaryExpression } from "../../primary-expression";
 import type { CompilableASTNode } from "../../../../../compilable-ast-node";
+import type { StringPrimaryExpression } from "../../string-primary-expression";
+import type { Expression } from "../../../expression";
+import { UnableToDetermineSemanticDataError } from "../../../../../../../errors";
 
 /**
  * Object property, which represents a property inside an {@link ObjectPrimaryExpression object}. This is a key-value
@@ -74,7 +77,25 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		return; // For now, we don't have any semantic analysis for object properties.
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		let id: string | StringPrimaryExpression;
+		let value: Expression;
+		if (this.children.length < 2) {
+			id = antlrChildren[0].text;
+			value = this.children[0];
+		} else {
+			id = (<StringPrimaryExpression>this.children[0]).getSemanticData().value;
+			value = this.children[1];
+		}
+
+		this.semanticData = {
+			identifier: id,
+			expressoDepresso: value,
+		};
 	}
 
 	/**
@@ -86,7 +107,14 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		return; // For now, we don't have any type checking for object properties.
+		const semanticData = this.getSemanticData();
+
+		const expression = semanticData.expressoDepresso;
+		expression.ensureTypeSemanticallyValid();
+
+		this.typeSemantics = {
+			evaluatedType: expression.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	public checkForWarnings = undefined; // TODO!

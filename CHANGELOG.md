@@ -17,7 +17,7 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-
+- Added semantic checking and code generation for PrimaryObjectExpression and ObjectProperty
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
   (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the

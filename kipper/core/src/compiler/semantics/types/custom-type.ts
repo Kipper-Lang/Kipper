@@ -94,14 +94,12 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromInterfaceDeclaration(interfaceDeclaration: InterfaceDeclaration): CustomType {
 		interfaceDeclaration.ensureSemanticallyValid();
-		throw new KipperInternalError("Internal interface representations are not implemented.");
 
-		// TODO! Implement custom type generation from interface declaration
-		// const fields: CustomTypeFields = new Map();
-		// for (const field of interfaceSemantics.fields) {
-		// 	fields.set(field.identifier, field.type);
-		// }
-		// return new CustomType(interfaceSemantics.identifier, "interface", fields);
+		const fields: CustomTypeFields = new Map();
+		for (const field of interfaceDeclaration.getSemanticData().members) {
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().type);
+		}
+		return new CustomType(interfaceDeclaration.getSemanticData().identifier, "interface", fields);
 	}
 
 	/**
@@ -113,14 +111,11 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromObjectLiteral(objectPrimaryExpression: ObjectPrimaryExpression): CustomType {
 		objectPrimaryExpression.ensureSemanticallyValid();
-		throw new KipperInternalError("Object literal custom types are not implemented.");
-
-		// TODO! Implement custom type generation from object literal
-		// const fields: CustomTypeFields = new Map();
-		// for (const field of objectLiteral.fields) {
-		// 	fields.set(field.identifier, field.type);
-		// }
-		// return new CustomType("object", "interface", fields);
+		const fields: CustomTypeFields = new Map();
+		for (const field of objectPrimaryExpression.getSemanticData().keyValuePairs) {
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().evaluatedType);
+		}
+		return new CustomType("", "interface", fields);
 	}
 
 	/**

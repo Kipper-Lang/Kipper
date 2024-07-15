@@ -6,6 +6,7 @@ import type { InterfaceDeclarationSemantics } from "./interface-declaration-sema
 import type { InterfaceDeclarationTypeSemantics } from "./interface-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import { CustomType } from "../../../../../semantics";
 import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
 import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
@@ -119,6 +120,7 @@ export class InterfaceDeclaration extends TypeDeclaration<
 			identifier: identifier,
 			members: [...this.children] as Array<InterfaceMemberDeclaration>,
 		};
+		this.scope.addType(this);
 	}
 
 	/**
@@ -130,9 +132,9 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Interface declarations are not yet implemented."));
+		this.typeSemantics = {
+			type: CustomType.fromInterfaceDeclaration(this),
+		};
 	}
 
 	/**
