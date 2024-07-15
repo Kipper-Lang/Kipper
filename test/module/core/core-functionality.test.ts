@@ -1320,7 +1320,7 @@ describe("Core functionality", () => {
 		});
 
 		it("Assign array to array", async () => {
-			const code = "var x: Array\<num\> = [1, 2, 3]; var y: Array\<num\> = x;";
+			const code = "var x: Array<num> = [1, 2, 3]; var y: Array<num> = x;";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1331,7 +1331,7 @@ describe("Core functionality", () => {
 		});
 
 		it("Accessing array element", async () => {
-			const code = "var x: Array\<num\> = [1, 2, 3]; print(x[1] as str);";
+			const code = "var x: Array<num> = [1, 2, 3]; print(x[1] as str);";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1342,7 +1342,7 @@ describe("Core functionality", () => {
 		});
 
 		it("Assigning one array element to another", async () => {
-			const code = "var x: Array\<num\> = [1, 2, 3]; var y: num = x[1]; print(y as str);";
+			const code = "var x: Array<num> = [1, 2, 3]; var y: num = x[1]; print(y as str);";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
