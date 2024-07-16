@@ -7,9 +7,6 @@ import type {
 	InterfaceDeclaration,
 	InterfacePropertyDeclaration,
 	ObjectPrimaryExpression,
-	ParameterDeclaration,
-	TranslatedCodeLine,
-	VariableDeclaration,
 	InterfaceMethodDeclaration,
 	TranslatedExpression,
 	ParameterDeclaration,
@@ -17,9 +14,8 @@ import type {
 	VariableDeclaration,
 } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
+import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";
-import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -137,9 +133,13 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	override objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const keyValuePairs = semanticData.keyValuePairs;
-		let keyValuePairsCodeString = await this.getStringifiedKeyValuePairs(keyValuePairs);
+		const translatedKeyValuePairs = await Promise.all(
+			keyValuePairs.map(async (pair) => {
+				return [...(await pair.translateCtxAndChildren()), ",", "\n"];
+			}),
+		);
 
 		// Return the object primary expression
-		return ["{\n", ...keyValuePairsCodeString, "\n}"];
+		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
 }

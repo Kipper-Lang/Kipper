@@ -449,27 +449,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const keyValuePairs = semanticData.keyValuePairs;
-		let keyValuePairsCodeString = await this.getStringifiedKeyValuePairs(keyValuePairs);
+		const translatedKeyValuePairs = await Promise.all(
+			keyValuePairs.map(async (pair) => {
+				return [...(await pair.translateCtxAndChildren()), ",", "\n"];
+			}),
+		);
 
-		return ["{", ...keyValuePairsCodeString, "}", ";"];
+		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
-
-	protected async getStringifiedKeyValuePairs(keyValuePairs: Array<ObjectProperty>): Promise<string> {
-		let keyValuePairsCode: Array<string> = [];
-
-		for (let pair of keyValuePairs) {
-			let pairCode = await pair.translateCtxAndChildren();
-			keyValuePairsCode.push(pairCode[0] + ",\n");
-		}
-
-		let code = keyValuePairsCode.join("");
-
-		if (code.endsWith(",\n")) {
-			code = code.slice(0, -2);
-		}
-
-		return code;
-	}
 
 	/**
 	 * Translates a {@link ObjectProperty} into the JavaScript language.
@@ -483,7 +470,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const translatedExpression = (await expression.translateCtxAndChildren()).join("");
 
 		// Return the concatenated result
-		return [` ${identifier}: ${translatedExpression}`];
+		return [identifier, ": ", translatedExpression];
 	};
 
 	/**
