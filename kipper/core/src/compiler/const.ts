@@ -28,6 +28,18 @@ export type KipperMetaTypeLiteral = "type";
 export const kipperMetaTypeLiteral: KipperMetaTypeLiteral = "type";
 
 /**
+ * Any type in Kipper, which can be used to represent any type.
+ * @since 0.12.0
+ */
+export type KipperAnyTypeLiteral = "any";
+
+/**
+ * Any type in Kipper, which can be used to represent any type.
+ * @since 0.12.0
+ */
+export const kipperAnyTypeLiteral: KipperAnyTypeLiteral = "any";
+
+/**
  * Null type in Kipper.
  * @since 0.10.0
  */
@@ -55,13 +67,13 @@ export const kipperUndefinedTypeLiteral: KipperUndefinedTypeLiteral = "undefined
  * Function type in Kipper.
  * @since 0.6.0
  */
-export type KipperFuncTypeLiteral = "func";
+export type KipperFuncTypeLiteral = "Func";
 
 /**
  * Function type in Kipper.
  * @since 0.6.0
  */
-export const kipperFuncTypeLiteral: KipperFuncTypeLiteral = "func";
+export const kipperFuncTypeLiteral: KipperFuncTypeLiteral = "Func";
 
 /**
  * Void type in Kipper.
@@ -140,7 +152,7 @@ export const kipperBoolTypeLiteral: KipperBoolTypeLiteral = "bool";
  * type checking generic type, it will not change the type itself.
  * @since 0.5.0
  */
-export type KipperListTypeLiteral = "list";
+export type KipperListTypeLiteral = "Array";
 
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
@@ -149,7 +161,7 @@ export type KipperListTypeLiteral = "list";
  * @example
  * list<T>
  */
-export const kipperListTypeLiteral: KipperListTypeLiteral = "list";
+export const kipperListTypeLiteral: KipperListTypeLiteral = "Array";
 
 /**
  * All primitive types inside Kipper.
@@ -184,6 +196,7 @@ export const kipperPrimitiveTypeLiterals: Array<KipperPrimitiveTypeLiteral> = [
  * @since 0.10.0
  */
 export type KipperBuiltInTypeLiteral =
+	| KipperAnyTypeLiteral
 	| KipperMetaTypeLiteral
 	| KipperPrimitiveTypeLiteral
 	| KipperFuncTypeLiteral
@@ -194,6 +207,7 @@ export type KipperBuiltInTypeLiteral =
  * @since 0.10.0
  */
 export const kipperBuiltInTypeLiterals: Array<KipperBuiltInTypeLiteral> = [
+	kipperAnyTypeLiteral,
 	kipperMetaTypeLiteral,
 	kipperFuncTypeLiteral,
 	...kipperPrimitiveTypeLiterals,

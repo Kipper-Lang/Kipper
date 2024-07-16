@@ -22,6 +22,7 @@ export type ASTPrimaryExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_voidOrNullOrUndefinedPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_arrayPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_objectPrimaryExpression
+	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_fStringPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_identifierPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_tangledPrimaryExpression;

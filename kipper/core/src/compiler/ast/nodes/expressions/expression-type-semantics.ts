@@ -13,8 +13,6 @@ export interface ExpressionTypeSemantics extends TypeData {
 	/**
 	 * The value type that this expression evaluates to. This is used to properly represent the evaluated type of
 	 * expressions that do not explicitly show their type.
-	 *
-	 * This will always evaluate to "type", as a type specifier will always be a type.
 	 * @since 0.10.0
 	 */
 	evaluatedType: ProcessedType;

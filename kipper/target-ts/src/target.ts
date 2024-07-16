@@ -2,20 +2,8 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, KipperBuiltInTypeLiteral } from "@kipper/core";
-import {
-	kipperBoolTypeLiteral,
-	KipperCompileTarget,
-	kipperFuncTypeLiteral,
-	kipperListTypeLiteral,
-	kipperMetaTypeLiteral,
-	KipperNotImplementedError,
-	kipperNullTypeLiteral,
-	kipperNumTypeLiteral,
-	kipperStrTypeLiteral,
-	kipperUndefinedTypeLiteral,
-	kipperVoidTypeLiteral,
-} from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
+import { BuiltInTypes, KipperBuiltInTypeLiteral, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
@@ -63,31 +51,35 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType<T extends string>(kipperType: T | Array<T>): string {
+	public static getTypeScriptType(kipperType: ProcessedType | Array<ProcessedType>): string {
 		if (Array.isArray(kipperType)) {
 			// Recursively call this function for each type in the array
 			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;
 		}
 
-		switch (kipperType) {
-			case kipperBoolTypeLiteral:
+		switch (kipperType.identifier) {
+			case BuiltInTypes.bool.identifier:
 				return "boolean";
-			case kipperFuncTypeLiteral:
-				return "Function";
-			case kipperListTypeLiteral:
-				return "Array";
-			case kipperMetaTypeLiteral:
+			case BuiltInTypes.type.identifier:
 				return "object";
-			case kipperNullTypeLiteral:
+			case BuiltInTypes.null.identifier:
 				return "null";
-			case kipperNumTypeLiteral:
+			case BuiltInTypes.num.identifier:
 				return "number";
-			case kipperStrTypeLiteral:
+			case BuiltInTypes.str.identifier:
 				return "string";
-			case kipperUndefinedTypeLiteral:
+			case BuiltInTypes.undefined.identifier:
 				return "undefined";
-			case kipperVoidTypeLiteral:
+			case BuiltInTypes.void.identifier:
 				return "void";
+			case BuiltInTypes.Func.identifier:
+				return "() => any";
+			case BuiltInTypes.Array.identifier: {
+				const memberType = this.getTypeScriptType((<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type);
+				return `Array<${memberType}>`;
+			}
+			case BuiltInTypes.any.identifier:
+				return "any";
 			default:
 				throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
 		}

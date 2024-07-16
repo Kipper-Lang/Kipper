@@ -54,7 +54,13 @@ export class KipperError extends Error {
 	 */
 	public tracebackData: TracebackMetadata;
 
-	constructor(msg: string) {
+	/**
+	 * The cause of this error. This is used to chain errors together.
+	 * @since 0.12.0
+	 */
+	public cause?: KipperError;
+
+	constructor(msg: string, cause?: KipperError) {
 		super(msg);
 		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
@@ -64,6 +70,7 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 			errorNode: undefined,
 		};
+		this.cause = cause;
 	}
 
 	/**
@@ -127,7 +134,7 @@ export class KipperError extends Error {
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
 			`${tokenSrc ? `  ${tokenSrc}\n` : ""}` +
-			`${this.name}: ${this.message}`
+			`${this.name}: ${this.message}`.replace(/\\n/g, `\n`)
 		);
 	}
 
@@ -560,7 +567,7 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  */
 export class TypeError extends KipperError {
 	constructor(msg: string, cause?: TypeError) {
-		super(msg + (cause?.message ? `\n${addLeftIndent(cause.message)}` : ""));
+		super(`${msg}${cause?.message ? `\n${addLeftIndent(cause.message, "~> ")}` : ""}`, cause);
 		this.name = "TypeError";
 	}
 }
@@ -611,8 +618,13 @@ export class ArgumentAssignmentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(leftExpType: string, rightExpType: string, cause?: TypeError) {
-		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`, cause);
+	constructor(expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to type '${expectedType}'.`, cause);
+	}
+
+	static formatGenericTypes(identifier: string, genericTypes?: Array<string>): string {
+		const params = genericTypes?.join(", ");
+		return `${identifier}${params ? `<${params}>` : ""}`;
 	}
 }
 
@@ -633,6 +645,40 @@ export class PropertyAssignmentTypeError extends TypeError {
 export class PropertyNotFoundError extends TypeError {
 	constructor(objType: string, identifier: string) {
 		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a generic argument is used that is not assignable to the expected type.
+ * @since 0.12.0
+ */
+export class GenericArgumentTypeError extends TypeError {
+	constructor(identifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to generic argument '${identifier}' of type '${expectedType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown when an invalid amount of generic arguments is passed to a type.
+ * @since 0.12.0
+ */
+export class InvalidAmountOfGenericArgumentsError extends TypeError {
+	constructor(typeIdentifier: string, expected: number, received: number) {
+		super(
+			`Type '${typeIdentifier}' only accepts ${expected} generic argument${
+				expected === 1 ? "" : "s"
+			}, received ${received}.`,
+		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a generic type.
+ * @since 0.12.0
+ */
+export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Type '${identifier}' does not accept generic arguments.`);
 	}
 }
 

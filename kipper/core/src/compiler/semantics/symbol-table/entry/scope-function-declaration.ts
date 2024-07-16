@@ -96,7 +96,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get type(): ProcessedType {
-		return BuiltInTypes.func;
+		return BuiltInTypes.Func;
 	}
 
 	/**

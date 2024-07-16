@@ -31,7 +31,7 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
 	JumpStatement,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -315,7 +315,7 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link LambdaPrimaryExpression} instances.
 	 */
-	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
+	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaPrimaryExpression>;
 }

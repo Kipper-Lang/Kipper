@@ -9,6 +9,7 @@ import type { ArrayPrimaryExpressionContext } from "../../../../../lexer-parser"
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { BuiltInTypes } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
+import { BuiltInTypeArray } from "../../../../../semantics/types/built-in";
 
 /**
  * List constant expression, which represents a list constant that was defined in the source code.
@@ -82,7 +83,7 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			value: [], // TODO! Implement list data fetching.
+			value: this.children,
 		};
 	}
 
@@ -95,9 +96,13 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		// This will always be of type 'list'
+		this.programCtx.typeCheck(this).validArrayExpression(this);
+
+		const valueType =
+			this.children.length > 0 ? this.children[0].getTypeSemanticData().evaluatedType : BuiltInTypes.any;
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.list,
+			evaluatedType: new BuiltInTypeArray(valueType),
+			valueType,
 		};
 	}
 

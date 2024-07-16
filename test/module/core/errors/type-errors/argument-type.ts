@@ -53,10 +53,10 @@ describe("ArgumentAssignmentTypeError", () => {
 				defaultConfig,
 			);
 		} catch (e) {
-			assert.fail("Expected no error");
+			assert.fail("Expected no error. Reicev");
 		}
 		assert.isDefined(result, "Expected defined compilation result");
-		assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-		assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+		assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+		assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 	});
 });

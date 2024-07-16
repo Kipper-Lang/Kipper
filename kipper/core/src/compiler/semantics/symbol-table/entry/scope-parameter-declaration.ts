@@ -5,7 +5,7 @@
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
 	FunctionDeclaration,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	ParameterDeclaration,
 	ParameterDeclarationSemantics,
 	ParameterDeclarationTypeSemantics,
@@ -111,7 +111,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * Returns the function this parameter is defined in.
 	 * @since 0.10.0
 	 */
-	public get func(): FunctionDeclaration | LambdaExpression {
+	public get func(): FunctionDeclaration | LambdaPrimaryExpression {
 		return this.semanticData.func;
 	}
 
@@ -142,6 +142,6 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type === BuiltInTypes.func;
+		return this.type === BuiltInTypes.Func;
 	}
 }

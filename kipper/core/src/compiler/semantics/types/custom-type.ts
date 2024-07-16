@@ -8,6 +8,7 @@ import {
 	PropertyNotFoundError,
 } from "../../../errors";
 import type { ClassDeclaration, InterfaceDeclaration, ObjectPrimaryExpression } from "../../ast";
+import { BuiltInTypes } from "../symbol-table";
 
 /**
  * Represents the kind of a custom type.
@@ -137,7 +138,7 @@ export class CustomType extends ProcessedType {
 	 * @since 0.12.0
 	 */
 	assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void {
-		if (type === this) {
+		if (this === type || type === BuiltInTypes.any) {
 			return;
 		} else if (type instanceof CustomType && type.kind === "interface") {
 			for (const [fieldName, fieldType] of this.fields) {

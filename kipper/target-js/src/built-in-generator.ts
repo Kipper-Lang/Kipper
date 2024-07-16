@@ -7,8 +7,8 @@ import type {
 	BuiltInFunction,
 	BuiltInVariable,
 	InternalFunction,
-	TranslatedCodeLine,
 	KipperProgramContext,
+	TranslatedCodeLine,
 } from "@kipper/core";
 import { KipperTargetBuiltInGenerator } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature } from "./tools";

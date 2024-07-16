@@ -10,7 +10,9 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { GenericTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import type { GenericType } from "../../../../../semantics";
+import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Generic type specifier expression, which represents a generic type specifier.
@@ -85,9 +87,17 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+		const identifier = antlrChildren[0].text;
+		const genericArguments = <Array<TypeSpecifierExpression>>this.children.slice();
+
+		this.semanticData = {
+			rawType: new RawType(identifier),
+			genericArguments: genericArguments,
+		};
 	}
 
 	/**
@@ -96,9 +106,17 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @since 0.8.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Generic Type Expressions have not been implemented yet."));
+		const semanticData = this.getSemanticData();
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
+		const genericArguments = semanticData.genericArguments.map((arg) => arg.getTypeSemanticData().storedType);
+
+		// Ensure the type is even generic and that there are the correct number of generic arguments
+		this.programCtx.typeCheck(this).ensureValidGenericType(valueType, genericArguments);
+
+		this.typeSemantics = {
+			evaluatedType: BuiltInTypes.type,
+			storedType: (<GenericType>valueType).changeGenericTypeArguments(genericArguments),
+		};
 	}
 
 	public checkForWarnings = undefined; // TODO!

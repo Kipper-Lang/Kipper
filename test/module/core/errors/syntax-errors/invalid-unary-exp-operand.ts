@@ -79,8 +79,8 @@ describe("InvalidUnaryExpressionOperandError", () => {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("Identifier in Tangled Expression", async () => {
@@ -91,8 +91,8 @@ describe("InvalidUnaryExpressionOperandError", () => {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("Identifier in Tangled Expression (Nested)", async () => {
@@ -103,8 +103,8 @@ describe("InvalidUnaryExpressionOperandError", () => {
 				assert.fail("Expected no 'InvalidUnaryExpressionOperandError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 	});
 });

@@ -5,9 +5,9 @@ import { assert } from "chai";
 
 describe("InvalidConversionTypeError", () => {
 	describe("Error", () => {
-		it("str as func", async () => {
+		it("str as Func", async () => {
 			try {
-				await new KipperCompiler().compile('"5" as func;', defaultConfig);
+				await new KipperCompiler().compile('"5" as Func;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
@@ -17,9 +17,9 @@ describe("InvalidConversionTypeError", () => {
 			assert.fail("Expected 'InvalidConversionTypeError'");
 		});
 
-		it("num as func", async () => {
+		it("num as Func", async () => {
 			try {
-				await new KipperCompiler().compile("5 as func;", defaultConfig);
+				await new KipperCompiler().compile("5 as Func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
@@ -29,9 +29,9 @@ describe("InvalidConversionTypeError", () => {
 			assert.fail("Expected 'InvalidConversionTypeError'");
 		});
 
-		it("bool as func", async () => {
+		it("bool as Func", async () => {
 			try {
-				await new KipperCompiler().compile("true as func;", defaultConfig);
+				await new KipperCompiler().compile("true as Func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");
@@ -90,8 +90,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("str as num", async () => {
@@ -105,8 +105,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("bool as str", async () => {
@@ -120,8 +120,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("bool as num", async () => {
@@ -135,8 +135,8 @@ describe("InvalidConversionTypeError", () => {
 				assert.fail("Expected no 'InvalidConversionTypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 	});
 });

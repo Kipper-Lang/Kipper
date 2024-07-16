@@ -39,10 +39,10 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	 */
 	override variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const typeData = node.getTypeSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = TargetTS.getTypeScriptType(typeData.valueType.identifier);
+		const tsType = TargetTS.getTypeScriptType(typeSemantics.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
@@ -83,9 +83,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const params = semanticData.parameters;
-		const returnTypeIdentifier = TargetTS.getTypeScriptType(
-			semanticData.returnType.getSemanticData().typeIdentifier.identifier,
-		);
+		const returnTypeIdentifier = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
 
 		const paramsCode: TranslatedCodeLine[] = await Promise.all(
 			params.map(async (param) => {
@@ -112,8 +110,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		node: InterfacePropertyDeclaration,
 	): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const valueType = TargetTS.getTypeScriptType(semanticData.type.identifier);
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.type);
 
 		// Return the property declaration
 		return [[identifier, ":", " ", valueType, ";"]];
@@ -121,8 +120,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const valueType = TargetTS.getTypeScriptType(semanticData.valueType.identifier);
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.valueType);
 
 		// Return the parameter declaration
 		return [[identifier, ":", " ", valueType]];

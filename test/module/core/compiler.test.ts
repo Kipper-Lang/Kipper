@@ -218,7 +218,7 @@ describe("KipperCompiler", () => {
 			it("Successful Compilation", async () => {
 				const result = await compiler.compile("var x: num = 1;", { target: defaultTarget });
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected defined programCtx");
+				assert.isDefined(result?.programCtx, "Expected defined programCtx");
 				assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 				assert.equal(result!!.errors.length, 0, "Expected no errors");
 			});
@@ -238,7 +238,7 @@ describe("KipperCompiler", () => {
 					it("One error", async () => {
 						const result = await compiler.compile("var x: num =", { target: defaultTarget });
 						assert.isDefined(result, "Expected defined compilation result");
-						assert.isUndefined(result!!.programCtx, "Expected undefined programCtx (syntax error)");
+						assert.isUndefined(result?.programCtx, "Expected undefined programCtx (syntax error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 1, "Expected an error to be reported");
 						assert.equal(result.errors[0].constructor.name, "LexerOrParserSyntaxError", "Expected different error");
@@ -261,7 +261,7 @@ describe("KipperCompiler", () => {
 					it("One error", async () => {
 						const result = await compiler.compile("const x: num;", { target: defaultTarget });
 						assert.isDefined(result, "Expected defined compilation result");
-						assert.isDefined(result!!.programCtx, "Expected undefined programCtx (semantic error)");
+						assert.isDefined(result?.programCtx, "Expected undefined programCtx (semantic error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 1, "Expected an error to be reported");
 						assert.equal(result.errors[0].constructor.name, "UndefinedConstantError", "Expected different error");
@@ -272,7 +272,7 @@ describe("KipperCompiler", () => {
 							target: defaultTarget,
 						});
 						assert.isDefined(result, "Expected defined compilation result");
-						assert.isDefined(result!!.programCtx, "Expected undefined programCtx (semantic error)");
+						assert.isDefined(result?.programCtx, "Expected undefined programCtx (semantic error)");
 						assert.equal(result!!.warnings.length, 0, "Expected no warnings");
 						assert.equal(result!!.errors.length, 3, "Expected three errors to be reported");
 						for (const error of result!!.errors) {

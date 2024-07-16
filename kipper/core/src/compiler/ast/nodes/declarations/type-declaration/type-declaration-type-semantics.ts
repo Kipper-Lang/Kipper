@@ -1,6 +1,5 @@
 import type { TypeData } from "../../../ast-node";
 import type { ProcessedType } from "../../../../semantics";
-import { CustomType } from "../../../../semantics";
 
 /**
  * Type semantics for a {@link TypeDeclaration}.
