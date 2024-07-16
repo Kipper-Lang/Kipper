@@ -731,6 +731,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 *
 	 * This for now only checks that the types of the array elements are always the same.
 	 * @param param The array primary expression to check.
+	 * @since 0.12.0
 	 */
 	validArrayExpression(param: ArrayPrimaryExpression) {
 		const children = param.getSemanticData().value;
