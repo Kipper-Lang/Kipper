@@ -19,13 +19,13 @@ To use development versions of Kipper download the
 ### Added
 
 - Added semantic checking and code generation for object literals and object properties.
-	([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
+  ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
   (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented the generic `Array<T>` type and single-type array initializers.
-	([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
+  ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
@@ -45,9 +45,9 @@ To use development versions of Kipper download the
   - `GenericArgumentTypeError`, which is thrown when a generic argument is used with an invalid type. This is an error
     indicating an invalid logic that should be fixed.
   - `InvalidAmountOfGenericArgumentsError`, which is thrown when an invalid amount of generic arguments is used. This is
-		an error indicating an invalid logic that should be fixed.
+    an error indicating an invalid logic that should be fixed.
   - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
-		an error indicating an invalid logic that should be fixed.
+    an error indicating an invalid logic that should be fixed.
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
