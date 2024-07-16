@@ -38,6 +38,12 @@ To use development versions of Kipper download the
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
     type. This is an error indicating an invalid logic that should be fixed.
+  - `GenericArgumentTypeError`, which is thrown when a generic argument is used with an invalid type. This is an error
+    indicating an invalid logic that should be fixed.
+  - `InvalidAmountOfGenericArgumentsError`, which is thrown when an invalid amount of generic arguments is used. This is
+		an error indicating an invalid logic that should be fixed.
+  - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
+		an error indicating an invalid logic that should be fixed.
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
@@ -47,6 +53,8 @@ To use development versions of Kipper download the
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
   - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
   - `CompilableType`, which represents a type that can be compiled.
+- New functions:
+  - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
 
 ### Changed
 
