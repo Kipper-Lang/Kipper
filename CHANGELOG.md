@@ -22,6 +22,8 @@ To use development versions of Kipper download the
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
   (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+- Implemented the generic `Array<T>` type and single-type array initializers.
+	([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
@@ -51,7 +53,7 @@ To use development versions of Kipper download the
   - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
   - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
-  - `TypeDeclarationTypeSemantics`, which represents the type semantics of a type declaration.
+  - `TypeDeclarationTyp`KipperTypeChecker.validArrayExpression`eSemantics`, which represents the type semantics of a type declaration.
   - `CompilableType`, which represents a type that can be compiled.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
