@@ -8,14 +8,14 @@ import { KipperInternalError } from "../../../../errors";
  * Represents a generic built-in type that is used in the type analysis phase.
  * @since 0.12.0
  */
-export abstract class GenericBuiltInType extends BuiltInType implements GenericType {
+export abstract class GenericBuiltInType<T extends GenericTypeArguments> extends BuiltInType implements GenericType<T> {
 	/**
 	 * The generic type arguments for this type.
 	 * @since 0.12.0
 	 */
-	public readonly genericTypeArguments: GenericTypeArguments;
+	public readonly genericTypeArguments: T;
 
-	protected constructor(identifier: KipperBuiltInTypeLiteral, genericTypeArguments: GenericTypeArguments) {
+	protected constructor(identifier: KipperBuiltInTypeLiteral, genericTypeArguments: T) {
 		super(identifier);
 		this.genericTypeArguments = genericTypeArguments;
 	}
@@ -30,7 +30,7 @@ export abstract class GenericBuiltInType extends BuiltInType implements GenericT
 		return true;
 	}
 
-	public abstract changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): GenericType;
+	public abstract changeGenericTypeArguments(genericTypeArguments: T): GenericType<T>;
 
 	/**
 	 * Asserts that this type is assignable to another type.

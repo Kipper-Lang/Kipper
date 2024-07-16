@@ -11,12 +11,18 @@ import {
 import { BuiltInTypes } from "../../symbol-table";
 
 /**
+ * Represents the generic arguments for the built-in type `Array`.
+ * @since 0.12.0
+ */
+export type BuiltInTypeArrayGenericArguments = [{ identifier: "T"; type: ProcessedType }];
+
+/**
  * Represents the built-in type `Array`.
  *
  * This is a generic type, which takes in exactly one type argument.
  * @since 0.12.0
  */
-export class BuiltInTypeArray extends GenericBuiltInType {
+export class BuiltInTypeArray extends GenericBuiltInType<BuiltInTypeArrayGenericArguments> {
 	constructor(genericTypeArgument: ProcessedType) {
 		super("Array", [{ identifier: "T", type: genericTypeArgument }]);
 	}
@@ -29,15 +35,8 @@ export class BuiltInTypeArray extends GenericBuiltInType {
 		return this.genericTypeArguments[0].type.isCompilable;
 	}
 
-	public changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): BuiltInTypeArray {
-		if (genericTypeArguments.length !== this.genericTypeArguments.length) {
-			throw new KipperInternalError(
-				"The length of the new generic type arguments must be equal to the length of the current generic type arguments.",
-			);
-		}
-
-		// TODO! Implement generic type arguments
-		return new BuiltInTypeArray(genericTypeArguments[0]);
+	public changeGenericTypeArguments(genericTypeArguments: BuiltInTypeArrayGenericArguments): BuiltInTypeArray {
+		return new BuiltInTypeArray(genericTypeArguments[0].type);
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
@@ -50,14 +49,16 @@ export class BuiltInTypeArray extends GenericBuiltInType {
 			type instanceof BuiltInTypeArray &&
 			this.genericTypeArguments.length === (<typeof this>type).genericTypeArguments.length
 		) {
+			const [valueType] = this.genericTypeArguments;
+			const [otherValueType] = (<typeof this>type).genericTypeArguments;
 			try {
-				this.genericTypeArguments[0].type.assertAssignableTo((<typeof this>type).genericTypeArguments[0].type);
+				valueType.type.assertAssignableTo(otherValueType.type);
 				return;
 			} catch (typeError) {
 				e = new GenericArgumentTypeError(
-					(<typeof this>type).genericTypeArguments[0].identifier,
-					(<typeof this>type).genericTypeArguments[0].type.toString(),
-					this.genericTypeArguments[0].type.toString(),
+					otherValueType.identifier,
+					otherValueType.type.toString(),
+					valueType.type.toString(),
 					<TypeError>typeError,
 				);
 			}
