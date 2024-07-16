@@ -19,4 +19,12 @@ export abstract class Type {
 	public get identifier(): string {
 		return this._identifier;
 	}
+
+	/**
+	 * Returns the full string representation of this type.
+	 *
+	 * This also includes generic type arguments if this type is a generic type.
+	 * @since 0.12.0
+	 */
+	public abstract toString(): string;
 }

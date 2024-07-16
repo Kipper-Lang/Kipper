@@ -4,7 +4,6 @@
  */
 import type { TypeDeclarationSemantics } from "../type-declaration-semantics";
 import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
-import { InterfaceMemberDeclarationSemantics } from "./interface-member-declaration";
 
 /**
  * Semantics for AST Node {@link ClassDeclaration}.

@@ -2,18 +2,18 @@
  * Semantics for AST Node {@link LambdaExpression}.
  * @since 0.11.0
  */
-import type { ExpressionSemantics } from "../expression-semantics";
-import type { ParameterDeclaration } from "../../declarations";
-import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
-import type { CompoundStatement } from "../../statements";
-import type { Expression } from "../expression";
-import type { RawType } from "../../../../semantics";
+import type { ExpressionSemantics } from "../../expression-semantics";
+import type { ParameterDeclaration } from "../../../declarations";
+import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
+import type { CompoundStatement } from "../../../statements";
+import type { Expression } from "../../expression";
+import type { RawType } from "../../../../../semantics";
 
 /**
  * Semantics for AST Node {@link LambdaExpression}.
  * @since 0.11.0
  */
-export interface LambdaExpressionSemantics extends ExpressionSemantics {
+export interface LambdaPrimaryExpressionSemantics extends ExpressionSemantics {
 	/**
 	 * The return type of the lambda expression.
 	 * @since 0.11.0

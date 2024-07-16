@@ -35,7 +35,7 @@ import type {
 	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
 	LogicalExpressionSemantics,
@@ -57,11 +57,7 @@ import type {
 	TranslatedExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
-	InterfacePropertyDeclaration,
 	WhileLoopIterationStatement,
-	InterfaceDeclaration,
-	ClassDeclaration,
-	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import {
 	BuiltInTypes,
@@ -436,7 +432,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
 	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const values = node.getSemanticData().value;
+		const translatedValues: Array<TranslatedExpression> = await Promise.all(
+			values.map(async (value, i) => {
+				const exp = await value.translateCtxAndChildren();
+				return [...exp, i + 1 === values.length ? "" : ", "];
+			}),
+		);
+		return ["[", ...translatedValues.flat(), "]"];
 	};
 
 	/**
@@ -831,9 +834,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link LambdaExpression} into the JavaScript language.
+	 * Translates a {@link LambdaPrimaryExpression} into the JavaScript language.
 	 */
-	lambdaPrimaryExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+	lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
 		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;

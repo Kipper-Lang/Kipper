@@ -33,7 +33,6 @@ import {
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
 	InterfaceDeclarationContext,
-	InterfaceMemberDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
@@ -67,7 +66,6 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
-import { InterfaceMemberDeclaration, InterfaceMemberDeclarationSemantics } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -96,7 +94,7 @@ import {
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
 	JumpStatement,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
@@ -178,7 +176,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
-		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaExpression,
+		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -327,7 +325,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseAndExpression: BitwiseAndExpression,
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
-		RULE_lambdaPrimaryExpression: LambdaExpression,
+		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**

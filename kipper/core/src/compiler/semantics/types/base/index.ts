@@ -5,3 +5,6 @@
 export * from "./type";
 export * from "./processed-type";
 export * from "./compilable-type";
+export * from "./generic-type";
+export * from "./generic-built-in-type";
+export * from "./built-in-type";

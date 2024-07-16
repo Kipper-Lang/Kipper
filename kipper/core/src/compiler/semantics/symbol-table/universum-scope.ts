@@ -1,25 +1,40 @@
 import { Scope } from "./base";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
-import { BuiltInType } from "../types";
+import type { BuiltInType } from "../types";
 import type { KipperProgramContext } from "../../program-ctx";
 import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
 import type { KipperBuiltInTypeLiteral } from "../../const";
+import {
+	BuiltInTypeArray,
+	BuiltInTypeBool,
+	BuiltInTypeFunc,
+	BuiltInTypeNull,
+	BuiltInTypeNum,
+	BuiltInTypeStr,
+	BuiltInTypeType,
+	BuiltInTypeUndefined,
+	BuiltInTypeVoid,
+} from "../types/built-in";
+import { BuiltInTypeAny } from "../types/built-in/any";
+
+const any = new BuiltInTypeAny();
 
 /**
  * Contains all the built-in types that are used in the type analysis phase.
  * @since 0.11.0
  */
 export const BuiltInTypes = {
-	type: new BuiltInType("type"),
-	undefined: new BuiltInType("undefined"),
-	void: new BuiltInType("void"),
-	null: new BuiltInType("null"),
-	bool: new BuiltInType("bool"),
-	num: new BuiltInType("num"),
-	str: new BuiltInType("str"),
-	func: new BuiltInType("func"),
-	list: new BuiltInType("list"),
+	any: any,
+	type: new BuiltInTypeType(),
+	undefined: new BuiltInTypeUndefined(),
+	void: new BuiltInTypeVoid(),
+	null: new BuiltInTypeNull(),
+	bool: new BuiltInTypeBool(),
+	num: new BuiltInTypeNum(),
+	str: new BuiltInTypeStr(),
+	Func: new BuiltInTypeFunc(),
+	Array: new BuiltInTypeArray(any),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
 /**

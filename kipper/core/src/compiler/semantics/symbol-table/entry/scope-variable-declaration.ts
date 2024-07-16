@@ -155,6 +155,6 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type === BuiltInTypes.func;
+		return this.type === BuiltInTypes.Func;
 	}
 }

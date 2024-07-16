@@ -406,7 +406,7 @@ identifierTypeSpecifierExpression
 	;
 
 genericTypeSpecifierExpression
-	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
+	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
 	;
 
 typeofTypeSpecifierExpression

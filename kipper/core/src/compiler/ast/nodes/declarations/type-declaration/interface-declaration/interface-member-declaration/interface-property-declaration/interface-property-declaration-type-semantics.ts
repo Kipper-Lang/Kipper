@@ -1,6 +1,5 @@
 import type { TypeDeclarationTypeSemantics } from "../../../type-declaration-type-semantics";
 import type { ProcessedType } from "../../../../../../../semantics";
-import { CustomType } from "../../../../../../../semantics";
 
 /**
  * Type semantics for AST Node {@link InterfacePropertyDeclaration}.

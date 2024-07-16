@@ -160,7 +160,7 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 		const isDefined = Boolean(assignValue);
 		const storageType = <KipperStorageType>this.tokenStream.getText(storageTypeCtx.sourceInterval);
-		const valueType: RawType = typeSpecifier.getSemanticData().typeIdentifier;
+		const valueType: RawType = typeSpecifier.getSemanticData().rawType;
 
 		this.semanticData = {
 			isDefined: isDefined,

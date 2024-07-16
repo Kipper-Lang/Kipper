@@ -92,7 +92,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			typeIdentifier: new RawType(this.sourceCode),
+			rawType: new RawType(this.sourceCode),
 		};
 	}
 
@@ -105,7 +105,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 		const semanticData = this.getSemanticData();
 
 		// Create a checked type instance (this function handles error recovery and invalid types)
-		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier, this.scope);
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
 		this.typeSemantics = {
 			// A type specifier will always evaluate to be of type 'type'
 			evaluatedType: BuiltInTypes.type,

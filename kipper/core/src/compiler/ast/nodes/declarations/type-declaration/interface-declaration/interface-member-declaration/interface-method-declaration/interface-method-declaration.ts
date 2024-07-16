@@ -4,13 +4,11 @@
  */
 import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
 import { BuiltInTypes } from "../../../../../../../semantics";
-import { RawType } from "../../../../../../../semantics";
 import type { InterfaceMethodDeclarationContext } from "../../../../../../../lexer-parser";
-import { CompoundStatementContext, DeclaratorContext } from "../../../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
+import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import { InterfaceMemberDeclaration } from "../interface-member-declaration";
 import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../../../../errors";
 import type { InterfaceMethodDeclarationSemantics } from "./interface-method-declaration-semantics";
 import type { InterfaceMethodDeclarationTypeSemantics } from "./interface-method-declaration-type-semantics";
 import type { IdentifierTypeSpecifierExpression } from "../../../../../expressions";
@@ -166,7 +164,7 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			returnType: returnType,
-			type: BuiltInTypes.func,
+			type: BuiltInTypes.Func,
 		};
 	}
 

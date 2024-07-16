@@ -174,7 +174,7 @@ export class FunctionDeclaration
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const returnType: RawType = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const returnType: RawType = retTypeSpecifier.getSemanticData().rawType;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,

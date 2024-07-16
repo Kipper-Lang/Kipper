@@ -16,7 +16,8 @@ import type {
 	Statement,
 	UnaryExpression,
 	UnaryExpressionSemantics,
-	LambdaExpression,
+	LambdaPrimaryExpression,
+	ArrayPrimaryExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -44,6 +45,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { CanNotUseNonGenericAsGenericTypeError, InvalidAmountOfGenericArgumentsError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -62,7 +64,8 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 } from "../../../errors";
-import type { RawType, ProcessedType } from "../types";
+import type { RawType, ProcessedType, GenericType, BuiltInTypeArray } from "../types";
+import { GenericTypeArguments } from "../types";
 import { UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
@@ -102,7 +105,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public getCheckedType(rawType: RawType, scope: Scope): ProcessedType {
 		try {
-			const type = this.getTypeFromIdentifier(rawType.identifier, scope);
+			const type = this.getTypeFromIdentifier(rawType.toString(), scope);
 			return type.typeValue;
 		} catch (e) {
 			// If the error is not a KipperError, rethrow it (since it is not a rawType error, and we don't know what happened)
@@ -116,11 +119,29 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 				this.programCtx.reportError(e);
 
 				// Recover from the error by wrapping the undefined rawType
-				return new UndefinedType(rawType.identifier);
+				return new UndefinedType(rawType.toString());
 			}
 
 			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
 			throw e;
+		}
+	}
+
+	/**
+	 * Ensures that the given {@link type generic type} is valid by checking whether the provided generic arguments
+	 * match the generic type's constraints.
+	 *
+	 * As generics are not fully implemented, this only checks for the number of arguments.
+	 * @param type The generic type to check.
+	 * @param args The generic arguments to check.
+	 */
+	public ensureValidGenericType(type: ProcessedType | GenericType, args: ProcessedType[]): void {
+		if (!type.isGeneric || !("genericTypeArguments" in type)) {
+			throw this.assertError(new CanNotUseNonGenericAsGenericTypeError(type.toString()));
+		} else if (type.genericTypeArguments.length !== args.length) {
+			throw this.assertError(
+				new InvalidAmountOfGenericArgumentsError(type.toString(), type.genericTypeArguments.length, args.length),
+			);
 		}
 	}
 
@@ -141,7 +162,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 			// If the reference is not callable, throw an error
 			if (!target.isCallable) {
-				throw this.assertError(new ExpressionNotCallableError(targetType.identifier));
+				throw this.assertError(new ExpressionNotCallableError(targetType.toString()));
 			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
 				// Calling a function stored in a variable or parameter is not implemented yet
 				throw this.notImplementedError(
@@ -303,7 +324,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure that both expressions are of type 'num'
 		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
-			throw this.assertError(new InvalidRelationalComparisonTypeError(leftOpType.identifier, rightOpType.identifier));
+			throw this.assertError(new InvalidRelationalComparisonTypeError(leftOpType.toString(), rightOpType.toString()));
 		}
 	}
 
@@ -329,7 +350,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure that the operator '+', '-', '++' and '--' are only used on numbers
 		if (semanticData.operator !== "!" && expType !== BuiltInTypes.num) {
-			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType.identifier));
+			throw this.assertError(new InvalidUnaryExpressionTypeError(semanticData.operator, expType.toString()));
 		}
 
 		// Ensure that the operand of an '++' and '--' modifier expression is a reference
@@ -387,7 +408,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			}
 
 			// If types are not matching, not numeric, and they are not of string-like types, throw an error
-			throw this.assertError(new ArithmeticOperationTypeError(leftOpType.identifier, rightOpType.identifier));
+			throw this.assertError(new ArithmeticOperationTypeError(leftOpType.toString(), rightOpType.toString()));
 		}
 	}
 
@@ -410,7 +431,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// Ensure that both expressions are of type 'num'
 		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
-			throw this.assertError(new BitwiseOperationTypeError(leftOpType.identifier, rightOpType.identifier));
+			throw this.assertError(new BitwiseOperationTypeError(leftOpType.toString(), rightOpType.toString()));
 		}
 	}
 
@@ -443,7 +464,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			) !== undefined;
 		if (!viableConversion) {
 			throw this.assertError(
-				new InvalidConversionTypeError(originalCompileType.identifier, targetCompileType.identifier),
+				new InvalidConversionTypeError(originalCompileType.toString(), targetCompileType.toString()),
 			);
 		}
 	}
@@ -489,7 +510,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {IncompleteReturnsInCodePathsError} If not all code paths return a value.
 	 * @since 0.10.0
 	 */
-	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaExpression): void {
+	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
 		const returnType = typeData.returnType;
@@ -580,9 +601,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		// TODO! Add support for 'object' types once they are implemented
-		if (objType !== BuiltInTypes.str && objType !== BuiltInTypes.list) {
-			throw this.assertError(new ValueNotIndexableTypeError(objType.identifier));
+		if (!objType.isAssignableTo(BuiltInTypes.str) && !objType.isAssignableTo(BuiltInTypes.Array)) {
+			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
 		}
 	}
 
@@ -604,7 +624,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
 		if (keyType !== BuiltInTypes.num) {
-			throw this.assertError(new InvalidKeyTypeError(objType.identifier, keyType.identifier));
+			throw this.assertError(new InvalidKeyTypeError(objType.toString(), keyType.toString()));
 		}
 	}
 
@@ -627,9 +647,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// As currently only strings and lists are indexable, for now we only need to check for numeric indexes
 		if (startType !== undefined && startType !== BuiltInTypes.num) {
-			throw this.assertError(new InvalidKeyTypeError(objType.identifier, startType.identifier), key.start);
+			throw this.assertError(new InvalidKeyTypeError(objType.toString(), startType.toString()), key.start);
 		} else if (endType !== undefined && endType !== BuiltInTypes.num) {
-			throw this.assertError(new InvalidKeyTypeError(objType.identifier, endType.identifier), key.end);
+			throw this.assertError(new InvalidKeyTypeError(objType.toString(), endType.toString()), key.end);
 		}
 	}
 
@@ -658,32 +678,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
 				);
 			case "bracket": {
-				if (objType === BuiltInTypes.str) {
-					// Also ensure the key is valid
-					this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
+				this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
 
-					return BuiltInTypes.str;
+				if (objType.isAssignableTo(BuiltInTypes.Array)) {
+					return (<BuiltInTypeArray>objType).genericTypeArguments[0].type;
 				} else {
-					// Must be a list -> Not implemented yet
-					throw this.notImplementedError(
-						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
-					); // TODO! Add support for lists
+					return BuiltInTypes.str;
 				}
 			}
 			case "slice": {
-				if (objType === BuiltInTypes.str) {
-					// Also ensure the key is valid
-					this.validSliceNotationKey(
-						semanticData.objectLike,
-						<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
-					);
+				this.validSliceNotationKey(
+					semanticData.objectLike,
+					<{ start?: Expression; end?: Expression }>semanticData.propertyIndexOrKeyOrSlice,
+				);
 
-					return BuiltInTypes.str;
+				if (objType.isAssignableTo(BuiltInTypes.Array)) {
+					return objType;
 				} else {
-					// Must be a list -> Not implemented yet
-					throw this.notImplementedError(
-						new KipperNotImplementedError("Member access expression on lists are not implemented yet"),
-					); // TODO! Add support for lists
+					return BuiltInTypes.str;
 				}
 			}
 		}
@@ -711,6 +723,29 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					"Conditional expressions with mismatching branch return types are not implemented yet",
 				),
 			);
+		}
+	}
+
+	/**
+	 * Checks whether the passed array expression is valid.
+	 *
+	 * This for now only checks that the types of the array elements are always the same.
+	 * @param param The array primary expression to check.
+	 * @since 0.12.0
+	 */
+	validArrayExpression(param: ArrayPrimaryExpression) {
+		const children = param.getSemanticData().value;
+		if (children.length > 0) {
+			const expectedType = children[0].getTypeSemanticData().evaluatedType;
+
+			for (const child of children) {
+				if (child.getTypeSemanticData().evaluatedType !== expectedType) {
+					// Arrays may only have a single type of elements (for now)
+					throw this.notImplementedError(
+						new KipperNotImplementedError("Arrays with multiple types of elements are not implemented yet."),
+					);
+				}
+			}
 		}
 	}
 }

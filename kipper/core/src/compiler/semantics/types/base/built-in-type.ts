@@ -1,13 +1,13 @@
-import { ProcessedType } from "./base/processed-type";
-import type { KipperBuiltInTypeLiteral } from "../../const";
-import type { CompilableType } from "./base/compilable-type";
-import { ArgumentAssignmentTypeError, AssignmentTypeError, PropertyAssignmentTypeError } from "../../../errors";
+import { ProcessedType } from "./processed-type";
+import type { KipperBuiltInTypeLiteral } from "../../../const";
+import { ArgumentAssignmentTypeError, AssignmentTypeError, PropertyAssignmentTypeError } from "../../../../errors";
+import { BuiltInTypes } from "../../symbol-table";
 
 /**
  * Represents a built-in type that is used in the type analysis phase.
  * @since 0.11.0
  */
-export class BuiltInType extends ProcessedType implements CompilableType {
+export abstract class BuiltInType extends ProcessedType {
 	public static readonly interchangeableTypes = ["void", "undefined"];
 
 	public constructor(identifier: KipperBuiltInTypeLiteral) {
@@ -17,10 +17,10 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 	/**
 	 * Returns whether the type is compilable.
 	 *
-	 * This is ALWAYS true, since built-in types are always compilable.
+	 * This is usually true for built-in types, but for generics it depends on the generic type arguments.
 	 * @since 0.11.0
 	 */
-	public get isCompilable(): true {
+	public get isCompilable(): boolean {
 		return true;
 	}
 
@@ -35,7 +35,7 @@ export class BuiltInType extends ProcessedType implements CompilableType {
 	 * @since 0.11.0
 	 */
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void {
-		if (this === type) {
+		if (this === type || type === BuiltInTypes.any) {
 			return;
 		} else if (
 			BuiltInType.interchangeableTypes.includes(this.identifier) &&

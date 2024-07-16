@@ -1,7 +1,6 @@
 import type { TypeDeclarationSemantics } from "../../../type-declaration-semantics";
 import type { IdentifierTypeSpecifierExpression } from "../../../../../expressions";
 import type { ParameterDeclaration } from "../../../../parameter-declaration";
-import type { RawType } from "../../../../../../../semantics";
 
 /**
  * Semantics for AST Node {@link InterfacePropertyDeclaration}.
