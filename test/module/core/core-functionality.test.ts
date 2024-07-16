@@ -1518,4 +1518,16 @@ describe("Core functionality", () => {
 			);
 		});
 	});
+
+	describe("Object literals", () => {
+		it("should be able to create an Object literal", async () => {
+			const fileContent = "{ x: 1, y: '2' };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
+		});
+	});
 });

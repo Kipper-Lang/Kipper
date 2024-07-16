@@ -447,7 +447,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const keyValuePairs = semanticData.keyValuePairs;
+		const translatedKeyValuePairs = await Promise.all(
+			keyValuePairs.map(async (pair) => {
+				return [...(await pair.translateCtxAndChildren()), ",", "\n"];
+			}),
+		);
+
+		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
 
 	/**
@@ -455,7 +463,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
-		return [];
+		const expression = node.getSemanticData().expressoDepresso;
+		const identifier = node.getSemanticData().identifier;
+
+		// Await the translation and join the array into a string
+		const translatedExpression = (await expression.translateCtxAndChildren()).join("");
+
+		// Return the concatenated result
+		return [identifier, ": ", translatedExpression];
 	};
 
 	/**
