@@ -12,6 +12,8 @@ import type {
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	VariableDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
@@ -141,5 +143,32 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		// Return the object primary expression
 		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
+	};
+
+	override classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const params = semanticData.parameters;
+		const body = semanticData.functionBody;
+		const returnType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().evaluatedType);
+
+		const translatedParams = (await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			))
+			.map((param) => [...(param.flat()), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
+
+		return [[identifier, "(", ...translatedParams, ")", ":", " ", returnType], ...(await body.translateCtxAndChildren())];
+	};
+
+	override classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const typeScriptType = TargetTS.getTypeScriptType(semanticData.typeSpecifier.getTypeSemanticData().storedType);
+
+		return [identifier, ":", " ", typeScriptType];
 	};
 }

@@ -7,6 +7,8 @@ import type { FunctionDeclaration, LambdaPrimaryExpression, ParameterDeclaration
 import type { ScopeDeclaration } from "./entry";
 import { ScopeParameterDeclaration } from "./entry";
 import { LocalScope } from "./local-scope";
+import type { ClassMethodDeclaration } from "../../ast";
+import type { ClassConstructorDeclaration } from "../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * A function-specific scope that is bound to a {@link FunctionDeclaration} and not the global namespace.
@@ -15,7 +17,9 @@ import { LocalScope } from "./local-scope";
 export class FunctionScope extends LocalScope {
 	protected readonly _arguments: Map<string, ScopeParameterDeclaration>;
 
-	constructor(public ctx: FunctionDeclaration | LambdaPrimaryExpression) {
+	constructor(
+		public ctx: FunctionDeclaration | LambdaPrimaryExpression | ClassMethodDeclaration | ClassConstructorDeclaration,
+	) {
 		super(ctx);
 		this._arguments = new Map<string, ScopeParameterDeclaration>();
 	}

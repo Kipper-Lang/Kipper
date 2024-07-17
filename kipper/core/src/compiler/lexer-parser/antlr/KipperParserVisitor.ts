@@ -1,9 +1,11 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
-// kind values.
-import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
-import KipperParserBase from "./base/KipperParserBase";
+
+	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+	// kind values.
+	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+	import KipperParserBase from "./base/KipperParserBase";
+
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
@@ -60,6 +62,10 @@ import { InterfaceMemberDeclarationContext } from "./KipperParser";
 import { InterfacePropertyDeclarationContext } from "./KipperParser";
 import { InterfaceMethodDeclarationContext } from "./KipperParser";
 import { ClassDeclarationContext } from "./KipperParser";
+import { ClassMemberDeclarationContext } from "./KipperParser";
+import { ClassPropertyDeclarationContext } from "./KipperParser";
+import { ClassMethodDeclarationContext } from "./KipperParser";
+import { ClassConstructorDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
@@ -122,6 +128,7 @@ import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeSpecifierIdentifierContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -534,6 +541,34 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitClassDeclaration?: (ctx: ClassDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classMemberDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassMemberDeclaration?: (ctx: ClassMemberDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classPropertyDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassPropertyDeclaration?: (ctx: ClassPropertyDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classMethodDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassMethodDeclaration?: (ctx: ClassMethodDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classConstructorDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassConstructorDeclaration?: (ctx: ClassConstructorDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.statement`.
@@ -969,3 +1004,4 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 */
 	visitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => Result;
 }
+

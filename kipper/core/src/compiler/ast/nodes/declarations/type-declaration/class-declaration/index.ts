@@ -6,3 +6,4 @@
 export * from "./class-declaration";
 export * from "./class-declaration-semantics";
 export * from "./class-declaration-type-semantics";
+export * from "./class-member-declaration/";
