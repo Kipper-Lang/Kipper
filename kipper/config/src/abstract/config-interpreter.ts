@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import type { ConfigFile } from "./config-file";
 import type { ConfigErrorMetaData } from "../errors";
 import { ConfigValidationError, UnknownFieldError } from "../errors";
