@@ -5,17 +5,20 @@
 import type {
 	FunctionDeclaration,
 	InterfaceDeclaration,
-	InterfacePropertyDeclaration,
 	ObjectPrimaryExpression,
 	InterfaceMethodDeclaration,
 	TranslatedExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	VariableDeclaration,
+	InterfaceMemberDeclaration,
+	InterfaceMemberDeclarationSemantics,
 } from "@kipper/core";
+import { InterfacePropertyDeclaration } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";
+import type { InterfaceMemberDeclarationTypeSemantics } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration-type-semantics";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -62,25 +65,47 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
-	private generateInterfaceRuntimeTypeChecks = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		var semanticData = node.getSemanticData();
-		var interfaceName = semanticData.identifier;
-		var interfaceMembers = semanticData.members;
+	private generateInterfaceRuntimeTypeChecks = async (
+		node: InterfaceDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const interfaceName = semanticData.identifier;
+		const interfaceMembers = semanticData.members;
 
-		var memberDeclarations = await Promise.all(
-			interfaceMembers.map(async (member) => {
-				return member.translateCtxAndChildren();
-			}),
-		);
+		let varName = "__intf_" + interfaceName;
 
-		let varName = "_intf_" + interfaceName;
-		let properties = ""; // TODO
+		let propertiesWithTypes = "";
+		for (let member of interfaceMembers) {
+			if (member instanceof InterfacePropertyDeclaration) {
+				let property = member.getSemanticData();
+				let type = member.getTypeSemanticData();
+				propertiesWithTypes += `"${property.identifier}": ${TargetTS.getTypeScriptType(type.type)}, `;
+			}
+		}
+
 		let methods = "";
 
 		let lines: Array<TranslatedCodeLine> = [
-			["const", varName, "=", "new", "Type(", interfaceName, ",", "[", properties, "]", ",", "[", methods, "]", ")" ],
+			[
+				"const ",
+				varName,
+				" = ",
+				"new ",
+				"Type(",
+				interfaceName,
+				",",
+				"[{",
+				propertiesWithTypes,
+				"}]",
+				",",
+				"[",
+				methods,
+				"]",
+				")",
+			],
 		];
-	}
+		return lines;
+	};
 
 	override interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
@@ -93,10 +118,13 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			}),
 		);
 
+		let runtimeTypeChecks = await this.generateInterfaceRuntimeTypeChecks(node);
+
 		return [
 			["interface", " ", interfaceName, " ", "{"],
 			...memberDeclarations.flat().map((line) => [" ", ...line]),
 			["}"],
+			...runtimeTypeChecks,
 		];
 	};
 

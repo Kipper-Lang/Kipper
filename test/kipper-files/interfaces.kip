@@ -1,0 +1,4 @@
+interface X {
+	a: str;
+	b: num;
+}
