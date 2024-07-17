@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link IdentifierPrimaryExpression}.
  * @since 0.5.0
  */
-import type { Reference } from "../../../../../analysis";
+import type { Reference } from "../../../../../semantics";
 import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
 
 /**

@@ -42,12 +42,10 @@ blockItem
 
 declaration
     :   variableDeclaration SemiColon
-    | 	functionDeclaration SemiColon?
+    | 	functionDeclaration
+    |	interfaceDeclaration
+    |	classDeclaration
     ;
-
-functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
-	;
 
 variableDeclaration
 	:	storageTypeSpecifier initDeclarator
@@ -58,6 +56,14 @@ storageTypeSpecifier
     |   'const'
     ;
 
+initDeclarator
+    :   declarator ':' typeSpecifierExpression ('=' initializer)?
+    ;
+
+initializer
+    :   assignmentExpression
+    ;
+
 declarator
     :   directDeclarator
     ;
@@ -66,22 +72,39 @@ directDeclarator
     :   Identifier
     ;
 
-initDeclarator
-    :   declarator ':' typeSpecifierExpression ('=' initializer)?
-    ;
+functionDeclaration
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
+	;
 
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
-    // Note: Args and Kwargs, like in Python will be added later
     ;
 
 parameterDeclaration
     :   declarator ':' typeSpecifierExpression
     ;
 
-initializer
-    :   assignmentExpression
+interfaceDeclaration
+    :   'interface' declarator '{' interfaceMemberDeclaration* '}'
     ;
+
+interfaceMemberDeclaration
+    :   interfacePropertyDeclaration
+    |   interfaceMethodDeclaration
+    ;
+
+interfacePropertyDeclaration
+    :   declarator ':' typeSpecifierExpression SemiColon
+    ;
+
+interfaceMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
+    ;
+
+
+classDeclaration
+	:	'class' declarator '{' '}'
+	;
 
 // -- Statements
 
@@ -154,6 +177,7 @@ returnStatement
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
     :   tangledPrimaryExpression
+    |   lambdaPrimaryExpression
     |   arrayPrimaryExpression
     |   objectPrimaryExpression
     |   boolPrimaryExpression
@@ -162,10 +186,9 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
-    |   lambdaExpression
     ;
 
-lambdaExpression
+lambdaPrimaryExpression
    :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
    ;
 
@@ -383,7 +406,7 @@ identifierTypeSpecifierExpression
 	;
 
 genericTypeSpecifierExpression
-	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
+	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
 	;
 
 typeofTypeSpecifierExpression

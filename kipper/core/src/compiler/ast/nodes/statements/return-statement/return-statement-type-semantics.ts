@@ -2,7 +2,7 @@
  * Type semantics for a {@link ReturnStatement}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { StatementTypeSemantics } from "../statement-type-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface ReturnStatementTypeSemantics extends StatementTypeSemantics {
 	 * The type of value returned by this return statement.
 	 * @since 0.10.0
 	 */
-	returnType: CheckedType | undefined;
+	returnType: ProcessedType | undefined;
 }

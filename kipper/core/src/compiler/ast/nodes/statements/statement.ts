@@ -21,12 +21,21 @@ export abstract class Statement<
 	Semantics extends StatementSemantics = StatementSemantics,
 	TypeSemantics extends StatementTypeSemantics = StatementTypeSemantics,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
+	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ParserStatementContext;
+
+	protected constructor(antlrRuleCtx: ParserStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -48,14 +57,6 @@ export abstract class Statement<
 	 */
 	public abstract get ruleName(): ASTStatementRuleName;
 
-	protected constructor(antlrRuleCtx: ParserStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-
-		// Manually add the child to the parent
-		parent.addNewChild(this);
-	}
-
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
@@ -71,6 +72,4 @@ export abstract class Statement<
 	public async translateCtxAndChildren(): Promise<Array<TranslatedCodeLine>> {
 		return await this.targetCodeGenerator(this);
 	}
-
-	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, Array<TranslatedCodeLine>>;
 }

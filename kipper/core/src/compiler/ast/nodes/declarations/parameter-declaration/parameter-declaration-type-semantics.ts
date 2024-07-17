@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { DeclarationTypeSemantics } from "../declaration-type-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface ParameterDeclarationTypeSemantics extends DeclarationTypeSemant
 	 * The {@link KipperType type} of the parameter.
 	 * @since 0.10.0
 	 */
-	valueType: CheckedType;
+	valueType: ProcessedType;
 }

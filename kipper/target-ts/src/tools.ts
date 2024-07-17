@@ -3,12 +3,12 @@
  * @since 0.8.0
  */
 import type {
-	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	KipperCompilableType,
+	FunctionDeclaration,
 	InternalFunction,
 	InternalFunctionArgument,
+	ProcessedType,
 } from "@kipper/core";
 import { TargetTS } from "./target";
 
@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
  */
 export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-	returnType: KipperCompilableType | Array<KipperCompilableType>;
+	params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
+	returnType: ProcessedType | Array<ProcessedType>;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -31,16 +31,19 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 			params: semanticData.params.map((param) => {
 				return {
 					identifier: param.getSemanticData().identifier,
-					type: param.getTypeSemanticData().valueType.getCompilableType(),
+					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.returnType.getCompilableType(),
+			returnType: typeData.returnType,
 		};
 	} else {
 		return {
 			identifier: funcSpec.identifier,
 			params: funcSpec.params.map((arg: BuiltInFunctionArgument | InternalFunctionArgument) => {
-				return { identifier: arg.identifier, type: arg.valueType };
+				return {
+					identifier: arg.identifier,
+					type: Array.isArray(arg.valueType) ? arg.valueType : arg.valueType,
+				};
 			}),
 			returnType: funcSpec.returnType,
 		};
@@ -56,8 +59,8 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createTSFunctionSignature(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-		returnType: KipperCompilableType | Array<KipperCompilableType>;
+		params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
+		returnType: ProcessedType | Array<ProcessedType>;
 	},
 	ignoreParams: boolean = false,
 ): string {

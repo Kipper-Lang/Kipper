@@ -11,10 +11,9 @@ import type {
 } from "../target-presets";
 import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
-import type { KipperProgramContext } from "../program-ctx";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
-import type { FunctionScope, GlobalScope, LocalScope } from "../analysis";
+import type { GlobalScope, LocalScope } from "../semantics";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
 import { AnalysableASTNode } from "./analysable-ast-node";
@@ -42,15 +41,18 @@ export abstract class CompilableASTNode<
 	extends AnalysableASTNode<Semantics, TypeSemantics>
 	implements TargetCompilableNode
 {
-	protected _scopeCtx: ScopeNode<LocalScope | FunctionScope> | KipperProgramContext | undefined;
-	protected override _parent: CompilableNodeParent;
-	protected override _children: Array<CompilableNodeChild>;
+	abstract readonly targetCodeGenerator: TargetASTNodeCodeGenerator<
+		any,
+		TranslatedCodeLine | Array<TranslatedCodeLine>
+	>;
 
 	protected constructor(antlrCtx: KipperParserRuleContext, parent: CompilableNodeParent) {
 		super(antlrCtx, parent);
 		this._parent = parent;
 		this._children = [];
 	}
+
+	protected override _parent: CompilableNodeParent;
 
 	/**
 	 * Returns the {@link CompilableASTNode parent} that has this node as a child.
@@ -60,34 +62,14 @@ export abstract class CompilableASTNode<
 		return this._parent;
 	}
 
+	protected override _children: Array<CompilableNodeChild>;
+
 	/**
 	 * The children of this AST node.
 	 * @since 0.8.0
 	 */
 	public get children(): Array<CompilableNodeChild> {
 		return this._children;
-	}
-
-	/**
-	 * Adds new child ctx item to this AST node. The child item should be in the order that they appeared in the
-	 * {@link this.antlrCtx} parse tree.
-	 *
-	 * This will also automatically set the parent of {@link newChild} to this instance.
-	 * @since 0.8.0
-	 */
-	public addNewChild(newChild: CompilableNodeChild): void {
-		this._children.push(newChild);
-	}
-
-	/**
-	 * Returns whether this AST node has any side effects. This means that the node will change the state of the
-	 * program in some way and not only return a value.
-	 *
-	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
-	 * @since 0.11.0
-	 */
-	public hasSideEffects(): boolean {
-		return false;
 	}
 
 	/**
@@ -128,22 +110,14 @@ export abstract class CompilableASTNode<
 	 * @since 0.8.0
 	 */
 	public get scope(): LocalScope | GlobalScope {
-		if ("innerScope" in this.scopeCtx) {
-			return (<ScopeNode<LocalScope | FunctionScope>>this.scopeCtx).innerScope;
-		} else {
-			return (<KipperProgramContext>this.scopeCtx).globalScope;
-		}
+		return this.scopeCtx.innerScope;
 	}
 
 	/**
 	 * The context / AST node of the {@link scope}.
 	 * @since 0.8.0
 	 */
-	public get scopeCtx(): ScopeNode<LocalScope | FunctionScope> | KipperProgramContext {
-		if (this._scopeCtx) {
-			return this._scopeCtx;
-		}
-
+	public get scopeCtx(): ScopeNode<LocalScope | GlobalScope> {
 		let parent: CompilableNodeParent = this.parent;
 		while (parent.parent !== undefined && !("innerScope" in parent)) {
 			parent = parent.parent;
@@ -151,9 +125,9 @@ export abstract class CompilableASTNode<
 
 		// If there is no parent -> root node, return the program context
 		if (parent.parent === undefined) {
-			return (<RootASTNode>parent).programCtx;
+			return <RootASTNode>parent;
 		}
-		return <ScopeNode<LocalScope | FunctionScope>>parent;
+		return <ScopeNode<LocalScope>>parent;
 	}
 
 	/**
@@ -166,15 +140,32 @@ export abstract class CompilableASTNode<
 	}
 
 	/**
+	 * Adds new child ctx item to this AST node. The child item should be in the order that they appeared in the
+	 * {@link this.antlrCtx} parse tree.
+	 *
+	 * This will also automatically set the parent of {@link newChild} to this instance.
+	 * @since 0.8.0
+	 */
+	public addNewChild(newChild: CompilableNodeChild): void {
+		this._children.push(newChild);
+	}
+
+	/**
+	 * Returns whether this AST node has any side effects. This means that the node will change the state of the
+	 * program in some way and not only return a value.
+	 *
+	 * This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.
+	 * @since 0.11.0
+	 */
+	public hasSideEffects(): boolean {
+		return false;
+	}
+
+	/**
 	 * Generates the typescript code for this item, and all children (if they exist).
 	 * @since 0.8.0
 	 */
 	public async translateCtxAndChildren(): Promise<TranslatedCodeLine | Array<TranslatedCodeLine>> {
 		return await this.targetCodeGenerator(this);
 	}
-
-	abstract readonly targetCodeGenerator: TargetASTNodeCodeGenerator<
-		any,
-		TranslatedCodeLine | Array<TranslatedCodeLine>
-	>;
 }

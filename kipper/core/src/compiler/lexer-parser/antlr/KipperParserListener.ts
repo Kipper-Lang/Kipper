@@ -46,15 +46,20 @@ import { ExternalItemContext } from "./KipperParser";
 import { BlockItemListContext } from "./KipperParser";
 import { BlockItemContext } from "./KipperParser";
 import { DeclarationContext } from "./KipperParser";
-import { FunctionDeclarationContext } from "./KipperParser";
 import { VariableDeclarationContext } from "./KipperParser";
 import { StorageTypeSpecifierContext } from "./KipperParser";
+import { InitDeclaratorContext } from "./KipperParser";
+import { InitializerContext } from "./KipperParser";
 import { DeclaratorContext } from "./KipperParser";
 import { DirectDeclaratorContext } from "./KipperParser";
-import { InitDeclaratorContext } from "./KipperParser";
+import { FunctionDeclarationContext } from "./KipperParser";
 import { ParameterListContext } from "./KipperParser";
 import { ParameterDeclarationContext } from "./KipperParser";
-import { InitializerContext } from "./KipperParser";
+import { InterfaceDeclarationContext } from "./KipperParser";
+import { InterfaceMemberDeclarationContext } from "./KipperParser";
+import { InterfacePropertyDeclarationContext } from "./KipperParser";
+import { InterfaceMethodDeclarationContext } from "./KipperParser";
+import { ClassDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
@@ -69,7 +74,7 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
-import { LambdaExpressionContext } from "./KipperParser";
+import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
 import { BoolPrimaryExpressionContext } from "./KipperParser";
 import { IdentifierPrimaryExpressionContext } from "./KipperParser";
@@ -619,17 +624,6 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitDeclaration?: (ctx: DeclarationContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
-	 * @param ctx the parse tree
-	 */
-	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
-	 * @param ctx the parse tree
-	 */
-	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
-
-	/**
 	 * Enter a parse tree produced by `KipperParser.variableDeclaration`.
 	 * @param ctx the parse tree
 	 */
@@ -650,6 +644,28 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitStorageTypeSpecifier?: (ctx: StorageTypeSpecifierContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.initDeclarator`.
+	 * @param ctx the parse tree
+	 */
+	enterInitDeclarator?: (ctx: InitDeclaratorContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.initDeclarator`.
+	 * @param ctx the parse tree
+	 */
+	exitInitDeclarator?: (ctx: InitDeclaratorContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	enterInitializer?: (ctx: InitializerContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.initializer`.
+	 * @param ctx the parse tree
+	 */
+	exitInitializer?: (ctx: InitializerContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.declarator`.
@@ -674,15 +690,15 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitDirectDeclarator?: (ctx: DirectDeclaratorContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.initDeclarator`.
+	 * Enter a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	enterInitDeclarator?: (ctx: InitDeclaratorContext) => void;
+	enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.initDeclarator`.
+	 * Exit a parse tree produced by `KipperParser.functionDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	exitInitDeclarator?: (ctx: InitDeclaratorContext) => void;
+	exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.parameterList`.
@@ -707,15 +723,59 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitParameterDeclaration?: (ctx: ParameterDeclarationContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.initializer`.
+	 * Enter a parse tree produced by `KipperParser.interfaceDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	enterInitializer?: (ctx: InitializerContext) => void;
+	enterInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.initializer`.
+	 * Exit a parse tree produced by `KipperParser.interfaceDeclaration`.
 	 * @param ctx the parse tree
 	 */
-	exitInitializer?: (ctx: InitializerContext) => void;
+	exitInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfaceMemberDeclaration?: (ctx: InterfaceMemberDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfaceMemberDeclaration?: (ctx: InterfaceMemberDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfacePropertyDeclaration?: (ctx: InterfacePropertyDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfacePropertyDeclaration?: (ctx: InterfacePropertyDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterInterfaceMethodDeclaration?: (ctx: InterfaceMethodDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitInterfaceMethodDeclaration?: (ctx: InterfaceMethodDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterClassDeclaration?: (ctx: ClassDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitClassDeclaration?: (ctx: ClassDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.statement`.
@@ -872,15 +932,15 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitPrimaryExpression?: (ctx: PrimaryExpressionContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Enter a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	enterLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	enterLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 	/**
-	 * Exit a parse tree produced by `KipperParser.lambdaExpression`.
+	 * Exit a parse tree produced by `KipperParser.lambdaPrimaryExpression`.
 	 * @param ctx the parse tree
 	 */
-	exitLambdaExpression?: (ctx: LambdaExpressionContext) => void;
+	exitLambdaPrimaryExpression?: (ctx: LambdaPrimaryExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.tangledPrimaryExpression`.

@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-import type { UncheckedType } from "../../../../analysis";
+import type { RawType } from "../../../../semantics";
 import type { CompoundStatement, IdentifierTypeSpecifierExpression, ParameterDeclaration } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 
@@ -20,7 +20,7 @@ export interface FunctionDeclarationSemantics extends DeclarationSemantics {
 	 * The {@link KipperType return type} of the function.
 	 * @since 0.5.0
 	 */
-	returnType: UncheckedType;
+	returnType: RawType;
 	/**
 	 * The type specifier expression for the return type.
 	 * @since 0.10.0

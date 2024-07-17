@@ -5,7 +5,6 @@
  * @since 0.11.0
  */
 import {
-	ParseRuleKindMapping,
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -16,6 +15,7 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -32,14 +32,20 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
+	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
+	ObjectPropertyContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
+	ParseRuleKindMapping,
 	RelationalExpressionContext,
 	ReturnStatementContext,
 	SliceNotationMemberAccessExpressionContext,
@@ -50,8 +56,6 @@ import {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	ObjectPropertyContext,
-	LambdaExpressionContext,
 } from "../../lexer-parser";
 import type {
 	ASTDeclarationKind,
@@ -66,8 +70,13 @@ import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -83,13 +92,16 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
 	JumpStatement,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -101,13 +113,9 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	BitwiseOrExpression,
-	BitwiseXorExpression,
-	BitwiseShiftExpression,
-	BitwiseAndExpression,
-	ObjectProperty,
-	LambdaExpression,
 } from "../nodes";
+import { InterfacePropertyDeclaration } from "../nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
+import { InterfaceMethodDeclaration } from "../nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -125,6 +133,10 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclaration,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclaration,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclaration,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclaration,
+		[ParseRuleKindMapping.RULE_interfacePropertyDeclaration]: InterfacePropertyDeclaration,
+		[ParseRuleKindMapping.RULE_interfaceMethodDeclaration]: InterfaceMethodDeclaration,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -164,7 +176,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
-		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpression,
+		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -193,6 +205,10 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_functionDeclaration]: FunctionDeclarationContext,
 		[ParseRuleKindMapping.RULE_variableDeclaration]: VariableDeclarationContext,
 		[ParseRuleKindMapping.RULE_parameterDeclaration]: ParameterDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfaceDeclaration]: InterfaceDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfacePropertyDeclaration]: InterfacePropertyDeclarationContext,
+		[ParseRuleKindMapping.RULE_interfaceMethodDeclaration]: InterfaceMethodDeclarationContext,
+		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -231,7 +247,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
-		[ParseRuleKindMapping.RULE_lambdaExpression]: LambdaExpressionContext,
+		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -266,6 +282,10 @@ export class ASTNodeMapper {
 		RULE_functionDeclaration: FunctionDeclaration,
 		RULE_variableDeclaration: VariableDeclaration,
 		RULE_parameterDeclaration: ParameterDeclaration,
+		RULE_interfaceDeclaration: InterfaceDeclaration,
+		RULE_interfacePropertyDeclaration: InterfacePropertyDeclaration,
+		RULE_interfaceMethodDeclaration: InterfaceMethodDeclaration,
+		RULE_classDeclaration: ClassDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**
@@ -305,7 +325,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseAndExpression: BitwiseAndExpression,
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
-		RULE_lambdaExpression: LambdaExpression,
+		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**

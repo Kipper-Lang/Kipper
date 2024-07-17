@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link FunctionDeclaration}.
  * @since 0.3.0
  */
-import type { UncheckedType } from "../../../../analysis";
-import type { FunctionDeclaration, IdentifierTypeSpecifierExpression, LambdaExpression } from "../../../nodes";
+import type { RawType } from "../../../../semantics";
 import type { DeclarationSemantics } from "../declaration-semantics";
+import type { FunctionDeclaration, IdentifierTypeSpecifierExpression, LambdaPrimaryExpression } from "../../../nodes";
 
 /**
  * Semantics for AST Node {@link ParameterDeclaration}.
@@ -20,7 +20,7 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The {@link KipperType type} of the parameter.
 	 * @since 0.5.0
 	 */
-	valueType: UncheckedType;
+	valueType: RawType;
 	/**
 	 * The type specifier expression for the parameter type.
 	 * @since 0.10.0
@@ -30,5 +30,5 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The parent function of this parameter.
 	 * @since 0.10.0
 	 */
-	func: FunctionDeclaration | LambdaExpression;
+	func: FunctionDeclaration | LambdaPrimaryExpression;
 }

@@ -2,10 +2,19 @@
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
  * @since 0.8.0
  */
-import type { TranslatedCodeLine, VariableDeclaration } from "@kipper/core";
-import type { FunctionDeclaration } from "@kipper/core";
+import type {
+	FunctionDeclaration,
+	InterfaceDeclaration,
+	InterfacePropertyDeclaration,
+	ObjectPrimaryExpression,
+	InterfaceMethodDeclaration,
+	TranslatedExpression,
+	ParameterDeclaration,
+	TranslatedCodeLine,
+	VariableDeclaration,
+} from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { JavaScriptTargetCodeGenerator } from "@kipper/target-js";
+import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";
 
 /**
@@ -32,10 +41,10 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	 */
 	override variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const typeData = node.getTypeSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const tsType = TargetTS.getTypeScriptType(typeData.valueType.getCompilableType());
+		const tsType = TargetTS.getTypeScriptType(typeSemantics.valueType);
 		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
 		// Only add ' = EXP' if assignValue is defined
@@ -51,5 +60,86 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 				";",
 			],
 		];
+	};
+
+	override interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const interfaceName = semanticData.identifier;
+		const interfaceMembers = semanticData.members;
+
+		const memberDeclarations = await Promise.all(
+			interfaceMembers.map(async (member) => {
+				return member.translateCtxAndChildren();
+			}),
+		);
+
+		return [
+			["interface", " ", interfaceName, " ", "{"],
+			...memberDeclarations.flat().map((line) => [" ", ...line]),
+			["}"],
+		];
+	};
+
+	override interfaceMethodDeclaration = async (
+		node: InterfaceMethodDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const params = semanticData.parameters;
+		const returnTypeIdentifier = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
+
+		const paramsCode: TranslatedCodeLine[] = await Promise.all(
+			params.map(async (param) => {
+				return param.translateCtxAndChildren();
+			}),
+		).then((results) => results.flat());
+
+		// Return the method declaration
+		return [
+			[
+				semanticData.identifier,
+				"(",
+				paramsCode.map((param) => param.join("")).join(", "),
+				")",
+				":",
+				" ",
+				returnTypeIdentifier,
+				";",
+			],
+		];
+	};
+
+	override interfacePropertyDeclaration = async (
+		node: InterfacePropertyDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
+		const identifier = semanticData.identifier;
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.type);
+
+		// Return the property declaration
+		return [[identifier, ":", " ", valueType, ";"]];
+	};
+
+	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
+		const identifier = semanticData.identifier;
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.valueType);
+
+		// Return the parameter declaration
+		return [[identifier, ":", " ", valueType]];
+	};
+
+	override objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const keyValuePairs = semanticData.keyValuePairs;
+		const translatedKeyValuePairs = await Promise.all(
+			keyValuePairs.map(async (pair) => {
+				return [...(await pair.translateCtxAndChildren()), ",", "\n"];
+			}),
+		);
+
+		// Return the object primary expression
+		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
 }

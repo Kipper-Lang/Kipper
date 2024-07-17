@@ -53,7 +53,7 @@ describe("UndefinedReferenceError", () => {
 			assert.fail(`Expected no '${(<KipperError>e).name}'`);
 		}
 		assert.isDefined(result, "Expected defined compilation result");
-		assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-		assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+		assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+		assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 	});
 });

@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link CastOrConvertExpression}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface CastOrConvertExpressionTypeSemantics extends ExpressionTypeSema
 	 * The type the {@link CastOrConvertExpressionSemantics.exp} should be converted to.
 	 * @since 0.10.0
 	 */
-	castType: CheckedType;
+	castType: ProcessedType;
 }

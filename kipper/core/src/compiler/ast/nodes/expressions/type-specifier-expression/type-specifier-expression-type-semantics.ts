@@ -2,7 +2,7 @@
  * Type semantics for AST Node {@link TypeSpecifierExpression}.
  * @since 0.10.0
  */
-import type { CheckedType } from "../../../../analysis";
+import type { ProcessedType } from "../../../../semantics";
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
 
 /**
@@ -15,5 +15,5 @@ export interface TypeSpecifierExpressionTypeSemantics extends ExpressionTypeSema
 	 * values should be stored in a variable.
 	 * @since 0.10.0
 	 */
-	storedType: CheckedType;
+	storedType: ProcessedType;
 }

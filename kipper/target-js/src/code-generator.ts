@@ -14,6 +14,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
@@ -29,9 +30,12 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalExpression,
 	LogicalExpressionSemantics,
@@ -56,14 +60,13 @@ import type {
 	WhileLoopIterationStatement,
 } from "@kipper/core";
 import {
+	BuiltInTypes,
 	CompoundStatement,
+	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
 	KipperTargetCodeGenerator,
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
 	VariableDeclaration,
-	Expression,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -355,7 +358,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [[`${semanticData.identifier}`]];
 	};
 
 	/**
@@ -385,6 +389,35 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
+	 * Translates a {@link AssignmentExpression} into the JavaScript language.
+	 */
+	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into the JavaScript language.
+	 */
+	interfacePropertyDeclaration = async (node: InterfacePropertyDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into the JavaScript language.
+	 * @param node
+	 */
+	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ClassDeclaration} into the JavaScript language.
+	 */
+	classDeclaration = async (node: ClassDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		return [];
+	};
+
+	/**
 	 * Translates a {@link NumberPrimaryExpression} into the JavaScript language.
 	 */
 	numberPrimaryExpression = async (node: NumberPrimaryExpression): Promise<TranslatedExpression> => {
@@ -399,7 +432,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ArrayPrimaryExpression} into the JavaScript language.
 	 */
 	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const values = node.getSemanticData().value;
+		const translatedValues: Array<TranslatedExpression> = await Promise.all(
+			values.map(async (value, i) => {
+				const exp = await value.translateCtxAndChildren();
+				return [...exp, i + 1 === values.length ? "" : ", "];
+			}),
+		);
+		return ["[", ...translatedValues.flat(), "]"];
 	};
 
 	/**
@@ -407,7 +447,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const keyValuePairs = semanticData.keyValuePairs;
+		const translatedKeyValuePairs = await Promise.all(
+			keyValuePairs.map(async (pair) => {
+				return [...(await pair.translateCtxAndChildren()), ",", "\n"];
+			}),
+		);
+
+		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
 
 	/**
@@ -415,21 +463,25 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
-		return [];
+		const expression = node.getSemanticData().expressoDepresso;
+		const identifier = node.getSemanticData().identifier;
+
+		// Await the translation and join the array into a string
+		const translatedExpression = (await expression.translateCtxAndChildren()).join("");
+
+		// Return the concatenated result
+		return [identifier, ": ", translatedExpression];
 	};
 
 	/**
 	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-		let identifier: string = semanticData.identifier;
+		const refTarget = node.getSemanticData().ref.refTarget;
+		let identifier: string = refTarget.isBuiltIn
+			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
+			: refTarget.identifier;
 
-		// If the identifier is not declared by the user, assume it's a built-in function and format the identifier
-		// accordingly.
-		if (!(semanticData.ref.refTarget instanceof ScopeDeclaration)) {
-			identifier = TargetJS.getBuiltInIdentifier(semanticData.ref.refTarget);
-		}
 		return [identifier];
 	};
 
@@ -565,8 +617,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const func = node.getTypeSemanticData().func;
 
 		// Get the proper identifier for the function
-		const identifier =
-			func instanceof ScopeFunctionDeclaration ? func.identifier : TargetJS.getBuiltInIdentifier(func.identifier);
+		const identifier = func.isBuiltIn ? TargetJS.getBuiltInIdentifier(func.builtInStructure!!) : func.identifier;
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
@@ -622,7 +673,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// If both types are the same we will only return the translated expression to avoid useless conversions.
 			return exp;
 		} else {
-			const func: string = TargetJS.getBuiltInIdentifier(getConversionFunctionIdentifier(originalType, destType));
+			const func: string = TargetJS.getBuiltInIdentifier(
+				getConversionFunctionIdentifier(originalType.identifier, destType.identifier),
+			);
 			return [func, "(", ...exp, ")"];
 		}
 	};
@@ -639,7 +692,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const exp2: TranslatedExpression = await semanticData.rightOp.translateCtxAndChildren();
 
 		// In this case it should be a string multiplication
-		if (semanticData.leftOp.getTypeSemanticData().evaluatedType.getCompilableType() === "str") {
+		if (semanticData.leftOp.getTypeSemanticData().evaluatedType === BuiltInTypes.str) {
 			return [stringRepeatFunction, "(", ...exp1, ", ", ...exp2, ")"];
 		}
 
@@ -758,21 +811,19 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		let identifier = semanticData.identifier;
-
-		// If the identifier is not found in the global scope, assume it's a built-in function and format the identifier
-		// accordingly.
-		if (!(semanticData.assignTarget.refTarget instanceof ScopeDeclaration)) {
-			identifier = TargetJS.getBuiltInIdentifier(identifier);
-		}
-
-		// The expression that is assigned to the reference
+		const refTarget = semanticData.assignTarget.refTarget;
+		const identifier = refTarget.isBuiltIn
+			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
+			: refTarget.identifier;
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
 		return [identifier, " ", semanticData.operator, " ", ...assignExp];
 	};
 
-	lambdaExpression = async (node: LambdaExpression): Promise<TranslatedExpression> => {
+	/**
+	 * Translates a {@link LambdaPrimaryExpression} into the JavaScript language.
+	 */
+	lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
 		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;

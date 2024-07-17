@@ -130,8 +130,8 @@ describe("AssignmentTypeError", () => {
 				assert.fail("Expected no 'TypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
 		it("num = num", async () => {
@@ -145,8 +145,8 @@ describe("AssignmentTypeError", () => {
 				assert.fail("Expected no 'TypeError'");
 			}
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-			assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 	});
 });

@@ -42,6 +42,8 @@ export abstract class ComparativeExpression<
 	TypeSemantics extends ComparativeExpressionTypeSemantics = ComparativeExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserComparativeExpressionContext;
+
 	public abstract get kind(): ASTComparativeExpressionKind;
+
 	public abstract get ruleName(): ParserComparativeExpressionRuleName;
 }

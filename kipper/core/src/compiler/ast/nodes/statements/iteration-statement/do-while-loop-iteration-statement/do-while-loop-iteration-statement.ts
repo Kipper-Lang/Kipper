@@ -20,17 +20,31 @@ export class DoWhileLoopIterationStatement extends IterationStatement<
 	DoWhileLoopIterationStatementTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_doWhileLoopIterationStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: DoWhileLoopIterationStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_doWhileLoopIterationStatement;
+	protected readonly _children: Array<CompilableNodeChild>;
+
+	constructor(antlrRuleCtx: DoWhileLoopIterationStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -45,12 +59,6 @@ export class DoWhileLoopIterationStatement extends IterationStatement<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -60,14 +68,6 @@ export class DoWhileLoopIterationStatement extends IterationStatement<
 	 */
 	public override get ruleName() {
 		return DoWhileLoopIterationStatement.ruleName;
-	}
-
-	protected readonly _children: Array<CompilableNodeChild>;
-
-	constructor(antlrRuleCtx: DoWhileLoopIterationStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
 	}
 
 	/**

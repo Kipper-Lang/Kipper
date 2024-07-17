@@ -340,8 +340,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 		});
 
@@ -357,8 +357,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 		});
 
@@ -374,8 +374,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 
 			it("num", async () => {
@@ -386,8 +386,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 		});
 
@@ -400,8 +400,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 
 			it("num", async () => {
@@ -412,8 +412,8 @@ describe("ArithmeticOperationTypeError", () => {
 					assert.fail("Expected no 'ArithmeticOperationTypeError'");
 				}
 				assert.isDefined(result, "Expected defined compilation result");
-				assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-				assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+				assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+				assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 			});
 		});
 	});

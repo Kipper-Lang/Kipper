@@ -13,6 +13,7 @@ import type {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -29,7 +30,11 @@ import type {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
+	KindParseRuleMapping,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
@@ -47,7 +52,6 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../../lexer-parser";
-import type { KindParseRuleMapping } from "../../lexer-parser";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
@@ -107,7 +111,11 @@ export type ParserStatementContext =
 export type ParserDeclarationContext =
 	| FunctionDeclarationContext
 	| ParameterDeclarationContext
-	| VariableDeclarationContext;
+	| VariableDeclarationContext
+	| InterfaceDeclarationContext
+	| InterfacePropertyDeclarationContext
+	| InterfaceMethodDeclarationContext
+	| ClassDeclarationContext;
 
 /**
  * Union type of all rule context classes implemented by the {@link ParseRuleKindMapping} that have a corresponding AST node class.
@@ -126,7 +134,11 @@ export type ASTNodeParserContext = ParserExpressionContext | ParserStatementCont
 export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_functionDeclaration
 	| typeof ParseRuleKindMapping.RULE_parameterDeclaration
-	| typeof ParseRuleKindMapping.RULE_variableDeclaration;
+	| typeof ParseRuleKindMapping.RULE_variableDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration
+	| typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration
+	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
@@ -182,7 +194,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseAndExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression
-	| typeof ParseRuleKindMapping.RULE_lambdaExpression
+	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;
 
 /**
@@ -202,7 +214,11 @@ export type ConstructableASTKind = ASTDeclarationKind | ASTStatementKind | ASTEx
 export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_functionDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_parameterDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_variableDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST
@@ -256,7 +272,7 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseAndExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseXorExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
 
 /**

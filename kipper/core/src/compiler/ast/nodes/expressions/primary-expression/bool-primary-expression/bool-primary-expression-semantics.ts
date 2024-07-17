@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
  */
-import type { KipperBoolTypeLiterals } from "../../../../../const";
+import type { KipperBoolTypeConstants } from "../../../../../const";
 import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface BoolPrimaryExpressionSemantics extends PrimaryExpressionSemanti
 	 * The value of this boolean constant expression.
 	 * @since 0.8.0
 	 */
-	value: KipperBoolTypeLiterals;
+	value: KipperBoolTypeConstants;
 }

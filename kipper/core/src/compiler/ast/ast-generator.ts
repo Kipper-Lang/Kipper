@@ -29,6 +29,7 @@ import type {
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
+	ClassDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -52,10 +53,13 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
+	InterfaceDeclarationContext,
+	InterfaceMethodDeclarationContext,
+	InterfacePropertyDeclarationContext,
 	JumpStatementContext,
 	KipperParserListener,
 	KipperParserRuleContext,
-	LambdaExpressionContext,
+	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
@@ -76,11 +80,12 @@ import type {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
+	InterfaceMemberDeclarationContext,
 } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
-import { Declaration, Expression, Statement, RootASTNode } from "./nodes";
+import { Declaration, Expression, RootASTNode, Statement } from "./nodes";
 import { DeclarationASTNodeFactory, ExpressionASTNodeFactory, StatementASTNodeFactory } from "./factories";
 import { KipperInternalError } from "../../errors";
 
@@ -96,18 +101,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	private readonly _declarationFactory: DeclarationASTNodeFactory;
 
 	/**
-	 * If this is true, the current context is inside an external item and automatically indicates
-	 * {@link _isFunctionDefinition} is false.
-	 */
-	private _isExternalItem: boolean;
-
-	/**
-	 * If this is true, the current context is inside a function definition and automatically indicates
-	 * {@link _isExternalItem} is false.
-	 */
-	private _isFunctionDefinition: boolean;
-
-	/**
 	 * The current Kipper AST node that is being walked through right now. This is the instance where current metadata
 	 * should be added to and read from, as this instance will represent and handle the context rules that were walked
 	 * through during this operation.
@@ -116,8 +109,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 
 	constructor(programCtx: KipperProgramContext, rootNode: CompilationUnitContext) {
 		this._rootNode = new RootASTNode(programCtx, rootNode);
-		this._isExternalItem = false;
-		this._isFunctionDefinition = false;
 		this._currentPrimaryNode = undefined;
 		this._expressionFactory = new ExpressionASTNodeFactory();
 		this._statementFactory = new StatementASTNodeFactory();
@@ -166,6 +157,18 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 		return this._declarationFactory;
 	}
 
+	private isStatementContext(ctx: ASTNodeParserContext): boolean {
+		return this.statementFactory.ruleIds.includes(<ASTStatementKind>ctx.astSyntaxKind);
+	}
+
+	private isDeclarationContext(ctx: ASTNodeParserContext): boolean {
+		return this.declarationFactory.ruleIds.includes(<ASTDeclarationKind>ctx.astSyntaxKind);
+	}
+
+	private isExpressionContext(ctx: ASTNodeParserContext): boolean {
+		return this.expressionFactory.ruleIds.includes(<ASTExpressionKind>ctx.astSyntaxKind);
+	}
+
 	/**
 	 * Returns which token is being processed at the moment and where meta-data should be assigned to.
 	 * @private
@@ -212,18 +215,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 		);
 	}
 
-	private isStatementContext(ctx: ASTNodeParserContext): boolean {
-		return this.statementFactory.ruleIds.includes(<ASTStatementKind>ctx.astSyntaxKind);
-	}
-
-	private isDeclarationContext(ctx: ASTNodeParserContext): boolean {
-		return this.declarationFactory.ruleIds.includes(<ASTDeclarationKind>ctx.astSyntaxKind);
-	}
-
-	private isExpressionContext(ctx: ASTNodeParserContext): boolean {
-		return this.expressionFactory.ruleIds.includes(<ASTExpressionKind>ctx.astSyntaxKind);
-	}
-
 	/**
 	 * Handles an exiting node context. This is required to properly generate the AST node hierarchy.
 	 * @private
@@ -257,17 +248,13 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Enter a parse tree produced by the `externalItem`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterExternalItem(ctx: ExternalItemContext): void {
-		this._isExternalItem = true;
-	}
+	public enterExternalItem?: (ctx: ExternalItemContext) => void = undefined;
 
 	/**
 	 * Exit a parse tree produced by the `externalItem`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitExternalItem(ctx: ExternalItemContext): void {
-		this._isExternalItem = false;
-	}
+	public exitExternalItem?: (ctx: ExternalItemContext) => void = undefined;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Expression section
@@ -372,6 +359,18 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @since 0.11.0
 	 */
 	public exitObjectProperty: (ctx: ObjectPropertyContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `actualBitwiseShiftExpression
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterLambdaPrimaryExpression: (ctx: LambdaPrimaryExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `actualBitwiseShiftExpression
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitLambdaPrimaryExpression: (ctx: LambdaPrimaryExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.boolPrimaryExpression`.
@@ -651,16 +650,6 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitActualEqualityExpression: (ctx: ActualEqualityExpressionContext) => void = this.handleExitingTreeNode;
-
-	/**
-	 * Enter a parse tree produced by the `actualBitwiseShiftExpression`
-	 */
-	public enterLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleEnteringTreeNode;
-
-	/**
-	 * Exit a parse tree produced by the `actualBitwiseShiftExpression`
-	 */
-	public exitLambdaExpression: (ctx: LambdaExpressionContext) => void = this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring logical and expressions, and only going to handle the rules 'passOnLogicalAndExpression',
@@ -1050,6 +1039,57 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitParameterDeclaration: (ctx: ParameterDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterInterfaceDeclaration: (ctx: InterfaceDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitInterfaceDeclaration: (ctx: InterfaceDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterInterfacePropertyDeclaration: (ctx: InterfacePropertyDeclarationContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfacePropertyDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitInterfacePropertyDeclaration: (ctx: InterfacePropertyDeclarationContext) => void =
+		this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterInterfaceMethodDeclaration: (ctx: InterfaceMethodDeclarationContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.interfaceMethodDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitInterfaceMethodDeclaration: (ctx: InterfaceMethodDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.classDeclaration`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Other

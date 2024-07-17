@@ -3,7 +3,7 @@
  * @since 0.3.0
  */
 import type { KipperStorageType } from "../../../../const";
-import type { Scope, UncheckedType } from "../../../../analysis";
+import type { RawType, Scope } from "../../../../semantics";
 import type { Expression, IdentifierTypeSpecifierExpression } from "../../../nodes";
 import type { DeclarationSemantics } from "../declaration-semantics";
 
@@ -28,7 +28,7 @@ export interface VariableDeclarationSemantics extends DeclarationSemantics {
 	 * The identifier of the {@link valueTypeSpecifier.semanticData.identifier typeSpecifier}.
 	 * @since 0.5.0
 	 */
-	valueType: UncheckedType;
+	valueType: RawType;
 	/**
 	 * The type specifier expression for the variable type.
 	 * @since 0.10.0

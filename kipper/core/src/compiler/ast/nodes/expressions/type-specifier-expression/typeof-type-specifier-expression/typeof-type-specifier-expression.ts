@@ -19,17 +19,28 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	TypeofTypeSpecifierExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: TypeofTypeSpecifierExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression;
+	constructor(antlrRuleCtx: TypeofTypeSpecifierExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -44,12 +55,6 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -61,9 +66,11 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 		return TypeofTypeSpecifierExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: TypeofTypeSpecifierExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): TypeofTypeSpecifierExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -90,20 +97,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): TypeofTypeSpecifierExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.typeofTypeSpecifierExpression;
 	readonly targetCodeGenerator = this.codeGenerator.typeofTypeSpecifierExpression;

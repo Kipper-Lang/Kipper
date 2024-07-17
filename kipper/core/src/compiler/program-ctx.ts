@@ -8,26 +8,41 @@
 import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type {
 	CompilationUnitContext,
+	KipperFileStream,
 	KipperLexer,
 	KipperParser,
 	LexerParserData,
-	KipperFileStream,
 } from "./lexer-parser";
-import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "./runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { TranslatedCodeLine } from "./const";
 import type { KipperWarning } from "../warnings";
 import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
 import { KipperFileASTGenerator } from "./ast";
 import type { EvaluatedCompileConfig } from "./compile-config";
-import type { InternalReference, Reference } from "./analysis";
-import { GlobalScope, KipperSemanticChecker, KipperTypeChecker } from "./analysis";
+import type {
+	BuiltInFunction,
+	BuiltInVariable,
+	GlobalScope,
+	InternalFunction,
+	InternalReference,
+	Reference,
+	ScopeFunctionDeclaration,
+} from "./semantics";
+import { ScopeVariableDeclaration } from "./semantics";
+import {
+	BuiltInFunctions,
+	BuiltInTypes,
+	BuiltInVariables,
+	KipperSemanticChecker,
+	KipperTypeChecker,
+	UniverseScope,
+} from "./semantics";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
 import type { OptimisationOptions } from "./optimiser";
 import { KipperOptimiser } from "./optimiser";
 import type { KipperLogger } from "../logger";
 import { LogLevel } from "../logger";
-import { KipperWarningIssuer } from "./analysis/analyser/warning-issuer";
+import { KipperWarningIssuer } from "./semantics/analyser/warning-issuer";
 import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
@@ -46,9 +61,9 @@ export class KipperProgramContext {
 
 	private readonly _warnings: Array<KipperWarning>;
 
-	private readonly _builtInFunctionReferences: Array<Reference<BuiltInFunction>>;
+	private readonly _builtInFunctionReferences: Array<Reference<ScopeFunctionDeclaration>>;
 
-	private readonly _builtInVariableReferences: Array<Reference<BuiltInVariable>>;
+	private readonly _builtInVariableReferences: Array<Reference<ScopeVariableDeclaration>>;
 
 	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
@@ -60,7 +75,7 @@ export class KipperProgramContext {
 	 */
 	private readonly _channels: LexerParserData["channels"];
 
-	private _abstractSyntaxTree: RootASTNode | undefined;
+	private _rootASTNode: RootASTNode | undefined;
 
 	/**
 	 * The field compiledCode that will store the cached code, once 'compileProgram' has been called. This is
@@ -68,12 +83,6 @@ export class KipperProgramContext {
 	 * @private
 	 */
 	private _compiledCode: Array<TranslatedCodeLine> | undefined;
-
-	/**
-	 * The global scope of this program, containing all variable and function declarations
-	 * @private
-	 */
-	private readonly _globalScope: GlobalScope;
 
 	/**
 	 * Represents the compilation translation target for the program. This contains the:
@@ -164,6 +173,12 @@ export class KipperProgramContext {
 	 */
 	public readonly builtInVariables: Array<BuiltInVariable>;
 
+	/**
+	 * The universe scope, which contains all built-in types and functions.
+	 * @since 0.11.0
+	 */
+	private readonly _universeScope: UniverseScope;
+
 	constructor(
 		lexerParserData: LexerParserData,
 		logger: KipperLogger,
@@ -190,27 +205,14 @@ export class KipperProgramContext {
 		this._stream = lexerParserData.fileStream;
 		this._channels = lexerParserData.channels;
 		this._antlrParseTree = lexerParserData.parseTree;
-		this._globalScope = new GlobalScope(this);
-		this._abstractSyntaxTree = undefined;
+		this._universeScope = new UniverseScope(this);
+		this._rootASTNode = undefined;
 		this._builtInFunctionReferences = [];
 		this._builtInVariableReferences = [];
 		this._internalReferences = [];
 		this._warnings = [];
 		this._errors = [];
-
-		// Register all built-in functions
-		const globalFunctions = [...compileConfig.builtInFunctions, ...compileConfig.extendBuiltInFunctions];
-		this.registerBuiltInFunctions(globalFunctions);
-		this.logger.debug(
-			`Registered ${globalFunctions.length} global function${globalFunctions.length === 1 ? "" : "s"}.`,
-		);
-
-		// Register all built-in variables
-		const globalVariables = [...compileConfig.builtInVariables, ...compileConfig.extendBuiltInVariables];
-		this.registerBuiltInVariables(globalVariables);
-		this.logger.debug(
-			`Registered ${globalVariables.length} global variable${globalVariables.length === 1 ? "" : "s"}.`,
-		);
+		this._initUniversalReferencables(compileConfig);
 	}
 
 	// @ts-ignore
@@ -301,9 +303,20 @@ export class KipperProgramContext {
 	/**
 	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
 	 * entire program.
+	 * @since 0.11.0
 	 */
-	public get globalScope(): GlobalScope {
-		return this._globalScope;
+	public get universeScope(): UniverseScope {
+		return this._universeScope;
+	}
+
+	/**
+	 * The global scope of this file, which contains all {@link ScopeDeclaration} instances that are accessible in the
+	 * entire program.
+	 *
+	 * May be undefined if {@link generateAbstractSyntaxTree} has not been called yet.
+	 */
+	public get globalScope(): GlobalScope | undefined {
+		return this._rootASTNode?.innerScope;
 	}
 
 	/**
@@ -335,7 +348,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInFunctionReferences(): Array<Reference<BuiltInFunction>> {
+	public get builtInFunctionReferences(): Array<Reference<ScopeFunctionDeclaration>> {
 		return this._builtInFunctionReferences;
 	}
 
@@ -347,7 +360,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInVariableReferences(): Array<Reference<BuiltInVariable>> {
+	public get builtInVariableReferences(): Array<Reference<ScopeVariableDeclaration>> {
 		return this._builtInVariableReferences;
 	}
 
@@ -357,8 +370,8 @@ export class KipperProgramContext {
 	 *
 	 * If the function {@link compileProgram} has not been called yet, this item will be {@link undefined}.
 	 */
-	public get abstractSyntaxTree(): RootASTNode | undefined {
-		return this._abstractSyntaxTree;
+	public get rootASTNode(): RootASTNode | undefined {
+		return this._rootASTNode;
 	}
 
 	/**
@@ -463,12 +476,25 @@ export class KipperProgramContext {
 		}
 
 		// Caching the result
-		this._abstractSyntaxTree = listener.rootNode;
+		this._rootASTNode = listener.rootNode;
 
 		const countNodes: number = listener.rootNode.children.length;
 		this.logger.debug(`Finished generation of Kipper AST.`);
 		this.logger.debug(`Parsed ${countNodes} top-level ${countNodes <= 1 ? "node" : "nodes"}.`);
 		return listener.rootNode;
+	}
+
+	/**
+	 * Sets up the built-ins for this program. This function should be called before the semantic analysis is run.
+	 *
+	 * TODO! For now this only registers the built-in types in the global scope so they can be use, but in the future
+	 * this should also generate the built-in functions and variables.
+	 * @since 0.11.0
+	 */
+	public async setUpBuiltInsInGlobalScope(): Promise<void> {
+		for (const [_, type] of Object.entries(BuiltInTypes)) {
+			this._universeScope.addType(type);
+		}
 	}
 
 	/**
@@ -483,11 +509,11 @@ export class KipperProgramContext {
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		try {
-			if (!this._abstractSyntaxTree) {
-				this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
+			if (!this._rootASTNode) {
+				this._rootASTNode = await this.generateAbstractSyntaxTree();
 			}
 
-			await this._abstractSyntaxTree.semanticAnalysis();
+			await this._rootASTNode.semanticAnalysis();
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -503,22 +529,22 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Processes the {@link abstractSyntaxTree} and generates a new optimised one based on the {@link options}.
+	 * Processes the {@link rootASTNode} and generates a new optimised one based on the {@link options}.
 	 * @param options The options for the optimisation. If undefined, the {@link defaultOptimisationOptions} are used.
 	 * @since 0.8.0
 	 * @see {@link compileProgram}
 	 */
 	public async optimise(options?: OptimisationOptions): Promise<RootASTNode> {
-		if (!this.abstractSyntaxTree) {
+		if (!this.rootASTNode) {
 			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
 		try {
-			const result = await this.optimiser.optimise(this.abstractSyntaxTree, options);
+			const result = await this.optimiser.optimise(this.rootASTNode, options);
 
 			// Caching the result
-			this._abstractSyntaxTree = result;
+			this._rootASTNode = result;
 
 			return result;
 		} catch (e) {
@@ -541,13 +567,13 @@ export class KipperProgramContext {
 	 * @see {@link compileProgram}
 	 */
 	public async translate(): Promise<Array<TranslatedCodeLine>> {
-		if (!this.abstractSyntaxTree) {
+		if (!this.rootASTNode) {
 			// TODO! Change this error to a more fitting one
 			throw new UndefinedSemanticsError();
 		}
 
 		try {
-			return await this.abstractSyntaxTree.translate();
+			return await this.rootASTNode.translate();
 		} catch (e) {
 			if (e instanceof KipperError) {
 				// Log the Kipper error
@@ -570,13 +596,15 @@ export class KipperProgramContext {
 	 */
 	public async compileProgram(): Promise<Array<TranslatedCodeLine> | undefined> {
 		// Getting the processed AST tree
-		this._abstractSyntaxTree = await this.generateAbstractSyntaxTree();
+		this._rootASTNode = await this.generateAbstractSyntaxTree();
 
 		// Running the semantic analysis for the AST
+		this.logger.debug("Setting up built-ins in global scope.");
+		await this.setUpBuiltInsInGlobalScope();
 		this.logger.info(`Analysing semantics.`);
 		await this.semanticAnalysis();
 
-		// If the semantic analysis failed, return an empty array
+		// If the semantic analysis failed, return nothing
 		if (this.hasFailed) {
 			return undefined;
 		}
@@ -590,7 +618,7 @@ export class KipperProgramContext {
 		let genCode: Array<TranslatedCodeLine> = await this.translate();
 
 		this.logger.debug(`Lines of generated code: ${genCode.length}.`);
-		this.logger.debug(`Number of processed root items: ${this._abstractSyntaxTree.children.length}.`);
+		this.logger.debug(`Number of processed root items: ${this._rootASTNode.children.length}.`);
 
 		// Cache the result
 		this._compiledCode = genCode;
@@ -697,8 +725,8 @@ export class KipperProgramContext {
 		builtInVariables = Array.isArray(builtInVariables) ? builtInVariables : [builtInVariables];
 
 		// Make sure the global is valid and doesn't interfere with other identifiers
+		// If an error occurs, line 1 and col 1 will be used, as the ctx is undefined.
 		for (let g of builtInVariables) {
-			// If an error occurs, line 1 and col 1 will be used, as the ctx is undefined.
 			this.semanticCheck(undefined).globalCanBeRegistered(g.identifier);
 		}
 		this.builtInVariables.push(...builtInVariables);
@@ -710,6 +738,7 @@ export class KipperProgramContext {
 	 */
 	public clearBuiltInFunctions() {
 		this.builtInFunctions.splice(0);
+		this.universeScope.clearUniversalFunctions();
 	}
 
 	/**
@@ -718,6 +747,7 @@ export class KipperProgramContext {
 	 */
 	public clearBuiltInVariables() {
 		this.builtInVariables.splice(0);
+		this.universeScope.clearUniversalVariables();
 	}
 
 	/**
@@ -726,16 +756,16 @@ export class KipperProgramContext {
 	 * @param refTarget The built-in identifier referenced.
 	 * @since 0.8.0
 	 */
-	public addBuiltInReference(exp: Expression, refTarget: BuiltInFunction | BuiltInVariable) {
+	public addBuiltInReference(exp: Expression, refTarget: ScopeVariableDeclaration | ScopeFunctionDeclaration) {
 		const ref = {
 			refTarget: refTarget,
 			srcExpr: exp,
-		} satisfies Reference<BuiltInFunction | BuiltInVariable>;
+		} satisfies Reference<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
-		if ("valueType" in ref.refTarget) {
-			this._builtInVariableReferences.push(<Reference<BuiltInVariable>>ref);
+		if (ref.refTarget instanceof ScopeVariableDeclaration) {
+			this._builtInVariableReferences.push(<Reference<ScopeVariableDeclaration>>ref);
 		} else {
-			this._builtInFunctionReferences.push(<Reference<BuiltInFunction>>ref);
+			this._builtInFunctionReferences.push(<Reference<ScopeFunctionDeclaration>>ref);
 		}
 	}
 
@@ -750,5 +780,38 @@ export class KipperProgramContext {
 			refTarget: ref,
 			srcExpr: exp,
 		});
+	}
+
+	/**
+	 * Initialises the universal referencables for the program context, by registering all built-in functions and
+	 * variables as well as adding all the extension functions and variables.
+	 *
+	 * This will initialise {@link this._universeScope}.
+	 * @param compileConfig The compile configuration for the program.
+	 * @private
+	 * @since 0.11.0
+	 */
+	private _initUniversalReferencables(compileConfig: EvaluatedCompileConfig) {
+		// Register all built-in functions
+		const globalFunctions = [...Object.values(BuiltInFunctions), ...compileConfig.extendBuiltInFunctions];
+		this.registerBuiltInFunctions(globalFunctions);
+		this.logger.debug(
+			`Registered ${globalFunctions.length} global function${globalFunctions.length === 1 ? "" : "s"}.`,
+		);
+
+		// Register all built-in variables
+		const globalVariables = [...Object.values(BuiltInVariables), ...compileConfig.extendBuiltInVariables];
+		this.registerBuiltInVariables(globalVariables);
+		this.logger.debug(
+			`Registered ${globalVariables.length} global variable${globalVariables.length === 1 ? "" : "s"}.`,
+		);
+
+		this._universeScope.init();
+		for (const extFunction of compileConfig.extendBuiltInFunctions) {
+			this._universeScope.addFunction(extFunction);
+		}
+		for (const extVariable of compileConfig.extendBuiltInVariables) {
+			this._universeScope.addVariable(extVariable);
+		}
 	}
 }

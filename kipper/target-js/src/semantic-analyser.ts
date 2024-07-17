@@ -2,9 +2,18 @@
  * The TypeScript target-specific semantic analyser.
  * @since 0.10.0
  */
-import type { FunctionDeclaration, ParameterDeclaration, VariableDeclaration } from "@kipper/core";
+import type {
+	ClassDeclaration,
+	Declaration,
+	FunctionDeclaration,
+	InterfaceDeclaration,
+	InterfacePropertyDeclaration,
+	ParameterDeclaration,
+	VariableDeclaration,
+} from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
+import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -17,9 +26,7 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * @param declaration The variable, function or parameter declaration.
 	 * @private
 	 */
-	protected checkViabilityOfIdentifier(
-		declaration: ParameterDeclaration | FunctionDeclaration | VariableDeclaration,
-	): void {
+	protected checkViabilityOfIdentifier(declaration: Declaration): void {
 		const identifier = declaration.getSemanticData().identifier;
 
 		// Throw an error in case the declaration identifier is reserved
@@ -100,6 +107,34 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	variableDeclaration = async (node: VariableDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
+	 */
+	interfaceDeclaration = async (node: InterfaceDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	interfacePropertyDeclaration = async (node: InterfacePropertyDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration) => {
+		this.checkViabilityOfIdentifier(node);
+	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link VariableDeclaration} instances.
+	 */
+	classDeclaration = async (node: ClassDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
 
@@ -222,26 +257,6 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	equalityExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.
-	 */
-	logicalAndExpression = undefined;
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link LogicalOrExpression} instances.
-	 */
-	logicalOrExpression = undefined;
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link ConditionalExpression} instances.
-	 */
-	conditionalExpression = undefined;
-
-	/**
-	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
-	 */
-	assignmentExpression = undefined;
-
-	/**
 	 * Performs typescript-specific semantic analysis for {@link BitwiseAndExpression} instances.
 	 */
 	bitwiseAndExpression = undefined;
@@ -262,7 +277,27 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	bitwiseShiftExpression = undefined;
 
 	/**
+	 * Performs typescript-specific semantic analysis for {@link LogicalAndExpression} instances.
+	 */
+	logicalAndExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link LogicalOrExpression} instances.
+	 */
+	logicalOrExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ConditionalExpression} instances.
+	 */
+	conditionalExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link AssignmentExpression} instances.
+	 */
+	assignmentExpression = undefined;
+
+	/**
 	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
-	lambdaExpression = undefined;
+	lambdaPrimaryExpression = undefined;
 }
