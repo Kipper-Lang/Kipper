@@ -15,8 +15,9 @@ import {
 	BuiltInTypeType,
 	BuiltInTypeUndefined,
 	BuiltInTypeVoid,
-} from "../types/built-in";
+} from "../types";
 import { BuiltInTypeAny } from "../types/built-in/any";
+import { BuiltInTypeObject } from "../types/built-in/object";
 
 const any = new BuiltInTypeAny();
 
@@ -35,6 +36,7 @@ export const BuiltInTypes = {
 	str: new BuiltInTypeStr(),
 	Func: new BuiltInTypeFunc(),
 	Array: new BuiltInTypeArray(any),
+	obj: new BuiltInTypeObject(),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
 /**

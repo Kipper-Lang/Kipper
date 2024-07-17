@@ -70,6 +70,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
+import { builtInTypes } from "./built-in-types";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -136,15 +137,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// The following objects are built-in types and functions that are used internally by Kipper and should not be
 			// modified by the user.
 			[
-				"__kipper.builtIn = __kipper.builtIn || {};" +
-					"__kipper.builtIn.int = __kipper.builtIn.int || new Type('int', undefined, undefined);" +
-					"__kipper.builtIn.str = __kipper.builtIn.str || new Type('str', undefined, undefined);" +
-					"__kipper.builtIn.bool = __kipper.builtIn.bool || new Type('bool', undefined, undefined);" +
-					"__kipper.builtIn.void = __kipper.builtIn.void || new Type('void', undefined, undefined);" +
-					"__kipper.builtIn.undefined = __kipper.builtIn.undefined || new Type('undefined', undefined, undefined);" +
-					"__kipper.builtIn.null = __kipper.builtIn.null || new Type('null', undefined, undefined);" +
-					"__kipper.builtIn.obj = __kipper.builtIn.obj || new Type('obj', undefined, undefined);" +
-					"__kipper.builtIn.array = __kipper.builtIn.array || new Type('array', undefined, undefined);",
+				`__kipper.builtIn = ${TargetJS.internalObjectIdentifier}.builtIn || {};` +
+					builtInTypes
+						.map(
+							(b) =>
+								`${TargetJS.internalObjectIdentifier}.builtIn.${b.name} = ${TargetJS.internalObjectIdentifier}.builtIn.${b.name} || ${b.value}`,
+						)
+						.join(";"),
 			],
 		];
 	};
