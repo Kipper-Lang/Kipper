@@ -19,6 +19,7 @@ import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
 import type { InterfaceMemberDeclarationTypeSemantics } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration-type-semantics";
+import { BuiltInRuntimeType } from "@kipper/target-js/lib/built-in-types";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -79,7 +80,13 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			if (member instanceof InterfacePropertyDeclaration) {
 				let property = member.getSemanticData();
 				let type = member.getTypeSemanticData();
-				propertiesWithTypes += `"${property.identifier}": ${TargetJS.getRuntimeType(type.type)}, `;
+				let runtimeType = TargetJS.getRuntimeType(type.type);
+				if(runtimeType instanceof BuiltInRuntimeType){
+					propertiesWithTypes += `new Property("${property.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}),`;
+				}
+				else{
+					propertiesWithTypes += `new Property(${property.identifier}, TESTEST), `;
+				}
 			}
 		}
 
@@ -94,9 +101,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 				"Type(",
 				'"' + interfaceName + '"',
 				",",
-				"[{",
+				"[",
 				propertiesWithTypes,
-				"}]",
+				"]",
 				",",
 				"[",
 				methods,

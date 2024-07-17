@@ -121,9 +121,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			],
 			// The following object is the template for runtime types
 			["// @ts-ignore"],
+			["class Property {constructor(name, type) {this.name = name;this.type = type;}}"],
+			["// @ts-ignore"],
 			[
 				"class Type {" +
-					"constructor(name, fields = [], methods = [], baseType = null) {" +
+					"constructor(name, fields, methods, baseType = null) {" +
 					"this.name = name;" +
 					"this.fields = fields;" +
 					"this.methods = methods;" +
