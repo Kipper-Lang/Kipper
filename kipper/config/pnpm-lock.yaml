@@ -22,7 +22,7 @@ dependencies:
     version: 7.6.0
   tslib:
     specifier: ~2.6.2
-    version: 2.6.2
+    version: 2.6.3
 
 devDependencies:
   '@kipper/core':
@@ -65,8 +65,8 @@ packages:
       lru-cache: 6.0.0
     dev: false
 
-  /tslib@2.6.2:
-    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+  /tslib@2.6.3:
+    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
     dev: false
 
   /typescript@5.1.3:
