@@ -62,6 +62,26 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
+	private generateInterfaceRuntimeTypeChecks = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		var semanticData = node.getSemanticData();
+		var interfaceName = semanticData.identifier;
+		var interfaceMembers = semanticData.members;
+
+		var memberDeclarations = await Promise.all(
+			interfaceMembers.map(async (member) => {
+				return member.translateCtxAndChildren();
+			}),
+		);
+
+		let varName = "_intf_" + interfaceName;
+		let properties = ""; // TODO
+		let methods = "";
+
+		let lines: Array<TranslatedCodeLine> = [
+			["const", varName, "=", "new", "Type(", interfaceName, ",", "[", properties, "]", ",", "[", methods, "]", ")" ],
+		];
+	}
+
 	override interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const interfaceName = semanticData.identifier;
