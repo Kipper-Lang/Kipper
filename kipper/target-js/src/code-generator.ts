@@ -118,6 +118,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
 				";",
 			],
+			// The following object is the template for runtime types
+			["// @ts-ignore"],
+			[
+				"class Type {" +
+					"constructor(name, fields = [], methods = [], baseType = null) {" +
+					"this.name = name;" +
+					"this.fields = fields;" +
+					"this.methods = methods;" +
+					"this.baseType = baseType;" +
+					"}" +
+					"isCompatibleWith(obj) {" +
+					"return this.name === obj.name;" +
+					"}",
+				"}",
+			],
+			// The following objects are built-in types and functions that are used internally by Kipper and should not be
+			// modified by the user.
+			[
+				"__kipper.builtIn = __kipper.builtIn || {};" +
+					"__kipper.builtIn.int = __kipper.builtIn.int || new Type('int', undefined, undefined);" +
+					"__kipper.builtIn.str = __kipper.builtIn.str || new Type('str', undefined, undefined);" +
+					"__kipper.builtIn.bool = __kipper.builtIn.bool || new Type('bool', undefined, undefined);" +
+					"__kipper.builtIn.void = __kipper.builtIn.void || new Type('void', undefined, undefined);" +
+					"__kipper.builtIn.undefined = __kipper.builtIn.undefined || new Type('undefined', undefined, undefined);" +
+					"__kipper.builtIn.null = __kipper.builtIn.null || new Type('null', undefined, undefined);" +
+					"__kipper.builtIn.obj = __kipper.builtIn.obj || new Type('obj', undefined, undefined);" +
+					"__kipper.builtIn.array = __kipper.builtIn.array || new Type('array', undefined, undefined);",
+			],
 		];
 	};
 
