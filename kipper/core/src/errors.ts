@@ -320,6 +320,16 @@ export class MissingRequiredSemanticDataError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a generic type is initialised that contains more than one spread argument.
+ * @since 0.12.0
+ */
+export class GenericCanOnlyHaveOneSpreadError extends KipperInternalError {
+	constructor() {
+		super("Only one generic argument can be a spread argument.");
+	}
+}
+
+/**
  * An error that is raised whenever a feature is used that has not been implemented yet.
  * @since 0.6.0
  */
@@ -659,16 +669,35 @@ export class GenericArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
+ * @since 0.12.0
+ */
+export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+	constructor(expected: number, received: number) {
+		super(`Function type expects ${expected} arguments, received ${received}.`);
+	}
+}
+
+/**
  * Error that is thrown when an invalid amount of generic arguments is passed to a type.
  * @since 0.12.0
  */
 export class InvalidAmountOfGenericArgumentsError extends TypeError {
-	constructor(typeIdentifier: string, expected: number, received: number) {
+	constructor(typeIdentifier: string, expected: number, received: number, spreadPresent: boolean) {
 		super(
-			`Type '${typeIdentifier}' only accepts ${expected} generic argument${
-				expected === 1 ? "" : "s"
-			}, received ${received}.`,
+			`Type '${typeIdentifier}' ${spreadPresent ? "expects at least" : "only accepts"} ${expected} generic` +
+				`argument${expected === 1 ? "" : "s"}, received ${received}.`,
 		);
+	}
+}
+
+/**
+ * Error that is thrown when a generic type is used that is not defined.
+ * @since 0.12.0
+ */
+export class MultipleSpreadsInGenericTypeArgumentsError extends TypeError {
+	constructor() {
+		super("Only one spread argument is allowed in generic type arguments.");
 	}
 }
 

@@ -824,32 +824,28 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link LambdaPrimaryExpression} into the JavaScript language.
 	 */
 	lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
-		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
 
-		// Step 2: Translate Parameters
-		let translatedParams = params.map((param) => param.getSemanticData().identifier).join(", ");
+		// Generate the function signature
+		const translatedParams: TranslatedExpression = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => <TranslatedExpression>[...param.flat(), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
 
-		let translatedBody;
-		let translatedBodyAsync = await body.translateCtxAndChildren();
+		const translatedBody =
+			body instanceof Expression
+				? await body.translateCtxAndChildren()
+				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
 
-		if (body instanceof Expression) {
-			translatedBody = translatedBodyAsync
-				.map((line) => {
-					if (line instanceof Array) {
-						return line.join(" ").trim();
-					}
-					return line;
-				})
-				.join("");
-		} else {
-			translatedBody = await this.compoundStatement(body);
-			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");
-		}
-
-		// Step 4: Format Lambda Expression
-		return [`(${translatedParams}) => ${translatedBody}`];
+		// Return the lambda function
+		return ["(", ...translatedParams, ") => ", ...translatedBody];
 	};
 }
