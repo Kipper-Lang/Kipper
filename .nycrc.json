@@ -11,6 +11,6 @@
 		"**/*.spec.ts",
 		"**/*.d.ts",
 		"**/*.map",
-		"**/error.ts"
+		"**/errors.ts"
 	]
 }
