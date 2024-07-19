@@ -13,6 +13,7 @@ import type {
 	TranslatedCodeLine,
 	VariableDeclaration,
 } from "@kipper/core";
+import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
 import { TargetTS } from "./target";
@@ -118,6 +119,34 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		// Return the property declaration
 		return [[identifier, ":", " ", valueType, ";"]];
+	};
+
+	override lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+		const params = semanticData.params;
+		const body = semanticData.functionBody;
+		const returnType = TargetTS.getTypeScriptType(typeData.returnType);
+
+		// Generate the function signature
+		const translatedParams: TranslatedExpression = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => <TranslatedExpression>[...param.flat(), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
+
+		const translatedBody =
+			body instanceof Expression
+				? await body.translateCtxAndChildren()
+				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
+
+		// Return the lambda function
+		return ["(", ...translatedParams, "): ", returnType, " => ", ...translatedBody];
 	};
 
 	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {

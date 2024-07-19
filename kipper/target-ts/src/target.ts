@@ -72,8 +72,13 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 				return "undefined";
 			case BuiltInTypes.void.identifier:
 				return "void";
-			case BuiltInTypes.Func.identifier:
-				return "() => any";
+			case BuiltInTypes.Func.identifier: {
+				const returnType = this.getTypeScriptType((<typeof BuiltInTypes.Func>kipperType).returnType);
+				const paramTypes = (<typeof BuiltInTypes.Func>kipperType).parameterTypes
+					.map((param, index) => `arg${index}: ${this.getTypeScriptType(param)}`)
+					.join(", ");
+				return `(${paramTypes}) => ${returnType}`;
+			}
 			case BuiltInTypes.Array.identifier: {
 				const memberType = this.getTypeScriptType((<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type);
 				return `Array<${memberType}>`;
