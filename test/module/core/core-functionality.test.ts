@@ -1562,7 +1562,7 @@ describe("Core functionality", () => {
 		});
 
 		it("should be able to create class with members", async () => {
-			const fileContent = `class Test {\n  x: num;\n  y: str; \ngreet(): void {\nprint("Kippa");\n};\n  constructor(a: num, b: str)\n{\n};}`;
+			const fileContent = `class Test {\n  x: num;\n  y: str;\ngreet(): void {\nprint("Kippa");\n};\n  constructor(a: num, b: str)\n{\n};}`;
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
