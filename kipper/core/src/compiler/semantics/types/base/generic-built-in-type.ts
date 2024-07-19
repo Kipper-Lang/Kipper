@@ -2,7 +2,7 @@ import { BuiltInType } from "./built-in-type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 import type { KipperBuiltInTypeLiteral } from "../../../const";
 import type { ProcessedType } from "./index";
-import { KipperInternalError } from "../../../../errors";
+import { GenericCanOnlyHaveOneSpreadError, KipperInternalError } from "../../../../errors";
 
 /**
  * Represents a generic built-in type that is used in the type analysis phase.
@@ -18,6 +18,12 @@ export abstract class GenericBuiltInType<T extends GenericTypeArguments> extends
 	protected constructor(identifier: KipperBuiltInTypeLiteral, genericTypeArguments: T) {
 		super(identifier);
 		this.genericTypeArguments = genericTypeArguments;
+
+		// Ensure that only one generic argument is a spread argument i.e. can contain `1..N` elements.
+		const spreadArguments = genericTypeArguments.filter((arg) => Array.isArray(arg.type));
+		if (spreadArguments.length > 1) {
+			throw new GenericCanOnlyHaveOneSpreadError();
+		}
 	}
 
 	/**

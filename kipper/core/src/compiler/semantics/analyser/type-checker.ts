@@ -65,7 +65,7 @@ import {
 	ValueNotIndexableTypeError,
 } from "../../../errors";
 import type { RawType, ProcessedType, GenericType, BuiltInTypeArray } from "../types";
-import { GenericTypeArguments } from "../types";
+import type { GenericTypeArguments } from "../types";
 import { UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
@@ -135,12 +135,33 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param type The generic type to check.
 	 * @param args The generic arguments to check.
 	 */
-	public ensureValidGenericType(type: ProcessedType | GenericType, args: ProcessedType[]): void {
+	public ensureValidGenericType(type: ProcessedType | GenericType<GenericTypeArguments>, args: ProcessedType[]): void {
 		if (!type.isGeneric || !("genericTypeArguments" in type)) {
 			throw this.assertError(new CanNotUseNonGenericAsGenericTypeError(type.toString()));
-		} else if (type.genericTypeArguments.length !== args.length) {
+		}
+
+		const requiredGenericArgs = type.genericTypeArguments.filter((arg) => !Array.isArray(arg.type));
+		const spreadCount = type.genericTypeArguments.length - requiredGenericArgs.length;
+		if (spreadCount > 1) {
 			throw this.assertError(
-				new InvalidAmountOfGenericArgumentsError(type.toString(), type.genericTypeArguments.length, args.length),
+				new InvalidAmountOfGenericArgumentsError(
+					type.toString(),
+					requiredGenericArgs.length,
+					args.length,
+					!!spreadCount,
+				),
+			);
+		} else if (
+			(spreadCount && requiredGenericArgs.length > args.length) ||
+			(!spreadCount && requiredGenericArgs.length !== args.length)
+		) {
+			throw this.assertError(
+				new InvalidAmountOfGenericArgumentsError(
+					type.toString(),
+					requiredGenericArgs.length,
+					args.length,
+					!!spreadCount,
+				),
 			);
 		}
 	}

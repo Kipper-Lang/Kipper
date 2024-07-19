@@ -2,11 +2,13 @@ import { GenericBuiltInType } from "../base/generic-built-in-type";
 import type { ProcessedType } from "../index";
 import {
 	ArgumentAssignmentTypeError,
-	AssignmentTypeError, GenericArgumentTypeError,
+	AssignmentTypeError,
+	GenericArgumentTypeError,
 	KipperInternalError,
-	PropertyAssignmentTypeError, type TypeError,
+	PropertyAssignmentTypeError,
+	type TypeError,
 } from "../../../../errors";
-import {BuiltInTypes} from "../../symbol-table";
+import { BuiltInTypes } from "../../symbol-table";
 
 /**
  * Represents the generic arguments for the built-in type `Func`.
@@ -14,7 +16,7 @@ import {BuiltInTypes} from "../../symbol-table";
  */
 export type BuiltInTypeFuncGenericArguments = [
 	{ identifier: "T"; type: Array<ProcessedType> },
-	{ identifier: "R"; type: ProcessedType }
+	{ identifier: "R"; type: ProcessedType },
 ];
 
 /**
@@ -22,10 +24,7 @@ export type BuiltInTypeFuncGenericArguments = [
  * @since 0.12.0
  */
 export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericArguments> {
-	constructor(
-		paramTypes: Array<ProcessedType>,
-		returnType: ProcessedType,
-	) {
+	constructor(paramTypes: Array<ProcessedType>, returnType: ProcessedType) {
 		super("Func", [
 			{
 				identifier: "T",
@@ -34,7 +33,7 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 			{
 				identifier: "R",
 				type: returnType,
-			}
+			},
 		]);
 	}
 
@@ -46,11 +45,24 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 		return Object.values(this.changeGenericTypeArguments).every((arg) => arg.isCompilable);
 	}
 
+	/**
+	 * Returns the return type of the function.
+	 * @since 0.12.0
+	 */
+	public get returnType(): ProcessedType {
+		return this.genericTypeArguments[1].type;
+	}
+
+	/**
+	 * Returns the parameter types of the function.
+	 * @since 0.12.0
+	 */
+	public get parameterTypes(): Array<ProcessedType> {
+		return this.genericTypeArguments[0].type;
+	}
+
 	public changeGenericTypeArguments(genericTypeArguments: BuiltInTypeFuncGenericArguments): BuiltInTypeFunc {
-		return new BuiltInTypeFunc(
-			genericTypeArguments[0].type,
-			genericTypeArguments[1].type
-		);
+		return new BuiltInTypeFunc(genericTypeArguments[0].type, genericTypeArguments[1].type);
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
@@ -71,24 +83,24 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 					paramType.assertAssignableTo(otherParamTypes.type[index]);
 				});
 				return;
-			} catch (e) {
+			} catch (error) {
 				e = new GenericArgumentTypeError(
 					otherParamTypes.identifier,
 					otherParamTypes.type.toString(),
 					paramTypes.type.toString(),
-					<TypeError>e,
+					<TypeError>error,
 				);
 			}
 
 			try {
 				returnType.type.assertAssignableTo(otherReturnType.type);
 				return;
-			} catch (e) {
+			} catch (error) {
 				e = new GenericArgumentTypeError(
 					otherReturnType.identifier,
 					otherReturnType.type.toString(),
 					returnType.type.toString(),
-					<TypeError>e,
+					<TypeError>error,
 				);
 			}
 		}

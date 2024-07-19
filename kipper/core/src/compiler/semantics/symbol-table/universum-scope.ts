@@ -33,7 +33,7 @@ export const BuiltInTypes = {
 	bool: new BuiltInTypeBool(),
 	num: new BuiltInTypeNum(),
 	str: new BuiltInTypeStr(),
-	Func: new BuiltInTypeFunc(),
+	Func: new BuiltInTypeFunc([], any),
 	Array: new BuiltInTypeArray(any),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
