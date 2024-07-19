@@ -26,6 +26,10 @@ To use development versions of Kipper download the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
+- Implemented the generic `Func<T..., R>` type and function type initializers.
+	([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
+- Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
+	parameter inside of a generic type specifier.
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
@@ -49,7 +53,7 @@ To use development versions of Kipper download the
   - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
     an error indicating an invalid logic that should be fixed.
   - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
-		match the amount of arguments in the function type it is compared to.
+		match the number of arguments in the function type it is compared to.
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
