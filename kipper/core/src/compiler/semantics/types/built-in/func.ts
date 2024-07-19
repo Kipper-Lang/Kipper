@@ -4,7 +4,7 @@ import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	GenericArgumentTypeError,
-	KipperInternalError,
+	KipperInternalError, MismatchingArgCountBetweenFuncTypesError,
 	PropertyAssignmentTypeError,
 	type TypeError,
 } from "../../../../errors";
@@ -77,6 +77,10 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 		) {
 			const [paramTypes, returnType] = this.genericTypeArguments;
 			const [otherParamTypes, otherReturnType] = (<typeof this>type).genericTypeArguments;
+
+			if (paramTypes.type.length !== otherParamTypes.type.length) {
+				throw new MismatchingArgCountBetweenFuncTypesError(otherParamTypes.type.length, paramTypes.type.length);
+			}
 
 			try {
 				paramTypes.type.forEach((paramType, index) => {

@@ -669,6 +669,16 @@ export class GenericArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
+ * @since 0.12.0
+ */
+export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+	constructor(expected: number, received: number) {
+		super(`Function type expects ${expected} arguments, received ${received}.`);
+	}
+}
+
+/**
  * Error that is thrown when an invalid amount of generic arguments is passed to a type.
  * @since 0.12.0
  */
