@@ -156,7 +156,16 @@ export class LambdaPrimaryExpression
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.Func,
+			evaluatedType: BuiltInTypes.Func.changeGenericTypeArguments([
+				{
+					identifier: "T",
+					type: semanticData.params.map((param) => param.getTypeSemanticData().storedType),
+				},
+				{
+					identifier: "R",
+					type: returnType,
+				},
+			]),
 			returnType: returnType,
 		};
 
