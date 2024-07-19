@@ -48,6 +48,8 @@ To use development versions of Kipper download the
     an error indicating an invalid logic that should be fixed.
   - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
     an error indicating an invalid logic that should be fixed.
+  - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
+		match the amount of arguments in the function type it is compared to.
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
