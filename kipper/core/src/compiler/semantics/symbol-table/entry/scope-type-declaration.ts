@@ -116,11 +116,11 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	/**
 	 * Returns whether the declaration has a value.
 	 *
-	 * As this is a type, it will always be false.
+	 * As this is a type, it will always be true;
 	 * @since 0.11.0
 	 */
-	public get hasValue(): false {
-		return false;
+	public get hasValue(): true {
+		return true;
 	}
 
 	/**
