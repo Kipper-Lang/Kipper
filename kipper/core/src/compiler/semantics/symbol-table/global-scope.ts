@@ -16,7 +16,10 @@ import type { UniverseScope } from "./universum-scope";
  * @since 0.8.0
  */
 export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
-	constructor(public readonly ctx: RootASTNode, public readonly universe: UniverseScope) {
+	constructor(
+		public readonly ctx: RootASTNode,
+		public readonly universe: UniverseScope,
+	) {
 		super();
 	}
 

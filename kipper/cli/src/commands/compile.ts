@@ -119,7 +119,7 @@ export default class Compile extends Command {
 		const { stream, outDir } = await getParseStream(args, flags, preExistingConfig);
 		const target: KipperCompileTarget = flags["target"]
 			? getTarget(flags["target"])
-			: preExistingCompileConfig?.target ?? getTarget("js");
+			: (preExistingCompileConfig?.target ?? getTarget("js"));
 
 		// Output
 		const encoding = flags["encoding"] || "utf8";
