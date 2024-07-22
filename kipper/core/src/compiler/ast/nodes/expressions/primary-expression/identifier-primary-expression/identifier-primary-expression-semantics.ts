@@ -2,8 +2,8 @@
  * Semantics for AST Node {@link IdentifierPrimaryExpression}.
  * @since 0.5.0
  */
-import type { Reference } from "../../../../../semantics";
 import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
+import type { KipperReferenceable } from "../../../../../const";
 
 /**
  * Semantics for AST Node {@link IdentifierPrimaryExpression}.
@@ -19,5 +19,5 @@ export interface IdentifierPrimaryExpressionSemantics extends PrimaryExpressionS
 	 * The reference that the {@link IdentifierPrimaryExpressionSemantics.identifier identifier} points to.
 	 * @since 0.10.0
 	 */
-	ref: Reference;
+	ref: KipperReferenceable;
 }
