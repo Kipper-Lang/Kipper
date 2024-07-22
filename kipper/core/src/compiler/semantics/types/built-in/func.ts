@@ -4,7 +4,8 @@ import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	GenericArgumentTypeError,
-	KipperInternalError, MismatchingArgCountBetweenFuncTypesError,
+	KipperInternalError,
+	MismatchingArgCountBetweenFuncTypesError,
 	PropertyAssignmentTypeError,
 	type TypeError,
 } from "../../../../errors";

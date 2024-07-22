@@ -179,18 +179,24 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const identifier = semanticData.identifier;
 		const params = semanticData.parameters;
 		const body = semanticData.functionBody;
-		const returnType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().evaluatedType);
+		const evaluatedType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
+		const returnType = evaluatedType;
 
-		const translatedParams = (await Promise.all(
+		const translatedParams = (
+			await Promise.all(
 				params.map(async (param) => {
 					return await param.translateCtxAndChildren();
 				}),
-			))
-			.map((param) => [...(param.flat()), ", "])
+			)
+		)
+			.map((param) => [...param.flat(), ", "])
 			.flat();
 		translatedParams.pop(); // Remove the last comma
 
-		return [[identifier, "(", ...translatedParams, ")", ":", " ", returnType], ...(await body.translateCtxAndChildren())];
+		return [
+			[identifier, "(", ...translatedParams, ")", ":", " ", returnType],
+			...(await body.translateCtxAndChildren()),
+		];
 	};
 
 	override classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {

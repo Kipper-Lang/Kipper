@@ -474,11 +474,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const params = semanticData.parameters;
 		const body = semanticData.functionBody;
 
-		let processedParams = (await Promise.all(
+		let processedParams = (
+			await Promise.all(
 				params.map(async (param) => {
 					return await param.translateCtxAndChildren();
 				}),
-			))
+			)
+		)
 			.map((param) => [...param.flat(), ", "])
 			.flat();
 		processedParams.pop();

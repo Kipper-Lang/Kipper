@@ -1,7 +1,7 @@
 import type { TypeDeclarationSemantics } from "../../../type-declaration-semantics";
 import type { ParameterDeclaration } from "../../../../parameter-declaration";
 import type { CompoundStatement } from "../../../../../statements";
-import { KipperConstructorInternalIdentifier } from "../../../../../../../const";
+import type { KipperConstructorInternalIdentifier } from "../../../../../../../const";
 
 /**
  * Semantics for AST Node {@link InterfacePropertyDeclaration}.
