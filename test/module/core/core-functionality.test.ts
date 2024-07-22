@@ -1350,7 +1350,6 @@ describe("Core functionality", () => {
 
 	describe("Lambdas", () => {
 		describe("js", () => {
-
 			it("parses simple lambda expression without syntax errors", async () => {
 				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
 				try {
@@ -1412,9 +1411,7 @@ describe("Core functionality", () => {
 			});
 		});
 
-		describe("ts", () => {
-
-		});
+		describe("ts", () => {});
 	});
 
 	describe("Functions", () => {
