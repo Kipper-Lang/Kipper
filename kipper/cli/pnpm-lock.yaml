@@ -46,7 +46,7 @@ dependencies:
     version: 10.9.2(@types/node@20.14.9)(typescript@5.1.3)
   tslib:
     specifier: ~2.6.2
-    version: 2.6.2
+    version: 2.6.3
   tslog:
     specifier: 3.3.4
     version: 3.3.4
@@ -435,7 +435,7 @@ packages:
       debug: 4.3.5(supports-color@8.1.1)
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.6.2
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -449,7 +449,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.6.2
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -463,7 +463,7 @@ packages:
       debug: 4.3.5(supports-color@8.1.1)
       globby: 11.1.0
       is-wsl: 2.2.0
-      tslib: 2.6.2
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -497,7 +497,7 @@ packages:
       strip-ansi: 6.0.1
       supports-color: 8.1.1
       supports-hyperlinks: 2.2.0
-      tslib: 2.6.2
+      tslib: 2.6.3
       widest-line: 3.1.0
       wrap-ansi: 7.0.0
     dev: true
@@ -530,7 +530,7 @@ packages:
       supports-color: 8.1.1
       supports-hyperlinks: 2.2.0
       ts-node: 10.9.2(@types/node@20.14.9)(typescript@5.1.3)
-      tslib: 2.6.2
+      tslib: 2.6.3
       widest-line: 3.1.0
       wordwrap: 1.0.0
       wrap-ansi: 7.0.0
@@ -589,7 +589,7 @@ packages:
       '@oclif/errors': 1.3.6
       '@oclif/linewrap': 1.0.0
       chalk: 4.1.2
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /@oclif/plugin-help@3.3.1:
@@ -3284,7 +3284,7 @@ packages:
       lodash: 4.17.21
       normalize-package-data: 3.0.3
       semver: 7.6.2
-      tslib: 2.6.2
+      tslib: 2.6.3
       yeoman-environment: 3.19.3
       yeoman-generator: 5.10.0(yeoman-environment@3.19.3)
       yosay: 2.0.2
@@ -3861,7 +3861,7 @@ packages:
   /rxjs@7.8.1:
     resolution: {integrity: sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==}
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: true
 
   /safe-buffer@5.1.2:
@@ -4301,6 +4301,7 @@ packages:
 
   /ts-node@10.9.2(@types/node@20.14.9)(typescript@5.1.3):
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
+    hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
       '@swc/wasm': '>=1.2.50'
@@ -4331,8 +4332,8 @@ packages:
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
-  /tslib@2.6.2:
-    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+  /tslib@2.6.3:
+    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
   /tslog@3.3.4:
     resolution: {integrity: sha512-N0HHuHE0e/o75ALfkioFObknHR5dVchUad4F0XyFf3gXJYB++DewEzwGI/uIOM216E5a43ovnRNEeQIq9qgm4Q==}
