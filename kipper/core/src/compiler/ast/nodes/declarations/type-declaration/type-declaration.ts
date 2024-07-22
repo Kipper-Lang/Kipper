@@ -4,6 +4,7 @@ import type { TypeDeclarationSemantics } from "./type-declaration-semantics";
 import type { TypeDeclarationTypeSemantics } from "./type-declaration-type-semantics";
 import type { ASTInterfaceMemberDeclarationKind } from "./interface-declaration";
 import { Declaration } from "../declaration";
+import type { ASTClassMemberDeclarationKind } from "./class-declaration/class-member-declaration/class-member-declaration";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link TypeDeclaration} AST node.
@@ -11,6 +12,7 @@ import { Declaration } from "../declaration";
  */
 export type ASTTypeDeclarationKind =
 	| ASTInterfaceMemberDeclarationKind
+	| ASTClassMemberDeclarationKind
 	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
 	| typeof ParseRuleKindMapping.RULE_classDeclaration;
 

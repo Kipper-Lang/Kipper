@@ -103,8 +103,26 @@ interfaceMethodDeclaration
 
 
 classDeclaration
-	:	'class' declarator '{' '}'
+	:	'class' declarator '{' (classMemberDeclaration | SemiColon)* '}'
 	;
+
+classMemberDeclaration
+	:	classPropertyDeclaration
+	|	classMethodDeclaration
+	|	classConstructorDeclaration
+	;
+
+classPropertyDeclaration
+    :   declarator ':' typeSpecifierExpression
+    ;
+
+classMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression compoundStatement?
+    ;
+
+classConstructorDeclaration
+    :  	'constructor' '(' parameterList? ')' compoundStatement
+    ;
 
 // -- Statements
 

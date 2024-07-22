@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Added semantic checking and code generation for classes, class methods, class properties and class constructors.
+  ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
@@ -31,13 +33,16 @@ To use development versions of Kipper download the
 - Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
   parameter inside of a generic type specifier.
 - Implemented constant `NaN`, which represents the `NaN` value in JavaScript (Not a Number).
-  ([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
+	([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
   - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassMethodDeclaration`, which represents an AST class method declaration.
+  - `ClassPropertyDeclaration`, which represents an AST class property declaration.
+  - `ClassConstructorDeclaration`, which represents an AST class constructor.
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
@@ -59,6 +64,12 @@ To use development versions of Kipper download the
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassMethodDeclarationSemantics`, which represents the semantics of a class method declaration.
+  - `ClassMethodDeclarationTypeSemantics`, which represents the type semantics of a class method declaration.
+  - `ClassPropertyDeclarationSemantics`, which represents the semantics of a class property declaration.
+  - `ClassPropertyDeclarationTypeSemantics`, which represents the type semantics of a class property declaration.
+  - `ClassConstructorDeclarationSemantics`, which represents the semantics of a class constructor declaration.
+  - `ClassConstructorDeclarationTypeSemantics`, which represents the type semantics of a class constructor declaration.
   - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
   - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
   - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
