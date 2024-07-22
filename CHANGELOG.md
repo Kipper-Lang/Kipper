@@ -17,7 +17,7 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-- Added semantic checking and code generation for classes, class methods, class properties and class constructors.([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
+- Added semantic checking and code generation for classes, class methods, class properties and class constructors ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
