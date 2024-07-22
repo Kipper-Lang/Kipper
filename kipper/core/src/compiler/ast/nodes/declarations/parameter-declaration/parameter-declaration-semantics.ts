@@ -5,6 +5,8 @@
 import type { RawType } from "../../../../semantics";
 import type { DeclarationSemantics } from "../declaration-semantics";
 import type { FunctionDeclaration, IdentifierTypeSpecifierExpression, LambdaPrimaryExpression } from "../../../nodes";
+import type { ClassMethodDeclaration } from "../type-declaration/class-declaration/class-member-declaration/class-method-declaration/class-method-declaration";
+import type { ClassConstructorDeclaration } from "../type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Semantics for AST Node {@link ParameterDeclaration}.
@@ -30,5 +32,5 @@ export interface ParameterDeclarationSemantics extends DeclarationSemantics {
 	 * The parent function of this parameter.
 	 * @since 0.10.0
 	 */
-	func: FunctionDeclaration | LambdaPrimaryExpression;
+	func: FunctionDeclaration | LambdaPrimaryExpression | ClassMethodDeclaration | ClassConstructorDeclaration;
 }

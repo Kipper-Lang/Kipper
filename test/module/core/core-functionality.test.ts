@@ -1350,7 +1350,6 @@ describe("Core functionality", () => {
 
 	describe("Lambdas", () => {
 		describe("js", () => {
-
 			it("parses simple lambda expression without syntax errors", async () => {
 				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
 				try {
@@ -1412,9 +1411,7 @@ describe("Core functionality", () => {
 			});
 		});
 
-		describe("ts", () => {
-
-		});
+		describe("ts", () => {});
 	});
 
 	describe("Functions", () => {
@@ -1533,6 +1530,55 @@ describe("Core functionality", () => {
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
+		});
+	});
+
+	describe("Class", () => {
+		it("should be able to create an empty class", async () => {
+			const fileContent = "class Test { }";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "class Test {\n}", "Invalid TypeScript code (Expected different output)");
+		});
+
+		it("should be able to create class with constructor", async () => {
+			const fileContent = "class Test {constructor (a:num, b:str) {};};";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n  constructor(a: number, b: string) \n  {\n  }\n}",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should be able to create class with members", async () => {
+			const fileContent = `class Test {\n  x: num;\n  y: str;\ngreet(): void {\nprint("Kippa");\n};\n  constructor(a: num, b: str)\n{\n};}`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: number;\n" +
+					"  y: string;\n" +
+					"  greet(): void\n" +
+					"  {\n" +
+					'    __kipper.print("Kippa");\n' +
+					"  }\n" +
+					"  constructor(a: number, b: string) \n" +
+					"  {\n" +
+					"  }\n" +
+					"}",
+			);
 		});
 	});
 });

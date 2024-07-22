@@ -29,7 +29,7 @@ export type ParserInterfaceMemberDeclarationContext = InstanceType<
 export type ParserInterfaceMemberDeclarationRuleName = (typeof KindParseRuleMapping)[ASTInterfaceMemberDeclarationKind];
 
 /**
- * Abstract interface member declaration class which represents a member declaration (either method or proeprty)
+ * Abstract interface member declaration class which represents a member declaration (either method or property)
  * inside an interface.
  * @since 0.12.0
  */

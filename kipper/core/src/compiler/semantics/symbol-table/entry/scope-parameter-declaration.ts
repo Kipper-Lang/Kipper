@@ -4,6 +4,7 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
+	ClassMethodDeclaration,
 	FunctionDeclaration,
 	LambdaPrimaryExpression,
 	ParameterDeclaration,
@@ -11,9 +12,9 @@ import type {
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { FunctionScope } from "../index";
-import { LocalScope } from "../index";
 import { BuiltInTypes } from "../index";
 import type { ProcessedType } from "../../types";
+import type { ClassConstructorDeclaration } from "../../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -111,7 +112,11 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * Returns the function this parameter is defined in.
 	 * @since 0.10.0
 	 */
-	public get func(): FunctionDeclaration | LambdaPrimaryExpression {
+	public get func():
+		| FunctionDeclaration
+		| LambdaPrimaryExpression
+		| ClassMethodDeclaration
+		| ClassConstructorDeclaration {
 		return this.semanticData.func;
 	}
 

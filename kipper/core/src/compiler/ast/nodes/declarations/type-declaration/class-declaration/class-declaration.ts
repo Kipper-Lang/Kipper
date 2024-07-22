@@ -9,9 +9,11 @@ import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
 import type { ClassDeclarationContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
+import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
+import type { ClassMemberDeclaration } from "./class-member-declaration";
+import type { ClassConstructorDeclaration } from "./class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
@@ -132,9 +134,22 @@ export class ClassDeclaration
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
+		const antlrChildren = this.getAntlrRuleChildren();
+		const children = this.children;
+
+		if (!antlrChildren) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		const identifier = antlrChildren[1].text;
+		const classMembers = children.filter((child) => child.ruleName !== "RULE_classConstructorDeclaration");
+		const constructorDeclaration = children.find((child) => child.ruleName == "RULE_classConstructorDeclaration");
+
+		this.semanticData = {
+			identifier: identifier,
+			classMembers: <ClassMemberDeclaration[]>classMembers,
+			constructorDeclaration: <ClassConstructorDeclaration | undefined>constructorDeclaration,
+		};
 	}
 
 	/**

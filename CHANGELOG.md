@@ -17,7 +17,7 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-
+- Added semantic checking and code generation for classes, class methods, class properties and class constructors ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
@@ -27,15 +27,18 @@ To use development versions of Kipper download the
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - Implemented the generic `Func<T..., R>` type and function type initializers.
-	([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
+  ([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
 - Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
-	parameter inside of a generic type specifier.
+  parameter inside of a generic type specifier.
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
   - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassMethodDeclaration`, which represents an AST class method declaration.
+  - `ClassPropertyDeclaration`, which represents an AST class property declaration.
+  - `ClassConstructorDeclaration`, which represents an AST class constructor.
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
@@ -53,10 +56,16 @@ To use development versions of Kipper download the
   - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
     an error indicating an invalid logic that should be fixed.
   - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
-		match the number of arguments in the function type it is compared to.
+    match the number of arguments in the function type it is compared to.
 - New interfaces:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassMethodDeclarationSemantics`, which represents the semantics of a class method declaration.
+  - `ClassMethodDeclarationTypeSemantics`, which represents the type semantics of a class method declaration.
+  - `ClassPropertyDeclarationSemantics`, which represents the semantics of a class property declaration.
+  - `ClassPropertyDeclarationTypeSemantics`, which represents the type semantics of a class property declaration.
+  - `ClassConstructorDeclarationSemantics`, which represents the semantics of a class constructor declaration.
+  - `ClassConstructorDeclarationTypeSemantics`, which represents the type semantics of a class constructor declaration.
   - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
   - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
   - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
