@@ -123,6 +123,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			["// @ts-ignore"],
 			["class Property {constructor(name, type) {this.name = name;this.type = type;}}"],
 			["// @ts-ignore"],
+			["class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}}"],
+			["// @ts-ignore"],
 			[
 				"class Type {" +
 					"constructor(name, fields, methods, baseType = null) {" +

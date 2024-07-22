@@ -2,23 +2,20 @@
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
  * @since 0.8.0
  */
-import type {
+import {
 	FunctionDeclaration,
 	InterfaceDeclaration,
-	ObjectPrimaryExpression,
 	InterfaceMethodDeclaration,
-	TranslatedExpression,
+	ObjectPrimaryExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
+	TranslatedExpression,
 	VariableDeclaration,
-	InterfaceMemberDeclaration,
-	InterfaceMemberDeclarationSemantics,
 } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
-import type { InterfaceMemberDeclarationTypeSemantics } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration-type-semantics";
 import { BuiltInRuntimeType } from "@kipper/target-js/lib/built-in-types";
 
 /**
@@ -76,39 +73,52 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		let varName = "__intf_" + interfaceName;
 
 		let propertiesWithTypes = "";
+		let functionsWithTypes = "";
 		for (let member of interfaceMembers) {
 			if (member instanceof InterfacePropertyDeclaration) {
 				let property = member.getSemanticData();
 				let type = member.getTypeSemanticData();
 				let runtimeType = TargetJS.getRuntimeType(type.type);
-				if(runtimeType instanceof BuiltInRuntimeType){
+				if (runtimeType instanceof BuiltInRuntimeType) {
 					propertiesWithTypes += `new Property("${property.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}),`;
-				}
-				else{
-					propertiesWithTypes += `new Property(${property.identifier}, TESTEST), `;
+				} else {
+					propertiesWithTypes += `new Property(${property.identifier}, __intf_${runtimeType}), `;
 				}
 			}
+			if (member instanceof InterfaceMethodDeclaration) {
+				let method = member.getSemanticData();
+				let returnType = member.getTypeSemanticData();
+				let params = method.parameters.map((param) => {
+					return param.getTypeSemanticData().valueType
+				});
+				let runtimeReturnType = TargetJS.getRuntimeType(returnType.type);
+				let runtimeParams = params.map((param) => {
+					let runtimeType = TargetJS.getRuntimeType(param);
+					if (runtimeType instanceof BuiltInRuntimeType) {
+						return `${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`;
+					} else {
+						return `__intf_${runtimeType}`;
+					}
+				});
+				if(runtimeReturnType instanceof BuiltInRuntimeType) {
+					functionsWithTypes += `new Method("${method.identifier}", [${runtimeParams.join(", ")}], ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeReturnType.name}),`;
+				}
+				else {
+					functionsWithTypes += `new Method("${method.identifier}", [${runtimeParams.join(", ")}], ${runtimeReturnType}),`;
+				};
+			}
 		}
-
-		let methods = "";
 
 		let lines: Array<TranslatedCodeLine> = [
 			[
 				"const ",
 				varName,
-				" = ",
-				"new ",
-				"Type(",
-				'"' + interfaceName + '"',
-				",",
-				"[",
+				" = new Type(\"" + interfaceName + "\"",
+				", [",
 				propertiesWithTypes,
-				"]",
-				",",
-				"[",
-				methods,
-				"]",
-				")",
+				"], [",
+				functionsWithTypes,
+				"])",
 			],
 		];
 		return lines;

@@ -17,4 +17,5 @@ export const builtInTypes: Array<BuiltInRuntimeType> = [
 	new BuiltInRuntimeType("null", 'new Type("null", undefined, undefined)'),
 	new BuiltInRuntimeType("obj", 'new Type("obj", undefined, undefined)'),
 	new BuiltInRuntimeType("array", 'new Type("array", undefined, undefined)'),
+	new BuiltInRuntimeType("Func", 'new Type("Func", undefined, undefined)'),
 ];

@@ -1,4 +1,5 @@
 interface X {
 	a: str;
 	b: num;
+	ds(a: str, b: num): num;
 }
