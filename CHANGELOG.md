@@ -17,7 +17,9 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
-- Added semantic checking and code generation for classes, class methods, class properties and class constructors ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
+
+- Added semantic checking and code generation for classes, class methods, class properties and class constructors.
+  ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
@@ -30,6 +32,8 @@ To use development versions of Kipper download the
   ([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
 - Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
   parameter inside of a generic type specifier.
+- Implemented constant `NaN`, which represents the `NaN` value in JavaScript (Not a Number).
+	([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
