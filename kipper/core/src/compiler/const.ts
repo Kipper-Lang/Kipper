@@ -649,3 +649,15 @@ export type KipperReferenceable = ScopeDeclaration;
  * @since 0.10.0
  */
 export type JmpStatementType = "continue" | "break";
+
+/**
+ * Represents the internal identifier for a Kipper constructor.
+ * @since 0.12.0
+ */
+export const KipperConstructorInternalIdentifierLiteral = "@constructor";
+
+/**
+ * Represents the internal identifier for a Kipper constructor.
+ * @since 0.12.0
+ */
+export type KipperConstructorInternalIdentifier = typeof KipperConstructorInternalIdentifierLiteral;

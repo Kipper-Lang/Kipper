@@ -80,6 +80,7 @@ RetIndicator : '->';
 // class and interface-related
 Class : 'class';
 Interface : 'interface';
+Constructor : 'constructor';
 
 // boolean constants
 True : 'true';

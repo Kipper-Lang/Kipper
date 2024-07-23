@@ -13,6 +13,8 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
@@ -56,6 +58,7 @@ import type { ObjectProperty } from "../../ast/nodes/expressions/primary-express
 import type { InterfacePropertyDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
 import { InterfaceMemberDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration";
 import type { InterfaceMethodDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
+import type { ClassConstructorDeclaration } from "../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -190,6 +193,25 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract classDeclaration: TargetASTNodeCodeGenerator<ClassDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translated a {@link ClassPropertyDeclaration} into a specific language.
+	 */
+
+	public abstract classPropertyDeclaration: TargetASTNodeCodeGenerator<ClassPropertyDeclaration, TranslatedCodeLine>;
+
+	/**
+	 * Translated a {@link ClassMethodDeclaration} into a specific language.
+	 */
+	public abstract classMethodDeclaration: TargetASTNodeCodeGenerator<ClassMethodDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ClassConstructorDeclaration} into a specific language.
+	 */
+	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
+		ClassConstructorDeclaration,
+		Array<TranslatedCodeLine>
+	>;
 
 	/**
 	 * Translates a {@link VariableDeclaration} into a specific language.

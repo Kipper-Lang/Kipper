@@ -10,9 +10,12 @@ import type {
 	TranslatedCodeLine,
 	TranslatedExpression,
 	VariableDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 } from "@kipper/core";
 import { InterfaceMethodDeclaration } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
+import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
@@ -188,6 +191,34 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		return [[identifier, ":", " ", valueType, ";"]];
 	};
 
+	override lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+		const params = semanticData.params;
+		const body = semanticData.functionBody;
+		const returnType = TargetTS.getTypeScriptType(typeData.returnType);
+
+		// Generate the function signature
+		const translatedParams: TranslatedExpression = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => <TranslatedExpression>[...param.flat(), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
+
+		const translatedBody =
+			body instanceof Expression
+				? await body.translateCtxAndChildren()
+				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
+
+		// Return the lambda function
+		return ["(", ...translatedParams, "): ", returnType, " => ", ...translatedBody];
+	};
+
 	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const typeSemantics = node.getTypeSemanticData();
@@ -209,5 +240,38 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		// Return the object primary expression
 		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
+	};
+
+	override classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const params = semanticData.parameters;
+		const body = semanticData.functionBody;
+		const evaluatedType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
+		const returnType = evaluatedType;
+
+		const translatedParams = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => [...param.flat(), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
+
+		return [
+			[identifier, "(", ...translatedParams, ")", ":", " ", returnType],
+			...(await body.translateCtxAndChildren()),
+		];
+	};
+
+	override classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const typeScriptType = TargetTS.getTypeScriptType(semanticData.typeSpecifier.getTypeSemanticData().storedType);
+
+		return [identifier, ":", " ", typeScriptType];
 	};
 }

@@ -9,7 +9,10 @@ export type ConfigErrorMetaData = { fileName: string; refChain: string[] };
  * @since 0.11.0
  */
 export class ConfigError {
-	public constructor(public message: string, public meta?: ConfigErrorMetaData) {
+	public constructor(
+		public message: string,
+		public meta?: ConfigErrorMetaData,
+	) {
 		this.message = `${message}${meta ? ` (${[...meta.refChain, meta.fileName].join(" -> ")})` : ""}`;
 	}
 }

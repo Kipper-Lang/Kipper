@@ -15,6 +15,8 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
@@ -72,6 +74,7 @@ import {
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
 import { builtInTypes } from "./built-in-types";
+import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -448,7 +451,75 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link ClassDeclaration} into the JavaScript language.
 	 */
 	classDeclaration = async (node: ClassDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const classMembers = semanticData.classMembers;
+		const constructor = semanticData.constructorDeclaration;
+
+		// Translate the class members
+		const translatedMembers = await Promise.all(
+			classMembers.map(async (member) => {
+				return await member.translateCtxAndChildren();
+			}),
+		);
+
+		// Translate the constructor
+		const translatedConstructor = constructor ? await constructor.translateCtxAndChildren() : [];
+
+		// Return the translated class declaration
+		return [
+			["class", " ", identifier, " ", "{"],
+			...indentLines(translatedMembers.flat()),
+			...indentLines(translatedConstructor),
+			["}"],
+		];
+	};
+
+	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+
+		return [`${identifier};`];
+	};
+
+	classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.identifier;
+		const params = semanticData.parameters;
+		const body = semanticData.functionBody;
+
+		const concatParams = async () => {
+			const translatedParams = await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			);
+			return translatedParams.join(", ");
+		};
+
+		return [[`${identifier}(${await concatParams()}) {`], ...(await body.translateCtxAndChildren()), ["}"]];
+	};
+
+	/**
+	 * Translates a {@link ClassConstructorDeclaration} into the JavaScript language.
+	 */
+	classConstructorDeclaration = async (node: ClassConstructorDeclaration): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const params = semanticData.parameters;
+		const body = semanticData.functionBody;
+
+		let processedParams = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => [...param.flat(), ", "])
+			.flat();
+		processedParams.pop();
+
+		return [["constructor", "(", ...processedParams, ")", " "], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**
@@ -864,32 +935,28 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link LambdaPrimaryExpression} into the JavaScript language.
 	 */
 	lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
-		// Step 1: Extract Semantic Data
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
 
-		// Step 2: Translate Parameters
-		let translatedParams = params.map((param) => param.getSemanticData().identifier).join(", ");
+		// Generate the function signature
+		const translatedParams: TranslatedExpression = (
+			await Promise.all(
+				params.map(async (param) => {
+					return await param.translateCtxAndChildren();
+				}),
+			)
+		)
+			.map((param) => <TranslatedExpression>[...param.flat(), ", "])
+			.flat();
+		translatedParams.pop(); // Remove the last comma
 
-		let translatedBody;
-		let translatedBodyAsync = await body.translateCtxAndChildren();
+		const translatedBody =
+			body instanceof Expression
+				? await body.translateCtxAndChildren()
+				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
 
-		if (body instanceof Expression) {
-			translatedBody = translatedBodyAsync
-				.map((line) => {
-					if (line instanceof Array) {
-						return line.join(" ").trim();
-					}
-					return line;
-				})
-				.join("");
-		} else {
-			translatedBody = await this.compoundStatement(body);
-			translatedBody = translatedBody.map((line) => line.join("").trim()).join("");
-		}
-
-		// Step 4: Format Lambda Expression
-		return [`(${translatedParams}) => ${translatedBody}`];
+		// Return the lambda function
+		return ["(", ...translatedParams, ") => ", ...translatedBody];
 	};
 }

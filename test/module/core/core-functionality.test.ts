@@ -1349,67 +1349,69 @@ describe("Core functionality", () => {
 	});
 
 	describe("Lambdas", () => {
-		const compiler = new KipperCompiler();
+		describe("js", () => {
+			it("parses simple lambda expression without syntax errors", async () => {
+				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
 
-		it("parses simple lambda expression without syntax errors", async () => {
-			const code = `var add: Func = (x: num, y: num): num -> x + y;`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\nadd(1, 2);");
+					const res = eval(stringResult);
+					assert.equal(res, 3, "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
 
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\nadd(1, 2);");
-				const res = eval(stringResult);
-				assert.equal(res, 3, "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
+			it("correctly identifies semantic data for a lambda with compound statement", async () => {
+				const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; };`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet('John');");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
+
+			it("correctly identifies semantic data for a lambda with single statement", async () => {
+				const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name;`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet('John');");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
+
+			it("correctly identifies semantic data for a lambda with no parameters", async () => {
+				const code = `var greet: Func<str> = (): str -> "Hello, World!";`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet();");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
 		});
 
-		it("correctly identifies semantic data for a lambda with compound statement", async () => {
-			const code = `var greet: Func = (name: str): str -> { return "Hello, " + name; };`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet('John');");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
-
-		it("correctly identifies semantic data for a lambda with single statement", async () => {
-			const code = `var greet: Func = (name: str): str -> "Hello, " + name;`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet('John');");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
-
-		it("correctly identifies semantic data for a lambda with no parameters", async () => {
-			const code = `var greet: Func = (): str -> "Hello, World!";`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet();");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
+		describe("ts", () => {});
 	});
 
 	describe("Functions", () => {
@@ -1528,6 +1530,55 @@ describe("Core functionality", () => {
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
+		});
+	});
+
+	describe("Class", () => {
+		it("should be able to create an empty class", async () => {
+			const fileContent = "class Test { }";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "class Test {\n}", "Invalid TypeScript code (Expected different output)");
+		});
+
+		it("should be able to create class with constructor", async () => {
+			const fileContent = "class Test {constructor (a:num, b:str) {};};";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n  constructor(a: number, b: string) \n  {\n  }\n}",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should be able to create class with members", async () => {
+			const fileContent = `class Test {\n  x: num;\n  y: str;\ngreet(): void {\nprint("Kippa");\n};\n  constructor(a: num, b: str)\n{\n};}`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: number;\n" +
+					"  y: string;\n" +
+					"  greet(): void\n" +
+					"  {\n" +
+					'    __kipper.print("Kippa");\n' +
+					"  }\n" +
+					"  constructor(a: number, b: string) \n" +
+					"  {\n" +
+					"  }\n" +
+					"}",
+			);
 		});
 	});
 });

@@ -15,7 +15,10 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassPropertyDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -76,7 +79,10 @@ import {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -93,6 +99,8 @@ import {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
@@ -114,8 +122,6 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
-import { InterfacePropertyDeclaration } from "../nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
-import { InterfaceMethodDeclaration } from "../nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -137,6 +143,9 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_interfacePropertyDeclaration]: InterfacePropertyDeclaration,
 		[ParseRuleKindMapping.RULE_interfaceMethodDeclaration]: InterfaceMethodDeclaration,
 		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclaration,
+		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclaration,
+		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclaration,
+		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -209,6 +218,9 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_interfacePropertyDeclaration]: InterfacePropertyDeclarationContext,
 		[ParseRuleKindMapping.RULE_interfaceMethodDeclaration]: InterfaceMethodDeclarationContext,
 		[ParseRuleKindMapping.RULE_classDeclaration]: ClassDeclarationContext,
+		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclarationContext,
+		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclarationContext,
+		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -286,6 +298,9 @@ export class ASTNodeMapper {
 		RULE_interfacePropertyDeclaration: InterfacePropertyDeclaration,
 		RULE_interfaceMethodDeclaration: InterfaceMethodDeclaration,
 		RULE_classDeclaration: ClassDeclaration,
+		RULE_classPropertyDeclaration: ClassPropertyDeclaration,
+		RULE_classMethodDeclaration: ClassMethodDeclaration,
+		RULE_classConstructorDeclaration: ClassConstructorDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**

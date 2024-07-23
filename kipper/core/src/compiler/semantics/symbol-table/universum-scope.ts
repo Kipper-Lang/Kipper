@@ -34,7 +34,7 @@ export const BuiltInTypes = {
 	bool: new BuiltInTypeBool(),
 	num: new BuiltInTypeNum(),
 	str: new BuiltInTypeStr(),
-	Func: new BuiltInTypeFunc(),
+	Func: new BuiltInTypeFunc([], any),
 	Array: new BuiltInTypeArray(any),
 	obj: new BuiltInTypeObject(),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
@@ -72,6 +72,7 @@ export const BuiltInFunctions = {
  */
 export const BuiltInVariables = {
 	__name__: new BuiltInVariable("__name__", BuiltInTypes.str, true),
+	NaN: new BuiltInVariable("NaN", BuiltInTypes.num, false),
 } satisfies Record<string, BuiltInVariable>;
 
 /**

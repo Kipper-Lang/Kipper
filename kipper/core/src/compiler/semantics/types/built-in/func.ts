@@ -3,17 +3,38 @@ import type { ProcessedType } from "../index";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
-	KipperInternalError,
+	GenericArgumentTypeError,
+	MismatchingArgCountBetweenFuncTypesError,
 	PropertyAssignmentTypeError,
+	type TypeError,
 } from "../../../../errors";
+import { BuiltInTypes } from "../../symbol-table";
+
+/**
+ * Represents the generic arguments for the built-in type `Func`.
+ * @since 0.12.0
+ */
+export type BuiltInTypeFuncGenericArguments = [
+	{ identifier: "T"; type: Array<ProcessedType> },
+	{ identifier: "R"; type: ProcessedType },
+];
 
 /**
  * Represents the built-in type `Func`.
  * @since 0.12.0
  */
-export class BuiltInTypeFunc extends GenericBuiltInType {
-	constructor() {
-		super("Func", []);
+export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericArguments> {
+	constructor(paramTypes: Array<ProcessedType>, returnType: ProcessedType) {
+		super("Func", [
+			{
+				identifier: "T",
+				type: paramTypes,
+			},
+			{
+				identifier: "R",
+				type: returnType,
+			},
+		]);
 	}
 
 	/**
@@ -21,31 +42,79 @@ export class BuiltInTypeFunc extends GenericBuiltInType {
 	 * @since 0.12.0
 	 */
 	public get isCompilable(): boolean {
-		// TODO! Implement generic type arguments
-		return true;
+		return Object.values(this.changeGenericTypeArguments).every((arg) => arg.isCompilable);
 	}
 
-	public changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): BuiltInTypeFunc {
-		if (genericTypeArguments.length !== this.genericTypeArguments.length) {
-			throw new KipperInternalError(
-				"The length of the new generic type arguments must be equal to the length of the current generic type arguments.",
-			);
-		}
+	/**
+	 * Returns the return type of the function.
+	 * @since 0.12.0
+	 */
+	public get returnType(): ProcessedType {
+		return this.genericTypeArguments[1].type;
+	}
 
-		// TODO! Implement generic type arguments
-		return new BuiltInTypeFunc();
+	/**
+	 * Returns the parameter types of the function.
+	 * @since 0.12.0
+	 */
+	public get parameterTypes(): Array<ProcessedType> {
+		return this.genericTypeArguments[0].type;
+	}
+
+	public changeGenericTypeArguments(genericTypeArguments: BuiltInTypeFuncGenericArguments): BuiltInTypeFunc {
+		return new BuiltInTypeFunc(genericTypeArguments[0].type, genericTypeArguments[1].type);
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
-		// TODO! Implement generic type arguments and function signature checking
-		if (this === type) {
+		if (this === type || type === BuiltInTypes.any) {
 			return;
-		} else if (propertyName) {
-			throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier);
+		}
+
+		let e: TypeError | undefined = undefined;
+		if (
+			type instanceof BuiltInTypeFunc &&
+			this.genericTypeArguments.length === (<typeof this>type).genericTypeArguments.length
+		) {
+			const [paramTypes, returnType] = this.genericTypeArguments;
+			const [otherParamTypes, otherReturnType] = (<typeof this>type).genericTypeArguments;
+
+			if (paramTypes.type.length !== otherParamTypes.type.length) {
+				throw new MismatchingArgCountBetweenFuncTypesError(otherParamTypes.type.length, paramTypes.type.length);
+			}
+
+			try {
+				paramTypes.type.forEach((paramType, index) => {
+					paramType.assertAssignableTo(otherParamTypes.type[index]);
+				});
+				return;
+			} catch (error) {
+				e = new GenericArgumentTypeError(
+					otherParamTypes.identifier,
+					otherParamTypes.type.toString(),
+					paramTypes.type.toString(),
+					<TypeError>error,
+				);
+			}
+
+			try {
+				returnType.type.assertAssignableTo(otherReturnType.type);
+				return;
+			} catch (error) {
+				e = new GenericArgumentTypeError(
+					otherReturnType.identifier,
+					otherReturnType.type.toString(),
+					returnType.type.toString(),
+					<TypeError>error,
+				);
+			}
+		}
+
+		if (propertyName) {
+			throw new PropertyAssignmentTypeError(propertyName, type.toString(), this.toString(), e);
 		} else if (argumentName) {
-			throw new ArgumentAssignmentTypeError(argumentName, type.identifier, this.identifier);
+			throw new ArgumentAssignmentTypeError(argumentName, type.toString(), this.toString(), e);
 		} else {
-			throw new AssignmentTypeError(type.identifier, this.identifier);
+			throw new AssignmentTypeError(type.toString(), this.toString(), e);
 		}
 	}
 }

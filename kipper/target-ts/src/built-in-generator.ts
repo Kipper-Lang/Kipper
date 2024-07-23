@@ -54,9 +54,7 @@ export function genTSVariable(varSpec: BuiltInVariable, value: string): Translat
 	return [
 		...(varSpec.local ? ["const", " "] : []),
 		TargetTS.getBuiltInIdentifier(varSpec),
-		":",
-		" ",
-		TargetTS.getTypeScriptType(varSpec.valueType),
+		...(varSpec.local ? [":", " ", TargetTS.getTypeScriptType(varSpec.valueType)] : []),
 		" ",
 		"=",
 		" ",
@@ -165,5 +163,9 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
 		return [genTSVariable(varSpec, `"${programCtx.fileName}"`)];
+	}
+
+	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
+		return [genTSVariable(varSpec, "NaN")];
 	}
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import type { ConfigFile } from "./config-file";
 import type { ConfigErrorMetaData } from "../errors";
 import { ConfigValidationError, UnknownFieldError } from "../errors";
@@ -52,24 +53,32 @@ export type Config<Scheme extends ConfigInterpreterScheme> = {
 	[key in keyof Scheme]: Scheme[key] extends { type: "string"; required: true }
 		? string
 		: Scheme[key] extends { type: "string"; required: false }
-		? string | undefined
-		: Scheme[key] extends { type: "number"; required: true }
-		? number
-		: Scheme[key] extends { type: "number"; required: false }
-		? number | undefined
-		: Scheme[key] extends { type: "boolean"; required: true }
-		? boolean
-		: Scheme[key] extends { type: "boolean"; required: false }
-		? boolean | undefined
-		: Scheme[key] extends { type: "array"; itemType: infer T; required: true }
-		? T[]
-		: Scheme[key] extends { type: "array"; itemType: infer T; required: false }
-		? T[] | undefined
-		: Scheme[key] extends { type: "object"; properties: infer P extends ConfigInterpreterScheme; required: true }
-		? Config<P>
-		: Scheme[key] extends { type: "object"; properties: infer P extends ConfigInterpreterScheme; required: false }
-		? Config<P> | undefined
-		: never;
+			? string | undefined
+			: Scheme[key] extends { type: "number"; required: true }
+				? number
+				: Scheme[key] extends { type: "number"; required: false }
+					? number | undefined
+					: Scheme[key] extends { type: "boolean"; required: true }
+						? boolean
+						: Scheme[key] extends { type: "boolean"; required: false }
+							? boolean | undefined
+							: Scheme[key] extends { type: "array"; itemType: infer T; required: true }
+								? T[]
+								: Scheme[key] extends { type: "array"; itemType: infer T; required: false }
+									? T[] | undefined
+									: Scheme[key] extends {
+												type: "object";
+												properties: infer P extends ConfigInterpreterScheme;
+												required: true;
+										  }
+										? Config<P>
+										: Scheme[key] extends {
+													type: "object";
+													properties: infer P extends ConfigInterpreterScheme;
+													required: false;
+											  }
+											? Config<P> | undefined
+											: never;
 };
 
 /**
