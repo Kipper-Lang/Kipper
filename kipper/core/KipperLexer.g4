@@ -88,7 +88,6 @@ False : 'false';
 
 // typeof operator
 Typeof : 'typeof';
-DefFunc : 'def';
 
 // Constant undefined, void and null identifiers
 Void : 'void';

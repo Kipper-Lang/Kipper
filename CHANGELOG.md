@@ -33,7 +33,7 @@ To use development versions of Kipper download the
 - Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
   parameter inside of a generic type specifier.
 - Implemented constant `NaN`, which represents the `NaN` value in JavaScript (Not a Number).
-	([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
+  ([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.

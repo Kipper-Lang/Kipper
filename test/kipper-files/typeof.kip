@@ -1,9 +1,6 @@
 interface X {
-  a: str;
-  b: num;
-}
-
-var y: X = {
-	a: "hello",
-	b: 5
+	a: num;
+	b: str;
 };
+
+var x: typeof(null);

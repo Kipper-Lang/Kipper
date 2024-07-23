@@ -3,7 +3,7 @@
  * @since 0.8.0
  */
 import type { TypeSpecifierExpressionSemantics } from "../type-specifier-expression-semantics";
-import type { Expression } from "../../expression";
+import type { ProcessedType } from "../../../../../semantics";
 
 /**
  * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
@@ -11,8 +11,8 @@ import type { Expression } from "../../expression";
  */
 export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
 	/**
-	 * The expression to evaluate the type of.
-	 * @since 0.8.0
+	 * The checked type for this typeof expression.
+	 * @since 0.12.0
 	 */
-	object: Expression;
+	evaluatedType: ProcessedType;
 }
