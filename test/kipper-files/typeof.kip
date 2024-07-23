@@ -1,0 +1,9 @@
+interface X {
+  a: str;
+  b: num;
+}
+
+var y: X = {
+	a: "hello",
+	b: 5
+};

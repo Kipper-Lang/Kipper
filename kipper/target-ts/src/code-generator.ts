@@ -2,16 +2,16 @@
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
  * @since 0.8.0
  */
-import {
+import type {
 	FunctionDeclaration,
 	InterfaceDeclaration,
-	InterfaceMethodDeclaration,
 	ObjectPrimaryExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
 	VariableDeclaration,
 } from "@kipper/core";
+import { InterfaceMethodDeclaration } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
@@ -89,7 +89,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 				let method = member.getSemanticData();
 				let returnType = member.getTypeSemanticData();
 				let params = method.parameters.map((param) => {
-					return param.getTypeSemanticData().valueType
+					return param.getTypeSemanticData().valueType;
 				});
 				let runtimeReturnType = TargetJS.getRuntimeType(returnType.type);
 				let runtimeParams = params.map((param) => {
@@ -100,12 +100,15 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 						return `__intf_${runtimeType}`;
 					}
 				});
-				if(runtimeReturnType instanceof BuiltInRuntimeType) {
-					functionsWithTypes += `new Method("${method.identifier}", [${runtimeParams.join(", ")}], ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeReturnType.name}),`;
+				if (runtimeReturnType instanceof BuiltInRuntimeType) {
+					functionsWithTypes += `new Method("${method.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${
+						runtimeReturnType.name
+					}, [${runtimeParams.join(", ")}]),`;
+				} else {
+					functionsWithTypes += `new Method("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(
+						", ",
+					)}]),`;
 				}
-				else {
-					functionsWithTypes += `new Method("${method.identifier}", [${runtimeParams.join(", ")}], ${runtimeReturnType}),`;
-				};
 			}
 		}
 
@@ -113,7 +116,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			[
 				"const ",
 				varName,
-				" = new Type(\"" + interfaceName + "\"",
+				' = new Type("' + interfaceName + '"',
 				", [",
 				propertiesWithTypes,
 				"], [",

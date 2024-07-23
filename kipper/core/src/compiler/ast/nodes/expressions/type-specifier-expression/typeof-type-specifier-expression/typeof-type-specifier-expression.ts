@@ -81,9 +81,14 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+		const objectToValidate = this.children[0];
+
+		this.programCtx.semanticCheck(this);
+
+		this.semanticData = {
+			object: objectToValidate,
+			rawType: objectToValidate.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	/**
@@ -92,9 +97,14 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @since 0.8.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+		const semanticData = this.getSemanticData();
+
+		this.programCtx.semanticCheck(this);
+
+		this.typeSemantics = {
+			storedType: semanticData.object.getTypeSemanticData().evaluatedType,
+			evaluatedType: semanticData.object.getTypeSemanticData().evaluatedType,
+		};
 	}
 
 	public checkForWarnings = undefined; // TODO!

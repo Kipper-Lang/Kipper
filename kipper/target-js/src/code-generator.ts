@@ -59,6 +59,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { BuiltInType } from "@kipper/core";
 import {
 	BuiltInTypes,
 	CompoundStatement,
@@ -123,7 +124,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			["// @ts-ignore"],
 			["class Property {constructor(name, type) {this.name = name;this.type = type;}}"],
 			["// @ts-ignore"],
-			["class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}}"],
+			[
+				"class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}}",
+			],
 			["// @ts-ignore"],
 			[
 				"class Type {" +
@@ -573,7 +576,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link TypeofTypeSpecifierExpression} into the JavaScript language.
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		if (semanticData.rawType instanceof BuiltInType) {
+			return ["__kipper.builtIn.", semanticData.rawType.identifier];
+		} else {
+			return ["__intf_", semanticData.rawType.identifier];
+		}
 	};
 
 	/**
