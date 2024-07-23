@@ -8,7 +8,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { TypeofTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { RawType } from "../../../../../semantics";
+import { BuiltInType, BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
@@ -81,13 +81,8 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const expression = this.children[0];
-
-		this.programCtx.semanticCheck(this);
-
 		this.semanticData = {
-			evaluatedType: expression.getTypeSemanticData().evaluatedType,
-			rawType: new RawType(expression.sourceCode)
+			rawType: new RawType(this.sourceCode)
 		};
 	}
 
@@ -99,11 +94,11 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		this.programCtx.semanticCheck(this);
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
 
 		this.typeSemantics = {
-			storedType: semanticData.object.g,
-			evaluatedType: semanticData.object.getTypeSemanticData().evaluatedType,
+			evaluatedType: BuiltInTypes.type,
+			storedType: valueType,
 		};
 	}
 

@@ -10,9 +10,4 @@ import type { ProcessedType } from "../../../../../semantics";
  * @since 0.8.0
  */
 export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	/**
-	 * The checked type for this typeof expression.
-	 * @since 0.12.0
-	 */
-	evaluatedType: ProcessedType;
 }
