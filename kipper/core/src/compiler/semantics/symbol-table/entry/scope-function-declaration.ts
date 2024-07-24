@@ -11,7 +11,7 @@ import type {
 import { ScopeDeclaration } from "./scope-declaration";
 import type { BuiltInTypeFunc, ProcessedType } from "../../types";
 import type { BuiltInFunction, BuiltInFunctionArgument } from "../../runtime-built-ins";
-import type { UniverseScope } from "../universum-scope";
+import type { UniverseScope } from "../universe-scope";
 
 /**
  * Represents the definition of a function inside a {@link Scope}.

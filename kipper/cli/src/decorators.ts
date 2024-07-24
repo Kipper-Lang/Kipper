@@ -23,21 +23,29 @@ export function prettifiedErrors<TProto extends Command>() {
 			try {
 				return await originalFunc.call(this, ...argArray);
 			} catch (error) {
+				if ("prettified" in (<Error>error) && (<OclifCLIError & { prettified?: boolean }>error).prettified) {
+					throw error; // Rethrow the error, since it has already been prettified
+				}
+
 				const cliError = error instanceof KipperCLIError || error instanceof OclifCLIError;
 				const configError = error instanceof ConfigError;
 				const internalError = error instanceof KipperInternalError;
+				const unexpectedError = internalError || (!cliError && !configError);
 
 				// Error configuration
 				const name: string = getErrorName(cliError, configError, internalError);
-				const msg: string =
+				let msg: string =
 					error && typeof error === "object" && "message" in error && typeof error.message === "string"
-						? error.message
+						? unexpectedError
+						  ? (<Error>error)?.stack ?? error.message
+							: error.message
 						: String(error);
+
 				// prettier-ignore
 				const errConfig: { exit: number } & PrettyPrintableError = {
 					exit: 1,
 					suggestions:
-						internalError || (!cliError && !configError)
+						unexpectedError
 							? [
 									"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
 										"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
@@ -49,10 +57,11 @@ export function prettifiedErrors<TProto extends Command>() {
 				// modify it, so we have the correct result we want
 				try {
 					this.error(msg, errConfig);
-				} catch (e) {
-					(<OclifCLIError>e).name = name;
+				} catch (oclifError) {
+					(<OclifCLIError>oclifError).name = name;
+					(<OclifCLIError & { prettified?: boolean }>oclifError).prettified = true;
 
-					throw e; // Rethrowing it -> Oclif will pretty print it
+					throw oclifError; // Rethrowing it -> Oclif will pretty print it
 				}
 			}
 		};

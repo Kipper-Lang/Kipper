@@ -47,10 +47,10 @@ export const BuiltInFunctions = {
 	print: new BuiltInFunction(
 		"print",
 		[
-			{
-				identifier: "msg",
-				valueType: BuiltInTypes.any,
-			},
+			new BuiltInFunctionArgument(
+				"msg",
+				BuiltInTypes.any,
+			),
 		],
 		BuiltInTypes.void,
 	),

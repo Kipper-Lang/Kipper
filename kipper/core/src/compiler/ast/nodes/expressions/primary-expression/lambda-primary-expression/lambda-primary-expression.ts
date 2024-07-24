@@ -155,18 +155,10 @@ export class LambdaPrimaryExpression
 		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
+		const funcType = new BuiltInTypeFunc(paramTypes, returnType);
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.Func.changeGenericTypeArguments([
-				{
-					identifier: "T",
-					type: semanticData.params.map((param) => param.getTypeSemanticData().storedType),
-				},
-				{
-					identifier: "R",
-					type: returnType,
-				},
-			]),
-			type: new BuiltInTypeFunc(paramTypes, returnType),
+			evaluatedType: funcType,
+			type: funcType,
 		};
 
 		// Ensure that all code paths return a value

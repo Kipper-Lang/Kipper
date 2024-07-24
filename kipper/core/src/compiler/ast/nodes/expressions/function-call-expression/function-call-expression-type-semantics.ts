@@ -3,7 +3,9 @@
  * @since 0.5.0
  */
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
-import type { ScopeFunctionDeclaration } from "../../../../semantics";
+import {ScopeFunctionDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration} from "../../../../semantics";
+import {KipperReferenceable} from "../../../../const";
+import {Expression} from "../expression";
 
 /**
  * Type semantics for AST Node {@link FunctionCallExpression}.
@@ -11,9 +13,11 @@ import type { ScopeFunctionDeclaration } from "../../../../semantics";
  */
 export interface FunctionCallExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
-	 * The function that this expression calls. Can be either a {@link ScopeFunctionDeclaration function declaration} or
-	 * a {@link ScopeVariableDeclaration function in a variable}.
-	 * @since 0.10.0
+	 * The function that this expression calls.
+	 *
+	 * This can be a function declaration, a parameter declaration, a variable declaration or a referenceable i.e. a
+	 * function stored inside a variable of some sort.
+	 * @since 0.12.0
 	 */
-	func: ScopeFunctionDeclaration;
+	funcOrExp: ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression;
 }

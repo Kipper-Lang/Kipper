@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	BitwiseAndExpression,
@@ -49,7 +49,7 @@ import type {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	ReturnStatement,
+	ReturnStatement, ScopeDeclaration,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -693,12 +693,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link FunctionCallExpression} into the JavaScript language.
 	 */
 	functionCallExpression = async (node: FunctionCallExpression): Promise<TranslatedExpression> => {
-		// Get the function and semantic data
 		const semanticData = node.getSemanticData();
-		const func = node.getTypeSemanticData().func;
+		const func = node.getTypeSemanticData().funcOrExp;
 
 		// Get the proper identifier for the function
-		const identifier = func.isBuiltIn ? TargetJS.getBuiltInIdentifier(func.builtInStructure!!) : func.identifier;
+		const exp = func instanceof Expression ?
+			await func.translateCtxAndChildren()
+			: undefined;
+		const identifier = func instanceof ScopeDeclaration ?
+			func.isBuiltIn ? TargetJS.getBuiltInIdentifier(func.builtInStructure!!) : func.identifier
+			: undefined;
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];
@@ -709,7 +713,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		args = args.slice(0, -1); // Removing last whitespace and comma before the closing parenthesis
 
 		// Return the compiled function call
-		return [identifier, "(", ...args, ")"];
+		return [...(identifier ? [identifier] : exp!!), "(", ...args, ")"];
 	};
 
 	/**

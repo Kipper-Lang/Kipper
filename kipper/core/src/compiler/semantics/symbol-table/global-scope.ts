@@ -7,7 +7,7 @@ import type { ScopeDeclaration } from "./entry";
 import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./base/scope";
-import type { UniverseScope } from "./universum-scope";
+import type { UniverseScope } from "./universe-scope";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
