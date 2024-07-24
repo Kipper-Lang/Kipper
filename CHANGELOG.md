@@ -93,6 +93,7 @@ To use development versions of Kipper download the
 ### Changed
 
 - Argument type of built-in function `print` from `str` to `any`.
+	([#667](https://github.com/Kipper-Lang/Kipper/issues/667))
 - Type from interface to class:
   - `InternalFunction`, which represents an internal function.
   - `BuiltInFunction`, which represents a built-in function.
