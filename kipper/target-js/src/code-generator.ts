@@ -113,12 +113,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
 			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
+				'__kipper.KipperError = __kipper.KipperError || (class KipperError extends Error { constructor(msg) { super(msg); this.name="KipError"; }})',
 				";",
 			],
 			["// @ts-ignore"],
 			[
-				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
+				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends __kipper.KipperError { constructor(msg) { super(msg); this.name="KipTypeError"; }})',
+				";",
+			],
+			["// @ts-ignore"],
+			[
+				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends __kipper.KipperError { constructor(msg) { super(msg); this.name="KipIndexError"; }})',
 				";",
 			],
 		];
