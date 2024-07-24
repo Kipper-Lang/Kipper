@@ -5,7 +5,6 @@
 import type {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
-	AssignmentExpression,
 	BitwiseAndExpression,
 	BitwiseExpression,
 	BitwiseExpressionSemantics,
@@ -61,6 +60,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { AssignmentExpression } from "@kipper/core";
 import {
 	BuiltInTypes,
 	CompoundStatement,
@@ -548,7 +548,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link IdentifierPrimaryExpression} into the JavaScript language.
 	 */
 	identifierPrimaryExpression = async (node: IdentifierPrimaryExpression): Promise<TranslatedExpression> => {
-		const refTarget = node.getSemanticData().ref.refTarget;
+		const refTarget = node.getSemanticData().ref;
 		let identifier: string = refTarget.isBuiltIn
 			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
 			: refTarget.identifier;
@@ -573,9 +573,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				// of objects.
 				const keyOrIndex = await (<Expression>semanticData.propertyIndexOrKeyOrSlice).translateCtxAndChildren();
 
-				// Return the member access expression in form of a function call to the internal 'index' function
-				const sliceIdentifier = TargetJS.getBuiltInIdentifier("index");
-				return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
+				if (node.parent instanceof AssignmentExpression) {
+					// If the member access is part of an assignment, return the member access expression in form of an assignment
+					return [...object, "[", ...keyOrIndex, "]"];
+				} else {
+					// Return the member access expression in form of a function call to the internal 'index' function
+					const sliceIdentifier = TargetJS.getBuiltInIdentifier("index");
+					return [sliceIdentifier, "(", ...object, ", ", ...keyOrIndex, ")"];
+				}
 			}
 			case "slice": {
 				// -> The member access is done via a slice, meaning the member name is a slice expression
@@ -882,13 +887,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		const refTarget = semanticData.assignTarget.refTarget;
-		const identifier = refTarget.isBuiltIn
-			? TargetJS.getBuiltInIdentifier(refTarget.builtInStructure!!)
-			: refTarget.identifier;
+		const toAssign = await semanticData.toAssign.translateCtxAndChildren();
 		const assignExp = await semanticData.value.translateCtxAndChildren();
 
-		return [identifier, " ", semanticData.operator, " ", ...assignExp];
+		return [...toAssign, " ", semanticData.operator, " ", ...assignExp];
 	};
 
 	/**

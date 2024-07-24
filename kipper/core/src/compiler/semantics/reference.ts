@@ -7,13 +7,14 @@ import type { KipperReferenceable } from "../const";
 import type { InternalFunction } from "./runtime-internals";
 
 /**
- * A {@link KipperReferenceable reference} to an identifier that stores a value or function.
+ * A reference to an identifier that stores some sort of value.
  *
  * This is a wrapper interface for {@link KipperReferenceable} that provides a more convenient way to access the
  * identifier's metadata and reference expression.
- * @since 0.8.0
+ * @since 0.12.0
+ * @template T The type of the reference target.
  */
-export interface Reference<T extends KipperReferenceable = KipperReferenceable> {
+export interface BuiltInReference<T extends KipperReferenceable = KipperReferenceable> {
 	/**
 	 * The target that this reference points to.
 	 * @since 0.8.0
@@ -29,7 +30,7 @@ export interface Reference<T extends KipperReferenceable = KipperReferenceable> 
 /**
  * A reference to an {@link InternalFunction internal function}.
  *
- * Unlike {@link Reference}, this interface does not represent user references, but rather references to internal
+ * Unlike {@link BuiltInReference}, this interface does not represent user references, but rather references to internal
  * functions that are used by the compiler to provide functionality.
  * @since 0.10.0
  */

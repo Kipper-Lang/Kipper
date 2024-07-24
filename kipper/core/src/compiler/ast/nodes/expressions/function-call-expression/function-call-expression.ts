@@ -14,7 +14,8 @@ import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import type { Reference, ScopeFunctionDeclaration } from "../../../../semantics";
+import type { ScopeFunctionDeclaration } from "../../../../semantics";
+import type { KipperReferenceable } from "../../../../const";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.
@@ -105,7 +106,7 @@ export class FunctionCallExpression extends Expression<
 		}
 
 		let identifier: string | undefined = undefined;
-		let ref: Reference | undefined = undefined;
+		let ref: KipperReferenceable | undefined = undefined;
 		if ("ref" in toCallSemantics && "identifier" in toCallSemantics) {
 			identifier = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).identifier;
 			ref = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).ref;
@@ -135,7 +136,7 @@ export class FunctionCallExpression extends Expression<
 
 		// Ensure that the reference is a callable function
 		this.programCtx.typeCheck(this).refTargetCallable(semanticData.target);
-		const calledFunc = (<Reference<ScopeFunctionDeclaration>>semanticData.target).refTarget;
+		const calledFunc = <ScopeFunctionDeclaration>semanticData.target;
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);

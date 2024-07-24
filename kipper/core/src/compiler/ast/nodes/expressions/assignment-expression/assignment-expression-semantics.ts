@@ -2,11 +2,11 @@
  * Semantics for AST Node {@link AssignmentExpression}.
  * @since 0.5.0
  */
-import type { Reference } from "../../../../semantics";
 import type { KipperAssignOperator } from "../../../../const";
 import type { Expression } from "../expression";
 import type { ExpressionSemantics } from "../expression-semantics";
 import type { IdentifierPrimaryExpression } from "../primary-expression";
+import type { MemberAccessExpression } from "../member-access-expression";
 
 /**
  * Semantics for AST Node {@link AssignmentExpression}.
@@ -14,20 +14,10 @@ import type { IdentifierPrimaryExpression } from "../primary-expression";
  */
 export interface AssignmentExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The identifier expression that is being assigned to.
-	 * @since 0.7.0
-	 */
-	identifier: string;
-	/**
-	 * The identifier AST node context that the {@link AssignmentExpressionSemantics.identifier identifier} points to.
-	 * @since 0.10.0
-	 */
-	identifierCtx: IdentifierPrimaryExpression;
-	/**
 	 * The reference that is being assigned to.
-	 * @since 0.10.0
+	 * @since 0.12.0
 	 */
-	assignTarget: Reference;
+	toAssign: IdentifierPrimaryExpression | MemberAccessExpression;
 	/**
 	 * The assigned value to this variable.
 	 * @since 0.7.0

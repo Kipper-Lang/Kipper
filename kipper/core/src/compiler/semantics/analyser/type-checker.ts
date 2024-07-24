@@ -67,7 +67,7 @@ import {
 import type { RawType, ProcessedType, GenericType, BuiltInTypeArray } from "../types";
 import type { GenericTypeArguments } from "../types";
 import { UndefinedType } from "../types";
-import type { Reference } from "../reference";
+import type { BuiltInReference } from "../reference";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -173,16 +173,15 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ExpressionNotCallableError} If the passed {@link ref} is not callable.
 	 * @since 0.10.0
 	 */
-	public refTargetCallable(ref: Expression | Reference): void {
-		if ("refTarget" in ref && ref.refTarget instanceof ScopeDeclaration) {
-			const target = ref.refTarget;
-			const targetType = target.type;
+	public refTargetCallable(ref: Expression | KipperReferenceable): void {
+		if (ref instanceof ScopeDeclaration) {
+			const targetType = ref.type;
 			if (!targetType.isCompilable) {
 				return; // Ignore undefined types - Skip type checking (the type is invalid anyway)
 			}
 
 			// If the reference is not callable, throw an error
-			if (!target.isCallable) {
+			if (!ref.isCallable) {
 				throw this.assertError(new ExpressionNotCallableError(targetType.toString()));
 			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
 				// Calling a function stored in a variable or parameter is not implemented yet
@@ -206,15 +205,18 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validAssignment(assignmentExp: AssignmentExpression): void {
 		const semanticData = assignmentExp.getSemanticData();
-		const leftExpTypeData = semanticData.identifierCtx.getTypeSemanticData();
+		const toAssign = semanticData.toAssign;
+		const leftExpSemantics = toAssign.getSemanticData();
+		const leftExpTypeData = toAssign.getTypeSemanticData();
 		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
 		// Ensure that the left-hand side is not read-only
 		if (
-			"storageType" in semanticData.assignTarget.refTarget &&
-			semanticData.assignTarget.refTarget.storageType === "const"
+			toAssign instanceof IdentifierPrimaryExpression &&
+			leftExpSemantics.ref instanceof ScopeVariableDeclaration &&
+			leftExpSemantics.ref.storageType === "const"
 		) {
-			throw this.assertError(new ReadOnlyWriteTypeError(semanticData.assignTarget.refTarget.identifier));
+			throw this.assertError(new ReadOnlyWriteTypeError(leftExpSemantics.ref.identifier));
 		}
 
 		// Get the compile-types for the left and right hand side
@@ -534,7 +536,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.returnType;
+		const returnType = typeData.type.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {
