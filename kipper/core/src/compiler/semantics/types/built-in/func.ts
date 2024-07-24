@@ -58,7 +58,7 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 	 * Returns the parameter types of the function.
 	 * @since 0.12.0
 	 */
-	public get parameterTypes(): Array<ProcessedType> {
+	public get paramTypes(): Array<ProcessedType> {
 		return this.genericTypeArguments[0].type;
 	}
 

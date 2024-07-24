@@ -4,6 +4,7 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
+	ClassConstructorDeclaration,
 	ClassMethodDeclaration,
 	FunctionDeclaration,
 	LambdaPrimaryExpression,
@@ -12,9 +13,7 @@ import type {
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { FunctionScope } from "../index";
-import { BuiltInTypes } from "../index";
-import type { ProcessedType } from "../../types";
-import type { ClassConstructorDeclaration } from "../../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import { BuiltInTypeFunc, type ProcessedType } from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.
@@ -147,6 +146,6 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get isCallable(): boolean {
-		return this.type === BuiltInTypes.Func;
+		return this.type instanceof BuiltInTypeFunc;
 	}
 }

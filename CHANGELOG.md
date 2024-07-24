@@ -23,6 +23,8 @@ To use development versions of Kipper download the
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Support for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
+- Support for calling lambdas and functions stored in variables or expressions.
+  ([#674](https://github.com/Kipper-Lang/Kipper/issues/674))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
   (objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
@@ -43,6 +45,8 @@ To use development versions of Kipper download the
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
+  - `UniverseScope`, which represents the universe scope, where all built-in types, functions and variables are
+    declared. This serves as the parent of the global scope.
   - `InterfaceDeclaration`, which represents an AST interface declaration.
   - `ClassMethodDeclaration`, which represents an AST class method declaration.
   - `ClassPropertyDeclaration`, which represents an AST class property declaration.
@@ -50,9 +54,18 @@ To use development versions of Kipper download the
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
+  - `UnionType`, which represents a union type.
+  - `BuiltInTypeAny`, which represents the `any` type.
+  - `BuiltInTypeVoid`, which represents the `void` type.
+  - `BuiltInTypeNull`, which represents the `null` type.
+  - `BuiltInTypeUndefined`, which represents the `undefined` type.
+  - `BuiltInTypeBool`, which represents the `bool` type.
+  - `BuiltInTypeNum`, which represents the `num` type.
+  - `BuiltInTypeStr`, which represents the `str` type.
+  - `BuiltInTypeArray`, which represents the `Array<T>` type.
+  - `BuiltInTypeFunc`, which represents the `Func<T..., R>` type.
+  - `BuiltInTypeObj`, which represents the `obj` type.
   - `ScopeTypeDeclaration`, which represents a scope type declaration.
-  - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
-    declared. This serves as the parent of the global scope.
   - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
@@ -89,6 +102,8 @@ To use development versions of Kipper download the
   - `FunctionDeclarationTypeSemantics.type`, which returns the type of the function declaration i.e. the function type.
   - `LambdaPrimaryExpressionTypeSemantics.type`, which returns the type of the lambda primary expression i.e. the
     function type.
+  - `FunctionCallExpressionTypeSemantics.funcOrExp`, which returns the function or expression that is called. This
+    always stores some sort of value that extends `BuiltInTypeFunc`.
 - New runtime error `KipperError`, which serves as the base for `TypeError` and `IndexError`.
 
 ### Changed
@@ -111,12 +126,15 @@ To use development versions of Kipper download the
 
 - All functions and lambdas simply resolving to `Func` instead of the appropriate filled-up `Func<T..., R>` type. This
   now enables proper type checking for function references.
+- CLI command `run` not properly reporting internal or unexpected errors, as they were already prettified in the
+  internally called up command `compile`.
 
 ### Deprecated
 
 ### Removed
 
 - Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
+- `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
 
 </details>
 
