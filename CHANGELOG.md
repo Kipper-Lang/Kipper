@@ -18,13 +18,14 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Support for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
-  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
+  (objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
@@ -93,7 +94,7 @@ To use development versions of Kipper download the
 ### Changed
 
 - Argument type of built-in function `print` from `str` to `any`.
-	([#667](https://github.com/Kipper-Lang/Kipper/issues/667))
+  ([#667](https://github.com/Kipper-Lang/Kipper/issues/667))
 - Type from interface to class:
   - `InternalFunction`, which represents an internal function.
   - `BuiltInFunction`, which represents a built-in function.

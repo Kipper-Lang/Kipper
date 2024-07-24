@@ -3,12 +3,12 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
-import { UnionType } from "@kipper/core";
-import { BuiltInTypes, KipperBuiltInTypeLiteral, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
+import { UnionType, CustomType } from "@kipper/core";
+import { BuiltInTypes, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
-import { TargetJS } from "@kipper/target-js/lib/target";
+import { TargetJS } from "@kipper/target-js";
 
 /**
  * The TypeScript translation target for the Kipper language.
@@ -56,6 +56,8 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 		if (kipperType instanceof UnionType) {
 			// Recursively call this function for each type in the array
 			return `${(<UnionType>kipperType).unionTypes.map(KipperTypeScriptTarget.getTypeScriptType).join(" | ")}`;
+		} else if (kipperType instanceof CustomType) {
+			return kipperType.identifier;
 		}
 
 		switch (kipperType.identifier) {
@@ -86,8 +88,9 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 				);
 				return `Array<${memberType}>`;
 			}
-			case BuiltInTypes.any.identifier:
+			case BuiltInTypes.any.identifier: {
 				return "any";
+			}
 			default:
 				throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
 		}

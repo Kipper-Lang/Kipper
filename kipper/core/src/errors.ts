@@ -811,12 +811,32 @@ export class ValueNotIndexableTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever the given value can not be accessed using the given access method.
+ * @since 0.12.0
+ */
+export class ValueTypeNotIndexableWithGivenAccessor extends TypeError {
+	constructor(type: string, accessType: string) {
+		super(`Value of type '${type}' can not be accessed using '${accessType}' style indexing`);
+	}
+}
+
+/**
  * Error that is thrown when a key is used that has a different type than the key type of the object.
  * @since 0.10.0
  */
 export class InvalidKeyTypeError extends TypeError {
 	constructor(objType: string, keyType: string) {
 		super(`Key of type '${keyType}' can not be used to access object-like of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever the given identifier does not exist on an object.
+ * @since 0.12.0
+ */
+export class PropertyDoesNotExistError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' does not exist on type '${objType}'`);
 	}
 }
 

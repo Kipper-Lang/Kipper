@@ -6,6 +6,14 @@ import type { Expression } from "../../../expression";
  * @since 0.11.0
  */
 export interface ObjectPropertySemantics extends PrimaryExpressionSemantics {
+	/**
+	 * The identifier of the property.
+	 * @since 0.11.0
+	 */
 	identifier: string;
-	expressoDepresso: Expression;
+	/**
+	 * The expression being assigned to the property.
+	 * @since 0.12.0
+	 */
+	value: Expression;
 }

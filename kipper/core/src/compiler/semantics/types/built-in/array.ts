@@ -2,7 +2,6 @@ import { GenericBuiltInType } from "../base/generic-built-in-type";
 import type { ProcessedType } from "../index";
 import { UnionType } from "../index";
 import type { TypeError } from "../../../../errors";
-import { KipperInternalError } from "../../../../errors";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,

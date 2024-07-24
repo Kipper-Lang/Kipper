@@ -1,9 +1,7 @@
 import type { CompilableType } from "./compilable-type";
-import { AssignmentTypeError, type TypeError, TypeNotCompilableError } from "../../../../errors";
+import { TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
-import { UnionType } from "./union-type";
-import { BuiltInTypes } from "../../symbol-table";
 
 /**
  * A processed type that may be used for type checking and compilation. This type is the general type that will be used

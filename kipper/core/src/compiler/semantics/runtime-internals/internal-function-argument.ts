@@ -1,4 +1,3 @@
-import { KipperBuiltInTypeLiteral } from "../../const";
 import type { ProcessedType } from "../types";
 
 /**
