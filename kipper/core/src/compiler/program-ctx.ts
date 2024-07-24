@@ -21,20 +21,20 @@ import { KipperFileASTGenerator } from "./ast";
 import type { EvaluatedCompileConfig } from "./compile-config";
 import type {
 	BuiltInFunction,
+	BuiltInReference,
 	BuiltInVariable,
 	GlobalScope,
 	InternalFunction,
 	InternalReference,
-	BuiltInReference,
 	ScopeFunctionDeclaration,
 } from "./semantics";
-import { ScopeVariableDeclaration } from "./semantics";
 import {
 	BuiltInFunctions,
 	BuiltInTypes,
 	BuiltInVariables,
 	KipperSemanticChecker,
 	KipperTypeChecker,
+	ScopeVariableDeclaration,
 	UniverseScope,
 } from "./semantics";
 import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";

@@ -15,13 +15,11 @@ export interface ClassDeclarationSemantics extends TypeDeclarationSemantics {
 	 * @since 0.11.0
 	 */
 	identifier: string;
-
 	/**
 	 * The body of the class.
 	 * @since 0.11.0
 	 */
 	classMembers: Array<ClassMemberDeclaration>;
-
 	/**
 	 * The class constructor.
 	 * @since 0.11.0

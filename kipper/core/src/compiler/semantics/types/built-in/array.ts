@@ -1,5 +1,6 @@
 import { GenericBuiltInType } from "../base/generic-built-in-type";
 import type { ProcessedType } from "../index";
+import { UnionType } from "../index";
 import type { TypeError } from "../../../../errors";
 import {
 	ArgumentAssignmentTypeError,
@@ -39,11 +40,17 @@ export class BuiltInTypeArray extends GenericBuiltInType<BuiltInTypeArrayGeneric
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
+		let e: TypeError | undefined = undefined;
 		if (this === type || type === BuiltInTypes.any) {
 			return;
+		} else if (type instanceof UnionType) {
+			if (type.unionTypes.some((unionType: ProcessedType) => this.isAssignableTo(unionType))) {
+				return;
+			} else {
+				e = new AssignmentTypeError(type.identifier, this.identifier);
+			}
 		}
 
-		let e: TypeError | undefined = undefined;
 		if (
 			type instanceof BuiltInTypeArray &&
 			this.genericTypeArguments.length === (<typeof this>type).genericTypeArguments.length

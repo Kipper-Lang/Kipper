@@ -14,7 +14,7 @@ import { jsConfig } from "./errors";
  */
 export function testPrintOutput(newConsoleLog: (message: any) => void, jsProgram: string): void {
 	const oldConsoleLog = console.log;
-	console.log = newConsoleLog;
+	console.log = (v: any) => newConsoleLog(String(v));
 	eval(jsProgram); // Eval the program, which should call the 'print' function.
 	console.log = oldConsoleLog;
 }
