@@ -138,7 +138,7 @@ describe("Core functionality", () => {
 		});
 
 		it("to 'array[]'", async () => {
-			const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;";
+			const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;\nprint(x[0] as str);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -147,6 +147,9 @@ describe("Core functionality", () => {
 				instance.write().includes("let x: Array<number> = [1, 2, 3];\nx[0] = 4;"),
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(instance.write());
+			testPrintOutput((message: any) => assert.equal(message, "4", "Expected different output"), jsCode);
 		});
 	});
 
