@@ -1,4 +1,5 @@
 import type { ProcessedType } from "../types";
+import { BuiltInTypeFunc } from "../types";
 import type { BuiltInFunctionArgument } from "./built-in-function-argument";
 
 /**
@@ -31,9 +32,19 @@ export class BuiltInFunction {
 	 */
 	public readonly returnType: ProcessedType;
 
+	/**
+	 * The function type of the built-in function.
+	 * @since 0.12.0
+	 */
+	public readonly funcType: BuiltInTypeFunc;
+
 	public constructor(identifier: string, params: Array<BuiltInFunctionArgument>, returnType: ProcessedType) {
 		this.identifier = identifier;
 		this.params = params;
 		this.returnType = returnType;
+		this.funcType = new BuiltInTypeFunc(
+			params.map((param) => param.valueType),
+			returnType,
+		);
 	}
 }

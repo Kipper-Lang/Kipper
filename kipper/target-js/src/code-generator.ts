@@ -2,9 +2,9 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
-	ArrayPrimaryExpression, AssignmentExpression,
+	ArrayPrimaryExpression,
 	BitwiseAndExpression,
 	BitwiseExpression,
 	BitwiseExpressionSemantics,
@@ -60,6 +60,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { AssignmentExpression } from "@kipper/core";
 import {
 	BuiltInTypes,
 	CompoundStatement,

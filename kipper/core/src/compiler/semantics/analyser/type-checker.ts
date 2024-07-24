@@ -205,7 +205,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validAssignment(assignmentExp: AssignmentExpression): void {
 		const semanticData = assignmentExp.getSemanticData();
-		const toAssign =  semanticData.toAssign;
+		const toAssign = semanticData.toAssign;
 		const leftExpSemantics = toAssign.getSemanticData();
 		const leftExpTypeData = toAssign.getTypeSemanticData();
 		const rightExpTypeData = semanticData.value.getTypeSemanticData();
@@ -536,7 +536,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.returnType;
+		const returnType = typeData.type.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {

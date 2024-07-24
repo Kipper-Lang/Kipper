@@ -9,7 +9,7 @@ import type {
 	ParameterDeclaration,
 } from "../../../ast";
 import { ScopeDeclaration } from "./scope-declaration";
-import type { ProcessedType } from "../../types";
+import type { BuiltInTypeFunc, ProcessedType } from "../../types";
 import type { BuiltInFunction, BuiltInFunctionArgument } from "../../runtime-built-ins";
 import type { UniverseScope } from "../universum-scope";
 import { BuiltInTypes } from "../universum-scope";
@@ -95,15 +95,15 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * The type of this function. This is always "func".
 	 * @since 0.10.0
 	 */
-	public get type(): ProcessedType {
-		return BuiltInTypes.Func;
+	public get type(): BuiltInTypeFunc {
+		return this.typeData?.type ?? this._builtInFunction!!.funcType;
 	}
 
 	/**
 	 * The return type of this function. This can be every {@link KipperType} except {@link KipperFuncType}.
 	 */
 	public get returnType(): ProcessedType {
-		return this.typeData?.returnType ?? this._builtInFunction?.returnType!!;
+		return this.type.returnType;
 	}
 
 	/**
