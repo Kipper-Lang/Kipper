@@ -115,6 +115,7 @@ To use development versions of Kipper download the
 ### Changed
 
 - Argument type of built-in function `print` from `str` to `any`.
+- Argument type of built-in function `len` from `str` to `str | Array<any>`.
   ([#667](https://github.com/Kipper-Lang/Kipper/issues/667))
 - Type from interface to class:
   - `InternalFunction`, which represents an internal function.
