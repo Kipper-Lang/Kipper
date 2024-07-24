@@ -81,11 +81,12 @@ To use development versions of Kipper download the
     tracking of built-in types.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
-- New Properties:
+- New properties:
   - `BuiltInFunction.funcType`, which returns a function type for the built-in function.
   - `FunctionDeclarationTypeSemantics.type`, which returns the type of the function declaration i.e. the function type.
   - `LambdaPrimaryExpressionTypeSemantics.type`, which returns the type of the lambda primary expression i.e. the
     function type.
+- New runtime error `KipperError`, which serves as the base for `TypeError` and `IndexError`.
 
 ### Changed
 
