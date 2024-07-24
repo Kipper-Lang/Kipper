@@ -28,7 +28,7 @@ To use development versions of Kipper download the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
-- Added support for index-based array assignments. [#669](https://github.com/Kipper-Lang/Kipper/issues/669))
+- Support for index-based array assignments. ([#669](https://github.com/Kipper-Lang/Kipper/issues/669))
 - Implemented the generic `Func<T..., R>` type and function type initializers.
   ([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
 - Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
@@ -62,7 +62,7 @@ To use development versions of Kipper download the
     an error indicating an invalid logic that should be fixed.
   - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
     match the number of arguments in the function type it is compared to.
-- New interfaces:
+- New interfaces and types:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
   - `ClassMethodDeclarationSemantics`, which represents the semantics of a class method declaration.
@@ -77,6 +77,8 @@ To use development versions of Kipper download the
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
   - `TypeDeclarationTyp`KipperTypeChecker.validArrayExpression`eSemantics`, which represents the type semantics of a type declaration.
   - `CompilableType`, which represents a type that can be compiled.
+  - `BuiltInReference`, which replaces the now removed type `Reference` in the `KipperProgramContext` for reference 
+    tracking of built-in types.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
 
@@ -89,6 +91,7 @@ To use development versions of Kipper download the
   - `BuiltInVariable`, which represents a built-in variable.
 - Renamed:
   - Module `analysis` to `semantics`.
+  - Module `compiler/.../expressions/arithmetic` to `arithmetic-expression`.
   - Class `UncheckedType` to `RawType`.
   - Class `CheckedType` to `ProcessedType`.
   - Class `UndefinedCustomType` to `UndefinedType`.
@@ -98,6 +101,8 @@ To use development versions of Kipper download the
 ### Deprecated
 
 ### Removed
+
+- Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
 
 </details>
 
