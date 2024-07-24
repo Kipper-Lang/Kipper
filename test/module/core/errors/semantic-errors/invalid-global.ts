@@ -1,4 +1,4 @@
-import {BuiltInFunction, KipperError, KipperProgramContext, LexerParserData} from "@kipper/core";
+import { BuiltInFunction, KipperError, KipperProgramContext, LexerParserData } from "@kipper/core";
 import { BuiltInTypes } from "@kipper/core";
 import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { defaultConfig } from "../index";
