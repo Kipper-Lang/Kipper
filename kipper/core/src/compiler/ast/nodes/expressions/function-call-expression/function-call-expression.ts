@@ -14,13 +14,13 @@ import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import {
-	BuiltInType,
+import type {
 	BuiltInTypeFunc,
-	ScopeDeclaration,
 	ScopeFunctionDeclaration,
-	ScopeParameterDeclaration, ScopeVariableDeclaration
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
 } from "../../../../semantics";
+import { ScopeDeclaration } from "../../../../semantics";
 import type { KipperReferenceable } from "../../../../const";
 
 /**
@@ -145,12 +145,14 @@ export class FunctionCallExpression extends Expression<
 
 		// Ensure valid arguments are passed
 		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.target, semanticData.args);
-		const calledExp = <ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression>semanticData.target;
+		const calledExp = <ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression>(
+			semanticData.target
+		);
 
 		// The evaluated type is always equal to the return of the function
-		const funcType = <BuiltInTypeFunc>(calledExp instanceof ScopeDeclaration ?
-			calledExp.type
-			: calledExp.getTypeSemanticData().evaluatedType);
+		const funcType = <BuiltInTypeFunc>(
+			(calledExp instanceof ScopeDeclaration ? calledExp.type : calledExp.getTypeSemanticData().evaluatedType)
+		);
 		this.typeSemantics = {
 			evaluatedType: funcType.returnType,
 			funcOrExp: calledExp,

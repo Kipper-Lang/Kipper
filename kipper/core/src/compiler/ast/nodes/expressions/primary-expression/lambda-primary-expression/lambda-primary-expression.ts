@@ -16,7 +16,7 @@ import { CompoundStatement } from "../../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import { ParameterDeclaration } from "../../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypeFunc, BuiltInTypes, LambdaScope } from "../../../../../semantics";
+import { BuiltInTypeFunc, LambdaScope } from "../../../../../semantics";
 
 /**
  * Lambda expression class, which represents a lambda expression in the AST.

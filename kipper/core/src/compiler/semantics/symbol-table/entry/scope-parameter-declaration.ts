@@ -4,6 +4,7 @@
  */
 import { ScopeDeclaration } from "./scope-declaration";
 import type {
+	ClassConstructorDeclaration,
 	ClassMethodDeclaration,
 	FunctionDeclaration,
 	LambdaPrimaryExpression,
@@ -12,9 +13,7 @@ import type {
 	ParameterDeclarationTypeSemantics,
 } from "../../../ast";
 import type { FunctionScope } from "../index";
-import { BuiltInTypes } from "../index";
-import {BuiltInTypeFunc, ProcessedType} from "../../types";
-import type { ClassConstructorDeclaration } from "../../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import { BuiltInTypeFunc, type ProcessedType } from "../../types";
 
 /**
  * Represents the definition of a parameter inside a {@link FunctionDeclaration function}.

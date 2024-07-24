@@ -23,7 +23,7 @@ export function prettifiedErrors<TProto extends Command>() {
 			try {
 				return await originalFunc.call(this, ...argArray);
 			} catch (error) {
-				if ("prettified" in (<Error>error) && (<OclifCLIError & { prettified?: boolean }>error).prettified) {
+				if ("prettified" in <Error>error && (<OclifCLIError & { prettified?: boolean }>error).prettified) {
 					throw error; // Rethrow the error, since it has already been prettified
 				}
 
@@ -32,12 +32,12 @@ export function prettifiedErrors<TProto extends Command>() {
 				const internalError = error instanceof KipperInternalError;
 				const unexpectedError = internalError || (!cliError && !configError);
 
-				// Error configuration
 				const name: string = getErrorName(cliError, configError, internalError);
 				let msg: string =
 					error && typeof error === "object" && "message" in error && typeof error.message === "string"
 						? unexpectedError
-						  ? (<Error>error)?.stack ?? error.message
+							? // prettier-ignore
+								((<Error>error)?.stack ?? error.message)
 							: error.message
 						: String(error);
 
@@ -47,9 +47,9 @@ export function prettifiedErrors<TProto extends Command>() {
 					suggestions:
 						unexpectedError
 							? [
-									"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
-										"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
-								]
+								"Ensure no invalid types or data were passed to module functions or classes. Otherwise report the " +
+								"issue on https://github.com/Kipper-Lang/Kipper. Help us improve Kipper!️",
+							]
 							: undefined,
 				};
 

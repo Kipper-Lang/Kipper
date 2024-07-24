@@ -30,14 +30,8 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import { Scope, ScopeFunctionDeclaration } from "../symbol-table";
-import {
-	BuiltInTypes,
-	ScopeDeclaration,
-	ScopeParameterDeclaration,
-	ScopeTypeDeclaration,
-	ScopeVariableDeclaration,
-} from "../symbol-table";
+import { type Scope, ScopeFunctionDeclaration } from "../symbol-table";
+import { BuiltInTypes, ScopeDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
 import {
 	kipperIncrementOrDecrementOperators,
@@ -68,15 +62,8 @@ import {
 	ValueNotIndexableTypeError,
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
-import {
-	BuiltInTypeArray,
-	BuiltInTypeFunc,
-	CustomType,
-	GenericType,
-	GenericTypeArguments,
-	ProcessedType,
-	RawType
-} from "../types";
+import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
+import { BuiltInTypeFunc } from "../types";
 import { BuiltInTypeObj } from "../types";
 import { UndefinedType } from "../types";
 
@@ -348,22 +335,17 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentAssignmentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(
-		func: Expression | KipperReferenceable,
-		args: Array<Expression>
-	): void {
-		const funcType = <BuiltInTypeFunc>(func instanceof Expression ? func.getTypeSemanticData().evaluatedType : func.type);
+	public validFunctionCallArguments(func: Expression | KipperReferenceable, args: Array<Expression>): void {
+		const funcType = <BuiltInTypeFunc>(
+			(func instanceof Expression ? func.getTypeSemanticData().evaluatedType : func.type)
+		);
 		if (funcType.paramTypes.length !== args.length) {
-			throw this.assertError(new InvalidAmountOfArgumentsError(
-				funcType.identifier,
-				funcType.paramTypes.length,
-				args.length
-			));
+			throw this.assertError(
+				new InvalidAmountOfArgumentsError(funcType.identifier, funcType.paramTypes.length, args.length),
+			);
 		}
 
-		const params = func instanceof ScopeFunctionDeclaration ?
-				func.params :
-				funcType.paramTypes;
+		const params = func instanceof ScopeFunctionDeclaration ? func.params : funcType.paramTypes;
 
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression, index) => {

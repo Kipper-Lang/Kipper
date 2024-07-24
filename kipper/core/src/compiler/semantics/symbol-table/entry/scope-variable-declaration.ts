@@ -5,8 +5,7 @@
 import type { VariableDeclaration, VariableDeclarationSemantics, VariableDeclarationTypeSemantics } from "../../../ast";
 import type { KipperStorageType } from "../../../const";
 import type { UniverseScope } from "../index";
-import { BuiltInTypes } from "../index";
-import {BuiltInType, BuiltInTypeFunc, ProcessedType} from "../../types";
+import { BuiltInTypeFunc, type ProcessedType } from "../../types";
 import { ScopeDeclaration } from "./scope-declaration";
 import type { BuiltInVariable } from "../../runtime-built-ins";
 

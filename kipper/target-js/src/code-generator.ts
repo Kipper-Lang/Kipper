@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	BitwiseAndExpression,
@@ -13,6 +13,7 @@ import {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
@@ -49,7 +50,7 @@ import {
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
-	ReturnStatement, ScopeDeclaration,
+	ReturnStatement,
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
@@ -60,7 +61,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
-import { AssignmentExpression } from "@kipper/core";
+import { AssignmentExpression, ScopeDeclaration } from "@kipper/core";
 import {
 	BuiltInTypes,
 	CompoundStatement,
@@ -72,7 +73,6 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -697,12 +697,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const func = node.getTypeSemanticData().funcOrExp;
 
 		// Get the proper identifier for the function
-		const exp = func instanceof Expression ?
-			await func.translateCtxAndChildren()
-			: undefined;
-		const identifier = func instanceof ScopeDeclaration ?
-			func.isBuiltIn ? TargetJS.getBuiltInIdentifier(func.builtInStructure!!) : func.identifier
-			: undefined;
+		const exp = func instanceof Expression ? await func.translateCtxAndChildren() : undefined;
+		const identifier =
+			func instanceof ScopeDeclaration
+				? func.isBuiltIn
+					? TargetJS.getBuiltInIdentifier(func.builtInStructure!!)
+					: func.identifier
+				: undefined;
 
 		// Generate the arguments
 		let args: TranslatedExpression = [];

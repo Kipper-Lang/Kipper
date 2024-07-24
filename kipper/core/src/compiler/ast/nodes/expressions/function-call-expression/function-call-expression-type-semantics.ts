@@ -3,9 +3,12 @@
  * @since 0.5.0
  */
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
-import {ScopeFunctionDeclaration, ScopeParameterDeclaration, ScopeVariableDeclaration} from "../../../../semantics";
-import {KipperReferenceable} from "../../../../const";
-import {Expression} from "../expression";
+import type {
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "../../../../semantics";
+import type { Expression } from "../expression";
 
 /**
  * Type semantics for AST Node {@link FunctionCallExpression}.

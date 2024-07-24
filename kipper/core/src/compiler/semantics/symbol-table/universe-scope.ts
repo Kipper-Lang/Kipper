@@ -44,16 +44,7 @@ export const BuiltInTypes = {
  * Contains all the built-in functions in Kipper that are available per default in every program.
  */
 export const BuiltInFunctions = {
-	print: new BuiltInFunction(
-		"print",
-		[
-			new BuiltInFunctionArgument(
-				"msg",
-				BuiltInTypes.any,
-			),
-		],
-		BuiltInTypes.void,
-	),
+	print: new BuiltInFunction("print", [new BuiltInFunctionArgument("msg", BuiltInTypes.any)], BuiltInTypes.void),
 	len: new BuiltInFunction(
 		"len",
 		[
