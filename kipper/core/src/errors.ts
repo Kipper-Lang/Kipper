@@ -692,16 +692,6 @@ export class InvalidAmountOfGenericArgumentsError extends TypeError {
 }
 
 /**
- * Error that is thrown when a generic type is used that is not defined.
- * @since 0.12.0
- */
-export class MultipleSpreadsInGenericTypeArgumentsError extends TypeError {
-	constructor() {
-		super("Only one spread argument is allowed in generic type arguments.");
-	}
-}
-
-/**
  * Error that is thrown whenever a type is used that is not a generic type.
  * @since 0.12.0
  */
