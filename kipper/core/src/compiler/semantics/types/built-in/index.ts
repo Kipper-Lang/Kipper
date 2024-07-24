@@ -11,3 +11,4 @@ export * from "./str";
 export * from "./type";
 export * from "./undefined";
 export * from "./void";
+export * from "./obj";

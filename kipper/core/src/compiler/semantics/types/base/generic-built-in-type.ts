@@ -2,7 +2,7 @@ import { BuiltInType } from "./built-in-type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 import type { KipperBuiltInTypeLiteral } from "../../../const";
 import type { ProcessedType } from "./index";
-import { GenericCanOnlyHaveOneSpreadError, KipperInternalError } from "../../../../errors";
+import { GenericCanOnlyHaveOneSpreadError } from "../../../../errors";
 
 /**
  * Represents a generic built-in type that is used in the type analysis phase.

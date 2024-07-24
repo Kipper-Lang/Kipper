@@ -539,7 +539,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
-		const expression = node.getSemanticData().expressoDepresso;
+		const expression = node.getSemanticData().value;
 		const identifier = node.getSemanticData().identifier;
 
 		// Await the translation and join the array into a string
@@ -571,7 +571,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		switch (<"dot" | "bracket" | "slice">semanticData.accessType) {
 			case "dot":
-				return []; // TODO: Not implemented
+				return [object[0] + "." + semanticData.propertyIndexOrKeyOrSlice];
 			case "bracket": {
 				// -> The member access is done via brackets, meaning the member name is an expression
 				// In this case, only indexes are allowed, not keys, but in the future, this will change with the implementation

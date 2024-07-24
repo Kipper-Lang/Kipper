@@ -1,5 +1,5 @@
 import type { CompilableType } from "./compilable-type";
-import { type TypeError, TypeNotCompilableError } from "../../../../errors";
+import { TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 

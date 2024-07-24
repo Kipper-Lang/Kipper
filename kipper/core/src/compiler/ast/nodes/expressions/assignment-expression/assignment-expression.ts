@@ -23,7 +23,7 @@ import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import type { KipperAssignOperator, KipperReferenceable } from "../../../../const";
 import { kipperArithmeticAssignOperators } from "../../../../const";
 import { getParseRuleSource } from "../../../../../tools";
-import { ScopeDeclaration, ScopeVariableDeclaration } from "../../../../semantics";
+import { ScopeVariableDeclaration } from "../../../../semantics";
 import type { MemberAccessExpression } from "../member-access-expression";
 
 /**
