@@ -18,9 +18,9 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Added support for classes, class methods, class properties and class constructors.
+- Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
-- Added support for object literals and object properties.
+- Support for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
@@ -77,10 +77,15 @@ To use development versions of Kipper download the
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
   - `TypeDeclarationTyp`KipperTypeChecker.validArrayExpression`eSemantics`, which represents the type semantics of a type declaration.
   - `CompilableType`, which represents a type that can be compiled.
-  - `BuiltInReference`, which replaces the now removed type `Reference` in the `KipperProgramContext` for reference 
+  - `BuiltInReference`, which replaces the now removed type `Reference` in the `KipperProgramContext` for reference
     tracking of built-in types.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
+- New Properties:
+  - `BuiltInFunction.funcType`, which returns a function type for the built-in function.
+  - `FunctionDeclarationTypeSemantics.type`, which returns the type of the function declaration i.e. the function type.
+  - `LambdaPrimaryExpressionTypeSemantics.type`, which returns the type of the lambda primary expression i.e. the
+    function type.
 
 ### Changed
 
@@ -97,6 +102,9 @@ To use development versions of Kipper download the
   - Class `UndefinedCustomType` to `UndefinedType`.
 
 ### Fixed
+
+- All functions and lambdas simply resolving to `Func` instead of the appropriate filled-up `Func<T..., R>` type. This
+  now enables proper type checking for function references.
 
 ### Deprecated
 
