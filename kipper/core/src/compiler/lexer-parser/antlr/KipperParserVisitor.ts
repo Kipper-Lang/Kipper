@@ -60,6 +60,10 @@ import { InterfaceMemberDeclarationContext } from "./KipperParser";
 import { InterfacePropertyDeclarationContext } from "./KipperParser";
 import { InterfaceMethodDeclarationContext } from "./KipperParser";
 import { ClassDeclarationContext } from "./KipperParser";
+import { ClassMemberDeclarationContext } from "./KipperParser";
+import { ClassPropertyDeclarationContext } from "./KipperParser";
+import { ClassMethodDeclarationContext } from "./KipperParser";
+import { ClassConstructorDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
@@ -534,6 +538,34 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitClassDeclaration?: (ctx: ClassDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classMemberDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassMemberDeclaration?: (ctx: ClassMemberDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classPropertyDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassPropertyDeclaration?: (ctx: ClassPropertyDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classMethodDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassMethodDeclaration?: (ctx: ClassMethodDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.classConstructorDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitClassConstructorDeclaration?: (ctx: ClassConstructorDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.statement`.

@@ -1,5 +1,8 @@
 import type { InternalFunction } from "./internal-function";
 import { BuiltInTypes } from "../symbol-table";
+import { InternalFunctionArgument } from "./internal-function-argument";
+import { UnionType } from "../types/base/union-type";
+import type { BuiltInTypeArray, BuiltInTypeNum, BuiltInTypeStr, BuiltInTypeUndefined } from "../types";
 
 /**
  * Contains all the internal built-in functions, which are used by Kipper to provide internal functionality. These
@@ -11,117 +14,73 @@ import { BuiltInTypes } from "../symbol-table";
 export const kipperInternalBuiltInFunctions = {
 	numToStr: {
 		identifier: "numToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.num,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.num)],
 		returnType: BuiltInTypes.str,
 	},
 	boolToStr: {
 		identifier: "boolToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.bool,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.bool)],
 		returnType: BuiltInTypes.str,
 	},
 	voidToStr: {
 		identifier: "voidToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.void,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.void)],
 		returnType: BuiltInTypes.str,
 	},
 	nullToStr: {
 		identifier: "nullToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.null,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.null)],
 		returnType: BuiltInTypes.str,
 	},
 	undefinedToStr: {
 		identifier: "undefinedToStr",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.undefined,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.undefined)],
 		returnType: BuiltInTypes.str,
 	},
 	strToNum: {
 		identifier: "strToNum",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.str,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.str)],
 		returnType: BuiltInTypes.num,
 	},
 	boolToNum: {
 		identifier: "boolToNum",
-		params: [
-			{
-				identifier: "value",
-				valueType: BuiltInTypes.bool,
-			},
-		],
+		params: [new InternalFunctionArgument("value", BuiltInTypes.bool)],
 		returnType: BuiltInTypes.num,
 	},
 	slice: {
 		identifier: "slice",
 		params: [
-			{
-				identifier: "objLike",
-				valueType: BuiltInTypes.str, // TODO: Implement this for all objLike types (At the moment only strings are supported)
-			},
-			{
-				identifier: "start",
-				valueType: [BuiltInTypes.num, BuiltInTypes.undefined], // Optional
-			},
-			{
-				identifier: "end",
-				valueType: [BuiltInTypes.num, BuiltInTypes.undefined], // Optional
-			},
+			new InternalFunctionArgument(
+				"objLike",
+				new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
+			),
+			new InternalFunctionArgument(
+				"start",
+				new UnionType<[BuiltInTypeNum, BuiltInTypeUndefined]>([BuiltInTypes.num, BuiltInTypes.undefined]),
+			),
+			new InternalFunctionArgument(
+				"end",
+				new UnionType<[BuiltInTypeNum, BuiltInTypeUndefined]>([BuiltInTypes.num, BuiltInTypes.undefined]),
+			),
 		],
-		returnType: BuiltInTypes.str, // TODO: Implement this for all objLike types (At the moment only strings are supported)
+		returnType: new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
 	},
 	index: {
 		identifier: "index",
 		params: [
-			{
-				identifier: "arrayLike",
-				valueType: BuiltInTypes.str, // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
-			},
-			{
-				identifier: "indexOrKey",
-				valueType: BuiltInTypes.num,
-			},
+			new InternalFunctionArgument(
+				"arrayLike",
+				new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
+			),
+			new InternalFunctionArgument("indexOrKey", BuiltInTypes.num),
 		],
-		returnType: BuiltInTypes.str, // TODO: Implement this for all arrayLike types (At the moment only strings are supported)
+		returnType: new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
 	},
 	repeatString: {
 		identifier: "repeatString",
 		params: [
-			{
-				identifier: "toRepeat",
-				valueType: BuiltInTypes.str,
-			},
-			{
-				identifier: "times",
-				valueType: BuiltInTypes.num,
-			},
+			new InternalFunctionArgument("toRepeat", BuiltInTypes.str),
+			new InternalFunctionArgument("times", BuiltInTypes.num),
 		],
 		returnType: BuiltInTypes.str,
 	},

@@ -2,22 +2,28 @@ import { BuiltInType } from "./built-in-type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 import type { KipperBuiltInTypeLiteral } from "../../../const";
 import type { ProcessedType } from "./index";
-import { KipperInternalError } from "../../../../errors";
+import { GenericCanOnlyHaveOneSpreadError } from "../../../../errors";
 
 /**
  * Represents a generic built-in type that is used in the type analysis phase.
  * @since 0.12.0
  */
-export abstract class GenericBuiltInType extends BuiltInType implements GenericType {
+export abstract class GenericBuiltInType<T extends GenericTypeArguments> extends BuiltInType implements GenericType<T> {
 	/**
 	 * The generic type arguments for this type.
 	 * @since 0.12.0
 	 */
-	public readonly genericTypeArguments: GenericTypeArguments;
+	public readonly genericTypeArguments: T;
 
-	protected constructor(identifier: KipperBuiltInTypeLiteral, genericTypeArguments: GenericTypeArguments) {
+	protected constructor(identifier: KipperBuiltInTypeLiteral, genericTypeArguments: T) {
 		super(identifier);
 		this.genericTypeArguments = genericTypeArguments;
+
+		// Ensure that only one generic argument is a spread argument i.e. can contain `1..N` elements.
+		const spreadArguments = genericTypeArguments.filter((arg) => Array.isArray(arg.type));
+		if (spreadArguments.length > 1) {
+			throw new GenericCanOnlyHaveOneSpreadError();
+		}
 	}
 
 	/**
@@ -30,7 +36,7 @@ export abstract class GenericBuiltInType extends BuiltInType implements GenericT
 		return true;
 	}
 
-	public abstract changeGenericTypeArguments(genericTypeArguments: Array<ProcessedType>): GenericType;
+	public abstract changeGenericTypeArguments(genericTypeArguments: T): GenericType<T>;
 
 	/**
 	 * Asserts that this type is assignable to another type.

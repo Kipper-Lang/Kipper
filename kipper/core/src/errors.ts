@@ -320,6 +320,16 @@ export class MissingRequiredSemanticDataError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a generic type is initialised that contains more than one spread argument.
+ * @since 0.12.0
+ */
+export class GenericCanOnlyHaveOneSpreadError extends KipperInternalError {
+	constructor() {
+		super("Only one generic argument can be a spread argument.");
+	}
+}
+
+/**
  * An error that is raised whenever a feature is used that has not been implemented yet.
  * @since 0.6.0
  */
@@ -659,15 +669,24 @@ export class GenericArgumentTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
+ * @since 0.12.0
+ */
+export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+	constructor(expected: number, received: number) {
+		super(`Function type expects ${expected} arguments, received ${received}.`);
+	}
+}
+
+/**
  * Error that is thrown when an invalid amount of generic arguments is passed to a type.
  * @since 0.12.0
  */
 export class InvalidAmountOfGenericArgumentsError extends TypeError {
-	constructor(typeIdentifier: string, expected: number, received: number) {
+	constructor(typeIdentifier: string, expected: number, received: number, spreadPresent: boolean) {
 		super(
-			`Type '${typeIdentifier}' only accepts ${expected} generic argument${
-				expected === 1 ? "" : "s"
-			}, received ${received}.`,
+			`Type '${typeIdentifier}' ${spreadPresent ? "expects at least" : "only accepts"} ${expected} generic` +
+				`argument${expected === 1 ? "" : "s"}, received ${received}.`,
 		);
 	}
 }
@@ -679,6 +698,16 @@ export class InvalidAmountOfGenericArgumentsError extends TypeError {
 export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
 	constructor(identifier: string) {
 		super(`Type '${identifier}' does not accept generic arguments.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a function type.
+ * @since 0.12.0
+ */
+export class TypeNotAssignableToUnionError extends TypeError {
+	constructor(type: string, unionType: Array<string>, cause?: TypeError) {
+		super(`Type '${type}' is not assignable to union type '${unionType.join(" | ")}'.`, cause);
 	}
 }
 
@@ -772,12 +801,32 @@ export class ValueNotIndexableTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever the given value can not be accessed using the given access method.
+ * @since 0.12.0
+ */
+export class ValueTypeNotIndexableWithGivenAccessor extends TypeError {
+	constructor(type: string, accessType: string) {
+		super(`Value of type '${type}' can not be accessed using '${accessType}' style indexing`);
+	}
+}
+
+/**
  * Error that is thrown when a key is used that has a different type than the key type of the object.
  * @since 0.10.0
  */
 export class InvalidKeyTypeError extends TypeError {
 	constructor(objType: string, keyType: string) {
 		super(`Key of type '${keyType}' can not be used to access object-like of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever the given identifier does not exist on an object.
+ * @since 0.12.0
+ */
+export class PropertyDoesNotExistError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' does not exist on type '${objType}'`);
 	}
 }
 

@@ -3,6 +3,7 @@
  * @since 0.11.0
  */
 import type { TypeDeclarationSemantics } from "../type-declaration-semantics";
+import type { ClassMemberDeclaration, ClassConstructorDeclaration } from "./class-member-declaration";
 
 /**
  * Semantics for AST Node {@link ClassDeclaration}.
@@ -14,4 +15,14 @@ export interface ClassDeclarationSemantics extends TypeDeclarationSemantics {
 	 * @since 0.11.0
 	 */
 	identifier: string;
+	/**
+	 * The body of the class.
+	 * @since 0.11.0
+	 */
+	classMembers: Array<ClassMemberDeclaration>;
+	/**
+	 * The class constructor.
+	 * @since 0.11.0
+	 */
+	constructorDeclaration: ClassConstructorDeclaration | undefined;
 }

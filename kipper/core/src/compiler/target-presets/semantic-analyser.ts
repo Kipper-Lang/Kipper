@@ -14,6 +14,7 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
+	ClassMethodDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -30,6 +31,8 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
@@ -38,6 +41,7 @@ import type {
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -51,11 +55,9 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	InterfacePropertyDeclaration,
-	InterfaceMethodDeclaration,
-	ObjectProperty,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
+import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -142,6 +144,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
 	 */
 	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassMethodDeclaration} instances.
+	 */
+	public abstract classMethodDeclaration?: TargetASTNodeSemanticAnalyser<ClassMethodDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassConstructorDeclaration} instances.
+	 */
+	public abstract classConstructorDeclaration?: TargetASTNodeSemanticAnalyser<ClassConstructorDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.

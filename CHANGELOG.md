@@ -18,26 +18,54 @@ To use development versions of Kipper download the
 
 ### Added
 
-- Added semantic checking and code generation for object literals and object properties.
+- Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
+- Support for classes, class methods, class properties and class constructors.
+  ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
+- Support for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
+- Support for calling lambdas and functions stored in variables or expressions.
+  ([#674](https://github.com/Kipper-Lang/Kipper/issues/674))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
-  (objects, arrays etc.). This does not inheritely add functionality but serves as the stepping stone for the
+  (objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
   implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
+- Support for index-based array assignments. ([#669](https://github.com/Kipper-Lang/Kipper/issues/669))
+- Implemented the generic `Func<T..., R>` type and function type initializers.
+  ([#584](https://github.com/Kipper-Lang/Kipper/issues/584))
+- Implemented internal generic spread argument `T...`, which allows multiple arguments to be passed to a single
+  parameter inside a generic type specifier.
+- Implemented constant `NaN`, which represents the `NaN` value in JavaScript (Not a Number).
+  ([#671](https://github.com/Kipper-Lang/Kipper/issues/671))
+- Support for internal type unions in built-in and internal functions.
+  ([#496](https://github.com/Kipper-Lang/Kipper/issues/496))
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
+  - `UniverseScope`, which represents the universe scope, where all built-in types, functions and variables are
+    declared. This serves as the parent of the global scope.
   - `InterfaceDeclaration`, which represents an AST interface declaration.
+  - `ClassMethodDeclaration`, which represents an AST class method declaration.
+  - `ClassPropertyDeclaration`, which represents an AST class property declaration.
+  - `ClassConstructorDeclaration`, which represents an AST class constructor.
   - `ClassDeclaration`, which represents an AST class declaration.
   - `BuiltInType`, which represents a built-in type.
   - `CustomType`, which represents a user defined type.
+  - `UnionType`, which represents a union type.
+  - `BuiltInTypeAny`, which represents the `any` type.
+  - `BuiltInTypeVoid`, which represents the `void` type.
+  - `BuiltInTypeNull`, which represents the `null` type.
+  - `BuiltInTypeUndefined`, which represents the `undefined` type.
+  - `BuiltInTypeBool`, which represents the `bool` type.
+  - `BuiltInTypeNum`, which represents the `num` type.
+  - `BuiltInTypeStr`, which represents the `str` type.
+  - `BuiltInTypeArray`, which represents the `Array<T>` type.
+  - `BuiltInTypeFunc`, which represents the `Func<T..., R>` type.
+  - `BuiltInTypeObj`, which represents the `obj` type.
   - `ScopeTypeDeclaration`, which represents a scope type declaration.
-  - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
-    declared. This serves as the parent of the global scope.
   - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
@@ -48,36 +76,72 @@ To use development versions of Kipper download the
     an error indicating an invalid logic that should be fixed.
   - `CanNotUseNonGenericAsGenericTypeError`, which is thrown when a non-generic type is used as a generic type. This is
     an error indicating an invalid logic that should be fixed.
-- New interfaces:
+  - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
+    match the number of arguments in the function type it is compared to.
+  - `GenericCanOnlyHaveOneSpreadError`, which is thrown when a generic type has more than one spread argument. This is
+    for now an internal-only error that should not be thrown in normal circumstances.
+  - `TypeNotAssignableToUnionError`, which is thrown when a type is not assignable to a union type.
+  - `ValueTypeNotIndexableWithGivenAccessor`, which is thrown when a value type is not indexable with the given
+    accessor.
+  - `PropertyDoesNotExistError`, which is thrown when a property does not exist on a type.
+- New interfaces and types:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
+  - `ClassMethodDeclarationSemantics`, which represents the semantics of a class method declaration.
+  - `ClassMethodDeclarationTypeSemantics`, which represents the type semantics of a class method declaration.
+  - `ClassPropertyDeclarationSemantics`, which represents the semantics of a class property declaration.
+  - `ClassPropertyDeclarationTypeSemantics`, which represents the type semantics of a class property declaration.
+  - `ClassConstructorDeclarationSemantics`, which represents the semantics of a class constructor declaration.
+  - `ClassConstructorDeclarationTypeSemantics`, which represents the type semantics of a class constructor declaration.
   - `ClassDeclarationSemantics`, which represents the semantics of a class declaration.
   - `ClassDeclarationTypeSemantics`, which represents the type semantics of a class declaration.
   - `TypeDeclaration`, which represents a type declaration. This is an abstract base class for all type declarations.
   - `TypeDeclarationSemantics`, which represents the semantics of a type declaration.
   - `TypeDeclarationTyp`KipperTypeChecker.validArrayExpression`eSemantics`, which represents the type semantics of a type declaration.
   - `CompilableType`, which represents a type that can be compiled.
+  - `BuiltInReference`, which replaces the now removed type `Reference` in the `KipperProgramContext` for reference
+    tracking of built-in types.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
+- New properties:
+  - `BuiltInFunction.funcType`, which returns a function type for the built-in function.
+  - `FunctionDeclarationTypeSemantics.type`, which returns the type of the function declaration i.e. the function type.
+  - `LambdaPrimaryExpressionTypeSemantics.type`, which returns the type of the lambda primary expression i.e. the
+    function type.
+  - `FunctionCallExpressionTypeSemantics.funcOrExp`, which returns the function or expression that is called. This
+    always stores some sort of value that extends `BuiltInTypeFunc`.
+- New runtime error `KipperError`, which serves as the base for `TypeError` and `IndexError`.
 
 ### Changed
 
-- Changed type from interface to class:
+- Argument type of built-in function `print` from `str` to `any`.
+- Argument type of built-in function `len` from `str` to `str | Array<any>`.
+  ([#667](https://github.com/Kipper-Lang/Kipper/issues/667))
+- Type from interface to class:
   - `InternalFunction`, which represents an internal function.
   - `BuiltInFunction`, which represents a built-in function.
   - `InternalFunctionArgument`, which represents an internal function argument.
   - `BuiltInVariable`, which represents a built-in variable.
 - Renamed:
   - Module `analysis` to `semantics`.
+  - Module `compiler/.../expressions/arithmetic` to `arithmetic-expression`.
   - Class `UncheckedType` to `RawType`.
   - Class `CheckedType` to `ProcessedType`.
   - Class `UndefinedCustomType` to `UndefinedType`.
 
 ### Fixed
 
+- All functions and lambdas simply resolving to `Func` instead of the appropriate filled-up `Func<T..., R>` type. This
+  now enables proper type checking for function references.
+- CLI command `run` not properly reporting internal or unexpected errors, as they were already prettified in the
+  internally called up command `compile`.
+
 ### Deprecated
 
 ### Removed
+
+- Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
+- `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
 
 </details>
 

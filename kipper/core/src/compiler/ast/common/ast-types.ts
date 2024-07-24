@@ -13,7 +13,10 @@ import type {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassPropertyDeclarationContext,
 	CompoundStatementContext,
 	ConditionalExpressionContext,
 	DotNotationMemberAccessExpressionContext,
@@ -115,7 +118,10 @@ export type ParserDeclarationContext =
 	| InterfaceDeclarationContext
 	| InterfacePropertyDeclarationContext
 	| InterfaceMethodDeclarationContext
-	| ClassDeclarationContext;
+	| ClassDeclarationContext
+	| ClassPropertyDeclarationContext
+	| ClassMethodDeclarationContext
+	| ClassConstructorDeclarationContext;
 
 /**
  * Union type of all rule context classes implemented by the {@link ParseRuleKindMapping} that have a corresponding AST node class.
@@ -138,7 +144,10 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_interfaceDeclaration
 	| typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration
 	| typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration
-	| typeof ParseRuleKindMapping.RULE_classDeclaration;
+	| typeof ParseRuleKindMapping.RULE_classDeclaration
+	| typeof ParseRuleKindMapping.RULE_classPropertyDeclaration
+	| typeof ParseRuleKindMapping.RULE_classMethodDeclaration
+	| typeof ParseRuleKindMapping.RULE_classConstructorDeclaration;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
@@ -218,7 +227,10 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfacePropertyDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_interfaceMethodDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classPropertyDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classMethodDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classConstructorDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST

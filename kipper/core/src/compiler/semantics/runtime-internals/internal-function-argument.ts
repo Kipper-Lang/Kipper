@@ -1,4 +1,3 @@
-import { KipperBuiltInTypeLiteral } from "../../const";
 import type { ProcessedType } from "../types";
 
 /**
@@ -26,9 +25,9 @@ export class InternalFunctionArgument {
 	 *  // x is of type 'num'
 	 *  // y is of type 'str'
 	 */
-	public readonly valueType: ProcessedType | Array<ProcessedType>;
+	public readonly valueType: ProcessedType;
 
-	public constructor(identifier: string, valueType: ProcessedType | Array<ProcessedType>) {
+	public constructor(identifier: string, valueType: ProcessedType) {
 		this.identifier = identifier;
 		this.valueType = valueType;
 	}

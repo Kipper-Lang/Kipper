@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import type { BuiltInFunction } from "@kipper/core";
+import { BuiltInFunction } from "@kipper/core";
 import { BuiltInFunctions, BuiltInTypes, BuiltInVariables } from "@kipper/core";
 import { EvaluatedCompileConfig, InvalidGlobalError, KipperCompiler, KipperFileStream } from "@kipper/core";
 import { promises as fs } from "fs";
@@ -50,11 +50,7 @@ describe("KipperProgramContext", async () => {
 			);
 
 			// Add a new built-in function
-			let func: BuiltInFunction = {
-				identifier: "test",
-				params: [],
-				returnType: BuiltInTypes.void,
-			};
+			let func: BuiltInFunction = new BuiltInFunction("test", [], BuiltInTypes.void);
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(
@@ -87,11 +83,7 @@ describe("KipperProgramContext", async () => {
 			);
 
 			// Register new built-in function
-			let func: BuiltInFunction = {
-				identifier: "test",
-				params: [],
-				returnType: BuiltInTypes.void,
-			};
+			let func: BuiltInFunction = new BuiltInFunction("test", [], BuiltInTypes.void);
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(
@@ -140,11 +132,7 @@ describe("KipperProgramContext", async () => {
 			assert(programCtx.getBuiltInFunction("id") === undefined, "No built-in should exist");
 
 			// Register new built-in function
-			let func: BuiltInFunction = {
-				identifier: "test",
-				params: [],
-				returnType: BuiltInTypes.void,
-			};
+			let func: BuiltInFunction = new BuiltInFunction("test", [], BuiltInTypes.void);
 			programCtx.registerBuiltInFunctions(func);
 
 			assert(programCtx.getBuiltInFunction("") === undefined, "No built-in should exist");
@@ -157,11 +145,7 @@ describe("KipperProgramContext", async () => {
 			let programCtx = await compiler.getProgramCtx(parseData, { target: defaultTarget });
 
 			// Register new built-in function
-			let func: BuiltInFunction = {
-				identifier: "test",
-				params: [],
-				returnType: BuiltInTypes.void,
-			};
+			let func: BuiltInFunction = new BuiltInFunction("test", [], BuiltInTypes.void);
 			programCtx.registerBuiltInFunctions(func);
 
 			assert.equal(

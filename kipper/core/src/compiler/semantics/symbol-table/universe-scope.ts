@@ -1,22 +1,24 @@
-import { Scope } from "./base";
 import type { ScopeDeclaration } from "./entry";
-import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import type { BuiltInType } from "../types";
-import type { KipperProgramContext } from "../../program-ctx";
-import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
 import type { KipperBuiltInTypeLiteral } from "../../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
+import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
+import { UnionType } from "../types";
 import {
 	BuiltInTypeArray,
 	BuiltInTypeBool,
 	BuiltInTypeFunc,
 	BuiltInTypeNull,
 	BuiltInTypeNum,
+	BuiltInTypeObj,
 	BuiltInTypeStr,
 	BuiltInTypeType,
 	BuiltInTypeUndefined,
 	BuiltInTypeVoid,
-} from "../types/built-in";
-import { BuiltInTypeAny } from "../types/built-in/any";
+	BuiltInTypeAny,
+} from "../types";
+import { Scope } from "./base";
 
 const any = new BuiltInTypeAny();
 
@@ -27,13 +29,14 @@ const any = new BuiltInTypeAny();
 export const BuiltInTypes = {
 	any: any,
 	type: new BuiltInTypeType(),
+	obj: new BuiltInTypeObj(),
 	undefined: new BuiltInTypeUndefined(),
 	void: new BuiltInTypeVoid(),
 	null: new BuiltInTypeNull(),
 	bool: new BuiltInTypeBool(),
 	num: new BuiltInTypeNum(),
 	str: new BuiltInTypeStr(),
-	Func: new BuiltInTypeFunc(),
+	Func: new BuiltInTypeFunc([], any),
 	Array: new BuiltInTypeArray(any),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
@@ -41,24 +44,14 @@ export const BuiltInTypes = {
  * Contains all the built-in functions in Kipper that are available per default in every program.
  */
 export const BuiltInFunctions = {
-	print: new BuiltInFunction(
-		"print",
-		[
-			{
-				identifier: "msg",
-				valueType: BuiltInTypes.str,
-			},
-		],
-		BuiltInTypes.void,
-	),
+	print: new BuiltInFunction("print", [new BuiltInFunctionArgument("msg", BuiltInTypes.any)], BuiltInTypes.void),
 	len: new BuiltInFunction(
 		"len",
 		[
-			{
-				identifier: "arrayLike",
-				// TODO: Implement this for all arrayLike types (At the moment only strings are supported)
-				valueType: BuiltInTypes.str,
-			},
+			new BuiltInFunctionArgument(
+				"arrayLike",
+				new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
+			),
 		],
 		BuiltInTypes.num,
 	),
@@ -70,6 +63,7 @@ export const BuiltInFunctions = {
  */
 export const BuiltInVariables = {
 	__name__: new BuiltInVariable("__name__", BuiltInTypes.str, true),
+	NaN: new BuiltInVariable("NaN", BuiltInTypes.num, false),
 } satisfies Record<string, BuiltInVariable>;
 
 /**

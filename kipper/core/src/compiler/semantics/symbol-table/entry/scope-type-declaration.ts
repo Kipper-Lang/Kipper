@@ -5,8 +5,8 @@
 import { ScopeDeclaration } from "./scope-declaration";
 import type { TypeDeclaration, TypeDeclarationSemantics } from "../../../ast";
 import type { BuiltInType, CustomType, ProcessedType } from "../../types";
-import type { UniverseScope } from "../universum-scope";
-import { BuiltInTypes } from "../universum-scope";
+import type { UniverseScope } from "../universe-scope";
+import { BuiltInTypes } from "../universe-scope";
 
 /**
  * Represents the definition of a type such as a class or interface in a scope.
@@ -116,11 +116,11 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	/**
 	 * Returns whether the declaration has a value.
 	 *
-	 * As this is a type, it will always be false.
+	 * As this is a type, it will always be true;
 	 * @since 0.11.0
 	 */
-	public get hasValue(): false {
-		return false;
+	public get hasValue(): true {
+		return true;
 	}
 
 	/**

@@ -11,7 +11,7 @@ import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { GenericTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import type { GenericType } from "../../../../../semantics";
+import type { GenericType, GenericTypeArguments, ProcessedType } from "../../../../../semantics";
 import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
@@ -108,14 +108,75 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
-		const genericArguments = semanticData.genericArguments.map((arg) => arg.getTypeSemanticData().storedType);
+		const providedArguments = semanticData.genericArguments.map((arg) => arg.getTypeSemanticData().storedType);
 
 		// Ensure the type is even generic and that there are the correct number of generic arguments
-		this.programCtx.typeCheck(this).ensureValidGenericType(valueType, genericArguments);
+		this.programCtx.typeCheck(this).ensureValidGenericType(valueType, providedArguments);
+
+		// We need to duplicate the generic arguments required for the value type and then assign to them the provided
+		// generic arguments. This is a bit more complex than it seems, as we need to handle spread operators.
+		const newGenericArguments = (<GenericType<GenericTypeArguments>>valueType).genericTypeArguments.map(
+			(v): GenericTypeArguments[number] => {
+				return {
+					identifier: v.identifier,
+					type: Array.isArray(v.type) ? [] : v.type,
+				};
+			},
+		);
+
+		// This is an algorithm which based on the given generic arguments of the value type will determine how to
+		// distribute the provided generic types to the required generic arguments of the value type.
+		// This is challenging as we have a spread operator, i.e. certain generic arguments can have 0..N elements.
+		// This can only occur once in the entire generic arguments list though
+		//
+		// The algorithm works like this:
+		// 1. We assign every single generic argument to the corresponding generic argument of the value type
+		// 2. If/Once we hit a spread operator, we assign all remaining generic arguments to the spread operator
+		// 3. We go to the next generic argument and see if there are any arguments behind the spread operator, for each
+		// 	of those we pop them from the spread operator and assign them to the current generic argument.
+		// 4. We repeat this until we have assigned all generic arguments
+
+		let currGenericArgIndex = 0;
+		let foundSpread = false;
+		while (currGenericArgIndex < newGenericArguments.length && !foundSpread) {
+			const currGenericArg = newGenericArguments[currGenericArgIndex];
+			if (Array.isArray(newGenericArguments[currGenericArgIndex].type)) {
+				const spreadArg = newGenericArguments[currGenericArgIndex];
+				spreadArg.type = providedArguments;
+				foundSpread = true;
+			} else {
+				const providedArg = providedArguments.shift();
+
+				// As we already check for enough generic arguments, we can safely assume that there is a provided argument
+				currGenericArg.type = <ProcessedType>providedArg;
+				currGenericArgIndex++;
+			}
+		}
+
+		if (foundSpread) {
+			const spreadArg = newGenericArguments[currGenericArgIndex] as {
+				identifier: string;
+				type: ProcessedType[];
+			};
+			currGenericArgIndex++;
+
+			while (currGenericArgIndex < newGenericArguments.length) {
+				const currGenericArg = newGenericArguments[currGenericArgIndex];
+
+				// Now we simply need to take back all the extra arguments from the spread operator and assign them to the
+				// current generic argument
+				if (Array.isArray(currGenericArg.type)) {
+					throw new KipperNotImplementedError("Multiple spread operators in generic arguments");
+				}
+
+				currGenericArg.type = spreadArg.type.pop()!!;
+				currGenericArgIndex++;
+			}
+		}
 
 		this.typeSemantics = {
 			evaluatedType: BuiltInTypes.type,
-			storedType: (<GenericType>valueType).changeGenericTypeArguments(genericArguments),
+			storedType: (<GenericType<GenericTypeArguments>>valueType).changeGenericTypeArguments(newGenericArguments),
 		};
 	}
 

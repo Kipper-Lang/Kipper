@@ -7,7 +7,7 @@ export * from "./expression";
 export * from "./expression-semantics";
 export * from "./expression-type-semantics";
 export * from "./primary-expression/";
-export * from "./arithmetic/";
+export * from "./arithmetic-expression/";
 export * from "./comparative-expression/";
 export * from "./logical-expression/";
 export * from "./postfix-expression/";

@@ -14,7 +14,7 @@ import { jsConfig } from "./errors";
  */
 export function testPrintOutput(newConsoleLog: (message: any) => void, jsProgram: string): void {
 	const oldConsoleLog = console.log;
-	console.log = newConsoleLog;
+	console.log = (v: any) => newConsoleLog(String(v));
 	eval(jsProgram); // Eval the program, which should call the 'print' function.
 	console.log = oldConsoleLog;
 }
@@ -29,7 +29,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
 			assert.include(instance.write(), '__kipper.print("");', "Expected print call to be present in output");
 		});
@@ -39,7 +39,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
 			assert.include(instance.write(), '__kipper.print("");', "Expected print call to be present in output");
 		});
@@ -51,7 +51,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("let x: number;"), "Invalid TypeScript code (Expected different output)");
 		});
 	});
@@ -62,7 +62,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("let x: number = 4;"), "Invalid TypeScript code (Expected different output)");
 		});
 
@@ -71,34 +71,85 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("const x: number = 4;"), "Invalid TypeScript code (Expected different output)");
 		});
 	});
 
 	describe("Assignment", () => {
-		it("num", async () => {
+		it("to 'num'", async () => {
 			const fileContent = "var x: num = 4;\nx = 5;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
 				instance.write().includes("let x: number = 4;\nx = 5;"),
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
 
-		it("str", async () => {
+		it("to 'str'", async () => {
 			const fileContent = 'var x: str = "4";\nx = "5";';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
 				instance.write().includes('let x: string = "4";\nx = "5";'),
 				"Invalid TypeScript code (Expected different output)",
 			);
+		});
+
+		it("to 'bool'", async () => {
+			const fileContent = "var x: bool = true;\nx = false;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			assert(
+				instance.write().includes("let x: boolean = true;\nx = false;"),
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("to 'array'", async () => {
+			const fileContent = "var x: Array<num> = [1, 2, 3];\nx = [4, 5, 6];";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			assert(
+				instance.write().includes("let x: Array<number> = [1, 2, 3];\nx = [4, 5, 6];"),
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("to 'func'", async () => {
+			const fileContent = "var x: Func<str, void> = print;\nx = print;";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			assert(
+				instance.write().includes("let x: (arg0: string) => void = __kipper.print;\nx = __kipper.print;"),
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("to 'array[]'", async () => {
+			const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;\nprint(x[0] as str);";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			assert(
+				instance.write().includes("let x: Array<number> = [1, 2, 3];\nx[0] = 4;"),
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(instance.write());
+			testPrintOutput((message: any) => assert.equal(message, "4", "Expected different output"), jsCode);
 		});
 	});
 
@@ -108,7 +159,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
 				instance.write().includes("__kipper.print = __kipper.print;"),
 				"Invalid TypeScript code (Expected different output)",
@@ -120,7 +171,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("12 * 93;"), "Invalid TypeScript code (Expected different output)");
 			assert(instance.write().includes('"5" + "1";'), "Invalid TypeScript code (Expected different output)");
 		});
@@ -130,7 +181,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes('__kipper.print("x");'), "Invalid TypeScript code (Expected different output)");
 			assert(instance.write().includes('__kipper.print("y");'), "Invalid TypeScript code (Expected different output)");
 			assert(instance.write().includes('__kipper.print("z");'), "Invalid TypeScript code (Expected different output)");
@@ -143,7 +194,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
 				instance.write().includes("let x: void = void(0);"),
 				"Invalid TypeScript code (Expected different output)",
@@ -159,7 +210,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("let x: null = null;"), "Invalid TypeScript code (Expected different output)");
 		});
 
@@ -168,7 +219,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
 				instance.write().includes("let x: undefined = undefined;"),
 				"Invalid TypeScript code (Expected different output)",
@@ -186,7 +237,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("+4;"), "Invalid TypeScript code (Expected different output)");
 		});
 
@@ -195,7 +246,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("-4;"), "Invalid TypeScript code (Expected different output)");
 		});
 
@@ -206,7 +257,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(instance.write().includes("!true;"), "Invalid TypeScript code (Expected different output)");
 		});
 
@@ -416,7 +467,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code (Expected different output)");
@@ -435,7 +486,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code (Expected different output)");
@@ -453,7 +504,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code (Expected different output)");
@@ -471,7 +522,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 4;", "Invalid TypeScript code (Expected different output)");
@@ -489,7 +540,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 5;", "Invalid TypeScript code (Expected different output)");
@@ -507,7 +558,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: number = 5;", "Invalid TypeScript code (Expected different output)");
@@ -527,7 +578,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -542,7 +593,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -557,7 +608,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -575,7 +626,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "const x: number = true ? 5 : 10", "Invalid TypeScript code (Expected different output)");
@@ -587,7 +638,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -603,7 +654,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -620,7 +671,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "while (x <= 5) {\n  x += 1;\n}", "Invalid TypeScript code (Expected different output)");
@@ -634,7 +685,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "while (x <= 10) \n  x += 1;", "Invalid TypeScript code (Expected different output)");
@@ -648,7 +699,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -666,7 +717,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -685,7 +736,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -705,7 +756,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -723,7 +774,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -741,7 +792,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -760,7 +811,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -779,7 +830,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -800,7 +851,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "do {\n  x += 1;\n} while (x <= 5)", "Invalid TypeScript code (Expected different output)");
@@ -814,7 +865,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "do \n  x += 1;\nwhile (x <= 10)", "Invalid TypeScript code (Expected different output)");
@@ -828,7 +879,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -846,7 +897,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -865,7 +916,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -1308,7 +1359,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "let x: Array<number> = [1, 2, 3];", "Invalid TypeScript code (Expected different output)");
@@ -1319,7 +1370,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const jsCode = instance.write();
 			assert.include(jsCode, `let x: Array<number> = [1, 2, 3];\nlet y: Array<number> = x;`);
@@ -1330,7 +1381,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const jsCode = ts.transpile(instance.write());
 			testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
@@ -1341,7 +1392,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const jsCode = ts.transpile(instance.write());
 			testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
@@ -1349,67 +1400,69 @@ describe("Core functionality", () => {
 	});
 
 	describe("Lambdas", () => {
-		const compiler = new KipperCompiler();
+		describe("js", () => {
+			it("parses simple lambda expression without syntax errors", async () => {
+				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
 
-		it("parses simple lambda expression without syntax errors", async () => {
-			const code = `var add: Func = (x: num, y: num): num -> x + y;`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\nadd(1, 2);");
+					const res = eval(stringResult);
+					assert.equal(res, 3, "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
 
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\nadd(1, 2);");
-				const res = eval(stringResult);
-				assert.equal(res, 3, "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
+			it("correctly identifies semantic data for a lambda with compound statement", async () => {
+				const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; };`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet('John');");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
+
+			it("correctly identifies semantic data for a lambda with single statement", async () => {
+				const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name;`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet('John');");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
+
+			it("correctly identifies semantic data for a lambda with no parameters", async () => {
+				const code = `var greet: Func<str> = (): str -> "Hello, World!";`;
+				try {
+					const result = await compiler.compile(code, jsConfig);
+
+					// Evaluate the compiled code
+					let stringResult = result.result!.map((x) => x.join("")).join("\n");
+					stringResult = stringResult.concat("\ngreet();");
+					const res = eval(stringResult);
+					assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
+				} catch (e) {
+					assert.fail("Failed to analyze lambda expression semantically");
+				}
+			});
 		});
 
-		it("correctly identifies semantic data for a lambda with compound statement", async () => {
-			const code = `var greet: Func = (name: str): str -> { return "Hello, " + name; };`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet('John');");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
-
-		it("correctly identifies semantic data for a lambda with single statement", async () => {
-			const code = `var greet: Func = (name: str): str -> "Hello, " + name;`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet('John');");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
-
-		it("correctly identifies semantic data for a lambda with no parameters", async () => {
-			const code = `var greet: Func = (): str -> "Hello, World!";`;
-			try {
-				const result = await compiler.compile(code, jsConfig);
-
-				// Evaluate the compiled code
-				let stringResult = result.result!.map((x) => x.join("")).join("\n");
-				stringResult = stringResult.concat("\ngreet();");
-				const res = eval(stringResult);
-				assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
-			} catch (e) {
-				assert.fail("Failed to analyze lambda expression semantically");
-			}
-		});
+		describe("ts", () => {});
 	});
 
 	describe("Functions", () => {
@@ -1418,7 +1471,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(code, "function test(): void {\n}", "Invalid TypeScript code (Expected different output)");
@@ -1429,7 +1482,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -1447,7 +1500,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -1465,7 +1518,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 			const code = instance.write();
 			assert.include(
@@ -1485,7 +1538,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(written, "interface Test {\n}", "Invalid TypeScript code (Expected different output)");
 		});
@@ -1495,7 +1548,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(
 				written,
@@ -1509,7 +1562,7 @@ describe("Core functionality", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors.length, 0, "Expected no compilation errors");
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(
 				written,
@@ -1528,6 +1581,77 @@ describe("Core functionality", () => {
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
 			let written = instance.write();
 			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
+		});
+	});
+
+	describe("Class", () => {
+		it("should be able to create an empty class", async () => {
+			const fileContent = "class Test { }";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "class Test {\n}", "Invalid TypeScript code (Expected different output)");
+		});
+
+		it("should be able to create class with constructor", async () => {
+			const fileContent = "class Test {constructor (a:num, b:str) {};};";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n  constructor(a: number, b: string) \n  {\n  }\n}",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should be able to create class with members", async () => {
+			const fileContent = `class Test {\n  x: num;\n  y: str;\ngreet(): void {\nprint("Kippa");\n};\n  constructor(a: num, b: str)\n{\n};}`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: number;\n" +
+					"  y: string;\n" +
+					"  greet(): void\n" +
+					"  {\n" +
+					'    __kipper.print("Kippa");\n' +
+					"  }\n" +
+					"  constructor(a: number, b: string) \n" +
+					"  {\n" +
+					"  }\n" +
+					"}",
+			);
+		});
+	});
+
+	describe("should be able to to initialize interface", () => {
+		it("should be able to init class", async () => {
+			const fileContent = `interface Test {a: str;}; var x : Test = {a: "3"}; print(x.a);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"interface Test {\n" +
+					" a: string;\n" +
+					"}\n" +
+					"let x: Test = {\n" +
+					'  a: "3",\n' +
+					"};\n" +
+					"__kipper.print(x.a);",
+				"Invalid TypeScript code (Expected different output)",
+			);
 		});
 	});
 });

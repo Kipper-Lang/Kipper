@@ -12,7 +12,10 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
@@ -30,6 +33,8 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
@@ -38,6 +43,7 @@ import type {
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -52,10 +58,6 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { ObjectProperty } from "../../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
-import type { InterfacePropertyDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
-import { InterfaceMemberDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration";
-import type { InterfaceMethodDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -190,6 +192,25 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract classDeclaration: TargetASTNodeCodeGenerator<ClassDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translated a {@link ClassPropertyDeclaration} into a specific language.
+	 */
+
+	public abstract classPropertyDeclaration: TargetASTNodeCodeGenerator<ClassPropertyDeclaration, TranslatedCodeLine>;
+
+	/**
+	 * Translated a {@link ClassMethodDeclaration} into a specific language.
+	 */
+	public abstract classMethodDeclaration: TargetASTNodeCodeGenerator<ClassMethodDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ClassConstructorDeclaration} into a specific language.
+	 */
+	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
+		ClassConstructorDeclaration,
+		Array<TranslatedCodeLine>
+	>;
 
 	/**
 	 * Translates a {@link VariableDeclaration} into a specific language.

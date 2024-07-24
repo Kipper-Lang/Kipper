@@ -14,7 +14,14 @@ import { Expression } from "../expression";
 import type { FunctionCallExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import type { Reference, ScopeFunctionDeclaration } from "../../../../semantics";
+import type {
+	BuiltInTypeFunc,
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "../../../../semantics";
+import { ScopeDeclaration } from "../../../../semantics";
+import type { KipperReferenceable } from "../../../../const";
 
 /**
  * Function call class, which represents a function call expression in the Kipper language.
@@ -105,7 +112,7 @@ export class FunctionCallExpression extends Expression<
 		}
 
 		let identifier: string | undefined = undefined;
-		let ref: Reference | undefined = undefined;
+		let ref: KipperReferenceable | undefined = undefined;
 		if ("ref" in toCallSemantics && "identifier" in toCallSemantics) {
 			identifier = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).identifier;
 			ref = (<IdentifierPrimaryExpressionSemantics>toCallSemantics).ref;
@@ -135,15 +142,20 @@ export class FunctionCallExpression extends Expression<
 
 		// Ensure that the reference is a callable function
 		this.programCtx.typeCheck(this).refTargetCallable(semanticData.target);
-		const calledFunc = (<Reference<ScopeFunctionDeclaration>>semanticData.target).refTarget;
 
 		// Ensure valid arguments are passed
-		this.programCtx.typeCheck(this).validFunctionCallArguments(calledFunc, semanticData.args);
+		this.programCtx.typeCheck(this).validFunctionCallArguments(semanticData.target, semanticData.args);
+		const calledExp = <ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression>(
+			semanticData.target
+		);
 
 		// The evaluated type is always equal to the return of the function
+		const funcType = <BuiltInTypeFunc>(
+			(calledExp instanceof ScopeDeclaration ? calledExp.type : calledExp.getTypeSemanticData().evaluatedType)
+		);
 		this.typeSemantics = {
-			evaluatedType: calledFunc.returnType,
-			func: calledFunc,
+			evaluatedType: funcType.returnType,
+			funcOrExp: calledExp,
 		};
 	}
 

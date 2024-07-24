@@ -1,7 +1,7 @@
 import type { CompilableType } from "./compilable-type";
-import { type TypeError, TypeNotCompilableError } from "../../../../errors";
+import { TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
-import type { GenericType } from "./generic-type";
+import type { GenericType, GenericTypeArguments } from "./generic-type";
 
 /**
  * A processed type that may be used for type checking and compilation. This type is the general type that will be used
@@ -36,6 +36,14 @@ export abstract class ProcessedType extends Type {
 	 * @since 0.12.0
 	 */
 	public get isGeneric(): boolean {
+		return false;
+	}
+
+	/**
+	 * Returns whether the type is a union type.
+	 * @since 0.12.0
+	 */
+	public get isUnion(): boolean {
 		return false;
 	}
 
@@ -86,7 +94,11 @@ export abstract class ProcessedType extends Type {
 		let type = this.identifier;
 		if (this.isGeneric) {
 			type +=
-				"<" + (<GenericType>(<unknown>this)).genericTypeArguments?.map((arg) => arg.type.toString()).join(", ") + ">";
+				"<" +
+				(<GenericType<GenericTypeArguments>>(<unknown>this)).genericTypeArguments
+					?.map((arg) => arg.type.toString())
+					.join(", ") +
+				">";
 		}
 		return type;
 	}

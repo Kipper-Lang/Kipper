@@ -3,9 +3,8 @@
  * @since 0.10.0
  */
 import type { TranslatedCodeLine } from "../../const";
-import type { BuiltInFunction, BuiltInVariable } from "../../semantics";
+import type { BuiltInFunction, BuiltInVariable, InternalFunction } from "../../semantics";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { InternalFunction } from "../../semantics";
 
 /**
  * Generator for the Kipper built-ins that are specific for a target.
@@ -142,4 +141,13 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @since 0.10.0
 	 */
 	abstract __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Built-in variable 'NaN' that provides the NaN value.
+	 * @param varSpec The specification for the variable. This contains the overall metadata for the variable that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.12.0
+	 */
+	abstract NaN(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 }

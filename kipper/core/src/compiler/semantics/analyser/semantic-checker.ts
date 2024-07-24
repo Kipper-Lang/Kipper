@@ -12,11 +12,12 @@ import type {
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
+import { MemberAccessExpression } from "../../ast";
 import { LambdaPrimaryExpression, Expression } from "../../ast";
 import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import type { Scope } from "../symbol-table";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
 	BuiltInOverwriteError,
@@ -160,10 +161,12 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public validAssignment(leftExp: Expression): void {
-		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
+		if (!(leftExp instanceof IdentifierPrimaryExpression) && !(leftExp instanceof MemberAccessExpression)) {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
 			);
+		} else if (leftExp instanceof MemberAccessExpression && leftExp.getSemanticData().accessType === "slice") {
+			throw this.assertError(new InvalidAssignmentError("Slices are not assignable."));
 		}
 	}
 

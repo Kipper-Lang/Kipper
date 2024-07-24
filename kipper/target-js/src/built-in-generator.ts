@@ -149,4 +149,8 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
 		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
+
+	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
+		return [genJSVariable(varSpec, "NaN")];
+	}
 }

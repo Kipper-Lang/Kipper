@@ -4,16 +4,18 @@
  */
 import type {
 	ClassDeclaration,
+	ClassMethodDeclaration,
 	Declaration,
 	FunctionDeclaration,
 	InterfaceDeclaration,
 	InterfacePropertyDeclaration,
 	ParameterDeclaration,
+	TargetASTNodeSemanticAnalyser,
 	VariableDeclaration,
+	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
-import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -137,6 +139,16 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	classDeclaration = async (node: ClassDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link classConstructorDeclaration} instances.
+	 */
+	classConstructorDeclaration = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ClassMethodDeclaration} instances.
+	 */
+	classMethodDeclaration?: TargetASTNodeSemanticAnalyser<ClassMethodDeclaration> | undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link NumberPrimaryExpression} instances.

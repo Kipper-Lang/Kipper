@@ -80,7 +80,9 @@ import type {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	InterfaceMemberDeclarationContext,
+	ClassPropertyDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassConstructorDeclarationContext,
 } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
@@ -1090,6 +1092,39 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classProperty`.
+	 */
+	public enterClassPropertyDeclaration: (ctx: ClassPropertyDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.classProperty`.
+	 */
+	public exitClassPropertyDeclaration: (ctx: ClassPropertyDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classMethod`.
+	 */
+	public enterClassMethodDeclaration: (ctx: ClassMethodDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.classMethod`.
+	 */
+
+	public exitClassMethodDeclaration: (ctx: ClassMethodDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classConstructor`.
+	 */
+	public enterClassConstructorDeclaration: (ctx: ClassConstructorDeclarationContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.classConstructor`.
+	 */
+	public exitClassConstructorDeclaration: (ctx: ClassConstructorDeclarationContext) => void =
+		this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Other

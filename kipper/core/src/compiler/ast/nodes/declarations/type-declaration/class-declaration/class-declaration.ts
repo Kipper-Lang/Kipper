@@ -7,11 +7,13 @@ import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
 import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import { CustomType } from "../../../../../semantics";
 import type { ClassDeclarationContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
+import type { ClassMemberDeclaration, ClassConstructorDeclaration } from "./class-member-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
@@ -132,9 +134,23 @@ export class ClassDeclaration
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
+		const antlrChildren = this.getAntlrRuleChildren();
+		const children = this.children;
+
+		if (!antlrChildren) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		const identifier = antlrChildren[1].text;
+		const classMembers = children.filter((child) => child.ruleName !== "RULE_classConstructorDeclaration");
+		const constructorDeclaration = children.find((child) => child.ruleName == "RULE_classConstructorDeclaration");
+
+		this.semanticData = {
+			identifier: identifier,
+			classMembers: <ClassMemberDeclaration[]>classMembers,
+			constructorDeclaration: <ClassConstructorDeclaration | undefined>constructorDeclaration,
+		};
+		this.scopeDeclaration = this.scope.addType(this);
 	}
 
 	/**
@@ -146,8 +162,8 @@ export class ClassDeclaration
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
+		this.typeSemantics = {
+			type: CustomType.fromClassDeclaration(this),
+		};
 	}
 }

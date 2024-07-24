@@ -4,7 +4,12 @@
  */
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
-import type { InternalFunction, Reference, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../semantics/";
+import type {
+	InternalFunction,
+	BuiltInReference,
+	ScopeFunctionDeclaration,
+	ScopeVariableDeclaration,
+} from "../semantics/";
 
 /**
  * The options available for an optimisation run in {@link KipperOptimiser.optimise}.
@@ -77,7 +82,7 @@ export class KipperOptimiser {
 	 * @since 0.8.0
 	 */
 	private async optimiseBuiltIns(): Promise<void> {
-		const strippedBuiltInVariables: Array<Reference<ScopeVariableDeclaration>> = [];
+		const strippedBuiltInVariables: Array<BuiltInReference<ScopeVariableDeclaration>> = [];
 		for (const ref of this.programCtx.builtInVariableReferences) {
 			const included: boolean =
 				strippedBuiltInVariables.find((includedRef) => includedRef.refTarget === ref.refTarget) !== undefined;
@@ -89,7 +94,7 @@ export class KipperOptimiser {
 		this.programCtx.registerBuiltInVariables(strippedBuiltInVariables.map((v) => v.refTarget.builtInStructure!!));
 
 		// Optimise the registered built-in functions by optimising them using the stored references.
-		const strippedBuiltInFunctions: Array<Reference<ScopeFunctionDeclaration>> = [];
+		const strippedBuiltInFunctions: Array<BuiltInReference<ScopeFunctionDeclaration>> = [];
 		for (const ref of this.programCtx.builtInFunctionReferences) {
 			const alreadyIncluded: boolean =
 				strippedBuiltInFunctions.find((includedRef) => includedRef.refTarget === ref.refTarget) !== undefined;

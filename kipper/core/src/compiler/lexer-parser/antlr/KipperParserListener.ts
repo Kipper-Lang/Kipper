@@ -60,6 +60,10 @@ import { InterfaceMemberDeclarationContext } from "./KipperParser";
 import { InterfacePropertyDeclarationContext } from "./KipperParser";
 import { InterfaceMethodDeclarationContext } from "./KipperParser";
 import { ClassDeclarationContext } from "./KipperParser";
+import { ClassMemberDeclarationContext } from "./KipperParser";
+import { ClassPropertyDeclarationContext } from "./KipperParser";
+import { ClassMethodDeclarationContext } from "./KipperParser";
+import { ClassConstructorDeclarationContext } from "./KipperParser";
 import { StatementContext } from "./KipperParser";
 import { CompoundStatementContext } from "./KipperParser";
 import { ExpressionStatementContext } from "./KipperParser";
@@ -776,6 +780,50 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitClassDeclaration?: (ctx: ClassDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterClassMemberDeclaration?: (ctx: ClassMemberDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.classMemberDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitClassMemberDeclaration?: (ctx: ClassMemberDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classPropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterClassPropertyDeclaration?: (ctx: ClassPropertyDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.classPropertyDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitClassPropertyDeclaration?: (ctx: ClassPropertyDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterClassMethodDeclaration?: (ctx: ClassMethodDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.classMethodDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitClassMethodDeclaration?: (ctx: ClassMethodDeclarationContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.classConstructorDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterClassConstructorDeclaration?: (ctx: ClassConstructorDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.classConstructorDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitClassConstructorDeclaration?: (ctx: ClassConstructorDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.statement`.
