@@ -1,0 +1,36 @@
+/*! Defaults design for the lists and special formatting */
+ul, ol {
+  flex-direction: column;
+  padding-left: 2rem;
+  list-style-type: disc;
+  display: flex;
+}
+
+ul.no-style-list, ol.no-style-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.bullet-list, ol.bullet-list {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+
+.markdown-content ul li, .markdown-content ol li {
+  margin-bottom: 0;
+}
+
+.markdown-content ul li .code-toolbar, .markdown-content ol li .code-toolbar {
+  margin-bottom: 1rem;
+}
+
+.markdown-content ul :last-child:is(li) :last-child.code-toolbar, .markdown-content ol :last-child:is(li) :last-child.code-toolbar {
+  margin-bottom: 0;
+}
+
+.markdown-content li + li {
+  margin-top: .25em;
+}
+
+/*# sourceMappingURL=index.ee0d14b6.css.map */
