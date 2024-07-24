@@ -25,8 +25,8 @@ import { TargetTS } from "./target";
 export function genTSFunction(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
-		returnType: ProcessedType | Array<ProcessedType>;
+		params: Array<{ identifier: string; type: ProcessedType }>;
+		returnType: ProcessedType;
 	},
 	body: string,
 	ignoreParams: boolean = false,

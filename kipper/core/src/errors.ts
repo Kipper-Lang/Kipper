@@ -712,6 +712,16 @@ export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used that is not a function type.
+ * @since 0.12.0
+ */
+export class TypeNotAssignableToUnionError extends TypeError {
+	constructor(type: string, unionType: Array<string>, cause: TypeError) {
+		super(`Type '${type}' is not assignable to union type '${unionType.join(' | ')}'.`, cause);
+	}
+}
+
+/**
  * Error that is thrown whenever a read-only variable is being assigned to.
  * @since 0.8.3
  */

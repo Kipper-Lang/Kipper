@@ -40,6 +40,14 @@ export abstract class ProcessedType extends Type {
 	}
 
 	/**
+	 * Returns whether the type is a union type.
+	 * @since 0.12.0
+	 */
+	public get isUnion(): boolean {
+		return false;
+	}
+
+	/**
 	 * Gets the compilable type for this type.
 	 *
 	 * This function throws an error instead of returning undefined, since it's intended to be used in circumstances,

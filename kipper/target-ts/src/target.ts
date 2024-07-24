@@ -2,7 +2,7 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
+import {BuiltInFunction, BuiltInVariable, ProcessedType, UnionType} from "@kipper/core";
 import { BuiltInTypes, KipperBuiltInTypeLiteral, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
@@ -51,10 +51,10 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType(kipperType: ProcessedType | Array<ProcessedType>): string {
-		if (Array.isArray(kipperType)) {
+	public static getTypeScriptType(kipperType: ProcessedType): string {
+		if (kipperType instanceof UnionType) {
 			// Recursively call this function for each type in the array
-			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;
+			return `${(<UnionType>kipperType).unionTypes.map(KipperTypeScriptTarget.getTypeScriptType).join(" | ")}`;
 		}
 
 		switch (kipperType.identifier) {
@@ -73,14 +73,14 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 			case BuiltInTypes.void.identifier:
 				return "void";
 			case BuiltInTypes.Func.identifier: {
-				const returnType = this.getTypeScriptType((<typeof BuiltInTypes.Func>kipperType).returnType);
+				const returnType = KipperTypeScriptTarget.getTypeScriptType((<typeof BuiltInTypes.Func>kipperType).returnType);
 				const paramTypes = (<typeof BuiltInTypes.Func>kipperType).parameterTypes
-					.map((param, index) => `arg${index}: ${this.getTypeScriptType(param)}`)
+					.map((param, index) => `arg${index}: ${KipperTypeScriptTarget.getTypeScriptType(param)}`)
 					.join(", ");
 				return `(${paramTypes}) => ${returnType}`;
 			}
 			case BuiltInTypes.Array.identifier: {
-				const memberType = this.getTypeScriptType((<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type);
+				const memberType = KipperTypeScriptTarget.getTypeScriptType((<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type);
 				return `Array<${memberType}>`;
 			}
 			case BuiltInTypes.any.identifier:
