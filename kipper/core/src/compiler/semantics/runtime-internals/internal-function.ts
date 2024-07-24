@@ -1,6 +1,6 @@
 import type { InternalFunctionArgument } from "./internal-function-argument";
 import { KipperBuiltInTypeLiteral } from "../../const";
-import type { ProcessedType } from "../types";
+import { BuiltInTypeFunc, ProcessedType } from "../types";
 
 /**
  * Interface representation of a {@link InternalFunction}, which is used to provide functionality for Kipper specific

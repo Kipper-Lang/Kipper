@@ -25,7 +25,7 @@ import type {
 	GlobalScope,
 	InternalFunction,
 	InternalReference,
-	Reference,
+	BuiltInReference,
 	ScopeFunctionDeclaration,
 } from "./semantics";
 import { ScopeVariableDeclaration } from "./semantics";
@@ -61,9 +61,9 @@ export class KipperProgramContext {
 
 	private readonly _warnings: Array<KipperWarning>;
 
-	private readonly _builtInFunctionReferences: Array<Reference<ScopeFunctionDeclaration>>;
+	private readonly _builtInFunctionReferences: Array<BuiltInReference<ScopeFunctionDeclaration>>;
 
-	private readonly _builtInVariableReferences: Array<Reference<ScopeVariableDeclaration>>;
+	private readonly _builtInVariableReferences: Array<BuiltInReference<ScopeVariableDeclaration>>;
 
 	private readonly _internalReferences: Array<InternalReference<InternalFunction>>;
 
@@ -348,7 +348,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInFunctionReferences(): Array<Reference<ScopeFunctionDeclaration>> {
+	public get builtInFunctionReferences(): Array<BuiltInReference<ScopeFunctionDeclaration>> {
 		return this._builtInFunctionReferences;
 	}
 
@@ -360,7 +360,7 @@ export class KipperProgramContext {
 	 * so they will not be generated.
 	 * @since 0.10.0
 	 */
-	public get builtInVariableReferences(): Array<Reference<ScopeVariableDeclaration>> {
+	public get builtInVariableReferences(): Array<BuiltInReference<ScopeVariableDeclaration>> {
 		return this._builtInVariableReferences;
 	}
 
@@ -760,12 +760,12 @@ export class KipperProgramContext {
 		const ref = {
 			refTarget: refTarget,
 			srcExpr: exp,
-		} satisfies Reference<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
+		} satisfies BuiltInReference<ScopeVariableDeclaration | ScopeFunctionDeclaration>;
 
 		if (ref.refTarget instanceof ScopeVariableDeclaration) {
-			this._builtInVariableReferences.push(<Reference<ScopeVariableDeclaration>>ref);
+			this._builtInVariableReferences.push(<BuiltInReference<ScopeVariableDeclaration>>ref);
 		} else {
-			this._builtInFunctionReferences.push(<Reference<ScopeFunctionDeclaration>>ref);
+			this._builtInFunctionReferences.push(<BuiltInReference<ScopeFunctionDeclaration>>ref);
 		}
 	}
 

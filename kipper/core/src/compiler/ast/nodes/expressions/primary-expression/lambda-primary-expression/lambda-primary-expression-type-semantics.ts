@@ -3,7 +3,7 @@
  * @since 0.11.0
  */
 import type { ExpressionTypeSemantics } from "../../expression-type-semantics";
-import type { ProcessedType } from "../../../../../semantics";
+import type { BuiltInTypeFunc, ProcessedType } from "../../../../../semantics";
 
 /**
  * Type semantics for AST Node {@link LambdaExpression}.
@@ -11,8 +11,8 @@ import type { ProcessedType } from "../../../../../semantics";
  */
 export interface LambdaPrimaryExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
-	 * The return type of the lambda expression.
-	 * @since 0.11.0
+	 * The type of the declaration. This is always some variation of {@link BuiltInTypeFunc i.e. `Func<P..., T>`}.
+	 * @since 0.12.0
 	 */
-	returnType: ProcessedType;
+	type: BuiltInTypeFunc;
 }

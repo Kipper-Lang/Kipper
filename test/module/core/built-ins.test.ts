@@ -153,5 +153,16 @@ describe("Built-ins", () => {
 			let code: string = getJSEvalCode(result);
 			testPrintOutput((out) => assert.equal(out, "test.kip"), code);
 		});
+
+		it("NaN", async () => {
+			const stream = new KipperFileStream({ stringContent: "print(NaN as str);", name: "test.kip" });
+			const result = await compiler.compile(stream, { target: new TargetTS() });
+
+			assert.include(result.write(), "__kipper.NaN");
+			assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
+
+			let code: string = getJSEvalCode(result);
+			testPrintOutput((out) => assert.equal(out, "NaN"), code);
+		});
 	});
 });
