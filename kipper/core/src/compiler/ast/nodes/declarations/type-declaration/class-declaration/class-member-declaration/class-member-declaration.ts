@@ -1,7 +1,5 @@
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../../../mapping";
-import type { InterfaceMemberDeclarationSemantics } from "../../interface-declaration";
-import type { InterfaceMemberDeclarationTypeSemantics } from "../../interface-declaration/interface-member-declaration/interface-member-declaration-type-semantics";
 import { TypeDeclaration } from "../../type-declaration";
 import type { ClassMemberDeclarationSemantics } from "./class-member-declaration-semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "./class-member-declaration-type-semantics";

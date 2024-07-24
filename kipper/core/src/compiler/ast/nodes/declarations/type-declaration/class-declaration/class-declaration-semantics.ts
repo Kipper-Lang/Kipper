@@ -4,7 +4,6 @@
  */
 import type { TypeDeclarationSemantics } from "../type-declaration-semantics";
 import type { ClassMemberDeclaration } from "./class-member-declaration";
-import { ClassMemberDeclarationSemantics } from "./class-member-declaration";
 import type { ClassConstructorDeclaration } from "./class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**

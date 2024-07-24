@@ -1,6 +1,5 @@
 import type { PrimaryExpressionSemantics } from "../../primary-expression-semantics";
 import type { Expression } from "../../../expression";
-import { StringPrimaryExpression } from "../../string-primary-expression";
 
 /**
  * Semantics for AST Node {@link ObjectPrimaryExpression}.

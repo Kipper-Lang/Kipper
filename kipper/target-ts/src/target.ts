@@ -2,7 +2,8 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import {BuiltInFunction, BuiltInVariable, ProcessedType, UnionType} from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
+import { UnionType } from "@kipper/core";
 import { BuiltInTypes, KipperBuiltInTypeLiteral, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
@@ -80,7 +81,9 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 				return `(${paramTypes}) => ${returnType}`;
 			}
 			case BuiltInTypes.Array.identifier: {
-				const memberType = KipperTypeScriptTarget.getTypeScriptType((<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type);
+				const memberType = KipperTypeScriptTarget.getTypeScriptType(
+					(<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type,
+				);
 				return `Array<${memberType}>`;
 			}
 			case BuiltInTypes.any.identifier:

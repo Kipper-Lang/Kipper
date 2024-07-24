@@ -56,7 +56,6 @@ import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import type { ObjectProperty } from "../../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 import type { InterfacePropertyDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-property-declaration";
-import { InterfaceMemberDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-member-declaration";
 import type { InterfaceMethodDeclaration } from "../../ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
 import type { ClassConstructorDeclaration } from "../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 

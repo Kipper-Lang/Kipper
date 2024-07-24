@@ -1,11 +1,11 @@
-import {ProcessedType} from "./processed-type";
-import {BuiltInTypes} from "../../symbol-table";
+import { ProcessedType } from "./processed-type";
+import { BuiltInTypes } from "../../symbol-table";
+import type { TypeError } from "../../../../errors";
 import {
-	TypeError,
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	PropertyAssignmentTypeError,
-	TypeNotAssignableToUnionError
+	TypeNotAssignableToUnionError,
 } from "../../../../errors";
 
 /**
@@ -43,12 +43,15 @@ export class UnionType<T extends Array<ProcessedType> = [ProcessedType, Processe
 
 		let e: TypeError | undefined;
 		if (type instanceof UnionType) {
-			for (const unionType of this.unionTypes) {
-				try {
-					unionType.assertAssignableTo(type, propertyName, argumentName);
-				} catch (error) {
-					e = new TypeNotAssignableToUnionError(unionType.identifier, type.unionTypes, <TypeError>error);
-				}
+			if (
+				this.unionTypes.every((unionType) => type.unionTypes.some((t: ProcessedType) => unionType.isAssignableTo(t)))
+			) {
+				return;
+			} else {
+				e = new TypeNotAssignableToUnionError(
+					this.identifier,
+					type.unionTypes.map((t: ProcessedType) => t.identifier),
+				);
 			}
 		}
 

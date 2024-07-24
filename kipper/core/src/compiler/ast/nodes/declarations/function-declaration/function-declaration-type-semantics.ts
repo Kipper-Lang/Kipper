@@ -3,7 +3,6 @@
  * @since 0.10.0
  */
 import type { BuiltInTypeFunc } from "../../../../semantics";
-import { ProcessedType } from "../../../../semantics";
 import type { DeclarationTypeSemantics } from "../declaration-type-semantics";
 
 /**

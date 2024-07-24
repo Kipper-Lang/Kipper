@@ -716,8 +716,8 @@ export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
  * @since 0.12.0
  */
 export class TypeNotAssignableToUnionError extends TypeError {
-	constructor(type: string, unionType: Array<string>, cause: TypeError) {
-		super(`Type '${type}' is not assignable to union type '${unionType.join(' | ')}'.`, cause);
+	constructor(type: string, unionType: Array<string>, cause?: TypeError) {
+		super(`Type '${type}' is not assignable to union type '${unionType.join(" | ")}'.`, cause);
 	}
 }
 
