@@ -2,8 +2,9 @@ import { Scope } from "./base";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import type { BuiltInType } from "../types";
+import { UnionType } from "../types";
 import type { KipperProgramContext } from "../../program-ctx";
-import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
+import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
 import type { KipperBuiltInTypeLiteral } from "../../const";
 import {
 	BuiltInTypeArray,
@@ -46,7 +47,7 @@ export const BuiltInFunctions = {
 		[
 			{
 				identifier: "msg",
-				valueType: BuiltInTypes.str,
+				valueType: BuiltInTypes.any,
 			},
 		],
 		BuiltInTypes.void,
@@ -54,11 +55,10 @@ export const BuiltInFunctions = {
 	len: new BuiltInFunction(
 		"len",
 		[
-			{
-				identifier: "arrayLike",
-				// TODO: Implement this for all arrayLike types (At the moment only strings are supported)
-				valueType: BuiltInTypes.str,
-			},
+			new BuiltInFunctionArgument(
+				"arrayLike",
+				new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
+			),
 		],
 		BuiltInTypes.num,
 	),
