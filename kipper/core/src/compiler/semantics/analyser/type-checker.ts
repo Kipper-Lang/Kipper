@@ -38,7 +38,7 @@ import {
 	ScopeTypeDeclaration,
 	ScopeVariableDeclaration,
 } from "../symbol-table";
-import type { KipperArithmeticOperator, KipperBitwiseOperator } from "../../const";
+import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
 import {
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
@@ -69,9 +69,8 @@ import {
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInType, BuiltInTypeObj, Type } from "../types";
+import { BuiltInTypeObj } from "../types";
 import { UndefinedType } from "../types";
-import type { BuiltInReference } from "../reference";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an

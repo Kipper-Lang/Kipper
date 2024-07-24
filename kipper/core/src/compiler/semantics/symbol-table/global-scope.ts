@@ -3,7 +3,6 @@
  * variables and functions of a Kipper program.
  * @since 0.8.0
  */
-import type { KipperProgramContext } from "../../program-ctx";
 import type { ScopeDeclaration } from "./entry";
 import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";

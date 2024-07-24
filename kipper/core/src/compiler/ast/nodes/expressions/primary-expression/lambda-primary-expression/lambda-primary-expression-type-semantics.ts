@@ -3,7 +3,7 @@
  * @since 0.11.0
  */
 import type { ExpressionTypeSemantics } from "../../expression-type-semantics";
-import type { BuiltInTypeFunc, ProcessedType } from "../../../../../semantics";
+import type { BuiltInTypeFunc } from "../../../../../semantics";
 
 /**
  * Type semantics for AST Node {@link LambdaExpression}.

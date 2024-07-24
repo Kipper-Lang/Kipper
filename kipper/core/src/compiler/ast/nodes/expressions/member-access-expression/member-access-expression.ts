@@ -14,9 +14,8 @@ import {
 } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { kipperInternalBuiltInFunctions } from "../../../../semantics";
-import { ClassMethodDeclaration, ClassPropertyDeclaration } from "../../declarations";
 
 /**
  * A union of all possible {@link KipperParserRuleContext} rule contexts that {@link MemberAccessExpression} implements.

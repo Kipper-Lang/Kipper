@@ -539,7 +539,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.11.0
 	 */
 	objectProperty = async (node: ObjectProperty): Promise<TranslatedExpression> => {
-		const expression = node.getSemanticData().expressoDepresso;
+		const expression = node.getSemanticData().value;
 		const identifier = node.getSemanticData().identifier;
 
 		// Await the translation and join the array into a string

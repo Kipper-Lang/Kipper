@@ -5,7 +5,6 @@
  * @since 0.10.0
  */
 import type { Scope } from "../semantics";
-import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserASTNode, SemanticData, TypeData } from "./ast-node";
 
 /**
