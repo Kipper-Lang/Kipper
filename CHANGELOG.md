@@ -78,6 +78,12 @@ To use development versions of Kipper download the
     an error indicating an invalid logic that should be fixed.
   - `MismatchingArgCountBetweenFuncTypesError`, which is thrown when the amount of arguments in a function type does not
     match the number of arguments in the function type it is compared to.
+  - `GenericCanOnlyHaveOneSpreadError`, which is thrown when a generic type has more than one spread argument. This is
+  	for now an internal-only error that should not be thrown in normal circumstances.
+  - `TypeNotAssignableToUnionError`, which is thrown when a type is not assignable to a union type.
+  - `ValueTypeNotIndexableWithGivenAccessor`, which is thrown when a value type is not indexable with the given
+    accessor.
+  - `PropertyDoesNotExistError`, which is thrown when a property does not exist on a type.
 - New interfaces and types:
   - `InterfaceDeclarationSemantics`, which represents the semantics of an interface declaration.
   - `InterfaceDeclarationTypeSemantics`, which represents the type semantics of an interface declaration.
