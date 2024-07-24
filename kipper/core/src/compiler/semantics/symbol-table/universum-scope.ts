@@ -2,20 +2,21 @@ import { Scope } from "./base";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import type { BuiltInType } from "../types";
-import type { KipperProgramContext } from "../../program-ctx";
-import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
-import type { KipperBuiltInTypeLiteral } from "../../const";
 import {
 	BuiltInTypeArray,
 	BuiltInTypeBool,
 	BuiltInTypeFunc,
 	BuiltInTypeNull,
 	BuiltInTypeNum,
+	BuiltInTypeObj,
 	BuiltInTypeStr,
 	BuiltInTypeType,
 	BuiltInTypeUndefined,
 	BuiltInTypeVoid,
-} from "../types/built-in";
+} from "../types";
+import type { KipperProgramContext } from "../../program-ctx";
+import { BuiltInFunction, BuiltInVariable } from "../runtime-built-ins";
+import type { KipperBuiltInTypeLiteral } from "../../const";
 import { BuiltInTypeAny } from "../types/built-in/any";
 
 const any = new BuiltInTypeAny();
@@ -27,6 +28,7 @@ const any = new BuiltInTypeAny();
 export const BuiltInTypes = {
 	any: any,
 	type: new BuiltInTypeType(),
+	obj: new BuiltInTypeObj(),
 	undefined: new BuiltInTypeUndefined(),
 	void: new BuiltInTypeVoid(),
 	null: new BuiltInTypeNull(),

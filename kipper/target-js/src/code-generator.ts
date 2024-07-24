@@ -566,7 +566,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		switch (<"dot" | "bracket" | "slice">semanticData.accessType) {
 			case "dot":
-				return []; // TODO: Not implemented
+				return [object[0] + "." + semanticData.propertyIndexOrKeyOrSlice];
 			case "bracket": {
 				// -> The member access is done via brackets, meaning the member name is an expression
 				// In this case, only indexes are allowed, not keys, but in the future, this will change with the implementation

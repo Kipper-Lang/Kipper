@@ -7,6 +7,8 @@ import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
 import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
+import { CustomType, ProcessedType } from "../../../../../semantics";
+import { GlobalScope } from "../../../../../semantics";
 import type { ClassDeclarationContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
@@ -150,6 +152,7 @@ export class ClassDeclaration
 			classMembers: <ClassMemberDeclaration[]>classMembers,
 			constructorDeclaration: <ClassConstructorDeclaration | undefined>constructorDeclaration,
 		};
+		this.scopeDeclaration = this.scope.addType(this);
 	}
 
 	/**
@@ -161,8 +164,8 @@ export class ClassDeclaration
 	 * @since 0.11.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Class declarations are not yet implemented."));
+		this.typeSemantics = {
+			type: CustomType.fromClassDeclaration(this),
+		};
 	}
 }

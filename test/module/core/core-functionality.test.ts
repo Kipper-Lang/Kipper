@@ -1581,4 +1581,26 @@ describe("Core functionality", () => {
 			);
 		});
 	});
+
+	describe("should be able to to initialize interface", () => {
+		it("should be able to init class", async () => {
+			const fileContent = `interface Test {a: str;}; var x : Test = {a: "3"}; print(x.a);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"interface Test {\n" +
+					" a: string;\n" +
+					"}\n" +
+					"let x: Test = {\n" +
+					'  a: "3",\n' +
+					"};\n" +
+					"__kipper.print(x.a);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
 });

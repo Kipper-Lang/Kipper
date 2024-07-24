@@ -6,27 +6,28 @@
 import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 import type {
+	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
+	LambdaPrimaryExpression,
 	MemberAccessExpression,
+	MemberAccessExpressionSemantics,
 	ParameterDeclarationSemantics,
 	RelationalExpression,
 	Statement,
 	UnaryExpression,
 	UnaryExpressionSemantics,
-	LambdaPrimaryExpression,
-	ArrayPrimaryExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
+	Expression,
 	IdentifierPrimaryExpression,
 	IfStatement,
 	ParameterDeclaration,
 	ReturnStatement,
 	TangledPrimaryExpression,
-	Expression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import type { Scope, ScopeFunctionDeclaration } from "../symbol-table";
@@ -37,7 +38,7 @@ import {
 	ScopeTypeDeclaration,
 	ScopeVariableDeclaration,
 } from "../symbol-table";
-import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
+import type { KipperArithmeticOperator, KipperBitwiseOperator } from "../../const";
 import {
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
@@ -45,13 +46,15 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { CanNotUseNonGenericAsGenericTypeError, InvalidAmountOfGenericArgumentsError } from "../../../errors";
+import { PropertyDoesNotExistError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
+	CanNotUseNonGenericAsGenericTypeError,
 	ExpressionNotCallableError,
 	IncompleteReturnsInCodePathsError,
 	InvalidAmountOfArgumentsError,
+	InvalidAmountOfGenericArgumentsError,
 	InvalidConversionTypeError,
 	InvalidKeyTypeError,
 	InvalidRelationalComparisonTypeError,
@@ -63,9 +66,10 @@ import {
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
+	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
-import type { RawType, ProcessedType, GenericType, BuiltInTypeArray } from "../types";
-import type { GenericTypeArguments } from "../types";
+import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
+import { BuiltInType, BuiltInTypeObj, Type } from "../types";
 import { UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
@@ -125,6 +129,30 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			// If error recovery is not enabled, we shouldn't bother trying to handle invalid types
 			throw e;
 		}
+	}
+
+	/**
+	 * Searches for the given identifier in the object or throws an error if it can't be found.
+	 * @param obj The object which should be searched.
+	 * @param identifier The identifier to search for.
+	 * @returns The type of the property
+	 * @throws {PropertyDoesNotExistError} If the property does not exist.
+	 * @since 0.12.0
+	 */
+	public findPropertyInObject(obj: BuiltInTypeObj | CustomType, identifier: string): ProcessedType {
+		if (obj instanceof BuiltInTypeObj) {
+			throw this.assertError(new PropertyDoesNotExistError(obj.toString(), identifier));
+		}
+
+		// Assuming obj.fields is a Map or an iterable collection of [key, value] pairs
+		for (const [fieldIdentifier, type] of obj.fields) {
+			if (fieldIdentifier === identifier) {
+				return type;
+			}
+		}
+
+		// If no matching field was found, throw an error
+		throw this.assertError(new PropertyDoesNotExistError(obj.toString(), identifier));
 	}
 
 	/**
@@ -614,7 +642,10 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {TypeError} If the object expression is not an object.
 	 * @since 0.10.0
 	 */
-	public objectLikeIsIndexableOrAccessible(objLike: Expression): void {
+	public objectLikeIsIndexableOrAccessible(
+		objLike: Expression,
+		accessType: MemberAccessExpressionSemantics["accessType"],
+	): void {
 		const objType = objLike.getTypeSemanticData().evaluatedType;
 
 		// If the obj type is undefined, skip type checking (the type is invalid anyway)
@@ -622,13 +653,24 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		if (!objType.isAssignableTo(BuiltInTypes.str) && !objType.isAssignableTo(BuiltInTypes.Array)) {
+		if (
+			!objType.isAssignableTo(BuiltInTypes.str) &&
+			!objType.isAssignableTo(BuiltInTypes.Array) &&
+			!objType.isAssignableTo(BuiltInTypes.obj)
+		) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
+		} else if (
+			(objType.isAssignableTo(BuiltInTypes.str) &&
+				objType.isAssignableTo(BuiltInTypes.Array) &&
+				accessType === "dot") ||
+			(objType.isAssignableTo(BuiltInTypes.obj) && accessType !== "dot")
+		) {
+			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessor(objType.toString(), accessType));
 		}
 	}
 
 	/**
-	 * Ensure the passed {@link key} may be used to access the members of the passed {@link objLike}.
+	 * Ensures the passed {@link key} may be used to access the members of the passed {@link objLike}.
 	 * @param objLike The object-like expression to check.
 	 * @param key The key that accesses the members of the object-like expression.
 	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
@@ -650,7 +692,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Ensure the passed {@link key slice keys} may be used to access the members of the passed {@link objLike}.
+	 * Ensures the passed {@link key slice keys} may be used to access the members of the passed {@link objLike}.
 	 * @param objLike The object-like expression to check.
 	 * @param key The key that accesses the members of the object-like expression.
 	 * @throws {InvalidKeyTypeError} In case the key type can not be used to index the object-like expression.
@@ -683,7 +725,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const semanticData = memberAccess.getSemanticData();
 
 		// First ensure the object is indexable
-		this.objectLikeIsIndexableOrAccessible(semanticData.objectLike);
+		this.objectLikeIsIndexableOrAccessible(semanticData.objectLike, semanticData.accessType);
 
 		const preAnalysisType = semanticData.objectLike.getTypeSemanticData().evaluatedType;
 		const objType = preAnalysisType;
@@ -694,10 +736,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		switch (semanticData.accessType) {
-			case "dot":
-				throw this.notImplementedError(
-					new KipperNotImplementedError("Member access expression using dot notation is not implemented yet"),
+			case "dot": {
+				return this.findPropertyInObject(
+					<BuiltInTypeObj | CustomType>objType,
+					<string>semanticData.propertyIndexOrKeyOrSlice,
 				);
+			}
 			case "bracket": {
 				this.validBracketNotationKey(semanticData.objectLike, <Expression>semanticData.propertyIndexOrKeyOrSlice);
 

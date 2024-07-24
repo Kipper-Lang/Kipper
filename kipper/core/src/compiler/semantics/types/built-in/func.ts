@@ -4,7 +4,6 @@ import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	GenericArgumentTypeError,
-	KipperInternalError,
 	MismatchingArgCountBetweenFuncTypesError,
 	PropertyAssignmentTypeError,
 	type TypeError,

@@ -17,6 +17,8 @@ To use development versions of Kipper download the
 [`next` tag release](https://www.npmjs.com/package/kipper?activeTab=versions), which will include the specified changes.
 
 ### Added
+
+- Added support for dot notation so that the User can access Properties and Methods of objects `.` ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Added semantic checking and code generation for classes, class methods, class properties and class constructors ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
   ([#526](https://github.com/Kipper-Lang/Kipper/issues/526))
