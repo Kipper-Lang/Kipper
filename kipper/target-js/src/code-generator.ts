@@ -964,7 +964,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
 
 			if(runtimeType instanceof BuiltInRuntimeType) {
-				return [runtimeType.name];
+				return [`${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`];
 			}
 			else {
 				return ["lol"];
