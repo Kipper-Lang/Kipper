@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import type {
+import {
 	AssignmentExpression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
@@ -17,7 +17,7 @@ import type {
 	UnaryExpression,
 	UnaryExpressionSemantics,
 	LambdaPrimaryExpression,
-	ArrayPrimaryExpression,
+	ArrayPrimaryExpression, TypeofExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -346,6 +346,27 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// Ensure that both expressions are of type 'num'
 		if (leftOpType !== BuiltInTypes.num || rightOpType !== BuiltInTypes.num) {
 			throw this.assertError(new InvalidRelationalComparisonTypeError(leftOpType.toString(), rightOpType.toString()));
+		}
+	}
+
+	/**
+	 * Asserts that the passed typeof expression is valid by checking its operand.
+	 * @param exp The typeof expression to check.
+	 * @throws {InvalidUnaryExpressionOperandError} If the operand is not a valid operand for the operator.
+	 * @since 0.12.0
+	 */
+	public validTypeofExpression(exp: TypeofExpression): void {
+		const semanticData = exp.getSemanticData();
+		const operandType = semanticData.operand.getTypeSemanticData().evaluatedType;
+
+		// If the type is undefined, skip type checking (the type is invalid anyway)
+		if (!operandType.isCompilable) {
+			return;
+		}
+
+		// Ensure that the operand is a reference
+		if (!(semanticData.operand instanceof IdentifierPrimaryExpression)) {
+			throw this.assertError(new InvalidUnaryExpressionOperandError());
 		}
 	}
 

@@ -95,7 +95,6 @@ export class TypeofExpression extends PostfixExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
-		const operator = <KipperPostfixOperator>this.sourceCode.slice(-2); // After the expression
 
 		// Ensure that the child expression is present
 		if (!exp) {
@@ -104,7 +103,7 @@ export class TypeofExpression extends PostfixExpression<
 
 		this.semanticData = {
 			operand: exp,
-			operator: operator,
+			operator: "typeof" as KipperPostfixOperator,
 		};
 	}
 
@@ -119,11 +118,11 @@ export class TypeofExpression extends PostfixExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
 			// This will always be a number
-			evaluatedType: BuiltInTypes.num,
+			evaluatedType: BuiltInTypes.type,
 		};
 
 		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
+		this.programCtx.typeCheck(this).validTypeofExpression(this);
 	}
 
 	public checkForWarnings = undefined; // TODO!

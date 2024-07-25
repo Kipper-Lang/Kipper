@@ -57,6 +57,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
@@ -952,5 +953,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		// Return the lambda function
 		return ["(", ...translatedParams, ") => ", ...translatedBody];
+	};
+
+	typeofExpression = async (node: TypeofExpression): Promise<TranslatedExpression> => {
+		return [];
 	};
 }

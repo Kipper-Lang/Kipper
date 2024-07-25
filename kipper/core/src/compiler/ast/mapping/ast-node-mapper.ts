@@ -68,7 +68,7 @@ import type {
 	ASTStatementKind,
 	ASTStatementRuleName,
 } from "../common";
-import type { Declaration, Expression, Statement } from "../nodes";
+import { Declaration, Expression, Statement, TypeofExpression } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -186,6 +186,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
+		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -342,6 +343,7 @@ export class ASTNodeMapper {
 		RULE_bitwiseXorExpression: BitwiseXorExpression,
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
 		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
+		RULE_typeofExpression: TypeofExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**
