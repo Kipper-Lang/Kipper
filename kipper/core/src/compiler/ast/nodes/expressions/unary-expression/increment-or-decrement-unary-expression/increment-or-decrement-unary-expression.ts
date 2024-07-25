@@ -9,7 +9,7 @@ import type { IncrementOrDecrementUnaryExpressionSemantics } from "./increment-o
 import type { IncrementOrDecrementUnaryTypeSemantics } from "./increment-or-decrement-unary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
-import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
+import type { KipperPostfixOperator } from "../../../../../const";
 import { UnaryExpression } from "../unary-expression";
 import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
@@ -95,7 +95,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
-		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(0, 2); // Before the expression
+		const operator = <KipperPostfixOperator>this.sourceCode.slice(0, 2); // Before the expression
 
 		// Ensure that the child expression is present
 		if (!exp) {

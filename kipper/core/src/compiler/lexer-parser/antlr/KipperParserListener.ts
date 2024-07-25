@@ -1,9 +1,11 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
-// kind values.
-import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
-import KipperParserBase from "./base/KipperParserBase";
+
+	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+	// kind values.
+	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+	import KipperParserBase from "./base/KipperParserBase";
+
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
@@ -124,8 +126,10 @@ import { ExpressionContext } from "./KipperParser";
 import { TypeSpecifierExpressionContext } from "./KipperParser";
 import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
+import { TypeofExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeSpecifierIdentifierContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete listener for a parse tree produced by
@@ -1486,6 +1490,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitGenericTypeSpecifierExpression?: (ctx: GenericTypeSpecifierExpressionContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.typeofExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeofExpression?: (ctx: TypeofExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeofExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeofExpression?: (ctx: TypeofExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.typeofTypeSpecifierExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -1507,3 +1522,4 @@ export interface KipperParserListener extends ParseTreeListener {
 	 */
 	exitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
 }
+

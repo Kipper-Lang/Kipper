@@ -54,7 +54,7 @@ import {
 	SliceNotationMemberAccessExpressionContext,
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
-	TangledPrimaryExpressionContext,
+	TangledPrimaryExpressionContext, TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
@@ -260,6 +260,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpressionContext,
+		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,

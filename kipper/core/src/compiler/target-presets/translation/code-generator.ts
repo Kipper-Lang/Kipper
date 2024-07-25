@@ -2,7 +2,7 @@
  * Code generator specifying how a Kipper parse tree should be translated into a specific language.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
@@ -46,7 +46,7 @@ import type {
 	ReturnStatement,
 	StringPrimaryExpression,
 	SwitchStatement,
-	TangledPrimaryExpression,
+	TangledPrimaryExpression, TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -419,4 +419,9 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link LambdaPrimaryExpression} into a specific language.
 	 */
 	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TypeofExpression} into a specific language.
+	 */
+	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
 }

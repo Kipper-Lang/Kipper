@@ -647,13 +647,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link TypeofTypeSpecifierExpression} into the JavaScript language.
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-
-		if (semanticData.rawType instanceof BuiltInType) {
-			return ["__kipper.builtIn.", semanticData.rawType.identifier];
-		} else {
-			return ["__intf_", semanticData.rawType.identifier];
-		}
+		return [];
 	};
 
 	/**

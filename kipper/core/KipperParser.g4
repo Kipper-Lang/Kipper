@@ -310,6 +310,7 @@ sliceNotation
 postfixExpression
     :   computedPrimaryExpression // Pass-on (Not matching rule)
     |   incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
+ 	| 	typeofExpression
     ;
 
 incrementOrDecrementPostfixExpression
@@ -425,6 +426,10 @@ identifierTypeSpecifierExpression
 
 genericTypeSpecifierExpression
 	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
+	;
+
+typeofExpression
+	:	'typeof' '(' assignmentExpression ')'
 	;
 
 typeofTypeSpecifierExpression

@@ -12,8 +12,9 @@ import type {
 	VariableDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
+    TypeofTypeSpecifierExpression,
 } from "@kipper/core";
-import { InterfaceMethodDeclaration } from "@kipper/core";
+import { BuiltInType, InterfaceMethodDeclaration } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
 import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
@@ -274,4 +275,13 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		return [identifier, ":", " ", typeScriptType];
 	};
+
+	/**
+	 * Translates a {@link TypeofTypeSpecifierExpression} into the TypeScript language.
+	 */
+	override typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+
+		return [ "test" ];
+	}
 }
