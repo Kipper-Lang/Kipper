@@ -3,4 +3,4 @@ interface X {
 	b: str;
 };
 
-var x: typeof(null);
+print(f"{typeof("ds")}");

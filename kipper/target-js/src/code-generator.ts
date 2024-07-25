@@ -74,7 +74,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { builtInTypes } from "./built-in-types";
+import { BuiltInRuntimeType, builtInTypes } from "./built-in-types";
 import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -956,6 +956,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	typeofExpression = async (node: TypeofExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		const operand = semanticData.operand;
+
+		if(operand.getTypeSemanticData().evaluatedType instanceof BuiltInType) {
+			const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
+
+			if(runtimeType instanceof BuiltInRuntimeType) {
+				return [runtimeType.name];
+			}
+			else {
+				return ["lol"];
+			}
+		}
+
+		return [ ];
 	};
 }

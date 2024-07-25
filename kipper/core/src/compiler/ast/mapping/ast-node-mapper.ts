@@ -54,7 +54,8 @@ import {
 	SliceNotationMemberAccessExpressionContext,
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
-	TangledPrimaryExpressionContext, TypeofExpressionContext,
+	TangledPrimaryExpressionContext,
+	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
@@ -68,7 +69,8 @@ import type {
 	ASTStatementKind,
 	ASTStatementRuleName,
 } from "../common";
-import { Declaration, Expression, Statement, TypeofExpression } from "../nodes";
+import type { Declaration, Expression, Statement } from "../nodes";
+import { TypeofExpression } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,

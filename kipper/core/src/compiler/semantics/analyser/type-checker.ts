@@ -5,7 +5,7 @@
  */
 import type { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
-import {
+import type {
 	AssignmentExpression,
 	FunctionDeclaration,
 	IncrementOrDecrementPostfixExpression,
@@ -17,7 +17,8 @@ import {
 	UnaryExpression,
 	UnaryExpressionSemantics,
 	LambdaPrimaryExpression,
-	ArrayPrimaryExpression, TypeofExpression,
+	ArrayPrimaryExpression,
+	TypeofExpression,
 } from "../../ast";
 import {
 	CompoundStatement,
@@ -44,7 +45,7 @@ import {
 	kipperPlusOperator,
 	kipperSupportedConversions,
 } from "../../const";
-import type { TypeError } from "../../../errors";
+import { InvalidTypeofOperandError, TypeError } from "../../../errors";
 import { CanNotUseNonGenericAsGenericTypeError, InvalidAmountOfGenericArgumentsError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
@@ -362,11 +363,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// If the type is undefined, skip type checking (the type is invalid anyway)
 		if (!operandType.isCompilable) {
 			return;
-		}
-
-		// Ensure that the operand is a reference
-		if (!(semanticData.operand instanceof IdentifierPrimaryExpression)) {
-			throw this.assertError(new InvalidUnaryExpressionOperandError());
 		}
 	}
 

@@ -529,10 +529,7 @@ export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = 
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperUnaryOperator =
-	| KipperUnaryModifierOperator
-	| KipperPostfixOperator
-	| KipperBitwiseNotOperator;
+export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperPostfixOperator | KipperBitwiseNotOperator;
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.

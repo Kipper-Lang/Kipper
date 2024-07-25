@@ -2,7 +2,7 @@
  * Target-specific Semantic Analyser.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
@@ -54,7 +54,8 @@ import {
 	InterfacePropertyDeclaration,
 	InterfaceMethodDeclaration,
 	ObjectProperty,
-	ClassMethodDeclaration, TypeofExpression,
+	ClassMethodDeclaration,
+	TypeofExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";

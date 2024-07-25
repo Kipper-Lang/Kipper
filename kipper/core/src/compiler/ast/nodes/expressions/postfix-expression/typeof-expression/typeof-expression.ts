@@ -23,10 +23,7 @@ import type { KipperPostfixOperator } from "../../../../../const";
  * typeof(49); // "__kipper.builtIn.num"
  * typeof("Hello, World!"); // "__kipper.builtIn.str"
  */
-export class TypeofExpression extends PostfixExpression<
-	TypeofExpressionSemantics,
-	TypeofExpressionTypeSemantics
-> {
+export class TypeofExpression extends PostfixExpression<TypeofExpressionSemantics, TypeofExpressionTypeSemantics> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.12.0
@@ -83,7 +80,7 @@ export class TypeofExpression extends PostfixExpression<
 	}
 
 	public hasSideEffects(): boolean {
-		return true; // This expression has side effects as it modifies the value of the operand
+		return false; // This expression has side effects as it modifies the value of the operand
 	}
 
 	/**
@@ -117,7 +114,7 @@ export class TypeofExpression extends PostfixExpression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			// This will always be a number
+			// This will always be of type "type" as the typeof operator always returns a type
 			evaluatedType: BuiltInTypes.type,
 		};
 

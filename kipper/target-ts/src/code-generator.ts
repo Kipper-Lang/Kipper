@@ -12,7 +12,7 @@ import type {
 	VariableDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
-    TypeofTypeSpecifierExpression,
+	TypeofTypeSpecifierExpression,
 } from "@kipper/core";
 import { BuiltInType, InterfaceMethodDeclaration } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
@@ -279,9 +279,11 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	/**
 	 * Translates a {@link TypeofTypeSpecifierExpression} into the TypeScript language.
 	 */
-	override typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
+	override typeofTypeSpecifierExpression = async (
+		node: TypeofTypeSpecifierExpression,
+	): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 
-		return [ "test" ];
-	}
+		return ["test"];
+	};
 }

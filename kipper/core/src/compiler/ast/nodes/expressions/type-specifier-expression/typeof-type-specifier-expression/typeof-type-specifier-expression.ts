@@ -8,10 +8,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { TypeofTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import {
-	BuiltInTypes,
-	RawType,
-} from "../../../../../semantics";
+import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
@@ -93,7 +90,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 			ref: {
 				refTarget: ref,
 				srcExpr: this,
-			}
+			},
 		};
 	}
 

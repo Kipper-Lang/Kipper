@@ -764,9 +764,9 @@ export class InvalidRelationalComparisonTypeError extends TypeError {
  * Error that is thrown whenever a type is used with the 'typeof' operator that is not valid.
  * @since 0.9.0
  */
-export class InvalidTypeofTypeError extends TypeError {
+export class InvalidTypeofOperandError extends TypeError {
 	constructor(type: string) {
-		super(`Typeof operator can not be used with type '${type}'.`);
+		super(`Typeof operand '${type}' is not valid.`);
 	}
 }
 
