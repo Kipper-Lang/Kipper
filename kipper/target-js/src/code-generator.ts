@@ -960,17 +960,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		const operand = semanticData.operand;
 
-		if(operand.getTypeSemanticData().evaluatedType instanceof BuiltInType) {
-			const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
+		const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
 
-			if(runtimeType instanceof BuiltInRuntimeType) {
-				return [`${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`];
-			}
-			else {
-				return ["lol"];
-			}
+		if(runtimeType instanceof BuiltInRuntimeType) {
+			return [`${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`];
 		}
-
-		return [ ];
+		else {
+			return [ runtimeType ]; // Implement logic for interfaces and classes
+		}
 	};
 }
