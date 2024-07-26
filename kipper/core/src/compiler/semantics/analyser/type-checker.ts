@@ -352,22 +352,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	}
 
 	/**
-	 * Asserts that the passed typeof expression is valid by checking its operand.
-	 * @param exp The typeof expression to check.
-	 * @throws {InvalidUnaryExpressionOperandError} If the operand is not a valid operand for the operator.
-	 * @since 0.12.0
-	 */
-	public validTypeofExpression(exp: TypeofExpression): void {
-		const semanticData = exp.getSemanticData();
-		const operandType = semanticData.operand.getTypeSemanticData().evaluatedType;
-
-		// If the type is undefined, skip type checking (the type is invalid anyway)
-		if (!operandType.isCompilable) {
-			return;
-		}
-	}
-
-	/**
 	 * Asserts that the passed unary expression is valid by checking its {@link operand.semanticData.operand operand} and
 	 * {@link operand.semanticData.operator operator}.
 	 * @param operand The unary expression to check. (Also includes {@link IncrementOrDecrementPostfixExpression}, since

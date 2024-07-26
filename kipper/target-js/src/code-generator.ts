@@ -73,7 +73,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { BuiltInRuntimeType, builtInRuntimeTypes } from "./built-in-runtime-types";
+import { BuiltInRuntimeType } from "./built-in-runtime-types";
 import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -102,59 +102,87 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			["// @ts-ignore"],
 			[
 				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
-				' globalThis !== "undefined" ?' +
-				" globalThis : typeof" +
-				' window !== "undefined" ?' +
-				' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};',
+					' globalThis !== "undefined" ?' +
+					" globalThis : typeof" +
+					' window !== "undefined" ?' +
+					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};',
 			],
 			// __createKipper function
 			["// @ts-ignore"],
 			[
 				"var __createKipper = () => {" +
-				" if (__globalScope.__kipper || __kipper) { return undefined; }" +
-				" class KipperType {" +
-				"  constructor(name, fields, methods, baseType = null) " +
-				"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
-				"  isCompatibleWith(obj) { return this.name === obj.name; }" +
-				" };" +
-				" class KipperGenericType extends KipperType {" +
-				"  constructor(name, fields, methods, genericArgs, baseType = null) " +
-				"  { super(name, fields, methods, baseType); this.genericArgs = genericArgs; }" +
-				"  isCompatibleWith(obj) { return this.name === obj.name; }" +
-				"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
-				" };" +
-				" const __type_any = new KipperType('any', undefined, undefined);" +
-				" const __type_null = new KipperType('bool', undefined, undefined);" +
-				" const __type_undefined = new KipperType('bool', undefined, undefined);" +
-				" const __type_str = new KipperType('str', undefined, undefined);" +
-				" const __type_num = new KipperType('num', undefined, undefined);" +
-				" const __type_bool = new KipperType('bool', undefined, undefined);" +
-				" const __type_obj = new KipperType('bool', [], []);" +
-				" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
-				" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
-				" return {" +
-				"  TypeError: (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name = 'TypeError'; } })," +
-				"  IndexError: (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name = 'IndexError'; } })," +
-				"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
-				"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
-				"  Type: KipperType," +
-				"  builtIn: {" +
-				"   any: __type_any," +
-				"   null: __type_null," +
-				"   undefined: __type_undefined," +
-				"   str: __type_str," +
-				"   num: __type_num," +
-				"   bool: __type_bool," +
-				"   obj: __type_obj," +
-				"   Array: __type_Array," +
-				"   Func: __type_Func," +
-				"  }" +
-				" };" +
-				"};",
+					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
+					" class KipperType {" +
+					"  constructor(name, fields, methods, baseType = null) " +
+					"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
+					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+					" };" +
+					" class KipperGenericType extends KipperType {" +
+					"  constructor(name, fields, methods, genericArgs, baseType = null) " +
+					"  { super(name, fields, methods, baseType); this.genericArgs = genericArgs; }" +
+					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
+					" };" +
+					" const __type_any = new KipperType('any', undefined, undefined);" +
+					" const __type_null = new KipperType('bool', undefined, undefined);" +
+					" const __type_undefined = new KipperType('bool', undefined, undefined);" +
+					" const __type_str = new KipperType('str', undefined, undefined);" +
+					" const __type_num = new KipperType('num', undefined, undefined);" +
+					" const __type_bool = new KipperType('bool', undefined, undefined);" +
+					" const __type_obj = new KipperType('bool', [], []);" +
+					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
+					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
+					" return {" +
+					"  TypeError: (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name = 'TypeError'; } })," +
+					"  IndexError: (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name = 'IndexError'; } })," +
+					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
+					"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
+					"  Type: KipperType," +
+					"  builtIn: {" +
+					"   any: __type_any," +
+					"   null: __type_null," +
+					"   undefined: __type_undefined," +
+					"   str: __type_str," +
+					"   num: __type_num," +
+					"   bool: __type_bool," +
+					"   obj: __type_obj," +
+					"   Array: __type_Array," +
+					"   Func: __type_Func," +
+					"  }," +
+					"  assignTypeMeta: (value, typeMeta) => Object.assign(value, { __kipType: typeMeta })," +
+					"  typeOf: (value) => {" +
+					"   const prim = typeof value;" +
+					"   switch (prim) {" +
+					"    case 'undefined': return __kipper.builtIn.undefined;" +
+					"    case 'string': return __kipper.builtIn.str;" +
+					"    case 'number': return __kipper.builtIn.num;" +
+					"    case 'boolean': return __kipper.builtIn.bool;" +
+					"    case 'function': {" +
+					"     return '__kipType' in value ? value.__kipType : __kipper.builtIn.Func;" +
+					"    }" +
+					"    case 'symbol':" +
+					"    case 'bigint':" +
+					"    case 'object': {" +
+					"     if (value === null) return __kipper.builtIn.null;" +
+					"     if (Array.isArray(value)) {" +
+					"      return '__kipType' in value ? value.__kipType : __kipper.builtIn.Array;" +
+					"     }" +
+					"     const prot = Object.getPrototypeOf(value);" +
+					"     if (prot) {" +
+					"      return prot.constructor;" +
+					"     }" +
+					"     return __kipper.builtIn.obj;" +
+					"    }" +
+					"  	}" +
+					"  }" +
+					" };" +
+					"};",
 			],
 			// global __kipper variable
 			["// @ts-ignore"],
-			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper()) as NonNullable<ReturnType<typeof __createKipper>>;"],
+			[
+				"var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper()) as NonNullable<ReturnType<typeof __createKipper>>;",
+			],
 		];
 	};
 
@@ -956,15 +984,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	typeofExpression = async (node: TypeofExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
+		const operand = await semanticData.operand.translateCtxAndChildren();
 
-		const operand = semanticData.operand;
-
-		const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
-
-		if (runtimeType instanceof BuiltInRuntimeType) {
-			return [`${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`];
-		} else {
-			return [runtimeType]; // Implement logic for interfaces and classes
-		}
+		return [
+			TargetJS.getBuiltInIdentifier("typeOf"),
+			"(",
+			...operand,
+			")",
+		];
 	};
 }

@@ -117,9 +117,6 @@ export class TypeofExpression extends PostfixExpression<TypeofExpressionSemantic
 			// This will always be of type "type" as the typeof operator always returns a type
 			evaluatedType: BuiltInTypes.type,
 		};
-
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validTypeofExpression(this);
 	}
 
 	public checkForWarnings = undefined; // TODO!

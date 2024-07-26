@@ -274,15 +274,4 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 		return [identifier, ":", " ", typeScriptType];
 	};
-
-	/**
-	 * Translates a {@link TypeofTypeSpecifierExpression} into the TypeScript language.
-	 */
-	override typeofTypeSpecifierExpression = async (
-		node: TypeofTypeSpecifierExpression,
-	): Promise<TranslatedExpression> => {
-		const semanticData = node.getSemanticData();
-
-		return ["test"];
-	};
 }

@@ -18,6 +18,6 @@ export const builtInRuntimeTypes: Array<BuiltInRuntimeType> = [
 	new BuiltInRuntimeType("undefined", `new __kipper.Type("undefined", undefined, undefined)`),
 	new BuiltInRuntimeType("null", `new __kipper.Type("null", undefined, undefined)`),
 	new BuiltInRuntimeType("obj", `new __kipper.Type("obj", undefined, undefined)`),
-	new BuiltInRuntimeType("array", `new __kipper.Type("array", undefined, undefined)`),
+	new BuiltInRuntimeType("Array", `new __kipper.Type("Array", undefined, undefined)`),
 	new BuiltInRuntimeType("Func", `new __kipper.Type("Func", undefined, undefined)`),
 ];
