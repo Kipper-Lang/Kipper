@@ -61,7 +61,7 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 			case BuiltInTypes.bool.identifier:
 				return "boolean";
 			case BuiltInTypes.type.identifier:
-				return "object";
+				return "InstanceType<typeof __kipper.Type>";
 			case BuiltInTypes.null.identifier:
 				return "null";
 			case BuiltInTypes.num.identifier:

@@ -97,66 +97,64 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
-			['"use strict"', ";"],
+			['"use strict";'],
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
 			[
 				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
-					' globalThis !== "undefined" ?' +
-					" globalThis : typeof" +
-					' window !== "undefined" ?' +
-					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
-				";",
+				' globalThis !== "undefined" ?' +
+				" globalThis : typeof" +
+				' window !== "undefined" ?' +
+				' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};',
 			],
-			// Create global kipper object - Always prefer the global '__kipper' instance
-			["// @ts-ignore"],
-			["var __kipper = __globalScope.__kipper = __globalScope.__kipper || __kipper || {}", ";"],
-			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
-			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			// __createKipper function
 			["// @ts-ignore"],
 			[
-				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name="TypeError"; }})',
-				";",
+				"var __createKipper = () => {" +
+				" if (__globalScope.__kipper || __kipper) { return undefined; }" +
+				" class KipperType {" +
+				"  constructor(name, fields, methods, baseType = null) " +
+				"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
+				"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+				" };" +
+				" class KipperGenericType extends KipperType {" +
+				"  constructor(name, fields, methods, genericArgs, baseType = null) " +
+				"  { super(name, fields, methods, baseType); this.genericArgs = genericArgs; }" +
+				"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+				"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
+				" };" +
+				" const __type_any = new KipperType('any', undefined, undefined);" +
+				" const __type_null = new KipperType('bool', undefined, undefined);" +
+				" const __type_undefined = new KipperType('bool', undefined, undefined);" +
+				" const __type_str = new KipperType('str', undefined, undefined);" +
+				" const __type_num = new KipperType('num', undefined, undefined);" +
+				" const __type_bool = new KipperType('bool', undefined, undefined);" +
+				" const __type_obj = new KipperType('bool', [], []);" +
+				" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
+				" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
+				" return {" +
+				"  TypeError: (class KipperTypeError extends TypeError { constructor(msg) { super(msg); this.name = 'TypeError'; } })," +
+				"  IndexError: (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name = 'IndexError'; } })," +
+				"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
+				"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
+				"  Type: KipperType," +
+				"  builtIn: {" +
+				"   any: __type_any," +
+				"   null: __type_null," +
+				"   undefined: __type_undefined," +
+				"   str: __type_str," +
+				"   num: __type_num," +
+				"   bool: __type_bool," +
+				"   obj: __type_obj," +
+				"   Array: __type_Array," +
+				"   Func: __type_Func," +
+				"  }" +
+				" };" +
+				"};",
 			],
+			// global __kipper variable
 			["// @ts-ignore"],
-			[
-				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends Error { constructor(msg) { super(msg); this.name="IndexError"; }})',
-				";",
-			],
-			// The following object is the template for runtime types
-			["// @ts-ignore"],
-			[
-				"__kipper.Property = __kipper.Property || (class Property {constructor(name, type) {this.name = name;this.type = type;}})",
-			],
-			["// @ts-ignore"],
-			[
-				"__kipper.Method = __kipper.Method || (class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}})",
-			],
-			["// @ts-ignore"],
-			[
-				"__kipper.Type = __kipper.Type || (class Type {" +
-					"constructor(name, fields, methods, baseType = null) {" +
-					"this.name = name;" +
-					"this.fields = fields;" +
-					"this.methods = methods;" +
-					"this.baseType = baseType;" +
-					"}" +
-					"isCompatibleWith(obj) {" +
-					"return this.name === obj.name;" +
-					"}",
-				"})",
-			],
-			// The following objects are built-in types and functions that are used internally by Kipper and should not be
-			// modified by the user.
-			[
-				`__kipper.builtIn = ${TargetJS.internalObjectIdentifier}.builtIn || {};` +
-					builtInRuntimeTypes
-						.map(
-							(b) =>
-								`${TargetJS.internalObjectIdentifier}.builtIn.${b.name} = ${TargetJS.internalObjectIdentifier}.builtIn.${b.name} || ${b.value}`,
-						)
-						.join(";"),
-			],
+			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper()) as NonNullable<ReturnType<typeof __createKipper>>;"],
 		];
 	};
 

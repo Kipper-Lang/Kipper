@@ -6,5 +6,4 @@ interface X {
 var x: Func<num> = (): num -> {
   return 1;
 };
-
 var y: type = typeof(x);
