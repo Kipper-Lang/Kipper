@@ -33,8 +33,6 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
-	InterfaceMethodDeclaration,
-	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
 	LambdaPrimaryExpression,
@@ -70,10 +68,11 @@ import {
 	IfStatement,
 	KipperTargetCodeGenerator,
 	VariableDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { BuiltInRuntimeType } from "./built-in-runtime-types";
 import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -196,6 +195,55 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	wrapUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
 		return [];
+	};
+
+	protected generateInterfaceRuntimeTypeChecks = async (
+		node: InterfaceDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const interfaceName = semanticData.identifier;
+		const interfaceMembers = semanticData.members;
+		const identifier = "__intf_" + interfaceName;
+
+		let propertiesWithTypes = "";
+		let functionsWithTypes = "";
+		for (let member of interfaceMembers) {
+			if (member instanceof InterfacePropertyDeclaration) {
+				const property = member.getSemanticData();
+				const type = member.getTypeSemanticData();
+				const runtimeType = TargetJS.getRuntimeType(type.type);
+				propertiesWithTypes +=
+					`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
+			}
+			if (member instanceof InterfaceMethodDeclaration) {
+				const method = member.getSemanticData();
+				const returnType = member.getTypeSemanticData();
+				const params = method.parameters.map((param) => {
+					return param.getTypeSemanticData().valueType;
+				});
+				const runtimeReturnType = TargetJS.getRuntimeType(returnType.type);
+				const runtimeParams = params.map((paramType) => {
+					return `__intf_${TargetJS.getRuntimeType(paramType)}`;
+				});
+				functionsWithTypes +=
+					`new ${TargetJS.getBuiltInIdentifier("Method")}` +
+					`("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(",")}]),`;
+			}
+		}
+
+		let lines: Array<TranslatedCodeLine> = [
+			[
+				"const ",
+				identifier,
+				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + '"',
+				", [",
+				propertiesWithTypes,
+				"], [",
+				functionsWithTypes,
+				"])",
+			],
+		];
+		return lines;
 	};
 
 	/**
@@ -457,7 +505,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
+		return [
+			...runtimeInterfaceType,
+		];
 	};
 
 	/**
@@ -566,13 +617,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
 		const values = node.getSemanticData().value;
+		const valueType = node.getTypeSemanticData().valueType;
+		const valueTypeIdentifier = TargetJS.getRuntimeType(valueType);
+
 		const translatedValues: Array<TranslatedExpression> = await Promise.all(
 			values.map(async (value, i) => {
 				const exp = await value.translateCtxAndChildren();
 				return [...exp, i + 1 === values.length ? "" : ", "];
 			}),
 		);
-		return ["[", ...translatedValues.flat(), "]"];
+
+		return [
+			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+			"(",
+			"[",
+			...translatedValues.flat(),
+			"]",
+			",",
+			TargetJS.getBuiltInIdentifier("builtIn.Array.changeGenericTypeArguments"),
+			"(",
+			`{T: ${valueTypeIdentifier}}`,
+			")",
+			")",
+		];
 	};
 
 	/**
@@ -960,6 +1027,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
+		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
 		const translatedParams: TranslatedExpression = (
@@ -971,26 +1039,36 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		)
 			.map((param) => <TranslatedExpression>[...param.flat(), ", "])
 			.flat();
-		translatedParams.pop(); // Remove the last comma
+		// Remove the last comma
+		translatedParams.pop();
 
 		const translatedBody =
 			body instanceof Expression
 				? await body.translateCtxAndChildren()
 				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
+		const paramTypes = funcType.parameterTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
+		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
 
-		// Return the lambda function
-		return ["(", ...translatedParams, ") => ", ...translatedBody];
+		return [
+			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+			"(",
+			"(",
+			...translatedParams,
+			") => ",
+			...(body instanceof CompoundStatement ? translatedBody.slice() : translatedBody),
+			",",
+			TargetJS.getBuiltInIdentifier("builtIn.Func.changeGenericTypeArguments"),
+			"(",
+			`{T: [${paramTypes.join(",")}], R: ${returnType}}`,
+			")",
+			")",
+		];
 	};
 
 	typeofExpression = async (node: TypeofExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const operand = await semanticData.operand.translateCtxAndChildren();
 
-		return [
-			TargetJS.getBuiltInIdentifier("typeOf"),
-			"(",
-			...operand,
-			")",
-		];
+		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
 	};
 }

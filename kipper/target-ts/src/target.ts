@@ -3,7 +3,7 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
-import { BuiltInTypes, KipperBuiltInTypeLiteral, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
+import { BuiltInTypes, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";

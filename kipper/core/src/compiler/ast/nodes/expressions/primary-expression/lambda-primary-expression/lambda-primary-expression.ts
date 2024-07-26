@@ -16,7 +16,7 @@ import { CompoundStatement } from "../../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import { ParameterDeclaration } from "../../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes, LambdaScope } from "../../../../../semantics";
+import { BuiltInTypeFunc, BuiltInTypes, LambdaScope } from "../../../../../semantics";
 
 /**
  * Lambda expression class, which represents a lambda expression in the AST.
@@ -156,16 +156,10 @@ export class LambdaPrimaryExpression
 		// Get the type that will be returned using the return type specifier
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.Func.changeGenericTypeArguments([
-				{
-					identifier: "T",
-					type: semanticData.params.map((param) => param.getTypeSemanticData().storedType),
-				},
-				{
-					identifier: "R",
-					type: returnType,
-				},
-			]),
+			evaluatedType: new BuiltInTypeFunc(
+				semanticData.params.map((param) => param.getTypeSemanticData().storedType),
+				returnType,
+			),
 			returnType: returnType,
 		};
 
