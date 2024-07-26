@@ -3,6 +3,8 @@ interface X {
 	b: str;
 };
 
-var x: num = 2;
+var x: Func<num> = (): num -> {
+  return 1;
+};
 
-print(f"{typeof(x)}");
+var y: type = typeof(x);

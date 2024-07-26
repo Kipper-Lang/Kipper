@@ -62,7 +62,6 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
-import { BuiltInType } from "@kipper/core";
 import {
 	BuiltInTypes,
 	CompoundStatement,
@@ -74,7 +73,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { BuiltInRuntimeType, builtInTypes } from "./built-in-types";
+import { BuiltInRuntimeType, builtInRuntimeTypes } from "./built-in-runtime-types";
 import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -126,14 +125,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			],
 			// The following object is the template for runtime types
 			["// @ts-ignore"],
-			["class Property {constructor(name, type) {this.name = name;this.type = type;}}"],
-			["// @ts-ignore"],
 			[
-				"class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}}",
+				"__kipper.Property = __kipper.Property || (class Property {constructor(name, type) {this.name = name;this.type = type;}})",
 			],
 			["// @ts-ignore"],
 			[
-				"class Type {" +
+				"__kipper.Method = __kipper.Method || (class Method {constructor(name, returnType, parameters) {this.name = name;this.returnType = returnType;this.parameters = parameters;}})",
+			],
+			["// @ts-ignore"],
+			[
+				"__kipper.Type = __kipper.Type || (class Type {" +
 					"constructor(name, fields, methods, baseType = null) {" +
 					"this.name = name;" +
 					"this.fields = fields;" +
@@ -143,13 +144,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"isCompatibleWith(obj) {" +
 					"return this.name === obj.name;" +
 					"}",
-				"}",
+				"})",
 			],
 			// The following objects are built-in types and functions that are used internally by Kipper and should not be
 			// modified by the user.
 			[
 				`__kipper.builtIn = ${TargetJS.internalObjectIdentifier}.builtIn || {};` +
-					builtInTypes
+					builtInRuntimeTypes
 						.map(
 							(b) =>
 								`${TargetJS.internalObjectIdentifier}.builtIn.${b.name} = ${TargetJS.internalObjectIdentifier}.builtIn.${b.name} || ${b.value}`,
@@ -962,11 +963,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 		const runtimeType = TargetJS.getRuntimeType(operand.getTypeSemanticData().evaluatedType);
 
-		if(runtimeType instanceof BuiltInRuntimeType) {
+		if (runtimeType instanceof BuiltInRuntimeType) {
 			return [`${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}`];
-		}
-		else {
-			return [ runtimeType ]; // Implement logic for interfaces and classes
+		} else {
+			return [runtimeType]; // Implement logic for interfaces and classes
 		}
 	};
 }

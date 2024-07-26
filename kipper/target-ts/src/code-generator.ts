@@ -14,13 +14,12 @@ import type {
 	ClassPropertyDeclaration,
 	TypeofTypeSpecifierExpression,
 } from "@kipper/core";
-import { BuiltInType, InterfaceMethodDeclaration } from "@kipper/core";
+import { InterfaceMethodDeclaration } from "@kipper/core";
 import { InterfacePropertyDeclaration } from "@kipper/core";
 import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
+import { BuiltInRuntimeType, indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
-import { BuiltInRuntimeType } from "@kipper/target-js/lib/built-in-types";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -84,9 +83,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 				let type = member.getTypeSemanticData();
 				let runtimeType = TargetJS.getRuntimeType(type.type);
 				if (runtimeType instanceof BuiltInRuntimeType) {
-					propertiesWithTypes += `new Property("${property.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}),`;
+					propertiesWithTypes += `new ${TargetJS.internalObjectIdentifier}.Property("${property.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${runtimeType.name}),`;
 				} else {
-					propertiesWithTypes += `new Property(${property.identifier}, __intf_${runtimeType}), `;
+					propertiesWithTypes += `new ${TargetJS.internalObjectIdentifier}.Property(${property.identifier}, __intf_${runtimeType}), `;
 				}
 			}
 			if (member instanceof InterfaceMethodDeclaration) {
@@ -105,11 +104,11 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 					}
 				});
 				if (runtimeReturnType instanceof BuiltInRuntimeType) {
-					functionsWithTypes += `new Method("${method.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${
+					functionsWithTypes += `new ${TargetJS.internalObjectIdentifier}.Method("${method.identifier}", ${TargetJS.internalObjectIdentifier}.builtIn.${
 						runtimeReturnType.name
 					}, [${runtimeParams.join(", ")}]),`;
 				} else {
-					functionsWithTypes += `new Method("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(
+					functionsWithTypes += `new ${TargetJS.internalObjectIdentifier}.Method("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(
 						", ",
 					)}]),`;
 				}
@@ -120,7 +119,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			[
 				"const ",
 				varName,
-				' = new Type("' + interfaceName + '"',
+				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + '"',
 				", [",
 				propertiesWithTypes,
 				"], [",

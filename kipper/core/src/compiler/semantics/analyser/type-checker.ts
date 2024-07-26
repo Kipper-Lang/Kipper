@@ -45,7 +45,8 @@ import {
 	kipperPlusOperator,
 	kipperSupportedConversions,
 } from "../../const";
-import { InvalidTypeofOperandError, TypeError } from "../../../errors";
+import type { TypeError } from "../../../errors";
+import { InvalidTypeofOperandError } from "../../../errors";
 import { CanNotUseNonGenericAsGenericTypeError, InvalidAmountOfGenericArgumentsError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,

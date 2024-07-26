@@ -9,6 +9,7 @@ export * from "./semantic-analyser";
 export * from "./code-generator";
 export * from "./built-in-generator";
 export * from "./tools";
+export * from "./built-in-runtime-types";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/target-js";

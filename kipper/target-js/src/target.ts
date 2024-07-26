@@ -10,8 +10,8 @@ import { BuiltInVariable, KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
-import type { BuiltInRuntimeType } from "./built-in-types";
-import { builtInTypes } from "./built-in-types";
+import type { BuiltInRuntimeType } from "./built-in-runtime-types";
+import { builtInRuntimeTypes } from "./built-in-runtime-types";
 
 /**
  * The JavaScript translation target for the Kipper language.
@@ -122,7 +122,7 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	 */
 	public static getRuntimeType(type: ProcessedType): BuiltInRuntimeType | string {
 		if (type instanceof BuiltInType) {
-			return builtInTypes.find((t) => t.name.toLowerCase() === type.identifier.toLowerCase()) ?? type.identifier;
+			return builtInRuntimeTypes.find((t) => t.name.toLowerCase() === type.identifier.toLowerCase()) ?? type.identifier;
 		}
 		return type.identifier;
 	}
