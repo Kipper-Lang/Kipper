@@ -28,14 +28,12 @@ export function genJSFunction(
 ): Array<TranslatedCodeLine> {
 	return [
 		[
-			TargetJS.getBuiltInIdentifier(signature.identifier),
-			" ",
-			"=",
+			signature.identifier,
+			":",
 			" ",
 			createJSFunctionSignature(signature, ignoreParams),
 			" ",
 			body,
-			";",
 		],
 	];
 }
@@ -46,7 +44,24 @@ export function genJSFunction(
  * @param value The value of the variable.
  */
 export function genJSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
-	return [...(varSpec.local ? ["const", " "] : []), TargetJS.getBuiltInIdentifier(varSpec), " ", "=", " ", value, ";"];
+	if (varSpec.local) {
+		return [
+			"const",
+			" ",
+			TargetJS.getBuiltInIdentifier(varSpec),
+			" ",
+			"=",
+			" ",
+			value,
+			";",
+		];
+	}
+	return [
+		varSpec.identifier,
+		":",
+		" ",
+		value,
+	];
 }
 
 /**

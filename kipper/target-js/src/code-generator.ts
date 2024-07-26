@@ -93,7 +93,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * replacement to {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.10.0
 	 */
-	setUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
+	setUp = async (programCtx: KipperProgramContext, requirements: Array<TranslatedCodeLine>): Promise<Array<TranslatedCodeLine>> => {
+		const inlinedRequirements = requirements.map((req) => req.join("")).join(", ");
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
@@ -126,12 +127,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
 					" };" +
 					" const __type_any = new KipperType('any', undefined, undefined);" +
-					" const __type_null = new KipperType('bool', undefined, undefined);" +
-					" const __type_undefined = new KipperType('bool', undefined, undefined);" +
+					" const __type_null = new KipperType('null', undefined, undefined);" +
+					" const __type_undefined = new KipperType('undefined', undefined, undefined);" +
 					" const __type_str = new KipperType('str', undefined, undefined);" +
 					" const __type_num = new KipperType('num', undefined, undefined);" +
 					" const __type_bool = new KipperType('bool', undefined, undefined);" +
-					" const __type_obj = new KipperType('bool', [], []);" +
+					" const __type_obj = new KipperType('obj', [], []);" +
 					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
 					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
 					" return {" +
@@ -171,13 +172,14 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"      return '__kipType' in value ? value.__kipType : __kipper.builtIn.Array;" +
 					"     }" +
 					"     const prot = Object.getPrototypeOf(value);" +
-					"     if (prot) {" +
+					"     if (prot && prot.constructor !== Object) {" +
 					"      return prot.constructor;" +
 					"     }" +
 					"     return __kipper.builtIn.obj;" +
 					"    }" +
 					"  	}" +
-					"  }" +
+					"  }," +
+					inlinedRequirements +
 					" };" +
 					"};",
 			],

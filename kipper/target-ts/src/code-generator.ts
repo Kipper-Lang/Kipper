@@ -154,6 +154,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const paramTypes = funcType.paramTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
 		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
 
+		if (body instanceof CompoundStatement) {
+			translatedBody.pop(); // remove unnecessary newline
+		}
 		return [
 			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
 			"(",
@@ -162,7 +165,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			"): ",
 			returnTypeSpecifier,
 			" => ",
-			...(body instanceof CompoundStatement ? translatedBody.slice() : translatedBody),
+			...translatedBody,
 			",",
 			TargetJS.getBuiltInIdentifier("builtIn.Func.changeGenericTypeArguments"),
 			"(",
