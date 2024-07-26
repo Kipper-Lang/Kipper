@@ -6,17 +6,12 @@ import type { ObjectPrimaryExpressionSemantics } from "./object-primary-expressi
 import type { ObjectPrimaryExpressionTypeSemantics } from "./object-primary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ObjectPrimaryExpressionContext } from "../../../../../lexer-parser";
-import { DeclaratorContext } from "../../../../../lexer-parser";
-import { InitDeclaratorContext, StorageTypeSpecifierContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { PrimaryExpression } from "../primary-expression";
 import { CustomType } from "../../../../../semantics";
 import type { ObjectProperty } from "./object-property";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import type { KipperStorageType } from "../../../../../const";
-import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import type { ParseTree } from "antlr4ts/tree";
-import type { Expression } from "../../expression";
 
 /**
  * Object literal constant, which represents an object that was defined in the source code.

@@ -1,5 +1,5 @@
 import type { CompilableType } from "./compilable-type";
-import { type TypeError, TypeNotCompilableError } from "../../../../errors";
+import { TypeNotCompilableError } from "../../../../errors";
 import { Type } from "./type";
 import type { GenericType, GenericTypeArguments } from "./generic-type";
 
@@ -36,6 +36,14 @@ export abstract class ProcessedType extends Type {
 	 * @since 0.12.0
 	 */
 	public get isGeneric(): boolean {
+		return false;
+	}
+
+	/**
+	 * Returns whether the type is a union type.
+	 * @since 0.12.0
+	 */
+	public get isUnion(): boolean {
 		return false;
 	}
 

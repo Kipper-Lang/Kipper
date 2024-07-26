@@ -1,6 +1,4 @@
-import { KipperBuiltInTypeLiteral } from "../../const";
 import type { ProcessedType } from "../types";
-import { UniverseScope } from "../symbol-table";
 
 /**
  * Interface representation of an argument of a {@link BuiltInFunction}.

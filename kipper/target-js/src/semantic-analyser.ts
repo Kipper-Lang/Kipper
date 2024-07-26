@@ -12,11 +12,10 @@ import type {
 	ParameterDeclaration,
 	TargetASTNodeSemanticAnalyser,
 	VariableDeclaration,
+	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
-import type { InterfaceMethodDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/interface-declaration/interface-member-declaration/interface-method-declaration";
-import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * The TypeScript target-specific semantic analyser.

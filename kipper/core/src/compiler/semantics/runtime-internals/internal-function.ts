@@ -1,5 +1,4 @@
 import type { InternalFunctionArgument } from "./internal-function-argument";
-import { KipperBuiltInTypeLiteral } from "../../const";
 import type { ProcessedType } from "../types";
 
 /**

@@ -14,7 +14,7 @@ import {
 } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import { Expression } from "../expression";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 import { kipperInternalBuiltInFunctions } from "../../../../semantics";
 
 /**
@@ -101,11 +101,18 @@ export class MemberAccessExpression extends Expression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		// Handle the different types of member access expressions
 		if (this.antlrRuleCtx instanceof DotNotationMemberAccessExpressionContext) {
-			throw this.programCtx
-				.semanticCheck(this)
-				.notImplementedError(
-					new KipperNotImplementedError("Member access expressions using dot notation are not yet implemented"),
-				);
+			const antlrChildren = this.getAntlrRuleChildren();
+			const objExp = this.children[0];
+			if (!antlrChildren || !objExp) {
+				throw new UnableToDetermineSemanticDataError();
+			}
+
+			const identifier = antlrChildren.pop()!.text.slice(1);
+			this.semanticData = {
+				objectLike: objExp,
+				propertyIndexOrKeyOrSlice: identifier,
+				accessType: "dot",
+			};
 		} else if (this.antlrRuleCtx instanceof BracketNotationMemberAccessExpressionContext) {
 			const objExp = this.children[0];
 			const keyExp = this.children[1];

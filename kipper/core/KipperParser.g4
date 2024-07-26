@@ -317,6 +317,10 @@ incrementOrDecrementPostfixExpression
 	:	computedPrimaryExpression incrementOrDecrementOperator
 	;
 
+typeofExpression
+	:	'typeof' '(' assignmentExpression ')'
+	;
+
 unaryExpression
     :   postfixExpression // Pass-on (Not matching rule)
     |   incrementOrDecrementUnaryExpression
@@ -426,10 +430,6 @@ identifierTypeSpecifierExpression
 
 genericTypeSpecifierExpression
 	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
-	;
-
-typeofExpression
-	:	'typeof' '(' assignmentExpression ')'
 	;
 
 typeofTypeSpecifierExpression

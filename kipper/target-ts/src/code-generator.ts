@@ -13,9 +13,11 @@ import type {
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
 } from "@kipper/core";
-import { CompoundStatement } from "@kipper/core";
-import { InterfaceMethodDeclaration } from "@kipper/core";
-import { InterfacePropertyDeclaration } from "@kipper/core";
+import {
+	CompoundStatement,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
+} from "@kipper/core";
 import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
@@ -130,7 +132,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.returnType);
+		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.type.returnType);
 		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
@@ -149,7 +151,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			body instanceof Expression
 				? await body.translateCtxAndChildren()
 				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
-		const paramTypes = funcType.parameterTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
+		const paramTypes = funcType.paramTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
 		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
 
 		return [

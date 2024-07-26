@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
  */
 export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
-	returnType: ProcessedType | Array<ProcessedType>;
+	params: Array<{ identifier: string; type: ProcessedType }>;
+	returnType: ProcessedType;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -34,7 +34,7 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.returnType,
+			returnType: typeData.type.returnType,
 		};
 	} else {
 		return {
@@ -59,8 +59,8 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createTSFunctionSignature(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: ProcessedType | Array<ProcessedType> }>;
-		returnType: ProcessedType | Array<ProcessedType>;
+		params: Array<{ identifier: string; type: ProcessedType }>;
+		returnType: ProcessedType;
 	},
 	ignoreParams: boolean = false,
 ): string {

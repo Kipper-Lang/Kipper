@@ -1,6 +1,5 @@
 import { ProcessedType } from "./base";
 import type { TypeError } from "../../../errors";
-import { KipperInternalError } from "../../../errors";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
@@ -76,14 +75,14 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromClassDeclaration(classDeclaration: ClassDeclaration): CustomType {
 		classDeclaration.ensureSemanticallyValid();
-		throw new KipperInternalError("Internal class representations are not implemented.");
 
-		// TODO! Implement custom type generation from class declaration
-		// const fields: CustomTypeFields = new Map();
-		// for (const field of objectSemantics.fields) {
-		// 	fields.set(field.identifier, field.type);
-		// }
-		// return new CustomType(objectSemantics.identifier, "class", fields);
+		const fields: CustomTypeFields = new Map();
+		const semanticData = classDeclaration.getSemanticData();
+
+		for (const field of semanticData.classMembers) {
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().type);
+		}
+		return new CustomType(classDeclaration.getSemanticData().identifier, "class", fields);
 	}
 
 	/**
@@ -95,14 +94,12 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromInterfaceDeclaration(interfaceDeclaration: InterfaceDeclaration): CustomType {
 		interfaceDeclaration.ensureSemanticallyValid();
-		throw new KipperInternalError("Internal interface representations are not implemented.");
 
-		// TODO! Implement custom type generation from interface declaration
-		// const fields: CustomTypeFields = new Map();
-		// for (const field of interfaceSemantics.fields) {
-		// 	fields.set(field.identifier, field.type);
-		// }
-		// return new CustomType(interfaceSemantics.identifier, "interface", fields);
+		const fields: CustomTypeFields = new Map();
+		for (const field of interfaceDeclaration.getSemanticData().members) {
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().type);
+		}
+		return new CustomType(interfaceDeclaration.getSemanticData().identifier, "interface", fields);
 	}
 
 	/**
@@ -135,7 +132,7 @@ export class CustomType extends ProcessedType {
 	 * @since 0.12.0
 	 */
 	assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void {
-		if (this === type || type === BuiltInTypes.any) {
+		if (this === type || type === BuiltInTypes.any || type === BuiltInTypes.obj) {
 			return;
 		} else if (type instanceof CustomType && type.kind === "interface") {
 			for (const [fieldName, fieldType] of this.fields) {

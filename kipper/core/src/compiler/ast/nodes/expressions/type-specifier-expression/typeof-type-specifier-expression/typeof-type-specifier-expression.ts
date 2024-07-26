@@ -81,8 +81,11 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const identifier = this.sourceCode.split("(")[1].split(")")[0];
-
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new Error("Invalid typeof expression");
+		}
+		const identifier = antlrChildren[2].text;
 		const ref = this.programCtx.semanticCheck(this).getExistingReference(identifier, this.scope);
 
 		this.semanticData = {
@@ -101,7 +104,6 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-
 		const valueReference = semanticData.ref;
 
 		this.typeSemantics = {
