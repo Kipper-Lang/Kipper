@@ -1,9 +1,20 @@
+var x: Func<num, num> = (arg0: num): num -> {
+  return 1;
+};
+var xType: type = typeof(x);
+
+var test1: typeof(x);
+
 interface X {
 	a: num;
 	b: str;
 };
+var y: X = {a: 1, b: "hello"};
+var yType: type = typeof(y);
 
-var x: Func<num> = (): num -> {
-  return 1;
-};
-var y: type = typeof(x);
+var z: Array<num> = [2, 3, 1];
+var zType: type = typeof(z);
+
+print(xType);
+print(yType);
+print(zType);
