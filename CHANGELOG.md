@@ -18,6 +18,10 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Support for the typeof operator, which returns the runtime type of a value.
+	([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
+- Support for Nix Flakes and direnv, which allows for a more reproducible and consistent development environment.
+	([#663](
 - Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
@@ -45,6 +49,9 @@ To use development versions of Kipper download the
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
+  - `TypeofExpression`, which represents an AST typeof expression that returns the runtime type of an object.
+  - `TypeofTypeSpecifierExpression`, which represents an AST typeof type specifier that lets one define a type by using an object as reference
+  - `BuiltInTypeObject`, which is the base class for the compilers representation of runtime objects
   - `UniverseScope`, which represents the universe scope, where all built-in types, functions and variables are
     declared. This serves as the parent of the global scope.
   - `InterfaceDeclaration`, which represents an AST interface declaration.
@@ -103,6 +110,8 @@ To use development versions of Kipper download the
     tracking of built-in types.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
+  - `generateInterfaceRuntimeTypeChecks` which generates runtime type checks for an interface.
+  - `getRuntimeType`, which gets the corresponding runtime representation of a built-in type.
 - New properties:
   - `BuiltInFunction.funcType`, which returns a function type for the built-in function.
   - `FunctionDeclarationTypeSemantics.type`, which returns the type of the function declaration i.e. the function type.
