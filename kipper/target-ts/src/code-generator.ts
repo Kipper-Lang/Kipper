@@ -12,12 +12,10 @@ import type {
 	VariableDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
-} from "@kipper/core";
-import {
-	CompoundStatement,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
 } from "@kipper/core";
+import { CompoundStatement } from "@kipper/core";
 import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";

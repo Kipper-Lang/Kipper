@@ -638,8 +638,8 @@ export class KipperProgramContext {
 	 * @see {@link KipperTargetBuiltInGenerator}
 	 */
 	public async generateRequirements(): Promise<{
-		global: Array<TranslatedCodeLine>,
-		local: Array<TranslatedCodeLine>,
+		global: Array<TranslatedCodeLine>;
+		local: Array<TranslatedCodeLine>;
 	}> {
 		let global: Array<TranslatedCodeLine> = [];
 		let local: Array<TranslatedCodeLine> = [];

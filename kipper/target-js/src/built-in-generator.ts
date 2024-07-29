@@ -26,16 +26,7 @@ export function genJSFunction(
 	body: string,
 	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
-	return [
-		[
-			signature.identifier,
-			":",
-			" ",
-			createJSFunctionSignature(signature, ignoreParams),
-			" ",
-			body,
-		],
-	];
+	return [[signature.identifier, ":", " ", createJSFunctionSignature(signature, ignoreParams), " ", body]];
 }
 
 /**
@@ -45,23 +36,9 @@ export function genJSFunction(
  */
 export function genJSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
 	if (varSpec.local) {
-		return [
-			"const",
-			" ",
-			TargetJS.getBuiltInIdentifier(varSpec),
-			" ",
-			"=",
-			" ",
-			value,
-			";",
-		];
+		return ["const", " ", TargetJS.getBuiltInIdentifier(varSpec), " ", "=", " ", value, ";"];
 	}
-	return [
-		varSpec.identifier,
-		":",
-		" ",
-		value,
-	];
+	return [varSpec.identifier, ":", " ", value];
 }
 
 /**

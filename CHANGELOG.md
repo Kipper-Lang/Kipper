@@ -19,9 +19,8 @@ To use development versions of Kipper download the
 ### Added
 
 - Support for the typeof operator, which returns the runtime type of a value.
-	([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
+  ([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
 - Support for Nix Flakes and direnv, which allows for a more reproducible and consistent development environment.
-	([#663](
 - Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))

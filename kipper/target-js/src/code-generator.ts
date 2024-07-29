@@ -71,7 +71,7 @@ import {
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
 	AssignmentExpression,
-	ScopeDeclaration
+	ScopeDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -93,7 +93,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * replacement to {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.10.0
 	 */
-	setUp = async (programCtx: KipperProgramContext, requirements: Array<TranslatedCodeLine>): Promise<Array<TranslatedCodeLine>> => {
+	setUp = async (
+		programCtx: KipperProgramContext,
+		requirements: Array<TranslatedCodeLine>,
+	): Promise<Array<TranslatedCodeLine>> => {
 		const inlinedRequirements = requirements.map((req) => req.join("")).join(", ");
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
@@ -512,9 +515,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
-		return [
-			...runtimeInterfaceType,
-		];
+		return [...runtimeInterfaceType];
 	};
 
 	/**

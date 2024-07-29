@@ -3,8 +3,6 @@ var x: Func<num, num> = (arg0: num): num -> {
 };
 var xType: type = typeof(x);
 
-var test1: typeof(x);
-
 interface X {
 	a: num;
 	b: str;
@@ -12,8 +10,12 @@ interface X {
 var y: X = {a: 1, b: "hello"};
 var yType: type = typeof(y);
 
+var t: str = "hello";
+var tType: typeof(t) = "test";
+print(typeof(tType));
+
 var z: Array<num> = [2, 3, 1];
-var zType: type = typeof(z);
+var zType: type = typeof z;
 
 print(xType);
 print(yType);

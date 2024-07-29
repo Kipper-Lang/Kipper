@@ -318,8 +318,8 @@ incrementOrDecrementPostfixExpression
 	;
 
 typeofExpression
-	:	'typeof' '(' assignmentExpression ')'
-	;
+	:	'typeof' ( '(' assignmentExpression ')' | assignmentExpression )
+ 	;
 
 unaryExpression
     :   postfixExpression // Pass-on (Not matching rule)

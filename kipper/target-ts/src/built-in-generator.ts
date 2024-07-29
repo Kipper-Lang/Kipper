@@ -31,16 +31,7 @@ export function genTSFunction(
 	body: string,
 	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
-	return [
-		[
-			signature.identifier,
-			":",
-			" ",
-			createTSFunctionSignature(signature, ignoreParams),
-			" ",
-			body,
-		],
-	];
+	return [[signature.identifier, ":", " ", createTSFunctionSignature(signature, ignoreParams), " ", body]];
 }
 
 /**
@@ -64,12 +55,7 @@ export function genTSVariable(varSpec: BuiltInVariable, value: string): Translat
 			";",
 		];
 	}
-	return [
-		varSpec.identifier,
-		":",
-		" ",
-		value,
-	];
+	return [varSpec.identifier, ":", " ", value];
 }
 
 /**
