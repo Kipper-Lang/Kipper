@@ -106,6 +106,7 @@ export const ParseRuleKindMapping = {
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'
+	RULE_newInstantiationExpression: 1003, // -> See 'computedPrimaryExpression'
 } as const;
 
 /**

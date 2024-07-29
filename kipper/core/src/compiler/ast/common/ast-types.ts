@@ -41,6 +41,7 @@ import type {
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
+	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	OperatorModifiedUnaryExpressionContext,
 	ParameterDeclarationContext,
@@ -90,6 +91,7 @@ export type ParserExpressionContext =
 	| BitwiseOrExpressionContext
 	| BitwiseAndExpressionContext
 	| BitwiseXorExpressionContext
+	| NewInstantiationExpressionContext
 	| BitwiseShiftExpressionContext;
 
 /**
@@ -204,7 +206,8 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_bitwiseXorExpression
 	| typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression
 	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
-	| typeof ParseRuleKindMapping.RULE_memberAccessExpression;
+	| typeof ParseRuleKindMapping.RULE_memberAccessExpression
+	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link CompilableASTNode}.
@@ -285,7 +288,8 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseXorExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_bitwiseShiftExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link CompilableASTNode}.

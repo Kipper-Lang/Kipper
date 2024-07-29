@@ -46,7 +46,7 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
-		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
+		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

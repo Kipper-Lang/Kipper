@@ -1603,4 +1603,27 @@ describe("Core functionality", () => {
 			);
 		});
 	});
+
+	describe("it should be able to instantiate a class with new", () => {
+		it("should be able to init class", async () => {
+			const fileContent = `class Test {a: str; constructor (b: str) {a = b;}}; var x : Test = new Test("3"); print(x.a);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {" +
+					"\n" +
+					" a: string;\n" +
+					"}\n" +
+					"let x: Test = {\n" +
+					'  a: "3",\n' +
+					"};\n" +
+					"__kipper.print(x.a);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
 });

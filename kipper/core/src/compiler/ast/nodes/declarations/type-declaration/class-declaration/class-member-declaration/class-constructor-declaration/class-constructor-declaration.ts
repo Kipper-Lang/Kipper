@@ -2,7 +2,8 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.12.0
  */
-import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
+import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
+import { ScopeTypeDeclaration, ScopeVariableDeclaration } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassConstructorDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -36,7 +37,7 @@ export class ClassConstructorDeclaration
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
 
 	/**
 	/**
@@ -99,17 +100,17 @@ export class ClassConstructorDeclaration
 	 * in the {@link scope parent scope}.
 	 * @since 0.12.0
 	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
 
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
 	}
 
-	public getScopeDeclaration(): ScopeTypeDeclaration {
+	public getScopeDeclaration(): ScopeFunctionDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
-		return <ScopeTypeDeclaration>super.getScopeDeclaration();
+		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -150,6 +151,7 @@ export class ClassConstructorDeclaration
 			parameters: params,
 			functionBody: <CompoundStatement>functionBody,
 		};
+		this.scopeDeclaration = this.scope.addConstructor(this);
 	}
 
 	/**

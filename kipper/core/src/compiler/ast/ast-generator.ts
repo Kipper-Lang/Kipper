@@ -83,6 +83,7 @@ import type {
 	ClassPropertyDeclarationContext,
 	ClassMethodDeclarationContext,
 	ClassConstructorDeclarationContext,
+	NewInstantiationExpressionContext,
 } from "../lexer-parser";
 import { InterfaceMemberDeclarationContext } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
@@ -1093,6 +1094,17 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public enterNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public exitNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.classProperty`.

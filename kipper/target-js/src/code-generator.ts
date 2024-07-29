@@ -73,6 +73,7 @@ import {
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
 import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type { NewInstantiationExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/new-instantiation-expression";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -439,6 +440,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...indentLines(translatedConstructor),
 			["}"],
 		];
+	};
+
+	newInstantiationExpression = async (node: NewInstantiationExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.class.getSemanticData().rawType.identifier;
+		const args = semanticData.args;
+		const translatedArgs = args.map(async (arg) => {
+			return await arg.translateCtxAndChildren();
+		});
+		const finishedArgs = await Promise.all(translatedArgs);
+
+		return ["new", " ", identifier, "(", ...finishedArgs.flat(), ")"];
 	};
 
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {

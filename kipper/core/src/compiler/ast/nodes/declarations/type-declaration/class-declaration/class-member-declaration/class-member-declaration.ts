@@ -5,6 +5,8 @@ import type { InterfaceMemberDeclarationTypeSemantics } from "../../interface-de
 import { TypeDeclaration } from "../../type-declaration";
 import type { ClassMemberDeclarationSemantics } from "./class-member-declaration-semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "./class-member-declaration-type-semantics";
+import type { GlobalScope, LocalScope } from "../../../../../../semantics";
+import type { ClassScope } from "../../../../../../semantics/symbol-table/class-scope";
 
 export type ASTClassMemberDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_classPropertyDeclaration
@@ -39,4 +41,11 @@ export abstract class ClassMemberDeclaration<
 	protected abstract readonly _antlrRuleCtx: ParserClassMemberDeclarationContext;
 	public abstract get kind(): ASTClassMemberDeclarationKind;
 	public abstract get ruleName(): ParserClassMemberDeclarationRuleName;
+
+	/**
+	 * The {@link scope} of this AST node.
+	 */
+	public get scope(): ClassScope {
+		return <ClassScope>this.scopeCtx.innerScope;
+	}
 }

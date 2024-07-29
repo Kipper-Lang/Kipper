@@ -13,7 +13,7 @@ import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
 import type { TokenStream } from "antlr4ts/TokenStream";
 import type { RootASTNode, SemanticData } from "./index";
-import type { GlobalScope, LocalScope } from "../semantics";
+import type { GlobalScope, LocalScope, ClassScope } from "../semantics";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
 import { AnalysableASTNode } from "./analysable-ast-node";
@@ -109,7 +109,7 @@ export abstract class CompilableASTNode<
 	 * The {@link scope} of this AST node.
 	 * @since 0.8.0
 	 */
-	public get scope(): LocalScope | GlobalScope {
+	public get scope(): LocalScope | ClassScope | GlobalScope {
 		return this.scopeCtx.innerScope;
 	}
 
@@ -117,7 +117,7 @@ export abstract class CompilableASTNode<
 	 * The context / AST node of the {@link scope}.
 	 * @since 0.8.0
 	 */
-	public get scopeCtx(): ScopeNode<LocalScope | GlobalScope> {
+	public get scopeCtx(): ScopeNode<LocalScope | ClassScope | GlobalScope> {
 		let parent: CompilableNodeParent = this.parent;
 		while (parent.parent !== undefined && !("innerScope" in parent)) {
 			parent = parent.parent;

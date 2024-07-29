@@ -7,15 +7,13 @@ import type { ClassDeclarationSemantics } from "./class-declaration-semantics";
 import type { ClassDeclarationTypeSemantics } from "./class-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
 import type { ScopeTypeDeclaration } from "../../../../../semantics";
-import { CustomType, ProcessedType } from "../../../../../semantics";
-import { GlobalScope } from "../../../../../semantics";
+import { CustomType } from "../../../../../semantics";
 import type { ClassDeclarationContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
-import type { ClassMemberDeclaration } from "./class-member-declaration";
-import type { ClassConstructorDeclaration } from "./class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type { ClassMemberDeclaration, ClassConstructorDeclaration } from "./class-member-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
