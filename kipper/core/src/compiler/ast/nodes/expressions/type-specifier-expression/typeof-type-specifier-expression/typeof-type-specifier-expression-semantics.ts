@@ -8,6 +8,4 @@ import type { TypeSpecifierExpressionSemantics } from "../type-specifier-express
  * Semantics for AST Node {@link TypeofTypeSpecifierExpression}.
  * @since 0.8.0
  */
-export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {
-	// Not implemented.
-}
+export interface TypeofTypeSpecifierExpressionSemantics extends TypeSpecifierExpressionSemantics {}

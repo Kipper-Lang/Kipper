@@ -637,8 +637,12 @@ export class KipperProgramContext {
 	 * @private
 	 * @see {@link KipperTargetBuiltInGenerator}
 	 */
-	public async generateRequirements(): Promise<Array<Array<string>>> {
-		let code: Array<TranslatedCodeLine> = [];
+	public async generateRequirements(): Promise<{
+		global: Array<TranslatedCodeLine>;
+		local: Array<TranslatedCodeLine>;
+	}> {
+		let global: Array<TranslatedCodeLine> = [];
+		let local: Array<TranslatedCodeLine> = [];
 
 		// Generating the code for the builtin wrappers
 		for (const internalSpec of this.internals) {
@@ -648,7 +652,8 @@ export class KipperProgramContext {
 			// Fetch the function for handling this built-in
 			const func: (func: InternalFunction, programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>> =
 				Reflect.get(this.target.builtInGenerator, internalSpec.identifier);
-			code = [...code, ...(await func(internalSpec, this))];
+			const gen = await func(internalSpec, this);
+			global.push(...gen);
 		}
 
 		// Generating the code for the global functions
@@ -661,9 +666,17 @@ export class KipperProgramContext {
 				func: BuiltInFunction | BuiltInVariable,
 				programCtx: KipperProgramContext,
 			) => Promise<Array<TranslatedCodeLine>> = Reflect.get(this.target.builtInGenerator, builtInSpec.identifier);
-			code = [...code, ...(await func(builtInSpec, this))];
+			const gen = await func(builtInSpec, this);
+			if ("local" in builtInSpec && builtInSpec.local) {
+				local.push(...gen);
+			} else {
+				global.push(...gen);
+			}
 		}
-		return code;
+		return {
+			global,
+			local,
+		};
 	}
 
 	/**

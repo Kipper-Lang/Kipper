@@ -233,10 +233,8 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 		const targetWrapUp: TargetWrapUpCodeGenerator = this.codeGenerator.wrapUp;
 
 		// Add set up code, and then append all children
-		let genCode: Array<TranslatedCodeLine> = [
-			...(await targetSetUp(this.programCtx)),
-			...(await this.programCtx.generateRequirements()),
-		];
+		const { global, local } = await this.programCtx.generateRequirements();
+		let genCode: Array<TranslatedCodeLine> = [...(await targetSetUp(this.programCtx, global)), ...local];
 		for (let child of this.children) {
 			genCode.push(...(await child.translateCtxAndChildren()));
 		}

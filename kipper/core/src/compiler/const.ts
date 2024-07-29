@@ -497,13 +497,13 @@ export const kipperNegateOperator: KipperNegateOperator = "!";
  * All available increment and decrement operators, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperIncrementOrDecrementOperator = "++" | "--";
+export type KipperPostfixOperator = "++" | "--" | "typeof";
 
 /**
  * Increment and decrement operators, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export const kipperIncrementOrDecrementOperators: Array<KipperIncrementOrDecrementOperator> = ["++", "--"];
+export const kipperIncrementOrDecrementOperators: Array<KipperPostfixOperator> = ["++", "--", "typeof"];
 
 /**
  * Modifier Unary operators, which can be used to modify the value of an expression.
@@ -529,10 +529,7 @@ export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = 
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperUnaryOperator =
-	| KipperUnaryModifierOperator
-	| KipperIncrementOrDecrementOperator
-	| KipperBitwiseNotOperator;
+export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperPostfixOperator | KipperBitwiseNotOperator;
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.

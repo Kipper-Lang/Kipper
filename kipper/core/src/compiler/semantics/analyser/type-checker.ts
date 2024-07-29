@@ -40,7 +40,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { PropertyDoesNotExistError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -60,6 +59,7 @@ import {
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
+	PropertyDoesNotExistError,
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";

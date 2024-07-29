@@ -55,6 +55,7 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	TypeofExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
@@ -330,4 +331,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link LambdaPrimaryExpression} instances.
 	 */
 	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
+	 */
+	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
 }

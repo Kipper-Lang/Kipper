@@ -31,18 +31,7 @@ export function genTSFunction(
 	body: string,
 	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
-	return [
-		[
-			TargetTS.getBuiltInIdentifier(signature.identifier),
-			" ",
-			"=",
-			" ",
-			createTSFunctionSignature(signature, ignoreParams),
-			" ",
-			body,
-			";",
-		],
-	];
+	return [[signature.identifier, ":", " ", createTSFunctionSignature(signature, ignoreParams), " ", body]];
 }
 
 /**
@@ -51,16 +40,22 @@ export function genTSFunction(
  * @param value The value of the variable.
  */
 export function genTSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
-	return [
-		...(varSpec.local ? ["const", " "] : []),
-		TargetTS.getBuiltInIdentifier(varSpec),
-		...(varSpec.local ? [":", " ", TargetTS.getTypeScriptType(varSpec.valueType)] : []),
-		" ",
-		"=",
-		" ",
-		value,
-		";",
-	];
+	if (varSpec.local) {
+		return [
+			"const",
+			" ",
+			TargetTS.getBuiltInIdentifier(varSpec),
+			":",
+			" ",
+			TargetTS.getTypeScriptType(varSpec.valueType),
+			" ",
+			"=",
+			" ",
+			value,
+			";",
+		];
+	}
+	return [varSpec.identifier, ":", " ", value];
 }
 
 /**

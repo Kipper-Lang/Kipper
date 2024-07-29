@@ -16,3 +16,7 @@ kipper/web/src/
 *.yaml
 *.json
 CITATION.cff
+flake.nix
+flake.lock
+.envrc
+.direnv

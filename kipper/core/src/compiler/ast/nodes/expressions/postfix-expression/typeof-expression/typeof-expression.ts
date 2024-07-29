@@ -1,41 +1,38 @@
 /**
- * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.
- * @since 0.1.0
+ * Typeof expression, which returns the runtime type of a value.
+ * @since 0.12.0
  * @example
- * 49++; // 49 will be incremented by 1
- * 11--; // 11 will be decremented by 1
+ * typeof(49); // "__kipper.builtIn.num"
+ * typeof("Hello, World!"); // "__kipper.builtIn.str"
  */
-import type { IncrementOrDecrementPostfixExpressionSemantics } from "./increment-or-decrement-postfix-expression-semantics";
-import type { IncrementOrDecrementPostfixExpressionTypeSemantics } from "./increment-or-decrement-postfix-expression-type-semantics";
-import type { KipperPostfixOperator } from "../../../../../const";
 import type { Expression } from "../../expression";
 import { PostfixExpression } from "../postfix-expression";
-import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../../lexer-parser";
+import type { TypeofExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { BuiltInTypes } from "../../../../../semantics";
+import type { TypeofExpressionSemantics } from "./typeof-expression-semantics";
+import type { TypeofExpressionTypeSemantics } from "./typeof-expression-type-semantics";
+import type { KipperPostfixOperator } from "../../../../../const";
 
 /**
- * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.
- * @since 0.1.0
+ * Typeof expression, which returns the runtime type of a value.
+ * @since 0.12.0
  * @example
- * 49++; // 49 will be incremented by 1
- * 11--; // 11 will be decremented by 1
+ * typeof(49); // "__kipper.builtIn.num"
+ * typeof("Hello, World!"); // "__kipper.builtIn.str"
  */
-export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
-	IncrementOrDecrementPostfixExpressionSemantics,
-	IncrementOrDecrementPostfixExpressionTypeSemantics
-> {
+export class TypeofExpression extends PostfixExpression<TypeofExpressionSemantics, TypeofExpressionTypeSemantics> {
 	/**
 	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * @since 0.12.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_incrementOrDecrementPostfixExpression;
+	public static readonly kind = ParseRuleKindMapping.RULE_typeofExpression;
 
 	/**
 	 * The static rule name for this AST Node.
-	 * @since 0.11.0
+	 * @since 0.12.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
@@ -44,9 +41,9 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext;
+	protected override readonly _antlrRuleCtx: TypeofExpressionContext;
 
-	constructor(antlrRuleCtx: IncrementOrDecrementPostfixExpressionContext, parent: CompilableASTNode) {
+	constructor(antlrRuleCtx: TypeofExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
@@ -57,10 +54,10 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.10.0
+	 * @since 0.12.0
 	 */
 	public override get kind() {
-		return IncrementOrDecrementPostfixExpression.kind;
+		return TypeofExpression.kind;
 	}
 
 	/**
@@ -69,21 +66,21 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.11.0
+	 * @since 0.12.0
 	 */
 	public override get ruleName() {
-		return IncrementOrDecrementPostfixExpression.ruleName;
+		return TypeofExpression.ruleName;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): IncrementOrDecrementPostfixExpressionContext {
+	public override get antlrRuleCtx(): TypeofExpressionContext {
 		return this._antlrRuleCtx;
 	}
 
 	public hasSideEffects(): boolean {
-		return true; // This expression has side effects as it modifies the value of the operand
+		return false; // This expression has side effects as it modifies the value of the operand
 	}
 
 	/**
@@ -95,7 +92,6 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
-		const operator = <KipperPostfixOperator>this.sourceCode.slice(-2); // After the expression
 
 		// Ensure that the child expression is present
 		if (!exp) {
@@ -104,7 +100,7 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 
 		this.semanticData = {
 			operand: exp,
-			operator: operator,
+			operator: "typeof" as KipperPostfixOperator,
 		};
 	}
 
@@ -114,20 +110,17 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 *
 	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
 	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
+	 * @since 0.12.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			// This will always be a number
-			evaluatedType: BuiltInTypes.num,
+			// This will always be of type "type" as the typeof operator always returns a type
+			evaluatedType: BuiltInTypes.type,
 		};
-
-		// Ensure that this expression is valid (e.g. the operand is a number)
-		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.incrementOrDecrementPostfixExpression;
-	readonly targetCodeGenerator = this.codeGenerator.incrementOrDecrementPostfixExpression;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.typeofExpression;
+	readonly targetCodeGenerator = this.codeGenerator.typeofExpression;
 }

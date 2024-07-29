@@ -8,7 +8,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { TypeofTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { KipperNotImplementedError } from "../../../../../../errors";
+import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
@@ -81,9 +81,20 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+		const antlrChildren = this.antlrRuleCtx.children;
+		if (!antlrChildren?.length) {
+			throw new Error("Invalid typeof expression");
+		}
+		const identifier = antlrChildren[2].text;
+		const ref = this.programCtx.semanticCheck(this).getExistingReference(identifier, this.scope);
+
+		this.semanticData = {
+			rawType: new RawType(identifier),
+			ref: {
+				refTarget: ref,
+				srcExpr: this,
+			},
+		};
 	}
 
 	/**
@@ -92,9 +103,13 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 * @since 0.8.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw this.programCtx
-			.semanticCheck(this)
-			.notImplementedError(new KipperNotImplementedError("Typeof Type Expressions have not been implemented yet."));
+		const semanticData = this.getSemanticData();
+		const valueReference = semanticData.ref;
+
+		this.typeSemantics = {
+			evaluatedType: BuiltInTypes.type,
+			storedType: valueReference.refTarget.type,
+		};
 	}
 
 	public checkForWarnings = undefined; // TODO!

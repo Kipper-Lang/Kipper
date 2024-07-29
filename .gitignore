@@ -85,3 +85,6 @@ typings/
 
 # Nyc
 .nyc_output/
+
+# Nix
+.direnv
