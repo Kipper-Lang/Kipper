@@ -89,6 +89,11 @@ False : 'false';
 // typeof operator
 Typeof : 'typeof';
 
+// try-catch-finally
+Try : 'try';
+Catch : 'catch';
+Finally : 'finally';
+
 // Constant undefined, void and null identifiers
 Void : 'void';
 Null : 'null';

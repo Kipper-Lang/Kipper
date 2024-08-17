@@ -133,6 +133,7 @@ statement
     |   jumpStatement
     | 	returnStatement
     |	compoundStatement
+    |	tryCatchStatement
     ;
 
 compoundStatement
@@ -190,6 +191,12 @@ jumpStatement
 returnStatement
 	: 	'return' expression? SemiColon
 	;
+
+tryCatchStatement
+	:	'try' compoundStatement
+		('catch' '(' parameterDeclaration ')' compoundStatement)*
+		('finally' compoundStatement)?
+ 	;
 
 // -- Expressions
 
