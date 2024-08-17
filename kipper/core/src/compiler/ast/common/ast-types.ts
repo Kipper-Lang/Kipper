@@ -2,7 +2,7 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -49,12 +49,13 @@ import type {
 	ReturnStatementContext,
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
-	TangledPrimaryExpressionContext,
+	TangledPrimaryExpressionContext, TryCatchStatementContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
 } from "../../lexer-parser";
+import { TryCatchStatement } from "../nodes";
 
 /**
  * Union type of all usable expression rule context classes implemented by the {@link ParseRuleKindMapping} for an
@@ -105,6 +106,7 @@ export type ParserStatementContext =
 	| WhileLoopIterationStatementContext
 	| ForLoopIterationStatementContext
 	| JumpStatementContext
+	| TryCatchStatementContext
 	| ReturnStatementContext;
 
 /**
@@ -162,6 +164,7 @@ export type ASTStatementKind =
 	| typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_forLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_jumpStatement
+	| typeof ParseRuleKindMapping.RULE_tryCatchStatement
 	| typeof ParseRuleKindMapping.RULE_returnStatement;
 
 /**
@@ -247,6 +250,7 @@ export type ASTStatementRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_jumpStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tryCatchStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement];
 
 /**

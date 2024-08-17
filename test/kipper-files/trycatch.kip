@@ -1,0 +1,12 @@
+interface Exception {
+	a: str;
+	b: num;
+	ds(a: str, b: num): num;
+}
+
+try{
+	var x: num = 3;
+}
+catch(e: Exception){
+
+}
