@@ -19,7 +19,6 @@ import type {
 	ActualBitwiseOrExpressionContext,
 	ActualBitwiseShiftExpressionContext,
 	ActualBitwiseXorExpressionContext,
-	ActualCastOrConvertExpressionContext,
 	ActualConditionalExpressionContext,
 	ActualEqualityExpressionContext,
 	ActualLogicalAndExpressionContext,
@@ -83,7 +82,13 @@ import type {
 	ClassPropertyDeclarationContext,
 	ClassMethodDeclarationContext,
 	ClassConstructorDeclarationContext,
+	CastOrConvertExpressionContext,
+	CastExpressionContext,
+	ConvertExpressionContext,
+	TryCastExpressionContext,
+	ForceCastExpressionContext,
 } from "../lexer-parser";
+import { ActualCastOrConvertExpressionContext } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
@@ -543,28 +548,77 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	public exitOperatorModifiedUnaryExpression: (ctx: OperatorModifiedUnaryExpressionContext) => void =
 		this.handleExitingTreeNode;
 
-	// NOTE:
-	// We are ignoring the 'castOrConvertExpression' rule, and only going to handle the rule
-	// 'actualCastOrConvertExpression', which implements a more precise 'castOrConvertExpression' rule.
-	//
-	// This is to simplify the walking process, without having to check if the expression is actually used every time
-	// an expression is called.
+	// -- NOTE: We are ignoring cast or convert expressions, as the children rules will handle everything. --
 
 	/**
-	 * Enter a parse tree produced by the `actualCastOrConvertExpression`
+	 * Enter a parse tree produced by the `castOrConvertExpression`
 	 * labeled alternative in `KipperParser.castOrConvertExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public enterActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
-		this.handleEnteringTreeNode;
+	public enterCastOrConvertExpression?(ctx: CastOrConvertExpressionContext): void;
 
 	/**
-	 * Exit a parse tree produced by the `actualCastOrConvertExpression`
+	 * Exit a parse tree produced by the `castOrConvertExpression`
 	 * labeled alternative in `KipperParser.castOrConvertExpression`.
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
-	public exitActualCastOrConvertExpression: (ctx: ActualCastOrConvertExpressionContext) => void =
-		this.handleExitingTreeNode;
+	public exitCastOrConvertExpression?(ctx: CastOrConvertExpressionContext): void;
+
+	/**
+	 * Enter a parse tree produced by the `convertExpression`
+	 * labeled alternative in `KipperParser.convertExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterConvertExpression: (ctx: ConvertExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `convertExpression`
+	 * labeled alternative in `KipperParser.convertExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitConvertExpression: (ctx: ConvertExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `castExpression`
+	 * labeled alternative in `KipperParser.castExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterCastExpression: (ctx: CastExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `castExpression`
+	 * labeled alternative in `KipperParser.castExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitCastExpression: (ctx: CastExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `tryCastExpression`
+	 * labeled alternative in `KipperParser.tryCastExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterTryCastExpression: (ctx: TryCastExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `tryCastExpression`
+	 * labeled alternative in `KipperParser.tryCastExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitTryCastExpression: (ctx: TryCastExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the `forceCastExpression`
+	 * labeled alternative in `KipperParser.forceCastExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterForceCastExpression: (ctx: ForceCastExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the `forceCastExpression`
+	 * labeled alternative in `KipperParser.forceCastExpression`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitForceCastExpression: (ctx: ForceCastExpressionContext) => void = this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring the 'multiplicativeExpression' rule, and only going to handle the rule

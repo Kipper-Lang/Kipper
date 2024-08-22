@@ -26,6 +26,8 @@ import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
 import { ActualCastOrConvertExpressionContext } from "./KipperParser";
+import { ActualForceCastOrConvertExpressionContext } from "./KipperParser";
+import { ActualConvertCastOrConvertExpressionContext } from "./KipperParser";
 import { PassOnBitwiseOrExpressionContext } from "./KipperParser";
 import { ActualBitwiseOrExpressionContext } from "./KipperParser";
 import { PassOnEqualityExpressionContext } from "./KipperParser";
@@ -106,6 +108,10 @@ import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementOperatorContext } from "./KipperParser";
 import { UnaryOperatorContext } from "./KipperParser";
 import { CastOrConvertExpressionContext } from "./KipperParser";
+import { ConvertExpressionContext } from "./KipperParser";
+import { CastExpressionContext } from "./KipperParser";
+import { ForceCastExpressionContext } from "./KipperParser";
+import { TryCastExpressionContext } from "./KipperParser";
 import { MultiplicativeExpressionContext } from "./KipperParser";
 import { AdditiveExpressionContext } from "./KipperParser";
 import { BitwiseShiftExpressionContext } from "./KipperParser";
@@ -286,6 +292,22 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualCastOrConvertExpression?: (ctx: ActualCastOrConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualForceCastOrConvertExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualForceCastOrConvertExpression?: (ctx: ActualForceCastOrConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualConvertCastOrConvertExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualConvertCastOrConvertExpression?: (ctx: ActualConvertCastOrConvertExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnBitwiseOrExpression`
@@ -860,6 +882,34 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitCastOrConvertExpression?: (ctx: CastOrConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.convertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConvertExpression?: (ctx: ConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.castExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCastExpression?: (ctx: CastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.forceCastExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForceCastExpression?: (ctx: ForceCastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.tryCastExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTryCastExpression?: (ctx: TryCastExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.multiplicativeExpression`.

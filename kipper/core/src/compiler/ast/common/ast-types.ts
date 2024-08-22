@@ -187,7 +187,10 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_functionCallExpression
 	| typeof ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression
 	| typeof ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression
-	| typeof ParseRuleKindMapping.RULE_castOrConvertExpression
+	| typeof ParseRuleKindMapping.RULE_castExpression
+	| typeof ParseRuleKindMapping.RULE_convertExpression
+	| typeof ParseRuleKindMapping.RULE_forceCastExpression
+	| typeof ParseRuleKindMapping.RULE_tryCastExpression
 	| typeof ParseRuleKindMapping.RULE_multiplicativeExpression
 	| typeof ParseRuleKindMapping.RULE_additiveExpression
 	| typeof ParseRuleKindMapping.RULE_relationalExpression
@@ -268,7 +271,10 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_functionCallExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_operatorModifiedUnaryExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_castOrConvertExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_castExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tryCastExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forceCastExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_convertExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_multiplicativeExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_additiveExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_relationalExpression]

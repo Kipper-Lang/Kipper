@@ -12,7 +12,7 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression,
+	CastExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -20,9 +20,11 @@ import type {
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
+	ConvertExpression,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForceCastExpression,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
@@ -57,10 +59,12 @@ import type {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TryCastExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { CastOrConvertExpression } from "@kipper/core";
 import { AssignmentExpression, ScopeDeclaration } from "@kipper/core";
 import {
 	BuiltInTypes,
@@ -746,8 +750,33 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link CastOrConvertExpression} into the JavaScript language.
+	 * @since 0.12.0
 	 */
-	castOrConvertExpression = async (node: CastOrConvertExpression): Promise<TranslatedExpression> => {
+	castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link TryCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ForceCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
+		return [];
+	};
+
+	/**
+	 * Translates a {@link ConvertExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	convertExpression = async (node: ConvertExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
 

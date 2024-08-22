@@ -244,9 +244,24 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	operatorModifiedUnaryExpression = undefined;
 
 	/**
-	 * Performs typescript-specific semantic analysis for {@link CastOrConvertExpression} instances.
+	 * Performs typescript-specific semantic analysis for {@link CastExpression} instances.
 	 */
-	castOrConvertExpression = undefined;
+	castExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link TryCastExpression} instances.
+	 */
+	tryCastExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ForceCastExpression} instances.
+	 */
+	forceCastExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link ConvertExpression} instances.
+	 */
+	convertExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link MultiplicativeExpression} instances.
