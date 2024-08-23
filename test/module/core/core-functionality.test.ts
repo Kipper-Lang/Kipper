@@ -120,7 +120,11 @@ describe("Core functionality", () => {
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
-				instance.write().includes("let x: Array<number> = [1, 2, 3];\nx = [4, 5, 6];"),
+				instance
+					.write()
+					.includes(
+						"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));\nx = __kipper.assignTypeMeta([4, 5, 6],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));",
+					),
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
@@ -138,13 +142,17 @@ describe("Core functionality", () => {
 		});
 
 		it("to 'array[]'", async () => {
-			const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;\nprint(x[0] as str);";
+			const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;\nprint(x[0]);";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			assert(
-				instance.write().includes("let x: Array<number> = [1, 2, 3];\nx[0] = 4;"),
+				instance
+					.write()
+					.includes(
+						"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));\nx[0] = 4;",
+					),
 				"Invalid TypeScript code (Expected different output)",
 			);
 
