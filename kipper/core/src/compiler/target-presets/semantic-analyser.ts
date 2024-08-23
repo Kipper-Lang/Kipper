@@ -14,6 +14,7 @@ import type {
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassDeclaration,
+	ClassMethodDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -30,6 +31,8 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
@@ -38,6 +41,7 @@ import type {
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -51,10 +55,6 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	InterfacePropertyDeclaration,
-	InterfaceMethodDeclaration,
-	ObjectProperty,
-	ClassMethodDeclaration,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";

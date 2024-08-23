@@ -12,11 +12,17 @@ import type {
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
-import { LambdaPrimaryExpression, Expression } from "../../ast";
-import { CompoundStatement, FunctionDeclaration, IdentifierPrimaryExpression, IterationStatement } from "../../ast";
+import {
+	CompoundStatement,
+	Expression,
+	FunctionDeclaration,
+	IdentifierPrimaryExpression,
+	IterationStatement,
+	LambdaPrimaryExpression,
+} from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import type { Scope } from "../symbol-table";
-import { ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../symbol-table";
 import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
 	BuiltInOverwriteError,

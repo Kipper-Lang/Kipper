@@ -164,7 +164,7 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			returnType: returnType,
-			type: BuiltInTypes.Func,
+			valueType: BuiltInTypes.Func,
 		};
 	}
 

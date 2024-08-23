@@ -93,7 +93,7 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @since 0.11.0
 	 */
 	public get typeValue(): CustomType | ProcessedType {
-		return this.node?.getTypeSemanticData()?.type || this._builtInType!!;
+		return this.node?.getTypeSemanticData()?.valueType || this._builtInType!!;
 	}
 
 	/**

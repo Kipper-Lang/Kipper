@@ -117,7 +117,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const semanticData = node.getSemanticData();
 		const typeSemantics = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const valueType = TargetTS.getTypeScriptType(typeSemantics.type);
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.valueType);
 
 		// Return the property declaration
 		return [[identifier, ":", " ", valueType, ";"]];

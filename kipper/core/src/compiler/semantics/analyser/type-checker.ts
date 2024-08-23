@@ -46,7 +46,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { PropertyDoesNotExistError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -62,6 +61,7 @@ import {
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
+	PropertyDoesNotExistError,
 	ReadOnlyWriteTypeError,
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
@@ -69,8 +69,7 @@ import {
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInType, BuiltInTypeObj, Type } from "../types";
-import { UndefinedType } from "../types";
+import { BuiltInTypeObj, UndefinedType } from "../types";
 import type { Reference } from "../reference";
 
 /**

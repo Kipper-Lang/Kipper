@@ -5,8 +5,8 @@
  */
 import type { KipperProgramContext } from "../../program-ctx";
 import type { ScopeDeclaration } from "./entry";
-import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { Scope } from "./base/scope";
 import type { UniverseScope } from "./universum-scope";
 

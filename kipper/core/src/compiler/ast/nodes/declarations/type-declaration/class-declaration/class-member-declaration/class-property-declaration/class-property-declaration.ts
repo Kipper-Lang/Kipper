@@ -122,7 +122,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 		this.semanticData = {
 			identifier: identifier,
 			typeSpecifier: typeSpecifier,
-			type: typeSpecifier.getSemanticData().rawType,
+			valueType: typeSpecifier.getSemanticData().rawType,
 		};
 		this.scopeDeclaration = this.scope.addVariable(this);
 	}
@@ -142,7 +142,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 		semanticData.typeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.typeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			type: valueType,
+			valueType: valueType,
 		};
 	}
 

@@ -29,7 +29,10 @@ import type {
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
+	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassPropertyDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -61,6 +64,7 @@ import type {
 	KipperParserRuleContext,
 	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
+	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
 	ObjectPropertyContext,
@@ -80,12 +84,7 @@ import type {
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	ClassPropertyDeclarationContext,
-	ClassMethodDeclarationContext,
-	ClassConstructorDeclarationContext,
-	NewInstantiationExpressionContext,
 } from "../lexer-parser";
-import { InterfaceMemberDeclarationContext } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";

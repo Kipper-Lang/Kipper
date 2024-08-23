@@ -3,7 +3,6 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
-import { ScopeTypeDeclaration, ScopeVariableDeclaration } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassConstructorDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -164,7 +163,7 @@ export class ClassConstructorDeclaration
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			type: BuiltInTypes.Func,
+			valueType: BuiltInTypes.Func,
 		};
 	}
 

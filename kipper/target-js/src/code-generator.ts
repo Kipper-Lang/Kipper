@@ -14,6 +14,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
@@ -44,6 +45,7 @@ import type {
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -72,8 +74,6 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import type { ClassConstructorDeclaration } from "@kipper/core/lib/compiler/ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
-import type { NewInstantiationExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/new-instantiation-expression";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -476,7 +476,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			return translatedParams.join(", ");
 		};
 
-		return [[`${identifier}(${await concatParams()}) {`], ...(await body.translateCtxAndChildren()), ["}"]];
+		return [[identifier, `(`, await concatParams(), `)`], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**
@@ -498,7 +498,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			.flat();
 		processedParams.pop();
 
-		return [["constructor", "(", ...processedParams, ")", " "], ...(await body.translateCtxAndChildren())];
+		return [["constructor", "(", ...processedParams, ")"], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**

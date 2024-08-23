@@ -14,4 +14,5 @@ export * from "./object-primary-expression/";
 export * from "./void-or-null-or-undefined-primary-expression/";
 export * from "./fstring-primary-expression/";
 export * from "./identifier-primary-expression/";
-export * from "./tangled-primary-expression";
+export * from "./tangled-primary-expression/";
+export * from "./lambda-primary-expression/";

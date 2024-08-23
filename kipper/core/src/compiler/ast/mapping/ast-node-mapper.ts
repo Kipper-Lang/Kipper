@@ -108,6 +108,7 @@ import {
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -123,7 +124,6 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
-import { NewInstantiationExpression } from "../nodes/expressions/new-instantiation-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.

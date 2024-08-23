@@ -3,7 +3,6 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
-import { ScopeTypeDeclaration } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -186,7 +185,7 @@ export class ClassMethodDeclaration
 		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
 			returnType: returnType,
-			type: BuiltInTypes.Func,
+			valueType: BuiltInTypes.Func,
 		};
 	}
 

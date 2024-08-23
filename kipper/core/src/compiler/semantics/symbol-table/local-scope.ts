@@ -4,7 +4,6 @@
  * @since 0.8.0
  */
 import type {
-	ClassMethodDeclaration,
 	CompilableASTNode,
 	FunctionDeclaration,
 	ScopeNode,

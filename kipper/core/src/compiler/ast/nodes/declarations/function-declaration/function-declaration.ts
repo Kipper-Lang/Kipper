@@ -9,7 +9,7 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import { ClassScope, GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
 import { FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {

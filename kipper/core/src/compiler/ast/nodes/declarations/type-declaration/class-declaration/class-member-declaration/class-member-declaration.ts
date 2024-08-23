@@ -1,12 +1,9 @@
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../../../mapping";
-import type { InterfaceMemberDeclarationSemantics } from "../../interface-declaration";
-import type { InterfaceMemberDeclarationTypeSemantics } from "../../interface-declaration/interface-member-declaration/interface-member-declaration-type-semantics";
-import { TypeDeclaration } from "../../type-declaration";
 import type { ClassMemberDeclarationSemantics } from "./class-member-declaration-semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "./class-member-declaration-type-semantics";
-import type { GlobalScope, LocalScope } from "../../../../../../semantics";
 import type { ClassScope } from "../../../../../../semantics/symbol-table/class-scope";
+import { Declaration } from "../../../declaration";
 
 export type ASTClassMemberDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_classPropertyDeclaration
@@ -37,7 +34,7 @@ export type ParserClassMemberDeclarationRuleName = (typeof KindParseRuleMapping)
 export abstract class ClassMemberDeclaration<
 	Semantics extends ClassMemberDeclarationSemantics = ClassMemberDeclarationSemantics,
 	TypeSemantics extends ClassMemberDeclarationTypeSemantics = ClassMemberDeclarationTypeSemantics,
-> extends TypeDeclaration<Semantics, TypeSemantics> {
+> extends Declaration<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserClassMemberDeclarationContext;
 	public abstract get kind(): ASTClassMemberDeclarationKind;
 	public abstract get ruleName(): ParserClassMemberDeclarationRuleName;

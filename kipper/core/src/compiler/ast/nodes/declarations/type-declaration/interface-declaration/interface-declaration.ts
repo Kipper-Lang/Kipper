@@ -10,7 +10,7 @@ import { CustomType } from "../../../../../semantics";
 import type { InterfaceDeclarationContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { InterfaceMemberDeclaration } from "./interface-member-declaration";
-import { KipperNotImplementedError, UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { TypeDeclaration } from "../type-declaration";
 
 /**
@@ -133,7 +133,7 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			type: CustomType.fromInterfaceDeclaration(this),
+			valueType: CustomType.fromInterfaceDeclaration(this),
 		};
 	}
 

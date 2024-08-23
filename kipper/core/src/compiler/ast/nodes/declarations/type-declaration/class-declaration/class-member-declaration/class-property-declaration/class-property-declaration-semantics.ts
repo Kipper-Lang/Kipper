@@ -1,12 +1,12 @@
-import type { TypeDeclarationSemantics } from "../../../type-declaration-semantics";
 import type { IdentifierTypeSpecifierExpression } from "../../../../../expressions";
 import type { RawType } from "../../../../../../../semantics";
+import type { ClassMemberDeclarationSemantics } from "../class-member-declaration-semantics";
 
 /**
  * Semantics for AST Node {@link InterfacePropertyDeclaration}.
  * @since 0.12.0
  */
-export interface ClassPropertyDeclarationSemantics extends TypeDeclarationSemantics {
+export interface ClassPropertyDeclarationSemantics extends ClassMemberDeclarationSemantics {
 	/**
 	 * The identifier of this member property.
 	 * @since 0.12.0
@@ -23,5 +23,5 @@ export interface ClassPropertyDeclarationSemantics extends TypeDeclarationSemant
 	 * The identifier of the {@link typeSpecifier.semanticData.identifier typeSpecifier}.
 	 * @since 0.12.0
 	 */
-	type: RawType;
+	valueType: RawType;
 }
