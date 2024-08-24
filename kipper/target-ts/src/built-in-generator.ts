@@ -48,8 +48,8 @@ export function genTSFunction(
 export function genTSGenericFunction(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: ProcessedType | 'T' }>;
-		returnType: ProcessedType | 'T';
+		params: Array<{ identifier: string; type: ProcessedType | "T" }>;
+		returnType: ProcessedType | "T";
 	},
 	body: string,
 	ignoreParams: boolean = false,

@@ -1084,7 +1084,7 @@ describe("Core functionality", () => {
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 					assert.include(
 						instance.write(),
-						`let x: Array<number> = __kipper.slice([1, 2, 3, 4], undefined, undefined);`,
+						`let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num})), undefined, undefined);`,
 						"Expected different TypeScript code",
 					);
 				});
@@ -1660,7 +1660,7 @@ describe("Core functionality", () => {
 			assert.include(
 				written,
 				`interface Test {\n` +
-					` a: string;\n` +
+					`  a: string;\n` +
 					`}\n` +
 					`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
 					"let x: Test = {\n" +
