@@ -1,1 +1,1 @@
-interface Test {a: str;}; var x : Test = {a: "3"}; print(x.a);
+interface Test { x: num; y: str;}
