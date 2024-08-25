@@ -55,6 +55,7 @@ import {
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TryCatchStatementContext,
 	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
@@ -70,6 +71,7 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
+import { TryCatchStatement } from "../nodes";
 import { TypeofExpression } from "../nodes";
 import {
 	AdditiveExpression,
@@ -206,6 +208,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatement,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatement,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatement,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatement,
 	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
@@ -287,6 +290,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatementContext,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatementContext,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatementContext,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatementContext,
 	} satisfies Record<ASTStatementKind, any>;
 
 	/**
@@ -363,6 +367,7 @@ export class ASTNodeMapper {
 		RULE_forLoopIterationStatement: ForLoopIterationStatement,
 		RULE_returnStatement: ReturnStatement,
 		RULE_jumpStatement: JumpStatement,
+		RULE_tryCatchStatement: TryCatchStatement,
 	} satisfies Record<ASTStatementRuleName, typeof Statement<any, any>>;
 
 	/**

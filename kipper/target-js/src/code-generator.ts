@@ -13,6 +13,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	CatchClause,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -55,6 +56,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TryCatchStatement,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -474,6 +476,30 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
 
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
+	};
+
+	/**
+	 * Translates a {@link TryCatchStatement} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
+		const catchBlock = await Promise.all(
+			semanticData.catchBlock.map(async (catchClause) => {
+				const parameter = catchClause.getSemanticData().parameter;
+				const body = await catchClause.getSemanticData().body.translateCtxAndChildren();
+				return [["catch", " ", "(", parameter, ")", " ", "{"], ...indentLines(body), ["}"]];
+			}),
+		);
+		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
+
+		return [
+			["try", " ", "{"],
+			...indentLines(tryBlock),
+			...catchBlock.flat(),
+			...(finallyBlock.length > 0 ? [["finally", " ", "{"], ...indentLines(finallyBlock), ["}"]] : []),
+		];
 	};
 
 	/**

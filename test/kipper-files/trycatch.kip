@@ -1,7 +1,6 @@
 interface Exception {
 	a: str;
 	b: num;
-	ds(a: str, b: num): num;
 }
 
 try{

@@ -9,12 +9,13 @@ import { Statement } from "../statement";
 import type { Expression } from "../../expressions";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { TryCatchStatementTypeSemantics } from "./try-catch-statement-type-semantics";
+import type { TryCatchStatementSemantics } from "./try-catch-statement-semantics";
 
 /**
  * TryCatchStatement class, which represents try-catch statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class TryCatchStatement extends Statement<TryCatchStatement, TryCatchStatementTypeSemantics> {
+export class TryCatchStatement extends Statement<TryCatchStatementSemantics, TryCatchStatementTypeSemantics> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.12.0
@@ -91,8 +92,7 @@ export class TryCatchStatement extends Statement<TryCatchStatement, TryCatchStat
 	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
-	public async primarySemanticAnalysis(): Promise<void> {
-	}
+	public async primarySemanticAnalysis(): Promise<void> {}
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
