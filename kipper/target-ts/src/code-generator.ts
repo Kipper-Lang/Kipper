@@ -79,7 +79,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
 		return [
 			["interface", " ", interfaceName, " ", "{"],
-			...memberDeclarations.flat().map((line) => [" ", ...line]),
+			...memberDeclarations.flat().map((line) => ["  ", ...line]),
 			["}"],
 			...runtimeInterfaceType,
 		];

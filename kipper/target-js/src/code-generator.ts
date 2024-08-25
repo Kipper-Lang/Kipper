@@ -189,10 +189,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"};",
 			],
 			// global __kipper variable
-			["// @ts-ignore"],
-			[
-				"var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper()) as NonNullable<ReturnType<typeof __createKipper>>;",
-			],
+			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper());"],
 		];
 	};
 
