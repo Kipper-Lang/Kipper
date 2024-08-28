@@ -13,6 +13,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	CatchBlock,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -474,6 +475,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};
 
+	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
+		const parameterType = catchBlock.parameter.getTypeSemanticData().valueType.identifier;
+		const blockBody = await catchBlock.body.translateCtxAndChildren();
+		const x =  [
+			["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType, ")"],
+			...blockBody
+		];
+		return x;
+	};
+
 	/**
 	 * Translates a {@link TryCatchStatement} into the JavaScript language.
 	 * @since 0.12.0
@@ -481,22 +492,20 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
-		const catchBlocks = <TranslatedCodeLine[][]>await Promise.all(
-			semanticData.catchBlock.map(async (block) => {
-				const parameter = await block.parameter.translateCtxAndChildren();
-				const body = await block.body.translateCtxAndChildren().then((lines) => indentLines(removeBrackets(lines)));
-				const parameterName = parameter.flat().join("").split(":")[0];
-				// Tis is just a temporary solution until I implement the proper cases for the catch block
-				return ["catch", " ", "(", parameterName, ": unknown", ")", " ", "{", ...body, "}"];
+		const catchBlocks = await Promise.all(
+			semanticData.catchBlock.map(async (block: CatchBlock) => {
+				return await this.generateCatchIfCondition(block);
 			}),
 		);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
 
 		return [
 			["try"],
-			...indentLines(tryBlock),
-			catchBlocks.map((block) => block.flat()).flat(),
-			...(finallyBlock.length > 0 ? [["finally"], ...indentLines(finallyBlock)] : []),
+			...tryBlock,
+			["catch", " ", "(", "__e_1", ": unknown", ")", " ", "{"],
+			...indentLines(catchBlocks.flat()),
+			["}"],
+			...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : []),
 		];
 	};
 

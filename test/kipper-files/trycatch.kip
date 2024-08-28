@@ -1,6 +1,9 @@
-interface Exception {
-	a: str;
-	b: num;
+class Exception {
+
+}
+
+class Exception2 {
+
 }
 
 var x: num = 1;
@@ -9,6 +12,9 @@ try{
 }
 catch(e: Exception) {
 	x = 3;
+}
+catch(e: Exception2) {
+	x = 4;
 }
 finally {
 	x = 5;
