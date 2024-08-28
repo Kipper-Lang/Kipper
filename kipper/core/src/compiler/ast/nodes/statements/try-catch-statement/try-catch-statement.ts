@@ -9,7 +9,7 @@ import { Statement } from "../statement";
 import type { Expression } from "../../expressions";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { TryCatchStatementTypeSemantics } from "./try-catch-statement-type-semantics";
-import type { TryCatchStatementSemantics } from "./try-catch-statement-semantics";
+import type { CatchBlock, TryCatchStatementSemantics } from "./try-catch-statement-semantics";
 
 /**
  * TryCatchStatement class, which represents try-catch statements in the Kipper language and is compilable using
@@ -92,7 +92,27 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
-	public async primarySemanticAnalysis(): Promise<void> {}
+	public async primarySemanticAnalysis(): Promise<void> {
+		const tryBlock: Statement = <Statement>this._children[0];
+		const catchClausesWithFinally: Array<CatchBlock | Statement> = <Array<CatchBlock | Statement>>(
+			this._children.slice(1)
+		);
+		let catchClauses: CatchBlock[] = [];
+		let finallyBlock: Statement | undefined = undefined;
+
+		if (catchClausesWithFinally[catchClausesWithFinally.length - 1] instanceof Statement) {
+			finallyBlock = <Statement>catchClausesWithFinally.pop();
+			catchClauses = <CatchBlock[]>catchClausesWithFinally;
+		} else {
+			catchClauses = <CatchBlock[]>catchClausesWithFinally;
+		}
+
+		this.semanticData = {
+			tryBlock: tryBlock,
+			catchBlock: catchClauses,
+			finallyBlock: finallyBlock,
+		};
+	}
 
 	/**
 	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
@@ -102,7 +122,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * the children has already failed and as such no parent node should run type checking.
 	 * @since 0.12.0
 	 */
-	public primarySemanticTypeChecking = undefined; // If-statements will never have type checking
+	public primarySemanticTypeChecking = undefined; // Try-Catch-statements will never have type checking
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

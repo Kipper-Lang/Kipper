@@ -54,6 +54,7 @@ export const ParseRuleKindMapping = {
 	RULE_doWhileLoopIterationStatement: KipperParser.RULE_doWhileLoopIterationStatement,
 	RULE_jumpStatement: KipperParser.RULE_jumpStatement,
 	RULE_returnStatement: KipperParser.RULE_returnStatement,
+	RULE_tryCatchStatement: KipperParser.RULE_tryCatchStatement,
 	RULE_primaryExpression: KipperParser.RULE_primaryExpression,
 	RULE_lambdaPrimaryExpression: KipperParser.RULE_lambdaPrimaryExpression,
 	RULE_tangledPrimaryExpression: KipperParser.RULE_tangledPrimaryExpression,
@@ -104,7 +105,6 @@ export const ParseRuleKindMapping = {
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
-	RULE_tryCatchStatement: KipperParser.RULE_tryCatchStatement,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'

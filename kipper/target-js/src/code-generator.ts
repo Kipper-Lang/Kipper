@@ -13,7 +13,6 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
-	CatchClause,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -482,20 +481,22 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
-		const catchBlock = await Promise.all(
-			semanticData.catchBlock.map(async (catchClause) => {
-				const parameter = catchClause.getSemanticData().parameter;
-				const body = await catchClause.getSemanticData().body.translateCtxAndChildren();
-				return [["catch", " ", "(", parameter, ")", " ", "{"], ...indentLines(body), ["}"]];
+		const catchBlocks = <TranslatedCodeLine[][]>await Promise.all(
+			semanticData.catchBlock.map(async (block) => {
+				const parameter = await block.parameter.translateCtxAndChildren();
+				const body = await block.body
+					.translateCtxAndChildren()
+					.then((body) => (block.body instanceof CompoundStatement ? removeBrackets(body) : indentLines(body)));
+				return ["catch", " ", "(", ...parameter, ")", " ", "{", ...body, "}"];
 			}),
 		);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
 
 		return [
-			["try", " ", "{"],
+			["try"],
 			...indentLines(tryBlock),
-			...catchBlock.flat(),
-			...(finallyBlock.length > 0 ? [["finally", " ", "{"], ...indentLines(finallyBlock), ["}"]] : []),
+			...catchBlocks.flat(),
+			...(finallyBlock.length > 0 ? [["finally"], ...indentLines(finallyBlock)] : []),
 		];
 	};
 

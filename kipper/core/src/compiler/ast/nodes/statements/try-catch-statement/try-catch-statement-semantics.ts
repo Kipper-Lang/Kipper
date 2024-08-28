@@ -15,10 +15,10 @@ export interface TryCatchStatementSemantics extends SemanticData {
 
 	/**
 	 * The catch clause that handles exceptions thrown in the try block.
-	 * It can be either a single {@link CatchClause} or an array of them.
+	 * It can be either a single {@link CatchBlock} or an array of them.
 	 * @since 0.12.0
 	 */
-	catchBlock: CatchClause[];
+	catchBlock: CatchBlock[];
 
 	/**
 	 * The optional finally block which is executed after the try and catch blocks, regardless of the outcome.
@@ -28,10 +28,10 @@ export interface TryCatchStatementSemantics extends SemanticData {
 }
 
 /**
- * Semantics for AST Node {@link CatchClause}.
+ * Semantics for AST Node {@link CatchBlock}.
  * @since 0.12.0
  */
-export interface CatchClause extends SemanticData {
+export interface CatchBlock extends SemanticData {
 	/**
 	 * The variable that holds the exception thrown in the try block.
 	 * @since 0.12.0

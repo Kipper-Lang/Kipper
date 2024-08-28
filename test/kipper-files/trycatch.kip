@@ -2,10 +2,15 @@ interface Exception {
 	a: str;
 	b: num;
 }
-
+var x: num = 1;
 try{
-	var x: num = 3;
+	x = 2;
 }
-catch(e: Exception){
+catch(e: Exception) {
+	x = 3;
+}
+finally {
+	x = 4;
+}
 
-}
+print(x);
