@@ -484,9 +484,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const catchBlocks = <TranslatedCodeLine[][]>await Promise.all(
 			semanticData.catchBlock.map(async (block) => {
 				const parameter = await block.parameter.translateCtxAndChildren();
-				const body = await block.body
-					.translateCtxAndChildren()
-					.then((body) => (block.body instanceof CompoundStatement ? removeBrackets(body) : indentLines(body)));
+				const body = await block.body.translateCtxAndChildren().then((lines) => indentLines(removeBrackets(lines)));
 				return ["catch", " ", "(", ...parameter, ")", " ", "{", ...body, "}"];
 			}),
 		);
@@ -495,7 +493,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [
 			["try"],
 			...indentLines(tryBlock),
-			...catchBlocks.flat(),
+			catchBlocks.map((block) => block.flat()).flat(),
 			...(finallyBlock.length > 0 ? [["finally"], ...indentLines(finallyBlock)] : []),
 		];
 	};
