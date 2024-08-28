@@ -10,6 +10,7 @@ import type { Expression } from "../../expressions";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { TryCatchStatementTypeSemantics } from "./try-catch-statement-type-semantics";
 import type { CatchBlock, TryCatchStatementSemantics } from "./try-catch-statement-semantics";
+import type { ParameterDeclaration } from "../../declarations";
 
 /**
  * TryCatchStatement class, which represents try-catch statements in the Kipper language and is compilable using
@@ -94,17 +95,24 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const tryBlock: Statement = <Statement>this._children[0];
-		const catchClausesWithFinally: Array<CatchBlock | Statement> = <Array<CatchBlock | Statement>>(
+		const catchClausesWithFinally: Array<Statement | ParameterDeclaration> = <Array<Statement | ParameterDeclaration>>(
 			this._children.slice(1)
 		);
 		let catchClauses: CatchBlock[] = [];
 		let finallyBlock: Statement | undefined = undefined;
 
-		if (catchClausesWithFinally[catchClausesWithFinally.length - 1] instanceof Statement) {
+		// In the catchClausesWithFinally array, there are always a pair of parameterdeclarations and compoundstatements because of the grammar.
+		// When the length is odd, it means that there is a finally block.
+		if (catchClausesWithFinally.length % 2 == 1) {
 			finallyBlock = <Statement>catchClausesWithFinally.pop();
-			catchClauses = <CatchBlock[]>catchClausesWithFinally;
-		} else {
-			catchClauses = <CatchBlock[]>catchClausesWithFinally;
+		}
+
+		for (let i = 0; i < catchClausesWithFinally.length; i += 2) {
+			const catchClause: CatchBlock = {
+				parameter: <ParameterDeclaration>catchClausesWithFinally[i],
+				body: <Statement>catchClausesWithFinally[i + 1],
+			};
+			catchClauses.push(catchClause);
 		}
 
 		this.semanticData = {

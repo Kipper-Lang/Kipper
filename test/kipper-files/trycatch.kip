@@ -2,6 +2,7 @@ interface Exception {
 	a: str;
 	b: num;
 }
+
 var x: num = 1;
 try{
 	x = 2;
@@ -10,7 +11,7 @@ catch(e: Exception) {
 	x = 3;
 }
 finally {
-	x = 4;
+	x = 5;
 }
 
 print(x);
