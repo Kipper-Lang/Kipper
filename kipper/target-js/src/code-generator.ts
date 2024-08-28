@@ -485,7 +485,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			semanticData.catchBlock.map(async (block) => {
 				const parameter = await block.parameter.translateCtxAndChildren();
 				const body = await block.body.translateCtxAndChildren().then((lines) => indentLines(removeBrackets(lines)));
-				return ["catch", " ", "(", ...parameter, ")", " ", "{", ...body, "}"];
+				const parameterName = parameter.flat().join("").split(":")[0];
+				// Tis is just a temporary solution until I implement the proper cases for the catch block
+				return ["catch", " ", "(", parameterName, ": unknown", ")", " ", "{", ...body, "}"];
 			}),
 		);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
