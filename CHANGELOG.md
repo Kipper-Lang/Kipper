@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Added semantic checking and code generation for the NewInstantiation expression to be able to create new instances of
+	classes. ([#679](https://github.com/Kipper-Lang/Kipper/issues/679))
 - Added support for dot notation so that the User can access Properties and Methods of objects `.` ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Added semantic checking and code generation for classes, class methods, class properties and class constructors ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
 - Added semantic checking and code generation for object literals and object properties.
@@ -48,6 +50,7 @@ To use development versions of Kipper download the
   - `UniverseTypeDeclaration`, which represents the universe, where all built-in types, functions and variables are
     declared. This serves as the parent of the global scope.
   - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as a interface or class.
+  - `NewInstantiationExpression`, which represents an AST new instantiation expression.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
     type. This is an error indicating an invalid logic that should be fixed.

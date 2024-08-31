@@ -451,7 +451,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		});
 		const finishedArgs = await Promise.all(translatedArgs);
 
-		return ["new", " ", identifier, "(", ...finishedArgs.flat(), ")"];
+		return ["new", " ", identifier, "(", ...finishedArgs.join(", "), ")"];
 	};
 
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {

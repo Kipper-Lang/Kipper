@@ -1623,4 +1623,28 @@ describe("Core functionality", () => {
 			"Invalid TypeScript code (Expected different output)",
 		);
 	});
+
+	it("it should be able to instantiate a class with new and two properties", async () => {
+		const fileContent = `class Test {x: str; y: num; constructor (a: str, b: num) {x = a; y = b;}}; var x : Test = new Test("hello", 42); print(x.x);`;
+		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+		assert.isDefined(instance.programCtx);
+		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		let written = instance.write();
+		assert.include(
+			written,
+			"class Test {\n" +
+				"  x: string;\n" +
+				"  y: number;\n" +
+				"  constructor(a: string, b: number)\n" +
+				"  {\n" +
+				"    x = a;\n" +
+				"    y = b;\n" +
+				"  }\n" +
+				"}\n" +
+				'let x: Test = new Test("hello", 42);\n' +
+				"__kipper.print(x.x);",
+			"Invalid TypeScript code (Expected different output)",
+		);
+	});
 });

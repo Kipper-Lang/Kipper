@@ -125,7 +125,8 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		const refTarget = semanticData.ref.refTarget;
 
 		this.typeSemantics = {
-			evaluatedType: refTarget.type,
+			evaluatedType: refTarget.type, //refTarget.type is undefined, I suspect it to be an issue with
+			// the scope when it comes to the variable declaration
 		};
 	}
 

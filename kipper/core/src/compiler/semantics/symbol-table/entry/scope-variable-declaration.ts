@@ -112,7 +112,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * The value type of this variable.
 	 */
 	public get type(): ProcessedType {
-		return this.typeData?.valueType ?? this._builtInVariable!!.valueType;
+		return this.typeData?.valueType ?? this._builtInVariable!!.valueType; //<-- thrown here
 	}
 
 	/**
