@@ -13,8 +13,8 @@ import type {
 	VariableDeclaration,
 } from "../../ast";
 import {
-	Expression,
 	CompoundStatement,
+	Expression,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	IterationStatement,

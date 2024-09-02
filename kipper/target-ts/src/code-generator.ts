@@ -3,20 +3,19 @@
  * @since 0.8.0
  */
 import type {
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	FunctionDeclaration,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	ObjectPrimaryExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
 	VariableDeclaration,
-	ClassMethodDeclaration,
-	ClassPropertyDeclaration,
-	InterfaceMethodDeclaration,
-	InterfacePropertyDeclaration,
 } from "@kipper/core";
-import { CompoundStatement } from "@kipper/core";
-import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
+import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";

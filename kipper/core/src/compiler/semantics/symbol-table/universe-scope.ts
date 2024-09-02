@@ -1,11 +1,8 @@
 import type { ScopeDeclaration } from "./entry";
-import type { BuiltInType } from "../types";
-import type { KipperBuiltInTypeLiteral } from "../../const";
-import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
-import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
-import { UnionType } from "../types";
+import type { BuiltInType } from "../types";
 import {
+	BuiltInTypeAny,
 	BuiltInTypeArray,
 	BuiltInTypeBool,
 	BuiltInTypeFunc,
@@ -16,8 +13,11 @@ import {
 	BuiltInTypeType,
 	BuiltInTypeUndefined,
 	BuiltInTypeVoid,
-	BuiltInTypeAny,
+	UnionType,
 } from "../types";
+import type { KipperBuiltInTypeLiteral } from "../../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
 import { Scope } from "./base";
 
 const any = new BuiltInTypeAny();

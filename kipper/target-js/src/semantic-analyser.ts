@@ -8,11 +8,11 @@ import type {
 	Declaration,
 	FunctionDeclaration,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
 	ParameterDeclaration,
 	TargetASTNodeSemanticAnalyser,
 	VariableDeclaration,
-	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";

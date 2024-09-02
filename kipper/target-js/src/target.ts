@@ -5,8 +5,7 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, ProcessedType } from "@kipper/core";
-import { BuiltInType } from "@kipper/core";
-import { BuiltInVariable, KipperCompileTarget } from "@kipper/core";
+import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
