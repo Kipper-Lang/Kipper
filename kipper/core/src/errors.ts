@@ -692,22 +692,22 @@ export class InvalidAmountOfGenericArgumentsError extends TypeError {
 }
 
 /**
- * Error that is thrown when a generic type is used that is not defined.
- * @since 0.12.0
- */
-export class MultipleSpreadsInGenericTypeArgumentsError extends TypeError {
-	constructor() {
-		super("Only one spread argument is allowed in generic type arguments.");
-	}
-}
-
-/**
  * Error that is thrown whenever a type is used that is not a generic type.
  * @since 0.12.0
  */
 export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
 	constructor(identifier: string) {
 		super(`Type '${identifier}' does not accept generic arguments.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a function type.
+ * @since 0.12.0
+ */
+export class TypeNotAssignableToUnionError extends TypeError {
+	constructor(type: string, unionType: Array<string>, cause?: TypeError) {
+		super(`Type '${type}' is not assignable to union type '${unionType.join(" | ")}'.`, cause);
 	}
 }
 

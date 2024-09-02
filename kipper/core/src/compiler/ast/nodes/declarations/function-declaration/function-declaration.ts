@@ -10,7 +10,7 @@ import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
 import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
-import { FunctionScope } from "../../../../semantics";
+import { BuiltInTypeFunc, FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
 	CompoundStatementContext,
@@ -206,11 +206,11 @@ export class FunctionDeclaration
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-
-		// Get the type that will be returned using the return type specifier
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
+
 		this.typeSemantics = {
-			returnType: returnType,
+			type: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 
 		// Ensure that all code paths return a value

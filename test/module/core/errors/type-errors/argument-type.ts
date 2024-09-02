@@ -7,7 +7,7 @@ describe("ArgumentAssignmentTypeError", () => {
 	describe("Error", () => {
 		it("Single argument (One invalid)", async () => {
 			try {
-				await new KipperCompiler().compile(`print(1);`, defaultConfig);
+				await new KipperCompiler().compile(`len(1);`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
 				assert((<KipperError>e).name === "TypeError", "Expected different error");

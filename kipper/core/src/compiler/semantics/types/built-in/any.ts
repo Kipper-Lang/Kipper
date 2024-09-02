@@ -1,4 +1,5 @@
 import type { ProcessedType } from "../../types";
+import { UnionType } from "../../types";
 import { BuiltInType, type CompilableType } from "../../types";
 import { ArgumentAssignmentTypeError, AssignmentTypeError, PropertyAssignmentTypeError } from "../../../../errors";
 
@@ -28,14 +29,23 @@ export class BuiltInTypeAny extends BuiltInType implements CompilableType {
 	 * @since 0.12.0
 	 */
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
+		let e: TypeError | undefined = undefined;
 		if (this === type) {
 			return;
-		} else if (propertyName) {
-			throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier);
+		} else if (type instanceof UnionType) {
+			if (type.unionTypes.some((unionType: ProcessedType) => this.isAssignableTo(unionType))) {
+				return;
+			} else {
+				return new AssignmentTypeError(type.identifier, this.identifier);
+			}
+		}
+
+		if (propertyName) {
+			throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier, e);
 		} else if (argumentName) {
-			throw new ArgumentAssignmentTypeError(argumentName, type.identifier, this.identifier);
+			throw new ArgumentAssignmentTypeError(argumentName, type.identifier, this.identifier, e);
 		} else {
-			throw new AssignmentTypeError(type.identifier, this.identifier);
+			throw new AssignmentTypeError(type.identifier, this.identifier, e);
 		}
 	}
 }

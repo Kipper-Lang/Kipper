@@ -94,10 +94,7 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {
 			identifier: identifier,
-			ref: {
-				refTarget: ref,
-				srcExpr: this,
-			},
+			ref: ref,
 		};
 
 		if (ref.isBuiltIn && (ref instanceof ScopeVariableDeclaration || ref instanceof ScopeFunctionDeclaration)) {
@@ -122,11 +119,10 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		const refTarget = semanticData.ref.refTarget;
+		const refTargetType = semanticData.ref.type;
 
 		this.typeSemantics = {
-			evaluatedType: refTarget.type, //refTarget.type is undefined, I suspect it to be an issue with
-			// the scope when it comes to the variable declaration
+			evaluatedType: refTargetType,
 		};
 	}
 

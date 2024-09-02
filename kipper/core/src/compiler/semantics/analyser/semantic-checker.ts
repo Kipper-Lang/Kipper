@@ -13,12 +13,13 @@ import type {
 	VariableDeclaration,
 } from "../../ast";
 import {
-	CompoundStatement,
 	Expression,
+	CompoundStatement,
 	FunctionDeclaration,
 	IdentifierPrimaryExpression,
 	IterationStatement,
 	LambdaPrimaryExpression,
+	MemberAccessExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
 import type { Scope } from "../symbol-table";
@@ -166,10 +167,12 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @since 0.7.0
 	 */
 	public validAssignment(leftExp: Expression): void {
-		if (!(leftExp instanceof IdentifierPrimaryExpression)) {
+		if (!(leftExp instanceof IdentifierPrimaryExpression) && !(leftExp instanceof MemberAccessExpression)) {
 			throw this.assertError(
 				new InvalidAssignmentError("The left-hand side of an expression must be an identifier or a property access."),
 			);
+		} else if (leftExp instanceof MemberAccessExpression && leftExp.getSemanticData().accessType === "slice") {
+			throw this.assertError(new InvalidAssignmentError("Slices are not assignable."));
 		}
 	}
 

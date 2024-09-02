@@ -3,7 +3,7 @@
  * invalid use of types and identifiers is detected.
  * @since 0.7.0
  */
-import type { BuiltInFunctionArgument } from "../runtime-built-ins";
+import { BuiltInFunctionArgument } from "../runtime-built-ins";
 import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	ArrayPrimaryExpression,
@@ -30,15 +30,9 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import type { Scope, ScopeFunctionDeclaration } from "../symbol-table";
-import {
-	BuiltInTypes,
-	ScopeDeclaration,
-	ScopeParameterDeclaration,
-	ScopeTypeDeclaration,
-	ScopeVariableDeclaration,
-} from "../symbol-table";
-import type { KipperArithmeticOperator, KipperBitwiseOperator } from "../../const";
+import { type Scope, ScopeFunctionDeclaration } from "../symbol-table";
+import { BuiltInTypes, ScopeDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
 import {
 	kipperIncrementOrDecrementOperators,
 	kipperMultiplicativeOperators,
@@ -69,8 +63,7 @@ import {
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInTypeObj, UndefinedType } from "../types";
-import type { Reference } from "../reference";
+import { BuiltInTypeFunc, BuiltInTypeObj, UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -200,27 +193,22 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ExpressionNotCallableError} If the passed {@link ref} is not callable.
 	 * @since 0.10.0
 	 */
-	public refTargetCallable(ref: Expression | Reference): void {
-		if ("refTarget" in ref && ref.refTarget instanceof ScopeDeclaration) {
-			const target = ref.refTarget;
-			const targetType = target.type;
+	public refTargetCallable(ref: Expression | KipperReferenceable): void {
+		if (ref instanceof ScopeDeclaration) {
+			const targetType = ref.type;
 			if (!targetType.isCompilable) {
 				return; // Ignore undefined types - Skip type checking (the type is invalid anyway)
 			}
 
 			// If the reference is not callable, throw an error
-			if (!target.isCallable) {
+			if (!ref.isCallable) {
 				throw this.assertError(new ExpressionNotCallableError(targetType.toString()));
-			} else if (ref instanceof ScopeParameterDeclaration || ref instanceof ScopeVariableDeclaration) {
-				// Calling a function stored in a variable or parameter is not implemented yet
-				throw this.notImplementedError(
-					new KipperNotImplementedError("Function calls from variable references are not implemented yet."),
-				);
 			}
 		} else if (ref instanceof Expression) {
-			throw this.notImplementedError(
-				new KipperNotImplementedError("Function calls from expressions are not implemented yet."),
-			);
+			const expType = ref.getTypeSemanticData().evaluatedType;
+			if (!(expType instanceof BuiltInTypeFunc)) {
+				throw this.assertError(new ExpressionNotCallableError(expType.toString()));
+			}
 		}
 	}
 
@@ -233,15 +221,18 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validAssignment(assignmentExp: AssignmentExpression): void {
 		const semanticData = assignmentExp.getSemanticData();
-		const leftExpTypeData = semanticData.identifierCtx.getTypeSemanticData();
+		const toAssign = semanticData.toAssign;
+		const leftExpSemantics = toAssign.getSemanticData();
+		const leftExpTypeData = toAssign.getTypeSemanticData();
 		const rightExpTypeData = semanticData.value.getTypeSemanticData();
 
 		// Ensure that the left-hand side is not read-only
 		if (
-			"storageType" in semanticData.assignTarget.refTarget &&
-			semanticData.assignTarget.refTarget.storageType === "const"
+			toAssign instanceof IdentifierPrimaryExpression &&
+			leftExpSemantics.ref instanceof ScopeVariableDeclaration &&
+			leftExpSemantics.ref.storageType === "const"
 		) {
-			throw this.assertError(new ReadOnlyWriteTypeError(semanticData.assignTarget.refTarget.identifier));
+			throw this.assertError(new ReadOnlyWriteTypeError(leftExpSemantics.ref.identifier));
 		}
 
 		// Get the compile-types for the left and right hand side
@@ -303,17 +294,23 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentAssignmentTypeError} If the given argument type does not match the parameter type.
 	 * @since 0.7.0
 	 */
-	public validArgumentValue(arg: ParameterDeclaration | BuiltInFunctionArgument, receivedType: ProcessedType): void {
-		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument;
+	public validArgumentValue(
+		arg: ParameterDeclaration | BuiltInFunctionArgument | ProcessedType,
+		receivedType: ProcessedType,
+		identifier?: string,
+	): void {
+		let semanticData: ParameterDeclarationSemantics | BuiltInFunctionArgument | undefined = undefined;
 		let argType: ProcessedType;
 
 		// Get the proper semantic data and value type
 		if (arg instanceof ParameterDeclaration) {
 			semanticData = arg.getSemanticData();
 			argType = arg.getTypeSemanticData().valueType;
-		} else {
+		} else if (arg instanceof BuiltInFunctionArgument) {
 			semanticData = arg;
 			argType = arg.valueType;
+		} else {
+			argType = arg;
 		}
 
 		// If either one of the types can't be compiled or evaluated then we skip this step
@@ -322,7 +319,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		try {
-			receivedType.assertAssignableTo(argType, undefined, semanticData.identifier);
+			receivedType.assertAssignableTo(argType, undefined, semanticData?.identifier ?? identifier);
 		} catch (e) {
 			throw this.assertError(<TypeError>e);
 		}
@@ -336,17 +333,28 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {ArgumentAssignmentTypeError} If any given argument type does not match the required parameter type.
 	 * @since 0.7.0
 	 */
-	public validFunctionCallArguments(func: ScopeFunctionDeclaration, args: Array<Expression>): void {
-		if (func.params.length != args.length) {
-			throw this.assertError(new InvalidAmountOfArgumentsError(func.identifier, func.params.length, args.length));
+	public validFunctionCallArguments(func: Expression | KipperReferenceable, args: Array<Expression>): void {
+		const funcType = <BuiltInTypeFunc>(
+			(func instanceof Expression ? func.getTypeSemanticData().evaluatedType : func.type)
+		);
+		if (funcType.paramTypes.length !== args.length) {
+			throw this.assertError(
+				new InvalidAmountOfArgumentsError(funcType.identifier, funcType.paramTypes.length, args.length),
+			);
 		}
+
+		const params = func instanceof ScopeFunctionDeclaration ? func.params : funcType.paramTypes;
 
 		// Iterate through both arrays at the same type to verify each type is valid
 		args.forEach((arg: Expression, index) => {
 			const typeData = arg.getTypeSemanticData();
 
 			this.setTracebackData({ ctx: arg });
-			this.validArgumentValue(func.params[index], typeData.evaluatedType);
+			this.validArgumentValue(
+				params[index],
+				typeData.evaluatedType,
+				`arg${index}`, // Backup name
+			);
 		});
 	}
 
@@ -561,7 +569,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.returnType;
+		const returnType = typeData.type.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {

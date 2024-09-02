@@ -94,7 +94,7 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 
 		this.semanticData = {
 			identifier: id,
-			expressoDepresso: value,
+			value: value,
 		};
 	}
 
@@ -109,7 +109,7 @@ export class ObjectProperty extends PrimaryExpression<ObjectPropertySemantics, O
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		const expression = semanticData.expressoDepresso;
+		const expression = semanticData.value;
 		expression.ensureTypeSemanticallyValid();
 
 		this.typeSemantics = {

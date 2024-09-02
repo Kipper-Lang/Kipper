@@ -3,12 +3,11 @@
  * variables and functions of a Kipper program.
  * @since 0.8.0
  */
-import type { KipperProgramContext } from "../../program-ctx";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { Scope } from "./base/scope";
-import type { UniverseScope } from "./universum-scope";
+import type { UniverseScope } from "./universe-scope";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a

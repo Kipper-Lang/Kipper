@@ -8,5 +8,5 @@ export * from "./global-scope";
 export * from "./local-scope";
 export * from "./class-scope";
 export * from "./function-scope";
-export * from "./universum-scope";
+export * from "./universe-scope";
 export * from "./lambda-scope";

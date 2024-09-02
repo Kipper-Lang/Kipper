@@ -16,7 +16,7 @@ import { CompoundStatement } from "../../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import { ParameterDeclaration } from "../../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes, LambdaScope } from "../../../../../semantics";
+import { BuiltInTypeFunc, LambdaScope } from "../../../../../semantics";
 
 /**
  * Lambda expression class, which represents a lambda expression in the AST.
@@ -152,21 +152,13 @@ export class LambdaPrimaryExpression
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-
-		// Get the type that will be returned using the return type specifier
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
+
+		const funcType = new BuiltInTypeFunc(paramTypes, returnType);
 		this.typeSemantics = {
-			evaluatedType: BuiltInTypes.Func.changeGenericTypeArguments([
-				{
-					identifier: "T",
-					type: semanticData.params.map((param) => param.getTypeSemanticData().storedType),
-				},
-				{
-					identifier: "R",
-					type: returnType,
-				},
-			]),
-			returnType: returnType,
+			evaluatedType: funcType,
+			type: funcType,
 		};
 
 		// Ensure that all code paths return a value

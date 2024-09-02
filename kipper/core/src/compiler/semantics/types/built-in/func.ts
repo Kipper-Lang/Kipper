@@ -1,5 +1,6 @@
 import { GenericBuiltInType } from "../base/generic-built-in-type";
 import type { ProcessedType } from "../index";
+import { UnionType } from "../index";
 import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
@@ -57,7 +58,7 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 	 * Returns the parameter types of the function.
 	 * @since 0.12.0
 	 */
-	public get parameterTypes(): Array<ProcessedType> {
+	public get paramTypes(): Array<ProcessedType> {
 		return this.genericTypeArguments[0].type;
 	}
 
@@ -66,11 +67,17 @@ export class BuiltInTypeFunc extends GenericBuiltInType<BuiltInTypeFuncGenericAr
 	}
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
+		let e: TypeError | undefined = undefined;
 		if (this === type || type === BuiltInTypes.any) {
 			return;
+		} else if (type instanceof UnionType) {
+			if (type.unionTypes.some((unionType: ProcessedType) => this.isAssignableTo(unionType))) {
+				return;
+			} else {
+				e = new AssignmentTypeError(type.identifier, this.identifier);
+			}
 		}
 
-		let e: TypeError | undefined = undefined;
 		if (
 			type instanceof BuiltInTypeFunc &&
 			this.genericTypeArguments.length === (<typeof this>type).genericTypeArguments.length
