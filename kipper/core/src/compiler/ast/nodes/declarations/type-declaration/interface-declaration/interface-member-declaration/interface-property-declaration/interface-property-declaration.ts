@@ -138,7 +138,7 @@ export class InterfacePropertyDeclaration extends InterfaceMemberDeclaration<
 		semanticData.typeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.typeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			type: valueType,
+			valueType: valueType,
 		};
 	}
 

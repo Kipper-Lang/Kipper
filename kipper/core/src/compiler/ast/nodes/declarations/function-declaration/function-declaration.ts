@@ -9,7 +9,7 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import type { RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
 import { BuiltInTypeFunc, FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
@@ -121,6 +121,13 @@ export class FunctionDeclaration
 	 */
 	public get innerScope(): FunctionScope {
 		return this._innerScope;
+	}
+
+	/**
+	 * The {@link scope} of this AST node.
+	 */
+	public get scope(): GlobalScope {
+		return <GlobalScope>this.scopeCtx.innerScope;
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {

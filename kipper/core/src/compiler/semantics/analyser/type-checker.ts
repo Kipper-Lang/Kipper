@@ -30,8 +30,14 @@ import {
 	TangledPrimaryExpression,
 } from "../../ast";
 import { KipperSemanticsAsserter } from "./err-handler";
-import { type Scope, ScopeFunctionDeclaration } from "../symbol-table";
-import { BuiltInTypes, ScopeDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "../symbol-table";
+import {
+	BuiltInTypes,
+	type Scope,
+	ScopeDeclaration,
+	ScopeFunctionDeclaration,
+	ScopeTypeDeclaration,
+	ScopeVariableDeclaration,
+} from "../symbol-table";
 import type { KipperArithmeticOperator, KipperBitwiseOperator, KipperReferenceable } from "../../const";
 import {
 	kipperIncrementOrDecrementOperators,
@@ -40,7 +46,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { PropertyDoesNotExistError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -56,6 +61,7 @@ import {
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
+	PropertyDoesNotExistError,
 	ReadOnlyWriteTypeError,
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
@@ -63,9 +69,7 @@ import {
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInTypeFunc } from "../types";
-import { BuiltInTypeObj } from "../types";
-import { UndefinedType } from "../types";
+import { BuiltInTypeFunc, BuiltInTypeObj, UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an

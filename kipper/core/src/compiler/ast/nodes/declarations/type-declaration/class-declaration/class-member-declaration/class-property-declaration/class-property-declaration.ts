@@ -2,7 +2,7 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.12.0
  */
-import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
+import type { ScopeVariableDeclaration } from "../../../../../../../semantics";
 import type {
 	ClassPropertyDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -35,7 +35,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
 	/**
@@ -90,17 +90,17 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 	 * in the {@link scope parent scope}.
 	 * @since 0.12.0
 	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
 
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
 	}
 
-	public getScopeDeclaration(): ScopeTypeDeclaration {
+	public getScopeDeclaration(): ScopeVariableDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
-		return <ScopeTypeDeclaration>super.getScopeDeclaration();
+		return <ScopeVariableDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -122,8 +122,9 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 		this.semanticData = {
 			identifier: identifier,
 			typeSpecifier: typeSpecifier,
-			type: typeSpecifier.getSemanticData().rawType,
+			valueType: typeSpecifier.getSemanticData().rawType,
 		};
+		this.scopeDeclaration = this.scope.addVariable(this);
 	}
 
 	/**
@@ -141,7 +142,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 		semanticData.typeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.typeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			type: valueType,
+			valueType: valueType,
 		};
 	}
 

@@ -3,7 +3,7 @@
  * @since 0.11.0
  */
 import type { TypeDeclarationSemantics } from "../type-declaration-semantics";
-import type { ClassMemberDeclaration, ClassConstructorDeclaration } from "./class-member-declaration";
+import type { ClassConstructorDeclaration, ClassMemberDeclaration } from "./class-member-declaration";
 
 /**
  * Semantics for AST Node {@link ClassDeclaration}.

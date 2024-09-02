@@ -8,11 +8,11 @@ import type {
 	Declaration,
 	FunctionDeclaration,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
 	ParameterDeclaration,
 	TargetASTNodeSemanticAnalyser,
 	VariableDeclaration,
-	InterfaceMethodDeclaration,
 } from "@kipper/core";
 import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
 import { TargetJS } from "./target";
@@ -139,6 +139,11 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	classDeclaration = async (node: ClassDeclaration) => {
 		this.checkViabilityOfIdentifier(node);
 	};
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link NewInstantiationExpression} instances.
+	 */
+	newInstantiationExpression = undefined;
 
 	/**
 	 * Performs typescript-specific semantic analysis for {@link classConstructorDeclaration} instances.
@@ -327,4 +332,9 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link LambdaExpression} instances.
 	 */
 	lambdaPrimaryExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link TypeofExpression} instances.
+	 */
+	typeofExpression = undefined;
 }

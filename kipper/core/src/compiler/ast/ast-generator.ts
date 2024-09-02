@@ -28,7 +28,10 @@ import type {
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
+	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassPropertyDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -60,6 +63,7 @@ import type {
 	KipperParserRuleContext,
 	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
+	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
 	ObjectPropertyContext,
@@ -74,21 +78,18 @@ import type {
 	SwitchLabeledStatementContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	TypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
 	WhileLoopIterationStatementContext,
-	ClassPropertyDeclarationContext,
-	ClassMethodDeclarationContext,
-	ClassConstructorDeclarationContext,
 	CastOrConvertExpressionContext,
 	CastExpressionContext,
 	ConvertExpressionContext,
 	TryCastExpressionContext,
 	ForceCastExpressionContext,
 } from "../lexer-parser";
-import { ActualCastOrConvertExpressionContext } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
 import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
@@ -824,6 +825,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	public exitActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
 		this.handleExitingTreeNode;
 
+	/**
+	 * Enter a parse tree produced by the KipperParser.typeofExpression
+	 */
+	public enterTypeofExpression: (ctx: TypeofExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.typeofExpression
+	 */
+	public exitTypeofExpression: (ctx: TypeofExpressionContext) => void = this.handleExitingTreeNode;
+
 	// NOTE:
 	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule
 	// 'actualConditionalExpression', which implements a more precise 'conditionalExpression' rule.
@@ -1146,6 +1157,17 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public enterNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public exitNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.classProperty`.

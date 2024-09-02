@@ -84,6 +84,7 @@ RetIndicator : '->';
 Class : 'class';
 Interface : 'interface';
 Constructor : 'constructor';
+New : 'new';
 
 // boolean constants
 True : 'true';

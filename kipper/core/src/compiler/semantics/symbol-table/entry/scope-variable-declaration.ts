@@ -2,7 +2,14 @@
  * A symbol table entry for a variable declaration.
  * @since 0.10.0
  */
-import type { VariableDeclaration, VariableDeclarationSemantics, VariableDeclarationTypeSemantics } from "../../../ast";
+import type {
+	ClassPropertyDeclaration,
+	ClassPropertyDeclarationSemantics,
+	ClassPropertyDeclarationTypeSemantics,
+	VariableDeclaration,
+	VariableDeclarationSemantics,
+	VariableDeclarationTypeSemantics,
+} from "../../../ast";
 import type { KipperStorageType } from "../../../const";
 import type { UniverseScope } from "../index";
 import { BuiltInTypeFunc, type ProcessedType } from "../../types";
@@ -16,8 +23,8 @@ import type { BuiltInVariable } from "../../runtime-built-ins";
 export class ScopeVariableDeclaration extends ScopeDeclaration {
 	private _valueWasUpdated: boolean = false;
 
-	public constructor(
-		private readonly _declaration?: VariableDeclaration,
+	protected constructor(
+		private readonly _declaration?: VariableDeclaration | ClassPropertyDeclaration,
 		private readonly _builtInVariable?: BuiltInVariable,
 		private readonly _universeScope?: UniverseScope,
 	) {
@@ -29,6 +36,14 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @param declaration The variable declaration node.
 	 */
 	public static fromVariableDeclaration(declaration: VariableDeclaration): ScopeVariableDeclaration {
+		return new ScopeVariableDeclaration(declaration);
+	}
+
+	/**
+	 * Creates a new scope variable declaration from a given class property declaration.
+	 * @param declaration The class property declaration.
+	 */
+	public static fromClassPropertyDeclaration(declaration: ClassPropertyDeclaration): ScopeVariableDeclaration {
 		return new ScopeVariableDeclaration(declaration);
 	}
 
@@ -65,7 +80,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): VariableDeclarationSemantics | undefined {
+	private get semanticData(): VariableDeclarationSemantics | ClassPropertyDeclarationSemantics | undefined {
 		return this._declaration?.getSemanticData();
 	}
 
@@ -74,14 +89,14 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
 	 * @private
 	 */
-	private get typeData(): VariableDeclarationTypeSemantics | undefined {
+	private get typeData(): VariableDeclarationTypeSemantics | ClassPropertyDeclarationTypeSemantics | undefined {
 		return this._declaration?.getTypeSemanticData();
 	}
 
 	/**
 	 * Returns the {@link VariableDeclaration AST node} this scope declaration bases on.
 	 */
-	public get node(): VariableDeclaration | undefined {
+	public get node(): VariableDeclaration | ClassPropertyDeclaration | undefined {
 		return this._declaration;
 	}
 
@@ -96,7 +111,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * The value type of this variable.
 	 */
 	public get type(): ProcessedType {
-		return this.typeData?.valueType ?? this._builtInVariable!!.valueType;
+		return this.typeData?.valueType ?? this._builtInVariable!!.valueType; //<-- thrown here
 	}
 
 	/**
