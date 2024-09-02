@@ -131,6 +131,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
 					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
 					" };" +
+					" class KipperError extends Error { " +
+					"  constructor(name, msg) { this.name=name; this.msg = msg; }" +
+					" };" +
 					" const __type_any = new KipperType('any', undefined, undefined);" +
 					" const __type_null = new KipperType('null', undefined, undefined);" +
 					" const __type_undefined = new KipperType('undefined', undefined, undefined);" +
@@ -478,10 +481,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
 		const parameterType = catchBlock.parameter.getTypeSemanticData().valueType.identifier;
 		const blockBody = await catchBlock.body.translateCtxAndChildren();
-		const x =  [
-			["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType, ")"],
-			...blockBody
-		];
+		const x = [["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType, ")"], ...blockBody];
 		return x;
 	};
 
