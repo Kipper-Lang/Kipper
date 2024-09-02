@@ -62,17 +62,17 @@ import type {
 	WhileLoopIterationStatement,
 } from "@kipper/core";
 import {
+	AssignmentExpression,
 	BuiltInTypes,
 	CompoundStatement,
 	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
-	KipperTargetCodeGenerator,
-	VariableDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
-	AssignmentExpression,
+	KipperTargetCodeGenerator,
 	ScopeDeclaration,
+	VariableDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
@@ -238,7 +238,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}
 		}
 
-		let lines: Array<TranslatedCodeLine> = [
+		return [
 			[
 				"const ",
 				identifier,
@@ -250,7 +250,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				"])",
 			],
 		];
-		return lines;
 	};
 
 	/**

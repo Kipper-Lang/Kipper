@@ -1,9 +1,8 @@
 import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
 import type { ASTNodeMapper } from "../../../../../mapping";
-import { TypeDeclaration } from "../../type-declaration";
 import type { ClassMemberDeclarationSemantics } from "./class-member-declaration-semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "./class-member-declaration-type-semantics";
-import type { ClassScope } from "../../../../../../semantics/symbol-table/class-scope";
+import type { ClassScope } from "../../../../../../semantics";
 import { Declaration } from "../../../declaration";
 
 export type ASTClassMemberDeclarationKind =

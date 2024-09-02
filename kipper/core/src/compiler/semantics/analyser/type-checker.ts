@@ -55,7 +55,6 @@ import {
 	InvalidUnaryExpressionTypeError,
 	KipperError,
 	KipperNotImplementedError,
-	PropertyDoesNotExistError,
 	ReadOnlyWriteTypeError,
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeError,
