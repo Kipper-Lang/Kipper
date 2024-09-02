@@ -44,6 +44,7 @@ import type {
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -446,6 +447,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 	};
 
+	newInstantiationExpression = async (node: NewInstantiationExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.class.getSemanticData().rawType.identifier;
+		const args = semanticData.args;
+		const translatedArgs = args.map(async (arg) => {
+			return await arg.translateCtxAndChildren();
+		});
+		const finishedArgs = await Promise.all(translatedArgs);
+
+		return ["new", " ", identifier, "(", ...finishedArgs.join(", "), ")"];
+	};
+
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -468,7 +481,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			return translatedParams.join(", ");
 		};
 
-		return [[`${identifier}(${await concatParams()}) {`], ...(await body.translateCtxAndChildren()), ["}"]];
+		return [[identifier, `(`, await concatParams(), `)`], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**
@@ -490,7 +503,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			.flat();
 		processedParams.pop();
 
-		return [["constructor", "(", ...processedParams, ")", " "], ...(await body.translateCtxAndChildren())];
+		return [["constructor", "(", ...processedParams, ")"], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**

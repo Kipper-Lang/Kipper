@@ -10,5 +10,5 @@ export interface InterfaceMethodDeclarationTypeSemantics extends TypeDeclaration
 	 * The processed type of this member property.
 	 * @since 0.12.0
 	 */
-	type: ProcessedType;
+	valueType: ProcessedType;
 }

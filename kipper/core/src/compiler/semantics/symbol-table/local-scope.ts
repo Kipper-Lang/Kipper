@@ -15,6 +15,7 @@ import { KipperNotImplementedError } from "../../../errors";
 import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration } from "./entry";
 import { ScopeVariableDeclaration } from "./entry";
 import { Scope } from "./base/scope";
+import type { ClassScope } from "./class-scope";
 
 /**
  * A scope that is bound to a {@link CompoundStatement} and not the global namespace.
@@ -30,7 +31,7 @@ export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, 
 	 * to the {@link KipperProgramContext} class).
 	 * @since 0.10.0
 	 */
-	public get parent(): LocalScope | GlobalScope {
+	public get parent(): LocalScope | ClassScope | GlobalScope {
 		return this.ctx.scope;
 	}
 
@@ -46,7 +47,7 @@ export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, 
 		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
-		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
+		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

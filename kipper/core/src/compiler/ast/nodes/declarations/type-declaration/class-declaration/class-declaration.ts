@@ -13,7 +13,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
-import type { ClassMemberDeclaration, ClassConstructorDeclaration } from "./class-member-declaration";
+import type { ClassConstructorDeclaration, ClassMemberDeclaration } from "./class-member-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
@@ -163,7 +163,7 @@ export class ClassDeclaration
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			type: CustomType.fromClassDeclaration(this),
+			valueType: CustomType.fromClassDeclaration(this),
 		};
 	}
 }

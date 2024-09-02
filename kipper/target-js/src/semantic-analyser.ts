@@ -141,6 +141,11 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	};
 
 	/**
+	 * Performs typescript-specific semantic analysis for {@link NewInstantiationExpression} instances.
+	 */
+	newInstantiationExpression = undefined;
+
+	/**
 	 * Performs typescript-specific semantic analysis for {@link classConstructorDeclaration} instances.
 	 */
 	classConstructorDeclaration = undefined;

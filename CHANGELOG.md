@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Semantic checking and code generation for the `new` keyword expression to be able to create new instances of
+	classes. ([#679](https://github.com/Kipper-Lang/Kipper/issues/679))
 - Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
