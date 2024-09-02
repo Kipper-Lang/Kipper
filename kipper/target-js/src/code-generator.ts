@@ -119,7 +119,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			[
 				"var __createKipper = () => {" +
 					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
-					" class KipperError extends Error { constructor(msg) { super(msg); this.name='KipError'; }};" +
 					" class KipperType {" +
 					"  constructor(name, fields, methods, baseType = null) " +
 					"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
