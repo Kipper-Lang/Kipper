@@ -1,13 +1,13 @@
-import type { TypeDeclarationSemantics } from "../../../type-declaration-semantics";
 import type { ParameterDeclaration } from "../../../../parameter-declaration";
 import type { CompoundStatement } from "../../../../../statements";
 import type { KipperConstructorInternalIdentifier } from "../../../../../../../const";
+import type { ClassMemberDeclarationSemantics } from "../class-member-declaration-semantics";
 
 /**
  * Semantics for AST Node {@link InterfacePropertyDeclaration}.
  * @since 0.12.0
  */
-export interface ClassConstructorDeclarationSemantics extends TypeDeclarationSemantics {
+export interface ClassConstructorDeclarationSemantics extends ClassMemberDeclarationSemantics {
 	/**
 	 * The identifier of the type declaration.
 	 *
@@ -20,7 +20,6 @@ export interface ClassConstructorDeclarationSemantics extends TypeDeclarationSem
 	 * @since 0.12.0
 	 */
 	parameters: Array<ParameterDeclaration>;
-
 	/**
 	 * The body of the function.
 	 * @since 0.10.0

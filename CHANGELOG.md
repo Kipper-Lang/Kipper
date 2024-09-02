@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Semantic checking and code generation for the `new` keyword expression to be able to create new instances of
+	classes. ([#679](https://github.com/Kipper-Lang/Kipper/issues/679))
 - Support for the typeof operator, which returns the runtime type of a value.
   ([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
 - Support for Nix Flakes and direnv, which allows for a more reproducible and consistent development environment.

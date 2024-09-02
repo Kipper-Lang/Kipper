@@ -56,6 +56,7 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	NewInstantiationExpression
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -214,6 +215,14 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
 		ClassConstructorDeclaration,
 		Array<TranslatedCodeLine>
+	>;
+
+	/**
+	 * Translates a {@link NewInstantiationExpression} into a specific language.
+	 */
+	public abstract newInstantiationExpression: TargetASTNodeCodeGenerator<
+		NewInstantiationExpression,
+		TranslatedExpression
 	>;
 
 	/**

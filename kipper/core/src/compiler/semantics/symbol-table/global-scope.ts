@@ -4,8 +4,8 @@
  * @since 0.8.0
  */
 import type { ScopeDeclaration } from "./entry";
-import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
+import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
 import { Scope } from "./base/scope";
 import type { UniverseScope } from "./universe-scope";
 
@@ -45,7 +45,7 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 		// Ensuring that the declaration does not overwrite other declarations
 		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
 
-		const scopeDeclaration = new ScopeVariableDeclaration(declaration);
+		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

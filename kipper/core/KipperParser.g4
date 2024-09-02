@@ -283,11 +283,12 @@ voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
 	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
 	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|   'new' typeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
 	;
 
 argumentExpressionList

@@ -29,7 +29,10 @@ import type {
 	ArrayPrimaryExpressionContext,
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
+	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
+	ClassMethodDeclarationContext,
+	ClassPropertyDeclarationContext,
 	CompilationUnitContext,
 	CompoundStatementContext,
 	DeclarationContext,
@@ -61,6 +64,7 @@ import type {
 	KipperParserRuleContext,
 	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
+	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
 	ObjectPropertyContext,
@@ -1103,6 +1107,17 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitClassDeclaration: (ctx: ClassDeclarationContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public enterNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.newInstantiationExpression`.
+	 */
+	public exitNewInstantiationExpression: (ctx: NewInstantiationExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.classProperty`.
