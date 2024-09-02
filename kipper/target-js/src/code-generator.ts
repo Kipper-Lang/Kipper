@@ -218,7 +218,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			if (member instanceof InterfacePropertyDeclaration) {
 				const property = member.getSemanticData();
 				const type = member.getTypeSemanticData();
-				const runtimeType = TargetJS.getRuntimeType(type.type);
+				const runtimeType = TargetJS.getRuntimeType(type.valueType);
 				propertiesWithTypes +=
 					`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
 			}
@@ -228,7 +228,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const params = method.parameters.map((param) => {
 					return param.getTypeSemanticData().valueType;
 				});
-				const runtimeReturnType = TargetJS.getRuntimeType(returnType.type);
+				const runtimeReturnType = TargetJS.getRuntimeType(returnType.valueType);
 				const runtimeParams = params.map((paramType) => {
 					return `__intf_${TargetJS.getRuntimeType(paramType)}`;
 				});

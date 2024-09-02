@@ -1659,13 +1659,14 @@ describe("Core functionality", () => {
 			let written = instance.write();
 			assert.include(
 				written,
-				"interface Test {\n" +
-					" a: string;\n" +
-					"}\n" +
-					"let x: Test = {\n" +
-					'  a: "3",\n' +
-					"};\n" +
-					"__kipper.print(x.a);",
+				`interface Test {\n` +
+				`  a: string;\n` +
+				`}\n` +
+				`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
+				"let x: Test = {\n" +
+				'  a: "3",\n' +
+				"};\n" +
+				"__kipper.print(x.a);",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
