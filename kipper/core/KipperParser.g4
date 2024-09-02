@@ -311,11 +311,16 @@ sliceNotation
 postfixExpression
     :   computedPrimaryExpression // Pass-on (Not matching rule)
     |   incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
+ 	| 	typeofExpression
     ;
 
 incrementOrDecrementPostfixExpression
 	:	computedPrimaryExpression incrementOrDecrementOperator
 	;
+
+typeofExpression
+	:	'typeof' assignmentExpression
+ 	;
 
 unaryExpression
     :   postfixExpression // Pass-on (Not matching rule)

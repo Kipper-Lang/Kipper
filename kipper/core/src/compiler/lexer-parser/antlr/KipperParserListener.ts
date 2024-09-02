@@ -118,6 +118,7 @@ import {
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
 	TranslationUnitContext,
+	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	TypeSpecifierExpressionContext,
 	TypeSpecifierIdentifierContext,
@@ -1234,6 +1235,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.typeofExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterTypeofExpression?: (ctx: TypeofExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.typeofExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitTypeofExpression?: (ctx: TypeofExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.unaryExpression`.

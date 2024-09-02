@@ -3,21 +3,21 @@
  * @since 0.8.0
  */
 import type {
-	FunctionDeclaration,
-	InterfaceDeclaration,
-	InterfacePropertyDeclaration,
-	ObjectPrimaryExpression,
-	InterfaceMethodDeclaration,
-	TranslatedExpression,
-	ParameterDeclaration,
-	TranslatedCodeLine,
-	VariableDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
+	FunctionDeclaration,
+	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
+	ObjectPrimaryExpression,
+	ParameterDeclaration,
+	TranslatedCodeLine,
+	TranslatedExpression,
+	VariableDeclaration,
 } from "@kipper/core";
-import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
+import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { indentLines, JavaScriptTargetCodeGenerator } from "@kipper/target-js";
+import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
 
 /**
@@ -69,17 +69,18 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const semanticData = node.getSemanticData();
 		const interfaceName = semanticData.identifier;
 		const interfaceMembers = semanticData.members;
-
 		const memberDeclarations = await Promise.all(
 			interfaceMembers.map(async (member) => {
 				return member.translateCtxAndChildren();
 			}),
 		);
 
+		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
 		return [
 			["interface", " ", interfaceName, " ", "{"],
-			...memberDeclarations.flat().map((line) => [" ", ...line]),
+			...memberDeclarations.flat().map((line) => ["  ", ...line]),
 			["}"],
+			...runtimeInterfaceType,
 		];
 	};
 
@@ -128,7 +129,8 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const returnType = TargetTS.getTypeScriptType(typeData.type.returnType);
+		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.type.returnType);
+		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
 		const translatedParams: TranslatedExpression = (
@@ -146,9 +148,28 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			body instanceof Expression
 				? await body.translateCtxAndChildren()
 				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
+		const paramTypes = funcType.paramTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
+		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
 
-		// Return the lambda function
-		return ["(", ...translatedParams, "): ", returnType, " => ", ...translatedBody];
+		if (body instanceof CompoundStatement) {
+			translatedBody.pop(); // remove unnecessary newline
+		}
+		return [
+			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+			"(",
+			"(",
+			...translatedParams,
+			"): ",
+			returnTypeSpecifier,
+			" => ",
+			...translatedBody,
+			",",
+			TargetJS.getBuiltInIdentifier("builtIn.Func.changeGenericTypeArguments"),
+			"(",
+			`{T: [${paramTypes.join(",")}], R: ${returnType}}`,
+			")",
+			")",
+		];
 	};
 
 	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {

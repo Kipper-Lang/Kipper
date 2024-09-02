@@ -118,6 +118,7 @@ import {
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
 	TranslationUnitContext,
+	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	TypeSpecifierExpressionContext,
 	TypeSpecifierIdentifierContext,
@@ -827,6 +828,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitIncrementOrDecrementPostfixExpression?: (ctx: IncrementOrDecrementPostfixExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.typeofExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTypeofExpression?: (ctx: TypeofExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.unaryExpression`.

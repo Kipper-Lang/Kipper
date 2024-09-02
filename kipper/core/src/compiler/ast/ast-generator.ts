@@ -79,6 +79,7 @@ import type {
 	SwitchLabeledStatementContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	TypeSpecifierExpressionContext,
 	VariableDeclarationContext,
@@ -770,6 +771,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	public exitActualBitwiseShiftExpression: (ctx: ActualBitwiseShiftExpressionContext) => void =
 		this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.typeofExpression
+	 */
+	public enterTypeofExpression: (ctx: TypeofExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.typeofExpression
+	 */
+	public exitTypeofExpression: (ctx: TypeofExpressionContext) => void = this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule

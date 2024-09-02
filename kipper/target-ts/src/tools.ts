@@ -71,3 +71,19 @@ export function createTSFunctionSignature(
 
 	return `function ${identifier}(${argsSignature}): ${TargetTS.getTypeScriptType(signature.returnType)}`;
 }
+
+export function createTSGenericFunctionSignature(
+	signature: {
+		identifier: string;
+		params: Array<{ identifier: string; type: ProcessedType | "T" }>;
+		returnType: ProcessedType | "T";
+	},
+	ignoreParams: boolean = false,
+): string {
+	const { identifier, params } = signature;
+	const argsSignature = ignoreParams
+		? ""
+		: `${params.map((p) => `${p.identifier}: ${p.type === "T" ? "T" : TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
+
+	return `function ${identifier}<T>(${argsSignature}): ${signature.returnType === "T" ? "T" : TargetTS.getTypeScriptType(signature.returnType)}`;
+}

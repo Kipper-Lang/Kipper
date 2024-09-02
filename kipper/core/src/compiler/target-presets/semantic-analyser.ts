@@ -51,6 +51,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeData,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -336,4 +337,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link LambdaPrimaryExpression} instances.
 	 */
 	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
+	 */
+	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
 }

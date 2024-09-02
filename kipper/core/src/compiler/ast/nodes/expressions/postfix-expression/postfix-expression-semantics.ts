@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link PostfixExpression}.
  * @since 0.11.0
  */
-import type { KipperIncrementOrDecrementOperator } from "../../../../const";
+import type { KipperPostfixOperator } from "../../../../const";
 import type { ExpressionSemantics } from "../expression-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface PostfixExpressionSemantics extends ExpressionSemantics {
 	 * The operator that is used to modify the {@link operand}.
 	 * @since 0.11.0
 	 */
-	operator: KipperIncrementOrDecrementOperator;
+	operator: KipperPostfixOperator;
 }

@@ -3,8 +3,7 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
-import { UnionType, CustomType } from "@kipper/core";
-import { BuiltInTypes, KipperCompileTarget, KipperNotImplementedError } from "@kipper/core";
+import { BuiltInTypes, CustomType, KipperCompileTarget, KipperNotImplementedError, UnionType } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
@@ -64,7 +63,7 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 			case BuiltInTypes.bool.identifier:
 				return "boolean";
 			case BuiltInTypes.type.identifier:
-				return "object";
+				return "InstanceType<typeof __kipper.Type>";
 			case BuiltInTypes.null.identifier:
 				return "null";
 			case BuiltInTypes.num.identifier:
