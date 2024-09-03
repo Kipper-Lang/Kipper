@@ -95,8 +95,8 @@ export class MatchesExpression extends Expression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const value = this.children[0] as Expression;
-		const pattern = this.children[1] as IdentifierTypeSpecifierExpression;
+		const value: Expression = this.children[0];
+		const pattern = <IdentifierTypeSpecifierExpression>this.children[1];
 
 		if (!value || !pattern) {
 			throw new UnableToDetermineSemanticDataError();
