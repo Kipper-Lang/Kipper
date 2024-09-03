@@ -131,7 +131,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
 					" };" +
 					" class KipperError extends Error { " +
-					"  constructor(name, msg) { this.name=name; this.msg = msg; }" +
+					`  constructor(msg) { this.name="Error"; this.msg = msg; }` +
 					" };" +
 					" const __type_any = new KipperType('any', undefined, undefined);" +
 					" const __type_null = new KipperType('null', undefined, undefined);" +
@@ -142,8 +142,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					" const __type_obj = new KipperType('obj', [], []);" +
 					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
 					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
+					" const __type_Error = new KipperType('error', undefined, undefined);" +
 					" return {" +
-					"  KipperError: KipperError," +
 					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
 					"  IndexError: (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } })," +
 					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
@@ -159,6 +159,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"   obj: __type_obj," +
 					"   Array: __type_Array," +
 					"   Func: __type_Func," +
+					"   Error: __type_Error," +
 					"  }," +
 					"  assignTypeMeta: (value, typeMeta) => Object.assign(value, { __kipType: typeMeta })," +
 					"  typeOf: (value) => {" +
