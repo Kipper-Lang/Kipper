@@ -828,5 +828,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 	}
 
-	validMatchesExpression(expression: Expression, pattern: IdentifierTypeSpecifierExpression) {}
+	validMatchesExpression(expression: Expression, pattern: IdentifierTypeSpecifierExpression) {
+		const expressionType = expression.getTypeSemanticData().evaluatedType;
+		const patternType = pattern.getTypeSemanticData().storedType;
+	}
 }

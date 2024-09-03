@@ -368,9 +368,14 @@ bitwiseShiftOperators
 	:   '<<' | '>>' | '>>>'
 	;
 
+matchesExpression
+	:	bitwiseShiftExpression # passOnMatchesExpression
+	|	matchesExpression 'matches' bitwiseShiftExpression # actualMatchesExpression
+	;
+
 relationalExpression
-    :   bitwiseShiftExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') bitwiseShiftExpression # actualRelationalExpression
+    :   matchesExpression # passOnRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') matchesExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -439,8 +444,4 @@ typeofTypeSpecifierExpression
 
 typeSpecifierIdentifier
 	:	(Identifier | 'null' | 'undefined' | 'void')
-	;
-
-matchesExpression
-	:	assignmentExpression 'matches' typeSpecifierExpression
 	;

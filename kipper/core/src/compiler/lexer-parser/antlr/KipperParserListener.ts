@@ -7,6 +7,8 @@ import KipperParserBase from "./base/KipperParserBase";
 
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 
+import { PassOnMatchesExpressionContext } from "./KipperParser";
+import { ActualMatchesExpressionContext } from "./KipperParser";
 import { PassOnBitwiseShiftExpressionContext } from "./KipperParser";
 import { ActualBitwiseShiftExpressionContext } from "./KipperParser";
 import { PassOnBitwiseAndExpressionContext } from "./KipperParser";
@@ -112,6 +114,7 @@ import { MultiplicativeExpressionContext } from "./KipperParser";
 import { AdditiveExpressionContext } from "./KipperParser";
 import { BitwiseShiftExpressionContext } from "./KipperParser";
 import { BitwiseShiftOperatorsContext } from "./KipperParser";
+import { MatchesExpressionContext } from "./KipperParser";
 import { RelationalExpressionContext } from "./KipperParser";
 import { EqualityExpressionContext } from "./KipperParser";
 import { BitwiseAndExpressionContext } from "./KipperParser";
@@ -128,13 +131,38 @@ import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeSpecifierIdentifierContext } from "./KipperParser";
-import { MatchesExpressionContext } from "./KipperParser";
 
 /**
  * This interface defines a complete listener for a parse tree produced by
  * `KipperParser`.
  */
 export interface KipperParserListener extends ParseTreeListener {
+	/**
+	 * Enter a parse tree produced by the `passOnMatchesExpression`
+	 * labeled alternative in `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnMatchesExpression?: (ctx: PassOnMatchesExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnMatchesExpression`
+	 * labeled alternative in `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnMatchesExpression?: (ctx: PassOnMatchesExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualMatchesExpression`
+	 * labeled alternative in `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualMatchesExpression?: (ctx: ActualMatchesExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualMatchesExpression`
+	 * labeled alternative in `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualMatchesExpression?: (ctx: ActualMatchesExpressionContext) => void;
+
 	/**
 	 * Enter a parse tree produced by the `passOnBitwiseShiftExpression`
 	 * labeled alternative in `KipperParser.bitwiseShiftExpression`.
@@ -1359,6 +1387,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	exitBitwiseShiftOperators?: (ctx: BitwiseShiftOperatorsContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterMatchesExpression?: (ctx: MatchesExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.matchesExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitMatchesExpression?: (ctx: MatchesExpressionContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `KipperParser.relationalExpression`.
 	 * @param ctx the parse tree
 	 */
@@ -1533,15 +1572,4 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `KipperParser.matchesExpression`.
-	 * @param ctx the parse tree
-	 */
-	enterMatchesExpression?: (ctx: MatchesExpressionContext) => void;
-	/**
-	 * Exit a parse tree produced by `KipperParser.matchesExpression`.
-	 * @param ctx the parse tree
-	 */
-	exitMatchesExpression?: (ctx: MatchesExpressionContext) => void;
 }
