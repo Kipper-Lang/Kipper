@@ -30,6 +30,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceofExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -342,4 +343,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
 	 */
 	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InstanceofExpression} instances.
+	 */
+	public abstract instanceofExpression?: TargetASTNodeSemanticAnalyser<InstanceofExpression>;
 }

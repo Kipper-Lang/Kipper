@@ -1716,5 +1716,26 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
+
+		it("it should be able to use instanceof operator", async () => {
+			const fileContent = `class Test {}; var x : Test = new Test(); if(x instanceof Test) {print("works");};`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  a: string;\n" +
+					"  constructor(b: string)\n" +
+					"  {\n" +
+					"    a = b;\n" +
+					"  }\n" +
+					"}\n" +
+					'let x: Test = new Test("3");\n',
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
 	});
 });

@@ -56,6 +56,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -263,6 +264,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Expression section
 	// -------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.instanceOfExpression`.
+	 */
+	public enterInstanceOfExpression?: (ctx: InstanceOfExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.instanceOfExpression`.
+	 */
+	public exitInstanceOfExpression?: (ctx: InstanceOfExpressionContext) => void = this.handleExitingTreeNode;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.identifierPrimaryExpression`.

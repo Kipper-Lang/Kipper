@@ -53,6 +53,7 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
@@ -76,6 +77,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
+import type { InstanceofExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/comparative-expression/relational-expression/instanceof-expression/instanceof-expression";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -1095,5 +1097,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const operand = await semanticData.operand.translateCtxAndChildren();
 
 		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
+	};
+
+	instanceofExpression = async (node: InstanceofExpression): Promise<TranslatedExpression> => {
+		return ["Jo here i am"];
 	};
 }

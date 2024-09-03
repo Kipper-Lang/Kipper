@@ -60,6 +60,7 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
+import type { InstanceofExpression } from "../../ast/nodes/expressions/comparative-expression/relational-expression/instanceof-expression/instanceof-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -436,4 +437,9 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link TypeofExpression} into a specific language.
 	 */
 	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@Link InstanceofExpression} into a specific language.
+	 */
+	public abstract instanceofExpression: TargetASTNodeCodeGenerator<InstanceofExpression, TranslatedExpression>;
 }
