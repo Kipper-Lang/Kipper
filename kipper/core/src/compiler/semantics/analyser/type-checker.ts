@@ -9,6 +9,7 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,
@@ -826,4 +827,6 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			}
 		}
 	}
+
+	validMatchesExpression(expression: Expression, pattern: IdentifierTypeSpecifierExpression) {}
 }

@@ -14,6 +14,8 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-pa
 import { Expression } from "../expression";
 import type { MatchesExpressionSemantics } from "./matches-expression-semantics";
 import type { MatchesExpressionTypeSemantics } from "./matches-expression-type-semantics";
+import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
  * Matches expression, which checks if a value matches a pattern.
@@ -93,8 +95,17 @@ export class MatchesExpression extends Expression<
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
+		const value = this.children[0] as Expression;
+		const pattern = this.children[1] as IdentifierTypeSpecifierExpression;
 
+		if (!value || !pattern) {
+			throw new UnableToDetermineSemanticDataError();
+		}
 
+		this.semanticData = {
+			expression: value,
+			pattern: pattern,
+		};
 	}
 
 	/**
@@ -106,7 +117,11 @@ export class MatchesExpression extends Expression<
 	 * @since 0.12.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
 
+		const matchType = semanticData.pattern.getTypeSemanticData().storedType;
+
+		this.programCtx.typeCheck(this).validMatchesExpression(semanticData.expression, semanticData.pattern);
 	}
 
 	/**

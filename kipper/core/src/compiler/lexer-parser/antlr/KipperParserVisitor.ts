@@ -1,11 +1,9 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-
-	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
-	// kind values.
-	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
-	import KipperParserBase from "./base/KipperParserBase";
-
+// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+// kind values.
+import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+import KipperParserBase from "./base/KipperParserBase";
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
@@ -131,7 +129,6 @@ import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeSpecifierIdentifierContext } from "./KipperParser";
 import { MatchesExpressionContext } from "./KipperParser";
-
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -1029,4 +1026,3 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 */
 	visitMatchesExpression?: (ctx: MatchesExpressionContext) => Result;
 }
-

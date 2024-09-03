@@ -2,7 +2,7 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -39,7 +39,8 @@ import {
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
-	LogicalOrExpressionContext, MatchesExpressionContext,
+	LogicalOrExpressionContext,
+	MatchesExpressionContext,
 	MultiplicativeExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,

@@ -12,7 +12,7 @@ import type {
 	ParserStatementContext,
 } from "./common";
 import type { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import {
+import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualBitwiseAndExpressionContext,
@@ -63,7 +63,8 @@ import {
 	KipperParserListener,
 	KipperParserRuleContext,
 	LambdaPrimaryExpressionContext,
-	LogicalAndExpressionContext, MatchesExpressionContext,
+	LogicalAndExpressionContext,
+	MatchesExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,

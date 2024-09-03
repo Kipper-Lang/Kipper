@@ -60,7 +60,7 @@ import type {
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
-import { MatchesExpression } from "../ast/nodes/expressions/matches-expression/matches-expression";
+import type { MatchesExpression } from "../ast/nodes/expressions/matches-expression/matches-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.

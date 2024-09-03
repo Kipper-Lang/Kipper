@@ -9,10 +9,10 @@ import type { Expression } from "../expression";
 
 export interface MatchesExpressionSemantics extends ExpressionSemantics {
 	/**
-	 * The interface to match against.
+	 * The pattern to match against.
 	 * @since 0.12.0
 	 */
-	interface: IdentifierTypeSpecifierExpression;
+	pattern: IdentifierTypeSpecifierExpression;
 
 	/**
 	 * The expression to match against the interface.

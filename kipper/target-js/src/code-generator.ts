@@ -76,6 +76,7 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
+import type { MatchesExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/matches-expression/matches-expression";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -1095,5 +1096,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const operand = await semanticData.operand.translateCtxAndChildren();
 
 		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
+	};
+
+	/**
+	 * Translates a {@link MatchesExpression} into the JavaScript language.
+	 */
+	matchesExpression = async (node: MatchesExpression): Promise<TranslatedExpression> => {
+		return [];
 	};
 }
