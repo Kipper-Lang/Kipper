@@ -440,3 +440,7 @@ typeofTypeSpecifierExpression
 typeSpecifierIdentifier
 	:	(Identifier | 'null' | 'undefined' | 'void')
 	;
+
+matchesExpression
+	:	assignmentExpression 'matches' typeSpecifierExpression
+	;

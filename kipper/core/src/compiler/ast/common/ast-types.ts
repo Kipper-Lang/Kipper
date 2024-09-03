@@ -2,7 +2,7 @@
  * AST pre-set types that are used throughout the compiler.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpressionContext,
 	ArrayPrimaryExpressionContext,
 	AssignmentExpressionContext,
@@ -39,7 +39,7 @@ import type {
 	JumpStatementContext,
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
-	LogicalOrExpressionContext,
+	LogicalOrExpressionContext, MatchesExpressionContext,
 	MultiplicativeExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
@@ -92,7 +92,8 @@ export type ParserExpressionContext =
 	| BitwiseAndExpressionContext
 	| BitwiseXorExpressionContext
 	| NewInstantiationExpressionContext
-	| BitwiseShiftExpressionContext;
+	| BitwiseShiftExpressionContext
+	| MatchesExpressionContext;
 
 /**
  * Union type of all usable statement rule context classes implemented by the {@link ParseRuleKindMapping} for a
@@ -208,7 +209,8 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression
 	| typeof ParseRuleKindMapping.RULE_typeofExpression
-	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression;
+	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression
+	| typeof ParseRuleKindMapping.RULE_matchesExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link CompilableASTNode}.
@@ -291,7 +293,8 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_typeofExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_matchesExpression];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link CompilableASTNode}.

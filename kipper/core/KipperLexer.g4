@@ -87,6 +87,9 @@ New : 'new';
 True : 'true';
 False : 'false';
 
+// matches operator
+Matches : 'matches';
+
 // typeof operator
 Typeof : 'typeof';
 
