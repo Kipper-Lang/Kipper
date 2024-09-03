@@ -1,3 +1,1 @@
-var x: str = "test";
-
-var res: bool = x matches str;
+var res: bool = "test" matches str;

@@ -16,6 +16,7 @@ import type { MatchesExpressionSemantics } from "./matches-expression-semantics"
 import type { MatchesExpressionTypeSemantics } from "./matches-expression-type-semantics";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import { BuiltInType, BuiltInTypes } from "../../../../semantics";
 
 /**
  * Matches expression, which checks if a value matches a pattern.
@@ -122,6 +123,10 @@ export class MatchesExpression extends Expression<
 		const matchType = semanticData.pattern.getTypeSemanticData().storedType;
 
 		this.programCtx.typeCheck(this).validMatchesExpression(semanticData.expression, semanticData.pattern);
+
+		this.typeSemantics = {
+			evaluatedType: BuiltInTypes.bool,
+		};
 	}
 
 	/**
