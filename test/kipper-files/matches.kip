@@ -1,1 +1,8 @@
-var res: bool = "test" matches str;
+interface X {
+	y: str;
+	z: num;
+}
+
+var x: X = {y: "hello", z: 5};
+var res: bool = x matches X;
+print(res);

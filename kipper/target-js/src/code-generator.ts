@@ -29,7 +29,7 @@ import type {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
-	IdentifierTypeSpecifierExpression,
+	IdentifierTypeSpecifierExpression, IdentifierTypeSpecifierExpressionSemantics,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
@@ -61,6 +61,7 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { UndefinedConstantError } from "@kipper/core";
 import {
 	AssignmentExpression,
 	BuiltInTypes,
@@ -183,6 +184,45 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"     return __kipper.builtIn.obj;" +
 					"    }" +
 					"  	}" +
+					"  }," +
+					"  matches: (value, pattern) => {" +
+					"   const valueType = __kipper.typeOf(value);" +
+					"   const patternType = __kipper.typeOf(pattern);" +
+					"   if (valueType === patternType) {" +
+					"    return true;" +
+					"   }" +
+					"   if (valueType === __kipper.builtIn.str && patternType === __kipper.builtIn.str) {" +
+					"    return 'yes';" +
+					"   }" +
+					"   if (!valueType.isCompatibleWith(patternType)) { return false; }" +
+					"   if (patternType.fields && Array.isArray(patternType.fields)) {" +
+					"    for (const field of patternType.fields) {" +
+					"     const { name, type } = field;" +
+					"     if (!(name in value)) { return false; }" +
+					"     const fieldValue = value[name];" +
+					"     const fieldValueType = __kipper.typeOf(fieldValue);" +
+					"     if (!fieldValueType.isCompatibleWith(type)) { return false; }" +
+					"     if (type instanceof __kipper.Type || type instanceof __kipper.KipperGenericType) {" +
+					"      if (!__kipper.match(fieldValue, type)) { return false; }" +
+					"     }" +
+					"    }" +
+					"   }" +
+					"   if (patternType.methods && Array.isArray(patternType.methods)) {" +
+					"    for (const method of patternType.methods) {" +
+					"     const { name, returnType, parameters } = method;" +
+					"     if (!(name in value) || typeof value[name] !== 'function') { return false; }" +
+					"     const methodValue = value[name];" +
+					"     const methodValueType = __kipper.typeOf(methodValue);" +
+					"     if (!methodValueType.isCompatibleWith(returnType)) { return false; }" +
+					"     if (parameters && Array.isArray(parameters)) {" +
+					"      for (let i = 0; i < parameters.length; i++) {" +
+					"       const paramType = parameters[i];" +
+					"       if (!methodValueType.genericArgs.T[i].isCompatibleWith(paramType)) { return false; }" +
+					"      }" +
+					"     }" +
+					"    }" +
+					"   }" +
+					"   return true;" +
 					"  }," +
 					inlinedRequirements +
 					" };" +
@@ -1102,6 +1142,20 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link MatchesExpression} into the JavaScript language.
 	 */
 	matchesExpression = async (node: MatchesExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+
+		// Get the patterns name
+		const pattern = semanticData.pattern.getSemanticData();
+
+		const expression = semanticData.expression.getSemanticData();
+
+		return [
+			TargetJS.getBuiltInIdentifier("matches"),
+			"(",
+			...expression.identifier,
+			", ",
+			TargetJS.getBuiltInIdentifier(pattern.identifier),
+			")"
+		];
 	};
 }
