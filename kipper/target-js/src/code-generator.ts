@@ -186,39 +186,46 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"    }" +
 					"  	}" +
 					"  }," +
-					"  matches: (value, pattern) => {" +
-					"   const valueType = __kipper.typeOf(value);" +
-					"   const patternType = __kipper.typeOf(pattern);" +
-					"   if (!valueType.isCompatibleWith(patternType)) { return false; }" +
-					"   if (patternType.fields && Array.isArray(patternType.fields)) {" +
-					"    for (const field of patternType.fields) {" +
-					"     const { name, type } = field;" +
-					"     if (!(name in value)) { return false; }" +
-					"     const fieldValue = value[name];" +
-					"     const fieldValueType = __kipper.typeOf(fieldValue);" +
-					"     if (!fieldValueType.isCompatibleWith(type)) { return false; }" +
-					"     if (type instanceof __kipper.Type || type instanceof __kipper.KipperGenericType) {" +
-					"      if (!__kipper.match(fieldValue, type)) { return false; }" +
-					"     }" +
-					"    }" +
-					"   }" +
-					"   if (patternType.methods && Array.isArray(patternType.methods)) {" +
-					"    for (const method of patternType.methods) {" +
-					"     const { name, returnType, parameters } = method;" +
-					"     if (!(name in value) || typeof value[name] !== 'function') { return false; }" +
-					"     const methodValue = value[name];" +
-					"     const methodValueType = __kipper.typeOf(methodValue);" +
-					"     if (!methodValueType.isCompatibleWith(returnType)) { return false; }" +
-					"     if (parameters && Array.isArray(parameters)) {" +
-					"      for (let i = 0; i < parameters.length; i++) {" +
-					"       const paramType = parameters[i];" +
-					"       if (!methodValueType.genericArgs.T[i].isCompatibleWith(paramType)) { return false; }" +
-					"      }" +
-					"     }" +
-					"    }" +
-					"   }" +
-					"   return true;" +
-					"  }," +
+				"matches: (value, pattern) => {" +
+				"  const registeredRuntimeTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
+				"  if (pattern.fields && Array.isArray(pattern.fields)) {" +
+				"    for (const field of pattern.fields) {" +
+				"      const fieldName = field.name;" +
+				"      const fieldType = field.type;" +
+				"      const nameIsInType = fieldName in value;" +
+				"      if (!nameIsInType) {" +
+				"        return false;" +
+				"      }" +
+				"      const fieldValue = value[fieldName];" +
+				"      const isSameType = __kipper.typeOf(fieldValue) === field.type;" +
+				"      if (registeredRuntimeTypes.includes(field.type.name) && !isSameType) {" +
+				"        return false;" +
+				"      }" +
+				"      if (!registeredRuntimeTypes.includes(fieldType.name)) {" +
+				"        if (!__kipper.matches(fieldValue, fieldType)) {" +
+				"          return false;" +
+				"        }" +
+				"      }" +
+				"    }" +
+				"  }" +
+				"  if (pattern.methods && Array.isArray(pattern.methods)) {" +
+				"    for (const field of pattern.methods) {" +
+				"      const fieldName = field.name;" +
+				"      const fieldReturnType = field.returnType;" +
+				"      const parameters = field.parameters;" +
+				"      const nameIsInType = fieldName in value;" +
+				"      if (!nameIsInType) {" +
+				"        return false;" +
+				"      }" +
+				"      const fieldValue = value[fieldName];" +
+				"      const isSameType = fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
+				"      if (!isSameType) {" +
+				"        return false;" +
+				"      }" +
+				"    }" +
+				"  }" +
+				"  return true;" +
+				"  }," +
 					inlinedRequirements +
 					" };" +
 					"};",
