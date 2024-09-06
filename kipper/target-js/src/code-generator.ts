@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import {
+import type {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	BitwiseAndExpression,
@@ -11,7 +11,7 @@ import {
 	BitwiseOrExpression,
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
-	BoolPrimaryExpression, BuiltInType, BuiltInTypeType,
+	BoolPrimaryExpression,
 	CastOrConvertExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
@@ -55,12 +55,13 @@ import {
 	TangledPrimaryExpression,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
-	TranslatedExpression, TypeError,
+	TranslatedExpression,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
+import { BuiltInType, BuiltInTypeType, TypeError } from "@kipper/core";
 import {
 	AssignmentExpression,
 	BuiltInTypes,
@@ -77,6 +78,7 @@ import {
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
 import type { MatchesExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/matches-expression/matches-expression";
+import * as console from "node:console";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -253,32 +255,32 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const property = member.getSemanticData();
 				const type = member.getTypeSemanticData();
 
-				console.log(property.type.identifier);
-				console.log(type.valueType instanceof BuiltInType);
-
 				if (type.valueType instanceof BuiltInType) {
 					const runtimeType = TargetJS.getRuntimeType(type.valueType);
 					propertiesWithTypes +=
 						`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
-				}
-				else{
+				} else {
 					propertiesWithTypes +=
-						`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", __intf_${type.valueType}),`;
+						`new ${TargetJS.getBuiltInIdentifier("Property")}` +
+						`("${property.identifier}", __intf_${type.valueType}),`;
 				}
 			}
+
 			if (member instanceof InterfaceMethodDeclaration) {
 				const method = member.getSemanticData();
-				const returnType = member.getTypeSemanticData();
-				const params = method.parameters.map((param) => {
-					return param.getTypeSemanticData().valueType;
+				const methodName = method.identifier;
+				const returnType = method.returnType.getTypeSemanticData().storedType;
+				const runtimeReturnType = TargetJS.getRuntimeType(returnType);
+
+				const parametersArray = method.parameters.map((param) => {
+					const type = param.getTypeSemanticData().storedType;
+					const name = param.getSemanticData().identifier;
+					return `new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${name}", ${TargetJS.getRuntimeType(type)})`;
 				});
-				const runtimeReturnType = TargetJS.getRuntimeType(returnType.valueType);
-				const runtimeParams = params.map((paramType) => {
-					return `__intf_${TargetJS.getRuntimeType(paramType)}`;
-				});
+				const parameters = parametersArray.length > 0 ? `[${parametersArray.join(", ")}]` : "[]";
+
 				functionsWithTypes +=
-					`new ${TargetJS.getBuiltInIdentifier("Method")}` +
-					`("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(",")}]),`;
+					`new ${TargetJS.getBuiltInIdentifier("Method")}` + `("${methodName}", ${runtimeReturnType}, ${parameters})`;
 			}
 		}
 
@@ -1158,7 +1160,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...expression.identifier,
 			", ",
 			`__intf_${pattern.identifier}`,
-			")"
+			")",
 		];
 	};
 }
