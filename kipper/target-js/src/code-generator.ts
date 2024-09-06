@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	BitwiseAndExpression,
@@ -11,7 +11,7 @@ import type {
 	BitwiseOrExpression,
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
-	BoolPrimaryExpression,
+	BoolPrimaryExpression, BuiltInType, BuiltInTypeType,
 	CastOrConvertExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
@@ -29,7 +29,7 @@ import type {
 	FunctionDeclaration,
 	GenericTypeSpecifierExpression,
 	IdentifierPrimaryExpression,
-	IdentifierTypeSpecifierExpression, IdentifierTypeSpecifierExpressionSemantics,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
@@ -55,13 +55,12 @@ import type {
 	TangledPrimaryExpression,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
-	TranslatedExpression,
+	TranslatedExpression, TypeError,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
-import { UndefinedConstantError } from "@kipper/core";
 import {
 	AssignmentExpression,
 	BuiltInTypes,
@@ -188,12 +187,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  matches: (value, pattern) => {" +
 					"   const valueType = __kipper.typeOf(value);" +
 					"   const patternType = __kipper.typeOf(pattern);" +
-					"   if (valueType === patternType) {" +
-					"    return true;" +
-					"   }" +
-					"   if (valueType === __kipper.builtIn.str && patternType === __kipper.builtIn.str) {" +
-					"    return 'yes';" +
-					"   }" +
 					"   if (!valueType.isCompatibleWith(patternType)) { return false; }" +
 					"   if (patternType.fields && Array.isArray(patternType.fields)) {" +
 					"    for (const field of patternType.fields) {" +
@@ -259,9 +252,19 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			if (member instanceof InterfacePropertyDeclaration) {
 				const property = member.getSemanticData();
 				const type = member.getTypeSemanticData();
-				const runtimeType = TargetJS.getRuntimeType(type.valueType);
-				propertiesWithTypes +=
-					`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
+
+				console.log(property.type.identifier);
+				console.log(type.valueType instanceof BuiltInType);
+
+				if (type.valueType instanceof BuiltInType) {
+					const runtimeType = TargetJS.getRuntimeType(type.valueType);
+					propertiesWithTypes +=
+						`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
+				}
+				else{
+					propertiesWithTypes +=
+						`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", __intf_${type.valueType}),`;
+				}
 			}
 			if (member instanceof InterfaceMethodDeclaration) {
 				const method = member.getSemanticData();
@@ -1154,7 +1157,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			"(",
 			...expression.identifier,
 			", ",
-			TargetJS.getBuiltInIdentifier(pattern.identifier),
+			`__intf_${pattern.identifier}`,
 			")"
 		];
 	};
