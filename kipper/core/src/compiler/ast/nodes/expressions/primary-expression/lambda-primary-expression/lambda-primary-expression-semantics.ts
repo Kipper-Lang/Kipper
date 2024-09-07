@@ -1,5 +1,5 @@
 /**
- * Semantics for AST Node {@link LambdaExpression}.
+ * Semantics for AST Node {@link LambdaPrimaryExpression}.
  * @since 0.11.0
  */
 import type { ExpressionSemantics } from "../../expression-semantics";
@@ -10,7 +10,7 @@ import type { Expression } from "../../expression";
 import type { RawType } from "../../../../../semantics";
 
 /**
- * Semantics for AST Node {@link LambdaExpression}.
+ * Semantics for AST Node {@link LambdaPrimaryExpression}.
  * @since 0.11.0
  */
 export interface LambdaPrimaryExpressionSemantics extends ExpressionSemantics {

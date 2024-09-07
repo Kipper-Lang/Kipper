@@ -6,7 +6,7 @@ import type { CodePointCharStream, Token } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import type { LexerParserData } from "./lexer-parser";
-import { KipperLexer, KipperParser, KipperFileStream } from "./lexer-parser";
+import { KipperFileStream, KipperLexer, KipperParser } from "./lexer-parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import type { KipperSyntaxError } from "../errors";

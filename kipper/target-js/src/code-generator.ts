@@ -33,8 +33,6 @@ import type {
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
 	InterfaceDeclaration,
-	InterfaceMethodDeclaration,
-	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
 	LambdaPrimaryExpression,
@@ -44,6 +42,7 @@ import type {
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -57,18 +56,22 @@ import type {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
-import { AssignmentExpression, ScopeDeclaration } from "@kipper/core";
 import {
+	AssignmentExpression,
 	BuiltInTypes,
 	CompoundStatement,
 	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	KipperTargetCodeGenerator,
+	ScopeDeclaration,
 	VariableDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
@@ -91,7 +94,11 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * replacement to {@link KipperTargetBuiltInGenerator}.
 	 * @since 0.10.0
 	 */
-	setUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
+	setUp = async (
+		programCtx: KipperProgramContext,
+		requirements: Array<TranslatedCodeLine>,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const inlinedRequirements = requirements.map((req) => req.join("")).join(", ");
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
@@ -106,26 +113,82 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
 				";",
 			],
-			// Create global kipper object - Always prefer the global '__kipper' instance
-			["// @ts-ignore"],
-			["var __kipper = __globalScope.__kipper = __globalScope.__kipper || __kipper || {}", ";"],
-			// The following error classes are simply used for errors thrown in internal Kipper functions and should be used
-			// when the user code uses a Kipper-specific feature, syntax or function incorrectly.
+			// __createKipper function
 			["// @ts-ignore"],
 			[
-				'__kipper.KipperError = __kipper.KipperError || (class KipperError extends Error { constructor(msg) { super(msg); this.name="KipError"; }})',
-				";",
+				"var __createKipper = () => {" +
+					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
+					" class KipperError extends Error { constructor(msg) { super(msg); this.name='KipError'; }};" +
+					" class KipperType {" +
+					"  constructor(name, fields, methods, baseType = null) " +
+					"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
+					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+					" };" +
+					" class KipperGenericType extends KipperType {" +
+					"  constructor(name, fields, methods, genericArgs, baseType = null) " +
+					"  { super(name, fields, methods, baseType); this.genericArgs = genericArgs; }" +
+					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
+					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
+					" };" +
+					" const __type_any = new KipperType('any', undefined, undefined);" +
+					" const __type_null = new KipperType('null', undefined, undefined);" +
+					" const __type_undefined = new KipperType('undefined', undefined, undefined);" +
+					" const __type_str = new KipperType('str', undefined, undefined);" +
+					" const __type_num = new KipperType('num', undefined, undefined);" +
+					" const __type_bool = new KipperType('bool', undefined, undefined);" +
+					" const __type_obj = new KipperType('obj', [], []);" +
+					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
+					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
+					" return {" +
+					"  KipperError: KipperError," +
+					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
+					"  IndexError: (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } })," +
+					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
+					"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
+					"  Type: KipperType," +
+					"  builtIn: {" +
+					"   any: __type_any," +
+					"   null: __type_null," +
+					"   undefined: __type_undefined," +
+					"   str: __type_str," +
+					"   num: __type_num," +
+					"   bool: __type_bool," +
+					"   obj: __type_obj," +
+					"   Array: __type_Array," +
+					"   Func: __type_Func," +
+					"  }," +
+					"  assignTypeMeta: (value, typeMeta) => Object.assign(value, { __kipType: typeMeta })," +
+					"  typeOf: (value) => {" +
+					"   const prim = typeof value;" +
+					"   switch (prim) {" +
+					"    case 'undefined': return __kipper.builtIn.undefined;" +
+					"    case 'string': return __kipper.builtIn.str;" +
+					"    case 'number': return __kipper.builtIn.num;" +
+					"    case 'boolean': return __kipper.builtIn.bool;" +
+					"    case 'function': {" +
+					"     return '__kipType' in value ? value.__kipType : __kipper.builtIn.Func;" +
+					"    }" +
+					"    case 'symbol':" +
+					"    case 'bigint':" +
+					"    case 'object': {" +
+					"     if (value === null) return __kipper.builtIn.null;" +
+					"     if (Array.isArray(value)) {" +
+					"      return '__kipType' in value ? value.__kipType : __kipper.builtIn.Array;" +
+					"     }" +
+					"     const prot = Object.getPrototypeOf(value);" +
+					"     if (prot && prot.constructor !== Object) {" +
+					"      return prot.constructor;" +
+					"     }" +
+					"     return __kipper.builtIn.obj;" +
+					"    }" +
+					"  	}" +
+					"  }," +
+					inlinedRequirements +
+					" };" +
+					"};",
 			],
-			["// @ts-ignore"],
-			[
-				'__kipper.TypeError = __kipper.TypeError || (class KipperTypeError extends __kipper.KipperError { constructor(msg) { super(msg); this.name="KipTypeError"; }})',
-				";",
-			],
-			["// @ts-ignore"],
-			[
-				'__kipper.IndexError = __kipper.IndexError || (class KipperIndexError extends __kipper.KipperError { constructor(msg) { super(msg); this.name="KipIndexError"; }})',
-				";",
-			],
+			// global __kipper variable
+			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper());"],
 		];
 	};
 
@@ -139,6 +202,54 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	wrapUp = async (programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> => {
 		return [];
+	};
+
+	protected generateInterfaceRuntimeTypeChecks = async (
+		node: InterfaceDeclaration,
+	): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const interfaceName = semanticData.identifier;
+		const interfaceMembers = semanticData.members;
+		const identifier = "__intf_" + interfaceName;
+
+		let propertiesWithTypes = "";
+		let functionsWithTypes = "";
+		for (let member of interfaceMembers) {
+			if (member instanceof InterfacePropertyDeclaration) {
+				const property = member.getSemanticData();
+				const type = member.getTypeSemanticData();
+				const runtimeType = TargetJS.getRuntimeType(type.valueType);
+				propertiesWithTypes +=
+					`new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${property.identifier}", ${runtimeType}),`;
+			}
+			if (member instanceof InterfaceMethodDeclaration) {
+				const method = member.getSemanticData();
+				const returnType = member.getTypeSemanticData();
+				const params = method.parameters.map((param) => {
+					return param.getTypeSemanticData().valueType;
+				});
+				const runtimeReturnType = TargetJS.getRuntimeType(returnType.valueType);
+				const runtimeParams = params.map((paramType) => {
+					return `__intf_${TargetJS.getRuntimeType(paramType)}`;
+				});
+				functionsWithTypes +=
+					`new ${TargetJS.getBuiltInIdentifier("Method")}` +
+					`("${method.identifier}", ${runtimeReturnType}, [${runtimeParams.join(",")}]),`;
+			}
+		}
+
+		return [
+			[
+				"const ",
+				identifier,
+				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + '"',
+				", [",
+				propertiesWithTypes,
+				"], [",
+				functionsWithTypes,
+				"])",
+			],
+		];
 	};
 
 	/**
@@ -400,7 +511,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * Translates a {@link AssignmentExpression} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
-		return [];
+		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
+		return [...runtimeInterfaceType];
 	};
 
 	/**
@@ -446,6 +558,18 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 	};
 
+	newInstantiationExpression = async (node: NewInstantiationExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const identifier = semanticData.class.getSemanticData().rawType.identifier;
+		const args = semanticData.args;
+		const translatedArgs = args.map(async (arg) => {
+			return await arg.translateCtxAndChildren();
+		});
+		const finishedArgs = await Promise.all(translatedArgs);
+
+		return ["new", " ", identifier, "(", ...finishedArgs.join(", "), ")"];
+	};
+
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -468,7 +592,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			return translatedParams.join(", ");
 		};
 
-		return [[`${identifier}(${await concatParams()}) {`], ...(await body.translateCtxAndChildren()), ["}"]];
+		return [[identifier, `(`, await concatParams(), `)`], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**
@@ -490,7 +614,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			.flat();
 		processedParams.pop();
 
-		return [["constructor", "(", ...processedParams, ")", " "], ...(await body.translateCtxAndChildren())];
+		return [["constructor", "(", ...processedParams, ")"], ...(await body.translateCtxAndChildren())];
 	};
 
 	/**
@@ -509,13 +633,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	arrayPrimaryExpression = async (node: ArrayPrimaryExpression): Promise<TranslatedExpression> => {
 		const values = node.getSemanticData().value;
+		const valueType = node.getTypeSemanticData().valueType;
+		const valueTypeIdentifier = TargetJS.getRuntimeType(valueType);
+
 		const translatedValues: Array<TranslatedExpression> = await Promise.all(
 			values.map(async (value, i) => {
 				const exp = await value.translateCtxAndChildren();
 				return [...exp, i + 1 === values.length ? "" : ", "];
 			}),
 		);
-		return ["[", ...translatedValues.flat(), "]"];
+
+		return [
+			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+			"(",
+			"[",
+			...translatedValues.flat(),
+			"]",
+			",",
+			TargetJS.getBuiltInIdentifier("builtIn.Array.changeGenericTypeArguments"),
+			"(",
+			`{T: ${valueTypeIdentifier}}`,
+			")",
+			")",
+		];
 	};
 
 	/**
@@ -910,6 +1050,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const semanticData = node.getSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
+		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
 		const translatedParams: TranslatedExpression = (
@@ -927,8 +1068,32 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			body instanceof Expression
 				? await body.translateCtxAndChildren()
 				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
+		const paramTypes = funcType.paramTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
+		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
 
-		// Return the lambda function
-		return ["(", ...translatedParams, ") => ", ...translatedBody];
+		return [
+			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+			"(",
+			"(",
+			...translatedParams,
+			") => ",
+			...(body instanceof CompoundStatement ? translatedBody.slice() : translatedBody),
+			",",
+			TargetJS.getBuiltInIdentifier("builtIn.Func.changeGenericTypeArguments"),
+			"(",
+			`{T: [${paramTypes.join(",")}], R: ${returnType}}`,
+			")",
+			")",
+		];
+	};
+
+	/**
+	 * Translates a {@link TypeofExpression} into the JavaScript language.
+	 */
+	typeofExpression = async (node: TypeofExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const operand = await semanticData.operand.translateCtxAndChildren();
+
+		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
 	};
 }

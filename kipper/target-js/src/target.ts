@@ -4,8 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInType } from "@kipper/core";
-import { BuiltInVariable, KipperCompileTarget } from "@kipper/core";
+import type { BuiltInFunction, ProcessedType } from "@kipper/core";
+import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
@@ -111,6 +111,17 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 		return signature instanceof BuiltInVariable && signature.local
 			? signature.identifier
 			: this.getBuiltInIdentifier(signature.identifier);
+	}
+
+	/**
+	 * Gets the builtin type for a Kipper type.
+	 * @since 0.12.0
+	 */
+	public static getRuntimeType(type: ProcessedType): string {
+		if (type instanceof BuiltInType) {
+			return this.getBuiltInIdentifier(`builtIn.${type.identifier}`);
+		}
+		return type.identifier;
 	}
 }
 

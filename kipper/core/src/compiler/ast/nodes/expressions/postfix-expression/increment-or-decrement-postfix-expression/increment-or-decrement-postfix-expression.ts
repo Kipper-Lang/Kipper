@@ -7,7 +7,7 @@
  */
 import type { IncrementOrDecrementPostfixExpressionSemantics } from "./increment-or-decrement-postfix-expression-semantics";
 import type { IncrementOrDecrementPostfixExpressionTypeSemantics } from "./increment-or-decrement-postfix-expression-type-semantics";
-import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
+import type { KipperPostfixOperator } from "../../../../../const";
 import type { Expression } from "../../expression";
 import { PostfixExpression } from "../postfix-expression";
 import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../../lexer-parser";
@@ -95,7 +95,7 @@ export class IncrementOrDecrementPostfixExpression extends PostfixExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
-		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(-2); // After the expression
+		const operator = <KipperPostfixOperator>this.sourceCode.slice(-2); // After the expression
 
 		// Ensure that the child expression is present
 		if (!exp) {

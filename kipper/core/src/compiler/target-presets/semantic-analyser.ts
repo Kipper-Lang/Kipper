@@ -51,6 +51,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeData,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -58,6 +59,7 @@ import type {
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -144,6 +146,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
 	 */
 	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link NewInstantiationExpression} instances.
+	 */
+	public abstract newInstantiationExpression?: TargetASTNodeSemanticAnalyser<NewInstantiationExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ClassMethodDeclaration} instances.
@@ -330,4 +337,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link LambdaPrimaryExpression} instances.
 	 */
 	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
+	 */
+	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
 }

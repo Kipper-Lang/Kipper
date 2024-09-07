@@ -133,7 +133,7 @@ export class InterfaceDeclaration extends TypeDeclaration<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
-			type: CustomType.fromInterfaceDeclaration(this),
+			valueType: CustomType.fromInterfaceDeclaration(this),
 		};
 	}
 

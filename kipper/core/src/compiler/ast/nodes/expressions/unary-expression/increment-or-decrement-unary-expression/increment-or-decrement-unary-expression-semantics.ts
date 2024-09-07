@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
-import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
+import type { KipperPostfixOperator } from "../../../../../const";
 import type { UnaryExpressionSemantics } from "../unary-expression-semantics";
 
 /**
@@ -14,5 +14,5 @@ export interface IncrementOrDecrementUnaryExpressionSemantics extends UnaryExpre
 	 * The operator that is used to modify the {@link operand}.
 	 * @since 0.9.0
 	 */
-	operator: KipperIncrementOrDecrementOperator;
+	operator: KipperPostfixOperator;
 }

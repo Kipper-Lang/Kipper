@@ -41,6 +41,7 @@ import type {
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -51,6 +52,7 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -79,7 +81,10 @@ export type TargetASTNodeCodeGenerator<
  * This is not intended as a replacement to {@link KipperTargetBuiltInGenerator}.
  * @since 0.10.0
  */
-export type TargetSetUpCodeGenerator = (programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>>;
+export type TargetSetUpCodeGenerator = (
+	programCtx: KipperProgramContext,
+	requirements: Array<TranslatedCodeLine>,
+) => Promise<Array<TranslatedCodeLine>>;
 
 /**
  * Represents a function that generates wrap up code for a Kipper file.
@@ -210,6 +215,14 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
 		ClassConstructorDeclaration,
 		Array<TranslatedCodeLine>
+	>;
+
+	/**
+	 * Translates a {@link NewInstantiationExpression} into a specific language.
+	 */
+	public abstract newInstantiationExpression: TargetASTNodeCodeGenerator<
+		NewInstantiationExpression,
+		TranslatedExpression
 	>;
 
 	/**
@@ -418,4 +431,9 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link LambdaPrimaryExpression} into a specific language.
 	 */
 	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TypeofExpression} into a specific language.
+	 */
+	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
 }

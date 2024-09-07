@@ -80,7 +80,7 @@ export class CustomType extends ProcessedType {
 		const semanticData = classDeclaration.getSemanticData();
 
 		for (const field of semanticData.classMembers) {
-			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().type);
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().valueType);
 		}
 		return new CustomType(classDeclaration.getSemanticData().identifier, "class", fields);
 	}
@@ -97,7 +97,7 @@ export class CustomType extends ProcessedType {
 
 		const fields: CustomTypeFields = new Map();
 		for (const field of interfaceDeclaration.getSemanticData().members) {
-			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().type);
+			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().valueType);
 		}
 		return new CustomType(interfaceDeclaration.getSemanticData().identifier, "interface", fields);
 	}
