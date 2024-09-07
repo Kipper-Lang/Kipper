@@ -550,9 +550,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		if (operandCompileType !== targetCompileType && !operandCompileType.isAssignableTo(targetCompileType)) {
-			throw this.assertError(
-				new InvalidCastTypeError(operandCompileType.toString(), targetCompileType.toString()),
-			);
+			throw this.assertError(new InvalidCastTypeError(operandCompileType.toString(), targetCompileType.toString()));
 		}
 	}
 

@@ -15,7 +15,6 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastExpressionContext,
-	CastOrConvertExpressionContext,
 	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
 	ClassMethodDeclarationContext,

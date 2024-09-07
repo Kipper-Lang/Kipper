@@ -15,7 +15,6 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { RawType } from "../../../../../semantics";
 import { kipperInternalBuiltInFunctions } from "../../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { getConversionFunctionIdentifier } from "../../../../../../tools";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";
 
 /**

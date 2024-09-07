@@ -126,10 +126,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.12.0
 	 */
-	abstract tryCastAs(
-		funcSpec: InternalFunction,
-		programCtx: KipperProgramContext,
-	): Promise<Array<TranslatedCodeLine>>;
+	abstract tryCastAs(funcSpec: InternalFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Force-cast function which provides the ability to force-cast a value to a specific type. If the value cannot be
