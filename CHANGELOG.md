@@ -50,6 +50,7 @@ To use development versions of Kipper download the
   - `semantics/runtime-internals`, which contains the runtime internal functions.
   - `semantics/types`, which contains the runtime types.
 - New classes:
+  - `NewInstantiationExpression`, which represents an AST new instantiation expression.
   - `TypeofExpression`, which represents an AST typeof expression that returns the runtime type of an object.
   - `TypeofTypeSpecifierExpression`, which represents an AST typeof type specifier that lets one define a type by using an object as reference
   - `BuiltInTypeObject`, which is the base class for the compilers representation of runtime objects
@@ -109,6 +110,10 @@ To use development versions of Kipper download the
   - `CompilableType`, which represents a type that can be compiled.
   - `BuiltInReference`, which replaces the now removed type `Reference` in the `KipperProgramContext` for reference
     tracking of built-in types.
+  - `NewInstantiationExpressionSemantics`, which represents the semantics of a new instantiation expression.
+  - `NewInstantiationExpressionTypeSemantics`, which represents the type semantics of a new instantiation expression.
+  - `TypeofExpressionSemantics`, which represents the semantics of a typeof expression.
+  - `TypeofExpressionTypeSemantics`, which represents the type semantics of a typeof expression.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
   - `generateInterfaceRuntimeTypeChecks` which generates runtime type checks for an interface.
