@@ -179,6 +179,7 @@ which can be included and used inside a browser without any dependencies.
     - `identifiers.description`
     - `license-url`
     - `version`
+    - `date-released`
 
     These changes must be committed yourself with a commit message preferably similar to this:
 
