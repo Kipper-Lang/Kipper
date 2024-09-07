@@ -120,7 +120,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			["// @ts-ignore"],
 			[
 				"var __createKipper = () => {" +
-					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
+					" if ((__kipper = __globalScope.__kipper || typeof __kipper !== \"undefined\" && __kipper || undefined)) { return __kipper; }\n" +
 					" class KipperError extends Error { constructor(msg) { super(msg); this.name='KipError'; }};" +
 					" class KipperType {" +
 					"  constructor(name, fields, methods, baseType = null) " +
@@ -888,11 +888,12 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link CastOrConvertExpression} into the JavaScript language.
+	 * Translates a {@link CastExpression} into the JavaScript language.
 	 * @since 0.12.0
 	 */
 	castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return await semanticData.exp.translateCtxAndChildren();
 	};
 
 	/**
@@ -900,7 +901,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.12.0
 	 */
 	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [
+			TargetJS.getBuiltInIdentifier("tryCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			")",
+		];
 	};
 
 	/**
@@ -908,7 +915,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 * @since 0.12.0
 	 */
 	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
-		return [];
+		const semanticData = node.getSemanticData();
+		return [
+			TargetJS.getBuiltInIdentifier("forceCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			")",
+		];
 	};
 
 	/**
