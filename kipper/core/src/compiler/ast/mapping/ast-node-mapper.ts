@@ -127,7 +127,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
-import { InstanceofExpression } from "../nodes/expressions/comparative-expression/relational-expression/instanceof-expression/instanceof-expression";
+import { InstanceofExpression } from "../nodes/expressions/instanceof-expression/instanceof-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.

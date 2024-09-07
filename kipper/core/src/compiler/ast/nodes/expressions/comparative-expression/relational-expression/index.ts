@@ -5,4 +5,3 @@
 export * from "./relational-expression";
 export * from "./relational-expression-semantics";
 export * from "./relational-expression-type-semantics";
-export * from "./instanceof-expression";

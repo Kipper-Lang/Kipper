@@ -1,5 +1,5 @@
-import type { ExpressionTypeSemantics } from "../../../expression-type-semantics";
-import type { CustomType } from "../../../../../../semantics";
+import type { ExpressionTypeSemantics } from "../expression-type-semantics";
+import type { CustomType } from "../../../../semantics";
 
 export interface InstanceofExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**

@@ -60,7 +60,7 @@ import type {
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { InstanceofExpression } from "../../ast/nodes/expressions/comparative-expression/relational-expression/instanceof-expression/instanceof-expression";
+import type { InstanceofExpression } from "../../ast/nodes/expressions/instanceof-expression/instanceof-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a

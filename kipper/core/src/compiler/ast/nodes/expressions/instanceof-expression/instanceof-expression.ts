@@ -1,10 +1,10 @@
-import type { TargetASTNodeSemanticAnalyser } from "../../../../../../target-presets";
-import { Expression } from "../../../expression";
+import type { TargetASTNodeSemanticAnalyser } from "../../../../target-presets";
+import { Expression } from "../expression";
 import type { InstanceofExpressionSemantics } from "./instanceof-expression-semantics";
 import type { InstanceofExpressionTypeSemantics } from "./instanceof-expression-type-semantics";
-import type { InstanceOfExpressionContext } from "../../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../../../compilable-ast-node";
+import type { InstanceOfExpressionContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import type { CompilableASTNode } from "../../../compilable-ast-node";
 
 export class InstanceofExpression extends Expression<InstanceofExpressionSemantics, InstanceofExpressionTypeSemantics> {
 	/**

@@ -53,7 +53,6 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TargetASTNodeCodeGenerator,
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
@@ -61,6 +60,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	InstanceofExpression,
 } from "@kipper/core";
 import {
 	AssignmentExpression,
@@ -77,7 +77,6 @@ import {
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import type { InstanceofExpression } from "@kipper/core/lib/compiler/ast/nodes/expressions/comparative-expression/relational-expression/instanceof-expression/instanceof-expression";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
