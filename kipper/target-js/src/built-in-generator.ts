@@ -47,6 +47,10 @@ export function genJSVariable(varSpec: BuiltInVariable, value: string): Translat
  * @since 0.10.0
  */
 export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerator {
+	// ===================================================================================================================
+	// Internal functions which are used to provide specific syntax- or behaviour-specific functionality
+	// ===================================================================================================================
+
 	async numToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
@@ -123,6 +127,26 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return ${toRepeatIdentifier}.repeat(${timesIdentifier}); }`);
 	}
 
+	async tryCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const castTypeIdentifier = signature.params[0];
+		const toCastIdentifier = signature.params[1];
+
+		return genJSFunction(signature, `{ return true ? ${toCastIdentifier} : null; }`);
+	}
+
+	async forceCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const castTypeIdentifier = signature.params[0];
+		const toCastIdentifier = signature.params[1];
+
+		return genJSFunction(signature, `{ return ${toCastIdentifier}; }`);
+	}
+
+	// ===================================================================================================================
+	// Built-in functions that are direct parts of the language
+	// ===================================================================================================================
+
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0];
@@ -138,11 +162,11 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 
-	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
-		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
-	}
-
 	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
 		return [genJSVariable(varSpec, "NaN")];
+	}
+
+	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
+		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
 }

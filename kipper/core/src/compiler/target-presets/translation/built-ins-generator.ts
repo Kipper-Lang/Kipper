@@ -17,6 +17,10 @@ import type { KipperProgramContext } from "../../program-ctx";
  * @since 0.10.0
  */
 export abstract class KipperTargetBuiltInGenerator {
+	// ===================================================================================================================
+	// Internal functions which are used to provide specific syntax- or behaviour-specific functionality
+	// ===================================================================================================================
+
 	/**
 	 * Conversion function which provides 'num' to 'str' type conversion functionality.
 	 * @param func The specification for the function. This contains the overall metadata for the function that
@@ -114,6 +118,34 @@ export abstract class KipperTargetBuiltInGenerator {
 		funcSpec: InternalFunction,
 		programCtx: KipperProgramContext,
 	): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Try-cast function which provides the ability to try-cast a value to a specific type. If the value cannot be cast
+	 * to the type, then null is returned.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.12.0
+	 */
+	abstract tryCastAs(
+		funcSpec: InternalFunction,
+		programCtx: KipperProgramContext,
+	): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Force-cast function which provides the ability to force-cast a value to a specific type. If the value cannot be
+	 * cast to the type, then an error is thrown.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.12.0
+	 */
+	abstract forceCastAs(
+		funcSpec: InternalFunction,
+		programCtx: KipperProgramContext,
+	): Promise<Array<TranslatedCodeLine>>;
+
+	// ===================================================================================================================
+	// Built-in functions that are direct parts of the language
+	// ===================================================================================================================
 
 	/**
 	 * Print function which provides default IO console output functionality.

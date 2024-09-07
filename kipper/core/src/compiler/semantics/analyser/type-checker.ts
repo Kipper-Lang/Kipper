@@ -46,6 +46,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { InvalidCastTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -506,27 +507,51 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validConversion(operand: Expression, targetType: ProcessedType): void {
 		// Get the compile-types for the specified conversion types
-		const originalCompileType = operand.getTypeSemanticData().evaluatedType;
+		const operandCompileType = operand.getTypeSemanticData().evaluatedType;
 		const targetCompileType = targetType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (!originalCompileType.isCompilable || !targetCompileType.isCompilable) {
+		if (!operandCompileType.isCompilable || !targetCompileType.isCompilable) {
 			return;
 		}
 
 		// Return early if the types are the same
-		if (originalCompileType === targetCompileType) {
+		if (operandCompileType === targetCompileType) {
 			return;
 		}
 
 		// Check whether a supported pair of types exist
 		const viableConversion =
 			kipperSupportedConversions.find(
-				(types) => BuiltInTypes[types[0]] === originalCompileType && BuiltInTypes[types[1]] === targetType,
+				(types) => BuiltInTypes[types[0]] === operandCompileType && BuiltInTypes[types[1]] === targetType,
 			) !== undefined;
 		if (!viableConversion) {
 			throw this.assertError(
-				new InvalidConversionTypeError(originalCompileType.toString(), targetCompileType.toString()),
+				new InvalidConversionTypeError(operandCompileType.toString(), targetCompileType.toString()),
+			);
+		}
+	}
+
+	/**
+	 * Asserts that the cast for the {@link operand} is valid.
+	 * @param operand The expression to cast.
+	 * @param targetType The type to cast to.
+	 * @throws {InvalidCastTypeError} If the cast is invalid/impossible.
+	 * @since 0.12.0
+	 */
+	public validCast(operand: Expression, targetType: ProcessedType): void {
+		// Get the compile-types for the specified conversion types
+		const operandCompileType = operand.getTypeSemanticData().evaluatedType;
+		const targetCompileType = targetType;
+
+		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
+		if (!operandCompileType.isCompilable || !targetCompileType.isCompilable) {
+			return;
+		}
+
+		if (operandCompileType !== targetCompileType && !operandCompileType.isAssignableTo(targetCompileType)) {
+			throw this.assertError(
+				new InvalidCastTypeError(operandCompileType.toString(), targetCompileType.toString()),
 			);
 		}
 	}

@@ -129,21 +129,7 @@ export class TryCastExpression extends CastOrConvertExpression<
 			evaluatedType: evalType,
 			castType: evalType,
 		};
-
-		// Ensure the conversion is valid
-		this.programCtx.typeCheck(this).validConversion(semanticData.exp, evalType);
-
-		// Add internal reference to the program ctx for the conversion function, so it will be generated in the output code
-		const internalIdentifier = getConversionFunctionIdentifier(
-			semanticData.exp.getTypeSemanticData().evaluatedType.identifier,
-			semanticData.castType.identifier,
-		);
-		if (internalIdentifier in kipperInternalBuiltInFunctions) {
-			this.programCtx.addInternalReference(
-				this,
-				kipperInternalBuiltInFunctions[internalIdentifier as keyof typeof kipperInternalBuiltInFunctions],
-			);
-		}
+		this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["tryCastAs"]);
 	}
 
 	public checkForWarnings = undefined; // TODO!
