@@ -17,7 +17,7 @@ import type {
 } from "@kipper/core";
 import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
+import { indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
 
 /**
@@ -75,7 +75,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			}),
 		);
 
-		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
+		const runtimeInterfaceType = await RuntimeTypesGenerator.generateInterfaceRuntimeType(node);
 		return [
 			["interface", " ", interfaceName, " ", "{"],
 			...memberDeclarations.flat().map((line) => ["  ", ...line]),

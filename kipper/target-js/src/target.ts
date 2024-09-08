@@ -22,6 +22,12 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	static readonly internalObjectIdentifier = "__kipper";
 
 	/**
+	 * The internal prefix for interfaces in the JavaScript target.
+	 * @since 0.12.0
+	 */
+	static readonly internalInterfacePrefix = "__intf";
+
+	/**
 	 * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.
 	 * @since 0.10.0
 	 */

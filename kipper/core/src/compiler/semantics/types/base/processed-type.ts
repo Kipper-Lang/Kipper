@@ -93,12 +93,13 @@ export abstract class ProcessedType extends Type {
 	public toString(): string {
 		let type = this.identifier;
 		if (this.isGeneric) {
-			type +=
-				"<" +
-				(<GenericType<GenericTypeArguments>>(<unknown>this)).genericTypeArguments
-					?.map((arg) => arg.type.toString())
-					.join(", ") +
-				">";
+			const genericArgs = (<GenericType<GenericTypeArguments>>(<unknown>this)).genericTypeArguments
+				?.map((arg) => Array.isArray(arg.type)
+					? arg.type.map(type => type.toString()).join(", ")
+					: arg.type.toString()
+				)
+				.join(", ");
+			type += `<${genericArgs}>`;
 		}
 		return type;
 	}
