@@ -8,19 +8,21 @@ import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
+/**
+ * New instantiation expressions, which are used to create a new instance of a class.
+ * @since 0.12.0
+ */
 export class NewInstantiationExpression extends Expression<
 	NewInstantiationExpressionSemantics,
 	NewInstantiationExpressionTypeSemantics
 > {
 	/**
 	 * The static kind for this AST Node.
-	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_newInstantiationExpression;
 
 	/**
 	 * The static rule name for this AST Node.
-	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
@@ -34,9 +36,24 @@ export class NewInstantiationExpression extends Expression<
 	public get kind(): ASTExpressionKind {
 		return NewInstantiationExpression.kind;
 	}
+
 	public get ruleName(): ASTExpressionRuleName {
 		return NewInstantiationExpression.ruleName;
 	}
+
+	public async primarySemanticTypeChecking?(): Promise<void> {
+		const typeSepcifier = this.semanticData!.class.getTypeSemanticData().storedType;
+
+		this.typeSemantics = {
+			evaluatedType: typeSepcifier,
+		};
+	}
+
+	constructor(antlrRuleCtx: NewInstantiationExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
+
 	public async primarySemanticAnalysis?(): Promise<void> {
 		const children = this.children;
 
@@ -53,20 +70,7 @@ export class NewInstantiationExpression extends Expression<
 		};
 	}
 
-	public async primarySemanticTypeChecking?(): Promise<void> {
-		const typeSepcifier = this.semanticData!.class.getTypeSemanticData().storedType;
-
-		this.typeSemantics = {
-			evaluatedType: typeSepcifier,
-		};
-	}
-
-	constructor(antlrRuleCtx: NewInstantiationExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-	}
-
 	public checkForWarnings = undefined;
 	public targetCodeGenerator = this.codeGenerator.newInstantiationExpression;
-	targetSemanticAnalysis = this.semanticAnalyser.newInstantiationExpression;
+	public targetSemanticAnalysis = this.semanticAnalyser.newInstantiationExpression;
 }
