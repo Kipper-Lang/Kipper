@@ -1,4 +1,5 @@
-import { BuiltInTypeFunc, ProcessedType } from "../../../../../../../semantics";
+import type { BuiltInTypeFunc } from "../../../../../../../semantics";
+import { ProcessedType } from "../../../../../../../semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "../class-member-declaration-type-semantics";
 
 /**

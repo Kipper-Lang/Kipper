@@ -8,11 +8,9 @@
 export function addLeftIndent(msg: string, firstLinePrefix: string = "", spaces: number = 2): string {
 	return msg
 		.split("\n")
-		.map((line, index) =>
-			(index === 0
-				? " ".repeat(spaces) + firstLinePrefix
-				: " ".repeat(spaces + firstLinePrefix.length)
-			) + line
+		.map(
+			(line, index) =>
+				(index === 0 ? " ".repeat(spaces) + firstLinePrefix : " ".repeat(spaces + firstLinePrefix.length)) + line,
 		)
 		.join("\n");
 }

@@ -94,9 +94,8 @@ export abstract class ProcessedType extends Type {
 		let type = this.identifier;
 		if (this.isGeneric) {
 			const genericArgs = (<GenericType<GenericTypeArguments>>(<unknown>this)).genericTypeArguments
-				?.map((arg) => Array.isArray(arg.type)
-					? arg.type.map(type => type.toString()).join(", ")
-					: arg.type.toString()
+				?.map((arg) =>
+					Array.isArray(arg.type) ? arg.type.map((type) => type.toString()).join(", ") : arg.type.toString(),
 				)
 				.join(", ");
 			type += `<${genericArgs}>`;

@@ -33,7 +33,7 @@ export class RuntimeTypesGenerator {
 				} else {
 					propertiesWithTypes.push(
 						`new ${TargetJS.getBuiltInIdentifier("Property")}("${property.identifier}",` +
-						` ${KipperJavaScriptTarget.internalInterfacePrefix}_${type.valueType}),`,
+							` ${KipperJavaScriptTarget.internalInterfacePrefix}_${type.valueType}),`,
 					);
 				}
 			}
@@ -61,7 +61,7 @@ export class RuntimeTypesGenerator {
 			[
 				"const ",
 				identifier,
-				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + "\"",
+				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + '"',
 				", [",
 				...propertiesWithTypes,
 				"], [",

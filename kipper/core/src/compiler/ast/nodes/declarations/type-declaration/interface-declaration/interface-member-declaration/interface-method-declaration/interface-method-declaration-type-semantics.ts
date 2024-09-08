@@ -1,5 +1,5 @@
 import type { TypeDeclarationTypeSemantics } from "../../../type-declaration-type-semantics";
-import type { BuiltInTypeFunc} from "../../../../../../../semantics";
+import type { BuiltInTypeFunc } from "../../../../../../../semantics";
 import { ProcessedType } from "../../../../../../../semantics";
 
 /**
