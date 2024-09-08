@@ -116,7 +116,7 @@ To use development versions of Kipper download the
   - `TypeofExpressionTypeSemantics`, which represents the type semantics of a typeof expression.
 - New functions:
   - `KipperTypeChecker.validArrayExpression`, which ensures that an array expression is valid.
-  - `generateInterfaceRuntimeTypeChecks` which generates runtime type checks for an interface.
+  - `JavaScriptTargetCodeGenerator.generateInterfaceRuntimeType` which generates runtime type for an interface.
   - `getRuntimeType`, which gets the corresponding runtime representation of a built-in type.
 - New properties:
   - `BuiltInFunction.funcType`, which returns a function type for the built-in function.
