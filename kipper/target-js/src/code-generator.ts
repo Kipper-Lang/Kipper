@@ -186,46 +186,46 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"    }" +
 					"  	}" +
 					"  }," +
-				"matches: (value, pattern) => {" +
-				"  const registeredRuntimeTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
-				"  if (pattern.fields && Array.isArray(pattern.fields)) {" +
-				"    for (const field of pattern.fields) {" +
-				"      const fieldName = field.name;" +
-				"      const fieldType = field.type;" +
-				"      const nameIsInType = fieldName in value;" +
-				"      if (!nameIsInType) {" +
-				"        return false;" +
-				"      }" +
-				"      const fieldValue = value[fieldName];" +
-				"      const isSameType = __kipper.typeOf(fieldValue) === field.type;" +
-				"      if (registeredRuntimeTypes.includes(field.type.name) && !isSameType) {" +
-				"        return false;" +
-				"      }" +
-				"      if (!registeredRuntimeTypes.includes(fieldType.name)) {" +
-				"        if (!__kipper.matches(fieldValue, fieldType)) {" +
-				"          return false;" +
-				"        }" +
-				"      }" +
-				"    }" +
-				"  }" +
-				"  if (pattern.methods && Array.isArray(pattern.methods)) {" +
-				"    for (const field of pattern.methods) {" +
-				"      const fieldName = field.name;" +
-				"      const fieldReturnType = field.returnType;" +
-				"      const parameters = field.parameters;" +
-				"      const nameIsInType = fieldName in value;" +
-				"      if (!nameIsInType) {" +
-				"        return false;" +
-				"      }" +
-				"      const fieldValue = value[fieldName];" +
-				"      const isSameType = fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
-				"      if (!isSameType) {" +
-				"        return false;" +
-				"      }" +
-				"    }" +
-				"  }" +
-				"  return true;" +
-				"  }," +
+					"matches: (value, pattern) => {" +
+					"  const registeredRuntimeTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
+					"  if (pattern.fields && Array.isArray(pattern.fields)) {" +
+					"    for (const field of pattern.fields) {" +
+					"      const fieldName = field.name;" +
+					"      const fieldType = field.type;" +
+					"      const nameIsInType = fieldName in value;" +
+					"      if (!nameIsInType) {" +
+					"        return false;" +
+					"      }" +
+					"      const fieldValue = value[fieldName];" +
+					"      const isSameType = __kipper.typeOf(fieldValue) === field.type;" +
+					"      if (registeredRuntimeTypes.includes(field.type.name) && !isSameType) {" +
+					"        return false;" +
+					"      }" +
+					"      if (!registeredRuntimeTypes.includes(fieldType.name)) {" +
+					"        if (!__kipper.matches(fieldValue, fieldType)) {" +
+					"          return false;" +
+					"        }" +
+					"      }" +
+					"    }" +
+					"  }" +
+					"  if (pattern.methods && Array.isArray(pattern.methods)) {" +
+					"    for (const field of pattern.methods) {" +
+					"      const fieldName = field.name;" +
+					"      const fieldReturnType = field.returnType;" +
+					"      const parameters = field.parameters;" +
+					"      const nameIsInType = fieldName in value;" +
+					"      if (!nameIsInType) {" +
+					"        return false;" +
+					"      }" +
+					"      const fieldValue = value[fieldName];" +
+					"      const isSameType = fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
+					"      if (!isSameType) {" +
+					"        return false;" +
+					"      }" +
+					"    }" +
+					"  }" +
+					"  return true;" +
+					"  }," +
 					inlinedRequirements +
 					" };" +
 					"};",
