@@ -3,6 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
+import { BuiltInTypeFunc } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -163,8 +164,8 @@ export class ClassMethodDeclaration
 
 		this.semanticData = {
 			identifier: identifier,
-			returnType: retTypeSpecifier,
-			parameters: params,
+			returnTypeSpecifier: retTypeSpecifier,
+			params: params,
 			functionBody: <CompoundStatement>functionBody,
 		};
 		this.scopeDeclaration = this.scope.addFunction(this);
@@ -180,12 +181,11 @@ export class ClassMethodDeclaration
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
-		// Get the type that will be returned using the return type specifier
-		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			returnType: returnType,
-			valueType: BuiltInTypes.Func,
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
 

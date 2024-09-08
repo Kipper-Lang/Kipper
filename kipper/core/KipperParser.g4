@@ -101,7 +101,6 @@ interfaceMethodDeclaration
     :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
     ;
 
-
 classDeclaration
 	:	'class' declarator '{' (classMemberDeclaration | SemiColon)* '}'
 	;

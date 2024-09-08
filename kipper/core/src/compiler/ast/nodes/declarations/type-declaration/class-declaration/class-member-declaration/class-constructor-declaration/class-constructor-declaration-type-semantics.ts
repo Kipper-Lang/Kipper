@@ -1,4 +1,5 @@
-import type { ProcessedType } from "../../../../../../../semantics";
+import type { BuiltInTypeFunc} from "../../../../../../../semantics";
+import { ProcessedType } from "../../../../../../../semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "../class-member-declaration-type-semantics";
 
 /**
@@ -10,5 +11,5 @@ export interface ClassConstructorDeclarationTypeSemantics extends ClassMemberDec
 	 * The processed type of this member property.
 	 * @since 0.12.0
 	 */
-	valueType: ProcessedType;
+	valueType: BuiltInTypeFunc;
 }

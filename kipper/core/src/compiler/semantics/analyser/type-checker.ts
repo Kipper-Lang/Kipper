@@ -543,11 +543,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 
 		// If the return statement has no return value, then the value is automatically 'void'
 		const statementValueType = semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void;
-
-		// TODO! DON'T DO THIS. THIS IS PUTTING TYPE CHECKING OF A PARENT INTO A CHILD
-		// TODO! REALLY WE NEED TO REMOVE THIS SOON
 		const functionReturnType = this.getCheckedType(
-			semanticData.function.getSemanticData().returnType,
+			semanticData.function.getSemanticData().returnTypeSpecifier.getSemanticData().rawType,
 			semanticData.function.scope,
 		);
 

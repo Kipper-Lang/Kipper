@@ -3,6 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
+import { BuiltInTypeFunc } from "../../../../../../../semantics";
 import { BuiltInTypes } from "../../../../../../../semantics";
 import type { InterfaceMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -111,15 +112,15 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
-		let declaratorCtx = <DeclaratorContext | undefined>(
+		const declaratorCtx = <DeclaratorContext | undefined>(
 			parseTreeChildren.find((val) => val instanceof DeclaratorContext)
 		);
 
-		let retTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
-		let params: Array<ParameterDeclaration> = [];
+		const params: Array<ParameterDeclaration> = [];
+		let returnTypeSpecifier: IdentifierTypeSpecifierExpression | undefined;
 
 		// Create shallow copy of the children
-		let children = [...this.children];
+		const children = [...this.children];
 
 		// Evaluate the primary semantic data for the function
 		while (children.length > 0) {
@@ -129,23 +130,22 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 				params.push(child);
 			} else {
 				// Once the return type has been reached, stop, as the last two items should be the return type and func body
-				retTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
+				returnTypeSpecifier = <IdentifierTypeSpecifierExpression>child;
 				break;
 			}
 		}
 
 		// Ensure that the children are fully present and not undefined
 		// Also make sure the scope has the required argument field for the function (is of type 'FunctionScope')
-		if (!declaratorCtx || !retTypeSpecifier) {
+		if (!declaratorCtx || !returnTypeSpecifier) {
 			throw new UnableToDetermineSemanticDataError();
 		}
-
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
 
 		this.semanticData = {
 			identifier: identifier,
-			returnType: retTypeSpecifier,
-			parameters: params,
+			returnTypeSpecifier: returnTypeSpecifier,
+			params: params,
 		};
 	}
 
@@ -159,12 +159,11 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
-		// Get the type that will be returned using the return type specifier
-		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			returnType: returnType,
-			valueType: BuiltInTypes.Func,
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
 

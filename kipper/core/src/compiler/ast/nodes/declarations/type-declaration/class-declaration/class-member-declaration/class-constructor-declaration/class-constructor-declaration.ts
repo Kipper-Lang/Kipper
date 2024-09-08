@@ -3,6 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
+import { BuiltInTypeFunc } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassConstructorDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -147,7 +148,7 @@ export class ClassConstructorDeclaration
 
 		this.semanticData = {
 			identifier: KipperConstructorInternalIdentifierLiteral,
-			parameters: params,
+			params: params,
 			functionBody: <CompoundStatement>functionBody,
 		};
 		this.scopeDeclaration = this.scope.addConstructor(this);
@@ -162,8 +163,11 @@ export class ClassConstructorDeclaration
 	 * @since 0.12.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
+
 		this.typeSemantics = {
-			valueType: BuiltInTypes.Func,
+			valueType: new BuiltInTypeFunc(paramTypes, BuiltInTypes.void),
 		};
 	}
 

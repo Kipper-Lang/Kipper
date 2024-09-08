@@ -88,7 +88,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		node: InterfaceMethodDeclaration,
 	): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const params = semanticData.parameters;
+		const params = semanticData.params;
 		const returnTypeIdentifier = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
 
 		const paramsCode: TranslatedCodeLine[] = await Promise.all(
@@ -197,11 +197,14 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 	override classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const params = semanticData.parameters;
+		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const evaluatedType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
-		const returnType = evaluatedType;
+
+		// Get the required function signature
+		const type = typeData.valueType;
+		const returnType = TargetTS.getTypeScriptType(type.returnType);
 
 		const translatedParams = (
 			await Promise.all(

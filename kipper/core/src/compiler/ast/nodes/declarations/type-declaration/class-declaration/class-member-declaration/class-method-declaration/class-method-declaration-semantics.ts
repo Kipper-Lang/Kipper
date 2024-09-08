@@ -17,12 +17,12 @@ export interface ClassMethodDeclarationSemantics extends ClassMemberDeclarationS
 	 * The return type of this method.
 	 * @since 0.12.0
 	 */
-	parameters: Array<ParameterDeclaration>;
+	params: Array<ParameterDeclaration>;
 	/**
 	 * The return type of this method.
 	 * @since 0.12.0
 	 */
-	returnType: IdentifierTypeSpecifierExpression;
+	returnTypeSpecifier: IdentifierTypeSpecifierExpression;
 	/**
 	 * The body of the function.
 	 * @since 0.10.0

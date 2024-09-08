@@ -1,5 +1,6 @@
 import type { TypeDeclarationTypeSemantics } from "../../../type-declaration-type-semantics";
-import type { ProcessedType } from "../../../../../../../semantics";
+import type { BuiltInTypeFunc} from "../../../../../../../semantics";
+import { ProcessedType } from "../../../../../../../semantics";
 
 /**
  *
@@ -10,5 +11,5 @@ export interface InterfaceMethodDeclarationTypeSemantics extends TypeDeclaration
 	 * The processed type of this member property.
 	 * @since 0.12.0
 	 */
-	valueType: ProcessedType;
+	valueType: BuiltInTypeFunc;
 }

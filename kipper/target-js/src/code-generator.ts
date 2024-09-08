@@ -279,15 +279,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				const returnType = method.returnType.getTypeSemanticData().storedType;
 				const runtimeReturnType = TargetJS.getRuntimeType(returnType);
 
-				const parametersArray = method.parameters.map((param) => {
+				const paramsArray = method.params.map((param) => {
 					const type = param.getTypeSemanticData().storedType;
 					const name = param.getSemanticData().identifier;
 					return `new ${TargetJS.getBuiltInIdentifier("Property")}` + `("${name}", ${TargetJS.getRuntimeType(type)})`;
 				});
-				const parameters = parametersArray.length > 0 ? `[${parametersArray.join(", ")}]` : "[]";
+				const params = paramsArray.length > 0 ? `[${paramsArray.join(", ")}]` : "[]";
 
 				functionsWithTypes +=
-					`new ${TargetJS.getBuiltInIdentifier("Method")}` + `("${methodName}", ${runtimeReturnType}, ${parameters})`;
+					`new ${TargetJS.getBuiltInIdentifier("Method")}` + `("${methodName}", ${runtimeReturnType}, ${params})`;
 			}
 		}
 
@@ -633,7 +633,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
-		const params = semanticData.parameters;
+		const params = semanticData.params;
 		const body = semanticData.functionBody;
 
 		const concatParams = async () => {
@@ -653,7 +653,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	classConstructorDeclaration = async (node: ClassConstructorDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const params = semanticData.parameters;
+		const params = semanticData.params;
 		const body = semanticData.functionBody;
 
 		let processedParams = (
